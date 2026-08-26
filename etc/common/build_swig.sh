@@ -9,9 +9,11 @@ if [[ "$CMAKE_INSTALL_PREFIX" == "" ]]; then
     exit 1
 fi
 
-swig_version=v4.3.0
+swig_version=v4.4.0
 
 cd /tmp
+rm -rf swig
+
 git clone https://github.com/swig/swig.git
 cd swig
 git checkout ${swig_version}
@@ -72,17 +74,19 @@ if [[ $KERNEL == *Windows* ]]; then
     exit 0
 fi
 
-if [[ $KERNEL == *Linux* ]]; then
-    sudo apt install build-essential libpcre2-dev libpcre3-dev autoconf automake libtool bison git libboost-dev golang-go guile-2.2-dev nodejs node-gyp libwebkit2gtk-4.1-dev lua5.3 liblua5.3-dev mono-devel octave-dev default-jdk-headless php-cli php-dev python3-dev r-base ruby ruby-dev tcl-dev scilab libxml2-dev
-fi
+# if [[ $KERNEL == *Linux* ]]; then
+#     sudo apt install build-essential libpcre2-dev libpcre3-dev autoconf automake libtool bison git libboost-dev golang-go guile-2.2-dev nodejs node-gyp libwebkit2gtk-4.1-dev lua5.3 liblua5.3-dev mono-devel octave-dev default-jdk-headless php-cli php-dev python3-dev r-base ruby ruby-dev tcl-dev scilab libxml2-dev
+# fi
 
 if [[ $KERNEL == *Darwin* ]]; then
     brew install pcre2
+    brew install bison
 fi
 
 #
 # Build it
 #
+autogen.sh
 ./configure --prefix=${CMAKE_INSTALL_PREFIX}
 make
 make install

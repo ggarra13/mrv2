@@ -492,11 +492,14 @@ clean_mo_files()
     
 check_broken_swig_version() {
     local version
-    version=$(swig -version 2>/dev.null | grep -oP 'SWIG Version \K[0-9.]+')
-    
+    version=$(swig -version 2>/dev/null | grep -oP 'SWIG Version \K[0-9.]+')
+
+    echo
+    echo "SWIG version '$version'"
+    echo
     if [[ "$version" == "4.5.0" ]]; then
-        return 1  # true in bash exit codes
+        return 0  # true in bash exit codes
     else
-        return 0  # false in bash exit codes
+        return 1  # false in bash exit codes
     fi
 }

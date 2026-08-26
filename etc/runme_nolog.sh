@@ -442,6 +442,8 @@ echo "GNU arhiver ${GNU_ARCHIVER_NAME} version ${GNU_ARCHIVER_VERSION}"
 echo
 
 
+export CMAKE_INSTALL_PREFIX=$PWD/$BUILD_DIR/install
+export CMAKE_PREFIX_PATH=$PWD/$BUILD_DIR/install
 
 echo "CMake at: ${CMAKE_LOCATION} ${CMAKE_VERSION}"
 echo "Git at: ${GIT_LOCATION} ${GIT_VERSION}"
@@ -469,6 +471,42 @@ if command -v ninja > /dev/null 2>&1; then
 else
     echo
     echo "ninja NOT found!!! Cannot compile mrv2/vmrv2."
+    echo
+    exit 1
+fi
+
+build_swig=0
+if command -v swig > /dev/null 2>&1; then
+    if check_broken_swig_version; then
+	echo
+	echo "swig broken!!! Trying to compile from source."
+	echo
+	build_swig=1
+    fi
+else
+    build_swig=1
+    echo
+    echo "swig NOT found!!! Trying to compile from source."
+    echo
+fi
+
+if [[ "$build_swig" == "1" ]]; then
+    . etc/common/build_swig.sh
+    if command -v swig > /dev/null 2>&1; then
+	swig -version
+    else
+	echo
+	echo "swig NOT found!!! Cannot compile pyFLTK."
+	echo
+	exit 1
+    fi
+fi
+
+if command -v perl > /dev/null 2>&1; then
+    perl -version
+else
+    echo
+    echo "Perl NOT found!!! Cannot compile OpenSSL."
     echo
     exit 1
 fi
@@ -546,51 +584,6 @@ if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
 fi
 
-export CMAKE_INSTALL_PREFIX=$PWD/$BUILD_DIR/install
-export CMAKE_PREFIX_PATH=$PWD/$BUILD_DIR/install
-
-#
-# Handle Windows pre-flight compiles
-#
-if [[ $KERNEL == *Windows* ]]; then
-    . $PWD/etc/windows/compile_dlls.sh
-fi
-
-build_swig=0
-if command -v swig > /dev/null 2>&1; then
-    swig -version
-    if check_broken_swig_version; then
-       build_swig=1
-    fi
-else
-    build_swig=1
-fi
-
-if [[ $build_swig == 1 ]]; then
-    echo
-    echo "swig NOT found or broken!!! Trying to compile from source."
-    echo
-    . etc/common/build_swig.sh
-    if command -v swig > /dev/null 2>&1; then
-	swig -version
-    else
-	echo
-	echo "swig NOT found!!! Cannot compile pyFLTK."
-	echo
-	exit 1
-    fi
-fi
-
-if command -v perl > /dev/null 2>&1; then
-    perl -version
-else
-    echo
-    echo "Perl NOT found!!! Cannot compile OpenSSL."
-    echo
-    exit 1
-fi
-
-
 #
 # Work-around FLTK's CMakeLists.txt bug
 #
@@ -603,6 +596,13 @@ cd $BUILD_DIR
 #
 unset  VCPKG_ROOT
 export VCPKG_INSTALL_PREFIX=$PWD/install
+
+#
+# Handle Windows pre-flight compiles
+#
+if [[ $KERNEL == *Windows* ]]; then
+    . $PWD/etc/windows/compile_dlls.sh
+fi
 
 cmd="cmake -G 'Ninja'
 	   -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
