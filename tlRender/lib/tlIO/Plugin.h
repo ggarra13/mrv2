@@ -106,6 +106,10 @@ namespace tl
         public:
             virtual ~IWrite();
 
+            //! Write video header.
+            virtual void writeVideoHeader(const std::shared_ptr<image::Image>&,
+                                          const Options& = Options()) {};
+
             //! Write video data.
             virtual void writeVideo(
                 const OTIO_NS::RationalTime&,

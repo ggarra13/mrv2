@@ -1883,6 +1883,11 @@ namespace tl
             return out;
         }
 
+        void Write::writeVideoHeader(
+            const std::shared_ptr<image::Image>& image, const io::Options&)
+        {
+        }
+
         void Write::writeVideo(
             const OTIO_NS::RationalTime& time,
             const std::shared_ptr<image::Image>& image, const io::Options&)

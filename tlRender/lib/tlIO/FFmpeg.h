@@ -193,6 +193,9 @@ namespace tl
                 const file::Path&, const io::Info&, const io::Options&,
                 const std::weak_ptr<log::System>&);
 
+            void writeVideoHeader(const std::shared_ptr<image::Image>&,
+                                  const io::Options& = io::Options()) override;
+
             void writeVideo(
                 const OTIO_NS::RationalTime&,
                 const std::shared_ptr<image::Image>&,
