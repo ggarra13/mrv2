@@ -1529,8 +1529,9 @@ namespace tl
                     _hdr.eotf = toEOTF(frame->color_trc);
                     setPrimariesFromAVColorPrimaries(frame->color_primaries,
                                                      _hdr);
-                    if (toHDRData(frame, _hdr))
+                    if (image::isHDR(_hdr))
                     {
+                        toHDRData(frame, _hdr);
                         image->setHDR(_hdr);
                     }
                     image->setTags(tags);
