@@ -182,6 +182,7 @@ namespace tl
                 case AVCOL_TRC_SMPTE170M:
                 case AVCOL_TRC_SMPTE240M:
                 case AVCOL_TRC_IEC61966_2_4:
+                case AVCOL_TRC_IEC61966_2_1:
                 case AVCOL_TRC_BT1361_ECG:
                     out = image::EOTFType::EOTF_BT709;
                     break;
@@ -357,17 +358,17 @@ namespace tl
 
                 // If we are reading VPX, use libvpx-vp9 external lib if
                 // available so we can read an alpha channel.
-                if (!_options.hwAccel &&
-                    avVideoCodecParameters->codec_id == AV_CODEC_ID_VP9)
-                {
-                    auto avLibVpxCodec =
-                        avcodec_find_decoder_by_name("libvpx-vp9");
-                    if (avLibVpxCodec)
-                    {
-                        avVideoCodec = avLibVpxCodec;
-                        avVideoCodecParameters->codec_id = avVideoCodec->id;
-                    }
-                }
+                // if (!_options.hwAccel &&
+                //     avVideoCodecParameters->codec_id == AV_CODEC_ID_VP9)
+                // {
+                //     auto avLibVpxCodec =
+                //         avcodec_find_decoder_by_name("libvpx-vp9");
+                //     if (avLibVpxCodec)
+                //     {
+                //         avVideoCodec = avLibVpxCodec;
+                //         avVideoCodecParameters->codec_id = avVideoCodec->id;
+                //     }
+                // }
 
                 if (!avVideoCodec)
                 {
@@ -1527,9 +1528,8 @@ namespace tl
                     _hdr.eotf = toEOTF(frame->color_trc);
                     setPrimariesFromAVColorPrimaries(frame->color_primaries,
                                                      _hdr);
-                    if (image::isHDR(_hdr))
+                    if (toHDRData(frame, _hdr))
                     {
-                        toHDRData(frame, _hdr);
                         image->setHDR(_hdr);
                     }
                     image->setTags(tags);

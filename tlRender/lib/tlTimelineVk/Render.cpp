@@ -1095,6 +1095,7 @@ namespace tl
                 p.garbage[i].pipelineLayouts.reserve(20);
                 p.garbage[i].bindingSets.reserve(20);
                 p.garbage[i].buffers.reserve(20);
+                p.garbage[i].textures.reserve(20);
             }
         }
 
@@ -1207,6 +1208,7 @@ namespace tl
             g.pipelines.clear();
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
+            g.textures.clear();
             g.buffers.clear();
 
             const math::Matrix4x4f transform;
@@ -1990,7 +1992,7 @@ namespace tl
 
             // --- Process 3D Textures ---
             const unsigned num3DTextures = shaderDesc->getNum3DTextures();
-            int index = 5;
+            int index = 5;  // Start of binding index
             for (unsigned i = 0; i < num3DTextures; ++i)
             {
                 const char* textureName = nullptr;
@@ -2340,6 +2342,13 @@ namespace tl
                 return;
 
 #if defined(TLRENDER_OCIO)
+            if (p.ocioData)
+            {
+                for (auto& tex : p.ocioData->textures)
+                {
+                    p.garbage[p.frameIndex].textures.push_back(tex);
+                }
+            }
             p.ocioData.reset();
 #endif // TLRENDER_OCIO
 
@@ -2509,10 +2518,18 @@ namespace tl
         void Render::setLUTOptions(const timeline::LUTOptions& value)
         {
             TLRENDER_P();
+
             if (value == p.lutOptions)
                 return;
 
 #if defined(TLRENDER_OCIO)
+            if (p.lutData)
+            {
+                for (auto& tex : p.lutData->textures)
+                {
+                    p.garbage[p.frameIndex].textures.push_back(tex);
+                }
+            }
             p.lutData.reset();
 #endif // TLRENDER_OCIO
 
@@ -2574,7 +2591,7 @@ namespace tl
                 }
                 catch (const std::exception& e)
                 {
-                    p.ocioData.reset();
+                    p.lutData.reset();
                     throw e;
                 }
             }
@@ -2645,6 +2662,14 @@ namespace tl
                 if (!p.placeboData || peakDetectionChanged || hdrDataChanged ||
                     metadataChanged)
                 {
+                    if (p.placeboData)
+                    {
+                        for (auto& tex : p.placeboData->textures)
+                        {
+                            p.garbage[p.frameIndex].textures.push_back(tex);
+                        }
+                    }
+
                     // This ensures we have a valid object even if
                     // 'effectivePeakDetection' is false
                     p.placeboData.reset(new LibPlaceboData(ctx, effectivePeakDetection));
@@ -3229,6 +3254,13 @@ namespace tl
                 {
                     if (p.placeboData)
                     {
+                        if (p.placeboData)
+                        {
+                            for (auto& tex : p.placeboData->textures)
+                            {
+                                p.garbage[p.frameIndex].textures.push_back(tex);
+                            }
+                        }
                         p.placeboData->textures.clear();
                         _addTextures(p.placeboData->textures,
                                      p.placeboData->res);

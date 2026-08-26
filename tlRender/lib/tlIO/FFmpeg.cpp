@@ -3,7 +3,7 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
-#if 1
+#if 0
 #    define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 #else
 #    define DBG

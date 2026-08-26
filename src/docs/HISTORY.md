@@ -4,6 +4,8 @@ v1.7.5
 - Bug/Core: Fix a potential race (crash) condition in FFmpeg's log callback.
 - UI/Core: Added to Settings->Performance a pulldown select the HW driver.
 
+- Vulkan: Improved performance of movies with changing HDR metadata.
+- Vulkan: Fixed validation error when OCIO and libplacebo were used together.
 - Vulkan/Linux: Added HW decoding under Vulkan on both backends.
 
 - HDR: Added Saving of HDR movies with stream metadata.
@@ -13,6 +15,7 @@ v1.7.5
 - Libraries: Updated libvpx to v1.16.0, with aarch64 and Neon assembler
   	     optimizations.  Also added runtime-cpu-detection.
 	     This improves 8K playback to 30FPS on my old NVidia 3080 RTX.
+	     Well done, Google!
 - Libraries: Updated libdav1d to v1.5.4.
 - Libraries: Updated Svt-AV1 to v4.2.0.
 - Libraries: Updated FFmpeg to v9.0.1.

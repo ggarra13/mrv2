@@ -2263,15 +2263,15 @@ namespace tl
 
             AVFrameSideData* sd = nullptr;
 
-            sd = av_frame_get_side_data(frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA);
+            // --- Mastering display metadata ---
+            sd = av_frame_get_side_data(frame,
+                                        AV_FRAME_DATA_MASTERING_DISPLAY_METADATA);
             if (!sd) {
-                sd = av_frame_new_side_data(frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA, sizeof(AVMasteringDisplayMetadata));
+                sd = av_frame_new_side_data(frame,
+                                            AV_FRAME_DATA_MASTERING_DISPLAY_METADATA,
+                                            sizeof(AVMasteringDisplayMetadata));
             }
 
-            // --- Mastering display metadata ---
-            sd = av_frame_new_side_data(
-                frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA,
-                sizeof(AVMasteringDisplayMetadata));
             if (sd && sd->data)
             {
                 AVMasteringDisplayMetadata *mdm =
@@ -2336,6 +2336,8 @@ namespace tl
             // --- HDR 10+ metadata ---
             if (p.hdr.sceneMax[0] > 0.F)
             {
+                DBG;
+
                 sd = av_frame_get_side_data(frame,
                                             AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
                 if (!sd)
@@ -2400,7 +2402,6 @@ namespace tl
 #ifdef TLRENDER_DOVI
             if (p.hdr.isDolbyVision)
             {
-                DBG;
                 size_t dovi_size = 0;
                 // av_dovi_metadata_alloc respects the internal ABI limits of FFmpeg for DOVI
                 AVDOVIMetadata *dovi_alloc = av_dovi_metadata_alloc(&dovi_size);
