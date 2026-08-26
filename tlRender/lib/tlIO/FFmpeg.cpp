@@ -318,6 +318,8 @@ namespace tl
                     }
                 }
             }
+
+#ifdef TLRENDER_DOBI
             raw = get_side_data_raw(frame, AV_FRAME_DATA_DOVI_METADATA);
             if (raw)
             {
@@ -348,6 +350,7 @@ namespace tl
                     hdr_metadata_from_dovi_rpu(hdr, sd->buf->data, sd->buf->size);
                 }
             }
+#endif
 
             return out;
         }
