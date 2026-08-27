@@ -585,6 +585,13 @@ if [[ $ASK_TO_CONTINUE == 1 ]]; then
 fi
 
 #
+# Handle Windows pre-flight compiles
+#
+if [[ $KERNEL == *Windows* ]]; then
+    . $PWD/etc/windows/compile_dlls.sh
+fi
+
+#
 # Work-around FLTK's CMakeLists.txt bug
 #
 rm -rf $BUILD_DIR/install/include/FL
@@ -597,12 +604,6 @@ cd $BUILD_DIR
 unset  VCPKG_ROOT
 export VCPKG_INSTALL_PREFIX=$PWD/install
 
-#
-# Handle Windows pre-flight compiles
-#
-if [[ $KERNEL == *Windows* ]]; then
-    . $PWD/etc/windows/compile_dlls.sh
-fi
 
 cmd="cmake -G 'Ninja'
 	   -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}

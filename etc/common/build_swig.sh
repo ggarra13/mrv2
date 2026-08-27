@@ -79,14 +79,20 @@ fi
 # fi
 
 if [[ $KERNEL == *Darwin* ]]; then
-    brew install pcre2
-    brew install bison
+    brew tap-new local/swig
+    brew extract --version=4.4.0 swig local/swig
+    brew install swig@4.4.0
+elif [[ $KERNEL == *Linux* ]]; then
+    #
+    # Build it
+    #
+    ./autogen.sh
+    ./configure --prefix=${CMAKE_INSTALL_PREFIX}
+    make
+    make install
 fi
 
-#
-# Build it
-#
-autogen.sh
-./configure --prefix=${CMAKE_INSTALL_PREFIX}
-make
-make install
+hash -r
+
+echo "SWIG version now:"
+swig --version
