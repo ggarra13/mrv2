@@ -477,6 +477,7 @@ fi
 
 build_swig=0
 if command -v swig > /dev/null 2>&1; then
+    swig -version
     if check_broken_swig_version; then
 	echo
 	echo "swig broken!!! Trying to compile from source."
