@@ -8,6 +8,30 @@ if (USE_SYSTEM_LIBS)
     set(FFmpeg_DEP )
 endif()
 
+
+#
+# While mrv2/vmrv2 adheres to FFmpeg license, there may be issues with patents
+# that you should be aware.
+#
+#
+# Patent information according to ClaudeAI
+#
+# --enable-decoder=h264
+# --enable-encoder=libx264
+# --enable-libx264
+# --enable-gpl	            Patent pool via Access Advance (formerly MPEG LA).
+#
+# --enable-decoder=hevc, --enable-muxer=hevc, --enable-parser=hevc, hardware hevc_videotoolbox	Multiple competing patent pools (Access Advance, MPEG LA, Velos Media) — notoriously fragmented and litigated. Encoding is not enabled here (no libx265), only decode/mux, but decoders can still be in scope of some pools.
+#
+# --enable-decoder=aac
+# --enable-encoder=aac	Patent pool (via Fraunhofer/VoiceAge/Via Licensing). FFmpeg's native AAC encoder is generally considered low-risk/free to distribute compared to libfdk-aac (which you are not using here — good, no --enable-libfdk-aac).
+#
+# --enable-decoder/encoder=ac3, eac3	Dolby patents and trademarks (can't call it "Dolby Digital" without a trademark license even if you implement AC-3 independently).
+#
+# TrueHD	decoder/encoder/demuxer/muxer=truehd	Dolby patents.
+# DTS	        decoder=dca (DTS Coherent Acoustics), demuxer/muxer=dts	DTS Inc. patents.
+#
+
 if (NOT FFmpeg_FOUND)
     
     set(FFmpeg_VERSION 9.0.1)
@@ -147,7 +171,7 @@ if (NOT FFmpeg_FOUND)
             --enable-decoder=eac3
             --enable-decoder=flac
             --enable-decoder=gif
-            --enable-decoder=h264
+            --enable-decoder=h264   # patent pool via Access Advance and GPL
             --enable-decoder=hevc
             --enable-decoder=mjpeg
             --enable-decoder=mp3
@@ -277,7 +301,7 @@ if (NOT FFmpeg_FOUND)
             --enable-demuxer=eac3
             --enable-demuxer=flac
             --enable-demuxer=gif
-            --enable-demuxer=h264
+            --enable-demuxer=h264   # patent pool via Access Advance and GPL
             --enable-demuxer=hevc
             --enable-demuxer=m4v
             --enable-demuxer=matroska
@@ -369,7 +393,7 @@ if (NOT FFmpeg_FOUND)
             --enable-muxer=yuv4mpegpipe
 
             --disable-parsers
-            --enable-parser=aac
+            --enable-parser=aac 
             --enable-parser=ac3
             --enable-parser=av1
 	    --enable-parser=dca
