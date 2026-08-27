@@ -3,8 +3,6 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
-#define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -209,7 +207,6 @@ namespace tl
                 enum AVPixelFormat target,
                 std::weak_ptr<log::System>& _logSystem)
             {
-#ifdef HAVE_AVCODEC_GET_SUPPORTED_CONFIG
                 const enum AVPixelFormat* p = nullptr;
                 int num = 0;
                 int i = 0;
@@ -249,42 +246,6 @@ namespace tl
                         return best;
                     }
                 }
-#else
-                if (codec && codec->pix_fmts)
-                {
-                    const enum AVPixelFormat* p = codec->pix_fmts;
-                    const AVPixFmtDescriptor* desc =
-                        av_pix_fmt_desc_get(target);
-                    int has_alpha = desc ? desc->nb_components % 2 == 0 : 0;
-                    enum AVPixelFormat best = AV_PIX_FMT_NONE;
-
-                    for (; *p != AV_PIX_FMT_NONE; p++)
-                    {
-                        best = av_find_best_pix_fmt_of_2(
-                            best, *p, target, has_alpha, NULL);
-                        if (*p == target)
-                            break;
-                    }
-                    if (*p == AV_PIX_FMT_NONE)
-                    {
-                        if (target != AV_PIX_FMT_NONE)
-                        {
-                            const char* targetFormat =
-                                av_get_pix_fmt_name(target);
-                            const char* bestFormat = av_get_pix_fmt_name(best);
-                            const std::string msg =
-                                string::Format(
-                                    "Incompatible pixel format '{0}' for codec "
-                                    "'{1}', auto-selecting format '{2}'.")
-                                    .arg(targetFormat)
-                                    .arg(codec->name)
-                                    .arg(bestFormat);
-                            LOG_WARNING(msg);
-                        }
-                        return best;
-                    }
-                }
-#endif
                 return target;
             }
 
@@ -1404,11 +1365,6 @@ namespace tl
                             .arg(p.fileName));
                 }
                 p.avVideoStream->id = p.avFormatContext->nb_streams - 1;
-                // if (!avCodec->pix_fmts)
-                // {
-                //     throw std::runtime_error(string::Format("{0}: No pixel
-                //     formats available").arg(p.fileName));
-                // }
 
                 if ((videoInfo.size.w == 0 && videoInfo.size.h == 0) ||
                     videoInfo.size.pixelAspectRatio == 0)
@@ -1508,7 +1464,7 @@ namespace tl
                 p.avCodecContext->thread_type = FF_THREAD_FRAME;
 
                 // Get the pixel format from the options.
-                std::string pixelFormat = "YUV420P";
+                std::string pixelFormat = "YUV420P_U8"; // all codecs support it
                 option = p.options.find("FFmpeg/PixelFormat");
                 if (option != p.options.end())
                 {
@@ -2011,6 +1967,17 @@ namespace tl
             {
                 p.hasHDR = true;
                 p.hdr = *hdrData;
+
+                if (string::toLower(p.path.getExtension()) != ".mkv")
+                {
+                    throw std::runtime_error(
+                            "Saving videos with HDR data per frame "
+                            "requires VPX and a .mkv container");
+                }
+            }
+            else
+            {
+                p.hasHDR = false;
             }
 
             _encode(p.avCodecContext, p.avVideoStream, p.avFrame, p.avPacket);
@@ -2264,13 +2231,16 @@ namespace tl
             AVFrameSideData* sd = nullptr;
 
             // --- Mastering display metadata ---
-            sd = av_frame_get_side_data(frame,
-                                        AV_FRAME_DATA_MASTERING_DISPLAY_METADATA);
-            if (!sd) {
-                sd = av_frame_new_side_data(frame,
-                                            AV_FRAME_DATA_MASTERING_DISPLAY_METADATA,
-                                            sizeof(AVMasteringDisplayMetadata));
-            }
+            // Remove any existing side data first: since `frame` is reused
+            // across calls, an existing side-data buffer may still be
+            // referenced (not exclusively owned) by the encoder for a
+            // previously-sent frame. Mutating it in place would corrupt
+            // that earlier frame's metadata. Always allocate a fresh,
+            // independently-owned buffer instead.
+            av_frame_remove_side_data(frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA);
+            sd = av_frame_new_side_data(frame,
+                                        AV_FRAME_DATA_MASTERING_DISPLAY_METADATA,
+                                        sizeof(AVMasteringDisplayMetadata));
 
             if (sd && sd->data)
             {
@@ -2317,14 +2287,11 @@ namespace tl
             }
 
             // --- Content light level metadata ---
-            sd = av_frame_get_side_data(frame,
-                                        AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
-            if (!sd)
-            {
-                sd = av_frame_new_side_data(
-                    frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL,
-                    sizeof(AVContentLightMetadata));
-            }
+            // See note above: always drop + recreate rather than reuse.
+            av_frame_remove_side_data(frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
+            sd = av_frame_new_side_data(
+                frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL,
+                sizeof(AVContentLightMetadata));
             if (sd && sd->data)
             {
                 AVContentLightMetadata *clm = (AVContentLightMetadata*)
@@ -2336,16 +2303,11 @@ namespace tl
             // --- HDR 10+ metadata ---
             if (p.hdr.sceneMax[0] > 0.F)
             {
-                DBG;
-
-                sd = av_frame_get_side_data(frame,
-                                            AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
-                if (!sd)
-                {
-                    sd = av_frame_new_side_data(
-                        frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS,
-                        sizeof(AVDynamicHDRPlus));
-                }
+                // See note above: always drop + recreate rather than reuse.
+                av_frame_remove_side_data(frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
+                sd = av_frame_new_side_data(
+                    frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS,
+                    sizeof(AVDynamicHDRPlus));
                 if (sd && sd->data)
                 {
                     AVDynamicHDRPlus *data = (AVDynamicHDRPlus*) sd->data;
@@ -2407,11 +2369,9 @@ namespace tl
                 AVDOVIMetadata *dovi_alloc = av_dovi_metadata_alloc(&dovi_size);
                 if (dovi_alloc)
                 {
-                    sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DOVI_METADATA);
-                    if (!sd)
-                    {
-                        sd = av_frame_new_side_data(frame, AV_FRAME_DATA_DOVI_METADATA, dovi_size);
-                    }
+                    // See note above: always drop + recreate rather than reuse.
+                    av_frame_remove_side_data(frame, AV_FRAME_DATA_DOVI_METADATA);
+                    sd = av_frame_new_side_data(frame, AV_FRAME_DATA_DOVI_METADATA, dovi_size);
                     if (sd && sd->data)
                     {
                         // Copy the properly zeroed/allocated flat struct into the side data memory

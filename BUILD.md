@@ -216,9 +216,12 @@ xcode-select --install
 brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite3 xz zlib ccache automake autoconf
 
 # If you are building the Vulkan version of vmrv2, you need to install
-# The VulkanSDK components.  You don't need to install MoltenVk as it is built
+# The VulkanSDK components.  You may not need to install MoltenVk as it is built
 # from source.
 
+brew install vulkan-loader molten-vk vulkan-tools shaderc glslang vulkan-headersvulkan-profiles spirv-tools
+brew link --overwrite molten-vk
+	    
 #
 # rustup for cargo (needed for libdovi)
 #

@@ -9,6 +9,8 @@ v1.7.5
 - Vulkan/Linux: Added HW decoding under Vulkan on both backends.
 
 - HDR: Added Saving of HDR movies with stream metadata.
+- HDR: Added Saving of HDR movies with frame metadata (HDR10+).
+       Tested using VPX and a .mkv container.  Good for FFmpeg 9.0.1 and VPX!
 
 - Linux: Fixed a random crash when reloading the file requester.
 

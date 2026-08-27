@@ -562,6 +562,8 @@ namespace mrv
                 auto hdrData = videoFrame[0].layers[0].image->getHDR();
                 if (hdrData)
                 {
+                    std::cerr << "SaveMovie setHDR " << *hdrData
+                              << std::endl;
                     writer->setHDR(*hdrData);
                 }
                 writer->writeHeader();
