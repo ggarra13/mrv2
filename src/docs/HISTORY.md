@@ -14,6 +14,8 @@ v1.7.5
 
 - Linux: Fixed a random crash when reloading the file requester.
 
+- Core: Fixed an infringing file on the BSD-3 license (mrvSlider.cpp).
+
 - Libraries: Updated libvpx to v1.16.0, with aarch64 and Neon assembler
   	     optimizations.  Also added runtime-cpu-detection.
 	     This improves 8K playback to 30FPS on my old NVidia 3080 RTX.
