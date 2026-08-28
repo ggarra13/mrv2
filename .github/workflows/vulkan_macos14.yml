@@ -202,7 +202,11 @@ jobs:
         run: brew install libb2 libffi readline sqlite3 xz zlib
 
       - name: Install pyFLTK dependencies
-        run: brew install swig
+        run: |
+          brew install swig pcre bison
+
+          echo "$(brew --prefix bison)/bin" >> "$GITHUB_PATH"
+          echo "$(brew --prefix pcre2)/bin" >> "$GITHUB_PATH"
 
       - name: Install curl dependencies
         run: brew install libidn2
