@@ -33,7 +33,7 @@ if (NOT USD_FOUND)
 	set(CMAKE_BUILD_TYPE_LC relwithdebuginfo)
     endif()
 
-    set(USD_ARGS -v --build-variant ${CMAKE_BUILD_TYPE_LC} --generator Ninja -j 4)
+    set(USD_ARGS -v --build-variant ${CMAKE_BUILD_TYPE_LC} --generator Ninja -j ${NPROCS})
     if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
 	list(APPEND USD_ARGS --build-args)
 	list(APPEND USD_ARGS USD,"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
