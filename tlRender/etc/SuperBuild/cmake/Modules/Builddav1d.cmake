@@ -64,7 +64,7 @@ if (NOT dav1d_FOUND AND NOT FFmpeg_FOUND)
 
     ExternalProject_Add(
 	dav1d
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/dav1d
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/dav1d
 	DEPENDS ${dav1d_DEPENDENCIES}
 	GIT_REPOSITORY ${dav1d_REPOSITORY}
 	GIT_TAG ${dav1d_GIT_TAG}

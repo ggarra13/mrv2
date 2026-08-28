@@ -5,7 +5,7 @@ set(MoltenVK_GIT_TAG v1.4.1)
 
 ExternalProject_Add(
     MoltenVK
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/MoltenVK
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/MoltenVK
     GIT_REPOSITORY ${MoltenVK_GIT_REPOSITORY}
     GIT_TAG ${MoltenVK_GIT_TAG}
     CONFIGURE_COMMAND ./fetchDependencies --macos

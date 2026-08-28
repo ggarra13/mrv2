@@ -24,7 +24,7 @@ if (NOT glfw3_FOUND)
 	list(APPEND glfw3_PATCH
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             ${CMAKE_CURRENT_SOURCE_DIR}/patches/glfw3-patch/src/cocoa_init.m
-            ${CMAKE_CURRENT_BINARY_DIR}/glfw3/src/glfw3/src/cocoa_init.m)
+            ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/glfw3/src/glfw3/src/cocoa_init.m)
     endif()
 
     set(glfw3_ARGS
@@ -37,7 +37,7 @@ if (NOT glfw3_FOUND)
 
     ExternalProject_Add(
 	glfw3
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/glfw3
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/glfw3
 	GIT_REPOSITORY ${glfw3_GIT_REPOSITORY}
 	GIT_TAG ${glfw3_GIT_TAG}
 	PATCH_COMMAND ${glfw3_PATCH}

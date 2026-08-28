@@ -16,7 +16,7 @@ if (NOT APPLE)
     if (RtAudio_GIT_TAG STREQUAL "5.2.0")
 	set(RtAudio_PATCH ${CMAKE_COMMAND} -E copy_if_different
             ${CMAKE_CURRENT_SOURCE_DIR}/patches/RtAudio-patch/RtAudio.cpp
-            ${CMAKE_CURRENT_BINARY_DIR}/RtAudio/src/RtAudio/RtAudio.cpp )
+            ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/RtAudio/src/RtAudio/RtAudio.cpp )
     endif()
 endif()
 
@@ -37,7 +37,7 @@ endif()
 
 ExternalProject_Add(
     RtAudio
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/RtAudio
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/RtAudio
     GIT_REPOSITORY ${RtAudio_GIT_REPOSITORY}
     GIT_TAG ${RtAudio_GIT_TAG}
     

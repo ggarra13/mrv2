@@ -52,7 +52,7 @@ set(libplacebo_PATCH)
 
 ExternalProject_Add(
     libplacebo
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libplacebo
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/libplacebo
     GIT_REPOSITORY ${libplacebo_GIT_REPO}
     GIT_TAG ${libplacebo_GIT_TAG}
     DEPENDS ${libplacebo_DEPENDENCIES}

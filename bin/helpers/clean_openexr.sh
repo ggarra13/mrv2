@@ -16,7 +16,7 @@ rm -rf $INSTALL/lib/libopenjph*
 rm -rf $INSTALL/lib/openjph*
 
 echo "Cleaning tlRender deps OpenEXR"
-rm -rf $BUILD_DIR/tlRender/etc/SuperBuild/OpenEXR
+rm -rf $BUILD_DIR/deps/OpenEXR
 
 echo "Cleaning tlRender deps OpenJPH"
-rm -rf $BUILD_DIR/tlRender/etc/SuperBuild/OpenJPH
+rm -rf $BUILD_DIR/deps/OpenJPH

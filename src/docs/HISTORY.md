@@ -10,11 +10,13 @@ v1.7.5
 
 - HDR: Added Saving of HDR movies with stream metadata.
 - HDR: Added Saving of HDR movies with frame metadata (HDR10+).
-       Tested using VPX and a .mkv container.  Good for FFmpeg 9.0.1 and VPX!
+       Tested using VPX and a .mkv container.  Well done FFmpeg 9.0.1 and VPX!
 
 - Linux: Fixed a random crash when reloading the file requester.
 
 - Core: Fixed an infringing file on the BSD-3 license (mrvSlider.cpp).
+
+- Build: Made all temporary build directories to be in $BUILD_DIR/deps.
 
 - Libraries: Updated libvpx to v1.16.0, with aarch64 and Neon assembler
   	     optimizations.  Also added runtime-cpu-detection.

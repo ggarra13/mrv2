@@ -19,7 +19,7 @@ if (NOT LibRaw_FOUND)
 	BUILD_IN_SOURCE 0
 	BUILD_ALWAYS 0
 	UPDATE_COMMAND ""
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/LibRaw_cmake
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/LibRaw_cmake
 	INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
 	CONFIGURE_COMMAND ""
 	BUILD_COMMAND ""
@@ -50,10 +50,10 @@ if (NOT LibRaw_FOUND)
     #
     set(LibRaw_PATCH
 	COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-	${CMAKE_CURRENT_BINARY_DIR}/LibRaw_cmake/src/LibRaw_cmake/cmake <SOURCE_DIR>/cmake
+	${CMAKE_CURRENT_BINARY_DIR}/../../../deps/LibRaw_cmake/src/LibRaw_cmake/cmake <SOURCE_DIR>/cmake
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
 	${CMAKE_CURRENT_SOURCE_DIR}/patches/LibRaw-patch/CMakeLists.txt 
-	${CMAKE_CURRENT_BINARY_DIR}/LibRaw/src/LibRaw/CMakeLists.txt
+	${CMAKE_CURRENT_BINARY_DIR}/../../../deps/LibRaw/src/LibRaw/CMakeLists.txt
     )
 
     set(LibRaw_DEPENDENCIES LibRaw_cmake ${jasper_DEP} ${LCMS2_DEP} ${ZLIB_DEP})
@@ -64,7 +64,7 @@ if (NOT LibRaw_FOUND)
     
     ExternalProject_Add(
 	LibRaw
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/LibRaw
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/LibRaw
 	URL ${LibRaw_URL}
 	DEPENDS ${LibRaw_DEPENDENCIES}
 	PATCH_COMMAND ${LibRaw_PATCH}

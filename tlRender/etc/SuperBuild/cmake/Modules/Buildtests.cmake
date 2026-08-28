@@ -12,7 +12,7 @@ endif()
 
 ExternalProject_Add(
     tests
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/tests
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/tests
     DEPENDS ${TLRENDER_EXTERNAL_DEPS}
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/tests
     TEST_BEFORE_INSTALL TRUE

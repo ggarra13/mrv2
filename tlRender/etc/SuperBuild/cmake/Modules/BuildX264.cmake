@@ -78,7 +78,7 @@ if (NOT x264_FOUND)
 
     ExternalProject_Add(
 	X264
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/X264
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/X264
 	DEPENDS ${X264_DEPENDENCIES}
 	GIT_REPOSITORY "https://code.videolan.org/videolan/x264.git"
 	GIT_TAG ${X264_TAG}

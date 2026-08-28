@@ -51,6 +51,6 @@ rm -rf $INSTALL/resources
 
 rm -rf $INSTALL/README.md
 rm -rf $INSTALL/src
-rm -rf $BUILD_DIR/tlRender/etc/SuperBuild/USD
+rm -rf $BUILD_DIR/deps/USD
 rm -rf $INSTALL/THIRD_PARTY
 

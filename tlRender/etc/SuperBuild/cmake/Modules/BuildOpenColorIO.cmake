@@ -25,7 +25,7 @@ if (NOT OpenColorIO_FOUND)
 
     ExternalProject_Add(
 	OpenColorIO
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenColorIO
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/OpenColorIO
 	DEPENDS ${OpenColorIO_DEPENDENCIES}
 	GIT_REPOSITORY ${OpenColorIO_GIT_REPOSITORY}
 	GIT_TAG ${OpenColorIO_GIT_TAG}

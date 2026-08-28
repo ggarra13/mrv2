@@ -122,7 +122,7 @@ if (NOT VPX_FOUND AND NOT FFmpeg_FOUND)
 
     ExternalProject_Add(
 	VPX
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/VPX
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/VPX
 	DEPENDS ${VPX_DEPENDENCIES}
 	GIT_REPOSITORY "https://github.com/webmproject/libvpx.git"
 	GIT_TAG ${VPX_TAG}

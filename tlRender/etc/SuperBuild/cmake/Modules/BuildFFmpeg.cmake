@@ -55,11 +55,11 @@ if (NOT FFmpeg_FOUND)
     set(FFmpeg_PATCH )
     if(WIN32)
 	set(FFmpeg_PATCH ${CMAKE_COMMAND} -E copy_if_different
-            ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure
-            ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure.bak
+            ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/configure
+            ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/configure.bak
 	    COMMAND ${CMAKE_COMMAND} -E copy_if_different
 	    ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure_v9.0.1
-	    ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure)
+	    ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/configure)
     endif()
     
     set(FFmpeg_SHARED_LIBS ON)
@@ -590,7 +590,7 @@ if (NOT FFmpeg_FOUND)
 
 	convert_path_for_msys2("${CMAKE_CURRENT_BINARY_DIR}" BINARY_DIR)
 	set(FFmpeg_OPENSSL_COPY
-            "cp ${BINARY_DIR}/ffmpeg_configure.sh ${BINARY_DIR}/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
+            "cp ${BINARY_DIR}/ffmpeg_configure.sh ${BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
 
 	list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
 
@@ -611,7 +611,7 @@ if (NOT FFmpeg_FOUND)
             COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swscale.lib ${INSTALL_PREFIX}/lib")
     else()
 	set(FFmpeg_CONFIGURE_COPY
-            "cp ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
+            "cp ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
 
 	# PKG_CONFIG_PATH is exported inside ffmpeg_configure.sh itself, so it
 	# no longer needs to be set as a separate command here.
@@ -644,7 +644,7 @@ if (NOT FFmpeg_FOUND)
 
     ExternalProject_Add(
 	FFmpeg
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg
 	DEPENDS ${FFmpeg_DEPENDENCIES}
 	GIT_REPOSITORY "https://github.com/FFmpeg/FFmpeg.git"
 	GIT_TAG "n${FFmpeg_VERSION}"

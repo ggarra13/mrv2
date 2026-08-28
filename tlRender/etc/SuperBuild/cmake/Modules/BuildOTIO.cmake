@@ -32,10 +32,10 @@ if (NOT OpenTimelineIO_FOUND)
     if(WIN32)
 	set(OTIO_PATCH ${CMAKE_COMMAND} -E copy_if_different
             ${CMAKE_CURRENT_SOURCE_DIR}/patches/OTIO-patch/src/opentime/timeRange.h
-	    ${CMAKE_CURRENT_BINARY_DIR}/OTIO/src/OTIO/src/opentime/timeRange.h
+	    ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/OTIO/src/OTIO/src/opentime/timeRange.h
 	    COMMAND ${CMAKE_COMMAND} -E copy_if_different
             ${CMAKE_CURRENT_SOURCE_DIR}/patches/OTIO-patch/src/opentimelineio/errorStatus.h
-	    ${CMAKE_CURRENT_BINARY_DIR}/OTIO/src/OTIO/src/opentimelineio/errorStatus.h)
+	    ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/OTIO/src/OTIO/src/opentimelineio/errorStatus.h)
 
     endif()
 
@@ -80,7 +80,7 @@ if (NOT OpenTimelineIO_FOUND)
 
     ExternalProject_Add(
 	OTIO
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OTIO
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/OTIO
 	DEPENDS ${OTIO_DEPENDENCIES}
 	GIT_REPOSITORY ${OTIO_GIT_REPOSITORY}
 	GIT_TAG ${OTIO_GIT_TAG}
