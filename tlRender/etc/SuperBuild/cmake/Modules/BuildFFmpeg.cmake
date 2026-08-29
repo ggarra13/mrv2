@@ -131,32 +131,6 @@ if (NOT FFmpeg_FOUND)
 	${FFmpeg_CXXFLAGS}
 	${FFmpeg_OBJCFLAGS}
 	${FFmpeg_LDFLAGS})
-    if(NOT APPLE)
-	list(APPEND FFmpeg_CONFIGURE_ARGS
-	    --disable-videotoolbox
-	    --disable-audiotoolbox)
-	if (UNIX)
-	    if(DEFINED ENV{GITHUB_ACTIONS})
-		message(STATUS "Running on GitHub Actions - No HW acceleration")
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --disable-vulkan)
-	    else()
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --enable-vulkan
-		    --enable-vaapi
-		    --enable-ffnvcodec
-		    --enable-nvdec)
-	    endif()
-	endif()
-    else()
-	list(APPEND FFmpeg_CONFIGURE_ARGS
-	    --enable-videotoolbox
-	    --enable-hwaccel=h264_videotoolbox
-	    --enable-hwaccel=hevc_videotoolbox
-	    --enable-hwaccel=prores_videotoolbox
-	    --enable-hwaccel=vp9_videotoolbox
-	    --enable-audiotoolbox)
-    endif()
 
     if(TLRENDER_FFMPEG_MINIMAL)
 	list(APPEND FFmpeg_CONFIGURE_ARGS
@@ -527,6 +501,35 @@ if (NOT FFmpeg_FOUND)
 	endif()
     endif()
 
+    # Finally HW decoders and encoders.
+    
+    if(NOT APPLE)
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+	    --disable-videotoolbox
+	    --disable-audiotoolbox)
+	if (UNIX)
+	    if(DEFINED ENV{GITHUB_ACTIONS})
+		message(STATUS "Running on GitHub Actions - No HW acceleration")
+		list(APPEND FFmpeg_CONFIGURE_ARGS
+		    --disable-vulkan)
+	    else()
+		list(APPEND FFmpeg_CONFIGURE_ARGS
+		    --enable-vulkan
+		    --enable-vaapi
+		    --enable-ffnvcodec
+		    --enable-nvdec
+		    --enable-nvenc)
+	    endif()
+	endif()
+    else()
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+	    --enable-videotoolbox
+	    --enable-hwaccel=h264_videotoolbox
+	    --enable-hwaccel=hevc_videotoolbox
+	    --enable-hwaccel=prores_videotoolbox
+	    --enable-hwaccel=vp9_videotoolbox  # does not exist?
+	    --enable-audiotoolbox)
+    endif()
     if(NOT WIN32)
 	if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
 	    list(APPEND FFmpeg_CONFIGURE_ARGS

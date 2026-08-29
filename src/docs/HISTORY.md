@@ -4,8 +4,9 @@ v1.7.5
 - Bug/Core: Fix a potential race (crash) condition in FFmpeg's log callback.
 - UI/Core: Added to Settings->Performance a pulldown select the HW driver.
 
-- Vulkan: Improved performance of movies with changing HDR metadata.
+- Vulkan: Improved performance of movies with changing HDR metadata and destroying textures.
 - Vulkan: Fixed validation error when OCIO and libplacebo were used together.
+- Vulkan: Fixed on validation error when saving and no tonemapping.
 - Vulkan/Linux: Added HW decoding under Vulkan on both backends.
 
 - HDR: Added Saving of HDR movies with stream metadata.

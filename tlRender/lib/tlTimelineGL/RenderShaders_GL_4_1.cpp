@@ -161,9 +161,15 @@ namespace tl
                 "const uint PixelType_YUV_420P_U16      = 31;\n"
                 "const uint PixelType_YUV_422P_U16      = 32;\n"
                 "const uint PixelType_YUV_444P_U16      = 33;\n"
+
                 "const uint PixelType_YUV_420SP_U8      = 34;\n"
                 "const uint PixelType_YUV_420SP_U16     = 35;\n"
-                "const uint PixelType_ARGB_4444_Premult = 36;\n";
+                "const uint PixelType_YUV_422SP_U8      = 36;\n"
+                "const uint PixelType_YUV_422SP_U16     = 37;\n"
+                "const uint PixelType_YUV_444SP_U8      = 38;\n"
+                "const uint PixelType_YUV_444SP_U16     = 39;\n"
+
+                "const uint PixelType_ARGB_4444_Premult = 40;\n";
 
             const std::string videoLevels =
                 "// enum tl::image::VideoLevels\n"
@@ -185,7 +191,8 @@ float getBitDepth(int pixelType)
     {
         return 12.0;
     }
-    else if (pixelType == PixelType_YUV_420SP_U16 ||
+    else if (pixelType == PixelType_YUV_444SP_U16 ||
+             pixelType == PixelType_YUV_420SP_U16 ||
              pixelType == PixelType_YUV_420P_U16 ||
              pixelType == PixelType_YUV_422P_U16 ||
              pixelType == PixelType_YUV_444P_U16)
@@ -214,8 +221,9 @@ vec4 sampleTexture(
 
     if (pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_420SP_U16)
     {
-        // 1. Fetch plane channels based on storage type
-        if (pixelType == PixelType_YUV_420SP_U8 || pixelType == PixelType_YUV_420SP_U16)
+        // Check semi-planar types first:
+        if (pixelType >= PixelType_YUV_420SP_U8 &&
+            pixelType <= PixelType_YUV_444SP_U16)
         {
             // Semi-Planar (NV12 / P010 / P016): s0 = Y, s1 = RG (U/V)
             y  = texture(s0, textureCoord).r;
@@ -306,7 +314,7 @@ vec4 sampleTexture(
     }
     return c;
 })";
-            
+
         } // namespace
 
         std::string imageFragmentSource()

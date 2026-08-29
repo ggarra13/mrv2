@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include <tlCore/Math.h>
 #include <tlCore/String.h>
@@ -28,6 +29,7 @@ extern "C"
 #ifdef TLRENDER_DOVI
 #    include <libavutil/dovi_meta.h>
 #endif
+#include <libavutil/hwcontext.h>
 #include <libavutil/imgutils.h>
 #include <libavutil/hdr_dynamic_metadata.h>
 #include <libavutil/mastering_display_metadata.h>
@@ -200,6 +202,105 @@ namespace tl
                     throw std::runtime_error(
                         string::Format("Unknown pixel format {0}").arg(s));
                 return o;
+            }
+
+            //! Which hardware encoder backend (if any) was used/requested.
+            enum class HWBackend {
+                kNone,
+                kVideoToolbox, // macOS
+                kNVENC,        // NVIDIA, plain frames (no CUDA hwframe ctx)
+                kVAAPI         // Linux (Intel/AMD/NVIDIA-via-VAAPI)
+            };
+
+            HWBackend parseHWBackend(const std::string& c)
+            {
+                const std::string s = string::toLower(c);
+                if (s == "videotoolbox")
+                    return HWBackend::kVideoToolbox;
+                else if (s == "nvenc")
+                    return HWBackend::kNVENC;
+                else if (s == "vaapi")
+                    return HWBackend::kVAAPI;
+                return HWBackend::kNone;
+            }
+
+            //! Try to find a hardware encoder for \p avCodecID.  If
+            //! \p requested is empty or "auto", every backend available on
+            //! the current platform is tried, in order of preference,
+            //! stopping at the first encoder that FFmpeg actually has
+            //! registered.  Otherwise, only the requested backend is
+            //! tried.  \p outBackend is set to whichever backend actually
+            //! produced an encoder, or HWBackend::kNone if none did.
+            const AVCodec* findHardwareEncoder(
+                AVCodecID avCodecID, const std::string& requested,
+                HWBackend& outBackend)
+            {
+                outBackend = HWBackend::kNone;
+                const bool isAuto =
+                    requested.empty() ||
+                    string::toLower(requested) == "auto";
+                const HWBackend wanted =
+                    isAuto ? HWBackend::kNone : parseHWBackend(requested);
+
+                struct Candidate
+                {
+                    HWBackend backend;
+                    std::string name;
+                };
+
+                std::vector<Candidate> candidates;
+                switch (avCodecID)
+                {
+                case AV_CODEC_ID_H264:
+                    candidates = {
+                        {HWBackend::kVideoToolbox, "h264_videotoolbox"},
+                        {HWBackend::kNVENC, "h264_nvenc"},
+                        {HWBackend::kVAAPI, "h264_vaapi"},
+                    };
+                    break;
+                case AV_CODEC_ID_VP9:
+                    // Note: there is no vp9_videotoolbox or vp9_nvenc in
+                    // FFmpeg (Apple and NVIDIA do not offer hardware VP9
+                    // *encoding*).  VAAPI is the only real HW VP9 encoder.
+                    candidates = {
+                        {HWBackend::kVAAPI, "vp9_vaapi"},
+                    };
+                    break;
+                case AV_CODEC_ID_AV1:
+                    candidates = {
+                        {HWBackend::kVideoToolbox, "av1_videotoolbox"},
+                        {HWBackend::kNVENC, "av1_nvenc"},
+                        {HWBackend::kVAAPI, "av1_vaapi"},
+                    };
+                    break;
+                case AV_CODEC_ID_PRORES:
+                    // ProRes hardware encoding only exists on Apple
+                    // silicon via VideoToolbox.
+                    candidates = {
+                        {HWBackend::kVideoToolbox, "prores_videotoolbox"},
+                    };
+                    break;
+                default:
+                    break;
+                }
+
+                for (const auto& c : candidates)
+                {
+                    if (!isAuto && wanted != c.backend)
+                        continue;
+#ifndef __APPLE__
+                    if (c.backend == HWBackend::kVideoToolbox)
+                        continue;
+#endif
+                    const AVCodec* found =
+                        avcodec_find_encoder_by_name(c.name.c_str());
+                    if (found)
+                    {
+                        outBackend = c.backend;
+                        return found;
+                    }
+                }
+                return nullptr;
             }
 
             enum AVPixelFormat choosePixelFormat(
@@ -504,7 +605,6 @@ namespace tl
                 enum AVSampleFormat sample_fmt)
             {
                 bool out = false;
-#ifdef HAVE_AVCODEC_GET_SUPPORTED_CONFIG
                 const enum AVSampleFormat* p = nullptr;
                 int num = 0;
                 int i = 0;
@@ -522,18 +622,6 @@ namespace tl
                         }
                     }
                 }
-#else
-                const enum AVSampleFormat* p = codec->sample_fmts;
-                while (*p != AV_SAMPLE_FMT_NONE)
-                {
-                    if (*p == sample_fmt)
-                    {
-                        out = true;
-                        break;
-                    }
-                    p++;
-                }
-#endif
                 return out;
             }
 
@@ -543,8 +631,6 @@ namespace tl
                 AVChannelLayout* dst, int channelCount)
             {
                 int out = 1;
-
-#ifdef HAVE_AVCODEC_GET_SUPPORTED_CONFIG
                 if (codec && avctx)
                 {
                     const AVChannelLayout* p = nullptr;
@@ -575,32 +661,6 @@ namespace tl
                         out = av_channel_layout_copy(dst, best_ch_layout);
                     }
                 }
-#else
-                const AVChannelLayout* p = nullptr;
-                const AVChannelLayout* best_ch_layout = nullptr;
-                int best_nb_channels = 0;
-                if (!codec->ch_layouts)
-                {
-                    av_channel_layout_default(dst, channelCount);
-                    out = 0;
-                }
-                else
-                {
-                    p = codec->ch_layouts;
-                    while (p->nb_channels)
-                    {
-                        int nb_channels = p->nb_channels;
-
-                        if (nb_channels > best_nb_channels)
-                        {
-                            best_ch_layout = p;
-                            best_nb_channels = nb_channels;
-                        }
-                        p++;
-                    }
-                    out = av_channel_layout_copy(dst, best_ch_layout);
-                }
-#endif
                 return out;
             }
 
@@ -610,7 +670,6 @@ namespace tl
                 const int sampleRate)
             {
                 int out = 0;
-#ifdef HAVE_AVCODEC_GET_SUPPORTED_CONFIG
                 int* p = nullptr;
                 int num = 0;
                 int i = 0;
@@ -634,29 +693,6 @@ namespace tl
                             out = p[i];
                     }
                 }
-#else
-                if (!codec->supported_samplerates)
-                {
-                    out = sampleRate;
-                }
-                else
-                {
-                    const int* p = codec->supported_samplerates;
-                    while (*p)
-                    {
-                        if (*p == sampleRate)
-                        {
-                            out = sampleRate;
-                            break;
-                        }
-
-                        if (!out ||
-                            abs(sampleRate - *p) < abs(sampleRate - out))
-                            out = *p;
-                        p++;
-                    }
-                }
-#endif
                 return out;
             }
 
@@ -684,6 +720,15 @@ namespace tl
             bool hasHDR = false;
             image::HDRData hdr;
 
+            // Hardware Video Encoding
+            bool useVAAPI = false;
+
+            // sws_scale dest format
+            AVPixelFormat avSwPixelFormat = AV_PIX_FMT_NONE;
+            // real VAAPI hw surface sent to encoder
+            AVFrame* avHwFrame = nullptr;
+            AVBufferRef* avHWFramesCtx = nullptr;
+            AVBufferRef* avHWDeviceCtx = nullptr;
 
             // Audio
             AVCodecContext* avAudioCodecContext = nullptr;
@@ -1281,63 +1326,59 @@ namespace tl
                     }
                 }
 
+                // Which hardware backend to try: "auto" (default) tries
+                // VideoToolbox / NVENC / VAAPI in that order, whichever
+                // is actually registered on this build/platform.  It can
+                // also be forced to one specific backend.
+                std::string hwBackendOption = "auto";
+                option = p.options.find("FFmpeg/HardwareEncoder");
+                if (option != p.options.end())
+                {
+                    std::stringstream ss(option->second);
+                    ss >> hwBackendOption;
+                }
+
+                HWBackend hwBackend = HWBackend::kNone;
                 const AVCodec* avCodec = nullptr;
-                if (avCodecID == AV_CODEC_ID_H264)
+                if (hardwareEncode)
                 {
-#ifdef __APPLE__
-                    if (hardwareEncode)
-                    {
-                        avCodec =
-                            avcodec_find_encoder_by_name("h264_videotoolbox");
-                        if (!avCodec)
-                        {
-                            hardwareEncode = false;
-                        }
-                    }
-#endif
-                }
-                else if (avCodecID == AV_CODEC_ID_VP9)
-                {
-                    // Try hardware encoders first
-                    if (hardwareEncode)
-                    {
-#ifdef __APPLE__
-                        avCodec =
-                            avcodec_find_encoder_by_name("vp9_videotoolbox");
-#else
-                        avCodec = avcodec_find_encoder_by_name("vp9_qsv");
-#endif
-                    }
-                    // If failed, use software encoder
+                    avCodec = findHardwareEncoder(
+                        avCodecID, hwBackendOption, hwBackend);
                     if (!avCodec)
                     {
+                        // No matching hardware encoder was found/registered
+                        // -- fall back to software below.
                         hardwareEncode = false;
-                        avCodec = avcodec_find_encoder_by_name("libvpx-vp9");
+                        LOG_STATUS(
+                            "No hardware encoder available, using "
+                            "software encoder instead.");
+                    }
+                    else
+                    {
+                        LOG_STATUS(
+                            string::Format(
+                                "Using hardware encoder '{0}'.")
+                                .arg(avCodec->name));
                     }
                 }
-                else if (avCodecID == AV_CODEC_ID_AV1)
+
+                // Software fallbacks / codec-specific default encoder
+                // names, used when hardware encoding was off, unavailable,
+                // or not requested for this codec.
+                if (!avCodec && avCodecID == AV_CODEC_ID_VP9)
                 {
-                    hardwareEncode = false;
-                    if (profile == Profile::AV1_AOM)
-                    {
-                        avCodec = avcodec_find_encoder_by_name("libaom-av1");
-                    }
+                    avCodec = avcodec_find_encoder_by_name("libvpx-vp9");
                 }
-                else if (avCodecID == AV_CODEC_ID_PRORES)
+                else if (!avCodec && avCodecID == AV_CODEC_ID_AV1 &&
+                         profile == Profile::AV1_AOM)
                 {
-#ifdef __APPLE__
-                    if (hardwareEncode)
-                    {
-                        avCodec =
-                            avcodec_find_encoder_by_name("prores_videotoolbox");
-                    }
-#endif
-                    if (!avCodec)
-                    {
-                        hardwareEncode = false;
-                        avCodec = avcodec_find_encoder_by_name("prores_ks");
-                    }
+                    avCodec = avcodec_find_encoder_by_name("libaom-av1");
                 }
+                else if (!avCodec && avCodecID == AV_CODEC_ID_PRORES)
+                {
+                    avCodec = avcodec_find_encoder_by_name("prores_ks");
+                }
+
                 if (!avCodec)
                     avCodec = avcodec_find_encoder(avCodecID);
                 if (!avCodec)
@@ -1347,8 +1388,29 @@ namespace tl
                             .arg(p.fileName));
                 }
                 const std::string codecName = avCodec->name;
-                if (codecName.find("videotoolbox") != std::string::npos)
+
+                // Safety net: if avcodec_find_encoder() above happened to
+                // resolve to a hardware encoder on its own (e.g. no
+                // software encoder was compiled in), make sure our state
+                // reflects that.
+                if (hwBackend == HWBackend::kNone)
+                {
+                    if (codecName.find("videotoolbox") != std::string::npos)
+                        hwBackend = HWBackend::kVideoToolbox;
+                    else if (codecName.find("nvenc") != std::string::npos)
+                        hwBackend = HWBackend::kNVENC;
+                    else if (codecName.find("vaapi") != std::string::npos)
+                        hwBackend = HWBackend::kVAAPI;
+                }
+                if (hwBackend != HWBackend::kNone)
                     hardwareEncode = true;
+
+                // VAAPI is the only backend of the three that requires an
+                // AVHWDeviceContext / AVHWFramesContext and real hardware
+                // surfaces -- VideoToolbox and NVENC both accept plain
+                // system-memory AVFrames directly.
+                const bool useVAAPI = (hwBackend == HWBackend::kVAAPI);
+                p.useVAAPI = useVAAPI;
                 p.avCodecContext = avcodec_alloc_context3(avCodec);
                 if (!p.avCodecContext)
                 {
@@ -1474,9 +1536,23 @@ namespace tl
 
                 // Parse the pixel format and check that it is a valid one.
                 AVPixelFormat pix_fmt = parsePixelFormat(pixelFormat);
-                pix_fmt = choosePixelFormat(
-                    p.avCodecContext, avCodec, pix_fmt, _logSystem);
-                p.avCodecContext->pix_fmt = pix_fmt;
+                if (!useVAAPI)
+                {
+                    // avcodec_get_supported_config() for a *_vaapi encoder
+                    // only ever reports AV_PIX_FMT_VAAPI itself, so this
+                    // validation step does not apply -- the real pixel
+                    // format lives one level down, in the hw frame's
+                    // sw_format (set up below).
+                    pix_fmt = choosePixelFormat(
+                        p.avCodecContext, avCodec, pix_fmt, _logSystem);
+                }
+                p.avCodecContext->pix_fmt =
+                    useVAAPI ? AV_PIX_FMT_VAAPI : pix_fmt;
+                // Software-memory format that frames are rendered into
+                // with sws_scale before either being handed to the
+                // encoder directly (VideoToolbox/NVENC/software) or
+                // uploaded to a VAAPI hardware surface.
+                p.avSwPixelFormat = pix_fmt;
 
                 if (profile == Profile::H264)
                 {
@@ -1541,6 +1617,79 @@ namespace tl
                 else
                 {
                     LOG_STATUS("Hardware encoding is off.");
+                }
+
+                if (useVAAPI)
+                {
+                    // Optional render node, e.g. "/dev/dri/renderD128".
+                    // Left empty, FFmpeg picks the first VAAPI-capable
+                    // device it finds.
+                    std::string vaapiDevice;
+                    option = p.options.find("FFmpeg/VAAPIDevice");
+                    if (option != p.options.end())
+                    {
+                        std::stringstream ss(option->second);
+                        ss >> vaapiDevice;
+                    }
+
+                    AVBufferRef* hwDeviceCtx = nullptr;
+                    r = av_hwdevice_ctx_create(
+                        &hwDeviceCtx, AV_HWDEVICE_TYPE_VAAPI,
+                        vaapiDevice.empty() ? nullptr : vaapiDevice.c_str(),
+                        nullptr, 0);
+                    if (r < 0)
+                    {
+                        throw std::runtime_error(
+                            string::Format(
+                                "{0}: Cannot create VAAPI device - {1}")
+                                .arg(p.fileName)
+                                .arg(getErrorLabel(r)));
+                    }
+
+                    AVBufferRef* hwFramesRef =
+                        av_hwframe_ctx_alloc(hwDeviceCtx);
+                    if (!hwFramesRef)
+                    {
+                        av_buffer_unref(&hwDeviceCtx);
+                        throw std::runtime_error(
+                            string::Format(
+                                "{0}: Cannot allocate VAAPI frames context")
+                                .arg(p.fileName));
+                    }
+
+                    AVHWFramesContext* framesCtx =
+                        reinterpret_cast<AVHWFramesContext*>(
+                            hwFramesRef->data);
+                    framesCtx->format = AV_PIX_FMT_VAAPI;
+                    framesCtx->sw_format = p.avSwPixelFormat;
+                    framesCtx->width = p.avCodecContext->width;
+                    framesCtx->height = p.avCodecContext->height;
+                    // A small pool is enough since we upload/encode one
+                    // frame at a time and immediately release it.
+                    framesCtx->initial_pool_size = 4;
+
+                    r = av_hwframe_ctx_init(hwFramesRef);
+                    if (r < 0)
+                    {
+                        av_buffer_unref(&hwFramesRef);
+                        av_buffer_unref(&hwDeviceCtx);
+                        throw std::runtime_error(
+                            string::Format(
+                                "{0}: Cannot initialize VAAPI frames "
+                                "context - {1}")
+                                .arg(p.fileName)
+                                .arg(getErrorLabel(r)));
+                    }
+
+                    p.avCodecContext->hw_device_ctx =
+                        av_buffer_ref(hwDeviceCtx);
+                    p.avCodecContext->hw_frames_ctx =
+                        av_buffer_ref(hwFramesRef);
+
+                    // Private keeps its own references so it can release
+                    // them independently of the codec context.
+                    p.avHWDeviceCtx = hwDeviceCtx;
+                    p.avHWFramesCtx = hwFramesRef;
                 }
 
                 r = avcodec_open2(p.avCodecContext, avCodec, &codecOptions);
@@ -1654,7 +1803,7 @@ namespace tl
                         string::Format("{0}: Cannot allocate main video frame")
                             .arg(p.fileName));
                 }
-                p.avFrame->format = p.avVideoStream->codecpar->format;
+                p.avFrame->format = p.avSwPixelFormat;
                 p.avFrame->width = p.avVideoStream->codecpar->width;
                 p.avFrame->height = p.avVideoStream->codecpar->height;
 
@@ -1665,6 +1814,22 @@ namespace tl
                         string::Format("{0}: av_frame_get_buffer - {1}")
                             .arg(p.fileName)
                             .arg(getErrorLabel(r)));
+                }
+
+                if (p.useVAAPI)
+                {
+                    // Real hardware surface handed to the encoder; filled
+                    // in each writeVideo() call via
+                    // av_hwframe_get_buffer()/av_hwframe_transfer_data()
+                    // from p.avFrame above.
+                    p.avHwFrame = av_frame_alloc();
+                    if (!p.avHwFrame)
+                    {
+                        throw std::runtime_error(
+                            string::Format(
+                                "{0}: Cannot allocate VAAPI hw frame")
+                                .arg(p.fileName));
+                    }
                 }
 
                 p.avFrame2 = av_frame_alloc();
@@ -1724,7 +1889,7 @@ namespace tl
                     p.swsContext, "dsth", videoInfo.size.h,
                     AV_OPT_SEARCH_CHILDREN);
                 r = av_opt_set_int(
-                    p.swsContext, "dst_format", p.avCodecContext->pix_fmt,
+                    p.swsContext, "dst_format", p.avSwPixelFormat,
                     AV_OPT_SEARCH_CHILDREN);
                 r = av_opt_set_int(
                     p.swsContext, "sws_flags", swsScaleFlags,
@@ -1838,6 +2003,18 @@ namespace tl
             if (p.swsContext)
             {
                 sws_freeContext(p.swsContext);
+            }
+            if (p.avHwFrame)
+            {
+                av_frame_free(&p.avHwFrame);
+            }
+            if (p.avHWFramesCtx)
+            {
+                av_buffer_unref(&p.avHWFramesCtx);
+            }
+            if (p.avHWDeviceCtx)
+            {
+                av_buffer_unref(&p.avHWDeviceCtx);
             }
             if (p.avFrame2)
             {
@@ -1980,7 +2157,41 @@ namespace tl
                 p.hasHDR = false;
             }
 
-            _encode(p.avCodecContext, p.avVideoStream, p.avFrame, p.avPacket);
+            if (p.useVAAPI)
+            {
+                av_frame_unref(p.avHwFrame);
+                r = av_hwframe_get_buffer(p.avHWFramesCtx, p.avHwFrame, 0);
+                if (r < 0)
+                {
+                    throw std::runtime_error(
+                        string::Format(
+                            "{0}: Cannot get VAAPI hw frame buffer - {1}")
+                            .arg(p.fileName)
+                            .arg(getErrorLabel(r)));
+                }
+
+                r = av_hwframe_transfer_data(p.avHwFrame, p.avFrame, 0);
+                if (r < 0)
+                {
+                    throw std::runtime_error(
+                        string::Format(
+                            "{0}: Cannot upload frame to VAAPI surface "
+                            "- {1}")
+                            .arg(p.fileName)
+                            .arg(getErrorLabel(r)));
+                }
+                p.avHwFrame->pts = p.avFrame->pts;
+
+                _encode(
+                    p.avCodecContext, p.avVideoStream, p.avHwFrame,
+                    p.avPacket);
+            }
+            else
+            {
+                _encode(
+                    p.avCodecContext, p.avVideoStream, p.avFrame,
+                    p.avPacket);
+            }
         }
 
         void Write::writeAudio(

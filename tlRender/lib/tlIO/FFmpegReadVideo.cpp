@@ -732,8 +732,20 @@ namespace tl
                         av_pix_fmt_desc_get(_avInputPixelFormat);
                     const bool gt8 = desc && desc->comp[0].depth > 8;
                     const bool is422 = desc && 1 == desc->log2_chroma_w && 0 == desc->log2_chroma_h;
+                    const bool is444 = desc && 0 == desc->log2_chroma_w && 0 == desc->log2_chroma_h;
 
-                    if (is422)
+                    if (is444)
+                    {
+                        // NV24/NV42 (8-bit) and P410/P412/P416 (>8-bit) are the
+                        // semi-planar 4:4:4 counterparts of NV12/P010, i.e. one
+                        // luma plane plus one interleaved chroma plane at full
+                        // resolution. Like the 4:2:0/4:2:2 branches above, this
+                        // has no alpha plane, so YUVA444* sources are excluded
+                        // in _initHwAccel() and never reach this branch.
+                        _avOutputPixelFormat = gt8 ? AV_PIX_FMT_P410LE : AV_PIX_FMT_NV24;
+                        _info.pixelType = gt8 ? image::PixelType::YUV_444SP_U16 : image::PixelType::YUV_444SP_U8;
+                    }
+                    else if (is422)
                     {
                         _avOutputPixelFormat = gt8 ? AV_PIX_FMT_P210LE : AV_PIX_FMT_NV16;
                         _info.pixelType = gt8 ? image::PixelType::YUV_422SP_U16 : image::PixelType::YUV_422SP_U8;
@@ -1103,11 +1115,13 @@ namespace tl
 
         void ReadVideo::_initHwAccel(const AVCodec* codec)
         {
-            // The hardware path outputs 4:2:0 NV12/P010 with limited-range YUV
-            // colour handling. For sources it would not reproduce faithfully --
-            // full-range, or chroma subsampling other than 4:2:0 -- stay on the
-            // software decoder so hardware decoding is always a faithful match
-            // (it silently falls back rather than altering the image).
+            // The hardware path outputs 4:2:0/4:2:2/4:4:4 NV12/NV16/NV24/P010/
+            // P210/P410 with limited-range YUV colour handling. For sources it
+            // would not reproduce faithfully -- full-range, chroma subsampling
+            // other than 4:2:0/4:2:2/4:4:4, or an alpha channel (none of the
+            // semi-planar download formats carry an alpha plane) -- stay on
+            // the software decoder so hardware decoding is always a faithful
+            // match (it silently falls back rather than altering the image).
             const AVPixelFormat inputFormat =
                 static_cast<AVPixelFormat>(_avCodecParameters[_avStream]->format);
             const AVPixFmtDescriptor* inputDesc = av_pix_fmt_desc_get(inputFormat);
@@ -1115,6 +1129,10 @@ namespace tl
                 1 == inputDesc->log2_chroma_w && 1 == inputDesc->log2_chroma_h;
             const bool is422 = inputDesc &&
                 1 == inputDesc->log2_chroma_w && 0 == inputDesc->log2_chroma_h;
+            const bool is444 = inputDesc &&
+                0 == inputDesc->log2_chroma_w && 0 == inputDesc->log2_chroma_h;
+            const bool hasAlpha = inputDesc &&
+                (inputDesc->flags & AV_PIX_FMT_FLAG_ALPHA);
 
             if (AVCOL_RANGE_JPEG == _avCodecParameters[_avStream]->color_range)
             {
@@ -1123,10 +1141,23 @@ namespace tl
                 LOG_WARNING(msg);
                 return;
             }
-            if (!is420 && !is422)
+            if (!is420 && !is422 && !is444)
             {
                 std::string msg =
-                    string::Format("Hardware decoding skipped for a non-4:2:0/non-4:2:2 source; using software decoding: \"{0}\"").arg(_fileName);
+                    string::Format("Hardware decoding skipped for a non-4:2:0/non-4:2:2/non-4:4:4 source; using software decoding: \"{0}\"").arg(_fileName);
+                LOG_WARNING(msg);
+                return;
+            }
+            if (hasAlpha)
+            {
+                // e.g. ProRes 4444/4444 XQ (YUVA444P*). Vulkan hwaccel decode
+                // may well produce an alpha-bearing frame, but there is no
+                // semi-planar (NV/P-series) download format that carries an
+                // alpha plane, and this pipeline has no alpha-aware hardware
+                // path, so fall back to software decoding rather than
+                // silently dropping the alpha channel.
+                std::string msg =
+                    string::Format("Hardware decoding skipped for a source with an alpha channel; using software decoding: \"{0}\"").arg(_fileName);
                 LOG_WARNING(msg);
                 return;
             }

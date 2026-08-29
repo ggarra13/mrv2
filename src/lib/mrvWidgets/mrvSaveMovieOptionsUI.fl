@@ -208,8 +208,8 @@ o->textcolor(FL_BLACK);}
       }
     }
     Fl_Window uiAdvancedSettings {
-      label {Advanced Settings} open selected
-      xywh {0 0 416 355} type Double hotspot modal visible
+      label {Advanced Settings} open
+      xywh {0 0 416 355} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
         label Override
@@ -700,7 +700,8 @@ DON'T MESS WITH THEM!
 )"));
 uiHelpWindow->show();} {}
   }
-  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {} {
+  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {open
+  } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 const std::string codec = item->label();
@@ -709,9 +710,11 @@ v->deactivate();
 
 if (codec == "H264")
 {    
-\#ifdef __APPLE__
    v->activate();
-\#endif
+}
+else if (codec == "HEVC")
+{    
+   v->activate();
 }
 else if (codec == "ProRes")
 {
@@ -743,16 +746,21 @@ else if (codec == "ProRes_4444")
    v->activate();
 \#endif
 }
-else if (codec == "VP9")
+else if (codec == "AV1" || codec == "AV1_AOM")
 {
-\#ifdef __APPLE__
    v->activate();
-\#endif
+}
+else
+{
+   v->value(0);
+   v->do_callback();
+   v->deactivate();
 }
 
 auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
-v->value(value);} {}
+v->value(value);} {selected
+    }
   }
   Function {add_h264_sw_formats(Fl_Choice* v)} {} {
     code {v->add("YUV_420P");
@@ -762,8 +770,7 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 

@@ -405,6 +405,22 @@ namespace tl
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
+            case image::PixelType::YUV_444SP_U8:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                break;
+            }
+            case image::PixelType::YUV_444SP_U16:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                break;
+            }
             default:
             {
                 auto texture = vlk::Texture::create(ctx, info, options);
@@ -488,7 +504,7 @@ namespace tl
             }
             case image::PixelType::YUV_444P_U8:
             {
-                if (3 == textures.size())
+                if (2 == textures.size())
                 {
                     if (image->getPlaneCount() == 1)
                     {
@@ -498,9 +514,6 @@ namespace tl
                         const std::size_t h = info.size.h;
                         textures[1]->copy(
                             image->getData() + (w * h), textures[1]->getInfo());
-                        textures[2]->copy(
-                            image->getData() + (w * h) + (w * h),
-                            textures[2]->getInfo());
                     }
                     else
                     {
@@ -510,9 +523,6 @@ namespace tl
                         textures[1]->copy(image->getPlaneData(1),
                                           textures[1]->getInfo(),
                                           image->getLineSize(1));
-                        textures[2]->copy(image->getPlaneData(2),
-                                          textures[2]->getInfo(),
-                                          image->getLineSize(2));
                     }
                 }
                 break;
@@ -750,6 +760,8 @@ namespace tl
                 break;
             }
             case image::PixelType::YUV_420SP_U8:
+            case image::PixelType::YUV_422SP_U8:
+            case image::PixelType::YUV_444SP_U8:
             {
                 if (2 == textures.size())
                 {
@@ -773,6 +785,8 @@ namespace tl
                 break;
             }
             case image::PixelType::YUV_420SP_U16:
+            case image::PixelType::YUV_422SP_U16:
+            case image::PixelType::YUV_444SP_U16:
             {
                 if (2 == textures.size())
                 {
@@ -781,7 +795,8 @@ namespace tl
                         const std::size_t w = info.size.w;
                         const std::size_t h = info.size.h;
                         textures[0]->copy(image->getData(), textures[0]->getInfo());
-                        textures[1]->copy(image->getData() + (w * h) * 2, textures[1]->getInfo());
+                        textures[1]->copy(image->getData() + (w * h) * 2,
+                                          textures[1]->getInfo());
                     }
                     else
                     {
@@ -791,70 +806,6 @@ namespace tl
                         textures[1]->copy(image->getPlaneData(1),
                                           textures[1]->getInfo(),
                                           image->getLineSize(1));
-                    }
-                }
-                break;
-            }
-            case image::PixelType::YUV_422SP_U8:
-            {
-                if (3 == textures.size())
-                {
-                    if (image->getPlaneCount() == 1)
-                    {
-                        textures[0]->copy(image->getData(), textures[0]->getInfo());
-                        const std::size_t w = info.size.w;
-                        const std::size_t h = info.size.h;
-                        const std::size_t w2 = w / 2;
-                        textures[1]->copy(
-                            image->getData() + (w * h),
-                            textures[1]->getInfo());
-                        textures[2]->copy(
-                            image->getData() + (w * h) + (w2 * h) * 2,
-                            textures[2]->getInfo());
-                    }
-                    else
-                    {
-                        textures[0]->copy(image->getPlaneData(0),
-                                          textures[0]->getInfo(),
-                                          image->getLineSize(0));
-                        textures[1]->copy(image->getPlaneData(1),
-                                          textures[1]->getInfo(),
-                                          image->getLineSize(1));
-                        textures[2]->copy(image->getPlaneData(2),
-                                          textures[2]->getInfo(),
-                                          image->getLineSize(2));
-                    }
-                }
-                break;
-            }
-            case image::PixelType::YUV_422SP_U16:
-            {
-                if (3 == textures.size())
-                {
-                    if (image->getPlaneCount() == 1)
-                    {
-                        textures[0]->copy(image->getData(), textures[0]->getInfo());
-                        const std::size_t w = info.size.w;
-                        const std::size_t h = info.size.h;
-                        const std::size_t w2 = w / 2;
-                        textures[1]->copy(
-                            image->getData() + (w * h) * 2,
-                            textures[1]->getInfo());
-                        textures[2]->copy(
-                            image->getData() + (w * h) * 2 + (w2 * h) * 2,
-                            textures[2]->getInfo());
-                    }
-                    else
-                    {
-                        textures[0]->copy(image->getPlaneData(0),
-                                          textures[0]->getInfo(),
-                                          image->getLineSize(0));
-                        textures[1]->copy(image->getPlaneData(1),
-                                          textures[1]->getInfo(),
-                                          image->getLineSize(1));
-                        textures[2]->copy(image->getPlaneData(2),
-                                          textures[2]->getInfo(),
-                                          image->getLineSize(2));
                     }
                 }
                 break;
@@ -2780,6 +2731,13 @@ namespace tl
             else
             {
                 // Only destroy data if Tone Mapping is completely OFF
+                if (p.placeboData)
+                {
+                    for (auto& tex : p.placeboData->textures)
+                    {
+                        p.garbage[p.frameIndex].textures.push_back(tex);
+                    }
+                }
                 p.placeboData.reset();
             }
 #endif // TLRENDER_LIBPLACEBO

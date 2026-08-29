@@ -216,6 +216,12 @@ namespace tl
 
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G8_B8R8_2PLANE_420_UNORM,    // YUV_420SP_U8
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM, // YUV_420SP_U16
+
+                    VK_FORMAT_UNDEFINED,
+                    VK_FORMAT_UNDEFINED,
+
+                    VK_FORMAT_UNDEFINED,
+                    VK_FORMAT_UNDEFINED
             };
             return data[static_cast<std::size_t>(type)];
         }
