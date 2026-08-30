@@ -209,7 +209,9 @@ namespace tl
                 kNone,
                 kVideoToolbox, // macOS
                 kNVENC,        // NVIDIA, plain frames (no CUDA hwframe ctx)
-                kVAAPI         // Linux (Intel/AMD/NVIDIA-via-VAAPI)
+                kVAAPI,        // Linux (Intel/AMD/NVIDIA-via-VAAPI)
+                kD3D11VA       // Windows (Direct3D 11 hw surfaces, via
+                               // Media Foundation encoders)
             };
 
             HWBackend parseHWBackend(const std::string& c)
@@ -221,6 +223,9 @@ namespace tl
                     return HWBackend::kNVENC;
                 else if (s == "vaapi")
                     return HWBackend::kVAAPI;
+                else if (s == "d3d11va" || s == "d3d11" || s == "directx" ||
+                         s == "direct3d")
+                    return HWBackend::kD3D11VA;
                 return HWBackend::kNone;
             }
 
@@ -256,6 +261,9 @@ namespace tl
                         {HWBackend::kVideoToolbox, "h264_videotoolbox"},
                         {HWBackend::kNVENC, "h264_nvenc"},
                         {HWBackend::kVAAPI, "h264_vaapi"},
+                        // Windows Media Foundation encoder -- accepts a
+                        // real AV_PIX_FMT_D3D11 hw_frames_ctx.
+                        {HWBackend::kD3D11VA, "h264_mf"},
                     };
                     break;
                 case AV_CODEC_ID_VP9:
@@ -271,6 +279,16 @@ namespace tl
                         {HWBackend::kVideoToolbox, "av1_videotoolbox"},
                         {HWBackend::kNVENC, "av1_nvenc"},
                         {HWBackend::kVAAPI, "av1_vaapi"},
+                    };
+                    break;
+                case AV_CODEC_ID_HEVC:
+                    candidates = {
+                        {HWBackend::kVideoToolbox, "hevc_videotoolbox"},
+                        {HWBackend::kNVENC, "hevc_nvenc"},
+                        {HWBackend::kVAAPI, "hevc_vaapi"},
+                        // Windows Media Foundation encoder -- accepts a
+                        // real AV_PIX_FMT_D3D11 hw_frames_ctx.
+                        {HWBackend::kD3D11VA, "hevc_mf"},
                     };
                     break;
                 case AV_CODEC_ID_PRORES:
@@ -290,6 +308,10 @@ namespace tl
                         continue;
 #ifndef __APPLE__
                     if (c.backend == HWBackend::kVideoToolbox)
+                        continue;
+#endif
+#ifndef _WIN32
+                    if (c.backend == HWBackend::kD3D11VA)
                         continue;
 #endif
                     const AVCodec* found =
@@ -722,10 +744,11 @@ namespace tl
 
             // Hardware Video Encoding
             bool useVAAPI = false;
+            bool useD3D11VA = false;
 
             // sws_scale dest format
             AVPixelFormat avSwPixelFormat = AV_PIX_FMT_NONE;
-            // real VAAPI hw surface sent to encoder
+            // real hw surface (VAAPI or D3D11) sent to the encoder
             AVFrame* avHwFrame = nullptr;
             AVBufferRef* avHWFramesCtx = nullptr;
             AVBufferRef* avHWDeviceCtx = nullptr;
@@ -1214,10 +1237,6 @@ namespace tl
                 {
                     std::stringstream ss(option->second);
                     ss >> hardwareEncode;
-                    if (hardwareEncode)
-                    {
-                        LOG_STATUS("Trying Hardware encoding.");
-                    }
                 }
                 std::string avBitrate;
                 std::string profileString;
@@ -1307,6 +1326,10 @@ namespace tl
                     avCodecID = AV_CODEC_ID_AV1;
                     avProfile = AV_PROFILE_UNKNOWN;
                     break;
+                case Profile::HEVC:
+                    avCodecID = AV_CODEC_ID_HEVC;
+                    avProfile = AV_PROFILE_UNKNOWN;
+                    break;
                 default:
                     break;
                 }
@@ -1327,9 +1350,11 @@ namespace tl
                 }
 
                 // Which hardware backend to try: "auto" (default) tries
-                // VideoToolbox / NVENC / VAAPI in that order, whichever
-                // is actually registered on this build/platform.  It can
-                // also be forced to one specific backend.
+                // VideoToolbox / NVENC / VAAPI / D3D11VA (Media
+                // Foundation) in that order, whichever is actually
+                // registered on this build/platform.  It can also be
+                // forced to one specific backend via "FFmpeg/HardwareEncoder"
+                // (e.g. "d3d11va").
                 std::string hwBackendOption = "auto";
                 option = p.options.find("FFmpeg/HardwareEncoder");
                 if (option != p.options.end())
@@ -1342,6 +1367,10 @@ namespace tl
                 const AVCodec* avCodec = nullptr;
                 if (hardwareEncode)
                 {
+                    if (hardwareEncode)
+                    {
+                        LOG_STATUS("Trying Hardware encoding.");
+                    }
                     avCodec = findHardwareEncoder(
                         avCodecID, hwBackendOption, hwBackend);
                     if (!avCodec)
@@ -1401,16 +1430,20 @@ namespace tl
                         hwBackend = HWBackend::kNVENC;
                     else if (codecName.find("vaapi") != std::string::npos)
                         hwBackend = HWBackend::kVAAPI;
+                    else if (codecName.find("_mf") != std::string::npos)
+                        hwBackend = HWBackend::kD3D11VA;
                 }
                 if (hwBackend != HWBackend::kNone)
                     hardwareEncode = true;
 
-                // VAAPI is the only backend of the three that requires an
-                // AVHWDeviceContext / AVHWFramesContext and real hardware
-                // surfaces -- VideoToolbox and NVENC both accept plain
-                // system-memory AVFrames directly.
+                // VAAPI and D3D11VA are the only backends here that
+                // require an AVHWDeviceContext / AVHWFramesContext and
+                // real hardware surfaces -- VideoToolbox and NVENC both
+                // accept plain system-memory AVFrames directly.
                 const bool useVAAPI = (hwBackend == HWBackend::kVAAPI);
+                const bool useD3D11VA = (hwBackend == HWBackend::kD3D11VA);
                 p.useVAAPI = useVAAPI;
+                p.useD3D11VA = useD3D11VA;
                 p.avCodecContext = avcodec_alloc_context3(avCodec);
                 if (!p.avCodecContext)
                 {
@@ -1536,22 +1569,25 @@ namespace tl
 
                 // Parse the pixel format and check that it is a valid one.
                 AVPixelFormat pix_fmt = parsePixelFormat(pixelFormat);
-                if (!useVAAPI)
+                if (!useVAAPI && !useD3D11VA)
                 {
-                    // avcodec_get_supported_config() for a *_vaapi encoder
-                    // only ever reports AV_PIX_FMT_VAAPI itself, so this
-                    // validation step does not apply -- the real pixel
-                    // format lives one level down, in the hw frame's
-                    // sw_format (set up below).
+                    // avcodec_get_supported_config() for a *_vaapi or
+                    // Media Foundation D3D11VA encoder only ever reports
+                    // its own hw pixel format, so this validation step
+                    // does not apply -- the real pixel format lives one
+                    // level down, in the hw frame's sw_format (set up
+                    // below).
                     pix_fmt = choosePixelFormat(
                         p.avCodecContext, avCodec, pix_fmt, _logSystem);
                 }
                 p.avCodecContext->pix_fmt =
-                    useVAAPI ? AV_PIX_FMT_VAAPI : pix_fmt;
+                    useVAAPI     ? AV_PIX_FMT_VAAPI
+                    : useD3D11VA ? AV_PIX_FMT_D3D11
+                                 : pix_fmt;
                 // Software-memory format that frames are rendered into
                 // with sws_scale before either being handed to the
                 // encoder directly (VideoToolbox/NVENC/software) or
-                // uploaded to a VAAPI hardware surface.
+                // uploaded to a real VAAPI/D3D11 hardware surface.
                 p.avSwPixelFormat = pix_fmt;
 
                 if (profile == Profile::H264)
@@ -1692,6 +1728,86 @@ namespace tl
                     p.avHWFramesCtx = hwFramesRef;
                 }
 
+#ifdef _WIN32
+                if (useD3D11VA)
+                {
+                    // Optional adapter index (e.g. "0", "1", ...) picking
+                    // which GPU to use.  Left empty, FFmpeg picks the
+                    // default D3D11 adapter.
+                    std::string d3d11Device;
+                    option = p.options.find("FFmpeg/D3D11Device");
+                    if (option != p.options.end())
+                    {
+                        std::stringstream ss(option->second);
+                        ss >> d3d11Device;
+                    }
+
+                    AVBufferRef* hwDeviceCtx = nullptr;
+                    r = av_hwdevice_ctx_create(
+                        &hwDeviceCtx, AV_HWDEVICE_TYPE_D3D11VA,
+                        d3d11Device.empty() ? nullptr : d3d11Device.c_str(),
+                        nullptr, 0);
+                    if (r < 0)
+                    {
+                        throw std::runtime_error(
+                            string::Format(
+                                "{0}: Cannot create Direct3D 11 device - {1}")
+                                .arg(p.fileName)
+                                .arg(getErrorLabel(r)));
+                    }
+
+                    AVBufferRef* hwFramesRef =
+                        av_hwframe_ctx_alloc(hwDeviceCtx);
+                    if (!hwFramesRef)
+                    {
+                        av_buffer_unref(&hwDeviceCtx);
+                        throw std::runtime_error(
+                            string::Format(
+                                "{0}: Cannot allocate Direct3D 11 frames "
+                                "context")
+                                .arg(p.fileName));
+                    }
+
+                    AVHWFramesContext* framesCtx =
+                        reinterpret_cast<AVHWFramesContext*>(
+                            hwFramesRef->data);
+                    framesCtx->format = AV_PIX_FMT_D3D11;
+                    // D3D11 surfaces are typically restricted to NV12
+                    // (8-bit) or P010 (10-bit); other sw_formats will
+                    // fail at av_hwframe_ctx_init() below with a clear
+                    // error rather than silently misbehaving.
+                    framesCtx->sw_format = p.avSwPixelFormat;
+                    framesCtx->width = p.avCodecContext->width;
+                    framesCtx->height = p.avCodecContext->height;
+                    // A small pool is enough since we upload/encode one
+                    // frame at a time and immediately release it.
+                    framesCtx->initial_pool_size = 4;
+
+                    r = av_hwframe_ctx_init(hwFramesRef);
+                    if (r < 0)
+                    {
+                        av_buffer_unref(&hwFramesRef);
+                        av_buffer_unref(&hwDeviceCtx);
+                        throw std::runtime_error(
+                            string::Format(
+                                "{0}: Cannot initialize Direct3D 11 frames "
+                                "context - {1}")
+                                .arg(p.fileName)
+                                .arg(getErrorLabel(r)));
+                    }
+
+                    p.avCodecContext->hw_device_ctx =
+                        av_buffer_ref(hwDeviceCtx);
+                    p.avCodecContext->hw_frames_ctx =
+                        av_buffer_ref(hwFramesRef);
+
+                    // Private keeps its own references so it can release
+                    // them independently of the codec context.
+                    p.avHWDeviceCtx = hwDeviceCtx;
+                    p.avHWFramesCtx = hwFramesRef;
+                }
+#endif // _WIN32
+
                 r = avcodec_open2(p.avCodecContext, avCodec, &codecOptions);
                 if (r < 0)
                 {
@@ -1816,7 +1932,7 @@ namespace tl
                             .arg(getErrorLabel(r)));
                 }
 
-                if (p.useVAAPI)
+                if (p.useVAAPI || p.useD3D11VA)
                 {
                     // Real hardware surface handed to the encoder; filled
                     // in each writeVideo() call via
@@ -1827,7 +1943,7 @@ namespace tl
                     {
                         throw std::runtime_error(
                             string::Format(
-                                "{0}: Cannot allocate VAAPI hw frame")
+                                "{0}: Cannot allocate hardware frame")
                                 .arg(p.fileName));
                     }
                 }
@@ -2157,16 +2273,19 @@ namespace tl
                 p.hasHDR = false;
             }
 
-            if (p.useVAAPI)
+            if (p.useVAAPI || p.useD3D11VA)
             {
+                const char* hwName = p.useD3D11VA ? "Direct3D 11" : "VAAPI";
+
                 av_frame_unref(p.avHwFrame);
                 r = av_hwframe_get_buffer(p.avHWFramesCtx, p.avHwFrame, 0);
                 if (r < 0)
                 {
                     throw std::runtime_error(
                         string::Format(
-                            "{0}: Cannot get VAAPI hw frame buffer - {1}")
+                            "{0}: Cannot get {1} hw frame buffer - {2}")
                             .arg(p.fileName)
+                            .arg(hwName)
                             .arg(getErrorLabel(r)));
                 }
 
@@ -2175,9 +2294,10 @@ namespace tl
                 {
                     throw std::runtime_error(
                         string::Format(
-                            "{0}: Cannot upload frame to VAAPI surface "
-                            "- {1}")
+                            "{0}: Cannot upload frame to {1} surface "
+                            "- {2}")
                             .arg(p.fileName)
+                            .arg(hwName)
                             .arg(getErrorLabel(r)));
                 }
                 p.avHwFrame->pts = p.avFrame->pts;

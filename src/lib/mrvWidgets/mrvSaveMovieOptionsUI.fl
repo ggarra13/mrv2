@@ -39,8 +39,7 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
-  Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
-  } {
+  Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {} {
     Fl_Window uiMain {
       label {Save Movie Options} open
       xywh {0 0 465 613} type Double align 0 hide modal
@@ -700,8 +699,7 @@ DON'T MESS WITH THEM!
 )"));
 uiHelpWindow->show();} {}
   }
-  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {open
-  } {
+  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 const std::string codec = item->label();
@@ -715,6 +713,9 @@ if (codec == "H264")
 else if (codec == "HEVC")
 {    
    v->activate();
+   v->value(1);
+   v->do_callback();
+   v->deactivate();
 }
 else if (codec == "ProRes")
 {
@@ -748,7 +749,9 @@ else if (codec == "ProRes_4444")
 }
 else if (codec == "AV1" || codec == "AV1_AOM")
 {
+\#ifdef __APPLE__
    v->activate();
+\#endif
 }
 else
 {
@@ -759,8 +762,7 @@ else
 
 auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
-v->value(value);} {selected
-    }
+v->value(value);} {}
   }
   Function {add_h264_sw_formats(Fl_Choice* v)} {} {
     code {v->add("YUV_420P");
@@ -770,7 +772,8 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
+  } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -892,6 +895,13 @@ else if (codec == "HAP")
 {  
    v->add("RGBA_U8");
 }
+else if (codec == "HEVC")
+{
+   v->add("YUV_420P");
+   v->add("YUV_420P_10LE");
+   v->add("YUV_444P");
+   v->add("YUV_444P_10LE");
+}
 
 if (v->size() > 0)
 {
@@ -911,7 +921,8 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {}
+}} {selected
+    }
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];

@@ -43,6 +43,12 @@ if (NOT FFmpeg_FOUND)
 	endif()
     endif()
 
+    # NVidia hwaccel for decoding and encoding
+    set(FFmpeg_HW_ACCEL_NVIDIA ON)
+    
+    # Intel/AMD hwaccel for decoding and encoding
+    set(FFmpeg_HW_ACCEL_VAAPI ON)
+
     if(WIN32)
 	include(functions/Msys2)
     endif()
@@ -514,11 +520,27 @@ if (NOT FFmpeg_FOUND)
 		    --disable-vulkan)
 	    else()
 		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --enable-vulkan
-		    --enable-vaapi
-		    --enable-ffnvcodec
-		    --enable-nvdec
-		    --enable-nvenc)
+		    --enable-vulkan)
+		if (FFmpeg_HW_ACCEL_NVIDIA)
+		    list(APPEND FFmpeg_CONFIGURE_ARGS
+			--enable-ffnvcodec
+			--enable-nvdec
+			--enable-nvenc
+			--enable-encoder=av1_nvenc
+			--enable-encoder=h264_nvenc
+			--enable-encoder=hevc_nvenc)
+		endif()
+		if (FFmpeg_HW_ACCEL_VAAPI)
+		    list(APPEND FFmpeg_CONFIGURE_ARGS
+			--enable-vaapi
+			--enable-encoder=av1_vaapi
+			--enable-encoder=hevc_vaapi
+			--enable-encoder=h264_vaapi
+			--enable-encoder=vp8_vaapi
+			--enable-encoder=vp9_vaapi
+			--enable-encoder=mjpeg_vaapi
+			--enable-encoder=mpeg2_vaapi)
+		endif()
 	    endif()
 	endif()
     else()
@@ -527,7 +549,7 @@ if (NOT FFmpeg_FOUND)
 	    --enable-hwaccel=h264_videotoolbox
 	    --enable-hwaccel=hevc_videotoolbox
 	    --enable-hwaccel=prores_videotoolbox
-	    --enable-hwaccel=vp9_videotoolbox  # does not exist?
+	    --enable-hwaccel=vp9_videotoolbox  # does not exist
 	    --enable-audiotoolbox)
     endif()
     if(NOT WIN32)
