@@ -85,72 +85,72 @@ namespace tl
             switch (format)
             {
             case VK_FORMAT_R8_UNORM:
-                out = w * h * d * sizeof(uint8_t);
+                out = w * h * d * sizeof(uint8_t);   // L_U8
                 break;
             case VK_FORMAT_R16_UNORM:
-                out = w * h * d * sizeof(uint16_t);
+                out = w * h * d * sizeof(uint16_t);   // L_U16
                 break;
             case VK_FORMAT_R32_UINT:
-                out = w * h * d * sizeof(uint32_t);
+                out = w * h * d * sizeof(uint32_t);   // L_U32
                 break;
             case VK_FORMAT_R16_SFLOAT:
-                out = w * h * d * sizeof(uint16_t);
+                out = w * h * d * sizeof(uint16_t);   // L_F16
                 break;
             case VK_FORMAT_R32_SFLOAT:
-                out = w * h * d * sizeof(float);
+                out = w * h * d * sizeof(float);      // L_F32
                 break;
 
             case VK_FORMAT_R8G8_UNORM:
-                out = 2 * w * h * d * sizeof(uint8_t);
+                out = 2 * w * h * d * sizeof(uint8_t);  // LA_U8
                 break;
             case VK_FORMAT_R16G16_UNORM:
-                out = 2 * w * h * d * sizeof(uint16_t);
+                out = 2 * w * h * d * sizeof(uint16_t); // LA_U16
                 break;
             case VK_FORMAT_R32G32_UINT:
-                out = 2 * w * h * d * sizeof(uint32_t);
+                out = 2 * w * h * d * sizeof(uint32_t);  // LA_U32
                 break;
             case VK_FORMAT_R16G16_SFLOAT:
-                out = 2 * w * h * d * sizeof(uint16_t);
+                out = 2 * w * h * d * sizeof(uint16_t);  // LA_F16
                 break;
             case VK_FORMAT_R32G32_SFLOAT:
-                out = 2 * w * h * d * sizeof(float);
+                out = 2 * w * h * d * sizeof(float);     // LA_F32
                 break;
 
             case VK_FORMAT_R8G8B8_UNORM:
-                out = 3 * w * h * d * sizeof(uint8_t);
+                out = 3 * w * h * d * sizeof(uint8_t);      // RGB_U8
                 break;
             case VK_FORMAT_R16G16B16_UNORM:
-                out = 3 * w * h * d * sizeof(uint16_t);
+                out = 3 * w * h * d * sizeof(uint16_t);    // RGB_U16
                 break;
             case VK_FORMAT_R32G32B32_UINT:
-                out = 3 * w * h * d * sizeof(uint32_t);
+                out = 3 * w * h * d * sizeof(uint32_t);    // RGB_U32
                 break;
             case VK_FORMAT_R16G16B16_SFLOAT:
-                out = 3 * w * h * d * sizeof(uint16_t);
+                out = 3 * w * h * d * sizeof(uint16_t);   // RGB_F16
                 break;
             case VK_FORMAT_R32G32B32_SFLOAT:
-                out = 3 * w * h * d * sizeof(float);
+                out = 3 * w * h * d * sizeof(float);   // RGB_F32
                 break;
 
-            case VK_FORMAT_A2R10G10B10_UINT_PACK32:
-            case VK_FORMAT_A2R10G10B10_UNORM_PACK32:
+            case VK_FORMAT_A2R10G10B10_UINT_PACK32:      // RGB_U10
+            case VK_FORMAT_A2R10G10B10_UNORM_PACK32:     // RGB_U32
                 out = w * h * d * sizeof(uint32_t);
                 break;
 
             case VK_FORMAT_R8G8B8A8_UNORM:
-                out = 4 * w * h * d * sizeof(uint8_t);
+                out = 4 * w * h * d * sizeof(uint8_t);  // RGBA_U8
                 break;
             case VK_FORMAT_R16G16B16A16_UNORM:
-                out = 4 * w * h * d * sizeof(uint16_t);
+                out = 4 * w * h * d * sizeof(uint16_t);  // RGBA_U16
                 break;
             case VK_FORMAT_R32G32B32A32_UINT:
-                out = 4 * w * h * d * sizeof(uint32_t);
+                out = 4 * w * h * d * sizeof(uint32_t);  // RGBA_U32
                 break;
             case VK_FORMAT_R16G16B16A16_SFLOAT:
-                out = 4 * w * h * d * sizeof(uint16_t);
+                out = 4 * w * h * d * sizeof(uint16_t);  // RGBA_F16
                 break;
             case VK_FORMAT_R32G32B32A32_SFLOAT:
-                out = 4 * w * h * d * sizeof(float);
+                out = 4 * w * h * d * sizeof(float);  // RGBA_F32
                 break;
 
             default:
@@ -166,62 +166,60 @@ namespace tl
                 data = {
                     VK_FORMAT_UNDEFINED,
 
-                    VK_FORMAT_R8_UNORM,
-                    VK_FORMAT_R16_UNORM,
-                    VK_FORMAT_R32_UINT,
-                    VK_FORMAT_R16_SFLOAT,
-                    VK_FORMAT_R32_SFLOAT,
+                    VK_FORMAT_R8_UNORM,   // L_U8
+                    VK_FORMAT_R16_UNORM,  // L_U16
+                    VK_FORMAT_R32_UINT,   // L_U32
+                    VK_FORMAT_R16_SFLOAT, // L_F16
+                    VK_FORMAT_R32_SFLOAT, // L_F32
 
-                    VK_FORMAT_R8G8_UNORM,
-                    VK_FORMAT_R16G16_UNORM,
-                    VK_FORMAT_R32G32_UINT,
-                    VK_FORMAT_R16G16_SFLOAT,
-                    VK_FORMAT_R32G32_SFLOAT,
+                    VK_FORMAT_R8G8_UNORM,    // LA_U8
+                    VK_FORMAT_R16G16_UNORM,  // LA_U16
+                    VK_FORMAT_R32G32_UINT,   // LA_U32
+                    VK_FORMAT_R16G16_SFLOAT, // LA_F16
+                    VK_FORMAT_R32G32_SFLOAT, // LA_F32
 
-                    VK_FORMAT_R8G8B8_UNORM,
+                    VK_FORMAT_R8G8B8_UNORM,  // RGB_U8
                     //VK_FORMAT_R32G32B32A32_SFLOAT,
-                    VK_FORMAT_A2R10G10B10_UNORM_PACK32,
-                    VK_FORMAT_R16G16B16_UNORM,
-                    VK_FORMAT_R32G32B32_UINT,
-                    VK_FORMAT_R16G16B16_SFLOAT,
-                    VK_FORMAT_R32G32B32_SFLOAT,
+                    VK_FORMAT_A2R10G10B10_UNORM_PACK32, // RGB_U10
+                    VK_FORMAT_R16G16B16_UNORM,  // RGB_U16
+                    VK_FORMAT_R32G32B32_UINT,   // RGB_U32
+                    VK_FORMAT_R16G16B16_SFLOAT, // RGB_F16
+                    VK_FORMAT_R32G32B32_SFLOAT, // RGB_F32
 
-                    VK_FORMAT_R8G8B8A8_UNORM,
-                    VK_FORMAT_R16G16B16A16_UNORM,
-                    VK_FORMAT_R32G32B32A32_UINT,
-                    VK_FORMAT_R16G16B16A16_SFLOAT,
-                    VK_FORMAT_R32G32B32A32_SFLOAT,
+                    VK_FORMAT_R8G8B8A8_UNORM,     // RGBA_U8
+                    VK_FORMAT_R16G16B16A16_UNORM, // RGBA_U16
+                    VK_FORMAT_R32G32B32A32_UINT,  // RGBA_U32
+                    VK_FORMAT_R16G16B16A16_SFLOAT, // RGBA_F16
+                    VK_FORMAT_R32G32B32A32_SFLOAT, // RGBA_F32
 
-                    // YUV_*P_U8
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G8_B8R8_2PLANE_420_UNORM
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G8_B8R8_2PLANE_422_UNORM
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM
 
-                    // YUV_*P_U10
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM
+                    VK_FORMAT_UNDEFINED, // YUV_420P_U8
+                    VK_FORMAT_UNDEFINED, // YUV_422P_U8
+                    VK_FORMAT_UNDEFINED, // YUV_444P_U8
 
-                    // YUV_*P_U12
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM
+                    VK_FORMAT_UNDEFINED, // YUV_420P_U10
+                    VK_FORMAT_UNDEFINED, // YUV_422P_U10
+                    VK_FORMAT_UNDEFINED, // YUV_444P_U10
+
+                    VK_FORMAT_UNDEFINED, // YUV_420P_U12
+                    VK_FORMAT_UNDEFINED, // YUV_422P_U12
+                    VK_FORMAT_UNDEFINED, // YUV_444P_U12
 
                     // YUV_*P_U16
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM
+                    VK_FORMAT_UNDEFINED, // YUV_420P_U16
+                    VK_FORMAT_UNDEFINED, // YUV_422P_U16
+                    VK_FORMAT_UNDEFINED, // YUV_444P_U16
 
-                    VK_FORMAT_R8G8B8A8_UNORM,
+                    VK_FORMAT_UNDEFINED, // YUV_420SP_U8
+                    VK_FORMAT_UNDEFINED, // YUV_420SP_U16
 
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G8_B8R8_2PLANE_420_UNORM,    // YUV_420SP_U8
-                    VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM, // YUV_420SP_U16
+                    VK_FORMAT_UNDEFINED, // YUV_422SP_U8
+                    VK_FORMAT_UNDEFINED, // YUV_422SP_U16
 
-                    VK_FORMAT_UNDEFINED,
-                    VK_FORMAT_UNDEFINED,
+                    VK_FORMAT_UNDEFINED, // YUV_444SP_U8
+                    VK_FORMAT_UNDEFINED, // YUV_444SP_U16
 
-                    VK_FORMAT_UNDEFINED,
-                    VK_FORMAT_UNDEFINED
+                    VK_FORMAT_R8G8B8A8_UNORM, // ARGB_4444_Premult
             };
             return data[static_cast<std::size_t>(type)];
         }

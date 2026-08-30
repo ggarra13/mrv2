@@ -567,7 +567,7 @@ namespace tl
                     glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
                     textures[1]->bind();
                     glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
-                    glBindTexture(GL_TEXTURE_2D, 0);
+                    textures[1]->bind();
                 }
                 break;
             default:

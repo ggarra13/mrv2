@@ -391,7 +391,6 @@ namespace tl
                     image::Size(info.size.w / 2, info.size.h),
                     image::PixelType::L_U8);
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
-                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_422SP_U16:
@@ -402,7 +401,6 @@ namespace tl
                     image::Size(info.size.w / 2, info.size.h),
                     image::PixelType::L_U16);
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
-                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_444SP_U8:
@@ -410,13 +408,11 @@ namespace tl
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
-                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
             case image::PixelType::YUV_444SP_U16:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
-                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;

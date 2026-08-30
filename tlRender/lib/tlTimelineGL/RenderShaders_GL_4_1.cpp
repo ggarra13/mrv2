@@ -219,7 +219,7 @@ vec4 sampleTexture(
     vec4 c;
     float y = 0.0, cb = 0.0, cr = 0.0;
 
-    if (pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_420SP_U16)
+    if (pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_444SP_U16)
     {
         // Check semi-planar types first:
         if (pixelType >= PixelType_YUV_420SP_U8 &&

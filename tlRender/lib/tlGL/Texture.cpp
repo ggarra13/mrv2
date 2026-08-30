@@ -24,50 +24,68 @@ namespace tl
                     GL_NONE,
 
 #if defined(TLRENDER_API_GL_4_1)
-                    // Lumma
-                    GL_RED,  GL_RED,  GL_RED,  GL_RED,  GL_RED,
+                    // Luma
+                    GL_RED,  // L_U8
+                    GL_RED,  // L_U16
+                    GL_RED,  // L_U32
+                    GL_RED,  // L_F16
+                    GL_RED,  // L_F32
 
                     // Lumma + Alpha
-                    GL_RG,   GL_RG,   GL_RG,   GL_RG,   GL_RG,
+                    GL_RG, // LA_U8
+                    GL_RG, // LA_U16
+                    GL_RG, // LA_U32
+                    GL_RG, // LA_F16
+                    GL_RG, // LA_F32
 
                     // RGB
-                    GL_RGB,  GL_RGB, GL_RGB,  GL_RGB,  GL_RGB,  GL_RGB,
+                    GL_RGB,  // RGB_U8
+                    GL_RGB,  // RGB_U10
+                    GL_RGB,  // RGB_U12
+                    GL_RGB,  // RGB_U16
+                    GL_RGB,  // RGB_F16
+                    GL_RGB,  // RGB_F32
 
                     // RGBA
-                    GL_RGBA, GL_RGBA, GL_RGBA, GL_RGBA, GL_RGBA,
+                    GL_RGBA,  // RGBA_U8
+                    GL_RGBA,  // RGBA_U10
+                    GL_RGBA,  // RGBA_U16
+                    GL_RGBA,  // RGBA_F16
+                    GL_RGBA,  // RGBA_F32
 
                     // YUV_XXXP_U8
-                    GL_NONE, GL_NONE, GL_NONE,
+                    GL_NONE,  // YUV_420P_U8
+                    GL_NONE,  // YUV_422P_U8
+                    GL_NONE,  // YUV_444P_U8
 
                     // YUV_XXXP_U10
-                    GL_NONE, GL_NONE, GL_NONE,
+                    GL_NONE,  // YUV_420P_U10
+                    GL_NONE,  // YUV_422P_U10
+                    GL_NONE,  // YUV_444P_U10
 
                     // YUV_XXXP_U12
-                    GL_NONE, GL_NONE, GL_NONE,
+                    GL_NONE,  // YUV_420P_U12
+                    GL_NONE,  // YUV_422P_U12
+                    GL_NONE,  // YUV_444P_U12
 
                     // YUV_XXXP_U16
-                    GL_NONE, GL_NONE, GL_NONE,
+                    GL_NONE,  // YUV_420P_U16
+                    GL_NONE,  // YUV_422P_U16
+                    GL_NONE,  // YUV_444P_U16
 
-                    // YUV_420SP_U8
-                    GL_NONE,
+                    GL_NONE,  // YUV_420SP_U8
 
-                    // YUV_420SP_U16
-                    GL_NONE,
+                    GL_NONE,  // YUV_420SP_U16
 
-                    // YUV_422SP_U8
-                    GL_NONE,
+                    GL_NONE,  // YUV_422SP_U8
 
-                    // YUV_422SP_U16
-                    GL_NONE,
+                    GL_NONE,  // YUV_422SP_U16
 
-                    // YUV_444SP_U8
-                    GL_NONE,
+                    GL_NONE,  // YUV_444SP_U8
 
-                    // YUV_444SP_U16
-                    GL_NONE,
+                    GL_NONE,  // YUV_444SP_U16
 
-                    // ARGB_4444_Premult
-                    GL_BGRA
+                    GL_BGRA, // ARGB_4444_Premult
 #elif defined(TLRENDER_API_GLES_2)
                     GL_LUMINANCE,
                     GL_NONE,
@@ -133,20 +151,37 @@ namespace tl
 
                     GL_RGBA8,  GL_RGBA16, GL_RGBA32I, GL_RGBA16F, GL_RGBA32F,
 
+                    // YUV_XXXP_U8
                     GL_NONE,   GL_NONE,   GL_NONE,
 
+                    // YUV_XXXP_U10
                     GL_NONE,   GL_NONE,   GL_NONE,
 
+                    // YUV_XXXP_U12
                     GL_NONE,   GL_NONE,   GL_NONE,
 
+                    // YUV_XXXP_U16
                     GL_NONE,   GL_NONE,   GL_NONE,
 
-                    GL_NONE,   GL_NONE,
+                    // YUV_420SP_U8
+                    GL_NONE,
 
-                    GL_NONE,   GL_NONE,
+                    // YUV_420SP_U16
+                    GL_NONE,
 
-                    GL_NONE,   GL_NONE,
+                    // YUV_422SP_U8
+                    GL_NONE,
 
+                    // YUV_422SP_U16
+                    GL_NONE,
+
+                    // YUV_444SP_U8
+                    GL_NONE,
+
+                    // YUV_444SP_U16
+                    GL_NONE,
+
+                    // ARGB_4444_Premult
                     GL_RGBA,
 #elif defined(TLRENDER_API_GLES_2)
                     GL_LUMINANCE,
@@ -232,31 +267,45 @@ namespace tl
                     GL_HALF_FLOAT,
                     GL_FLOAT,
 
+                    // YUV_XXXP_U8
                     GL_NONE,
                     GL_NONE,
                     GL_NONE,
 
+                    // YUV_XXXP_U10
                     GL_NONE,
                     GL_NONE,
                     GL_NONE,
 
+                    // YUV_XXXP_U12
                     GL_NONE,
                     GL_NONE,
                     GL_NONE,
 
+                    // YUV_XXXP_U16
                     GL_NONE,
                     GL_NONE,
                     GL_NONE,
 
-                    GL_NONE,
-                    GL_NONE,
-
-                    GL_NONE,
+                    // YUV_420SP_U8
                     GL_NONE,
 
-                    GL_NONE,
+                    // YUV_420SP_U16
                     GL_NONE,
 
+                    // YUV_422SP_U8
+                    GL_NONE,
+
+                    // YUV_422SP_U16
+                    GL_NONE,
+
+                    // YUV_444SP_U8
+                    GL_NONE,
+
+                    // YUV_444SP_U16
+                    GL_NONE,
+
+                    // ARGB_4444_Premult
                     GL_UNSIGNED_SHORT_4_4_4_4_REV,
 #elif defined(TLRENDER_API_GLES_2)
                     GL_UNSIGNED_BYTE, GL_NONE, GL_NONE, GL_NONE, GL_NONE,
