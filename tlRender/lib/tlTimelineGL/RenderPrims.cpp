@@ -406,14 +406,13 @@ namespace tl
                 p.shaders["image"]->setUniform("textureSampler2", 2);
             case image::PixelType::YUV_420SP_U8:
             case image::PixelType::YUV_420SP_U16:
-                p.shaders["image"]->setUniform("textureSampler0", 0);
-                p.shaders["image"]->setUniform("textureSampler1", 1);
-                break;
             case image::PixelType::YUV_422SP_U8:
             case image::PixelType::YUV_422SP_U16:
+            case image::PixelType::YUV_444SP_U8:
+            case image::PixelType::YUV_444SP_U16:
                 p.shaders["image"]->setUniform("textureSampler0", 0);
                 p.shaders["image"]->setUniform("textureSampler1", 1);
-                p.shaders["image"]->setUniform("textureSampler2", 2);
+                p.shaders["image"]->setUniform("textureSampler2", 1);
                 break;
             default:
                 p.shaders["image"]->setUniform("textureSampler0", 0);

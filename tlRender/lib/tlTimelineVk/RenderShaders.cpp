@@ -573,10 +573,10 @@ const int PixelType_YUV_420SP_U16     = 35;
 const int PixelType_YUV_422SP_U8      = 36;
 const int PixelType_YUV_422SP_U16     = 37;
 
-const int PixelType_YUV_444SP_U8      = 37;
-const int PixelType_YUV_444SP_U16     = 38;
+const int PixelType_YUV_444SP_U8      = 38;
+const int PixelType_YUV_444SP_U16     = 39;
 
-const int PixelType_ARGB_4444_Premult = 39;
+const int PixelType_ARGB_4444_Premult = 40;
 
 
 // enum tl::image::VideoLevels

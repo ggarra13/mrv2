@@ -144,7 +144,7 @@ namespace tl
                 out.push_back(gl::Texture::create(infoTmp, options));
                 infoTmp = image::Info(
                     image::Size(info.size.w / 2, info.size.h),
-                    image::PixelType::L_U8);
+                    image::PixelType::LA_U8);
                 out.push_back(gl::Texture::create(infoTmp, options));
                 break;
             }
@@ -154,7 +154,7 @@ namespace tl
                 out.push_back(gl::Texture::create(infoTmp, options));
                 infoTmp = image::Info(
                     image::Size(info.size.w / 2, info.size.h),
-                    image::PixelType::L_U16);
+                    image::PixelType::LA_U16);
                 out.push_back(gl::Texture::create(infoTmp, options));
                 break;
             }
@@ -162,6 +162,9 @@ namespace tl
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
                 out.push_back(gl::Texture::create(infoTmp, options));
+                infoTmp = image::Info(
+                    image::Size(info.size.w, info.size.h),
+                    image::PixelType::LA_U8);
                 out.push_back(gl::Texture::create(infoTmp, options));
                 break;
             }
@@ -169,6 +172,9 @@ namespace tl
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
                 out.push_back(gl::Texture::create(infoTmp, options));
+                infoTmp = image::Info(
+                    image::Size(info.size.w, info.size.h),
+                    image::PixelType::LA_U16);
                 out.push_back(gl::Texture::create(infoTmp, options));
                 break;
             }

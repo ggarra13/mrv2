@@ -149,6 +149,7 @@ namespace tl
                 "const uint PixelType_RGBA_U32          = 19;\n"
                 "const uint PixelType_RGBA_F16          = 20;\n"
                 "const uint PixelType_RGBA_F32          = 21;\n"
+
                 "const uint PixelType_YUV_420P_U8       = 22;\n"
                 "const uint PixelType_YUV_422P_U8       = 23;\n"
                 "const uint PixelType_YUV_444P_U8       = 24;\n"
@@ -164,8 +165,10 @@ namespace tl
 
                 "const uint PixelType_YUV_420SP_U8      = 34;\n"
                 "const uint PixelType_YUV_420SP_U16     = 35;\n"
+
                 "const uint PixelType_YUV_422SP_U8      = 36;\n"
                 "const uint PixelType_YUV_422SP_U16     = 37;\n"
+
                 "const uint PixelType_YUV_444SP_U8      = 38;\n"
                 "const uint PixelType_YUV_444SP_U16     = 39;\n"
 
@@ -192,6 +195,7 @@ float getBitDepth(int pixelType)
         return 12.0;
     }
     else if (pixelType == PixelType_YUV_444SP_U16 ||
+             pixelType == PixelType_YUV_422SP_U16 ||
              pixelType == PixelType_YUV_420SP_U16 ||
              pixelType == PixelType_YUV_420P_U16 ||
              pixelType == PixelType_YUV_422P_U16 ||

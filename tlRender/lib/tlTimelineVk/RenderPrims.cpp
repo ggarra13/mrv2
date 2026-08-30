@@ -658,7 +658,7 @@ namespace tl
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
                 shader->setTexture("textureSampler0", textures[0]);
                 shader->setTexture("textureSampler1", textures[1]);
-                shader->setTexture("textureSampler2", textures[0]);
+                shader->setTexture("textureSampler2", textures[1]);
                 break;
             default:
                 textures[0]->transition(
