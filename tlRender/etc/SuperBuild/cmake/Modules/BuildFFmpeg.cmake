@@ -43,6 +43,9 @@ if (NOT FFmpeg_FOUND)
 	endif()
     endif()
 
+    # Direct3DVA hardware encoding
+    set(FFmpeg_HW_ACCEL_D3D12VA ON)
+    
     # NVidia hwaccel for decoding and encoding
     set(FFmpeg_HW_ACCEL_NVIDIA ON)
     
@@ -515,7 +518,7 @@ if (NOT FFmpeg_FOUND)
 	    --disable-audiotoolbox)
 	if (UNIX)
 	    if(DEFINED ENV{GITHUB_ACTIONS})
-		message(STATUS "Running on GitHub Actions - No HW acceleration")
+		message(STATUS "Running on GitHub Actions - No Linux HW acceleration")
 		list(APPEND FFmpeg_CONFIGURE_ARGS
 		    --disable-vulkan)
 	    else()
@@ -541,6 +544,14 @@ if (NOT FFmpeg_FOUND)
 			--enable-encoder=mjpeg_vaapi
 			--enable-encoder=mpeg2_vaapi)
 		endif()
+	    endif()
+	elseif(WIN32)
+	    if (FFmpeg_HW_ACCEL_D3D12VA)
+		list(APPEND FFmpeg_CONFIGURE_ARGS
+		    --enable-d3d12va
+		    --enable-encoder=av1_d3d12va
+		    --enable-encoder=hevc_d3d12va
+		    --enable-encoder=h264_d3d12va)
 	    endif()
 	endif()
     else()
