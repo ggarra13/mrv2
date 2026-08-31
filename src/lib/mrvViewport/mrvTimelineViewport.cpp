@@ -461,9 +461,30 @@ namespace mrv
             if (n == p.lastCursor)
                 return;
 
+#ifdef OPENGL_BACKEND
             if (window())
                 window()->cursor(n);
+#endif
 
+#ifdef VULKAN_BACKEND
+#   ifdef _WIN32
+            if (window())
+            {
+                if (n == FL_CURSOR_CROSS)
+                {
+                    Fl_PNG_Image* rgba_cross = load_png("crosshair.png");
+                    window()->cursor(rgba_cross, 16, 16);
+                }
+                else
+                {
+                    window()->cursor(n);
+                }
+            }
+#   else
+                if (window())
+                    window()->cursor(n);
+#   endif
+#endif
             p.lastCursor = n;
         }
 
