@@ -208,7 +208,7 @@ o->textcolor(FL_BLACK);}
       }
     }
     Fl_Window uiAdvancedSettings {
-      label {Advanced Settings} open
+      label {Advanced Settings}
       xywh {0 0 416 355} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
@@ -224,8 +224,11 @@ settings->setValue("SaveMovie/Override", value);}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color Range", value);}
+settings->setValue("SaveMovie/Color Range", value);} open
         tooltip {FFMpeg's Color Range for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
+        code2 {auto settings = mrv::App::app->settings();
+int value = settings->getValue<int>("SaveMovie/Color Range");
+o->value(value);}
       } {
         MenuItem {} {
           label {TV (Legal Range)}
@@ -445,7 +448,7 @@ settings->setValue("SaveMovie/Color Primaries", value);}
           callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color TRC", value);}
+settings->setValue("SaveMovie/Color TRC", value);} open
           tooltip {FFMpeg's Color Transfer Function settings for the codec selected.} xywh {168 236 170 26} down_box BORDER_BOX
         } {
           MenuItem {} {
@@ -553,7 +556,6 @@ else
    add_hardware(Profile, Hardware);
    add_pixel_formats(Profile, PixelFormat);      
    add_advanced_override(Override);
-   add_advanced_color_range(ColorRange);
    add_advanced_color_space(ColorSpace);
    add_advanced_color_primaries(ColorPrimaries);   
    add_advanced_color_trc(ColorTRC);
@@ -562,7 +564,8 @@ uiHelpWindow->hide();
 uiAdvancedSettings->hide();
 uiMain->show();
 while (uiMain->visible())
-  Fl::check();} {}
+  Fl::check();} {selected
+    }
   }
   Function {help_profile_cb()} {} {
     code {uiHelpWindow->label(_("Profile Help"));
@@ -695,13 +698,15 @@ and how it was created.  Useful to indicate,
 for example, if a set of 8-bit images were 
 bt709 or some other color space.
 
+Currently the override comes with two presets:
+bt709 for SDR work, and HDR for HDR work.
+
 If you don't know what those settings do, 
-DON'T MESS WITH THEM!
+leave it all at bt709.
 )"));
 uiHelpWindow->show();} {}
   }
-  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {open
-  } {
+  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 const std::string codec = item->label();
@@ -715,6 +720,9 @@ if (codec == "H264")
 else if (codec == "HEVC")
 {    
    v->activate();
+   v->value(1);
+   v->do_callback();
+   v->deactivate();
 }
 else if (codec == "ProRes")
 {
@@ -748,7 +756,9 @@ else if (codec == "ProRes_4444")
 }
 else if (codec == "AV1" || codec == "AV1_AOM")
 {
+\#ifndef __linux__
    v->activate();
+\#endif
 }
 else
 {
@@ -759,8 +769,7 @@ else
 
 auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
-v->value(value);} {selected
-    }
+v->value(value);} {}
   }
   Function {add_h264_sw_formats(Fl_Choice* v)} {} {
     code {v->add("YUV_420P");
@@ -892,6 +901,13 @@ else if (codec == "HAP")
 {  
    v->add("RGBA_U8");
 }
+else if (codec == "HEVC")
+{
+   v->add("YUV_420P");
+   v->add("YUV_420P_10LE");
+   v->add("YUV_444P");
+   v->add("YUV_444P_10LE");
+}
 
 if (v->size() > 0)
 {
@@ -1010,21 +1026,14 @@ for (auto entry : entries)
 const int value = settings->getValue<int>("SaveMovie/Resolution");
 o->value(value);} {}
   }
-  Function {add_advanced_override(Fl_Check_Button* v)} {} {
+  Function {add_advanced_override(Fl_Check_Button* v)} {open
+  } {
     code {auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/Override");
 v->value(value);} {}
   }
-  Function {add_advanced_color_range(Fl_Choice* o)} {} {
-    code {const auto& settings = mrv::App::app->settings();
-int value;
-if (!settings->hasValue("SaveMovie/Color Range"))
-   value = o->find_index("PC");
-else
-   value = settings->getValue<int>("SaveMovie/Color Range");
-o->value(value);} {}
-  }
-  Function {add_advanced_color_space(Fl_Choice* o)} {} {
+  Function {add_advanced_color_space(Fl_Choice* o)} {open
+  } {
     code {const auto& settings = mrv::App::app->settings();
 int value;
 if (!settings->hasValue("SaveMovie/Color Space"))
@@ -1033,16 +1042,18 @@ else
    value = settings->getValue<int>("SaveMovie/Color Space");
 o->value(value);} {}
   }
-  Function {add_advanced_color_primaries(Fl_Choice* o)} {} {
+  Function {add_advanced_color_primaries(Fl_Choice* o)} {open
+  } {
     code {const auto& settings = mrv::App::app->settings();
 const int value = settings->getValue<int>("SaveMovie/Color Primaries");
 o->value(value);} {}
   }
-  Function {add_advanced_color_trc(Fl_Choice* o)} {} {
+  Function {add_advanced_color_trc(Fl_Choice* o)} {open
+  } {
     code {const auto& settings = mrv::App::app->settings();
 int value;
 if (!settings->hasValue("SaveMovie/Color TRC"))
-   value = o->find_index("iec61966-2-1");
+   value = o->find_index("bt709");
 else
    value = settings->getValue<int>("SaveMovie/Color TRC");
 o->value(value);} {}
