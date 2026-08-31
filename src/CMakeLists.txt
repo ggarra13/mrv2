@@ -363,7 +363,7 @@ if (UNIX AND NOT APPLE)
 	DESTINATION icons
 	COMPONENT applications )
 elseif(WIN32)
-    install( FILES icons/mrv2.png
+    install( FILES icons/mrv2.png icons/crosshair.png
 	DESTINATION icons
 	COMPONENT applications )
 endif()
