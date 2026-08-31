@@ -1863,7 +1863,7 @@ namespace tl
                     framesCtx->height = p.avCodecContext->height;
                     // A small pool is enough since we upload/encode one
                     // frame at a time and immediately release it.
-                    framesCtx->initial_pool_size = 4;
+                    framesCtx->initial_pool_size = 1;
 
                     r = av_hwframe_ctx_init(hwFramesRef);
                     if (r < 0)
