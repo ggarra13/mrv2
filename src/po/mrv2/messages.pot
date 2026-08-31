@@ -1,12 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Contributors to the mrv2 Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.7.4\n"
+"Project-Id-Version: mrv2 v1.7.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"POT-Creation-Date: 2026-08-31 08:52-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -285,6 +287,7 @@ msgstr ""
 msgid "Save and reload session file restarting mrv2."
 msgstr ""
 
+#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr ""
 
@@ -1020,6 +1023,7 @@ msgstr ""
 msgid "Get all URL/File/AI directions for current frame as a JSON file."
 msgstr ""
 
+#, c++-format
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr ""
 
@@ -1190,9 +1194,11 @@ msgstr ""
 msgid "Temp Location: "
 msgstr ""
 
+#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr ""
 
+#, c++-format
 msgid "Running python script '{0}'"
 msgstr ""
 
@@ -1205,6 +1211,7 @@ msgstr ""
 msgid "Caching..."
 msgstr ""
 
+#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr ""
 
@@ -1214,9 +1221,11 @@ msgstr ""
 msgid "Show this message."
 msgstr ""
 
+#, c++-format
 msgid "Cannot parse option \"{0}\": {1}"
 msgstr ""
 
+#, c++-format
 msgid "Cannot parse argument \"{0}\": {1}"
 msgstr ""
 
@@ -1342,6 +1351,7 @@ msgstr ""
 msgid "Scripts/Add To Script List"
 msgstr ""
 
+#, c-format
 msgid "Scripts/%s"
 msgstr ""
 
@@ -1350,6 +1360,7 @@ msgid ""
 "it.  Press Keypad Enter to run it."
 msgstr ""
 
+#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr ""
 
@@ -1371,18 +1382,22 @@ msgstr ""
 msgid "Type your editor command"
 msgstr ""
 
+#, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr ""
 
+#, c++-format
 msgid "Regular expression error: {0}"
 msgstr ""
 
+#, c++-format
 msgid "Could not open python editor: {0}"
 msgstr ""
 
 msgid "Search String:"
 msgstr ""
 
+#, c-format
 msgid "No occurrences of '%s' found!"
 msgstr ""
 
@@ -1419,6 +1434,7 @@ msgstr ""
 msgid "Without Metadata"
 msgstr ""
 
+#, c++-format
 msgid "Streaming {0} {1}..."
 msgstr ""
 
@@ -1556,6 +1572,15 @@ msgstr ""
 msgid ""
 "When this setting is on, the player will try to decode the movie in the GPU "
 "if possible."
+msgstr ""
+
+msgid "FFmpeg HW Driver"
+msgstr ""
+
+msgid "Default HW Driver"
+msgstr ""
+
+msgid "Select what driver to use for your GPU."
 msgstr ""
 
 msgid "FFmpeg I/O threads"
@@ -1742,9 +1767,11 @@ msgstr ""
 msgid "Pick"
 msgstr ""
 
+#, c-format
 msgid "%.3f seconds "
 msgstr ""
 
+#, c-format
 msgid "Video Stream #%d"
 msgstr ""
 
@@ -2012,6 +2039,7 @@ msgstr ""
 msgid "Load an image or movie file"
 msgstr ""
 
+#, c-format
 msgid "Audio Stream #%d"
 msgstr ""
 
@@ -2030,6 +2058,7 @@ msgstr ""
 msgid "Format"
 msgstr ""
 
+#, c-format
 msgid "%d Hz."
 msgstr ""
 
@@ -2039,6 +2068,7 @@ msgstr ""
 msgid "Frequency of audio"
 msgstr ""
 
+#, c-format
 msgid "%d kb/s"
 msgstr ""
 
@@ -2063,6 +2093,7 @@ msgstr ""
 msgid "Duration of Audio"
 msgstr ""
 
+#, c-format
 msgid "Subtitle Stream #%d"
 msgstr ""
 
@@ -2370,9 +2401,11 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
+#, c++-format
 msgid "STUN server is {0}"
 msgstr ""
 
+#, c++-format
 msgid "TURN server is {0}"
 msgstr ""
 
@@ -2391,12 +2424,15 @@ msgstr ""
 msgid "No Web RTC Studio set.  Please update Preferences->WebRTC->Studio"
 msgstr ""
 
+#, c++-format
 msgid "The room ID is: {0}"
 msgstr ""
 
+#, c++-format
 msgid "The player ID is: {0}"
 msgstr ""
 
+#, c++-format
 msgid "Downloading {0}..."
 msgstr ""
 
@@ -2406,9 +2442,11 @@ msgstr ""
 msgid "ComfyUI listening on port "
 msgstr ""
 
+#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr ""
 
+#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr ""
 
@@ -2418,11 +2456,13 @@ msgstr ""
 msgid "Peer not connected."
 msgstr ""
 
+#, c++-format
 msgid ""
 "{0} is only reachable via relay (TURN), which would consume VPS bandwidth. "
 "Skipping fetch to avoid unexpected costs."
 msgstr ""
 
+#, c++-format
 msgid "Already fetching {0} from another sync request; skipping duplicate."
 msgstr ""
 
@@ -2438,13 +2478,15 @@ msgstr ""
 msgid "Download failed."
 msgstr ""
 
+#, c++-format
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr ""
 
+#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 
-#. ++-format
+#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr ""
 
@@ -2454,11 +2496,13 @@ msgstr ""
 msgid "ERROR:\t"
 msgstr ""
 
+#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 msgstr ""
 
+#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr ""
 
@@ -2470,48 +2514,59 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr ""
 
+#, c++-format
 msgid "Could not replace {0} with {1}"
 msgstr ""
 
 msgid "Annotation already existed at this time"
 msgstr ""
 
+#, c++-format
 msgid "Failed to open the file {0} for writing."
 msgstr ""
 
+#, c++-format
 msgid "Failed to write to the file {0}."
 msgstr ""
 
+#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr ""
 
+#, c++-format
 msgid "Failed to open the file '{0}' for reading."
 msgstr ""
 
+#, c++-format
 msgid "Failed to load the file '{0}."
 msgstr ""
 
+#, c++-format
 msgid ""
 "Movie File '{0}' is not readable.\n"
 "\n"
 "Do you want to replace it with another?"
 msgstr ""
 
+#, c++-format
 msgid ""
 "Sequence '{0}' is not readable.\n"
 "\n"
 "Do you want to replace it with another?"
 msgstr ""
 
+#, c++-format
 msgid ""
 "Audio File '{0}' is not readable.\n"
 "\n"
 "Do you want to replace it with another?"
 msgstr ""
 
+#, c++-format
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr ""
 
+#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr ""
 
@@ -2523,9 +2578,11 @@ msgstr ""
 msgid "Debanding is not set to None.  This can make images show blurred"
 msgstr ""
 
+#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr ""
 
+#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr ""
 
@@ -2535,30 +2592,34 @@ msgstr ""
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
-#. ++-format
+#, c++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr ""
 
+#, c++-format
 msgid "Error deleting directory: \"{0}\"."
 msgstr ""
 
+#, c++-format
 msgid "Cleaned directory: \"{0}\"."
 msgstr ""
 
-#. ++-format
+#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
 msgid "Resetting hotkeys to default."
 msgstr ""
 
+#, c++-format
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr ""
 
+#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr ""
 
-#. ++-format
+#, c++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr ""
 
@@ -2568,6 +2629,7 @@ msgstr ""
 msgid "OCIO config is now:"
 msgstr ""
 
+#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr ""
 
@@ -2577,58 +2639,74 @@ msgstr ""
 msgid "Setting OCIO config to built-in:"
 msgstr ""
 
+#, c++-format
 msgid "Path mapping for {0} already exists!"
 msgstr ""
 
+#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr ""
 
+#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr ""
 
 msgid "OCIO config file cannot be empty."
 msgstr ""
 
+#, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr ""
 
+#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr ""
 
+#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr ""
 
+#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr ""
 
+#, c++-format
 msgid "Could not split '{0}' into display and view."
 msgstr ""
 
+#, c++-format
 msgid "No default view for display '{0}'.  Does display exist?"
 msgstr ""
 
+#, c++-format
 msgid "Setting OCIO Preset '{0}'."
 msgstr ""
 
-#. ++-format
+#, c++-format
 msgid "Preset '{0}' not found."
 msgstr ""
 
+#, c++-format
 msgid "OCIO Preset '{0}' already exists!"
 msgstr ""
 
+#, c++-format
 msgid "Failed to load the file '{0}'."
 msgstr ""
 
+#, c++-format
 msgid "Loaded {0} ocio presets from \"{1}\"."
 msgstr ""
 
+#, c++-format
 msgid "Failed to open the file '{0}' for saving."
 msgstr ""
 
+#, c++-format
 msgid "Failed to save the file '{0}'."
 msgstr ""
 
+#, c++-format
 msgid "OCIO presets have been saved to \"{0}\"."
 msgstr ""
 
@@ -2659,11 +2737,13 @@ msgstr ""
 msgid "Japanese"
 msgstr ""
 
+#, c++-format
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
 msgstr ""
 
+#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr ""
 
@@ -2790,11 +2870,13 @@ msgstr ""
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr ""
 
+#, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
 msgstr ""
 
+#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -2942,18 +3024,22 @@ msgstr ""
 msgid "Could not get current path."
 msgstr ""
 
+#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr ""
 
+#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr ""
 
 msgid "Items selected must be on the same track."
 msgstr ""
 
+#, c++-format
 msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
 msgstr ""
 
+#, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
 msgstr ""
 
@@ -2963,10 +3049,11 @@ msgstr ""
 msgid "Please select two contiguous audio clips."
 msgstr ""
 
+#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr ""
 
-#. ++-format
+#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr ""
 
@@ -2979,7 +3066,7 @@ msgstr ""
 msgid "Unknown media reference"
 msgstr ""
 
-#. ++-format
+#, c++-format
 msgid "Track #{0} - {1}"
 msgstr ""
 
@@ -2989,9 +3076,11 @@ msgstr ""
 msgid "Cannot currently concatenate a directory."
 msgstr ""
 
+#, c++-format
 msgid "Could not append video track {0}"
 msgstr ""
 
+#, c++-format
 msgid "Could not append audio track {0}"
 msgstr ""
 
@@ -3225,16 +3314,18 @@ msgstr ""
 msgid "No item selected"
 msgstr ""
 
+#, c-format
 msgid "%s - Page %d"
 msgstr ""
 
+#, c++-format
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr ""
 
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
-#. ++-format
+#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
@@ -3362,12 +3453,15 @@ msgstr ""
 msgid "Cannot save an NDI stream"
 msgstr ""
 
+#, c++-format
 msgid "Saving movie to {0}."
 msgstr ""
 
+#, c++-format
 msgid "Saving audio to {0}."
 msgstr ""
 
+#, c++-format
 msgid "Saving pictures to {0}."
 msgstr ""
 
@@ -3388,51 +3482,66 @@ msgstr ""
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr ""
 
+#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
+#, c++-format
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
+#, c++-format
 msgid "Image info: {0} {1}"
 msgstr ""
 
+#, c++-format
 msgid "Scaled image info: {0}"
 msgstr ""
 
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr ""
 
+#, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
+#, c++-format
 msgid "Using preset {0}."
 msgstr ""
 
+#, c++-format
 msgid "Offscreen Buffer info: {0}"
 msgstr ""
 
+#, c++-format
 msgid "Output info: {0} {1}"
 msgstr ""
 
+#, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
+#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
+#, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
+#, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr ""
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
+#, c++-format
 msgid "Saving... {0}"
 msgstr ""
 
+#, c++-format
 msgid "Render size: {0}"
 msgstr ""
 
@@ -3445,15 +3554,18 @@ msgstr ""
 msgid "1.66"
 msgstr ""
 
+#, c-format
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr ""
 
 msgid "Cache: "
 msgstr ""
 
+#, c++-format
 msgid "HDR monitor min. nits = {0}"
 msgstr ""
 
+#, c++-format
 msgid "HDR monitor max. nits = {0}"
 msgstr ""
 
@@ -3463,24 +3575,30 @@ msgstr ""
 msgid "HDR monitor not detected by Vulkan or Window Manager."
 msgstr ""
 
+#, c++-format
 msgid "Vulkan color space is {0}"
 msgstr ""
 
+#, c++-format
 msgid "Vulkan format is {0}"
 msgstr ""
 
+#, c++-format
 msgid "Changed to HDR active monitor at index {0}"
 msgstr ""
 
+#, c++-format
 msgid "Changed to HDR supported but inactive monitor at index {0}"
 msgstr ""
 
+#, c++-format
 msgid "Changed to SDR monitor at index {0}"
 msgstr ""
 
 msgid "Edit Text"
 msgstr ""
 
+#, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr ""
 
@@ -3496,10 +3614,11 @@ msgstr ""
 msgid "Status is not saved"
 msgstr ""
 
-#. ++-format
+#, c++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr ""
 
+#, c++-format
 msgid "Unhandled buffer format: {0} for output: {1}"
 msgstr ""
 
@@ -3593,6 +3712,7 @@ msgstr ""
 msgid "File/Save and Reload Session"
 msgstr ""
 
+#, c-format
 msgid "File/Recent/%s"
 msgstr ""
 
@@ -3842,6 +3962,7 @@ msgstr ""
 msgid "Playback/Annotation/Clear All"
 msgstr ""
 
+#, c-format
 msgid "View/Mask/%s"
 msgstr ""
 
@@ -3914,9 +4035,11 @@ msgstr ""
 msgid "Timeline/Markers"
 msgstr ""
 
+#, c++-format
 msgid "Timeline/Visible Tracks/{0}"
 msgstr ""
 
+#, c++-format
 msgid "Timeline/Media Reference/{0}"
 msgstr ""
 
@@ -3974,12 +4097,14 @@ msgstr ""
 msgid "Image/Compare Mode/Tile"
 msgstr ""
 
+#, c-format
 msgid "Image/Go to/%s"
 msgstr ""
 
 msgid "Image/Compare/Toggle A and B"
 msgstr ""
 
+#, c-format
 msgid "Image/Compare/%s"
 msgstr ""
 
@@ -4046,24 +4171,31 @@ msgstr ""
 msgid "OCIO/Current"
 msgstr ""
 
+#, c-format
 msgid "OCIO/         ICS: %s"
 msgstr ""
 
+#, c-format
 msgid "OCIO/     Display: %s"
 msgstr ""
 
+#, c-format
 msgid "OCIO/        View: %s"
 msgstr ""
 
+#, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr ""
 
+#, c-format
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr ""
 
+#, c-format
 msgid "OCIO/        Look: %s"
 msgstr ""
 
+#, c-format
 msgid "OCIO/        LUT: %s"
 msgstr ""
 
@@ -4115,11 +4247,13 @@ msgstr ""
 msgid "Sync/Accept/Audio"
 msgstr ""
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
 msgstr ""
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -4218,17 +4352,21 @@ msgstr ""
 msgid "Detail mode"
 msgstr ""
 
+#, c-format
 msgid ""
 "Could not create directory '%s'. You may not have permission to perform this "
 "operation."
 msgstr ""
 
+#, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
 msgstr ""
 
+#, c-format
 msgid "File '%s' already exists!"
 msgstr ""
 
+#, c-format
 msgid "Unable to rename '%s' to '%s'"
 msgstr ""
 
@@ -4370,6 +4508,7 @@ msgstr ""
 msgid "OpenUSD ASCII Asset"
 msgstr ""
 
+#, c-format
 msgid "Another process using the file."
 msgstr ""
 
@@ -4469,9 +4608,11 @@ msgstr ""
 msgid "mrv2 depends on:"
 msgstr ""
 
+#, c++-format
 msgid "Total Physical Memory: {0} Gb"
 msgstr ""
 
+#, c++-format
 msgid "Total Virtual Memory: {0} Gb"
 msgstr ""
 
@@ -4523,6 +4664,7 @@ msgstr ""
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr ""
 
+#, c++-format
 msgid ""
 "Wayland Compositor supports Float on Top only through hotkeys.  Press {0}."
 msgstr ""
@@ -4532,6 +4674,7 @@ msgid ""
 "Manager to set a hotkey for it."
 msgstr ""
 
+#, c++-format
 msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr ""
 
@@ -4616,6 +4759,7 @@ msgstr ""
 msgid "Mean"
 msgstr ""
 
+#, c-format
 msgid "Track #%d - %s"
 msgstr ""
 
@@ -4634,28 +4778,64 @@ msgstr ""
 msgid "PC (Full Range)"
 msgstr ""
 
-msgid "BGR"
-msgstr ""
-
 msgid "bt709"
 msgstr ""
 
-msgid "FCC"
+msgid "HDR"
 msgstr ""
 
-msgid "SMPTE240m"
+msgid "gbr"
 msgstr ""
 
-msgid "bt601"
-msgstr ""
-
-msgid "bt2020"
-msgstr ""
-
-msgid "unspecified"
+msgid "unknown"
 msgstr ""
 
 msgid "reserved"
+msgstr ""
+
+msgid "fcc"
+msgstr ""
+
+msgid "bt601 (bt470bg)"
+msgstr ""
+
+msgid "smpte170m"
+msgstr ""
+
+msgid "smpte240m"
+msgstr ""
+
+msgid "ycgco"
+msgstr ""
+
+msgid "bt2020nc"
+msgstr ""
+
+msgid "bt2020c"
+msgstr ""
+
+msgid "smpte2085"
+msgstr ""
+
+msgid "chroma-derived-nc"
+msgstr ""
+
+msgid "chroma-derived-c"
+msgstr ""
+
+msgid "ictcp"
+msgstr ""
+
+msgid "ipt-c2"
+msgstr ""
+
+msgid "ycgco-re"
+msgstr ""
+
+msgid "ycgco-ro"
+msgstr ""
+
+msgid "unspecified"
 msgstr ""
 
 msgid "bt470m"
@@ -4664,7 +4844,13 @@ msgstr ""
 msgid "SMPTE170m"
 msgstr ""
 
+msgid "SMPTE240m"
+msgstr ""
+
 msgid "Film"
+msgstr ""
+
+msgid "bt2020"
 msgstr ""
 
 msgid "SMPTE428"
@@ -4685,7 +4871,7 @@ msgstr ""
 msgid "gamma28"
 msgstr ""
 
-msgid "smpte240m"
+msgid "bt601"
 msgstr ""
 
 msgid "linear"
@@ -4712,7 +4898,7 @@ msgstr ""
 msgid "bt2020-12"
 msgstr ""
 
-msgid "bt2100"
+msgid "bt2100 (smpte2084)"
 msgstr ""
 
 msgid "hlg"
@@ -4807,6 +4993,9 @@ msgid "Color Range"
 msgstr ""
 
 msgid "FFMpeg's Color Range for the codec selected"
+msgstr ""
+
+msgid "Presets"
 msgstr ""
 
 msgid "FFMpeg's Color Space for the codec selected"
@@ -4953,8 +5142,11 @@ msgid ""
 "  for example, if a set of 8-bit images were \n"
 "  bt709 or some other color space.\n"
 "\n"
+"  Currently the override comes with two presets:\n"
+"  bt709 for SDR work, and HDR for HDR work.\n"
+"\n"
 "  If you don't know what those settings do, \n"
-"  DON'T MESS WITH THEM!\n"
+"  leave it all at bt709.\n"
 "  "
 msgstr ""
 
@@ -6227,9 +6419,6 @@ msgstr ""
 msgid "Start value in the timeline where video starts."
 msgstr ""
 
-msgid "HDR"
-msgstr ""
-
 msgid "Prefer RGB (Vulkan)"
 msgstr ""
 
@@ -6998,24 +7187,31 @@ msgstr ""
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr ""
 
+#, c++-format
 msgid "Unknown licese plan '{0}'"
 msgstr ""
 
+#, c++-format
 msgid "License plan '{0}'"
 msgstr ""
 
+#, c++-format
 msgid "Supports annotations '{0}'"
 msgstr ""
 
+#, c++-format
 msgid "Supports editing '{0}'"
 msgstr ""
 
+#, c++-format
 msgid "Supports layers '{0}'"
 msgstr ""
 
+#, c++-format
 msgid "Supports python '{0}'"
 msgstr ""
 
+#, c++-format
 msgid "Supports voice annotations '{0}'"
 msgstr ""
 
@@ -7028,9 +7224,11 @@ msgstr ""
 msgid "Floating"
 msgstr ""
 
+#, c++-format
 msgid "Found floating license at '{0}'"
 msgstr ""
 
+#, c++-format
 msgid "Did not find floating license at '{0}'"
 msgstr ""
 
@@ -7040,12 +7238,15 @@ msgstr ""
 msgid "License expired"
 msgstr ""
 
+#, c++-format
 msgid "{0} is not readable. Using system default."
 msgstr ""
 
+#, c++-format
 msgid "{0} Active Licenses from {1}."
 msgstr ""
 
+#, c++-format
 msgid "Valid license for {0}"
 msgstr ""
 
@@ -7055,6 +7256,7 @@ msgstr ""
 msgid "Released Floating License"
 msgstr ""
 
+#, c++-format
 msgid "Your {0} license will expire on {1}."
 msgstr ""
 

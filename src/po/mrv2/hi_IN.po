@@ -6,6 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"POT-Creation-Date: 2026-08-31 08:52-0300\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -293,6 +294,7 @@ msgstr "एक सत्र फ़ाइल सहेजें."
 msgid "Save and reload session file restarting mrv2."
 msgstr "mrv2 को पुनः आरंभ करते हुए सत्र फ़ाइल को सहेजें और पुनः लोड करें।"
 
+#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "दोहरी पाइथन प्लगिन {0} को {1} और {2} में."
 
@@ -1106,6 +1108,7 @@ msgstr ""
 "वर्तमान फ्रेम के लिए सभी URL/फ़ाइल/AI निर्देशों को JSON फ़ाइल के रूप में "
 "प्राप्त करें।"
 
+#, c++-format
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - चैनल्स: {1} {2} {3}"
 
@@ -1280,9 +1283,11 @@ msgstr "पसंद स्थान:"
 msgid "Temp Location: "
 msgstr "अस्थायी स्थान: "
 
+#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "पायथन स्क्रिप्ट '{0}' पढ़ नहीं सका."
 
+#, c++-format
 msgid "Running python script '{0}'"
 msgstr "python स्क्रिप्ट '{0}' चलाएँ"
 
@@ -1295,6 +1300,7 @@ msgstr "पायथन त्रुटि:"
 msgid "Caching..."
 msgstr "कैश कर रहा है..."
 
+#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "फ़ाइलनाम '{0}' मौजूद नहीं है या पढ़ने की अनुमति नहीं है."
 
@@ -1304,9 +1310,11 @@ msgstr "कंसोल में लॉग छापें."
 msgid "Show this message."
 msgstr "यह संदेश भेजें."
 
+#, c++-format
 msgid "Cannot parse option \"{0}\": {1}"
 msgstr "\"{0}\" विकल्प का विश्लेषण नहीं कर सकता: {1}"
 
+#, c++-format
 msgid "Cannot parse argument \"{0}\": {1}"
 msgstr "तर्क \"{0}\" का विश्लेषण नहीं कर सकता है: {1}"
 
@@ -1440,6 +1448,7 @@ msgstr "संपादक/बाहरी संपादक"
 msgid "Scripts/Add To Script List"
 msgstr "स्क्रिप्ट्स/स्क्रिप्ट सूची में जोड़ें"
 
+#, c-format
 msgid "Scripts/%s"
 msgstr "स्क्रिप्ट्स/%s"
 
@@ -1450,6 +1459,7 @@ msgstr ""
 "अपने पायथन कोड में टाइप करें. इसके सिर्फ एक क्षेत्र को चलाने के लिए चुनें. "
 "इसे चलाने के लिए कुंजी पैड को दबाएँ."
 
+#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr ""
 "पायथन फ़ाइल {0} पहले से ही मौजूद है. क्या आप इसके ऊपर लिखना चाहते हैं?"
@@ -1472,18 +1482,22 @@ msgstr "स्ट्रीम एक अनपेक्षित त्रुट
 msgid "Type your editor command"
 msgstr "अपना संपादक कमांड टाइप करें"
 
+#, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr "{0} को रेखा संख्या से प्रतिस्थापित किया जाएगा. फ़ाइल नाम के साथ {1}"
 
+#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "नियमित (रेगुलर) एक्सप्रेशन. त्रुटि: {0}"
 
+#, c++-format
 msgid "Could not open python editor: {0}"
 msgstr "पायथन संपादक खोल नहीं सका: {0}"
 
 msgid "Search String:"
 msgstr "खोज स्ट्रिंग:"
 
+#, c-format
 msgid "No occurrences of '%s' found!"
 msgstr "'%s' की कोई उपस्थिति नहीं पाई गई!"
 
@@ -1520,6 +1534,7 @@ msgstr "मेटाडाटा से"
 msgid "Without Metadata"
 msgstr "बिना मेटाडाटा"
 
+#, c++-format
 msgid "Streaming {0} {1}..."
 msgstr "{0} स्ट्रीम कर रहा है {1}"
 
@@ -1663,6 +1678,15 @@ msgid ""
 msgstr ""
 "जब यह सेटिंग चालू होती है, तो प्लेयर संभव होने पर GPU पर फ़िल्म को डिकोड "
 "करने का प्रयास करेगा।"
+
+msgid "FFmpeg HW Driver"
+msgstr "FFmpeg हार्डवेयर ड्राइवर"
+
+msgid "Default HW Driver"
+msgstr "डिफ़ॉल्ट हार्डवेयर ड्राइवर"
+
+msgid "Select what driver to use for your GPU."
+msgstr "अपने GPU के लिए उपयोग किया जाने वाला ड्राइवर चुनें।"
 
 msgid "FFmpeg I/O threads"
 msgstr "एफ़एफएमपी आई/लड़ियाँ"
@@ -1860,9 +1884,11 @@ msgstr "1:16"
 msgid "Pick"
 msgstr "चुनें"
 
+#, c-format
 msgid "%.3f seconds "
 msgstr "%.3f सेकण्ड"
 
+#, c-format
 msgid "Video Stream #%d"
 msgstr "वीडियो स्ट्रीम #%d"
 
@@ -2130,6 +2156,7 @@ msgstr "अंतिम रूपांतरक"
 msgid "Load an image or movie file"
 msgstr "कोई छवि या फिल्म फ़ाइल लोड करें"
 
+#, c-format
 msgid "Audio Stream #%d"
 msgstr "ऑडियो स्ट्रीम #%d"
 
@@ -2148,6 +2175,7 @@ msgstr "ऑडियो चैनल की संख्या"
 msgid "Format"
 msgstr "फॉर्मेट"
 
+#, c-format
 msgid "%d Hz."
 msgstr "%d Hz."
 
@@ -2157,6 +2185,7 @@ msgstr "आवृत्ति"
 msgid "Frequency of audio"
 msgstr "ऑडियो की आवृत्ति"
 
+#, c-format
 msgid "%d kb/s"
 msgstr "%d केबी/से"
 
@@ -2181,6 +2210,7 @@ msgstr "अवधि"
 msgid "Duration of Audio"
 msgstr "ऑडियो की अवधि"
 
+#, c-format
 msgid "Subtitle Stream #%d"
 msgstr "सबटाइटल स्ट्रीम #%d"
 
@@ -2496,9 +2526,11 @@ msgstr "निम्न एनोटेशन सभी फ्रेम पर �
 msgid "Notes"
 msgstr "टिप्पणी"
 
+#, c++-format
 msgid "STUN server is {0}"
 msgstr "STUN सर्वर {0} है"
 
+#, c++-format
 msgid "TURN server is {0}"
 msgstr "TURN सर्वर {0} है"
 
@@ -2523,12 +2555,15 @@ msgstr ""
 "कोई WebRTC स्टूडियो सेट नहीं है। कृपया प्राथमिकताएँ->WebRTC->स्टूडियो को "
 "अपडेट करें"
 
+#, c++-format
 msgid "The room ID is: {0}"
 msgstr "कमरे की आईडी है: {0}"
 
+#, c++-format
 msgid "The player ID is: {0}"
 msgstr "प्लेयर आईडी है: {0}"
 
+#, c++-format
 msgid "Downloading {0}..."
 msgstr "{0} डाउनलोड किया जा रहा है..."
 
@@ -2538,9 +2573,11 @@ msgstr "पोर्ट पर सर्वर सुन रहा है"
 msgid "ComfyUI listening on port "
 msgstr "पोर्ट पर कॉमफ्यूयूयूआई सुन रहा है"
 
+#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr "सर्वर प्रोटोकॉल संस्करण {0} क्लाएंट संस्करण {1} है"
 
+#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "रिमोट फ़ाइल {0} स्थानीय सिस्टम पर मौजूद नहीं है."
 
@@ -2550,6 +2587,7 @@ msgstr "WebRTC से कनेक्ट नहीं है; दूरस्थ
 msgid "Peer not connected."
 msgstr "पीयर कनेक्ट नहीं है।"
 
+#, c++-format
 msgid ""
 "{0} is only reachable via relay (TURN), which would consume VPS bandwidth. "
 "Skipping fetch to avoid unexpected costs."
@@ -2557,6 +2595,7 @@ msgstr ""
 "{0} केवल रिले (TURN) के माध्यम से उपलब्ध है, जिससे VPS बैंडविड्थ का उपयोग "
 "होगा। अनपेक्षित लागत से बचने के लिए फ़ाइल प्राप्त करना छोड़ा जा रहा है।"
 
+#, c++-format
 msgid "Already fetching {0} from another sync request; skipping duplicate."
 msgstr ""
 "{0} पहले से ही किसी अन्य सिंक अनुरोध द्वारा प्राप्त किया जा रहा है; "
@@ -2575,15 +2614,17 @@ msgstr ""
 msgid "Download failed."
 msgstr "डाउनलोड विफल रहा।"
 
+#, c++-format
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr ""
 "दूरस्थ फ़ाइल {0} स्थानीय रूप से नहीं मिली और उसे प्राप्त करने के लिए कोई "
 "पीयर उपलब्ध नहीं है।"
 
+#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "रिमोट फ़ाइल {0} नाम {1} लेकिन पथ नहीं है."
 
-#. ++-format
+#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "रिमोट फ़ाइल {0} स्थानीय फ़ाइलनाम से मेल नहीं खाता."
 
@@ -2593,11 +2634,13 @@ msgstr "चेतावनी:"
 msgid "ERROR:\t"
 msgstr "त्रुटि:"
 
+#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 msgstr "{0} से नियमित एक्सप्रेशन बनाया गया है. यह है: {1}"
 
+#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "यह प्रोशनरेशन {0} संस्करण={1} जाँच करेगा"
 
@@ -2611,27 +2654,34 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "उदाहरण: gizmo_v0003.0001.exr"
 
+#, c++-format
 msgid "Could not replace {0} with {1}"
 msgstr "{0} को {1} से बदलें"
 
 msgid "Annotation already existed at this time"
 msgstr "व्याख्या इस समय से पहले से ही अस्तित्व में है"
 
+#, c++-format
 msgid "Failed to open the file {0} for writing."
 msgstr "फ़ाइल {0} को लिखने के लिए खोलने में असफल."
 
+#, c++-format
 msgid "Failed to write to the file {0}."
 msgstr "फ़ाइल {0} में लिखने में असफल."
 
+#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "सत्र \"{0}\" में सहेजा गया"
 
+#, c++-format
 msgid "Failed to open the file '{0}' for reading."
 msgstr "पढ़ने के लिए फ़ाइल '{0}' खोलने में असफल."
 
+#, c++-format
 msgid "Failed to load the file '{0}."
 msgstr "फ़ाइल '{0} लोड करने में असफल."
 
+#, c++-format
 msgid ""
 "Movie File '{0}' is not readable.\n"
 "\n"
@@ -2641,6 +2691,7 @@ msgstr ""
 "\n"
 "क्या आप इसे किसी अन्य से बदलना चाहते हैं?"
 
+#, c++-format
 msgid ""
 "Sequence '{0}' is not readable.\n"
 "\n"
@@ -2650,6 +2701,7 @@ msgstr ""
 "\n"
 "क्या आप इसे किसी अन्य से बदलना चाहते हैं?"
 
+#, c++-format
 msgid ""
 "Audio File '{0}' is not readable.\n"
 "\n"
@@ -2659,9 +2711,11 @@ msgstr ""
 "\n"
 "क्या आप इसे किसी अन्य से बदलना चाहते हैं?"
 
+#, c++-format
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "वरीयता \"{0}{1}\" से पढ़ा जा रहा है।"
 
+#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "{0} सहेजने में असमर्थ."
 
@@ -2675,9 +2729,11 @@ msgid "Debanding is not set to None.  This can make images show blurred"
 msgstr ""
 "डिबैंडिंग 'कोई नहीं' पर सेट नहीं है। इससे चित्र धुंधले दिखाई दे सकते हैं।"
 
+#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "\"{0}\" से रंग प्रसंग खोल नहीं सका."
 
+#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "\"{0}\" से लोड किया रंग प्रसंग"
 
@@ -2687,30 +2743,34 @@ msgstr "वरीयता से ओआईआईओ विन्यास स�
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "ओओआईओ एनवायरनमेंट वेरिएबल से ओआईओ विन्यास सेट किया जा रहा है."
 
-#. ++-format
+#, c++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "पथ \"{0}{1}\" से लोड किया गया."
 
+#, c++-format
 msgid "Error deleting directory: \"{0}\"."
 msgstr "निर्देशिका हटाने में त्रुटि: \"{0}\"।"
 
+#, c++-format
 msgid "Cleaned directory: \"{0}\"."
 msgstr "निर्देशिका साफ़ की गई: \"{0}\"।"
 
-#. ++-format
+#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" से गर्म हवा लोड किया जा रहा है।"
 
 msgid "Resetting hotkeys to default."
 msgstr "हॉटकीज़ को डिफ़ॉल्ट पर रीसेट किया जा रहा है।"
 
+#, c++-format
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "पथ \"{0}{1}\" को सहेजा गया."
 
+#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "निर्देशिका \"{0}{1}.prefs\" को सहेजा गया है."
 
-#. ++-format
+#, c++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "वरीयता को सहेजा गया है: \"{0}{1}\"."
 
@@ -2720,6 +2780,7 @@ msgstr "हटा रहा है"
 msgid "OCIO config is now:"
 msgstr "ओआईआईओ कॉन्फ़िग अब है:"
 
+#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "OCO फ़ाइल \"{0}\" नहीं मिला या पढ़ने योग्य नहीं है."
 
@@ -2729,59 +2790,75 @@ msgstr "डिफ़ॉल्ट पर ओआईओ विन्यास स�
 msgid "Setting OCIO config to built-in:"
 msgstr "बनाने के लिए ओआईआईओ कॉन्फ़िग सेट किया जा रहा है:"
 
+#, c++-format
 msgid "Path mapping for {0} already exists!"
 msgstr "{0} के लिए पथ पहले से ही मौजूद है!"
 
+#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "{0} की तुलना {1} से कर रहा है"
 
+#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "एक जोड़ मिला. फ़ाइल अब {0} है."
 
 msgid "OCIO config file cannot be empty."
 msgstr "ओआईओ कॉन्फ़िग फ़ाइल रिक्त नहीं किया जा सकता."
 
+#, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "OCO विन्यास '{0}' मौजूद नहीं है या पढ़ने योग्य नहीं है."
 
+#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "अवैध OCIO '{0}'."
 
+#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr "अवैध OCIO देखो '{0}'."
 
+#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "अवैध OCIO प्रदर्शन/दृश्य '{0}'."
 
+#, c++-format
 msgid "Could not split '{0}' into display and view."
 msgstr "'{0}' को प्रदर्शक व दृश्य में विभाजित नहीं कर सका."
 
+#, c++-format
 msgid "No default view for display '{0}'.  Does display exist?"
 msgstr ""
 "'{0}' प्रदर्शित करने के लिए कोई डिफ़ॉल्ट दृश्य नहीं. क्या प्रदर्शक मौजूद है?"
 
+#, c++-format
 msgid "Setting OCIO Preset '{0}'."
 msgstr "ओसीआईओ '{0}' सेट किया जा रहा है."
 
-#. ++-format
+#, c++-format
 msgid "Preset '{0}' not found."
 msgstr "प्रीसेट '{0}' नहीं मिला."
 
+#, c++-format
 msgid "OCIO Preset '{0}' already exists!"
 msgstr "OCIO पहले '{0}' से उपस्थित है!"
 
+#, c++-format
 msgid "Failed to load the file '{0}'."
 msgstr "'{0}' फ़ाइल लोड करने में विफल."
 
+#, c++-format
 msgid "Loaded {0} ocio presets from \"{1}\"."
 msgstr "{0} अस्थायी फाईल \"{1}\" से लोड किया."
 
+#, c++-format
 msgid "Failed to open the file '{0}' for saving."
 msgstr "सहेजने के लिए फ़ाइल '{0}' खोलने में असफल."
 
+#, c++-format
 msgid "Failed to save the file '{0}'."
 msgstr "'{0}' फ़ाइल सहेजने में असमर्थ."
 
+#, c++-format
 msgid "OCIO presets have been saved to \"{0}\"."
 msgstr "OCIO पहले से ही \"{0}\" में सहेजा गया है."
 
@@ -2812,6 +2889,7 @@ msgstr "रूसी"
 msgid "Japanese"
 msgstr "जापानी"
 
+#, c++-format
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -2819,6 +2897,7 @@ msgstr ""
 "{0} में भाषा को बदलने के लिए mrv2 की आवश्यकता है क्या आप सुनिश्चित हैं कि आप"
 " जारी रखना चाहते हैं?"
 
+#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "भाषा {0} के लिए, संख्या {1} पर सेट करें"
 
@@ -2951,6 +3030,7 @@ msgstr ""
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12"
 
+#, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
@@ -2958,6 +3038,7 @@ msgstr ""
 "\"%s\" को \"%s\" में पहले से ही प्रयोग किया जा रहा है. क्या आप इसे ओवरराइड "
 "करना चाहते हैं?"
 
+#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -3123,18 +3204,22 @@ msgstr "समय रेखा में क्लिप जोड़ने क�
 msgid "Could not get current path."
 msgstr "वर्तमान पथ पा नहीं सका."
 
+#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "EDDL वस्तु '{0}' अब लोड नहीं है. वापस नहीं कर सका या लाल."
 
+#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "{0} को {1} में जोड़ नहीं सका."
 
 msgid "Items selected must be on the same track."
 msgstr "चयनित आइटम एक ही ट्रैक पर होने चाहिए।"
 
+#, c++-format
 msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
 msgstr "चयनित आइटम ट्रैक पर क्रमिक होने चाहिए। बाएँ {0}। दाएँ {1}।"
 
+#, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
 msgstr "कृपया दो या चार क्रमिक आइटम चुनें। चयनित {0}।"
 
@@ -3144,10 +3229,11 @@ msgstr "कृपया दो सटे हुए वीडियो क्ल�
 msgid "Please select two contiguous audio clips."
 msgstr "कृपया दो सटे हुए ऑडियो क्लिप चुनें।"
 
+#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr ". बीजियो फ़ाइल को सहेज नहीं सका: {0}"
 
-#. ++-format
+#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "{0} सहेजने में त्रुटि {1}"
 
@@ -3160,7 +3246,7 @@ msgstr "गंतव्य फ़ाइल अवैध है."
 msgid "Unknown media reference"
 msgstr "अज्ञात मीडिया संदर्भ"
 
-#. ++-format
+#, c++-format
 msgid "Track #{0} - {1}"
 msgstr "ट्रैक 5:{0} - {1}"
 
@@ -3170,9 +3256,11 @@ msgstr "वर्तमान में के- स्केट नहीं क
 msgid "Cannot currently concatenate a directory."
 msgstr "वर्तमान में एक डिरेक्ट्री को फिर से बनाया नहीं जा सका."
 
+#, c++-format
 msgid "Could not append video track {0}"
 msgstr "वीडियो ट्रैक {0} को जोड़ नहीं सका"
 
+#, c++-format
 msgid "Could not append audio track {0}"
 msgstr "ऑडियो ट्रैक {0} जोड़ नहीं सका"
 
@@ -3412,16 +3500,18 @@ msgstr "पाठ व्याख्या संपादित करें"
 msgid "No item selected"
 msgstr "कोई वस्तु चुना नहीं गया"
 
+#, c-format
 msgid "%s - Page %d"
 msgstr "%s - पृष्ठ %d"
 
+#, c++-format
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "फ्रेम {0} - समयकोड: {1} - S: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "छवि बहुत बड़ा है. व्यूपोर्ट आकार सहेजेगा."
 
-#. ++-format
+#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "दृश्य आकार: {0} - X={1}, Y={2}"
 
@@ -3553,12 +3643,15 @@ msgstr ""
 msgid "Cannot save an NDI stream"
 msgstr "NDI स्ट्रीम को सहेज नहीं सका"
 
+#, c++-format
 msgid "Saving movie to {0}."
 msgstr "फिल्म {0} में सहेजा जा रहा है."
 
+#, c++-format
 msgid "Saving audio to {0}."
 msgstr "{0} में ऑडियो सहेज रहा है."
 
+#, c++-format
 msgid "Saving pictures to {0}."
 msgstr "{0} में छवि सहेज रहा है"
 
@@ -3590,51 +3683,66 @@ msgstr ""
 "HAP प्रोफाइल एक.mov विस्तार की जरूरत है. इसे में परिवर्तित करने के लिए इसे "
 "परिवर्तित करें."
 
+#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "नया फ़ाइल {0} पहले से मौजूद है! इसपर लिख नहीं सकता"
 
+#, c++-format
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: लेखक प्लगइन खोल नहीं सका."
 
+#, c++-format
 msgid "Image info: {0} {1}"
 msgstr "छवि जानकारी: {0} {1}"
 
+#, c++-format
 msgid "Scaled image info: {0}"
 msgstr "स्केल्ड छवि सूचना: {0}"
 
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "राइटर प्लगइन आउटपुट जानकारी नहीं पा सका. {0} को डिफ़ॉल्ट रूप में"
 
+#, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr "प्रोफाइल {0} का उपयोग कर रहा है, पिक्सेल प्रारूप {1}."
 
+#, c++-format
 msgid "Using preset {0}."
 msgstr "{0} का उपयोग कर रहा है"
 
+#, c++-format
 msgid "Offscreen Buffer info: {0}"
 msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
 
+#, c++-format
 msgid "Output info: {0} {1}"
 msgstr "आउटपुट जानकारी: {0} {1}"
 
+#, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "ऑडियो %<PRId64> - %<PRId64> के बिना इंजन सहेजा जा रहा है"
 
+#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "ऑडियो %<PRId64> - %<PRId64> के साथ इंजिन सहेजा जा रहा है"
 
+#, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "ऑडियो सहेजने %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "ऑडियो के बिना छवि सहेज रहा है %<PRId64> - %<PRId64>"
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "केवल समय में ऑडियो, लेकिन ऑडियो सहेजने की कोशिश नहीं कर रहा है."
 
+#, c++-format
 msgid "Saving... {0}"
 msgstr "सहेजा जा रहा है... {0}"
 
+#, c++-format
 msgid "Render size: {0}"
 msgstr "रेंडर आकार: {0}"
 
@@ -3647,15 +3755,18 @@ msgstr "1.85"
 msgid "1.66"
 msgstr "1.66"
 
+#, c-format
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "कैश: "
 
+#, c++-format
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR मॉनिटर की न्यूनतम ब्राइटनेस (निट्स) = {0}"
 
+#, c++-format
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR मॉनिटर की अधिकतम ब्राइटनेस (निट्स) = {0}"
 
@@ -3665,24 +3776,30 @@ msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ�
 msgid "HDR monitor not detected by Vulkan or Window Manager."
 msgstr "Vulkan या विंडो मैनेजर द्वारा HDR मॉनिटर का पता नहीं चला।"
 
+#, c++-format
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan रंग स्थान {0} है"
 
+#, c++-format
 msgid "Vulkan format is {0}"
 msgstr "Vulkan फ़ॉर्मेट {0} है"
 
+#, c++-format
 msgid "Changed to HDR active monitor at index {0}"
 msgstr "इंडेक्स {0} पर सक्रिय HDR मॉनिटर पर बदला गया"
 
+#, c++-format
 msgid "Changed to HDR supported but inactive monitor at index {0}"
 msgstr "इंडेक्स {0} पर HDR समर्थित लेकिन निष्क्रिय मॉनिटर पर बदला गया"
 
+#, c++-format
 msgid "Changed to SDR monitor at index {0}"
 msgstr "इंडेक्स {0} पर SDR मॉनिटर में बदला गया"
 
 msgid "Edit Text"
 msgstr "पाठ संपादित करें"
 
+#, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' कोई फ़ाइल, निर्देशिका या URL नहीं है।"
 
@@ -3698,10 +3815,11 @@ msgstr "चलाया नहीं जा सकता – ऑडियो ट
 msgid "Status is not saved"
 msgstr "स्थिति सहेजी नहीं गई है"
 
-#. ++-format
+#, c++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "ऑडियो एनोटेशन फ़ाइल {0} गायब है या मौजूद नहीं है!"
 
+#, c++-format
 msgid "Unhandled buffer format: {0} for output: {1}"
 msgstr "असमर्थित बफ़र फ़ॉर्मेट: {0} आउटपुट के लिए: {1}"
 
@@ -3807,6 +3925,7 @@ msgstr "फ़ाइल/सभी बंद करें"
 msgid "File/Save and Reload Session"
 msgstr "फ़ाइल/सत्र सहेजें और पुनः लोड करें"
 
+#, c-format
 msgid "File/Recent/%s"
 msgstr "फ़ाइल/हालिया/%s"
 
@@ -4056,6 +4175,7 @@ msgstr "प्लेबैक/व्याख्या/साफ करें"
 msgid "Playback/Annotation/Clear All"
 msgstr "प्लेबैक/व्याख्या/सभी साफ करें"
 
+#, c-format
 msgid "View/Mask/%s"
 msgstr "दृश्य/मास्क/%s"
 
@@ -4128,9 +4248,11 @@ msgstr "टाइम-लाइन/स्लाइड संक्रमण:"
 msgid "Timeline/Markers"
 msgstr "टाइम-लाइन/मार्कर्स"
 
+#, c++-format
 msgid "Timeline/Visible Tracks/{0}"
 msgstr "टाइम-लाइन/दृष्टिगोचर ट्रैक्स/{0}"
 
+#, c++-format
 msgid "Timeline/Media Reference/{0}"
 msgstr "टाइम-लाइन/मीडिया संदर्भ/{0}"
 
@@ -4188,12 +4310,14 @@ msgstr "छवि/तुलना मोड/लंबवत"
 msgid "Image/Compare Mode/Tile"
 msgstr "छवि/तुलना मोड/टाइल"
 
+#, c-format
 msgid "Image/Go to/%s"
 msgstr "छवि/यहाँ जाएँ/%s"
 
 msgid "Image/Compare/Toggle A and B"
 msgstr "छवि/तुलना/A और B टॉगल करें"
 
+#, c-format
 msgid "Image/Compare/%s"
 msgstr "छवि/तुलना करें/%s"
 
@@ -4260,24 +4384,31 @@ msgstr "OCIO/टॉगल"
 msgid "OCIO/Current"
 msgstr "OCIO/मौज़ूदा"
 
+#, c-format
 msgid "OCIO/         ICS: %s"
 msgstr "OCIO/         ICS: %s"
 
+#, c-format
 msgid "OCIO/     Display: %s"
 msgstr "OCIO/     Display: %s"
 
+#, c-format
 msgid "OCIO/        View: %s"
 msgstr "OCIO/        View: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/  Monitor #%d Display: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/  Monitor #%d    View: %s"
 
+#, c-format
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/        Look: %s"
 
+#, c-format
 msgid "OCIO/        LUT: %s"
 msgstr "OCIO/        LUT: %s"
 
@@ -4329,6 +4460,7 @@ msgstr "सिंक/स्वीकारें/व्याख्याएँ"
 msgid "Sync/Accept/Audio"
 msgstr "सिंक/स्वीकारें/ऑडियो"
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -4336,6 +4468,7 @@ msgstr ""
 "'{0}' में एक फंक्शन या टीप के रूप में वांछित है जिसमें पायथन फंक्शन तथा "
 "मेन्यू विकल्प हैं."
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -4436,6 +4569,7 @@ msgstr "संपूर्ण सूची मोड"
 msgid "Detail mode"
 msgstr "विवरण विधि"
 
+#, c-format
 msgid ""
 "Could not create directory '%s'. You may not have permission to perform this"
 " operation."
@@ -4443,12 +4577,15 @@ msgstr ""
 "'%s' निर्देशिका निर्मित नहीं कर सका. आपके पास इस संक्रिया को चलाने की अनुमति"
 " नहीं है."
 
+#, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "'%s' को हटाने की कोशिश के दौरान एक त्रुटि हुई। %s"
 
+#, c-format
 msgid "File '%s' already exists!"
 msgstr "फ़ाइल '%s' पहले से उपस्थित है!"
 
+#, c-format
 msgid "Unable to rename '%s' to '%s'"
 msgstr "`%s' का नाम '%s' में बदलने में असमर्थ"
 
@@ -4590,6 +4727,7 @@ msgstr "ओपन- पीजीपी असंसेट"
 msgid "OpenUSD ASCII Asset"
 msgstr "एसएओ- एसडी एसआर (यासेट) खोलें"
 
+#, c-format
 msgid "Another process using the file."
 msgstr "फ़ाइल का उपयोग कर एक और प्रक्रिया."
 
@@ -4689,9 +4827,11 @@ msgstr "msvc के साथ"
 msgid "mrv2 depends on:"
 msgstr "mrv2 इस पर निर्भर करता है:"
 
+#, c++-format
 msgid "Total Physical Memory: {0} Gb"
 msgstr "कुल भौतिक मेमोरी: {0} GB"
 
+#, c++-format
 msgid "Total Virtual Memory: {0} Gb"
 msgstr "कुल वर्चुअल मेमोरी: {0} GB"
 
@@ -4743,6 +4883,7 @@ msgstr "बक्सा खींचें"
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "mrvoIOrr के लिए अज्ञात प्रकार"
 
+#, c++-format
 msgid ""
 "Wayland Compositor supports Float on Top only through hotkeys.  Press {0}."
 msgstr ""
@@ -4756,6 +4897,7 @@ msgstr ""
 "पथलैंड ऊपरी पर फ्लोट समर्थित नहीं करता. अपने विंडो प्रबंधक का उपयोग इसके लिए"
 " गर्मकी सेट करने के लिए करें."
 
+#, c++-format
 msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr ""
 "फ्लोट के लिए कोई गनोम शैलकी ऊपरी पर नहीं. इसे दुनिया भर में '{0}' पर सेट "
@@ -4847,6 +4989,7 @@ msgstr "सीमा"
 msgid "Mean"
 msgstr "औसत"
 
+#, c-format
 msgid "Track #%d - %s"
 msgstr "ट्रैक #%d - %s"
 
@@ -4865,29 +5008,65 @@ msgstr "TV (लाइग सीमा)"
 msgid "PC (Full Range)"
 msgstr "PC (पूरा सीमा)"
 
-msgid "BGR"
-msgstr "BGR"
-
 msgid "bt709"
 msgstr "bt709"
 
-msgid "FCC"
-msgstr "FCC"
+msgid "HDR"
+msgstr "HDR"
 
-msgid "SMPTE240m"
-msgstr "SMPTE240m"
+msgid "gbr"
+msgstr "gbr"
 
-msgid "bt601"
-msgstr "bt601"
-
-msgid "bt2020"
-msgstr "bt2020"
-
-msgid "unspecified"
-msgstr "अ- निर्दिष्ट"
+msgid "unknown"
+msgstr "अज्ञात"
 
 msgid "reserved"
 msgstr "सुरक्षित"
+
+msgid "fcc"
+msgstr "fcc"
+
+msgid "bt601 (bt470bg)"
+msgstr "bt601 (bt470bg)"
+
+msgid "smpte170m"
+msgstr "smpte170m"
+
+msgid "smpte240m"
+msgstr "smpte240m"
+
+msgid "ycgco"
+msgstr "ycgco"
+
+msgid "bt2020nc"
+msgstr "bt2020nc"
+
+msgid "bt2020c"
+msgstr "bt2020c"
+
+msgid "smpte2085"
+msgstr "smpte2085"
+
+msgid "chroma-derived-nc"
+msgstr "chroma-derived-nc"
+
+msgid "chroma-derived-c"
+msgstr "chroma-derived-c"
+
+msgid "ictcp"
+msgstr "ictcp"
+
+msgid "ipt-c2"
+msgstr "ipt-c2"
+
+msgid "ycgco-re"
+msgstr "ycgco-re"
+
+msgid "ycgco-ro"
+msgstr "ycgco-ro"
+
+msgid "unspecified"
+msgstr "अ- निर्दिष्ट"
 
 msgid "bt470m"
 msgstr "bt470m"
@@ -4895,8 +5074,14 @@ msgstr "bt470m"
 msgid "SMPTE170m"
 msgstr "SMPTE170m"
 
+msgid "SMPTE240m"
+msgstr "SMPTE240m"
+
 msgid "Film"
 msgstr "फ़िल्म"
+
+msgid "bt2020"
+msgstr "bt2020"
 
 msgid "SMPTE428"
 msgstr "SMPTE428"
@@ -4916,8 +5101,8 @@ msgstr "gamma22"
 msgid "gamma28"
 msgstr "gamma28"
 
-msgid "smpte240m"
-msgstr "smpte240m"
+msgid "bt601"
+msgstr "bt601"
 
 msgid "linear"
 msgstr "linear"
@@ -4943,8 +5128,8 @@ msgstr "bt2020-10"
 msgid "bt2020-12"
 msgstr "bt2020-12"
 
-msgid "bt2100"
-msgstr "bt2100"
+msgid "bt2100 (smpte2084)"
+msgstr "bt2100 (smpte2084)"
 
 msgid "hlg"
 msgstr "hlg"
@@ -5044,6 +5229,9 @@ msgstr "रंग सीमाएं"
 
 msgid "FFMpeg's Color Range for the codec selected"
 msgstr "चुने गए कोडेकों के लिए FFMOGE का रंग सीमा"
+
+msgid "Presets"
+msgstr "प्रीसेट"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "चुने गए कोडेकों के लिए FFMOGE का रंग जगह"
@@ -5270,20 +5458,26 @@ msgid ""
 "  for example, if a set of 8-bit images were \n"
 "  bt709 or some other color space.\n"
 "\n"
+"  Currently the override comes with two presets:\n"
+"  bt709 for SDR work, and HDR for HDR work.\n"
+"\n"
 "  If you don't know what those settings do, \n"
-"  DON'T MESS WITH THEM!\n"
+"  leave it all at bt709.\n"
 "  "
 msgstr ""
 "\n"
 "\n"
-"विस्तृत विन्यास आपको भंडारित करने देता है\n"
-"फिल्म फ़ाइल में मेटाडाटा निर्धारित करने के लिए यह निर्धारित करने हेतु कि कहाँ जाएँ\n"
-"और उसे हर तरह के सामान से वुसअत दी\n"
-"उदाहरण के लिए, यदि 8 बिट छवियों का सेट होता है\n"
-"Bt709 या कुछ अन्य रंग जगह.\n"
+"  उन्नत सेटिंग्स आपको मूवी फ़ाइल में मेटाडेटा \n"
+"  सहेजने की सुविधा देती हैं, जिससे यह निर्धारित किया जा सके कि \n"
+"  इसे कहाँ और कैसे बनाया गया था। यह, उदाहरण के लिए, \n"
+"  यह बताने के लिए उपयोगी है कि 8-बिट छवियों का कोई सेट \n"
+"  bt709 या किसी अन्य कलर स्पेस में था।\n"
 "\n"
-"आप नहीं जानते कि उन सेटिंग क्या करते हैं,\n"
-"एम के साथ मत बनो!\n"
+"  वर्तमान में ओवरराइड में दो प्रीसेट शामिल हैं:\n"
+"  SDR कार्य के लिए bt709 और HDR कार्य के लिए HDR।\n"
+"\n"
+"  यदि आप नहीं जानते कि ये सेटिंग्स क्या करती हैं, \n"
+"  तो सभी सेटिंग्स को bt709 पर ही रहने दें।\n"
 "  "
 
 msgid "1/9"
@@ -6612,9 +6806,6 @@ msgstr "वीडियो प्रारंभ फ्रेम"
 msgid "Start value in the timeline where video starts."
 msgstr "समय रेखा में आरंभ करें जहाँ वीडियो प्रारंभ होता है."
 
-msgid "HDR"
-msgstr "HDR"
-
 msgid "Prefer RGB (Vulkan)"
 msgstr "RGB को प्राथमिकता दें (Vulkan)"
 
@@ -7451,24 +7642,31 @@ msgstr "भाग [/]"
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 
+#, c++-format
 msgid "Unknown licese plan '{0}'"
 msgstr "अज्ञात लाइसेंस योजना '{0}'"
 
+#, c++-format
 msgid "License plan '{0}'"
 msgstr "लाइसेंस योजना ‘{0}’"
 
+#, c++-format
 msgid "Supports annotations '{0}'"
 msgstr "टिप्पणियों का समर्थन करता है ‘{0}’"
 
+#, c++-format
 msgid "Supports editing '{0}'"
 msgstr "संपादन का समर्थन करता है ‘{0}’"
 
+#, c++-format
 msgid "Supports layers '{0}'"
 msgstr "लेयर्स का समर्थन करता है ‘{0}’"
 
+#, c++-format
 msgid "Supports python '{0}'"
 msgstr "Python का समर्थन करता है ‘{0}’"
 
+#, c++-format
 msgid "Supports voice annotations '{0}'"
 msgstr "वॉयस टिप्पणियों का समर्थन करता है ‘{0}’"
 
@@ -7481,9 +7679,11 @@ msgstr "नोड-लॉक्ड"
 msgid "Floating"
 msgstr "फ्लोटिंग"
 
+#, c++-format
 msgid "Found floating license at '{0}'"
 msgstr "'{0}' पर फ्लोटिंग लाइसेंस मिला"
 
+#, c++-format
 msgid "Did not find floating license at '{0}'"
 msgstr "'{0}' पर फ्लोटिंग लाइसेंस नहीं मिला"
 
@@ -7493,12 +7693,15 @@ msgstr "अमान्य समाप्ति तिथि"
 msgid "License expired"
 msgstr "लाइसेंस की अवधि समाप्त हो गई है"
 
+#, c++-format
 msgid "{0} is not readable. Using system default."
 msgstr "{0} पढ़ा नहीं जा सकता। सिस्टम डिफ़ॉल्ट का उपयोग किया जा रहा है।"
 
+#, c++-format
 msgid "{0} Active Licenses from {1}."
 msgstr "{0} सक्रिय लाइसेंस {1} से।"
 
+#, c++-format
 msgid "Valid license for {0}"
 msgstr "{0} के लिए वैध लाइसेंस"
 
@@ -7508,6 +7711,7 @@ msgstr "फ़्लोटिंग लाइसेंस जारी नही
 msgid "Released Floating License"
 msgstr "फ्लोटिंग लाइसेंस जारी किया गया"
 
+#, c++-format
 msgid "Your {0} license will expire on {1}."
 msgstr "आपका {0} लाइसेंस {1} को समाप्त हो जाएगा।"
 
@@ -8104,6 +8308,15 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
+
+#~ msgid "BGR"
+#~ msgstr "BGR"
+
+#~ msgid "FCC"
+#~ msgstr "FCC"
+
+#~ msgid "bt2100"
+#~ msgstr "bt2100"
 
 #~ msgid ""
 #~ ".otioz files cannot be edited.  Please unzip them first and use the "

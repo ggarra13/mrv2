@@ -5,6 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"POT-Creation-Date: 2026-08-31 08:52-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Insecty <insecty_l@163.com>\n"
 "Language: zh-CN\n"
@@ -302,6 +303,7 @@ msgstr "保存会话文件 。"
 msgid "Save and reload session file restarting mrv2."
 msgstr "保存并重新加载会话文件，同时重启 mrv2。"
 
+#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "复制的Python插件 {0} in {1} {2}"
 
@@ -1116,6 +1118,7 @@ msgstr "将当前帧的所有语音和鼠标方向以 JSON 文件形式获取。
 msgid "Get all URL/File/AI directions for current frame as a JSON file."
 msgstr "将当前帧的所有 URL/文件/AI 指令获取为 JSON 文件。"
 
+#, c++-format
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
 
@@ -1288,9 +1291,11 @@ msgstr "首选项位置 :"
 msgid "Temp Location: "
 msgstr "临时位置："
 
+#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "无法读取 python 脚本 '{0}'"
 
+#, c++-format
 msgid "Running python script '{0}'"
 msgstr "运行 python 脚本 '{0}'"
 
@@ -1303,6 +1308,7 @@ msgstr "Python 错误 :"
 msgid "Caching..."
 msgstr "正在缓存..."
 
+#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "文件名 '{0}' 不存在, 或者没有读取权限 。"
 
@@ -1312,9 +1318,11 @@ msgstr "打印到控制台的日志 。"
 msgid "Show this message."
 msgstr "显示此消息 。"
 
+#, c++-format
 msgid "Cannot parse option \"{0}\": {1}"
 msgstr "无法分析“ {0} ” 选项 : {1}"
 
+#, c++-format
 msgid "Cannot parse argument \"{0}\": {1}"
 msgstr "无法分析参数“ {0} ” : {1}"
 
@@ -1448,6 +1456,7 @@ msgstr "Editor/&External Editor"
 msgid "Scripts/Add To Script List"
 msgstr "脚本/添加到脚本列表"
 
+#, c-format
 msgid "Scripts/%s"
 msgstr "脚本/%s"
 
@@ -1456,6 +1465,7 @@ msgid ""
 "it.  Press Keypad Enter to run it."
 msgstr "在此输入 python 代码。 选择一个区域执行它的一部分。 按Enter 键运行"
 
+#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "Python 文件 {0} 已经存在。 您想要覆盖它吗?"
 
@@ -1477,18 +1487,22 @@ msgstr "Stream处于无法恢复的错误状态 。"
 msgid "Type your editor command"
 msgstr "键入编辑器命令"
 
+#, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr "{0} 将被替换为行号 。 {1} 将替换为文件名"
 
+#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "正则表达式错误: {0}"
 
+#, c++-format
 msgid "Could not open python editor: {0}"
 msgstr "无法打开 python 编辑器: {0}"
 
 msgid "Search String:"
 msgstr "搜索字符串 :"
 
+#, c-format
 msgid "No occurrences of '%s' found!"
 msgstr "找不到 '%s' 发生事件!"
 
@@ -1525,6 +1539,7 @@ msgstr "带有元元元数据"
 msgid "Without Metadata"
 msgstr "没有元元数据"
 
+#, c++-format
 msgid "Streaming {0} {1}..."
 msgstr "串流 {0} {1}..."
 
@@ -1663,6 +1678,15 @@ msgid ""
 "When this setting is on, the player will try to decode the movie in the GPU "
 "if possible."
 msgstr "启用此设置后，如果可能，播放器将尝试使用 GPU 解码影片。"
+
+msgid "FFmpeg HW Driver"
+msgstr "FFmpeg 硬件驱动"
+
+msgid "Default HW Driver"
+msgstr "默认硬件驱动"
+
+msgid "Select what driver to use for your GPU."
+msgstr "选择用于 GPU 的驱动程序。"
 
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/O 线程"
@@ -1849,9 +1873,11 @@ msgstr "1:16"
 msgid "Pick"
 msgstr "选取"
 
+#, c-format
 msgid "%.3f seconds "
 msgstr "% 3f 秒"
 
+#, c-format
 msgid "Video Stream #%d"
 msgstr "视频流 #%d"
 
@@ -2119,6 +2145,7 @@ msgstr "文件的最近修改日期"
 msgid "Load an image or movie file"
 msgstr "载入图像或影片"
 
+#, c-format
 msgid "Audio Stream #%d"
 msgstr "音频流 #%d"
 
@@ -2137,6 +2164,7 @@ msgstr "音频数量"
 msgid "Format"
 msgstr "格式"
 
+#, c-format
 msgid "%d Hz."
 msgstr "%d Hz."
 
@@ -2146,6 +2174,7 @@ msgstr "频率"
 msgid "Frequency of audio"
 msgstr "音频频率"
 
+#, c-format
 msgid "%d kb/s"
 msgstr "% d kb/s"
 
@@ -2170,6 +2199,7 @@ msgstr "持续时间"
 msgid "Duration of Audio"
 msgstr "音频持续时间"
 
+#, c-format
 msgid "Subtitle Stream #%d"
 msgstr "字幕流 #%d"
 
@@ -2479,9 +2509,11 @@ msgstr "在所有帧上显示注解"
 msgid "Notes"
 msgstr "Notes"
 
+#, c++-format
 msgid "STUN server is {0}"
 msgstr "STUN 服务器是 {0}"
 
+#, c++-format
 msgid "TURN server is {0}"
 msgstr "TURN 服务器为 {0}"
 
@@ -2500,12 +2532,15 @@ msgstr "未设置信令服务器。请在 首选项->WebRTC->信令 中进行设
 msgid "No Web RTC Studio set.  Please update Preferences->WebRTC->Studio"
 msgstr "未设置 WebRTC Studio。请在 首选项->WebRTC->Studio 中进行设置"
 
+#, c++-format
 msgid "The room ID is: {0}"
 msgstr "房间 ID 是：{0}"
 
+#, c++-format
 msgid "The player ID is: {0}"
 msgstr "播放器 ID 是：{0}"
 
+#, c++-format
 msgid "Downloading {0}..."
 msgstr "正在下载 {0}..."
 
@@ -2515,9 +2550,11 @@ msgstr "在端口监听服务器"
 msgid "ComfyUI listening on port "
 msgstr "ComfyUI 在端口监听"
 
+#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr "服务器协议版本为 {0}。 客户端协议版本为 {1}"
 
+#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "本地文件系统不存在远程文件 {0} 。"
 
@@ -2527,11 +2564,13 @@ msgstr "未通过 WebRTC 连接；无法获取远程文件。"
 msgid "Peer not connected."
 msgstr "对等端未连接。"
 
+#, c++-format
 msgid ""
 "{0} is only reachable via relay (TURN), which would consume VPS bandwidth. "
 "Skipping fetch to avoid unexpected costs."
 msgstr "{0} 只能通过中继（TURN）访问，这会消耗 VPS 带宽。为避免产生意外费用，已跳过获取操作。"
 
+#, c++-format
 msgid "Already fetching {0} from another sync request; skipping duplicate."
 msgstr "已在另一个同步请求中获取 {0}；跳过重复请求。"
 
@@ -2548,13 +2587,15 @@ msgstr ""
 msgid "Download failed."
 msgstr "下载失败。"
 
+#, c++-format
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr "本地未找到远程文件 {0}，且没有可用于获取该文件的对等端。"
 
+#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "远程文件 {0} 匹配文件名 {1}, 但不是路径 。"
 
-#. ++-format
+#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "远程文件 {0} 不匹配本地文件名 。"
 
@@ -2564,11 +2605,13 @@ msgstr "沃恩: 韦恩:"
 msgid "ERROR:\t"
 msgstr "错误:"
 
+#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 msgstr "从 {0} 创建的正则表达式。 它是 : {1}"
 
+#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "迭代 {0} 将检查版本 {1} 。"
 
@@ -2580,27 +2623,34 @@ msgstr "在此剪辑中没有版本。 请创建名为版本字符串的图像�
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "示例:  gizmo_v003.0001.exr"
 
+#, c++-format
 msgid "Could not replace {0} with {1}"
 msgstr "无法将 {0} 替换为 {1} 。"
 
 msgid "Annotation already existed at this time"
 msgstr "当前时间已经存在批注"
 
+#, c++-format
 msgid "Failed to open the file {0} for writing."
 msgstr "打开文件 {0} 以写入失败 。"
 
+#, c++-format
 msgid "Failed to write to the file {0}."
 msgstr "写入文件 {0} 失败 。"
 
+#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "会话已保存到\"{0}\"。"
 
+#, c++-format
 msgid "Failed to open the file '{0}' for reading."
 msgstr "打开文件 '{0}' 读取失败 。"
 
+#, c++-format
 msgid "Failed to load the file '{0}."
 msgstr "装入文件 '{0} 失败 。"
 
+#, c++-format
 msgid ""
 "Movie File '{0}' is not readable.\n"
 "\n"
@@ -2610,6 +2660,7 @@ msgstr ""
 "\n"
 "是否要用其他文件替换它？"
 
+#, c++-format
 msgid ""
 "Sequence '{0}' is not readable.\n"
 "\n"
@@ -2619,6 +2670,7 @@ msgstr ""
 "\n"
 "是否要用其他内容替换它？"
 
+#, c++-format
 msgid ""
 "Audio File '{0}' is not readable.\n"
 "\n"
@@ -2628,9 +2680,11 @@ msgstr ""
 "\n"
 "是否要用其他文件替换它？"
 
+#, c++-format
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "读取“ \"{0}{1}\" 的首选项"
 
+#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "获取 {0} 失败"
 
@@ -2642,9 +2696,11 @@ msgstr "设置面板中正在使用FFmpeg YUV 转换到 RGB 。 mrv2 将会减�
 msgid "Debanding is not set to None.  This can make images show blurred"
 msgstr "去色带未设置为“无”。这可能会使图像看起来模糊。"
 
+#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "无法打开 \"{0}\" 的颜色主题 。"
 
+#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "从 \"{0}\" 载入的颜色主题 。"
 
@@ -2654,30 +2710,34 @@ msgstr "设置基于偏好的OCIO配置"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "根据OCIO环境变量设置OCIO配置"
 
-#. ++-format
+#, c++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "从 \"{0}{1}\" 导入路径映射图"
 
+#, c++-format
 msgid "Error deleting directory: \"{0}\"."
 msgstr "删除目录时出错：“{0}”。"
 
+#, c++-format
 msgid "Cleaned directory: \"{0}\"."
 msgstr "已清理目录：“{0}”。"
 
-#. ++-format
+#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "正在从 \"{0}{1}.prefs\" 导入快捷键"
 
 msgid "Resetting hotkeys to default."
 msgstr "正在将快捷键重置为默认值。"
 
+#, c++-format
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "路径映射已保存到 \"{0}{1}\"。"
 
+#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "快捷键被保存到“ \"{0}{1}.prefs\"."
 
-#. ++-format
+#, c++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "首选项已保存为 \"{0}{1}\"."
 
@@ -2687,6 +2747,7 @@ msgstr "删除"
 msgid "OCIO config is now:"
 msgstr "OCIO 配置为:"
 
+#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "找不到或无法读取 OCIO 文件 \"{0}\" 。"
 
@@ -2696,58 +2757,74 @@ msgstr "设置 OCIO 默认配置 :"
 msgid "Setting OCIO config to built-in:"
 msgstr "设置 OCIO 内置配置 :"
 
+#, c++-format
 msgid "Path mapping for {0} already exists!"
 msgstr "{0} 路径映射已经存在!"
 
+#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "比较 {0} 到前缀 {1}"
 
+#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "找到了匹配文件。 文件现在是 {0}"
 
 msgid "OCIO config file cannot be empty."
 msgstr "OCIO 配置文件不能为空 。"
 
+#, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "OCIO 配置 '{0}' 不存在或不可读 。"
 
+#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "无效的 OCIO Ics '{0}' 。"
 
+#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr "无效的 OCIO 外观 '{0}' 。"
 
+#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "无效的 OCIO 显示/ 查看 '{0}' 。"
 
+#, c++-format
 msgid "Could not split '{0}' into display and view."
 msgstr "无法将 '{0}' 分割为显示和视图 。"
 
+#, c++-format
 msgid "No default view for display '{0}'.  Does display exist?"
 msgstr "显示“ {0} ” 没有默认视图。 显示是否存在?"
 
+#, c++-format
 msgid "Setting OCIO Preset '{0}'."
 msgstr "设置 OCIO 预设 '{0}' 。"
 
-#. ++-format
+#, c++-format
 msgid "Preset '{0}' not found."
 msgstr "找不到预设 '{0}' 。"
 
+#, c++-format
 msgid "OCIO Preset '{0}' already exists!"
 msgstr "OCIO 预设 '{0}' 已经存在!"
 
+#, c++-format
 msgid "Failed to load the file '{0}'."
 msgstr "装入文件 '{0}' 失败 。"
 
+#, c++-format
 msgid "Loaded {0} ocio presets from \"{1}\"."
 msgstr "从“ {1} ” 装入 {0} ocio 预设 。"
 
+#, c++-format
 msgid "Failed to open the file '{0}' for saving."
 msgstr "打开文件 '{0}' 保存失败 。"
 
+#, c++-format
 msgid "Failed to save the file '{0}'."
 msgstr "保存文件 '{0}' 失败 。"
 
+#, c++-format
 msgid "OCIO presets have been saved to \"{0}\"."
 msgstr "OCIO 预设已保存为 {0} 。"
 
@@ -2778,11 +2855,13 @@ msgstr "Russian"
 msgid "Japanese"
 msgstr "Japanese"
 
+#, c++-format
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
 msgstr "需要重新启动 mrv2 将语言更改为 {0}。  您确定要继续吗？"
 
+#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "设置语言为 {0}, 数字为 {1}"
 
@@ -2915,11 +2994,13 @@ msgstr ""
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.功能\t@B12@C7@b@.热键"
 
+#, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
 msgstr "快捷键 \"%s\" 已经被\"%s\" 使用。确定要覆盖它吗?"
 
+#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -3081,18 +3162,22 @@ msgstr "无效索引 添加剪辑到时间表时"
 msgid "Could not get current path."
 msgstr "无法获得当前路径"
 
+#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "EDL 项目 '{0}' 不再装入。 无法撤消或重做"
 
+#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "无法粘贴 {0}  错误 {1}"
 
 msgid "Items selected must be on the same track."
 msgstr "所选项目必须在同一轨道上。"
 
+#, c++-format
 msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
 msgstr "所选项目在轨道上必须是连续的。左侧 {0}。右侧 {1}。"
 
+#, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
 msgstr "请选择两个或四个连续的项目。已选 {0}。"
 
@@ -3102,10 +3187,11 @@ msgstr "请选择两个相邻的视频剪辑。"
 msgid "Please select two contiguous audio clips."
 msgstr "请选择两个相邻的音频剪辑。"
 
+#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "无法保存. otio 文件: {0}"
 
-#. ++-format
+#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "保存 {0} 出错  {1}"
 
@@ -3118,7 +3204,7 @@ msgstr "目的文件无效"
 msgid "Unknown media reference"
 msgstr "未知媒体引用未知"
 
-#. ++-format
+#, c++-format
 msgid "Track #{0} - {1}"
 msgstr "音轨 #{0} - {1}"
 
@@ -3128,9 +3214,11 @@ msgstr "无法将. otio 文件归结为. otio 文件"
 msgid "Cannot currently concatenate a directory."
 msgstr "无法连接目录"
 
+#, c++-format
 msgid "Could not append video track {0}"
 msgstr "无法附加视频轨道 {0}"
 
+#, c++-format
 msgid "Could not append audio track {0}"
 msgstr "无法附加音频轨道 {0}"
 
@@ -3364,16 +3452,18 @@ msgstr "编辑文本注释"
 msgid "No item selected"
 msgstr "未选中项目"
 
+#, c-format
 msgid "%s - Page %d"
 msgstr "%s - 第%d页"
 
+#, c++-format
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "图像太大。 将保存视图的大小 。"
 
-#. ++-format
+#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "视图端口大小 : {0} - X={1}, Y={2}"
 
@@ -3501,12 +3591,15 @@ msgstr "无法在此为当前帧创建注释。 已经存在全部帧注释 。"
 msgid "Cannot save an NDI stream"
 msgstr "无法保存 NDI 流"
 
+#, c++-format
 msgid "Saving movie to {0}."
 msgstr "将影片保存到 {0} 。"
 
+#, c++-format
 msgid "Saving audio to {0}."
 msgstr "将音频保存到 {0} 。"
 
+#, c++-format
 msgid "Saving pictures to {0}."
 msgstr "将图片保存到 {0} 。"
 
@@ -3528,51 +3621,66 @@ msgstr "GoPro Cineform 配置需要一个.mkv 的格式扩展。 将其修改为
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "HAP 配置需要. mov 扩展。 将其修改为. mov"
 
+#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新建文件 {0} 已经存在! 无法覆盖它"
 
+#, c++-format
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: 无法打开插件"
 
+#, c++-format
 msgid "Image info: {0} {1}"
 msgstr "图像信息: {0} {1}"
 
+#, c++-format
 msgid "Scaled image info: {0}"
 msgstr "缩放图像信息: {0}"
 
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer 插件没有获得输出信息 。 默认为 {0}"
 
+#, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr "使用 profile {0}, 像素格式 {1} 。"
 
+#, c++-format
 msgid "Using preset {0}."
 msgstr "使用预设 {0} 。"
 
+#, c++-format
 msgid "Offscreen Buffer info: {0}"
 msgstr "离屏缓冲区信息：{0}"
 
+#, c++-format
 msgid "Output info: {0} {1}"
 msgstr "输出信息: {0} {1}"
 
+#, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie without Audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie with Audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
+#, c++-format
 msgid "Saving... {0}"
 msgstr "保存... {0}"
 
+#, c++-format
 msgid "Render size: {0}"
 msgstr "渲染尺寸：{0}"
 
@@ -3585,15 +3693,18 @@ msgstr "1.85"
 msgid "1.66"
 msgstr "1.66"
 
+#, c-format
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "缓存："
 
+#, c++-format
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR 显示器最小亮度（尼特）= {0}"
 
+#, c++-format
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR 显示器最大亮度（尼特）= {0}"
 
@@ -3603,24 +3714,30 @@ msgstr "未找到HDR显示器或未配置。"
 msgid "HDR monitor not detected by Vulkan or Window Manager."
 msgstr "Vulkan 或窗口管理器未检测到 HDR 显示器。"
 
+#, c++-format
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan 颜色空间为 {0}"
 
+#, c++-format
 msgid "Vulkan format is {0}"
 msgstr "Vulkan 格式为 {0}"
 
+#, c++-format
 msgid "Changed to HDR active monitor at index {0}"
 msgstr "已切换到索引 {0} 的活动 HDR 显示器"
 
+#, c++-format
 msgid "Changed to HDR supported but inactive monitor at index {0}"
 msgstr "已切换到索引 {0} 的支持 HDR 但未激活的显示器"
 
+#, c++-format
 msgid "Changed to SDR monitor at index {0}"
 msgstr "已切换到索引 {0} 的 SDR 显示器"
 
 msgid "Edit Text"
 msgstr "编辑文本"
 
+#, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' 不是文件、目录或 URL。"
 
@@ -3636,10 +3753,11 @@ msgstr "无法播放 – 音频注释为空"
 msgid "Status is not saved"
 msgstr "状态未保存"
 
-#. ++-format
+#, c++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "音频注释文件 {0} 缺失或不存在！"
 
+#, c++-format
 msgid "Unhandled buffer format: {0} for output: {1}"
 msgstr "不支持的缓冲区格式：{0}，输出：{1}"
 
@@ -3745,6 +3863,7 @@ msgstr "文件/全部关闭"
 msgid "File/Save and Reload Session"
 msgstr "文件/保存并重新加载会话"
 
+#, c-format
 msgid "File/Recent/%s"
 msgstr "文件/最近/%s"
 
@@ -3994,6 +4113,7 @@ msgstr "播放/注释/清除"
 msgid "Playback/Annotation/Clear All"
 msgstr "播放/注释/全部清除"
 
+#, c-format
 msgid "View/Mask/%s"
 msgstr "视图/遮罩/%s"
 
@@ -4066,9 +4186,11 @@ msgstr "时间线/过渡"
 msgid "Timeline/Markers"
 msgstr "时间线/标记"
 
+#, c++-format
 msgid "Timeline/Visible Tracks/{0}"
 msgstr "时间线/可见音轨/{0}"
 
+#, c++-format
 msgid "Timeline/Media Reference/{0}"
 msgstr "时间线/媒体引用/{0}"
 
@@ -4126,12 +4248,14 @@ msgstr "图像/比较模式/垂直"
 msgid "Image/Compare Mode/Tile"
 msgstr "图像/比较模式/平铺"
 
+#, c-format
 msgid "Image/Go to/%s"
 msgstr "图像/转到/%s"
 
 msgid "Image/Compare/Toggle A and B"
 msgstr "图像/比较/切换 A 和 B"
 
+#, c-format
 msgid "Image/Compare/%s"
 msgstr "图像/比较/%s"
 
@@ -4198,24 +4322,31 @@ msgstr "OCIO/切换"
 msgid "OCIO/Current"
 msgstr "OCIO/目前"
 
+#, c-format
 msgid "OCIO/         ICS: %s"
 msgstr "OCIO/         ICS: %s"
 
+#, c-format
 msgid "OCIO/     Display: %s"
 msgstr "OCIO/     Display: %s"
 
+#, c-format
 msgid "OCIO/        View: %s"
 msgstr "OCIO/        View: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/  Monitor #%d Display: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/  Monitor #%d    View: %s"
 
+#, c-format
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/        Look: %s"
 
+#, c-format
 msgid "OCIO/        LUT: %s"
 msgstr "OCIO/        LUT: %s"
 
@@ -4267,6 +4398,7 @@ msgstr "同步/接受/注释"
 msgid "Sync/Accept/Audio"
 msgstr "同步/接受/音频"
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -4274,6 +4406,7 @@ msgstr ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -4374,17 +4507,21 @@ msgstr "宽列表模式"
 msgid "Detail mode"
 msgstr "详细细节模式"
 
+#, c-format
 msgid ""
 "Could not create directory '%s'. You may not have permission to perform this"
 " operation."
 msgstr "无法创建目录 “%s ” 。 您可能没有执行此操作的权限 。"
 
+#, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "尝试删除 '%s' 时发生错误。%s"
 
+#, c-format
 msgid "File '%s' already exists!"
 msgstr "文件 '%s' 已经存在!"
 
+#, c-format
 msgid "Unable to rename '%s' to '%s'"
 msgstr "无法将 “%s” 重命名为 “%s”"
 
@@ -4526,6 +4663,7 @@ msgstr "OpenUSD Compressed Asset"
 msgid "OpenUSD ASCII Asset"
 msgstr "OpenUSD ASCII Asset"
 
+#, c-format
 msgid "Another process using the file."
 msgstr "另一个进程在使用文件"
 
@@ -4626,9 +4764,11 @@ msgstr "With msvc "
 msgid "mrv2 depends on:"
 msgstr "mrv2 depends on:"
 
+#, c++-format
 msgid "Total Physical Memory: {0} Gb"
 msgstr "物理内存总量：{0} GB"
 
+#, c++-format
 msgid "Total Virtual Memory: {0} Gb"
 msgstr "虚拟内存总量：{0} GB"
 
@@ -4680,6 +4820,7 @@ msgstr "拖放框"
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "MrvOCIOBrowser 的未知类型"
 
+#, c++-format
 msgid ""
 "Wayland Compositor supports Float on Top only through hotkeys.  Press {0}."
 msgstr "Wayland 复合器仅通过快捷键支持“置顶显示”。请按 {0}。"
@@ -4689,6 +4830,7 @@ msgid ""
 "Manager to set a hotkey for it."
 msgstr "Wayland 不支持顶部的浮点 。 使用您的窗口管理器设置热键 。"
 
+#, c++-format
 msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr "GNOME Shell 没有顶部浮点的 GNOME Shell 热键。 设置为“ {0} ”"
 
@@ -4778,6 +4920,7 @@ msgstr "范围"
 msgid "Mean"
 msgstr "平均"
 
+#, c-format
 msgid "Track #%d - %s"
 msgstr "音轨 #%d - %s"
 
@@ -4796,29 +4939,65 @@ msgstr "TV (合法范围)"
 msgid "PC (Full Range)"
 msgstr "PC (全范围)"
 
-msgid "BGR"
-msgstr "BGR"
-
 msgid "bt709"
 msgstr "bt709"
 
-msgid "FCC"
-msgstr "FCC"
+msgid "HDR"
+msgstr "HDR"
 
-msgid "SMPTE240m"
-msgstr "SMPTE240m"
+msgid "gbr"
+msgstr "gbr"
 
-msgid "bt601"
-msgstr "bt601"
-
-msgid "bt2020"
-msgstr "bt2020"
-
-msgid "unspecified"
-msgstr "未指定"
+msgid "unknown"
+msgstr "未知"
 
 msgid "reserved"
 msgstr "保留"
+
+msgid "fcc"
+msgstr "fcc"
+
+msgid "bt601 (bt470bg)"
+msgstr "bt601 (bt470bg)"
+
+msgid "smpte170m"
+msgstr "smpte170m"
+
+msgid "smpte240m"
+msgstr "smpte240m"
+
+msgid "ycgco"
+msgstr "ycgco"
+
+msgid "bt2020nc"
+msgstr "bt2020nc"
+
+msgid "bt2020c"
+msgstr "bt2020c"
+
+msgid "smpte2085"
+msgstr "smpte2085"
+
+msgid "chroma-derived-nc"
+msgstr "chroma-derived-nc"
+
+msgid "chroma-derived-c"
+msgstr "chroma-derived-c"
+
+msgid "ictcp"
+msgstr "ictcp"
+
+msgid "ipt-c2"
+msgstr "ipt-c2"
+
+msgid "ycgco-re"
+msgstr "ycgco-re"
+
+msgid "ycgco-ro"
+msgstr "ycgco-ro"
+
+msgid "unspecified"
+msgstr "未指定"
 
 msgid "bt470m"
 msgstr "bt470m"
@@ -4826,8 +5005,14 @@ msgstr "bt470m"
 msgid "SMPTE170m"
 msgstr "SMPTE170m"
 
+msgid "SMPTE240m"
+msgstr "SMPTE240m"
+
 msgid "Film"
 msgstr "Film"
+
+msgid "bt2020"
+msgstr "bt2020"
 
 msgid "SMPTE428"
 msgstr "SMPTE428"
@@ -4847,8 +5032,8 @@ msgstr "gamma22"
 msgid "gamma28"
 msgstr "gamma28"
 
-msgid "smpte240m"
-msgstr "smpte240m"
+msgid "bt601"
+msgstr "bt601"
 
 msgid "linear"
 msgstr "linear"
@@ -4874,8 +5059,8 @@ msgstr "bt2020-10"
 msgid "bt2020-12"
 msgstr "bt2020-12"
 
-msgid "bt2100"
-msgstr "bt210"
+msgid "bt2100 (smpte2084)"
+msgstr "bt2100 (smpte2084)"
 
 msgid "hlg"
 msgstr "hlg"
@@ -4975,6 +5160,9 @@ msgstr "颜色范围"
 
 msgid "FFMpeg's Color Range for the codec selected"
 msgstr "所选编码器的 higpeg 颜色范围"
+
+msgid "Presets"
+msgstr "预设"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "所选编码器的 higpeg 颜色空间"
@@ -5216,20 +5404,24 @@ msgid ""
 "  for example, if a set of 8-bit images were \n"
 "  bt709 or some other color space.\n"
 "\n"
+"  Currently the override comes with two presets:\n"
+"  bt709 for SDR work, and HDR for HDR work.\n"
+"\n"
 "  If you don't know what those settings do, \n"
-"  DON'T MESS WITH THEM!\n"
+"  leave it all at bt709.\n"
 "  "
 msgstr ""
 "\n"
 "\n"
-"高级设置允许您存储\n"
-"在电影文件中的元数据中确定\n"
-"怎样造它,怎样造它,那对于能说明真理的是有用的。\n"
-"例如,如果一组8位图像是\n"
-"bt709 或其他颜色空间 。\n"
+"  高级设置允许您在影片文件中保存元数据，\n"
+"  以确定影片文件在哪里以及如何创建。此功能可用于指明，\n"
+"  例如，一组 8 位图像使用的是 bt709 还是其他色彩空间。\n"
 "\n"
-"如果你不知道这些设置会做什么\n"
-"不要和他们在一起!\n"
+"  当前的覆盖设置提供两个预设：\n"
+"  用于 SDR 工作的 bt709，以及用于 HDR 工作的 HDR。\n"
+"\n"
+"  如果您不知道这些设置的作用，\n"
+"  请将所有设置保留为 bt709。\n"
 "  "
 
 msgid "1/9"
@@ -6513,9 +6705,6 @@ msgstr "视频启动框架"
 msgid "Start value in the timeline where video starts."
 msgstr "开始在视频开始的时间线中开始值 。"
 
-msgid "HDR"
-msgstr "HDR"
-
 msgid "Prefer RGB (Vulkan)"
 msgstr "优先使用 RGB（Vulkan）"
 
@@ -7292,24 +7481,31 @@ msgstr "Divide"
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 
+#, c++-format
 msgid "Unknown licese plan '{0}'"
 msgstr "未知的许可计划“{0}”"
 
+#, c++-format
 msgid "License plan '{0}'"
 msgstr "许可计划「{0}」"
 
+#, c++-format
 msgid "Supports annotations '{0}'"
 msgstr "支持注释「{0}」"
 
+#, c++-format
 msgid "Supports editing '{0}'"
 msgstr "支持编辑「{0}」"
 
+#, c++-format
 msgid "Supports layers '{0}'"
 msgstr "支持图层「{0}」"
 
+#, c++-format
 msgid "Supports python '{0}'"
 msgstr "支持 Python「{0}」"
 
+#, c++-format
 msgid "Supports voice annotations '{0}'"
 msgstr "支持语音注释「{0}」"
 
@@ -7322,9 +7518,11 @@ msgstr "节点锁定"
 msgid "Floating"
 msgstr "浮动"
 
+#, c++-format
 msgid "Found floating license at '{0}'"
 msgstr "在“{0}”找到浮动许可"
 
+#, c++-format
 msgid "Did not find floating license at '{0}'"
 msgstr "在“{0}”未找到浮动许可"
 
@@ -7334,12 +7532,15 @@ msgstr "无效的到期日期"
 msgid "License expired"
 msgstr "许可证已过期"
 
+#, c++-format
 msgid "{0} is not readable. Using system default."
 msgstr "{0} 无法读取。正在使用系统默认值。"
 
+#, c++-format
 msgid "{0} Active Licenses from {1}."
 msgstr "来自 {1} 的 {0} 个活动许可证。"
 
+#, c++-format
 msgid "Valid license for {0}"
 msgstr "{0} 的有效许可证"
 
@@ -7349,6 +7550,7 @@ msgstr "无法释放浮动许可证。"
 msgid "Released Floating License"
 msgstr "已释放浮动许可证"
 
+#, c++-format
 msgid "Your {0} license will expire on {1}."
 msgstr "您的 {0} 许可证将于 {1} 到期。"
 
@@ -7945,6 +8147,15 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "任务信息失败"
+
+#~ msgid "BGR"
+#~ msgstr "BGR"
+
+#~ msgid "FCC"
+#~ msgstr "FCC"
+
+#~ msgid "bt2100"
+#~ msgstr "bt210"
 
 #~ msgid ""
 #~ ".otioz files cannot be edited.  Please unzip them first and use the "
