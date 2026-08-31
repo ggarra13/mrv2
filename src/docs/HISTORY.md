@@ -6,7 +6,7 @@ v1.7.5
 
 - Vulkan: Improved performance of movies with changing HDR metadata and destroying textures.
 - Vulkan: Fixed validation error when OCIO and libplacebo were used together.
-- Vulkan: Fixed on validation error when saving and no tonemapping.
+- Vulkan: Fixed one validation error when saving and no tonemapping.
 - Vulkan/Linux: Added HW decoding under Vulkan on both backends.  Allows HW decoding of prores, h264, hevc, av1, and vpx.  Note that performance is wildly dependant on the graphics card.
 
 - HDR: Added Saving of HDR movies with stream metadata.
