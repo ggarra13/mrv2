@@ -5,7 +5,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-08-31 08:52-0300\n"
 "PO-Revision-Date: 2026-07-27 22:27+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -304,7 +303,6 @@ msgstr "セッションファイルを保存します。"
 msgid "Save and reload session file restarting mrv2."
 msgstr "セッションファイルを保存し、mrv2 を再起動して再読み込みします。"
 
-#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "重複した Python プラグイン {0} が {1} と {2} にあります。"
 
@@ -1117,7 +1115,6 @@ msgstr "現在のフレームの音声およびマウスの指示を JSON ファ
 msgid "Get all URL/File/AI directions for current frame as a JSON file."
 msgstr "現在のフレームのすべての URL/ファイル/AI の指示を JSON ファイルとして取得します。"
 
-#, c++-format
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - チャンネル: {1} {2} {3}"
 
@@ -1290,11 +1287,9 @@ msgstr "設定の場所 : "
 msgid "Temp Location: "
 msgstr "一時フォルダの場所 : "
 
-#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "Python スクリプト '{0}' を読み込めませんでした"
 
-#, c++-format
 msgid "Running python script '{0}'"
 msgstr "Python スクリプト '{0}' を実行中"
 
@@ -1307,7 +1302,6 @@ msgstr "Pythonエラー : "
 msgid "Caching..."
 msgstr "キャッシュ中..."
 
-#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "ファイル名 '{0}' が存在しないか、読み取り権限がありません。"
 
@@ -1317,11 +1311,9 @@ msgstr "ログをコンソールに出力します。"
 msgid "Show this message."
 msgstr "このメッセージを表示します。"
 
-#, c++-format
 msgid "Cannot parse option \"{0}\": {1}"
 msgstr "オプション \"{0}\" を解析できません: {1}"
 
-#, c++-format
 msgid "Cannot parse argument \"{0}\": {1}"
 msgstr "引数 \"{0}\" を解析できません: {1}"
 
@@ -1454,7 +1446,6 @@ msgstr "エディタ/外部エディタ(&E)"
 msgid "Scripts/Add To Script List"
 msgstr "スクリプト/スクリプトリストに追加"
 
-#, c-format
 msgid "Scripts/%s"
 msgstr "スクリプト/%s"
 
@@ -1463,7 +1454,6 @@ msgid ""
 "it.  Press Keypad Enter to run it."
 msgstr "ここに Python コードを入力してください。実行したい部分を選択して、テンキーのEnterキーを押すと実行できます。"
 
-#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "Python ファイル {0} はすでに存在します。上書きしますか？"
 
@@ -1485,22 +1475,18 @@ msgstr "ストリームが回復不能なエラー状態です。"
 msgid "Type your editor command"
 msgstr "エディタコマンドを入力してください"
 
-#, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr "{0} は行番号に、{1} はファイル名に置き換えられます"
 
-#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "正規表現エラー : {0}"
 
-#, c++-format
 msgid "Could not open python editor: {0}"
 msgstr "Pythonエディタを開けませんでした : {0}"
 
 msgid "Search String:"
 msgstr "検索文字列 :"
 
-#, c-format
 msgid "No occurrences of '%s' found!"
 msgstr "'%s' は見つかりませんでした!"
 
@@ -1537,7 +1523,6 @@ msgstr "メタデータあり"
 msgid "Without Metadata"
 msgstr "メタデータなし"
 
-#, c++-format
 msgid "Streaming {0} {1}..."
 msgstr "{0} {1} をストリーミング中..."
 
@@ -1874,11 +1859,9 @@ msgstr "1:16"
 msgid "Pick"
 msgstr "選択"
 
-#, c-format
 msgid "%.3f seconds "
 msgstr "%.3f秒 "
 
-#, c-format
 msgid "Video Stream #%d"
 msgstr "ビデオストリーム #%d"
 
@@ -2146,7 +2129,6 @@ msgstr "ファイルの最終更新日"
 msgid "Load an image or movie file"
 msgstr "画像またはムービーファイルを読み込みます"
 
-#, c-format
 msgid "Audio Stream #%d"
 msgstr "オーディオストリーム #%d"
 
@@ -2165,7 +2147,6 @@ msgstr "オーディオチャンネル数"
 msgid "Format"
 msgstr "フォーマット"
 
-#, c-format
 msgid "%d Hz."
 msgstr "%d Hz."
 
@@ -2175,7 +2156,6 @@ msgstr "周波数"
 msgid "Frequency of audio"
 msgstr "オーディオの周波数"
 
-#, c-format
 msgid "%d kb/s"
 msgstr "%d kb/s"
 
@@ -2200,7 +2180,6 @@ msgstr "継続時間"
 msgid "Duration of Audio"
 msgstr "オーディオの継続時間"
 
-#, c-format
 msgid "Subtitle Stream #%d"
 msgstr "字幕ストリーム #%d"
 
@@ -2516,11 +2495,9 @@ msgstr "すべてのフレームに注釈を表示します。"
 msgid "Notes"
 msgstr "ノート"
 
-#, c++-format
 msgid "STUN server is {0}"
 msgstr "STUN サーバーは {0} です"
 
-#, c++-format
 msgid "TURN server is {0}"
 msgstr "TURN サーバーは {0} です"
 
@@ -2539,15 +2516,12 @@ msgstr "シグナリング サーバーが設定されていません。環境�
 msgid "No Web RTC Studio set.  Please update Preferences->WebRTC->Studio"
 msgstr "WebRTC スタジオが設定されていません。環境設定->WebRTC->スタジオで設定してください"
 
-#, c++-format
 msgid "The room ID is: {0}"
 msgstr "ルームID : {0}"
 
-#, c++-format
 msgid "The player ID is: {0}"
 msgstr "プレイヤーID : {0}"
 
-#, c++-format
 msgid "Downloading {0}..."
 msgstr "{0} をダウンロード中..."
 
@@ -2557,11 +2531,9 @@ msgstr "サーバーはポートでリッスンしています "
 msgid "ComfyUI listening on port "
 msgstr "ComfyUI はポートでリッスンしています "
 
-#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr "サーバープロトコルバージョンは {0}、クライアントプロトコルバージョンは {1} です"
 
-#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "リモートファイル {0} はローカルファイルシステムに存在しません。"
 
@@ -2571,14 +2543,12 @@ msgstr "WebRTC に接続されていないため、リモートファイルを�
 msgid "Peer not connected."
 msgstr "ピアが接続されていません。"
 
-#, c++-format
 msgid ""
 "{0} is only reachable via relay (TURN), which would consume VPS bandwidth. "
 "Skipping fetch to avoid unexpected costs."
 msgstr ""
 "{0} はリレー (TURN) 経由でのみ到達可能であり、VPS の帯域幅を消費します。予期しないコストを避けるため、取得をスキップします。"
 
-#, c++-format
 msgid "Already fetching {0} from another sync request; skipping duplicate."
 msgstr "{0} は別の同期要求で既に取得中のため、重複をスキップします。"
 
@@ -2595,15 +2565,12 @@ msgstr ""
 msgid "Download failed."
 msgstr "ダウンロードに失敗しました。"
 
-#, c++-format
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr "リモートファイル {0} はローカルに見つからず、取得元のピアもありません。"
 
-#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "リモートファイル {0} はファイル名 {1} と一致しますが、パスは一致しません。"
 
-#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "リモートファイル {0} はローカルファイル名と一致しません。"
 
@@ -2613,7 +2580,6 @@ msgstr "警告 :\t"
 msgid "ERROR:\t"
 msgstr "エラー :\t"
 
-#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
@@ -2621,7 +2587,6 @@ msgstr ""
 "{0} から作成された正規表現 :\n"
 "{1}"
 
-#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "イテレーション {0} はバージョン={1} をチェックします"
 
@@ -2633,34 +2598,27 @@ msgstr "このクリップにはバージョニングがありません。バー
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "例 : gizmo_v003.0001.exr"
 
-#, c++-format
 msgid "Could not replace {0} with {1}"
 msgstr "{0} を {1} に置き換えられませんでした"
 
 msgid "Annotation already existed at this time"
 msgstr "この時間には既に注釈が存在します"
 
-#, c++-format
 msgid "Failed to open the file {0} for writing."
 msgstr "ファイル {0} を書き込み用に開けませんでした。"
 
-#, c++-format
 msgid "Failed to write to the file {0}."
 msgstr "ファイル {0} への書き込みに失敗しました。"
 
-#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "セッションを \"{0}\" に保存しました。"
 
-#, c++-format
 msgid "Failed to open the file '{0}' for reading."
 msgstr "ファイル '{0}' を読み込み用に開けませんでした。"
 
-#, c++-format
 msgid "Failed to load the file '{0}."
 msgstr "ファイル '{0} の読み込みに失敗しました。"
 
-#, c++-format
 msgid ""
 "Movie File '{0}' is not readable.\n"
 "\n"
@@ -2670,7 +2628,6 @@ msgstr ""
 "\n"
 "別のファイルに置き換えますか？"
 
-#, c++-format
 msgid ""
 "Sequence '{0}' is not readable.\n"
 "\n"
@@ -2680,7 +2637,6 @@ msgstr ""
 "\n"
 "別のものに置き換えますか？"
 
-#, c++-format
 msgid ""
 "Audio File '{0}' is not readable.\n"
 "\n"
@@ -2690,11 +2646,9 @@ msgstr ""
 "\n"
 "別のファイルに置き換えますか？"
 
-#, c++-format
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "\"{0}{1}\" から設定を読み込み中です。"
 
-#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "{0} の取得に失敗しました。"
 
@@ -2706,11 +2660,9 @@ msgstr "設定パネルで FFmpeg YUV から RGB への変換がオンになっ�
 msgid "Debanding is not set to None.  This can make images show blurred"
 msgstr "デバンディングが「なし」に設定されていません。画像がぼやけて見える場合があります"
 
-#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "\"{0}\" からカラーテーマを開けませんでした。"
 
-#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "\"{0}\" からカラーテーマを読み込みました。"
 
@@ -2720,34 +2672,27 @@ msgstr "設定から OCIO 設定を設定しています。"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "OCIO 環境変数から OCIO 設定を設定しています。"
 
-#, c++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "パスマッピングが \"{0}{1}\" から読み込まれました。"
 
-#, c++-format
 msgid "Error deleting directory: \"{0}\"."
 msgstr "ディレクトリの削除中にエラーが発生しました: \"{0}\"。"
 
-#, c++-format
 msgid "Cleaned directory: \"{0}\"."
 msgstr "ディレクトリをクリーンアップしました: \"{0}\"。"
 
-#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" からホットキーを読み込み中です。"
 
 msgid "Resetting hotkeys to default."
 msgstr "ホットキーをデフォルトにリセットしています。"
 
-#, c++-format
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "パスマッピングが \"{0}{1}\" に保存されました。"
 
-#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "ホットキーが \"{0}{1}.prefs\" に保存されました。"
 
-#, c++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "設定が \"{0}{1}\" に保存されました。"
 
@@ -2757,7 +2702,6 @@ msgstr "削除中 "
 msgid "OCIO config is now:"
 msgstr "OCIO設定は現在:"
 
-#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "OCIOファイル \"{0}\" が見つからないか、読み込めません。"
 
@@ -2767,74 +2711,57 @@ msgstr "OCIO 設定をデフォルトに設定 :"
 msgid "Setting OCIO config to built-in:"
 msgstr "OCIO 設定を内蔵のものに設定 :"
 
-#, c++-format
 msgid "Path mapping for {0} already exists!"
 msgstr "{0} のパスマッピングは既に存在します！"
 
-#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "{0} をプレフィックス {1} と比較中"
 
-#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "一致が見つかりました。ファイルは現在 {0} です"
 
 msgid "OCIO config file cannot be empty."
 msgstr "OCIO 設定ファイルは空にできません。"
 
-#, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "OCIO 設定 '{0}' が存在しないか、読み込めません。"
 
-#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "無効な OCIO Ics '{0}'。"
 
-#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr "無効な OCIO ルック '{0}'。"
 
-#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "無効な OCIO 表示/ビュー '{0}'。"
 
-#, c++-format
 msgid "Could not split '{0}' into display and view."
 msgstr "'{0}' を表示とビューに分割できませんでした。"
 
-#, c++-format
 msgid "No default view for display '{0}'.  Does display exist?"
 msgstr "表示 '{0}' のデフォルトビューがありません。表示は存在しますか？"
 
-#, c++-format
 msgid "Setting OCIO Preset '{0}'."
 msgstr "OCIO プリセット '{0}' を設定中。"
 
-#, c++-format
 msgid "Preset '{0}' not found."
 msgstr "プリセット '{0}' が見つかりません。"
 
-#, c++-format
 msgid "OCIO Preset '{0}' already exists!"
 msgstr "OCIO プリセット '{0}' は既に存在します！"
 
-#, c++-format
 msgid "Failed to load the file '{0}'."
 msgstr "ファイル '{0}' の読み込みに失敗しました。"
 
-#, c++-format
 msgid "Loaded {0} ocio presets from \"{1}\"."
 msgstr "\"{1}\" から {0} 個の OCIO プリセットを読み込みました。"
 
-#, c++-format
 msgid "Failed to open the file '{0}' for saving."
 msgstr "保存のためにファイル '{0}' を開けませんでした。"
 
-#, c++-format
 msgid "Failed to save the file '{0}'."
 msgstr "ファイル '{0}' の保存に失敗しました。"
 
-#, c++-format
 msgid "OCIO presets have been saved to \"{0}\"."
 msgstr "OCIO プリセットが \"{0}\" に保存されました。"
 
@@ -2865,13 +2792,11 @@ msgstr "ロシア語"
 msgid "Japanese"
 msgstr "日本語"
 
-#, c++-format
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
 msgstr "言語を {0} に変更するには mrv2 の再起動が必要です。続行しますか？"
 
-#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "言語を {0}、数字を {1} に設定します"
 
@@ -3004,7 +2929,6 @@ msgstr ""
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.機能\t@B12@C7@b@.ホットキー"
 
-#, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
@@ -3012,7 +2936,6 @@ msgstr ""
 "ホットキー \"%s\" は既に \"%s\" で使用されています。\n"
 "上書きしますか？"
 
-#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -3178,22 +3101,18 @@ msgstr "タイムラインにクリップを追加するインデックスが無
 msgid "Could not get current path."
 msgstr "現在のパスを取得できませんでした。"
 
-#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "EDLアイテム '{0}' は読み込まれていません。元に戻す/やり直しはできません。"
 
-#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "{0} を貼り付けられませんでした。エラー {1}。"
 
 msgid "Items selected must be on the same track."
 msgstr "選択されたアイテムは同じトラック上にある必要があります。"
 
-#, c++-format
 msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
 msgstr "選択されたアイテムはトラック上で連続している必要があります。左 {0}、右 {1}。"
 
-#, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
 msgstr "連続する 2つまたは 4つのアイテムを選択してください。選択済み : {0}。"
 
@@ -3203,11 +3122,9 @@ msgstr "連続する 2つのビデオクリップを選択してください。"
 msgid "Please select two contiguous audio clips."
 msgstr "連続する 2つのオーディオクリップを選択してください。"
 
-#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr ".otio ファイルを保存できませんでした : {0}"
 
-#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "{0} の保存中にエラーが発生しました。{1}"
 
@@ -3220,7 +3137,6 @@ msgstr "出力先ファイルが無効です。"
 msgid "Unknown media reference"
 msgstr "不明なメディア参照"
 
-#, c++-format
 msgid "Track #{0} - {1}"
 msgstr "トラック #{0} - {1}"
 
@@ -3230,11 +3146,9 @@ msgstr "現在 .otio ファイルを連結できません。"
 msgid "Cannot currently concatenate a directory."
 msgstr "現在ディレクトリを連結できません。"
 
-#, c++-format
 msgid "Could not append video track {0}"
 msgstr "ビデオトラック {0} を追加できませんでした"
 
-#, c++-format
 msgid "Could not append audio track {0}"
 msgstr "オーディオトラック {0} を追加できませんでした"
 
@@ -3468,18 +3382,15 @@ msgstr "テキスト注釈を編集"
 msgid "No item selected"
 msgstr "アイテムが選択されていません"
 
-#, c-format
 msgid "%s - Page %d"
 msgstr "%s - %dページ"
 
-#, c++-format
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "フレーム {0} - TC: {1} - S: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "画像が大きすぎます。ビューポートサイズで保存します。"
 
-#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "ビューポートサイズ : {0} - X={1}, Y={2}"
 
@@ -3607,15 +3518,12 @@ msgstr "現在のフレームに注釈を作成できません。すべてのフ
 msgid "Cannot save an NDI stream"
 msgstr "NDI ストリームを保存できません"
 
-#, c++-format
 msgid "Saving movie to {0}."
 msgstr "ムービーを {0} に保存しています。"
 
-#, c++-format
 msgid "Saving audio to {0}."
 msgstr "オーディオを {0} に保存しています。"
 
-#, c++-format
 msgid "Saving pictures to {0}."
 msgstr "画像を {0} に保存しています。"
 
@@ -3637,66 +3545,51 @@ msgstr "GoPro Cineform プロファイルには .mkv ムービー拡張子が必
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "HAP プロファイルには .mov 拡張子が必要です。.mov に変更します"
 
-#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新しいファイル {0} はすでに存在します！上書きできません。"
 
-#, c++-format
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: ライタープラグインを開けません。"
 
-#, c++-format
 msgid "Image info: {0} {1}"
 msgstr "画像情報: {0} {1}"
 
-#, c++-format
 msgid "Scaled image info: {0}"
 msgstr "スケーリングされた画像情報 : {0}"
 
-#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "ライタープラグインが出力情報を取得しませんでした。デフォルトの {0} に設定します"
 
-#, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr "プロファイル {0}、ピクセル形式 {1} を使用中。"
 
-#, c++-format
 msgid "Using preset {0}."
 msgstr "プリセット{0} を使用中。"
 
-#, c++-format
 msgid "Offscreen Buffer info: {0}"
 msgstr "オフスクリーンバッファ情報 : {0}"
 
-#, c++-format
 msgid "Output info: {0} {1}"
 msgstr "出力情報 : {0} {1}"
 
-#, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "オーディオなしでムービーを保存しています %<PRId64> - %<PRId64>"
 
-#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "オーディオ付きでムービーを保存しています %<PRId64> - %<PRId64>"
 
-#, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "オーディオを保存しています %<PRId64> - %<PRId64>"
 
-#, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "オーディオなしで画像を保存しています %<PRId64> - %<PRId64>"
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "オーディオはタイムラインにのみありますが、オーディオを保存しようとしていません。"
 
-#, c++-format
 msgid "Saving... {0}"
 msgstr "保存中... {0}"
 
-#, c++-format
 msgid "Render size: {0}"
 msgstr "レンダーサイズ: {0}"
 
@@ -3709,18 +3602,15 @@ msgstr "1.85"
 msgid "1.66"
 msgstr "1.66"
 
-#, c-format
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "キャッシュ : "
 
-#, c++-format
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR モニターの最小輝度 = {0}"
 
-#, c++-format
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR モニターの最大輝度 = {0}"
 
@@ -3730,30 +3620,24 @@ msgstr "HDR モニターが見つからないか、設定されていません�
 msgid "HDR monitor not detected by Vulkan or Window Manager."
 msgstr "HDR モニターが Vulkan またはウィンドウマネージャーによって検出されませんでした。"
 
-#, c++-format
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan の色空間は {0}です"
 
-#, c++-format
 msgid "Vulkan format is {0}"
 msgstr "Vulkan  のフォーマットは {0} です"
 
-#, c++-format
 msgid "Changed to HDR active monitor at index {0}"
 msgstr "インデックス {0} のアクティブな HDR モニターに切り替えました"
 
-#, c++-format
 msgid "Changed to HDR supported but inactive monitor at index {0}"
 msgstr "インデックス {0} の HDR 対応だが非アクティブなモニターに切り替えました"
 
-#, c++-format
 msgid "Changed to SDR monitor at index {0}"
 msgstr "インデックス {0} の SDR モニターに変更しました"
 
 msgid "Edit Text"
 msgstr "テキストを編集"
 
-#, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' はファイル、ディレクトリ、または URL ではありません。"
 
@@ -3769,11 +3653,9 @@ msgstr "再生できません - 音声注釈が空です"
 msgid "Status is not saved"
 msgstr "ステータスは保存されていません"
 
-#, c++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "オーディオ注釈ファイル {0} が見つからないか存在しません！"
 
-#, c++-format
 msgid "Unhandled buffer format: {0} for output: {1}"
 msgstr "未対応のバッファ形式です : {0} 出力先 : {1}"
 
@@ -3879,7 +3761,6 @@ msgstr "ファイル/すべてを閉じる"
 msgid "File/Save and Reload Session"
 msgstr "ファイル/セッションを保存して再読み込み"
 
-#, c-format
 msgid "File/Recent/%s"
 msgstr "ファイル/最近使ったファイル/%s"
 
@@ -4129,7 +4010,6 @@ msgstr "再生/注釈/クリア"
 msgid "Playback/Annotation/Clear All"
 msgstr "再生/注釈/すべてクリア"
 
-#, c-format
 msgid "View/Mask/%s"
 msgstr "表示/マスク/%s"
 
@@ -4202,11 +4082,9 @@ msgstr "タイムライン/トランジション"
 msgid "Timeline/Markers"
 msgstr "タイムライン/マーカー"
 
-#, c++-format
 msgid "Timeline/Visible Tracks/{0}"
 msgstr "タイムライン/可視トラック/{0}"
 
-#, c++-format
 msgid "Timeline/Media Reference/{0}"
 msgstr "タイムライン/メディア参照/{0}"
 
@@ -4264,14 +4142,12 @@ msgstr "画像/比較モード/垂直"
 msgid "Image/Compare Mode/Tile"
 msgstr "画像/比較モード/タイル"
 
-#, c-format
 msgid "Image/Go to/%s"
 msgstr "画像/移動/%s"
 
 msgid "Image/Compare/Toggle A and B"
 msgstr "画像/比較/AとB を切り替え"
 
-#, c-format
 msgid "Image/Compare/%s"
 msgstr "画像/比較/%s"
 
@@ -4338,31 +4214,24 @@ msgstr "OCIO/切り替え"
 msgid "OCIO/Current"
 msgstr "OCIO/現在"
 
-#, c-format
 msgid "OCIO/         ICS: %s"
 msgstr "OCIO/         ICS : %s"
 
-#, c-format
 msgid "OCIO/     Display: %s"
 msgstr "OCIO/  ディスプレイ : %s"
 
-#, c-format
 msgid "OCIO/        View: %s"
 msgstr "OCIO/       ビュー : %s"
 
-#, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/ モニター #%d ディスプレイ : %s"
 
-#, c-format
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/ モニター #%d    ビュー : %s"
 
-#, c-format
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/       ルック : %s"
 
-#, c-format
 msgid "OCIO/        LUT: %s"
 msgstr "OCIO/        LUT : %s"
 
@@ -4414,13 +4283,11 @@ msgstr "同期/受信/注釈"
 msgid "Sync/Accept/Audio"
 msgstr "同期/受信/オーディオ"
 
-#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
 msgstr "'{0}' では、値として関数または、Python 関数とメニューオプションを含む文字列のタプルを期待していました。"
 
-#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -4519,21 +4386,17 @@ msgstr "ワイドリスト表示"
 msgid "Detail mode"
 msgstr "詳細表示"
 
-#, c-format
 msgid ""
 "Could not create directory '%s'. You may not have permission to perform this"
 " operation."
 msgstr "ディレクトリ '%s' を作成できませんでした。この操作を実行する権限がない可能性があります。"
 
-#, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "'%s' の削除中にエラーが発生しました。%s"
 
-#, c-format
 msgid "File '%s' already exists!"
 msgstr "ファイル '%s' は既に存在します!"
 
-#, c-format
 msgid "Unable to rename '%s' to '%s'"
 msgstr "'%s' を '%s' に名前変更できません"
 
@@ -4675,7 +4538,6 @@ msgstr "OpenUSD 圧縮アセット"
 msgid "OpenUSD ASCII Asset"
 msgstr "OpenUSD ASCII アセット"
 
-#, c-format
 msgid "Another process using the file."
 msgstr "別のプロセスがファイルを使用しています。"
 
@@ -4775,11 +4637,9 @@ msgstr "msvc 使用 "
 msgid "mrv2 depends on:"
 msgstr "mrv2 の依存関係 :"
 
-#, c++-format
 msgid "Total Physical Memory: {0} Gb"
 msgstr "物理メモリ合計 : {0} GB"
 
-#, c++-format
 msgid "Total Virtual Memory: {0} Gb"
 msgstr "仮想メモリ合計 : {0} GB"
 
@@ -4831,7 +4691,6 @@ msgstr "ドラッグボックス"
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "mrvOCIOBrowser の不明なタイプ"
 
-#, c++-format
 msgid ""
 "Wayland Compositor supports Float on Top only through hotkeys.  Press {0}."
 msgstr "Wayland コンポジターでは「常に手前に表示」はホットキー経由でのみサポートされています。{0} を押してください。"
@@ -4842,7 +4701,6 @@ msgid ""
 msgstr ""
 "お使いの Wayland コンポジターは「常に手前に表示」をサポートしていません。ウィンドウマネージャーでこの機能のホットキーを設定してください。"
 
-#, c++-format
 msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr "「常に手前に表示」のホットキーがありません。グローバルホットキーを '{0}' に設定します。"
 
@@ -4931,7 +4789,6 @@ msgstr "範囲"
 msgid "Mean"
 msgstr "平均"
 
-#, c-format
 msgid "Track #%d - %s"
 msgstr "トラック #%d - %s"
 
@@ -7526,31 +7383,24 @@ msgstr "除算 (テンキー)"
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.リモート\t@B12@C7@b@.ローカル"
 
-#, c++-format
 msgid "Unknown licese plan '{0}'"
 msgstr "不明なライセンスプラン「{0}」"
 
-#, c++-format
 msgid "License plan '{0}'"
 msgstr "ライセンスプラン「{0}」"
 
-#, c++-format
 msgid "Supports annotations '{0}'"
 msgstr "注釈をサポート「{0}」"
 
-#, c++-format
 msgid "Supports editing '{0}'"
 msgstr "編集をサポート「{0}」"
 
-#, c++-format
 msgid "Supports layers '{0}'"
 msgstr "レイヤーをサポート「{0}」"
 
-#, c++-format
 msgid "Supports python '{0}'"
 msgstr "Pythonをサポート「{0}」"
 
-#, c++-format
 msgid "Supports voice annotations '{0}'"
 msgstr "音声注釈をサポート「{0}」"
 
@@ -7563,11 +7413,9 @@ msgstr "ノードロック"
 msgid "Floating"
 msgstr "フローティング"
 
-#, c++-format
 msgid "Found floating license at '{0}'"
 msgstr "'{0}' にフローティングライセンスが見つかりました"
 
-#, c++-format
 msgid "Did not find floating license at '{0}'"
 msgstr "'{0}' にフローティングライセンスが見つかりませんでした"
 
@@ -7577,15 +7425,12 @@ msgstr "無効な有効期限です"
 msgid "License expired"
 msgstr "ライセンスの有効期限が切れています"
 
-#, c++-format
 msgid "{0} is not readable. Using system default."
 msgstr "{0} は読み取れません。システムデフォルトを使用します。"
 
-#, c++-format
 msgid "{0} Active Licenses from {1}."
 msgstr "{1} からのアクティブライセンスが {0} 件あります。"
 
-#, c++-format
 msgid "Valid license for {0}"
 msgstr "{0} の有効なライセンス"
 
@@ -7595,7 +7440,6 @@ msgstr "フローティングライセンスを解放できませんでした"
 msgid "Released Floating License"
 msgstr "フローティングライセンスを解放しました"
 
-#, c++-format
 msgid "Your {0} license will expire on {1}."
 msgstr "お使いの {0} ライセンスは {1} に期限切れとなります。"
 

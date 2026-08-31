@@ -30,14 +30,10 @@ do
 	else
 	    if [[ -d $FILE ]]; then
 		chmod 0755 $FILE
-	    elif [[ -e $FILE ]]; then
-		echo "Changing $FILE permissions to 0644"
+	    else
 		chmod 0644 $FILE
-		if [[ $FILE == *.pot || $FILE == *.po ]]; then
-		    echo "Running dos2unix on $FILE"
-		    dos2unix $FILE
-		    git add $FILE
-		fi
+		dos2unix $FILE
+		git add $FILE
 	    fi
 	fi
     fi
