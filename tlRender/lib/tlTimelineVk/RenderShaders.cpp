@@ -573,7 +573,10 @@ const int PixelType_YUV_420SP_U16     = 35;
 const int PixelType_YUV_422SP_U8      = 36;
 const int PixelType_YUV_422SP_U16     = 37;
 
-const int PixelType_ARGB_4444_Premult = 38;
+const int PixelType_YUV_444SP_U8      = 38;
+const int PixelType_YUV_444SP_U16     = 39;
+
+const int PixelType_ARGB_4444_Premult = 40;
 
 
 // enum tl::image::VideoLevels
@@ -597,6 +600,7 @@ float getBitDepth(int pixelType)
     else if (pixelType == PixelType_YUV_420P_U16 ||
              pixelType == PixelType_YUV_422P_U16 ||
              pixelType == PixelType_YUV_444P_U16 ||
+             pixelType == PixelType_YUV_444SP_U16 ||
              pixelType == PixelType_YUV_422SP_U16 ||
              pixelType == PixelType_YUV_420SP_U16)
     {
@@ -625,11 +629,11 @@ vec4 sampleTexture(
     vec4 c;
     float y = 0; float cr = 0; float cb = 0;
 
-    if (pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_422SP_U16)
+    if (pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_444SP_U16)
     {
-        // 1. Fetch plane channels based on storage type
-        if (pixelType == PixelType_YUV_420SP_U8 ||
-            pixelType == PixelType_YUV_420SP_U16)
+        // Check semi-Planar types first:
+        if (pixelType >= PixelType_YUV_420SP_U8 &&
+            pixelType <= PixelType_YUV_444SP_U16)
         {
             // Semi-Planar (NV12 / P010 / P016):
             y  = texture(s0, textureCoord).r;

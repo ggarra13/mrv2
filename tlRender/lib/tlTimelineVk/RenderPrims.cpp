@@ -611,7 +611,6 @@ namespace tl
             {
             case image::PixelType::YUV_420P_U8:
             case image::PixelType::YUV_422P_U8:
-            case image::PixelType::YUV_422SP_U8:
             case image::PixelType::YUV_444P_U8:
             case image::PixelType::YUV_420P_U10:
             case image::PixelType::YUV_422P_U10:
@@ -621,7 +620,6 @@ namespace tl
             case image::PixelType::YUV_444P_U12:
             case image::PixelType::YUV_420P_U16:
             case image::PixelType::YUV_422P_U16:
-            case image::PixelType::YUV_422SP_U16:
             case image::PixelType::YUV_444P_U16:
                 textures[0]->transition(
                     p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
@@ -644,6 +642,10 @@ namespace tl
                 break;
             case image::PixelType::YUV_420SP_U8:
             case image::PixelType::YUV_420SP_U16:
+            case image::PixelType::YUV_444SP_U8:
+            case image::PixelType::YUV_422SP_U8:
+            case image::PixelType::YUV_422SP_U16:
+            case image::PixelType::YUV_444SP_U16:
                 textures[0]->transition(
                     p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                     VK_ACCESS_TRANSFER_WRITE_BIT,
@@ -656,7 +658,7 @@ namespace tl
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
                 shader->setTexture("textureSampler0", textures[0]);
                 shader->setTexture("textureSampler1", textures[1]);
-                shader->setTexture("textureSampler2", textures[0]);
+                shader->setTexture("textureSampler2", textures[1]);
                 break;
             default:
                 textures[0]->transition(
