@@ -39,7 +39,8 @@ class SaveMovieOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
-  Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {} {
+  Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
+  } {
     Fl_Window uiMain {
       label {Save Movie Options} open
       xywh {0 0 465 613} type Double align 0 hide modal
@@ -108,7 +109,8 @@ add_hardware(o, v->Hardware);
 const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
+std::string profile = item->label();
+settings->setValue("SaveMovie/Profile", profile);} open
           tooltip {FFMpeg's Profile settings.} xywh {170 225 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
@@ -563,8 +565,7 @@ uiHelpWindow->hide();
 uiAdvancedSettings->hide();
 uiMain->show();
 while (uiMain->visible())
-  Fl::check();} {selected
-    }
+  Fl::check();} {}
   }
   Function {help_profile_cb()} {} {
     code {uiHelpWindow->label(_("Profile Help"));
@@ -630,6 +631,7 @@ HAP - RGB/A codec which is optimized for fast playback with
 Hardware encoding is only supported on newer MacBook
 Pro with M1 or newer chips.  H264, Prores, VP9 and
 AV1 are supported or soon will be.
+NVidia supports H264, HEVC and, depending on HW and drivers, AV1.
 )"));
 uiHelpWindow->show();} {}
   }
@@ -705,18 +707,15 @@ leave it all at bt709.
 )"));
 uiHelpWindow->show();} {}
   }
-  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {} {
+  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {user_data_type {SaveMovieOptionsUI*} open
+  } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 const std::string codec = item->label();
 
 v->deactivate();
 
-if (codec == "H264")
-{    
-   v->activate();
-}
-else if (codec == "HEVC")
+if (codec == "H264" || codec == "HEVC")
 {    
    v->activate();
    v->value(1);
@@ -768,7 +767,8 @@ else
 
 auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
-v->value(value);} {}
+v->value(value);} {selected
+    }
   }
   Function {add_h264_sw_formats(Fl_Choice* v)} {} {
     code {v->add("YUV_420P");
@@ -981,14 +981,11 @@ else
   v->deactivate();
 }} {}
   }
-  Function {add_profiles(Fl_Choice* o)} {} {
+  Function {add_profiles(Fl_Choice* o)} {user_data_type {SaveMovieOptionsUI*} open
+  } {
     code {auto entries = tl::ffmpeg::getProfileLabels();
 for (auto entry : entries)
 {
-\#ifndef TLRENDER_X264
-   if (entry == "H264")
-      continue;
-\#endif
 \#ifndef TLRENDER_SVTAV1
    if (entry == "AV1")
       continue;
@@ -999,40 +996,39 @@ for (auto entry : entries)
 \#endif
     o->add(gettext(entry.c_str()));
 }
-    if (o->size() > 0)
-    {
-        auto settings = mrv::App::app->settings();
-        const std::string& saved =
-            settings->getValue<std::string>("SaveMovie/Profile");
-        for (int i = 0; i < o->size(); ++i)
+if (o->size() > 0)
+{
+   auto settings = mrv::App::app->settings();
+   const std::string& saved =
+        settings->getValue<std::string>("SaveMovie/Profile");
+   for (int i = 0; i < o->size(); ++i)
+   {
+        const Fl_Menu_Item* const item = &o->menu()[i];
+        if (!item->label())
+            continue;
+        const std::string& profile = item->label();
+        if (saved == profile)
         {
-            const Fl_Menu_Item* const item = &o->menu()[i];
-            if (!item->label())
-                continue;
-            const std::string& profile = item->label();
-            if (saved == profile)
-            {
-                o->value(i);
-                o->activate();
-                return;
-            }
+            o->value(i);
+            o->activate();
+            o->do_callback();
+            return;
         }
     }
-    o->value(0);} {}
+}
+o->value(0);} {}
   }
   Function {add_resolution(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
 const int value = settings->getValue<int>("SaveMovie/Resolution");
 o->value(value);} {}
   }
-  Function {add_advanced_override(Fl_Check_Button* v)} {open
-  } {
+  Function {add_advanced_override(Fl_Check_Button* v)} {} {
     code {auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/Override");
 v->value(value);} {}
   }
-  Function {add_advanced_color_space(Fl_Choice* o)} {open
-  } {
+  Function {add_advanced_color_space(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
 int value;
 if (!settings->hasValue("SaveMovie/Color Space"))
@@ -1041,14 +1037,12 @@ else
    value = settings->getValue<int>("SaveMovie/Color Space");
 o->value(value);} {}
   }
-  Function {add_advanced_color_primaries(Fl_Choice* o)} {open
-  } {
+  Function {add_advanced_color_primaries(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
 const int value = settings->getValue<int>("SaveMovie/Color Primaries");
 o->value(value);} {}
   }
-  Function {add_advanced_color_trc(Fl_Choice* o)} {open
-  } {
+  Function {add_advanced_color_trc(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
 int value;
 if (!settings->hasValue("SaveMovie/Color TRC"))

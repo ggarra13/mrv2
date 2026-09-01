@@ -292,13 +292,6 @@ namespace tl
                         {HWBackend::kD3D12VA, "hevc_d3d12va"},
                     };
                     break;
-                case AV_CODEC_ID_HEVC:
-                    candidates = {
-                        {HWBackend::kVideoToolbox, "hevc_videotoolbox"},
-                        {HWBackend::kNVENC, "hevc_nvenc"},
-                        {HWBackend::kVAAPI, "hevc_vaapi"},
-                    };
-                    break;
                 case AV_CODEC_ID_PRORES:
                     // ProRes hardware encoding only exists on Apple
                     // silicon via VideoToolbox.
