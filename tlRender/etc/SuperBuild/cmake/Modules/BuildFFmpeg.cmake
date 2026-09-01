@@ -547,11 +547,12 @@ if (NOT FFmpeg_FOUND)
 	    endif()
 	elseif(WIN32)
 	    if (FFmpeg_HW_ACCEL_D3D12VA)
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --enable-d3d12va
-		    --enable-encoder=av1_d3d12va
-		    --enable-encoder=hevc_d3d12va
-		    --enable-encoder=h264_d3d12va)
+		if (FFmpeg_HW_ACCEL_NVIDIA)
+		    list(APPEND FFmpeg_CONFIGURE_ARGS
+			--enable-ffnvcodec
+			--enable-nvdec
+			--enable-nvenc)
+		endif()
 	    endif()
 	endif()
     else()
