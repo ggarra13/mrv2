@@ -546,12 +546,18 @@ if (NOT FFmpeg_FOUND)
 		endif()
 	    endif()
 	elseif(WIN32)
-	    if (FFmpeg_HW_ACCEL_D3D12VA)
-		if (FFmpeg_HW_ACCEL_NVIDIA)
-		    list(APPEND FFmpeg_CONFIGURE_ARGS
-			--enable-ffnvcodec
-			--enable-nvdec
-			--enable-nvenc)
+	    if(DEFINED ENV{GITHUB_ACTIONS})
+		message(STATUS "Running on GitHub Actions - No Windows HW acceleration")
+		list(APPEND FFmpeg_CONFIGURE_ARGS
+		    --disable-vulkan)
+	    else()
+		if (FFmpeg_HW_ACCEL_D3D12VA)
+		    if (FFmpeg_HW_ACCEL_NVIDIA)
+			list(APPEND FFmpeg_CONFIGURE_ARGS
+			    --enable-ffnvcodec
+			    --enable-nvdec
+			    --enable-nvenc)
+		    endif()
 		endif()
 	    endif()
 	endif()
