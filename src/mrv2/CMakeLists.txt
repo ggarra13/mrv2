@@ -386,3 +386,42 @@ if(TLRENDER_USD)
         COMPONENT applications)
 endif()
 
+#
+# Copy vcpkg-built DLLs (Windows/vcpkg workflow) after building mrv2
+#
+if(WIN32)
+    # Determine vcpkg arch from CMAKE_SYSTEM_PROCESSOR (mirrors the old $ARCH check)
+    set(VCPKG_ARCH "x64")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "(amd64|AMD64|x86_64)")
+        set(VCPKG_ARCH "x64")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "(aarch64|ARM64|arm64)")
+        set(VCPKG_ARCH "arm64")
+    endif()
+
+    set(VCPKG_TRIPLET "${VCPKG_ARCH}-windows")
+
+    # BUILD_DIR equivalent - override with -DVCPKG_BUILD_DIR=... if it's not
+    # the top-level binary dir in your layout
+    if(NOT DEFINED VCPKG_BUILD_DIR)
+        set(VCPKG_BUILD_DIR "${PROJECT_SOURCE_DIR}/../$ENV{BUILD_DIR}")
+    endif()
+
+    set(VCPKG_INSTALLED_DIR
+        "${VCPKG_BUILD_DIR}/deps/vcpkg/src/vcpkg/installed/${VCPKG_TRIPLET}")
+
+    if(EXISTS "${VCPKG_INSTALLED_DIR}/bin")
+        message(STATUS "Will copy vcpkg DLLs from ${VCPKG_INSTALLED_DIR}/bin")
+
+        add_custom_command(TARGET mrv2 POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E make_directory
+                    "${CMAKE_INSTALL_PREFIX}/bin"
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    "${VCPKG_INSTALLED_DIR}/bin"
+                    "${CMAKE_INSTALL_PREFIX}/bin"
+            COMMENT "Copying vcpkg DLLs (${VCPKG_TRIPLET}) to ${CMAKE_INSTALL_PREFIX}/bin"
+            VERBATIM
+        )
+    else()
+        message(STATUS "vcpkg installed dir not found: ${VCPKG_INSTALLED_DIR} (skipping DLL copy)")
+    endif()
+endif()
