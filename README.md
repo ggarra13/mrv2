@@ -75,8 +75,10 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
   Then, you need to further follow some steps as in the README.md file provided
   inside the .dmg.
   
-  NOTE:  From v1.7.2 on, the easiest way to upgrade mrv2 / vmrv2 on macOS is
+  NOTE:  From v1.7.5 on, the easiest way to upgrade mrv2 / vmrv2 on macOS is
          to use the Help->Upgrade mrv2 menu of the mrv2 you already installed.
+		 The script takes some minutes to run and then it will prompt you
+		 for your password.
   
 - Windows, like macOS, also protect you from installing files
   from the Internet.

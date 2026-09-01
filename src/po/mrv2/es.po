@@ -1702,6 +1702,15 @@ msgstr ""
 "Cuando este seteo está activo, el reproductor intentará decodificar las "
 "películas en la GPU si es posible."
 
+msgid "FFmpeg HW Driver"
+msgstr "Driver de HW FFmpeg"
+
+msgid "Default HW Driver"
+msgstr "Driver de HW estándar"
+
+msgid "Select what driver to use for your GPU."
+msgstr ""
+
 msgid "FFmpeg I/O threads"
 msgstr "Hilos de FFmpeg I/O"
 
@@ -2643,7 +2652,6 @@ msgstr ""
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Archivo remoto {0} iguala nombra base {1} pero no la carpeta."
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Archivo remoto {0} no es igual al archivo local."
 
@@ -2751,7 +2759,6 @@ msgstr "Seteando OCIO config desde preferencias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Seteando OCIO config de la variable de entorno OCIO."
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Mapeo de carpetas ha sido cargado de \"{0}{1}\"."
 
@@ -2761,7 +2768,6 @@ msgstr "Error al eliminar el directorio: \"{0}\"."
 msgid "Cleaned directory: \"{0}\"."
 msgstr "Directorio limpiado: \"{0}\"."
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
@@ -2774,7 +2780,6 @@ msgstr "Mapeo de carpetas ha sido grabado en \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Teclas han sido grabadas en: \"{0}{1}.prefs\"."
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Preferencias han sido grabadas en: \"{0}{1}\"."
 
@@ -2826,7 +2831,6 @@ msgstr "No hay vista por defecto para display '{0}'.  ¿Existe el display?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Usando preseteo OCIO '{0}'."
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preseteo '{0}' no encontrado"
 
@@ -3219,7 +3223,6 @@ msgstr "Por favor seleccione dos clips de audio contiguos."
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error grabando {0}. {1}"
 
@@ -3232,7 +3235,6 @@ msgstr "Archivo de destino es inválido."
 msgid "Unknown media reference"
 msgstr "Referencia de los medios desconocidos"
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Pista #{0} - {1}"
 
@@ -3491,7 +3493,6 @@ msgstr "Cuadro {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagen demasiado grande.  Guardaré el tamaño de la vista."
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
 
@@ -3767,7 +3768,6 @@ msgstr "No puedo reproducir - la anotación de audio está vacia"
 msgid "Status is not saved"
 msgstr "Estatus no es grabado"
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Anotación de audio en archivo {0} está faltante o no existe!"
 
@@ -4933,29 +4933,65 @@ msgstr "TV (Rango Legal)"
 msgid "PC (Full Range)"
 msgstr "PC (Rango Completo)"
 
-msgid "BGR"
-msgstr "BGR"
-
 msgid "bt709"
 msgstr "bt709"
 
-msgid "FCC"
-msgstr "FCC"
+msgid "HDR"
+msgstr "HDR"
 
-msgid "SMPTE240m"
-msgstr "SMPTE240m"
+msgid "gbr"
+msgstr "gbr"
 
-msgid "bt601"
-msgstr "bt601"
-
-msgid "bt2020"
-msgstr "bt2020"
-
-msgid "unspecified"
-msgstr "unspecified"
+msgid "unknown"
+msgstr "Desconocido"
 
 msgid "reserved"
 msgstr "reserved"
+
+msgid "fcc"
+msgstr "fcc"
+
+msgid "bt601 (bt470bg)"
+msgstr "bt601 (bt470bg)"
+
+msgid "smpte170m"
+msgstr "smpte170m"
+
+msgid "smpte240m"
+msgstr "smpte240m"
+
+msgid "ycgco"
+msgstr "ycgco"
+
+msgid "bt2020nc"
+msgstr "bt2020nc"
+
+msgid "bt2020c"
+msgstr "bt2020c"
+
+msgid "smpte2085"
+msgstr "smpte2085"
+
+msgid "chroma-derived-nc"
+msgstr "chroma-derived-nc"
+
+msgid "chroma-derived-c"
+msgstr "chroma-derived-c"
+
+msgid "ictcp"
+msgstr "ictcp"
+
+msgid "ipt-c2"
+msgstr "ipt-c2"
+
+msgid "ycgco-re"
+msgstr "ycgco-re"
+
+msgid "ycgco-ro"
+msgstr "ycgco-ro"
+
+msgid "unspecified"
+msgstr "unspecified"
 
 msgid "bt470m"
 msgstr "bt470m"
@@ -4963,8 +4999,14 @@ msgstr "bt470m"
 msgid "SMPTE170m"
 msgstr "SMPTE170m"
 
+msgid "SMPTE240m"
+msgstr "SMPTE240m"
+
 msgid "Film"
 msgstr "Film"
+
+msgid "bt2020"
+msgstr "bt2020"
 
 msgid "SMPTE428"
 msgstr "SMPTE428"
@@ -4984,8 +5026,8 @@ msgstr "gamma22"
 msgid "gamma28"
 msgstr "gamma28"
 
-msgid "smpte240m"
-msgstr "smpte240m"
+msgid "bt601"
+msgstr "bt601"
 
 msgid "linear"
 msgstr "linear"
@@ -5011,8 +5053,8 @@ msgstr "bt2020-10"
 msgid "bt2020-12"
 msgstr "bt2020-12"
 
-msgid "bt2100"
-msgstr "bt2100"
+msgid "bt2100 (smpte2084)"
+msgstr "bt2100 (smpte2084)"
 
 msgid "hlg"
 msgstr "hlg"
@@ -5112,6 +5154,9 @@ msgstr "Rango de Color"
 
 msgid "FFMpeg's Color Range for the codec selected"
 msgstr "Gama de colores de FFMpeg para el códec seleccionado"
+
+msgid "Presets"
+msgstr "Preseteos"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "Espacio de color de FFMpeg para el códec seleccionado"
@@ -5355,20 +5400,26 @@ msgid ""
 "  for example, if a set of 8-bit images were \n"
 "  bt709 or some other color space.\n"
 "\n"
+"  Currently the override comes with two presets:\n"
+"  bt709 for SDR work, and HDR for HDR work.\n"
+"\n"
 "  If you don't know what those settings do, \n"
-"  DON'T MESS WITH THEM!\n"
+"  leave it all at bt709.\n"
 "  "
 msgstr ""
 "\n"
 "\n"
-"Los ajustes avanzados le permiten almacenar\n"
-"metadatos en el archivo de la película para determinar dónde\n"
-"y cómo fue creado. Útil para indicar,\n"
-"por ejemplo, si un conjunto de imágenes de 8 bits\n"
-"bt709 u otro espacio de color.\n"
+"  Los ajustes avanzados le permiten almacenar\n"
+"  metadatos en el archivo de la película para determinar dónde\n"
+"  y cómo fue creado. Útil para indicar,\n"
+"  por ejemplo, si un conjunto de imágenes de 8 bits\n"
+"  bt709 u otro espacio de color.\n"
 "\n"
-"Si no sabes lo que hacen esos ajustes,\n"
-"¡No se mezclen con ellos!\n"
+"  Actualmente, los metadatos vienen con dos preseteos:\n"
+"  bt709 para trabajo en SDR, y HDR para trabajo en HDR.\n"
+"\n"
+"  Si no sabes lo que hacen esos ajustes,\n"
+"  dejalo en bt709\n"
 "  "
 
 msgid "1/9"
@@ -6710,9 +6761,6 @@ msgstr "Marco de inicio de vídeo"
 
 msgid "Start value in the timeline where video starts."
 msgstr "Inicie el valor en la línea de tiempo donde comienza el vídeo."
-
-msgid "HDR"
-msgstr "HDR"
 
 msgid "Prefer RGB (Vulkan)"
 msgstr "Preferir RGB (Vulkan)"
@@ -8211,6 +8259,15 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "task info falló"
+
+#~ msgid "BGR"
+#~ msgstr "BGR"
+
+#~ msgid "FCC"
+#~ msgstr "FCC"
+
+#~ msgid "bt2100"
+#~ msgstr "bt2100"
 
 #~ msgid "Start a server.  Use -port to specify a port number."
 #~ msgstr "Cree un servidor.  Use -port para especificar un número de puerto."

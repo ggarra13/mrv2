@@ -1686,6 +1686,15 @@ msgstr ""
 "Если этот параметр включен, проигрыватель попытается декодировать фильм на "
 "GPU, если это возможно."
 
+msgid "FFmpeg HW Driver"
+msgstr "Аппаратный драйвер FFmpeg"
+
+msgid "Default HW Driver"
+msgstr "Аппаратный драйвер по умолчанию"
+
+msgid "Select what driver to use for your GPU."
+msgstr "Выберите драйвер для использования с вашим GPU."
+
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/О нити"
 
@@ -2612,7 +2621,6 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "Дистанционный файл {0} совпадает с именем файла {1}, но не с дорожкой."
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Удалённый файл {0} не совпадает с местным именем файла."
 
@@ -2720,7 +2728,6 @@ msgstr "Сделать орио-конфигурацию из предпочте
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Запуск OCIO Conig из переменной окружающей среды OCIO."
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Картирование путей было загружено с \" {0} {1}\"."
 
@@ -2730,7 +2737,6 @@ msgstr "Ошибка при удалении каталога: «{0}»."
 msgid "Cleaned directory: \"{0}\"."
 msgstr "Каталог очищен: «{0}»."
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Загрузка хот-дога из \"{0}{1}.prefs\"."
 
@@ -2743,7 +2749,6 @@ msgstr "Картирование путей было сохранено до \" 
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys были сохранены на \"{0}{1}.prefs\"."
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Преференции были сохранены следующим образом: \"{0}{1}\"."
 
@@ -2796,7 +2801,6 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Установка OCIO Preset '{0}'."
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Предположить '{0}' не найдено."
 
@@ -3185,7 +3189,6 @@ msgstr "Пожалуйста, выберите два смежных аудио�
 msgid "Could not save .otio file: {0}"
 msgstr "Невозможно сохранить файл.otio: {0}"
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Ошибка сохранения {0}. {1}"
 
@@ -3198,7 +3201,6 @@ msgstr "Файл назначения недействителен."
 msgid "Unknown media reference"
 msgstr "Неизвестная ссылка на средства массовой информации"
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Дорожка # {0} - {1}"
 
@@ -3457,7 +3459,6 @@ msgstr "Рамка {0} - ТС: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Слишком большое изображение, сохранит размер смотрового портала."
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
 
@@ -3725,7 +3726,6 @@ msgstr "Воспроизведение невозможно – аудио-ан�
 msgid "Status is not saved"
 msgstr "Статус не сохранён"
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Файл аудиоаннотации {0} отсутствует или не существует!"
 
@@ -4892,29 +4892,65 @@ msgstr "ТV (Законный Диапазон)"
 msgid "PC (Full Range)"
 msgstr "PC (полная дальность)"
 
-msgid "BGR"
-msgstr "BGR"
-
 msgid "bt709"
 msgstr "bt709"
 
-msgid "FCC"
-msgstr "FCC"
+msgid "HDR"
+msgstr "HDR"
 
-msgid "SMPTE240m"
-msgstr "SMPTE240m"
+msgid "gbr"
+msgstr "gbr"
 
-msgid "bt601"
-msgstr "bt601"
-
-msgid "bt2020"
-msgstr "bt2020"
-
-msgid "unspecified"
-msgstr "не указано"
+msgid "unknown"
+msgstr "Неизвестно"
 
 msgid "reserved"
 msgstr "зарезервированы"
+
+msgid "fcc"
+msgstr "fcc"
+
+msgid "bt601 (bt470bg)"
+msgstr "bt601 (bt470bg)"
+
+msgid "smpte170m"
+msgstr "smpte170m"
+
+msgid "smpte240m"
+msgstr "smpte240m"
+
+msgid "ycgco"
+msgstr "ycgco"
+
+msgid "bt2020nc"
+msgstr "bt2020nc"
+
+msgid "bt2020c"
+msgstr "bt2020c"
+
+msgid "smpte2085"
+msgstr "smpte2085"
+
+msgid "chroma-derived-nc"
+msgstr "chroma-derived-nc"
+
+msgid "chroma-derived-c"
+msgstr "chroma-derived-c"
+
+msgid "ictcp"
+msgstr "ictcp"
+
+msgid "ipt-c2"
+msgstr "ipt-c2"
+
+msgid "ycgco-re"
+msgstr "ycgco-re"
+
+msgid "ycgco-ro"
+msgstr "ycgco-ro"
+
+msgid "unspecified"
+msgstr "не указано"
 
 msgid "bt470m"
 msgstr "bt470m"
@@ -4922,8 +4958,14 @@ msgstr "bt470m"
 msgid "SMPTE170m"
 msgstr "SMPTE170m"
 
+msgid "SMPTE240m"
+msgstr "SMPTE240m"
+
 msgid "Film"
 msgstr "Фильм"
+
+msgid "bt2020"
+msgstr "bt2020"
 
 msgid "SMPTE428"
 msgstr "SMPTE428"
@@ -4943,8 +4985,8 @@ msgstr "gamma22"
 msgid "gamma28"
 msgstr "gamma28"
 
-msgid "smpte240m"
-msgstr "smpte240m"
+msgid "bt601"
+msgstr "bt601"
 
 msgid "linear"
 msgstr "linear"
@@ -4970,8 +5012,8 @@ msgstr "bt2020-10"
 msgid "bt2020-12"
 msgstr "bt2020-12"
 
-msgid "bt2100"
-msgstr "bt2100"
+msgid "bt2100 (smpte2084)"
+msgstr "bt2100 (smpte2084)"
 
 msgid "hlg"
 msgstr "hlg"
@@ -5071,6 +5113,9 @@ msgstr "Диапазон цветов"
 
 msgid "FFMpeg's Color Range for the codec selected"
 msgstr "Цветовой диапазон FFMpeg для выбранного кодаc"
+
+msgid "Presets"
+msgstr "Предустановки"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "Цветовое пространство FFMpeg для выбранного кодаc"
@@ -5318,20 +5363,26 @@ msgid ""
 "  for example, if a set of 8-bit images were \n"
 "  bt709 or some other color space.\n"
 "\n"
+"  Currently the override comes with two presets:\n"
+"  bt709 for SDR work, and HDR for HDR work.\n"
+"\n"
 "  If you don't know what those settings do, \n"
-"  DON'T MESS WITH THEM!\n"
+"  leave it all at bt709.\n"
 "  "
 msgstr ""
 "\n"
 "\n"
-"Дополнительные параметры позволяют хранить\n"
-"Метаданные в файле фильма для определения места\n"
-"и как она была сотворена, и она была полезной для того, чтобы видеть,\n"
-"например, если набор из 8-битных изображений\n"
-"bt709 или какое-то другое цветовое пространство.\n"
+"  Расширенные настройки позволяют сохранять \n"
+"  метаданные в файле фильма, чтобы определить, где \n"
+"  и как он был создан. Это полезно, например, для указания, \n"
+"  использует ли набор 8-битных изображений пространство \n"
+"  bt709 или другое цветовое пространство.\n"
 "\n"
-"Если ты не знаешь, что делают эти настройки,\n"
-"Не думай об этом!\n"
+"  В настоящее время переопределение содержит две предустановки:\n"
+"  bt709 для работы в SDR и HDR для работы в HDR.\n"
+"\n"
+"  Если вы не знаете, что делают эти настройки, \n"
+"  оставьте все значения bt709.\n"
 "  "
 
 msgid "1/9"
@@ -6664,9 +6715,6 @@ msgstr "Строка запуска видео"
 
 msgid "Start value in the timeline where video starts."
 msgstr "Начинаем значение в графике, где начинается видео."
-
-msgid "HDR"
-msgstr "HDR"
 
 msgid "Prefer RGB (Vulkan)"
 msgstr "Предпочитать RGB (Vulkan)"
@@ -8167,6 +8215,15 @@ msgstr "shop_statistics64 не сработал"
 
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
+
+#~ msgid "BGR"
+#~ msgstr "BGR"
+
+#~ msgid "FCC"
+#~ msgstr "FCC"
+
+#~ msgid "bt2100"
+#~ msgstr "bt2100"
 
 #~ msgid ""
 #~ ".otioz files cannot be edited.  Please unzip them first and use the "

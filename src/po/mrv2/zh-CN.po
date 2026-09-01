@@ -1664,6 +1664,15 @@ msgid ""
 "if possible."
 msgstr "启用此设置后，如果可能，播放器将尝试使用 GPU 解码影片。"
 
+msgid "FFmpeg HW Driver"
+msgstr "FFmpeg 硬件驱动"
+
+msgid "Default HW Driver"
+msgstr "默认硬件驱动"
+
+msgid "Select what driver to use for your GPU."
+msgstr "选择用于 GPU 的驱动程序。"
+
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/O 线程"
 
@@ -2554,7 +2563,6 @@ msgstr "本地未找到远程文件 {0}，且没有可用于获取该文件的�
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "远程文件 {0} 匹配文件名 {1}, 但不是路径 。"
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "远程文件 {0} 不匹配本地文件名 。"
 
@@ -2654,7 +2662,6 @@ msgstr "设置基于偏好的OCIO配置"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "根据OCIO环境变量设置OCIO配置"
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "从 \"{0}{1}\" 导入路径映射图"
 
@@ -2664,7 +2671,6 @@ msgstr "删除目录时出错：“{0}”。"
 msgid "Cleaned directory: \"{0}\"."
 msgstr "已清理目录：“{0}”。"
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "正在从 \"{0}{1}.prefs\" 导入快捷键"
 
@@ -2677,7 +2683,6 @@ msgstr "路径映射已保存到 \"{0}{1}\"。"
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "快捷键被保存到“ \"{0}{1}.prefs\"."
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "首选项已保存为 \"{0}{1}\"."
 
@@ -2729,7 +2734,6 @@ msgstr "显示“ {0} ” 没有默认视图。 显示是否存在?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "设置 OCIO 预设 '{0}' 。"
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "找不到预设 '{0}' 。"
 
@@ -3105,7 +3109,6 @@ msgstr "请选择两个相邻的音频剪辑。"
 msgid "Could not save .otio file: {0}"
 msgstr "无法保存. otio 文件: {0}"
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "保存 {0} 出错  {1}"
 
@@ -3118,7 +3121,6 @@ msgstr "目的文件无效"
 msgid "Unknown media reference"
 msgstr "未知媒体引用未知"
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "音轨 #{0} - {1}"
 
@@ -3373,7 +3375,6 @@ msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "图像太大。 将保存视图的大小 。"
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "视图端口大小 : {0} - X={1}, Y={2}"
 
@@ -3636,7 +3637,6 @@ msgstr "无法播放 – 音频注释为空"
 msgid "Status is not saved"
 msgstr "状态未保存"
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "音频注释文件 {0} 缺失或不存在！"
 
@@ -4796,29 +4796,65 @@ msgstr "TV (合法范围)"
 msgid "PC (Full Range)"
 msgstr "PC (全范围)"
 
-msgid "BGR"
-msgstr "BGR"
-
 msgid "bt709"
 msgstr "bt709"
 
-msgid "FCC"
-msgstr "FCC"
+msgid "HDR"
+msgstr "HDR"
 
-msgid "SMPTE240m"
-msgstr "SMPTE240m"
+msgid "gbr"
+msgstr "gbr"
 
-msgid "bt601"
-msgstr "bt601"
-
-msgid "bt2020"
-msgstr "bt2020"
-
-msgid "unspecified"
-msgstr "未指定"
+msgid "unknown"
+msgstr "未知"
 
 msgid "reserved"
 msgstr "保留"
+
+msgid "fcc"
+msgstr "fcc"
+
+msgid "bt601 (bt470bg)"
+msgstr "bt601 (bt470bg)"
+
+msgid "smpte170m"
+msgstr "smpte170m"
+
+msgid "smpte240m"
+msgstr "smpte240m"
+
+msgid "ycgco"
+msgstr "ycgco"
+
+msgid "bt2020nc"
+msgstr "bt2020nc"
+
+msgid "bt2020c"
+msgstr "bt2020c"
+
+msgid "smpte2085"
+msgstr "smpte2085"
+
+msgid "chroma-derived-nc"
+msgstr "chroma-derived-nc"
+
+msgid "chroma-derived-c"
+msgstr "chroma-derived-c"
+
+msgid "ictcp"
+msgstr "ictcp"
+
+msgid "ipt-c2"
+msgstr "ipt-c2"
+
+msgid "ycgco-re"
+msgstr "ycgco-re"
+
+msgid "ycgco-ro"
+msgstr "ycgco-ro"
+
+msgid "unspecified"
+msgstr "未指定"
 
 msgid "bt470m"
 msgstr "bt470m"
@@ -4826,8 +4862,14 @@ msgstr "bt470m"
 msgid "SMPTE170m"
 msgstr "SMPTE170m"
 
+msgid "SMPTE240m"
+msgstr "SMPTE240m"
+
 msgid "Film"
 msgstr "Film"
+
+msgid "bt2020"
+msgstr "bt2020"
 
 msgid "SMPTE428"
 msgstr "SMPTE428"
@@ -4847,8 +4889,8 @@ msgstr "gamma22"
 msgid "gamma28"
 msgstr "gamma28"
 
-msgid "smpte240m"
-msgstr "smpte240m"
+msgid "bt601"
+msgstr "bt601"
 
 msgid "linear"
 msgstr "linear"
@@ -4874,8 +4916,8 @@ msgstr "bt2020-10"
 msgid "bt2020-12"
 msgstr "bt2020-12"
 
-msgid "bt2100"
-msgstr "bt210"
+msgid "bt2100 (smpte2084)"
+msgstr "bt2100 (smpte2084)"
 
 msgid "hlg"
 msgstr "hlg"
@@ -4975,6 +5017,9 @@ msgstr "颜色范围"
 
 msgid "FFMpeg's Color Range for the codec selected"
 msgstr "所选编码器的 higpeg 颜色范围"
+
+msgid "Presets"
+msgstr "预设"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "所选编码器的 higpeg 颜色空间"
@@ -5216,20 +5261,24 @@ msgid ""
 "  for example, if a set of 8-bit images were \n"
 "  bt709 or some other color space.\n"
 "\n"
+"  Currently the override comes with two presets:\n"
+"  bt709 for SDR work, and HDR for HDR work.\n"
+"\n"
 "  If you don't know what those settings do, \n"
-"  DON'T MESS WITH THEM!\n"
+"  leave it all at bt709.\n"
 "  "
 msgstr ""
 "\n"
 "\n"
-"高级设置允许您存储\n"
-"在电影文件中的元数据中确定\n"
-"怎样造它,怎样造它,那对于能说明真理的是有用的。\n"
-"例如,如果一组8位图像是\n"
-"bt709 或其他颜色空间 。\n"
+"  高级设置允许您在影片文件中保存元数据，\n"
+"  以确定影片文件在哪里以及如何创建。此功能可用于指明，\n"
+"  例如，一组 8 位图像使用的是 bt709 还是其他色彩空间。\n"
 "\n"
-"如果你不知道这些设置会做什么\n"
-"不要和他们在一起!\n"
+"  当前的覆盖设置提供两个预设：\n"
+"  用于 SDR 工作的 bt709，以及用于 HDR 工作的 HDR。\n"
+"\n"
+"  如果您不知道这些设置的作用，\n"
+"  请将所有设置保留为 bt709。\n"
 "  "
 
 msgid "1/9"
@@ -6512,9 +6561,6 @@ msgstr "视频启动框架"
 
 msgid "Start value in the timeline where video starts."
 msgstr "开始在视频开始的时间线中开始值 。"
-
-msgid "HDR"
-msgstr "HDR"
 
 msgid "Prefer RGB (Vulkan)"
 msgstr "优先使用 RGB（Vulkan）"
@@ -7945,6 +7991,15 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "任务信息失败"
+
+#~ msgid "BGR"
+#~ msgstr "BGR"
+
+#~ msgid "FCC"
+#~ msgstr "FCC"
+
+#~ msgid "bt2100"
+#~ msgstr "bt210"
 
 #~ msgid ""
 #~ ".otioz files cannot be edited.  Please unzip them first and use the "

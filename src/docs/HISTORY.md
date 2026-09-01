@@ -1,3 +1,13 @@
+v1.7.6
+======
+
+- Bug/MacOS:  "Help->Update mrv2" would always download and install the amd64 version of the installer.
+
+- Windows: Fixed minor memory leak on the cursor icon.
+
+- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the features depend on your harware and drivers.
+
+
 v1.7.5
 ======
 
@@ -6,8 +16,8 @@ v1.7.5
 
 - Vulkan: Improved performance of movies with changing HDR metadata and destroying textures.
 - Vulkan: Fixed validation error when OCIO and libplacebo were used together.
-- Vulkan: Fixed on validation error when saving and no tonemapping.
-- Vulkan/Linux: Added HW decoding under Vulkan on both backends.  Allows HW decoding of prores, h264, hevc, av1, and vpx.  Note that performance is dependant on the graphics card.
+- Vulkan: Fixed one validation error when saving and no tonemapping.
+- Vulkan/Linux: Added HW decoding under Vulkan on both backends.  Allows HW decoding of prores, h264, hevc, av1, and vpx.  Note that performance is wildly dependant on the graphics card.
 
 - HDR: Added Saving of HDR movies with stream metadata.
 - HDR: Added Saving of HDR movies with frame metadata (HDR10+).  Tested using VPX, Pixel Format YUV_420P_U10_LE and a .mkv container.  Well done FFmpeg 9.0.1 and VPX!

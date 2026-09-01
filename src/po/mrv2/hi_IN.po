@@ -1664,6 +1664,15 @@ msgstr ""
 "जब यह सेटिंग चालू होती है, तो प्लेयर संभव होने पर GPU पर फ़िल्म को डिकोड "
 "करने का प्रयास करेगा।"
 
+msgid "FFmpeg HW Driver"
+msgstr "FFmpeg हार्डवेयर ड्राइवर"
+
+msgid "Default HW Driver"
+msgstr "डिफ़ॉल्ट हार्डवेयर ड्राइवर"
+
+msgid "Select what driver to use for your GPU."
+msgstr "अपने GPU के लिए उपयोग किया जाने वाला ड्राइवर चुनें।"
+
 msgid "FFmpeg I/O threads"
 msgstr "एफ़एफएमपी आई/लड़ियाँ"
 
@@ -2583,7 +2592,6 @@ msgstr ""
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "रिमोट फ़ाइल {0} नाम {1} लेकिन पथ नहीं है."
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "रिमोट फ़ाइल {0} स्थानीय फ़ाइलनाम से मेल नहीं खाता."
 
@@ -2687,7 +2695,6 @@ msgstr "वरीयता से ओआईआईओ विन्यास स�
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "ओओआईओ एनवायरनमेंट वेरिएबल से ओआईओ विन्यास सेट किया जा रहा है."
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "पथ \"{0}{1}\" से लोड किया गया."
 
@@ -2697,7 +2704,6 @@ msgstr "निर्देशिका हटाने में त्रुट
 msgid "Cleaned directory: \"{0}\"."
 msgstr "निर्देशिका साफ़ की गई: \"{0}\"।"
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" से गर्म हवा लोड किया जा रहा है।"
 
@@ -2710,7 +2716,6 @@ msgstr "पथ \"{0}{1}\" को सहेजा गया."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "निर्देशिका \"{0}{1}.prefs\" को सहेजा गया है."
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "वरीयता को सहेजा गया है: \"{0}{1}\"."
 
@@ -2763,7 +2768,6 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr "ओसीआईओ '{0}' सेट किया जा रहा है."
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "प्रीसेट '{0}' नहीं मिला."
 
@@ -3147,7 +3151,6 @@ msgstr "कृपया दो सटे हुए ऑडियो क्लि�
 msgid "Could not save .otio file: {0}"
 msgstr ". बीजियो फ़ाइल को सहेज नहीं सका: {0}"
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "{0} सहेजने में त्रुटि {1}"
 
@@ -3160,7 +3163,6 @@ msgstr "गंतव्य फ़ाइल अवैध है."
 msgid "Unknown media reference"
 msgstr "अज्ञात मीडिया संदर्भ"
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "ट्रैक 5:{0} - {1}"
 
@@ -3421,7 +3423,6 @@ msgstr "फ्रेम {0} - समयकोड: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "छवि बहुत बड़ा है. व्यूपोर्ट आकार सहेजेगा."
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "दृश्य आकार: {0} - X={1}, Y={2}"
 
@@ -3698,7 +3699,6 @@ msgstr "चलाया नहीं जा सकता – ऑडियो ट
 msgid "Status is not saved"
 msgstr "स्थिति सहेजी नहीं गई है"
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "ऑडियो एनोटेशन फ़ाइल {0} गायब है या मौजूद नहीं है!"
 
@@ -4865,29 +4865,65 @@ msgstr "TV (लाइग सीमा)"
 msgid "PC (Full Range)"
 msgstr "PC (पूरा सीमा)"
 
-msgid "BGR"
-msgstr "BGR"
-
 msgid "bt709"
 msgstr "bt709"
 
-msgid "FCC"
-msgstr "FCC"
+msgid "HDR"
+msgstr "HDR"
 
-msgid "SMPTE240m"
-msgstr "SMPTE240m"
+msgid "gbr"
+msgstr "gbr"
 
-msgid "bt601"
-msgstr "bt601"
-
-msgid "bt2020"
-msgstr "bt2020"
-
-msgid "unspecified"
-msgstr "अ- निर्दिष्ट"
+msgid "unknown"
+msgstr "अज्ञात"
 
 msgid "reserved"
 msgstr "सुरक्षित"
+
+msgid "fcc"
+msgstr "fcc"
+
+msgid "bt601 (bt470bg)"
+msgstr "bt601 (bt470bg)"
+
+msgid "smpte170m"
+msgstr "smpte170m"
+
+msgid "smpte240m"
+msgstr "smpte240m"
+
+msgid "ycgco"
+msgstr "ycgco"
+
+msgid "bt2020nc"
+msgstr "bt2020nc"
+
+msgid "bt2020c"
+msgstr "bt2020c"
+
+msgid "smpte2085"
+msgstr "smpte2085"
+
+msgid "chroma-derived-nc"
+msgstr "chroma-derived-nc"
+
+msgid "chroma-derived-c"
+msgstr "chroma-derived-c"
+
+msgid "ictcp"
+msgstr "ictcp"
+
+msgid "ipt-c2"
+msgstr "ipt-c2"
+
+msgid "ycgco-re"
+msgstr "ycgco-re"
+
+msgid "ycgco-ro"
+msgstr "ycgco-ro"
+
+msgid "unspecified"
+msgstr "अ- निर्दिष्ट"
 
 msgid "bt470m"
 msgstr "bt470m"
@@ -4895,8 +4931,14 @@ msgstr "bt470m"
 msgid "SMPTE170m"
 msgstr "SMPTE170m"
 
+msgid "SMPTE240m"
+msgstr "SMPTE240m"
+
 msgid "Film"
 msgstr "फ़िल्म"
+
+msgid "bt2020"
+msgstr "bt2020"
 
 msgid "SMPTE428"
 msgstr "SMPTE428"
@@ -4916,8 +4958,8 @@ msgstr "gamma22"
 msgid "gamma28"
 msgstr "gamma28"
 
-msgid "smpte240m"
-msgstr "smpte240m"
+msgid "bt601"
+msgstr "bt601"
 
 msgid "linear"
 msgstr "linear"
@@ -4943,8 +4985,8 @@ msgstr "bt2020-10"
 msgid "bt2020-12"
 msgstr "bt2020-12"
 
-msgid "bt2100"
-msgstr "bt2100"
+msgid "bt2100 (smpte2084)"
+msgstr "bt2100 (smpte2084)"
 
 msgid "hlg"
 msgstr "hlg"
@@ -5044,6 +5086,9 @@ msgstr "रंग सीमाएं"
 
 msgid "FFMpeg's Color Range for the codec selected"
 msgstr "चुने गए कोडेकों के लिए FFMOGE का रंग सीमा"
+
+msgid "Presets"
+msgstr "प्रीसेट"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "चुने गए कोडेकों के लिए FFMOGE का रंग जगह"
@@ -5270,20 +5315,26 @@ msgid ""
 "  for example, if a set of 8-bit images were \n"
 "  bt709 or some other color space.\n"
 "\n"
+"  Currently the override comes with two presets:\n"
+"  bt709 for SDR work, and HDR for HDR work.\n"
+"\n"
 "  If you don't know what those settings do, \n"
-"  DON'T MESS WITH THEM!\n"
+"  leave it all at bt709.\n"
 "  "
 msgstr ""
 "\n"
 "\n"
-"विस्तृत विन्यास आपको भंडारित करने देता है\n"
-"फिल्म फ़ाइल में मेटाडाटा निर्धारित करने के लिए यह निर्धारित करने हेतु कि कहाँ जाएँ\n"
-"और उसे हर तरह के सामान से वुसअत दी\n"
-"उदाहरण के लिए, यदि 8 बिट छवियों का सेट होता है\n"
-"Bt709 या कुछ अन्य रंग जगह.\n"
+"  उन्नत सेटिंग्स आपको मूवी फ़ाइल में मेटाडेटा \n"
+"  सहेजने की सुविधा देती हैं, जिससे यह निर्धारित किया जा सके कि \n"
+"  इसे कहाँ और कैसे बनाया गया था। यह, उदाहरण के लिए, \n"
+"  यह बताने के लिए उपयोगी है कि 8-बिट छवियों का कोई सेट \n"
+"  bt709 या किसी अन्य कलर स्पेस में था।\n"
 "\n"
-"आप नहीं जानते कि उन सेटिंग क्या करते हैं,\n"
-"एम के साथ मत बनो!\n"
+"  वर्तमान में ओवरराइड में दो प्रीसेट शामिल हैं:\n"
+"  SDR कार्य के लिए bt709 और HDR कार्य के लिए HDR।\n"
+"\n"
+"  यदि आप नहीं जानते कि ये सेटिंग्स क्या करती हैं, \n"
+"  तो सभी सेटिंग्स को bt709 पर ही रहने दें।\n"
 "  "
 
 msgid "1/9"
@@ -6611,9 +6662,6 @@ msgstr "वीडियो प्रारंभ फ्रेम"
 
 msgid "Start value in the timeline where video starts."
 msgstr "समय रेखा में आरंभ करें जहाँ वीडियो प्रारंभ होता है."
-
-msgid "HDR"
-msgstr "HDR"
 
 msgid "Prefer RGB (Vulkan)"
 msgstr "RGB को प्राथमिकता दें (Vulkan)"
@@ -8104,6 +8152,15 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
+
+#~ msgid "BGR"
+#~ msgstr "BGR"
+
+#~ msgid "FCC"
+#~ msgstr "FCC"
+
+#~ msgid "bt2100"
+#~ msgstr "bt2100"
 
 #~ msgid ""
 #~ ".otioz files cannot be edited.  Please unzip them first and use the "

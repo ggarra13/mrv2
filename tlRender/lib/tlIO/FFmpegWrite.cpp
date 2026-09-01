@@ -210,7 +210,8 @@ namespace tl
                 kVideoToolbox, // macOS
                 kNVENC,        // NVIDIA, plain frames (no CUDA hwframe ctx)
                 kVAAPI,        // Linux (Intel/AMD/NVIDIA-via-VAAPI)
-                kD3D12VA,      // Windows D3D12VA
+                kD3D12VA       // Windows (native Direct3D 12 video-encode
+                               // hw surfaces; vendor-agnostic)
             };
 
             HWBackend parseHWBackend(const std::string& c)
@@ -260,6 +261,10 @@ namespace tl
                         {HWBackend::kVideoToolbox, "h264_videotoolbox"},
                         {HWBackend::kNVENC, "h264_nvenc"},
                         {HWBackend::kVAAPI, "h264_vaapi"},
+                        // Native FFmpeg D3D12 video-encode API -- accepts
+                        // a real AV_PIX_FMT_D3D12 hw_frames_ctx and works
+                        // across vendors (Intel/AMD/NVIDIA) on Windows.
+                        {HWBackend::kD3D12VA, "h264_d3d12va"},
                     };
                     break;
                 case AV_CODEC_ID_VP9:
@@ -276,6 +281,15 @@ namespace tl
                         {HWBackend::kVideoToolbox, "av1_videotoolbox"},
                         {HWBackend::kNVENC, "av1_nvenc"},
                         {HWBackend::kVAAPI, "av1_vaapi"},
+                        {HWBackend::kD3D12VA, "av1_d3d12va"},
+                    };
+                    break;
+                case AV_CODEC_ID_HEVC:
+                    candidates = {
+                        {HWBackend::kVideoToolbox, "hevc_videotoolbox"},
+                        {HWBackend::kNVENC, "hevc_nvenc"},
+                        {HWBackend::kVAAPI, "hevc_vaapi"},
+                        {HWBackend::kD3D12VA, "hevc_d3d12va"},
                     };
                     break;
                 case AV_CODEC_ID_HEVC:

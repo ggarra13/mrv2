@@ -1664,6 +1664,15 @@ msgid ""
 "if possible."
 msgstr ""
 
+msgid "FFmpeg HW Driver"
+msgstr "FFmpeg ハードウェアドライバー"
+
+msgid "Default HW Driver"
+msgstr "デフォルトのハードウェアドライバー"
+
+msgid "Select what driver to use for your GPU."
+msgstr "GPUで使用するドライバーを選択してください。"
+
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/Oスレッド数"
 
@@ -2562,7 +2571,6 @@ msgstr "リモートファイル {0} はローカルに見つからず、取得�
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "リモートファイル {0} はファイル名 {1} と一致しますが、パスは一致しません。"
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "リモートファイル {0} はローカルファイル名と一致しません。"
 
@@ -2664,7 +2672,6 @@ msgstr "設定から OCIO 設定を設定しています。"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "OCIO 環境変数から OCIO 設定を設定しています。"
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "パスマッピングが \"{0}{1}\" から読み込まれました。"
 
@@ -2674,7 +2681,6 @@ msgstr "ディレクトリの削除中にエラーが発生しました: \"{0}\"
 msgid "Cleaned directory: \"{0}\"."
 msgstr "ディレクトリをクリーンアップしました: \"{0}\"。"
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" からホットキーを読み込み中です。"
 
@@ -2687,7 +2693,6 @@ msgstr "パスマッピングが \"{0}{1}\" に保存されました。"
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "ホットキーが \"{0}{1}.prefs\" に保存されました。"
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "設定が \"{0}{1}\" に保存されました。"
 
@@ -2739,7 +2744,6 @@ msgstr "表示 '{0}' のデフォルトビューがありません。表示は�
 msgid "Setting OCIO Preset '{0}'."
 msgstr "OCIO プリセット '{0}' を設定中。"
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "プリセット '{0}' が見つかりません。"
 
@@ -3121,7 +3125,6 @@ msgstr "連続する 2つのオーディオクリップを選択してくださ�
 msgid "Could not save .otio file: {0}"
 msgstr ".otio ファイルを保存できませんでした : {0}"
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "{0} の保存中にエラーが発生しました。{1}"
 
@@ -3134,7 +3137,6 @@ msgstr "出力先ファイルが無効です。"
 msgid "Unknown media reference"
 msgstr "不明なメディア参照"
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "トラック #{0} - {1}"
 
@@ -3389,7 +3391,6 @@ msgstr "フレーム {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "画像が大きすぎます。ビューポートサイズで保存します。"
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "ビューポートサイズ : {0} - X={1}, Y={2}"
 
@@ -3652,7 +3653,6 @@ msgstr "再生できません - 音声注釈が空です"
 msgid "Status is not saved"
 msgstr "ステータスは保存されていません"
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "オーディオ注釈ファイル {0} が見つからないか存在しません！"
 
@@ -4807,29 +4807,65 @@ msgstr "TV (法定レンジ)"
 msgid "PC (Full Range)"
 msgstr "PC (フルレンジ)"
 
-msgid "BGR"
-msgstr "BGR"
-
 msgid "bt709"
 msgstr "bt709"
 
-msgid "FCC"
-msgstr "FCC"
+msgid "HDR"
+msgstr "HDR"
 
-msgid "SMPTE240m"
-msgstr "SMPTE240m"
+msgid "gbr"
+msgstr "gbr"
 
-msgid "bt601"
-msgstr "bt601"
-
-msgid "bt2020"
-msgstr "bt2020"
-
-msgid "unspecified"
-msgstr "未指定"
+msgid "unknown"
+msgstr "不明"
 
 msgid "reserved"
 msgstr "予約済み"
+
+msgid "fcc"
+msgstr "fcc"
+
+msgid "bt601 (bt470bg)"
+msgstr "bt601 (bt470bg)"
+
+msgid "smpte170m"
+msgstr "smpte170m"
+
+msgid "smpte240m"
+msgstr "smpte240m"
+
+msgid "ycgco"
+msgstr "ycgco"
+
+msgid "bt2020nc"
+msgstr "bt2020nc"
+
+msgid "bt2020c"
+msgstr "bt2020c"
+
+msgid "smpte2085"
+msgstr "smpte2085"
+
+msgid "chroma-derived-nc"
+msgstr "chroma-derived-nc"
+
+msgid "chroma-derived-c"
+msgstr "chroma-derived-c"
+
+msgid "ictcp"
+msgstr "ictcp"
+
+msgid "ipt-c2"
+msgstr "ipt-c2"
+
+msgid "ycgco-re"
+msgstr "ycgco-re"
+
+msgid "ycgco-ro"
+msgstr "ycgco-ro"
+
+msgid "unspecified"
+msgstr "未指定"
 
 msgid "bt470m"
 msgstr "bt470m"
@@ -4837,8 +4873,14 @@ msgstr "bt470m"
 msgid "SMPTE170m"
 msgstr "SMPTE170m"
 
+msgid "SMPTE240m"
+msgstr "SMPTE240m"
+
 msgid "Film"
 msgstr "フィルム"
+
+msgid "bt2020"
+msgstr "bt2020"
 
 msgid "SMPTE428"
 msgstr "SMPTE428"
@@ -4858,8 +4900,8 @@ msgstr "gamma22"
 msgid "gamma28"
 msgstr "gamma28"
 
-msgid "smpte240m"
-msgstr "smpte240m"
+msgid "bt601"
+msgstr "bt601"
 
 msgid "linear"
 msgstr "リニア"
@@ -4885,8 +4927,8 @@ msgstr "bt2020-10"
 msgid "bt2020-12"
 msgstr "bt2020-12"
 
-msgid "bt2100"
-msgstr "bt2100"
+msgid "bt2100 (smpte2084)"
+msgstr "bt2100 (smpte2084)"
 
 msgid "hlg"
 msgstr "HLG"
@@ -4986,6 +5028,9 @@ msgstr "カラーレンジ"
 
 msgid "FFMpeg's Color Range for the codec selected"
 msgstr "選択したコーデックの FFmpeg カラーレンジ"
+
+msgid "Presets"
+msgstr "プリセット"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "選択したコーデックの FFmpeg カラースペース"
@@ -5237,19 +5282,26 @@ msgid ""
 "  for example, if a set of 8-bit images were \n"
 "  bt709 or some other color space.\n"
 "\n"
+"  Currently the override comes with two presets:\n"
+"  bt709 for SDR work, and HDR for HDR work.\n"
+"\n"
 "  If you don't know what those settings do, \n"
-"  DON'T MESS WITH THEM!\n"
+"  leave it all at bt709.\n"
 "  "
 msgstr ""
 "\n"
 "\n"
-" 詳細設定では、ムービーファイルにメタデータを保存して、作成場所や\n"
-" 作成方法を記録できます。例えば、8ビット画像のセットが bt709 なのか\n"
-" 別のカラースペースなのかを示すのに役立ちます。\n"
+"  詳細設定では、ムービーファイルにメタデータを保存し、\n"
+"  どこで、どのように作成されたかを判別できるようにします。\n"
+"  たとえば、8ビット画像のセットが bt709 なのか、\n"
+"  その他のカラースペースなのかを示すのに役立ちます。\n"
 "\n"
-" これらの設定の内容がわからない場合は、\n"
-" 絶対に触らないでください！\n"
-" "
+"  現在、オーバーライドには2つのプリセットがあります：\n"
+"  SDR 用の bt709 と、HDR 用の HDR です。\n"
+"\n"
+"  これらの設定の意味が分からない場合は、\n"
+"  すべて bt709 のままにしてください。\n"
+"  "
 
 msgid "1/9"
 msgstr "1/9"
@@ -6544,9 +6596,6 @@ msgstr "ビデオ開始フレーム"
 
 msgid "Start value in the timeline where video starts."
 msgstr "タイムライン上でビデオが開始されるフレーム値。"
-
-msgid "HDR"
-msgstr "HDR"
 
 msgid "Prefer RGB (Vulkan)"
 msgstr "RGB を優先 (Vulkan)"
@@ -7987,6 +8036,15 @@ msgstr "host_statistics64 に失敗しました"
 
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました"
+
+#~ msgid "BGR"
+#~ msgstr "BGR"
+
+#~ msgid "FCC"
+#~ msgstr "FCC"
+
+#~ msgid "bt2100"
+#~ msgstr "bt2100"
 
 #~ msgid ""
 #~ ".otioz files cannot be edited.  Please unzip them first and use the "

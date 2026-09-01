@@ -553,7 +553,7 @@ class UpdatePlugin(plugin.Plugin):
         elif kernel == 'Linux':
             return self.check_linux_flavor()
         elif kernel == 'Darwin':
-            return 'amd64.dmg'
+            return '.dmg'
         else:
             return _('Unknown operating system')
 
