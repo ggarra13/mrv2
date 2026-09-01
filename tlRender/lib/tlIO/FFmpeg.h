@@ -45,6 +45,7 @@ namespace tl
             AV1,
             HAP,
             AV1_AOM,
+            HEVC,
 
             Count
         };

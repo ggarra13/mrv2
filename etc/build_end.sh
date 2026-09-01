@@ -3,21 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-vcpkg_ARCH=x64
-if [[ $ARCH == *amd64* ]]; then
-    vcpkg_ARCH=x64
-elif [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
-    vcpkg_ARCH=arm64
-fi
-vcpkg_TRIPLET=${vcpkg_ARCH}-windows
-vcpkg_DIR=$BUILD_DIR/deps/vcpkg/src/vcpkg/installed/$vcpkg_TRIPLET
-	
-if [[ $KERNEL == *Windows* ]]; then
-    if [[ -d $vcpkg_DIR ]]; then
-	echo "Copying $vcpkg_DIR/bin/*.dll"
-	cp -rf $vcpkg_DIR/bin/*.dll $BUILD_DIR/install/bin
-    fi
-fi
 
 if [[ "$CMAKE_TARGET" == "package" ]]; then
 

@@ -311,6 +311,10 @@ namespace tl
                     if (c.backend == HWBackend::kVideoToolbox)
                         continue;
 #endif
+#ifndef __linux__
+                    if (c.backend == HWBackend::kVAAPI)
+                        continue;
+#endif
 #ifndef _WIN32
                     if (c.backend == HWBackend::kD3D12VA)
                         continue;
@@ -1338,8 +1342,8 @@ namespace tl
                     avCodecID = AV_CODEC_ID_AV1;
                     avProfile = AV_PROFILE_AV1_MAIN;
                     break;
-                // case Profile::HEVC:
-                //     avCodecID = AV_CODEC_ID_HEVC;
+                case Profile::HEVC:
+                    avCodecID = AV_CODEC_ID_HEVC;
                     // Same reasoning as AV1 above -- hevc_d3d12va and
                     // hevc_vaapi need a concrete profile.  Refined for
                     // 10-bit/4:2:2/4:4:4 sources just below, alongside
@@ -1665,28 +1669,28 @@ namespace tl
                         avProfile = AV_PROFILE_H264_HIGH;
                     }
                 }
-                // else if (profile == Profile::HEVC)
-                // {
-                //     switch (pix_fmt)
-                //     {
-                //     case AV_PIX_FMT_YUV420P10LE:
-                //         avProfile = AV_PROFILE_HEVC_MAIN_10;
-                //         break;
-                //     case AV_PIX_FMT_YUV422P:
-                //     case AV_PIX_FMT_YUV422P10LE:
-                //     case AV_PIX_FMT_YUV444P:
-                //     case AV_PIX_FMT_YUV444P10LE:
-                //         // 4:2:2/4:4:4 need the Range Extensions profile;
-                //         // not all hw backends support it (hevc_d3d12va
-                //         // in particular is 4:2:0-only right now), so
-                //         // this combination may still need to fall back
-                //         // to software or 4:2:0 upstream.
-                //         avProfile = AV_PROFILE_HEVC_REXT;
-                //         break;
-                //     default:
-                //         avProfile = AV_PROFILE_HEVC_MAIN;
-                //     }
-                // }
+                else if (profile == Profile::HEVC)
+                {
+                    switch (pix_fmt)
+                    {
+                    case AV_PIX_FMT_YUV420P10LE:
+                        avProfile = AV_PROFILE_HEVC_MAIN_10;
+                        break;
+                    case AV_PIX_FMT_YUV422P:
+                    case AV_PIX_FMT_YUV422P10LE:
+                    case AV_PIX_FMT_YUV444P:
+                    case AV_PIX_FMT_YUV444P10LE:
+                        // 4:2:2/4:4:4 need the Range Extensions profile;
+                        // not all hw backends support it (hevc_d3d12va
+                        // in particular is 4:2:0-only right now), so
+                        // this combination may still need to fall back
+                        // to software or 4:2:0 upstream.
+                        avProfile = AV_PROFILE_HEVC_REXT;
+                        break;
+                    default:
+                        avProfile = AV_PROFILE_HEVC_MAIN;
+                    }
+                }
 
                 p.avCodecContext->profile = avProfile;
 
