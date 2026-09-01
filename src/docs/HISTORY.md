@@ -2,6 +2,7 @@ v1.7.6
 ======
 
 - Bug/MacOS:  "Help->Update mrv2" would always download and install the amd64 version of the installer.
+- Windows: Fixed minor memory leak on the cursor icon.
 
 
 v1.7.5
