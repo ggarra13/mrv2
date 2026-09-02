@@ -84,6 +84,7 @@ if(APPLE)
 	${Python_OPTIMIZATIONS}
 	--enable-shared
 	--with-openssl=${_openssl_LOC}
+	--disable-test-modules
 	--prefix=${CMAKE_INSTALL_PREFIX}
     )
     set( Python_BUILD make -j ${NPROCS} )
@@ -112,6 +113,7 @@ elseif(UNIX)
 	--enable-shared
         --prefix=${CMAKE_INSTALL_PREFIX}
 	--without-ensurepip
+	--disable-test-modules
     )
     
     # Build command
