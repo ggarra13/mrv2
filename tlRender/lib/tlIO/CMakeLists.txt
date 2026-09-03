@@ -11,6 +11,7 @@ set(HEADERS
     SGI.h
     SequenceIO.h
     STB.h
+    SVG.h
     System.h
     SystemInline.h)
 set(HEADERS_PRIVATE
@@ -31,14 +32,16 @@ set(SOURCE
     PPMRead.cpp
     PPMWrite.cpp
     Plugin.cpp
+    SequenceIORead.cpp
+    SequenceIOWrite.cpp
     SGI.cpp
     SGIRead.cpp
     SGIWrite.cpp
     STB.cpp
     STBRead.cpp
     STBWrite.cpp
-    SequenceIORead.cpp
-    SequenceIOWrite.cpp
+    SVG.cpp
+    SVGRead.cpp
     System.cpp
 )
 

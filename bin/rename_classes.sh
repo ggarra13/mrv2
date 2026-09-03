@@ -6,11 +6,6 @@ if [[ "$1" == "" ]]; then
 fi
 
 #
-# OTIO macros
-#
-sed -i 's#OTIO_NS::#otio::#g' "$@"
-
-#
 # FTK macros
 #
 sed -i 's#namespace ftk#namespace tl#g' "$@"

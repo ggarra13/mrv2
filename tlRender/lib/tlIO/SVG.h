@@ -1,0 +1,98 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2021-2024 Darby Johnston
+// All rights reserved.
+
+#pragma once
+
+#include <tlIO/SequenceIO.h>
+
+
+namespace tl
+{
+    //! SVG image I/O.
+    namespace svg
+    {
+
+        //! SVG reader.
+        //!
+        //! An SVG has no resolution of its own beyond the size the document
+        //! asks for, so the size to rasterize at is settled when the decoder
+        //! is made rather than per frame: the information and the image have
+        //! to agree, and the information is asked for without options.
+        //!
+        //! Options:
+        //! - SVG/Width: the width to rasterize at, in pixels.
+        //! - SVG/Height: the height to rasterize at, in pixels.
+        //!
+        //! Giving one keeps the document's aspect ratio; giving neither uses
+        //! the size the document asks for.
+        class Read : public io::ISequenceRead
+        {
+        protected:
+            void _init(
+                const file::Path&, const std::vector<file::MemoryRead>&,
+                const io::Options&, const std::shared_ptr<io::Cache>&,
+                const std::weak_ptr<log::System>&);
+
+            Read();
+
+        public:
+            virtual ~Read();
+
+            //! Create a new reader.
+            static std::shared_ptr<Read> create(
+                const file::Path&, const io::Options&,
+                const std::shared_ptr<io::Cache>&,
+                const std::weak_ptr<log::System>&);
+
+            //! Create a new reader.
+            static std::shared_ptr<Read> create(
+                const file::Path&, const std::vector<file::MemoryRead>&,
+                const io::Options&, const std::shared_ptr<io::Cache>&,
+                const std::weak_ptr<log::System>&);
+
+        protected:
+            io::Info _getInfo(
+                const std::string& fileName, const file::MemoryRead*) override;
+            io::VideoData _readVideo(
+                const std::string& fileName, const file::MemoryRead*,
+                const OTIO_NS::RationalTime&, const io::Options&) override;
+
+        private:
+            math::Size2i _requestedSize;
+        };
+
+        //! SVG plugin.
+        class Plugin : public io::IPlugin
+        {
+        protected:
+            Plugin();
+
+        public:
+            //! Create a new plugin.
+            static std::shared_ptr<Plugin> create(
+                const std::shared_ptr<io::Cache>&,
+                const std::weak_ptr<log::System>&);
+
+            std::shared_ptr<io::IRead> read(
+                const file::Path&, const io::Options& = io::Options()) override;
+            std::shared_ptr<io::IRead> read(
+                const file::Path&, const std::vector<file::MemoryRead>&,
+                const io::Options& = io::Options()) override;
+            image::Info getWriteInfo(
+                const image::Info&,
+                const io::Options& = io::Options()) const override
+            {
+                image::Info out;
+                return out;
+            }
+            std::shared_ptr<io::IWrite> write(
+                const file::Path&, const io::Info&,
+                const io::Options& = io::Options()) override
+            {
+                std::shared_ptr<io::IWrite> out;
+                return out;
+            }
+        };
+    } // namespace svg
+} // namespace tl

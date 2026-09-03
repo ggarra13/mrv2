@@ -35,6 +35,7 @@
 #if defined(TLRENDER_RAW)
 #    include <tlIO/RAW.h>
 #endif // TLRENDER_RAW
+#include <tlIO/SVG.h>
 #if defined(TLRENDER_ZFILE)
 #    include <tlIO/ZFile.h>
 #endif
@@ -70,6 +71,7 @@ namespace tl
                 _plugins.push_back(dpx::Plugin::create(p.cache, logSystem));
                 _plugins.push_back(ppm::Plugin::create(p.cache, logSystem));
                 _plugins.push_back(sgi::Plugin::create(p.cache, logSystem));
+                _plugins.push_back(svg::Plugin::create(p.cache, logSystem));
 #if defined(TLRENDER_STB)
                 _plugins.push_back(stb::Plugin::create(p.cache, logSystem));
 #endif
