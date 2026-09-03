@@ -42,7 +42,7 @@ namespace tl
                 auto fileIO = memory ?
                     file::FileIO::create(path, *memory) :
                     file::FileIO::create(path, file::Mode::Read);
-                auto out = std::make_unique<Fl_SVG_Image>(path.c_str(),
+                auto out = std::make_unique<Fl_SVG_Image>(fileName.c_str(),
                                                           file::read(fileIO).c_str());
                 if (!out)
                 {
