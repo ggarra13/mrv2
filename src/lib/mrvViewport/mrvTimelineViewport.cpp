@@ -472,13 +472,13 @@ namespace mrv
             {
                 if (n == FL_CURSOR_CROSS)
                 {
-                    static Fl_PNG_Image* rgba_cross = load_png("crosshair.png");
-                    window()->cursor(rgba_cross, 16, 16);
+                    static std::unique_ptr<Fl_PNG_Image> rgba_cross = load_png("crosshair.png");
+                    window()->cursor(rgba_cross.get(), 16, 16);
                 }
                 else if (n == FL_CURSOR_INSERT)
                 {
-                    static Fl_PNG_Image* rgba_insert = load_png("textcursor.png");
-                    window()->cursor(rgba_insert, 16, 16);
+                    static std::unique_ptr<Fl_PNG_Image> rgba_insert = load_png("textcursor.png");
+                    window()->cursor(rgba_insert.get(), 16, 16);
                 }
                 else
                 {
