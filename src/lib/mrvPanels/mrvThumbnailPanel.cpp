@@ -139,6 +139,7 @@ namespace mrv
                 const auto context = App::app->getContext();
                 const auto timeline = timeline::Timeline::create(context, path);
                 item->timeline = timeline;
+                _clearCache = true;
 
                 _createThumbnail(widget, path, timeline, time, layerId,
                                  mediaReferenceKey);

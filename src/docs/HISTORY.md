@@ -5,8 +5,10 @@ v1.7.6
 
 - Windows: Fixed minor memory leak on the cursor icon.
 
+- UI/Core: Made editing .otioz files properly update the Files Panel icon.
+
 - Core: Added SVG reader.  Works with most .svg with paths.  Does not decode those with text.
-- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the features depend on your harware and drivers.
+- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the features depend on your hardware and drivers.
 
 
 v1.7.5
