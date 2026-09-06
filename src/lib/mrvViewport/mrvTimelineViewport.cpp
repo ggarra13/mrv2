@@ -371,12 +371,6 @@ namespace mrv
             p.ui->uiText->value(0);
             p.ui->uiVoice->value(0);
             p.ui->uiLink->value(0);
-            if (!mrv::feature_needs_solo_or_later())
-            {
-                p.actionMode = ActionMode::kScrub;
-                p.ui->uiScrub->value(1);
-                return;
-            }
 
             switch (mode)
             {
@@ -398,51 +392,117 @@ namespace mrv
                 p.ui->uiStatus->copy_label(_("Erase"));
                 break;
             case ActionMode::kCircle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiCircle->value(1);
                 p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(OutlineCircle));
                 p.ui->uiStatus->copy_label(_("Circle"));
                 break;
             case ActionMode::kFilledCircle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiCircle->value(1);
                 p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(FilledCircle));
                 p.ui->uiStatus->copy_label(_("Filled Circle"));
                 break;
             case ActionMode::kRectangle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiRectangle->value(1);
                 p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(OutlineRectangle));
                 p.ui->uiStatus->copy_label(_("Rectangle"));
                 break;
             case ActionMode::kFilledRectangle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiRectangle->value(1);
                 p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(FilledRectangle));
                 p.ui->uiStatus->copy_label(_("Filled Rectangle"));
                 break;
             case ActionMode::kArrow:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiArrow->value(1);
                 p.ui->uiStatus->copy_label(_("Arrow"));
                 break;
             case ActionMode::kText:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiText->value(1);
                 p.ui->uiStatus->copy_label(_("Text"));
                 break;
             case ActionMode::kVoice:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiVoice->value(1);
                 p.ui->uiStatus->copy_label(_("Voice"));
                 break;
             case ActionMode::kRotate:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiStatus->copy_label(_("Rotate"));
                 break;
             case ActionMode::kPolygon:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiPolygon->value(1);
                 p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(OutlinePolygon));
                 p.ui->uiStatus->copy_label(_("Polygon"));
                 break;
             case ActionMode::kFilledPolygon:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiPolygon->value(1);
                 p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(FilledPolygon));
                 p.ui->uiStatus->copy_label(_("Filled Polygon"));
                 break;
             case ActionMode::kLink:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiLink->value(1);
                 p.ui->uiStatus->copy_label(_("Link"));
                 break;

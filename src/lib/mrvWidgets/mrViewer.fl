@@ -892,7 +892,7 @@ if (reason == FL_REASON_CLOSED)
         xywh {0 0 934 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar open
+          label MenuBar
           xywh {0 0 934 30} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {open
@@ -941,7 +941,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar open
+          label TopBar
           xywh {0 30 934 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -1167,7 +1167,7 @@ else
 uiAutoICS->value(1);
 uiAutoICS->do_callback();
 
-uiView->updateOCIOOptions();} open selected
+uiView->updateOCIOOptions();} open
                 tooltip {OCIO input color space for the image} xywh {285 30 155 29} down_box DOWN_BOX labelsize 10 align 112
                 code3 {o->disable_submenus();}
                 class {mrv::PopupMenu}
@@ -1201,13 +1201,13 @@ uiView->updateOCIOOptions();} open selected
             xywh {0 86 934 472} labeltype NO_LABEL hide resizable
           }
           Fl_Pack uiViewGroup {
-            label ViewGroup
+            label ViewGroup open
             xywh {0 59 934 501} type HORIZONTAL box FLAT_BOX labeltype NO_LABEL
             code3 {o->fixed( uiToolsGroup, uiToolsGroup->w() );
 uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {
+            Fl_Group uiToolsGroup {open
               xywh {0 59 42 501}
             } {
               Fl_Group uiEditGroup {
@@ -1278,7 +1278,7 @@ uiMain->workspace = uiViewGroup;}
                   }
                 }
               }
-              Fl_Group uiActionGroup {
+              Fl_Group uiActionGroup {open
                 xywh {0 59 42 501} box FLAT_BOX
               } {
                 Fl_Button uiScrub {
@@ -1304,10 +1304,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::feature_needs_solo_or_later())
-   return;
-
-uiView->setActionMode( mrv::ActionMode::kDraw );
+                  callback {uiView->setActionMode( mrv::ActionMode::kDraw );
 
 if (Fl::event_clicks() >= 1)
 {
@@ -1319,17 +1316,13 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiErase {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::feature_needs_solo_or_later())
-   return;
-    
-    
-uiView->setActionMode( mrv::ActionMode::kErase );
+                  callback {uiView->setActionMode( mrv::ActionMode::kErase );
 
 if (Fl::event_clicks() >= 1)
 {
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}}
+}} selected
                   tooltip {Eraser Tool} image {../../icons/Erase.svg} compress_image 1 xywh {2 164 40 35} down_box DOWN_BOX selection_color 14
                   class {mrv::Button}
                 }
