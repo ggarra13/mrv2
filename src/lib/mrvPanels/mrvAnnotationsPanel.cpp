@@ -170,16 +170,16 @@ namespace mrv
                         return;
                     const Fl_Menu_Item* item = c->mvalue();
                     std::string selectedFontName = item->label();
-                    
+
                     const std::vector<fs::path>& fontList = image::discoverSystemFonts();
                     if (fontList.empty())
                     {
                         LOG_ERROR("No fonts installed on this system.");
                         return;
                     }
-                    
+
                     fs::path out = fontList[0];
-            
+
                     for (const auto& path : fontList)
                     {
                         auto u8 = path.filename().u8string();
@@ -194,7 +194,7 @@ namespace mrv
                             break;
                         }
                     }
-                    
+
                     auto u8 = out.u8string();
                     w->fontPath = std::string(u8.begin(), u8.end());
 #endif
@@ -221,7 +221,7 @@ namespace mrv
 #ifdef OPENGL_BACKEND
                     int fontSize = o->value() * pct * p.ui->uiView->viewZoom()
                                    * pixels_per_unit;
-                    
+
                     w->textsize(fontSize);
                     w->redraw();
 #endif
@@ -231,7 +231,7 @@ namespace mrv
                     int fontSize = o->value() * pct * pixels_per_unit;
                     w->fontSize = fontSize;
 #endif
-                    
+
                     p.ui->uiView->redrawWindows();
                 });
 
@@ -510,45 +510,58 @@ namespace mrv
             if (!open)
                 cg->close();
 
+#if 0
+            auto view = p.ui->uiView;
+            if (!view)
+                return;
 
-            cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Notes"));
-            b = cg->button();
-            b->labelsize(14);
-            b->size(b->w(), 18);
-            cg->begin();
-            
-            Fl_Group* ng = new Fl_Group(X, 25, cg->w(), 200);
-            ng->begin();
-            
-            auto nV = new Widget<Fl_Multiline_Input>(X, 25, cg->w(), 180);
-            notes = nV;
-            notes->cursor_color(FL_RED);
-            notes->textsize(16);
-            notes->textcolor(FL_BLACK);
-            notes->wrap(true);
-            notes->when(FL_WHEN_CHANGED);
-            nV->callback(
+            auto player = view->getTimelinePlayer();
+            if (!player)
+                return;
+
+            auto times = player->getNoteAnnotationTimes();
+            for (auto time : times)
+            {
+                cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Notes"));
+                b = cg->button();
+                b->labelsize(12);
+                b->size(b->w(), 14);
+                cg->begin();
+
+                Fl_Group* ng = new Fl_Group(X, 25, cg->w(), 140);
+                ng->begin();
+
+                auto nV = new Widget<Fl_Multiline_Input>(X, 25, cg->w(), 140);
+                notes = nV;
+                notes->cursor_color(FL_RED);
+                notes->textsize(16);
+                notes->textcolor(FL_BLACK);
+                notes->wrap(true);
+                notes->when(FL_WHEN_CHANGED);
+                nV->callback(
                 [=](auto o)
-                {
-                    const std::string& text = o->value();
-                    if (text.empty())
                     {
-                        clear_note_annotation_cb(p.ui);
-                    }
-                    else
-                    {
-                        add_note_annotation_cb(p.ui, text);
-                    }
-                });
-            ng->end();
-            
-            cg->end();
+                        const std::string& text = o->value();
+                        if (text.empty())
+                        {
+                            clear_note_annotation_cb(p.ui);
+                        }
+                        else
+                        {
+                            add_note_annotation_cb(p.ui, text);
+                        }
+                    });
+                ng->end();
 
-            key = prefix + "Notes";
-            value = settings->getValue<std::any>(key);
-            open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
-            if (!open)
+                cg->end();
                 cg->close();
+            }
+#endif
+            // key = prefix + "Notes";
+            // value = settings->getValue<std::any>(key);
+            // open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+            // if (!open)
+            //     cg->close();
         }
 
         void AnnotationsPanel::redraw()

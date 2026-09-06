@@ -661,6 +661,25 @@ namespace mrv
         return times;
     }
 
+    const std::vector< OTIO_NS::RationalTime >
+    TimelinePlayer::getNoteAnnotationTimes() const
+    {
+        TLRENDER_P();
+
+        std::vector< OTIO_NS::RationalTime > times;
+        for (auto annotation : p.annotations)
+        {
+            for (auto shape : annotation->shapes)
+            {
+                if (auto s = dynamic_cast< draw::NoteShape* >(shape.get()))
+                {
+                    times.push_back(annotation->time);
+                }
+            }
+        }
+        return times;
+    }
+
     std::vector< std::shared_ptr< draw::Annotation > >
     TimelinePlayer::getAnnotations(const int previous, const int next) const
     {

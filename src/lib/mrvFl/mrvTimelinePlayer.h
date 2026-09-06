@@ -342,6 +342,10 @@ namespace mrv
         //! Return a list of annotation times
         const std::vector< OTIO_NS::RationalTime > getAnnotationTimes() const;
 
+        //! Return a list of note annotation times
+        const std::vector< OTIO_NS::RationalTime >
+        getNoteAnnotationTimes() const;
+
         //! @{
 
         //! Get annotation for current time
