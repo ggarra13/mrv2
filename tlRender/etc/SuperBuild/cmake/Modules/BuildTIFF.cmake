@@ -7,7 +7,7 @@ if (NOT TIFF_FOUND)
     include(ExternalProject)
 
     set(TIFF_GIT_REPOSITORY "https://gitlab.com/libtiff/libtiff.git")
-    set(TIFF_GIT_TAG "v4.5.0")
+    set(TIFF_GIT_TAG "v4.7.2") # was v4.5.0
 
     set(TIFF_DEPENDENCIES ${ZLIB_DEP})
     message(STATUS "TIFF DEPENDENCIES=${TIFF_DEPENDENCIES}")

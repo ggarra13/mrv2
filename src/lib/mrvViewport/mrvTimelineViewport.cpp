@@ -3829,6 +3829,13 @@ namespace mrv
                     // Make sure ocio is enabled.
                     p.ocio_disabled = false;
 
+                    // Handle OCIO Auto ICS
+                    if (p.ui->uiPrefs->uiOCIOUseAutoICS->value())
+                    {
+                        p.ui->uiAutoICS->value(0);
+                        p.ui->uiAutoICS->do_callback();
+                    }
+
                     // We pass BT709 metadata unless OCIO changes it in
                     // Viewport::_updateHDRMetadata().
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
