@@ -3896,6 +3896,7 @@ namespace mrv
                     // Handle OCIO Auto ICS
                     if (p.ui->uiPrefs->uiOCIOUseAutoICS->value())
                     {
+                        // Set it to 0 so the callback turns it to 1.
                         p.ui->uiAutoICS->value(0);
                         p.ui->uiAutoICS->do_callback();
                     }

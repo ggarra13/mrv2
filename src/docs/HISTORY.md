@@ -3,12 +3,26 @@ v1.7.6
 
 - Bug/MacOS:  "Help->Update mrv2" would always download and install the amd64 version of the installer.
 
-- Windows: Fixed minor memory leak on the cursor icon.
+- Windows: Added Text Insert icon to avoid the Vulkan dreaded ghosted square.
+
+- UI: Added hand drawn annotations and easing without a Solo License.  Note that area tools and other drawing tools like arrows remain on the Solo License.
+
+- Core: Added SVG reader.  Works with all .svg with paths.  Does not currently decode SVGs with text, though.
+- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the features depend on your hardware and drivers.
+- Core: Added the NVidia headers to the build, so the Linux branch will compile without the need for local files.
+
+Library updates:
+    - OpenColorIO 2.5.2
+    - OpenEXR 3.4.15
+    - libtiff 4.7.2
+	
+Fixes:
 
 - UI/Core: Made editing .otioz files properly update the Files Panel icon.
+- UI/Core: Fixed annotations creating a long line when trying to create an all frame and a current frame annotation on the same frame.
+- OpenGL/Core: Fixed OpenGL display of YUV_444P_U16 and similar movies.  One plane was missing.  Vulkan was fine.
+- Windows: Fixed minor memory leak on the cursor icon.
 
-- Core: Added SVG reader.  Works with most .svg with paths.  Does not decode those with text.
-- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the features depend on your hardware and drivers.
 
 
 v1.7.5

@@ -513,15 +513,15 @@ namespace mrv
             void _handleCompareWipe() noexcept;
             void _handleCompareOverlay() noexcept;
 
-            void _handlePushLeftMouseButton() noexcept;
-            void _handlePushLeftMouseButtonShapes() noexcept;
+            int  _handlePushLeftMouseButton() noexcept;
+            int  _handlePushLeftMouseButtonShapes() noexcept;
             int  _handleReleaseLeftMouseButtonShapes() noexcept;
 
-            void _handleDragLeftMouseButton() noexcept;
-            void _handleDragLeftMouseButtonShapes() noexcept;
-            void _handleDragSelection() noexcept;
+            int  _handleDragLeftMouseButton() noexcept;
+            int  _handleDragLeftMouseButtonShapes() noexcept;
+            int  _handleDragSelection() noexcept;
 
-            void _handleDragMiddleMouseButton() noexcept;
+            int  _handleDragMiddleMouseButton() noexcept;
 
             int _popupRMBMenu() noexcept;
             int _handlePopupLinkMenu(int event) noexcept;

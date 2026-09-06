@@ -384,17 +384,19 @@ namespace mrv
             }
         }
 
-        void TimelineViewport::_handleDragLeftMouseButton() noexcept
+        int TimelineViewport::_handleDragLeftMouseButton() noexcept
         {
             TLRENDER_P();
 
             if (p.compareOptions.mode == timeline::CompareMode::Wipe)
             {
                 _handleCompareWipe();
+                return 1;
             }
             else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
             {
                 _handleCompareOverlay();
+                return 1;
             }
             else
             {
@@ -419,7 +421,7 @@ namespace mrv
                         if (Fl::event_shift())
                         {
                             if (!mrv::feature_needs_solo_or_later())
-                                return;
+                                return 0;
                             return _handleDragSelection();
                         }
                         else
@@ -436,13 +438,12 @@ namespace mrv
                             }
                         }
                     }
-                    return;
+                    return 1;
                 }
                 else if (
                     Fl::event_shift() || p.actionMode == ActionMode::kSelection)
                 {
-                    _handleDragSelection();
-                    return;
+                    return _handleDragSelection();
                 }
                 else
                 {
@@ -450,11 +451,11 @@ namespace mrv
 
                     auto player = getTimelinePlayer();
                     if (!player)
-                        return;
+                        return 0;
 
                     auto annotation = player->getAnnotation();
                     if (p.actionMode != ActionMode::kScrub && !annotation)
-                        return;
+                        return 0;
 
                     if (isDrawAction(p.actionMode) &&
                         !p.showAnnotations)
@@ -472,7 +473,7 @@ namespace mrv
                         if (Fl::event_alt())
                         {
                             if (!p.player)
-                                return;
+                                return 0;
 
                             const int X = Fl::event_x() * pixels_per_unit();
                             const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * 20;
@@ -489,10 +490,9 @@ namespace mrv
                         {
                             scrub();
                         }
-                        return;
+                        return 1;
                     default:
-                        _handleDragLeftMouseButtonShapes();
-                        return;
+                        return _handleDragLeftMouseButtonShapes();
                     }
                 }
             }
@@ -576,7 +576,7 @@ namespace mrv
 
         }
 
-        void TimelineViewport::_handlePushLeftMouseButton() noexcept
+        int TimelineViewport::_handlePushLeftMouseButton() noexcept
         {
             TLRENDER_P();
 
@@ -588,17 +588,19 @@ namespace mrv
             if (p.compareOptions.mode == timeline::CompareMode::Wipe)
             {
                 _handleCompareWipe();
+                return 1;
             }
             else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
             {
                 _handleCompareOverlay();
+                return 1;
             }
             else
             {
                 if (Fl::event_shift() || p.actionMode == ActionMode::kSelection)
                 {
                     if (!mrv::feature_needs_solo_or_later())
-                        return;
+                        return 0;
 
                     p.lastEvent = FL_DRAG;
                     p.mousePos = _getFocus();
@@ -627,12 +629,12 @@ namespace mrv
                         }
 
                         p.lastEvent = FL_PUSH;
-                        return;
+                        return 1;
                     }
                     else if (p.actionMode == ActionMode::kVoice)
                     {
                         if (!p.player)
-                            return;
+                            return 0;
 
                         p.mousePos = _getFocus();
                         auto pos = _getRasterf();
@@ -698,11 +700,11 @@ namespace mrv
                                             break;
                                         }
                                         default:
-                                            return;
+                                            return 0;
                                         }
 #endif
                                         redrawWindows();
-                                        return;
+                                        return 1;
                                     }
                                 }
                             }
@@ -716,7 +718,7 @@ namespace mrv
                             case voice::RecordStatus::Recording:
                                 currentMouseData.pressed = true;
                                 redrawWindows();
-                                return;
+                                return 1;
                                 break;
                             default:
                                 break;
@@ -725,23 +727,24 @@ namespace mrv
                         else
                         {
                             if (dont_create_annotation)
-                                return;
+                                return 0;
 
                             bool allFrames = false;
                             auto annotation = p.player->createVoiceAnnotation(pos, allFrames);
                             auto voice = annotation->voices.back();
                             _startVoiceRecording(voice);
                         }
-                        return;
+                        return 1;
                     }
 #endif
 
-                    _handlePushLeftMouseButtonShapes();
+                    return _handlePushLeftMouseButtonShapes();
                 }
             }
+            return 0;
         }
 
-        void TimelineViewport::_handleDragSelection() noexcept
+        int TimelineViewport::_handleDragSelection() noexcept
         {
             TLRENDER_P();
             p.lastEvent = FL_DRAG;
@@ -757,6 +760,8 @@ namespace mrv
             setSelectionArea(area);
 
             redrawWindows();
+
+            return 1;
         }
 
         void TimelineViewport::handleViewSpinning() noexcept
@@ -797,7 +802,7 @@ namespace mrv
             }
         }
 
-        void TimelineViewport::_handleDragMiddleMouseButton() noexcept
+        int TimelineViewport::_handleDragMiddleMouseButton() noexcept
         {
             TLRENDER_P();
 
@@ -823,7 +828,7 @@ namespace mrv
                 if (Fl::event_shift())
                 {
                     if (changed)
-                        return;
+                        return 0;
 
                     auto o = p.environmentMapOptions;
                     o.focalLength += dx * speed;
@@ -842,7 +847,7 @@ namespace mrv
                     }
 
                     if (changed)
-                        return;
+                        return 1;
 
                     const auto viewportSize = getViewportSize();
 
@@ -883,7 +888,7 @@ namespace mrv
                     }
                 }
 
-                return;
+                return 1;
             }
             else
             {
@@ -892,6 +897,7 @@ namespace mrv
                 pos.y = p.viewPosMousePress.y + (p.mousePos.y - p.mousePress.y);
                 setViewPosAndZoom(pos, p.viewZoom);
             }
+            return 1;
         }
 
         void
@@ -1190,9 +1196,9 @@ namespace mrv
                 p.pressure = 1.F;
 #endif
                 p.mousePos = _getFocus();
-                _handlePushLeftMouseButton();
+                ret = _handlePushLeftMouseButton();
                 _updatePixelBar();
-                return 1;
+                return ret;
                 /* fall through */
             case Fl::Pen::DRAW:
             {
@@ -1302,7 +1308,7 @@ namespace mrv
                         return 1;
                     }
 
-                    _handlePushLeftMouseButton();
+                    return _handlePushLeftMouseButton();
                 }
                 else if (Fl::event_button2())
                 {
@@ -1551,17 +1557,18 @@ namespace mrv
 
                     if (Fl::event_ctrl())
                     {
-                        _handleDragMiddleMouseButton();
+                        return _handleDragMiddleMouseButton();
                     }
                     else
                     {
-                        _handleDragLeftMouseButton();
+                        int ret = _handleDragLeftMouseButton();
                         _updatePixelBar();
+                        return ret;
                     }
                 }
                 else if (Fl::event_button2())
                 {
-                    _handleDragMiddleMouseButton();
+                    return _handleDragMiddleMouseButton();
                 }
                 else if (Fl::event_button3())
                 {

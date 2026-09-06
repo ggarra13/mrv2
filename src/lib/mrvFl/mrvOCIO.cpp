@@ -23,7 +23,6 @@ namespace
     const char* kModule = "ocio";
 
     static std::string kInactive = _("None");
-    static std::string kAutomatic = _("Automatic");
 
 } // namespace
 
@@ -419,7 +418,6 @@ namespace mrv
             views.clear();
 
             inputs.push_back(kInactive.c_str());
-            inputs.push_back(kAutomatic.c_str());
             looks.push_back(kInactive.c_str());
             views.push_back(kInactive.c_str());
 
