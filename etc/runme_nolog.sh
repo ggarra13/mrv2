@@ -36,6 +36,10 @@ if [[ $KERNEL == *Windows* ]]; then
 	cd certificates
 	./create_windows_cert.sh
 	cd -
+    else
+	echo
+	echo "Windows .pfx certificate exists"
+	echo
     fi
 elif [[ $KERNEL == *Darwin* ]]; then
     true
