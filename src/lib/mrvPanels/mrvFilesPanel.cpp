@@ -164,11 +164,11 @@ namespace mrv
                     std::string key;
                     if (r.sort == Sort::FileName)
                     {
-                        key = path.getFileName(listdir);
+                        key = string::toLower(path.getFileName(listdir));
                     }
                     else if (r.sort == Sort::Directory)
                     {
-                        key = path.getDirectory();
+                        key = string::toLower(path.getDirectory());
                     }
                     else if (r.sort == Sort::User)
                     {

@@ -1,15 +1,16 @@
 v1.7.6
 ======
 
-- Bug/MacOS:  "Help->Update mrv2" would always download and install the amd64 version of the installer.
+- Bug/MacOS:  "Help->Update mrv2" would always download and install the amd64 version of the installer.  It was fixed in v1.7.5.
 
-- Windows: Added Text Insert icon to avoid the Vulkan dreaded ghosted square.
+- Windows: Added Text Insert icon to avoid the Vulkan dreaded ghosted square when annotating text.
 
-- UI: Added hand drawn annotations and easing without a Solo License.  Note that area tools and other drawing tools like arrows remain on the Solo License.
+- UI: Added hand drawn annotations and erasing without a Solo License.  Note that area tools and other drawing tools like arrows remain on the Solo License.
 
 - Core: Added SVG reader.  Works with all .svg with paths.  Does not currently decode SVGs with text, though.
 - Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the features depend on your hardware and drivers.
 - Core: Added the NVidia headers to the build, so the Linux branch will compile without the need for local files.
+- Core: Added OpenColorIO's LUT inversion on Color Panel.
 
 Library updates:
     - OpenColorIO 2.5.2

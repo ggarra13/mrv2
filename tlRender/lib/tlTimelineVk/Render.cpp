@@ -2503,6 +2503,10 @@ namespace tl
                     throw std::runtime_error("Cannot create OCIO transform");
                 }
                 p.lutData->transform->setSrc(p.lutOptions.fileName.c_str());
+                p.lutData->transform->setDirection(
+                    timeline::LUTDirection::Inverse == p.lutOptions.direction ?
+                    OCIO::TRANSFORM_DIR_INVERSE :
+                    OCIO::TRANSFORM_DIR_FORWARD);
                 p.lutData->transform->validate();
 
                 p.lutData->processor =

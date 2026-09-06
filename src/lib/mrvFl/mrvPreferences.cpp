@@ -656,7 +656,7 @@ namespace mrv
             setConfig(ocio::ocioDefault);
         }
 
-        ocio.get("use_ocio_auto_ics", tmp, 1);
+        ocio.get("use_ocio_auto_ics", tmp, 0);
         uiPrefs->uiOCIOUseAutoICS->value(tmp);
 
         ocio.get("use_default_display_view", tmp, 0);
@@ -2135,6 +2135,15 @@ namespace mrv
         {
             ui->uiOCIO->hide();
             ui->uiCOLORS->show();
+        }
+
+        if (uiPrefs->uiOCIOUseAutoICS->value())
+        {
+            ui->uiAutoICS->value(1);
+        }
+        else
+        {
+            ui->uiAutoICS->value(0);
         }
 
         // Handle image options
