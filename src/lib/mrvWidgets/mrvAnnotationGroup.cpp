@@ -16,7 +16,7 @@
 
 #define BUTTON_H 20
 #define GROUP_MARGIN 8 // compensates for FL_ROUND_BUTTON (?)
-#define TOOLS_MARGIN 10
+#define TOOLS_MARGIN 30
 
 namespace mrv
 {
@@ -108,7 +108,7 @@ namespace mrv
         _button = new Fl_Button(
             x,       // margin leaves room for FL_ROUND_BOX
             y + GROUP_MARGIN,       // margin leaves room for FL_ROUND_BOX
-            w, // width same as group within margin
+            w - TOOLS_MARGIN, // width same as group within margin
             BUTTON_H);              // button height fixed size
         _button->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
         _button->labelsize(16);
@@ -117,13 +117,13 @@ namespace mrv
         _button->color(Fl_Color(255)); //
         _button->callback((Fl_Callback*)toggle_tab_cb, this);
 
-        _add = new Fl_Button(x + w - (GROUP_MARGIN * 2 + TOOLS_MARGIN * 2),
-                             y + GROUP_MARGIN,
-                             TOOLS_MARGIN / 2, BUTTON_H, "+");
+        // _add = new Fl_Button(x + w - (GROUP_MARGIN * 2 + TOOLS_MARGIN * 2),
+        //                      y + GROUP_MARGIN,
+        //                      TOOLS_MARGIN, BUTTON_H, "+");
 
-        _remove = new Fl_Button(x + w - (GROUP_MARGIN * 2 + TOOLS_MARGIN),
-                                y + GROUP_MARGIN,
-                                TOOLS_MARGIN / 2, BUTTON_H, "-");
+        // _remove = new Fl_Button(x + w - (GROUP_MARGIN * 2 + TOOLS_MARGIN),
+        //                         y + GROUP_MARGIN,
+        //                         TOOLS_MARGIN, BUTTON_H, "-");
 
         _contents = new Pack(
             _button->x(),                    // lines up with button on x

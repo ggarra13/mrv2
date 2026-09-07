@@ -5,8 +5,25 @@
 
 #include <tlDraw/Shape.h>
 
+#include <cstdio>
+#include <ctime>
+
 namespace tl
 {
+    std::string current_timestamp_string()
+    {
+        std::time_t t = std::time(nullptr);
+        std::tm tmv;
+#if defined(_WIN32)
+        localtime_s(&tmv, &t);
+#else
+        localtime_r(&t, &tmv);
+#endif
+        char buf[32];
+        std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M", &tmv);
+        return std::string(buf);
+    }
+
     namespace draw
     {
         void to_json(nlohmann::json& j, const Shape& value)
@@ -64,7 +81,7 @@ namespace tl
             if (j.contains("date"))
                 j.at("date").get_to(value.date);
             else
-                value.date = "Today";
+                value.date = current_timestamp_string();
         }
 
     } // namespace draw
