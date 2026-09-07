@@ -4,7 +4,9 @@
 
 
 
-#include "mrvAnnotationGroup.h"
+#include "mrvWidgets/mrvAnnotationGroup.h"
+
+#include "mrvOS/mrvI8N.h"
 
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Window.H>
@@ -108,7 +110,7 @@ namespace mrv
         _button = new Fl_Button(
             x,       // margin leaves room for FL_ROUND_BOX
             y + GROUP_MARGIN,       // margin leaves room for FL_ROUND_BOX
-            w - TOOLS_MARGIN, // width same as group within margin
+            w - TOOLS_MARGIN * 2, // width same as group within margin
             BUTTON_H);              // button height fixed size
         _button->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
         _button->labelsize(16);
@@ -117,13 +119,15 @@ namespace mrv
         _button->color(Fl_Color(255)); //
         _button->callback((Fl_Callback*)toggle_tab_cb, this);
 
-        // _add = new Fl_Button(x + w - (GROUP_MARGIN * 2 + TOOLS_MARGIN * 2),
-        //                      y + GROUP_MARGIN,
-        //                      TOOLS_MARGIN, BUTTON_H, "+");
+        _add = new Fl_Button(x + w - (GROUP_MARGIN + TOOLS_MARGIN * 2),
+                             y + GROUP_MARGIN,
+                             TOOLS_MARGIN, BUTTON_H, "+");
+        _add->copy_tooltip(_("Add a new note at the current time."));
 
-        // _remove = new Fl_Button(x + w - (GROUP_MARGIN * 2 + TOOLS_MARGIN),
-        //                         y + GROUP_MARGIN,
-        //                         TOOLS_MARGIN, BUTTON_H, "-");
+        _remove = new Fl_Button(x + w - (GROUP_MARGIN + TOOLS_MARGIN),
+                                y + GROUP_MARGIN,
+                                TOOLS_MARGIN, BUTTON_H, "-");
+        _remove->copy_tooltip(_("Remove the current note."));
 
         _contents = new Pack(
             _button->x(),                    // lines up with button on x

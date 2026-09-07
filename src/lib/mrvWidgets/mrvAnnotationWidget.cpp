@@ -181,9 +181,9 @@ namespace mrv
         int cy = y() + TITLE_H / 2;
 
         // Filled marker circle with a thin dark outline
-        fl_color(note_->color);
+        fl_color(note_->circle_color);
         fl_pie(cx - circle_r, cy - circle_r, circle_d, circle_d, 0.0, 360.0);
-        fl_color(fl_darker(note_->color));
+        fl_color(fl_darker(note_->circle_color));
         fl_arc(cx - circle_r, cy - circle_r, circle_d, circle_d, 0.0, 360.0);
 
         // Timecode (bold, left of center, after the circle)

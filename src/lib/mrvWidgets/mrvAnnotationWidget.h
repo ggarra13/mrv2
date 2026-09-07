@@ -80,8 +80,8 @@ namespace mrv
     const std::string &date_string() const { return note_->date; }
     void date_string(const std::string &d) { note_->date = d; redraw(); }
 
-    Fl_Color circle_color() const { return note_->color; }
-    void circle_color(Fl_Color c) { note_->color = c; redraw(); }
+    Fl_Color circle_color() const { return note_->circle_color; }
+    void circle_color(Fl_Color c) { note_->circle_color = c; redraw(); }
 
     std::string note_text() const { return input_->value() ? input_->value() : ""; }
     void note_text(const std::string &t) { input_->value(t.c_str()); }

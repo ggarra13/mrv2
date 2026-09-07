@@ -65,7 +65,7 @@ namespace tl
         {
             to_json(j, static_cast<const Shape&>(value));
             j["text"] = value.text;
-            j["color"] = value.color;
+            j["circle_color"] = value.circle_color;
             j["date"] = value.date;
             j["type"] = "Note";
         }
@@ -74,10 +74,10 @@ namespace tl
         {
             from_json(j, static_cast<Shape&>(value));
             j.at("text").get_to(value.text);
-            if (j.contains("color"))
-                j.at("color").get_to(value.color);
+            if (j.contains("circle_color"))
+                j.at("circle_color").get_to(value.color);
             else
-                value.color = FL_RED;
+                value.circle_color = FL_RED;
             if (j.contains("date"))
                 j.at("date").get_to(value.date);
             else

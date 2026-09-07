@@ -71,7 +71,7 @@ namespace tl
 
 
         public:
-            Fl_Color color = FL_RED;
+            Fl_Color circle_color = FL_RED;
             std::string text;
             std::string date = "Today";
         };

@@ -522,6 +522,7 @@ namespace mrv
             if (!player)
                 return;
 
+
             auto ag = new AnnotationGroup(X, 40, g->w(), 20, _("Notes"));
             b = ag->button();
             b->labelsize(14);
@@ -554,7 +555,7 @@ namespace mrv
             {
                 for (auto shape : annotation->shapes)
                 {
-                    if (auto s  = dynamic_cast<tl::draw::NoteShape* >(shape.get()))
+                    if (auto s = dynamic_cast<tl::draw::NoteShape* >(shape.get()))
                     {
                         auto a = new AnnotationWidget(
                             X, 40, g->w(), 100, annotation->time, s);
