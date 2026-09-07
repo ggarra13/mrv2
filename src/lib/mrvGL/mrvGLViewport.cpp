@@ -820,11 +820,6 @@ namespace mrv
                     _drawRectangleOutline(selection, color, mvp);
                 }
 
-                if (panel::annotationsPanel)
-                {
-                    panel::annotationsPanel->notes->value("");
-                }
-
                 if (p.showAnnotations &&
                     (!annotations.empty() || !voannotations.empty()))
                 {

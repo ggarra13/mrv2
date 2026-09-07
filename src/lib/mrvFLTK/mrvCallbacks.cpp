@@ -167,10 +167,10 @@ namespace mrv
             c->uiStartFrame->setTime(start);
             c->uiEndFrame->setTime(end);
 
-            if (panel::annotationsPanel)
-            {
-                panel::annotationsPanel->notes->value("");
-            }
+            // if (panel::annotationsPanel)
+            // {
+            //     panel::annotationsPanel->notes->value("");
+            // }
         }
 
     } // namespace

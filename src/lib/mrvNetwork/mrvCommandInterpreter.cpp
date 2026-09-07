@@ -691,7 +691,7 @@ namespace mrv
                 clear_note_annotation_cb(ui);
                 if (annotationsPanel)
                 {
-                    annotationsPanel->notes->value("");
+                    //annotationsPanel->notes->value("");
                 }
             }
             else if (c == "Create Note Annotation")
@@ -706,7 +706,7 @@ namespace mrv
                 add_note_annotation_cb(ui, text);
                 if (annotationsPanel)
                 {
-                    annotationsPanel->notes->value(text.c_str());
+                    //annotationsPanel->notes->value(text.c_str());
                 }
             }
             else if (c == "Create Shape")

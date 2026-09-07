@@ -4,15 +4,15 @@
 
 #pragma once
 
-#include "mrvPanelWidget.h"
+#include "mrvPanels/mrvPanelWidget.h"
 
 class ViewerUI;
 class Fl_Button;
-class Fl_Multiline_Input;
 
 namespace mrv
 {
     class Button;
+    class AnnotationWidget;
 
     namespace panel
     {
@@ -23,7 +23,7 @@ namespace mrv
             Button* softBrush = nullptr;
 
         public:
-            Fl_Multiline_Input* notes = nullptr;
+            AnnotationWidget* notes = nullptr;
 
         public:
             AnnotationsPanel(ViewerUI* ui);

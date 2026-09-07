@@ -530,8 +530,7 @@ namespace mrv
             auto note = dynamic_cast< draw::NoteShape* >(shape.get());
             if (note)
             {
-                if (panel::annotationsPanel && alphamult == 1.F)
-                    panel::annotationsPanel->notes->value(note->text.c_str());
+                return;
             }
             else
             {

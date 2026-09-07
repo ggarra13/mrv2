@@ -25,6 +25,7 @@ endif()
 FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
 
 set(HEADERS
+    mrvAnnotationGroup.h
     mrvAudioButton.h
     mrvButton.h
     mrvBrowser.h
@@ -82,6 +83,7 @@ set(HEADERS
 set(SOURCES
     ${mrvWidgets_FLTK_UI_SRCS}
 
+    mrvAnnotationGroup.cpp
     mrvAudioButton.cpp
     mrvBrowser.cpp
     mrvButton.cpp

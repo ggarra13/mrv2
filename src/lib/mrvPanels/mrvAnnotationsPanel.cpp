@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include <FL/Fl_Choice.H>
+#include <FL/Fl_Pack.H>
 #include <FL/Fl_Radio_Round_Button.H>
 #include <FL/Fl_Round_Button.H>
 
@@ -15,6 +16,7 @@
 #include "mrvIcons/HardBrush.h"
 #include "mrvIcons/SoftBrush.h"
 
+#include "mrvWidgets/mrvAnnotationGroup.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvButton.h"
@@ -510,35 +512,25 @@ namespace mrv
             if (!open)
                 cg->close();
 
+            cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Notes"));
+            b = cg->button();
+            b->labelsize(14);
+            b->size(b->w(), 18);
+            cg->begin();
+
 #if 0
-            auto view = p.ui->uiView;
-            if (!view)
-                return;
+            Fl_Pack* ng = new Fl_Pack(X, 25, cg->w(), 140);
+            ng->begin();
 
-            auto player = view->getTimelinePlayer();
-            if (!player)
-                return;
 
-            auto times = player->getNoteAnnotationTimes();
-            for (auto time : times)
-            {
-                cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Notes"));
-                b = cg->button();
-                b->labelsize(12);
-                b->size(b->w(), 14);
-                cg->begin();
-
-                Fl_Group* ng = new Fl_Group(X, 25, cg->w(), 140);
-                ng->begin();
-
-                auto nV = new Widget<Fl_Multiline_Input>(X, 25, cg->w(), 140);
-                notes = nV;
-                notes->cursor_color(FL_RED);
-                notes->textsize(16);
-                notes->textcolor(FL_BLACK);
-                notes->wrap(true);
-                notes->when(FL_WHEN_CHANGED);
-                nV->callback(
+            auto nV = new Widget<Fl_Multiline_Input>(X, 25, cg->w(), 140);
+            notes = nV;
+            notes->cursor_color(FL_RED);
+            notes->textsize(16);
+            notes->textcolor(FL_BLACK);
+            notes->wrap(true);
+            notes->when(FL_WHEN_CHANGED);
+            nV->callback(
                 [=](auto o)
                     {
                         const std::string& text = o->value();
@@ -551,17 +543,33 @@ namespace mrv
                             add_note_annotation_cb(p.ui, text);
                         }
                     });
-                ng->end();
 
-                cg->end();
-                cg->close();
+            ng->end();
+#else
+            AnnotationGroup* ag;
+
+            auto view = p.ui->uiView;
+            if (!view) return;
+
+            auto player = view->getTimelinePlayer();
+            if (!player)
+                return;
+
+            auto times = player->getNoteAnnotationTimes();
+            std::cerr << "times.size()=" << times.size() << std::endl;
+            for (auto time : times)
+            {
+                ag = new AnnotationGroup(X, 20, g->w(), 20);
             }
 #endif
-            // key = prefix + "Notes";
-            // value = settings->getValue<std::any>(key);
-            // open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
-            // if (!open)
-            //     cg->close();
+
+            cg->end();
+
+            key = prefix + "Notes";
+            value = settings->getValue<std::any>(key);
+            open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+            if (!open)
+                cg->close();
         }
 
         void AnnotationsPanel::redraw()

@@ -1085,11 +1085,6 @@ namespace mrv
                 opacity = alpha;
 #endif
 
-            if (panel::annotationsPanel)
-            {
-                panel::annotationsPanel->notes->value("");
-            }
-
             const OTIO_NS::RationalTime& currentTime = player->currentTime();
 
             const auto& voannotations = p.player->getVoiceAnnotations();
