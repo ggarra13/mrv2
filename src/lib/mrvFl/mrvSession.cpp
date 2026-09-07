@@ -43,7 +43,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 18;
+    const int kSessionVersion = 19;
 } // namespace
 
 namespace
@@ -917,6 +917,12 @@ namespace mrv
                         {
                             auto actionMode = session["actionMode"];
                             view->setActionMode(actionMode);
+                        }
+
+                        if (version >= 18)
+                        {
+                            if (annotationsPanel)
+                                annotationsPanel->refresh();
                         }
 
                     }

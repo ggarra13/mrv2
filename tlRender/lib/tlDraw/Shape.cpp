@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
 #include <tlDraw/Shape.h>
 
 namespace tl
@@ -47,6 +48,8 @@ namespace tl
         {
             to_json(j, static_cast<const Shape&>(value));
             j["text"] = value.text;
+            // j["color"] = value.color;
+            // j["date"] = value.date;
             j["type"] = "Note";
         }
 
@@ -54,6 +57,14 @@ namespace tl
         {
             from_json(j, static_cast<Shape&>(value));
             j.at("text").get_to(value.text);
+            // if (j.contains("color"))
+            //     j.at("color").get_to(value.color);
+            // else
+            //     value.color = FL_RED;
+            // if (j.contains("date"))
+            //     j.at("date").get_to(value.date);
+            // else
+            //     value.date = "Today";
         }
 
     } // namespace draw

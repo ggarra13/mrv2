@@ -12,7 +12,6 @@ class Fl_Button;
 namespace mrv
 {
     class Button;
-    class AnnotationWidget;
 
     namespace panel
     {
@@ -22,8 +21,7 @@ namespace mrv
             Button* hardBrush = nullptr;
             Button* softBrush = nullptr;
 
-        public:
-            AnnotationWidget* notes = nullptr;
+            int openedNote = -1;
 
         public:
             AnnotationsPanel(ViewerUI* ui);

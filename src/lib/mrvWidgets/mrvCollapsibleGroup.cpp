@@ -90,7 +90,7 @@ namespace mrv
         const int x, const int y, const int w, const int h, const char* l) :
         Fl_Group(x, y, w, h, l)
     {
-        
+
         // Use a border box for now, so we can see our bounds in parent
         // mrv::Pack.
         // box(FL_BORDER_BOX);
@@ -191,7 +191,7 @@ namespace mrv
         _contents->hide();
         relabel_button();
         layout();           // layout changed
-        window()->redraw(); // force redraw (_contents->hide()/show() doesn't)
+        window()->redraw(); // force redraw (_contents->hide()/show() doesn't)c
     }
 
 } // namespace mrv

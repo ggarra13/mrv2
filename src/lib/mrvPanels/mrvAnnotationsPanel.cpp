@@ -16,7 +16,7 @@
 #include "mrvIcons/HardBrush.h"
 #include "mrvIcons/SoftBrush.h"
 
-#include "mrvWidgets/mrvAnnotationGroup.h"
+#include "mrvWidgets/mrvAnnotationWidget.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvButton.h"
@@ -38,6 +38,7 @@ namespace mrv
 {
     namespace panel
     {
+
         AnnotationsPanel::AnnotationsPanel(ViewerUI* ui) :
             PanelWidget(ui)
         {
@@ -512,41 +513,31 @@ namespace mrv
             if (!open)
                 cg->close();
 
-            cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Notes"));
+            cg = new CollapsibleGroup(X, 40, g->w(), 20, _("Notes"));
             b = cg->button();
             b->labelsize(14);
             b->size(b->w(), 18);
+            b->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                    if (cg->is_open())
+                        cg->close();
+                    else
+                        cg->open();
+
+                    const std::string& prefix = annotationsPanel->tab_prefix();
+                    const std::string key = prefix + "Notes";
+
+                    App* app = App::ui->app;
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
+
+                    annotationsPanel->refresh();
+                },
+                cg);
+
             cg->begin();
-
-#if 0
-            Fl_Pack* ng = new Fl_Pack(X, 25, cg->w(), 140);
-            ng->begin();
-
-
-            auto nV = new Widget<Fl_Multiline_Input>(X, 25, cg->w(), 140);
-            notes = nV;
-            notes->cursor_color(FL_RED);
-            notes->textsize(16);
-            notes->textcolor(FL_BLACK);
-            notes->wrap(true);
-            notes->when(FL_WHEN_CHANGED);
-            nV->callback(
-                [=](auto o)
-                    {
-                        const std::string& text = o->value();
-                        if (text.empty())
-                        {
-                            clear_note_annotation_cb(p.ui);
-                        }
-                        else
-                        {
-                            add_note_annotation_cb(p.ui, text);
-                        }
-                    });
-
-            ng->end();
-#else
-            AnnotationGroup* ag;
 
             auto view = p.ui->uiView;
             if (!view) return;
@@ -555,13 +546,20 @@ namespace mrv
             if (!player)
                 return;
 
-            auto times = player->getNoteAnnotationTimes();
-            std::cerr << "times.size()=" << times.size() << std::endl;
-            for (auto time : times)
+            auto annotations = player->getAllAnnotations();
+            for (auto annotation : annotations)
             {
-                ag = new AnnotationGroup(X, 20, g->w(), 20);
+                for (auto shape : annotation->shapes)
+                {
+                    if (auto s  = dynamic_cast<tl::draw::NoteShape* >(shape.get()))
+                    {
+                        auto ag = new AnnotationWidget(
+                            X, 20, g->w(), 100,
+                            annotation->time.to_timecode(), s);
+                        ag->set_collapsed(true);
+                    }
+                }
             }
-#endif
 
             cg->end();
 
@@ -570,6 +568,7 @@ namespace mrv
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
+
         }
 
         void AnnotationsPanel::redraw()
