@@ -21,8 +21,6 @@ namespace mrv
             Button* hardBrush = nullptr;
             Button* softBrush = nullptr;
 
-            int openedNote = -1;
-
         public:
             AnnotationsPanel(ViewerUI* ui);
             virtual ~AnnotationsPanel() {};

@@ -35,6 +35,8 @@
 
 #include <tlDraw/Shape.h>
 
+#include <opentime/rationalTime.h>
+
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Multiline_Input.H>
 #include <string>
@@ -48,7 +50,7 @@ namespace mrv
         //                 widget will remember this as the height to restore
         //                 to when the user re-expands it.
     AnnotationWidget(int X, int Y, int W, int H,
-                     const std::string& timecode,
+                     const OTIO_NS::RationalTime& time,
                      tl::draw::NoteShape* note);
 
     // Fl_Group overrides
@@ -72,8 +74,8 @@ namespace mrv
     bool has_note_text() const;
 
     // Accessors
-    const std::string &timecode() const { return timecode_; }
-    void timecode(const std::string &tc) { timecode_ = tc; redraw(); }
+    const OTIO_NS::RationalTime &time() const { return time_; }
+    void time(const OTIO_NS::RationalTime &tc) { time_ = tc; redraw(); }
 
     const std::string &date_string() const { return note_->date; }
     void date_string(const std::string &d) { note_->date = d; redraw(); }
@@ -91,8 +93,8 @@ namespace mrv
     static const int TITLE_H = 28;
 
 private:
-    tl::draw::NoteShape* note_;
-    std::string timecode_;
+    tl::draw::NoteShape*  note_;
+    OTIO_NS::RationalTime time_;
 
     Fl_Multiline_Input *input_;
 

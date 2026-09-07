@@ -13,10 +13,10 @@ namespace mrv
 {
     AnnotationWidget::AnnotationWidget(
         int X, int Y, int W, int H,
-        const std::string& timecode,
+        const OTIO_NS::RationalTime& time,
         tl::draw::NoteShape* note)
         : Fl_Group(X, Y, W, H),
-          timecode_(timecode),
+          time_(time),
           note_(note),
           input_(nullptr),
           collapsed_(false),
@@ -106,6 +106,7 @@ namespace mrv
                 measure_note_size(avail_w, mw, mh);
                 if (mw > avail_w) mw = avail_w;  // never exceed the card width
 
+                input_->insert(0);
                 input_->resize(x() + pad_, y() + TITLE_H + pad_, mw, mh);
                 input_->deactivate();
                 note_->text = input_->value();
@@ -190,7 +191,9 @@ namespace mrv
         fl_color(FL_FOREGROUND_COLOR);
         int tc_x = cx + circle_r + 8;
         int tc_w = w() / 2;
-        fl_draw(timecode_.c_str(), tc_x, y(), tc_w, TITLE_H,
+
+        const std::string& timecode = time_.to_timecode();
+        fl_draw(timecode.c_str(), tc_x, y(), tc_w, TITLE_H,
                 (Fl_Align)(FL_ALIGN_LEFT | FL_ALIGN_INSIDE));
 
         // Creation date (regular weight, right-aligned)

@@ -16,6 +16,7 @@
 #include "mrvIcons/HardBrush.h"
 #include "mrvIcons/SoftBrush.h"
 
+#include "mrvWidgets/mrvAnnotationGroup.h"
 #include "mrvWidgets/mrvAnnotationWidget.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
@@ -513,8 +514,16 @@ namespace mrv
             if (!open)
                 cg->close();
 
-            cg = new CollapsibleGroup(X, 40, g->w(), 20, _("Notes"));
-            b = cg->button();
+
+            auto view = p.ui->uiView;
+            if (!view) return;
+
+            auto player = view->getTimelinePlayer();
+            if (!player)
+                return;
+
+            auto ag = new AnnotationGroup(X, 40, g->w(), 20, _("Notes"));
+            b = ag->button();
             b->labelsize(14);
             b->size(b->w(), 18);
             b->callback(
@@ -535,16 +544,10 @@ namespace mrv
 
                     annotationsPanel->refresh();
                 },
-                cg);
+                ag);
 
-            cg->begin();
+            ag->begin();
 
-            auto view = p.ui->uiView;
-            if (!view) return;
-
-            auto player = view->getTimelinePlayer();
-            if (!player)
-                return;
 
             auto annotations = player->getAllAnnotations();
             for (auto annotation : annotations)
@@ -553,15 +556,14 @@ namespace mrv
                 {
                     if (auto s  = dynamic_cast<tl::draw::NoteShape* >(shape.get()))
                     {
-                        auto ag = new AnnotationWidget(
-                            X, 20, g->w(), 100,
-                            annotation->time.to_timecode(), s);
-                        ag->set_collapsed(true);
+                        auto a = new AnnotationWidget(
+                            X, 40, g->w(), 100, annotation->time, s);
+                        a->set_collapsed(true);
                     }
                 }
             }
 
-            cg->end();
+            ag->end();
 
             key = prefix + "Notes";
             value = settings->getValue<std::any>(key);
