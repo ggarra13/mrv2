@@ -52,8 +52,8 @@ namespace mrv
                 [](Fl_Widget* w, void* d)
                 {
                     ViewerUI* ui = static_cast< ViewerUI* >(d);
-                    delete annotationsPanel;
-                    annotationsPanel = nullptr;
+                    delete notesPanel;
+                    notesPanel = nullptr;
                     ui->uiMain->fill_menu(ui->uiMenuBar);
                 },
                 ui);
