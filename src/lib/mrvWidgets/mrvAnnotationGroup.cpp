@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvWidgets/mrvAnnotationGroup.h"
@@ -284,6 +286,7 @@ namespace mrv
                     player_->seek(w->time());
             }
         }
+
     }
 
     AnnotationWidget *AnnotationGroup::add_annotation()
