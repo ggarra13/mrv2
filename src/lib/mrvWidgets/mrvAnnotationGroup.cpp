@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
+#include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvWidgets/mrvAnnotationGroup.h"
 #include "mrvWidgets/mrvAnnotationWidget.h"
@@ -19,7 +19,7 @@
 #include <cstdio>
 
 #define BUTTON_H 20
-#define GROUP_MARGIN 8 // compensates for FL_ROUND_BUTTON (?)
+#define GROUP_MARGIN 4
 #define TOOLS_MARGIN 30
 
 static const int HEADER_H = 28;
@@ -102,15 +102,9 @@ namespace mrv
         const int x, const int y, const int w, const int h, const char* l) :
         Fl_Group(x, y, w, h, l)
     {
-
-        // Use a border box for now, so we can see our bounds in parent
-        // mrv::Pack.
-        // box(FL_BORDER_BOX);
-
         // Disable label from being shown; we show the label only in the button.
         labeltype(FL_NO_LABEL);
 
-        // NOTNEEDED Fl_Group::begin();
         //  Button
         button_ = new Fl_Button(
             x,       // margin leaves room for FL_ROUND_BOX
@@ -145,10 +139,10 @@ namespace mrv
         // end()contents_; we don't want it to begin() sucking up child widgets
         // on return
        contents_->end();
-        Fl_Group::end();
+       Fl_Group::end();
 
-        relabel_button(); // relabel button once pack created
-        resizable(0); // prevent FLTK auto-sizing -- we handle children ourself
+       relabel_button(); // relabel button once pack created
+       resizable(0); // prevent FLTK auto-sizing -- we handle children ourself
     }
 
     AnnotationGroup::~AnnotationGroup()
@@ -186,8 +180,8 @@ namespace mrv
 
     void AnnotationGroup::add(Fl_Widget* w)
     {
-       contents_->add(w);
-       contents_->redraw();
+        contents_->add(w);
+        contents_->redraw();
     }
 
     void AnnotationGroup::resize(int X, int Y, int W, int H)
@@ -201,7 +195,7 @@ namespace mrv
     {
         if (is_collapsed())
             return; // already open? do nothing
-       contents_->show();
+        contents_->show();
         relabel_button();
         layout();           // layout changed
         window()->redraw(); // force redraw (_contents->hide()/show() doesn't)
@@ -216,11 +210,6 @@ namespace mrv
         relabel_button();
         layout();           // layout changed
         window()->redraw(); // force redraw (_contents->hide()/show() doesn't)c
-    }
-
-    void AnnotationGroup::draw()
-    {
-        Fl_Group::draw();
     }
 
     AnnotationWidget*
@@ -288,6 +277,11 @@ namespace mrv
         for (AnnotationWidget *w : annotations_) {
             if (w != keep_active && !w->is_collapsed()) {
                 w->set_collapsed(true);
+            }
+            else
+            {
+                if (player_)
+                    player_->seek(w->time());
             }
         }
     }

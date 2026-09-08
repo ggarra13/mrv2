@@ -941,7 +941,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar
+          label TopBar open
           xywh {0 30 934 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -1126,7 +1126,16 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             } {
               Fl_Button uiAutoICS {
                 label {Auto  ICS}
-                callback {std::string help = _("Automatically select Input Color Space from file and OpenEXR metadata. ");
+                callback {auto player = uiView->getTimelinePlayer();
+if (!player)
+    return;
+    
+tl::file::Path path = player->path();
+std::string extension = path.getExtension();
+if (extension != ".exr")
+    return;
+
+std::string help = _("Automatically select Input Color Space from file and OpenEXR metadata. ");
 
 int value = !o->value();
 
@@ -1156,7 +1165,7 @@ else
     o->copy_tooltip(help.c_str());
     o->labelcolor(FL_FOREGROUND_COLOR);
     o->value(0);      
-}}
+}} selected
                 tooltip {Automatically select Input Color Space from file and OpenEXR metadata.} xywh {247 30 38 29} down_box DOWN_BOX selection_color 14 labelsize 10 align 144
                 class {mrv::Button}
               }
@@ -1201,7 +1210,7 @@ uiView->updateOCIOOptions();} open
             xywh {0 86 934 472} labeltype NO_LABEL hide resizable
           }
           Fl_Pack uiViewGroup {
-            label ViewGroup open
+            label ViewGroup
             xywh {0 59 934 501} type HORIZONTAL box FLAT_BOX labeltype NO_LABEL
             code3 {o->fixed( uiToolsGroup, uiToolsGroup->w() );
 uiMain->workspace = uiViewGroup;}
@@ -1322,7 +1331,7 @@ if (Fl::event_clicks() >= 1)
 {
    mrv::panel::annotations_panel_cb( nullptr, v);
    Fl::event_clicks(0);
-}} selected
+}}
                   tooltip {Eraser Tool} image {../../icons/Erase.svg} compress_image 1 xywh {2 164 40 35} down_box DOWN_BOX selection_color 14
                   class {mrv::Button}
                 }
@@ -1540,7 +1549,7 @@ uiMain->set_dock(o);}
             }
           }
           Fl_Group uiTimelineGroup {
-            label uiTimelineGroup open
+            label uiTimelineGroup
             xywh {0 560 934 30} box FLAT_BOX color 51 labeltype NO_LABEL
             class {mrv::TimelineGroup}
           } {

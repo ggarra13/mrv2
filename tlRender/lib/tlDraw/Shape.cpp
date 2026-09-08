@@ -75,7 +75,7 @@ namespace tl
             from_json(j, static_cast<Shape&>(value));
             j.at("text").get_to(value.text);
             if (j.contains("circle_color"))
-                j.at("circle_color").get_to(value.color);
+                j.at("circle_color").get_to(value.circle_color);
             else
                 value.circle_color = FL_RED;
             if (j.contains("date"))

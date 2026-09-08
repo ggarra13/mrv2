@@ -168,6 +168,7 @@ namespace mrv
                 {"Compare", (comparePanel != nullptr)},
                 {"Media Information", (imageInfoPanel != nullptr)},
                 {"Annotations", (annotationsPanel != nullptr)},
+                {"Notes", (notesPanel != nullptr)},
                 {"Devices", (devicesPanel != nullptr)},
                 {"Environment Map", (environmentMapPanel != nullptr)},
                 {"Settings", (settingsPanel != nullptr)},
@@ -200,6 +201,8 @@ namespace mrv
                 imageInfoPanel->save();
             if (annotationsPanel)
                 annotationsPanel->save();
+            if (notesPanel)
+                notesPanel->save();
 #ifdef TLRENDER_NDI
             if (ndiPanel)
                 ndiPanel->save();
@@ -921,8 +924,8 @@ namespace mrv
 
                         if (version >= 18)
                         {
-                            if (annotationsPanel)
-                                annotationsPanel->refresh();
+                            if (notesPanel)
+                                notesPanel->refresh();
                         }
 
                     }

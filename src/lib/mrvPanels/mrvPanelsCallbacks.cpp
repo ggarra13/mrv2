@@ -18,6 +18,7 @@ namespace mrv
         SettingsPanel* settingsPanel = nullptr;
         EnvironmentMapPanel* environmentMapPanel = nullptr;
         LogsPanel* logsPanel = nullptr;
+        NotesPanel* notesPanel = nullptr;
         DevicesPanel* devicesPanel = nullptr;
         ColorAreaPanel* colorAreaPanel = nullptr;
         AnnotationsPanel* annotationsPanel = nullptr;
@@ -132,6 +133,8 @@ namespace mrv
                 stereo3D_panel_cb(nullptr, ui);
             if (backgroundPanel && backgroundPanel->is_panel())
                 background_panel_cb(nullptr, ui);
+            if (notesPanel && notesPanel->is_panel())
+                notes_panel_cb(nullptr, ui);
 #ifdef MRV2_NETWORK
             if (webrtcPanel && webrtcPanel->is_panel())
                 webrtc_panel_cb(nullptr, ui);
@@ -170,6 +173,8 @@ namespace mrv
                 color_area_panel_cb(nullptr, ui);
             if (annotationsPanel && !annotationsPanel->is_panel())
                 annotations_panel_cb(nullptr, ui);
+            if (notesPanel && !notesPanel->is_panel())
+                notes_panel_cb(nullptr, ui);
             if (imageInfoPanel && !imageInfoPanel->is_panel())
                 image_info_panel_cb(nullptr, ui);
             if (histogramPanel && !histogramPanel->is_panel())
@@ -349,6 +354,26 @@ namespace mrv
                 return;
             }
             colorAreaPanel = new ColorAreaPanel(ui);
+            ui->uiMain->fill_menu(ui->uiMenuBar);
+        }
+
+        void notes_panel_cb(Fl_Widget* w, ViewerUI* ui)
+        {
+            bool send = ui->uiPrefs->SendUI->value();
+            if (send)
+            {
+                tcp->pushMessage(
+                    "Notes Panel", static_cast<bool>(!notesPanel));
+            }
+
+            if (notesPanel)
+            {
+                delete notesPanel;
+                notesPanel = nullptr;
+                ui->uiMain->fill_menu(ui->uiMenuBar);
+                return;
+            }
+            notesPanel = new NotesPanel(ui);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 

@@ -120,12 +120,13 @@ namespace mrv
             input_->activate();
             input_->resize(x() + pad_, y() + TITLE_H + pad_,
                            w() - 2 * pad_, expanded_h_ - TITLE_H - 2 * pad_);
+            input_->take_focus();
             input_->show();
             Fl_Group::resize(x(), y(), w(), expanded_h_);
             collapsed_ = false;
             shrunk_ = false;
 
-        if (expand_cb_) expand_cb_(this);
+            if (expand_cb_) expand_cb_(this);
         }
 
         if (window()) window()->redraw();  // let an Fl_Pack re-flow siblings

@@ -15,6 +15,8 @@
 namespace mrv
 {
 
+    class TimelinePlayer;
+
     class AnnotationGroup : public Fl_Group
     {
     public:
@@ -42,8 +44,6 @@ namespace mrv
         Fl_Button* button() { return button_; }
         void layout();
 
-        void draw() FL_OVERRIDE;
-
         // Open/close the widget
         void open();
         void close();
@@ -52,6 +52,9 @@ namespace mrv
         bool is_collapsed() const { return collapsed_; }
         void set_collapsed(bool collapse);
         void toggle_collapsed() { set_collapsed(!collapsed_); }
+
+        // Set timeline player
+        void setPlayer(TimelinePlayer* player) { player_ = player; }
 
         // Is widget open?
         // (expanded) note; every other note in the group is collapsed.
@@ -71,6 +74,7 @@ namespace mrv
         int  pad_;
         int  next_id_;
 
+        TimelinePlayer* player_ = nullptr;
 
         Fl_Button* add_btn_;
         Fl_Button* remove_btn_;
