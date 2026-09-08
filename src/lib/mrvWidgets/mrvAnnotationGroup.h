@@ -7,10 +7,12 @@
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvAnnotationWidget.h"
 
+#include <tlCore/ValueObserver.h>
+
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
 
-
+#include <memory>
 
 namespace mrv
 {
@@ -54,7 +56,7 @@ namespace mrv
         void toggle_collapsed() { set_collapsed(!collapsed_); }
 
         // Set timeline player
-        void setPlayer(TimelinePlayer* player) { player_ = player; }
+        void setPlayer(TimelinePlayer* player);
 
         // Is widget open?
         // (expanded) note; every other note in the group is collapsed.
@@ -75,6 +77,10 @@ namespace mrv
         int  next_id_;
 
         TimelinePlayer* player_ = nullptr;
+
+        void currentTimeChanged(const OTIO_NS::RationalTime& value);
+        std::shared_ptr<tl::observer::ValueObserver<OTIO_NS::RationalTime> >
+            currentTimeObserver;
 
         Fl_Button* add_btn_;
         Fl_Button* remove_btn_;

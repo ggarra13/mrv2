@@ -2243,8 +2243,6 @@ namespace mrv
     {
         TLRENDER_P();
 
-        DBG;
-
         std::shared_ptr<TimelinePlayer> player;
         if (!p.activeFiles.empty() && isRunning() && p.player)
         {
@@ -2481,6 +2479,9 @@ namespace mrv
                 if (isRunning())
                 {
                     panel::redrawThumbnails();
+
+                    if (panel::notesPanel)
+                        panel::notesPanel->refresh();
                 }
             }
         }

@@ -40,7 +40,12 @@ namespace mrv
     namespace panel
     {
 
+        struct NotesPanel::Private
+        {
+        };
+
         NotesPanel::NotesPanel(ViewerUI* ui) :
+            _r(new Private),
             PanelWidget(ui)
         {
             add_group("Notes");
@@ -59,6 +64,8 @@ namespace mrv
                 ui);
         }
 
+        NotesPanel::~NotesPanel() {}
+
         void NotesPanel::add_controls()
         {
             TLRENDER_P();
@@ -76,6 +83,9 @@ namespace mrv
             if (!player)
                 return;
 
+            g->clear();
+            g->begin();
+
             Fl_Button* b;
             std::string key;
             std::any value;
@@ -83,8 +93,6 @@ namespace mrv
 
             auto ag = new AnnotationGroup(X, Y, g->w(), 20, _("Notes"));
             b = ag->button();
-            b->labelsize(14);
-            b->size(b->w(), 18);
             b->callback(
                 [](Fl_Widget* w, void* d)
                 {
@@ -129,6 +137,7 @@ namespace mrv
                 ag->close();
 
         }
+
 
     } // namespace panel
 

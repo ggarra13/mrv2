@@ -122,7 +122,7 @@ namespace mrv
         button_ = new Fl_Button(
             x,       // margin leaves room for FL_ROUND_BOX
             y + GROUP_MARGIN,       // margin leaves room for FL_ROUND_BOX
-            w - TOOLS_MARGIN * 2, // width same as group within margin
+            w - GROUP_MARGIN * 2 - TOOLS_MARGIN * 2, // width same as group within margin
             BUTTON_H);              // button height fixed size
         button_->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
         button_->labelsize(16);
@@ -277,6 +277,26 @@ namespace mrv
         mrv::relayout(this);
     }
 
+    void AnnotationGroup::currentTimeChanged(const OTIO_NS::RationalTime& time)
+    {
+        for (AnnotationWidget *w : annotations_) {
+            if (time.almost_equal(w->time(), 1e-5))
+                w->color(FL_CYAN);
+            else
+                w->color(FL_BACKGROUND_COLOR);
+        }
+    }
+
+    void AnnotationGroup::setPlayer(TimelinePlayer* player)
+    {
+        player_ = player;
+        currentTimeObserver =
+            observer::ValueObserver<OTIO_NS::RationalTime>::create(
+                player->player()->observeCurrentTime(),
+                [this](const OTIO_NS::RationalTime& value)
+                    { currentTimeChanged(value); });
+    }
+
     void AnnotationGroup::set_collapsed(bool collapse)
     {
         if (collapse == collapsed_) return;
@@ -297,7 +317,8 @@ namespace mrv
         add_btn_->resize(x() + w() - pad_ - btn_w, btn_y, btn_w, btn_h);
         remove_btn_->resize(x() + w() - pad_ - 2 * btn_w - pad_, btn_y, btn_w, btn_h);
 
-        if (window()) window()->redraw();
+        contents_->redraw();
+        mrv::relayout(this);
         redraw();
     }
 

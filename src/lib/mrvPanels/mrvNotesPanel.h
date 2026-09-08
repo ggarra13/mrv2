@@ -15,9 +15,12 @@ namespace mrv
         {
         public:
             NotesPanel(ViewerUI* ui);
-            virtual ~NotesPanel() {};
+            virtual ~NotesPanel();
 
             void add_controls() override;
+
+        private:
+            MRV2_PRIVATE();
         };
     } // namespace panel
 

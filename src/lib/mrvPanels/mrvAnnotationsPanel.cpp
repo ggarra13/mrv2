@@ -542,7 +542,7 @@ namespace mrv
             auto nV = new Widget<Fl_Multiline_Input>(X, 25, cg->w(), 180);
             notes = nV;
             notes->cursor_color(FL_RED);
-            notes->textsize(16);
+            notes->textsize(14);
             notes->textcolor(FL_BLACK);
             notes->wrap(true);
             notes->when(FL_WHEN_CHANGED);
