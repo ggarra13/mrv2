@@ -1,5 +1,6 @@
 // mrvAnnotationWidget.cpp
 #include "mrvWidgets/mrvAnnotationWidget.h"
+#include "mrvWidgets/mrvLayoutUtil.h"
 
 #include "mrvOS/mrvI8N.h"
 
@@ -106,10 +107,10 @@ namespace mrv
                 measure_note_size(avail_w, mw, mh);
                 if (mw > avail_w) mw = avail_w;  // never exceed the card width
 
-                input_->insert(0);
                 input_->resize(x() + pad_, y() + TITLE_H + pad_, mw, mh);
-                input_->deactivate();
                 note_->text = input_->value();
+                input_->insert_position(0, 0);
+                input_->deactivate();
 
                 Fl_Group::resize(x(), y(), w(), TITLE_H + mh + 2 * pad_);
                 collapsed_ = false;
@@ -129,8 +130,10 @@ namespace mrv
             if (expand_cb_) expand_cb_(this);
         }
 
-        if (window()) window()->redraw();  // let an Fl_Pack re-flow siblings
-        redraw();
+        //if (window()) window()->redraw();  // let an Fl_Pack re-flow siblings
+        //redraw();
+
+        mrv::relayout(this);
     }
 
     int AnnotationWidget::handle(int event)

@@ -847,11 +847,9 @@ namespace mrv
         p.undoAnnotations.clear();
     }
 
-    void TimelinePlayer::clearFrameAnnotation()
+    void TimelinePlayer::clearFrameAnnotation(const OTIO_NS::RationalTime& time)
     {
         TLRENDER_P();
-
-        const auto& time = currentTime();
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
@@ -862,6 +860,15 @@ namespace mrv
             p.undoAnnotations = p.annotations;
             p.annotations.erase(found);
         }
+    }
+
+    void TimelinePlayer::clearFrameAnnotation()
+    {
+        TLRENDER_P();
+
+        const auto& time = currentTime();
+
+        clearFrameAnnotation(time);
     }
 
     void TimelinePlayer::clearAllAnnotations()

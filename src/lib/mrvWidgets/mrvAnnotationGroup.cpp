@@ -6,15 +6,19 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvFLTK/mrvCallbacks.h"
 
 #include "mrvWidgets/mrvAnnotationGroup.h"
 #include "mrvWidgets/mrvAnnotationWidget.h"
+#include "mrvWidgets/mrvLayoutUtil.h"
 #include "mrvWidgets/mrvPack.h"
 
 #include "mrvOS/mrvI8N.h"
+
+#include <tlCore/StringFormat.h>
 
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Window.H>
@@ -30,6 +34,11 @@
 
 static const int HEADER_H = 28;
 static const int DEFAULT_ANNOTATION_H = 130;
+
+namespace
+{
+    const char* kModule = "ann.";
+}
 
 namespace mrv
 {
@@ -202,7 +211,7 @@ namespace mrv
         contents_->show();
         relabel_button();
         layout();           // layout changed
-        window()->redraw(); // force redraw (_contents->hide()/show() doesn't)
+        mrv::relayout(this);
     }
 
     // Close the widget
@@ -213,7 +222,7 @@ namespace mrv
         contents_->hide();
         relabel_button();
         layout();           // layout changed
-        window()->redraw(); // force redraw (_contents->hide()/show() doesn't)c
+        mrv::relayout(this);
     }
 
     AnnotationWidget*
@@ -234,7 +243,7 @@ namespace mrv
         enforce_single_active(note);
 
         contents_->redraw();
-        if (window()) window()->redraw();
+        mrv::relayout(this);
         return note;
     }
 
@@ -257,11 +266,15 @@ namespace mrv
             if (annotation)
             {
                 annotation->remove(shape);
+                if (annotation->empty())
+                {
+                    player_->clearFrameAnnotation(time);
+                }
             }
         }
 
         contents_->redraw();
-        if (window()) window()->redraw();
+        mrv::relayout(this);
     }
 
     void AnnotationGroup::set_collapsed(bool collapse)
@@ -311,11 +324,21 @@ namespace mrv
         auto annotation = player_->getAnnotation();
         if (annotation)
         {
+            auto time = annotation->time;
             for (auto& shape : annotation->shapes)
             {
                 auto note = std::dynamic_pointer_cast<tl::draw::NoteShape>(shape);
                 if (note)
-                    return nullptr;
+                {
+                    std::string err = string::Format(_("This frame already has a note at {0}, frame {1}.")).arg(time.to_timecode()).arg(time.to_frames());
+                    LOG_ERROR(err);
+                    for (AnnotationWidget *w : annotations_) {
+                        if (w->time().almost_equal(time, 1e-5))
+                        {
+                            return w;
+                        }
+                    }
+                }
             }
         }
 

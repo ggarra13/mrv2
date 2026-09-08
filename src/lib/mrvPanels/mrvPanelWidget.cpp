@@ -120,6 +120,7 @@ namespace mrv
 
             g = new PanelGroup(dock, window, X, Y, W, H, screen, _(lbl));
             g->setLabel(label);
+            g->layout_callback([this] { resized(); });
 
             begin_group();
             add_controls();
