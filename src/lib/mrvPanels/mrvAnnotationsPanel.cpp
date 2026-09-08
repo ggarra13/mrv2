@@ -531,17 +531,15 @@ namespace mrv
                 [](Fl_Widget* w, void* d)
                 {
                     AnnotationGroup* ag = static_cast<AnnotationGroup*>(d);
-                    if (ag->is_open())
-                        ag->close();
-                    else
-                        ag->open();
+                    ag->toggle_collapsed();
 
                     const std::string& prefix = annotationsPanel->tab_prefix();
                     const std::string key = prefix + "Notes";
 
                     App* app = App::ui->app;
                     auto settings = app->settings();
-                    settings->setValue(key, static_cast<int>(ag->is_open()));
+                    settings->setValue(key,
+                                       static_cast<int>(ag->is_collapsed()));
 
                     annotationsPanel->refresh();
                 },

@@ -124,6 +124,8 @@ namespace mrv
             Fl_Group::resize(x(), y(), w(), expanded_h_);
             collapsed_ = false;
             shrunk_ = false;
+
+        if (expand_cb_) expand_cb_(this);
         }
 
         if (window()) window()->redraw();  // let an Fl_Pack re-flow siblings
@@ -143,8 +145,8 @@ namespace mrv
             }
             if (ex >= x() && ex <= x() + w() &&
                 ey >= y() && ey <= y() + h()) {
-                set_collapsed(false);
-                return Fl_Group::handle(event);
+                toggle_collapsed();
+                return 1;
             }
             break;
         }

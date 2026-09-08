@@ -39,16 +39,21 @@
 
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Multiline_Input.H>
+#include <functional>
 #include <string>
 
 namespace mrv
 {
 
-    class AnnotationWidget : public Fl_Group {
-    public:
-        // X,Y,W,H       : initial geometry. H is the *expanded* height; the
-        //                 widget will remember this as the height to restore
-        //                 to when the user re-expands it.
+class AnnotationWidget : public Fl_Group {
+public:
+    // X,Y,W,H       : initial geometry. H is the *expanded* height; the
+    //                 widget will remember this as the height to restore
+    //                 to when the user re-expands it.
+    // circle_color  : fill color of the little status/marker circle.
+    // timecode      : OTIO-style timecode string, e.g. "01:00:12:05".
+    // date_str      : creation date/time string, shown right-aligned.
+    // note_text     : initial contents of the multiline note field.
     AnnotationWidget(int X, int Y, int W, int H,
                      const OTIO_NS::RationalTime& time,
                      tl::draw::NoteShape* note);
@@ -72,6 +77,13 @@ namespace mrv
 
     // True if the note field has any non-whitespace text.
     bool has_note_text() const;
+
+    // Fired whenever this widget transitions INTO the fully expanded
+    // (editable) state -- e.g. so a containing AnnotationGroup can
+    // collapse all its siblings to enforce "only one active note at a
+    // time". Not fired for the collapsed/shrunk transitions.
+    using ExpandCallback = std::function<void(AnnotationWidget *)>;
+    void expand_callback(ExpandCallback cb) { expand_cb_ = std::move(cb); }
 
     // Accessors
     const OTIO_NS::RationalTime &time() const { return time_; }
@@ -97,6 +109,7 @@ private:
     OTIO_NS::RationalTime time_;
 
     Fl_Multiline_Input *input_;
+    ExpandCallback expand_cb_;
 
     bool collapsed_;    // true: input hidden, title-row-only (empty note)
     bool shrunk_;       // true: input shown, shrunk-to-fit, deactivated (non-empty note)
