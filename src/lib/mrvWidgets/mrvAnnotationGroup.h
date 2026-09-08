@@ -59,7 +59,7 @@ namespace mrv
         // Is widget open?
         // (expanded) note; every other note in the group is collapsed.
         AnnotationWidget *add_annotation(const OTIO_NS::RationalTime& time,
-                                         tl::draw::NoteShape* note);
+                                         std::shared_ptr<tl::draw::NoteShape>& note);
 
         // Adds a blank annotation with an auto-generated timecode/date.
         // This is what the header's [+] button calls.

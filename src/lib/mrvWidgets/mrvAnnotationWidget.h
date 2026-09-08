@@ -40,6 +40,7 @@
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Multiline_Input.H>
 #include <functional>
+#include <memory>
 #include <string>
 
 namespace mrv
@@ -56,7 +57,7 @@ public:
     // note_text     : initial contents of the multiline note field.
     AnnotationWidget(int X, int Y, int W, int H,
                      const OTIO_NS::RationalTime& time,
-                     tl::draw::NoteShape* note);
+                     std::shared_ptr<tl::draw::NoteShape> note);
 
     // Fl_Group overrides
     void draw() override;
@@ -98,6 +99,8 @@ public:
     std::string note_text() const { return input_->value() ? input_->value() : ""; }
     void note_text(const std::string &t) { input_->value(t.c_str()); }
 
+    std::shared_ptr<tl::draw::NoteShape> shape() { return note_; }
+
     Fl_Multiline_Input *input() const { return input_; }
 
     // Height reserved for the title row, public so callers can lay
@@ -105,7 +108,7 @@ public:
     static const int TITLE_H = 28;
 
 private:
-    tl::draw::NoteShape*  note_;
+    std::shared_ptr<tl::draw::NoteShape>  note_;
     OTIO_NS::RationalTime time_;
 
     Fl_Multiline_Input *input_;

@@ -30,6 +30,7 @@
 namespace
 {
     const char* kModule = "player";
+    const double kOTIOFuzzy = 1e-5;
 }
 
 namespace
@@ -661,25 +662,6 @@ namespace mrv
         return times;
     }
 
-    const std::vector< OTIO_NS::RationalTime >
-    TimelinePlayer::getNoteAnnotationTimes() const
-    {
-        TLRENDER_P();
-
-        std::vector< OTIO_NS::RationalTime > times;
-        for (auto annotation : p.annotations)
-        {
-            for (auto shape : annotation->shapes)
-            {
-                if (auto s = dynamic_cast< draw::NoteShape* >(shape.get()))
-                {
-                    times.push_back(annotation->time);
-                }
-            }
-        }
-        return times;
-    }
-
     std::vector< std::shared_ptr< draw::Annotation > >
     TimelinePlayer::getAnnotations(const int previous, const int next) const
     {
@@ -714,7 +696,8 @@ namespace mrv
         return annotations;
     }
 
-    std::shared_ptr< draw::Annotation > TimelinePlayer::getAnnotation() const
+    std::shared_ptr< draw::Annotation >
+    TimelinePlayer::getAnnotation(const OTIO_NS::RationalTime& time) const
     {
         TLRENDER_P();
 
@@ -722,11 +705,9 @@ namespace mrv
         if (playback() != timeline::Playback::Stop)
             return nullptr;
 
-        const auto& time = currentTime();
-
         const auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found == p.annotations.end())
         {
@@ -736,6 +717,11 @@ namespace mrv
         {
             return *found;
         }
+    }
+
+    std::shared_ptr< draw::Annotation > TimelinePlayer::getAnnotation() const
+    {
+        return getAnnotation(currentTime());
     }
 
     std::shared_ptr< draw::Annotation > TimelinePlayer::getUndoAnnotation() const
@@ -750,7 +736,7 @@ namespace mrv
 
         const auto found = std::find_if(
             p.undoAnnotations.begin(), p.undoAnnotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found == p.undoAnnotations.end())
         {
@@ -778,7 +764,7 @@ namespace mrv
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found == p.annotations.end())
         {
@@ -831,7 +817,8 @@ namespace mrv
                 p.annotations.begin(), p.annotations.end(),
                 [&incomingAnnotation](const std::shared_ptr<draw::Annotation>& a)
                 {
-                    return a->time == incomingAnnotation->time;
+                    return a->time.almost_equal(incomingAnnotation->time,
+                                                kOTIOFuzzy);
                 });
 
             if (found != p.annotations.end())
@@ -868,7 +855,7 @@ namespace mrv
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found != p.annotations.end())
         {
@@ -991,7 +978,7 @@ namespace mrv
 
         const auto found = std::find_if(
             p.voiceAnnotations.begin(), p.voiceAnnotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found == p.voiceAnnotations.end())
         {
@@ -1016,7 +1003,7 @@ namespace mrv
 
         const auto found = std::find_if(
             p.undoVoiceAnnotations.begin(), p.undoVoiceAnnotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found == p.undoVoiceAnnotations.end())
         {
@@ -1046,7 +1033,8 @@ namespace mrv
 
         auto found = std::find_if(
             p.voiceAnnotations.begin(), p.voiceAnnotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time,
+                                                                kOTIOFuzzy); });
 
         std::shared_ptr< voice::Annotation > annotation;
         if (found == p.voiceAnnotations.end())

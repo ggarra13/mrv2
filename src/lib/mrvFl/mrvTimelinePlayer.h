@@ -342,11 +342,11 @@ namespace mrv
         //! Return a list of annotation times
         const std::vector< OTIO_NS::RationalTime > getAnnotationTimes() const;
 
-        //! Return a list of note annotation times
-        const std::vector< OTIO_NS::RationalTime >
-        getNoteAnnotationTimes() const;
-
         //! @{
+
+        //! Get annotation for a specific time or nullptr if not available.
+        std::shared_ptr< draw::Annotation >
+        getAnnotation(const OTIO_NS::RationalTime&) const;
 
         //! Get annotation for current time
         std::shared_ptr< draw::Annotation > getAnnotation() const;

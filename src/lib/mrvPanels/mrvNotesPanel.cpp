@@ -113,7 +113,7 @@ namespace mrv
             {
                 for (auto shape : annotation->shapes)
                 {
-                    if (auto s = dynamic_cast<tl::draw::NoteShape* >(shape.get()))
+                    if (auto s = std::dynamic_pointer_cast<tl::draw::NoteShape>(shape))
                     {
                         ag->add_annotation(annotation->time, s);
                     }

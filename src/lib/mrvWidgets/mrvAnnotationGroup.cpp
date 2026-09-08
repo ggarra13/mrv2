@@ -2,9 +2,13 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrvApp/mrvApp.h"
+
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvFl/mrvTimelinePlayer.h"
+
+#include "mrvFLTK/mrvCallbacks.h"
 
 #include "mrvWidgets/mrvAnnotationGroup.h"
 #include "mrvWidgets/mrvAnnotationWidget.h"
@@ -33,12 +37,11 @@ namespace mrv
     // Change button label based on open/closed state of pack
     void AnnotationGroup::relabel_button()
     {
-        int open =contents_->visible() ? 1 : 0;
         char buf[256];
         // Draw arrow in label
         //    Text to the right of arrow based on parent's label()
         //
-        if (open)
+        if (collapsed_)
             snprintf(buf, 256, "@2>  %s", label() ? label() : "(no label)");
         else
             snprintf(buf, 256, "@>  %s", label() ? label() : "(no label)");
@@ -48,8 +51,7 @@ namespace mrv
     // Enforce layout
     void AnnotationGroup::layout()
     {
-
-        // Size self based on if open() or close()ed
+        // Size self based on if open() or close()
         int gh = button_->h() + (GROUP_MARGIN * 2);
         if (is_collapsed())
             gh +=contents_->h(); // include content's height if we're 'open'
@@ -70,7 +72,7 @@ namespace mrv
 
 
 
-        // Leavecontents_->h() alone, we shouldn't change it; Fl_Pack
+        // Leave contents_->h() alone, we shouldn't change it; Fl_Pack
         // calculates its own height, we don't want to mess that up by changing
         // it. visible() will control whether it's drawn or not. it's seen or
         // not.
@@ -217,7 +219,7 @@ namespace mrv
     AnnotationWidget*
     AnnotationGroup::add_annotation(
         const OTIO_NS::RationalTime& time,
-        tl::draw::NoteShape* note_shape)
+        std::shared_ptr<tl::draw::NoteShape>& note_shape)
     {
         contents_->begin();
         int note_w = contents_->w();
@@ -242,9 +244,21 @@ namespace mrv
         auto it = std::find(annotations_.begin(), annotations_.end(), note);
         if (it == annotations_.end()) return;
 
+        auto time = note->time();
+        auto shape = note->shape();
+
         contents_->remove(note);
         delete note;
         annotations_.erase(it);
+
+        if (player_)
+        {
+            auto annotation = player_->getAnnotation(time);
+            if (annotation)
+            {
+                annotation->remove(shape);
+            }
+        }
 
         contents_->redraw();
         if (window()) window()->redraw();
@@ -291,11 +305,37 @@ namespace mrv
 
     AnnotationWidget *AnnotationGroup::add_annotation()
     {
-        ++next_id_;
-        char tc[32];
-        OTIO_NS::RationalTime time(0, 24);
-        // @todo:
-        return nullptr; //add_annotation(time, note);
+        if (!player_)
+            return nullptr;
+
+        auto annotation = player_->getAnnotation();
+        if (annotation)
+        {
+            for (auto& shape : annotation->shapes)
+            {
+                auto note = std::dynamic_pointer_cast<tl::draw::NoteShape>(shape);
+                if (note)
+                    return nullptr;
+            }
+        }
+
+        add_note_annotation_cb(App::ui, "");
+
+        annotation = player_->getAnnotation();
+        if (!annotation)
+            return nullptr;
+
+        auto note = std::dynamic_pointer_cast<tl::draw::NoteShape>(annotation->lastShape());
+        if (!note)
+            return nullptr;
+
+        AnnotationWidget* n = add_annotation(player_->currentTime(), note);
+        n->input()->insert(0);
+        n->input()->take_focus();
+
+        layout();
+        redraw();
+        return n;
     }
 
     void AnnotationGroup::remove_annotation()

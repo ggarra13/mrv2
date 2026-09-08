@@ -14,7 +14,7 @@ namespace mrv
     AnnotationWidget::AnnotationWidget(
         int X, int Y, int W, int H,
         const OTIO_NS::RationalTime& time,
-        tl::draw::NoteShape* note)
+        std::shared_ptr<tl::draw::NoteShape> note)
         : Fl_Group(X, Y, W, H),
           time_(time),
           note_(note),
@@ -35,7 +35,7 @@ namespace mrv
         input_->value(note_->text.c_str());
 
         end();
-        resizable(0);
+        resizable(input_);
     }
 
     void AnnotationWidget::resize(int X, int Y, int W, int H)
@@ -141,11 +141,6 @@ namespace mrv
             int ey = Fl::event_y();
             if (ex >= x() && ex <= x() + w() &&
                 ey >= y() && ey <= y() + TITLE_H) {
-                toggle_collapsed();
-                return 1;
-            }
-            if (ex >= x() && ex <= x() + w() &&
-                ey >= y() && ey <= y() + h()) {
                 toggle_collapsed();
                 return 1;
             }
