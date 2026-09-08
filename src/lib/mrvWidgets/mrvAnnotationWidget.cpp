@@ -144,6 +144,14 @@ namespace mrv
                 toggle_collapsed();
                 return 1;
             }
+            if (!input_->active())
+            {
+                if (ex >= x() && ex <= x() + w() &&
+                    ey >= y() && ey <= y() + h()) {
+                    toggle_collapsed();
+                    return 1;
+                }
+            }
             break;
         }
         case FL_ENTER:
