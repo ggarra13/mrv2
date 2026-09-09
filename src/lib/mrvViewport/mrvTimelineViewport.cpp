@@ -3832,30 +3832,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            static const std::string help =
-                _("Automatically select Input Color Space from file "
-                  "and OpenEXR metadata. ");
-
-            bool autoUnmatched;
-            std::string autoName;
-            std::string autoSource;
-            std::string name = ocio::autoICS(autoUnmatched,
-                                             autoName,
-                                             autoSource);
-
-            if (!name.empty())
-            {
-                ocio::setIcs(name);
-                const std::string tooltip = string::Format("{0}Currently: {1} from {2}")
-                                            .arg(help)
-                                            .arg(autoName)
-                                            .arg(autoSource);
-                p.ui->uiAutoICS->copy_tooltip(tooltip.c_str());
-            }
-            else
-            {
-                p.ui->uiAutoICS->copy_tooltip(help.c_str());
-            }
+            _getHDR();
         }
 
         void TimelineViewport::_getHDR() noexcept
@@ -3902,9 +3879,9 @@ namespace mrv
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
 
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
-                    {
                         p.ocio_disabled = true;
-                    }
+                    else
+                        p.ocio_disabled = false;
                 }
                 else if (file::isSRGB(extension))
                 {
@@ -3928,7 +3905,30 @@ namespace mrv
                     // Handle OCIO Auto ICS
                     if (p.ui->uiAutoICS->value())
                     {
-                        setAutoICS();
+                        const std::string help =
+                            _("Automatically select Input Color Space\n"
+                              "from file and OpenEXR metadata.  ");
+
+                        bool autoUnmatched;
+                        std::string autoName;
+                        std::string autoSource;
+                        std::string name = ocio::autoICS(autoUnmatched,
+                                                         autoName,
+                                                         autoSource);
+
+                        if (!name.empty() && name != p.ocioOptions.input)
+                        {
+                            ocio::setIcs(name);
+                            std::string tooltip = string::Format("{0}Currently: {1} from {2}")
+                                                  .arg(help)
+                                                  .arg(autoName)
+                                                  .arg(autoSource);
+                            p.ui->uiAutoICS->copy_tooltip(tooltip.c_str());
+                        }
+                        else
+                        {
+                            p.ui->uiAutoICS->copy_tooltip(help.c_str());
+                        }
                     }
 
                     // We pass BT709 metadata unless OCIO changes it in

@@ -253,6 +253,7 @@ namespace mrv
             }
         }
 
+        layout();
         contents_->redraw();
         mrv::relayout(this);
     }
@@ -366,6 +367,8 @@ namespace mrv
         n->color(FL_CYAN);
 
         layout();
+
+        mrv::relayout(this);
         redraw();
         return n;
     }

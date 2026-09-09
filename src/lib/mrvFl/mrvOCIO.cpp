@@ -864,8 +864,15 @@ namespace mrv
                     throw std::runtime_error(err);
                 }
             }
-            uiICS->value(value);
-            uiICS->do_callback();
+            if (uiICS->value() != value)
+            {
+                auto uiAutoICS = App::ui->uiAutoICS;
+                const int enabled = uiAutoICS->value();
+                uiICS->value(value);
+                uiICS->do_callback();
+                uiAutoICS->value(enabled);
+                uiAutoICS->do_callback();
+            }
         }
 
         int icsIndex(const std::string& name)

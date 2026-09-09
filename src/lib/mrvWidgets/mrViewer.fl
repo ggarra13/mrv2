@@ -1130,15 +1130,18 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
 
 if (value)
 {
+  uiView->setAutoICS();
+  
   o->labelcolor(fl_rgb_color(255, 255, 255));
   o->color(FL_CYAN);
+  o->value(value);
 }
 else
 {
   o->labelcolor(FL_FOREGROUND_COLOR);
   o->color(FL_BACKGROUND_COLOR);
 }
-o->redraw();}
+o->redraw();} selected
                 tooltip {Automatically select Input Color Space from file and OpenEXR metadata.} xywh {247 30 38 29} type Toggle down_box DOWN_BOX selection_color 14 labelsize 10 align 16
               }
               Fl_Menu_Button uiICS {
@@ -1148,7 +1151,7 @@ o->redraw();}
 uiAutoICS->value(0);
 uiAutoICS->do_callback();
 
-uiView->updateOCIOOptions();} open selected
+uiView->updateOCIOOptions();} open
                 tooltip {OCIO input color space for the image} xywh {285 30 155 29} down_box DOWN_BOX labelsize 10 align 112
                 code3 {o->disable_submenus();}
                 class {mrv::PopupMenu}
