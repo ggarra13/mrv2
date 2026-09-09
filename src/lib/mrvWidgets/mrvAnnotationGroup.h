@@ -46,11 +46,8 @@ namespace mrv
         Fl_Button* button() { return button_; }
         void layout();
 
-        // Open/close the widget
-        void open();
-        void close();
 
-        // Open/close the widget
+        // Whole-group collapse state (hides/shows the entire note list).
         bool is_collapsed() const { return collapsed_; }
         void set_collapsed(bool collapse);
         void toggle_collapsed() { set_collapsed(!collapsed_); }
@@ -58,7 +55,7 @@ namespace mrv
         // Set timeline player
         void setPlayer(TimelinePlayer* player);
 
-        // Is widget open?
+        // Adds a fully-specified annotation. It becomes the active
         // (expanded) note; every other note in the group is collapsed.
         AnnotationWidget *add_annotation(const OTIO_NS::RationalTime& time,
                                          std::shared_ptr<tl::draw::NoteShape>& note);

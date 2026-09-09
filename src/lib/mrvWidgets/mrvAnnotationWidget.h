@@ -103,6 +103,11 @@ public:
 
     Fl_Multiline_Input *input() const { return input_; }
 
+    // Set whether the display of the annotation should be like the one at
+    // a current time.
+    void at_current_time(bool);
+
+
     // Height reserved for the title row, public so callers can lay
     // things out around the widget if they need to.
     static const int TITLE_H = 28;

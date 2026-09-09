@@ -2,28 +2,13 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Pack.H>
-#include <FL/Fl_Radio_Round_Button.H>
-#include <FL/Fl_Round_Button.H>
 
 #include "mrViewer.h"
 
-
-#include "mrvCore/mrvFonts.h"
-
-#include "mrvIcons/Annotations.h"
-#include "mrvIcons/HardBrush.h"
-#include "mrvIcons/SoftBrush.h"
-
 #include "mrvWidgets/mrvAnnotationGroup.h"
 #include "mrvWidgets/mrvAnnotationWidget.h"
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvHorSlider.h"
-#include "mrvWidgets/mrvButton.h"
-#include "mrvWidgets/mrvCollapsibleGroup.h"
-#include "mrvWidgets/mrvDoubleSpinner.h"
-#include "mrvWidgets/mrvMultilineInput.h"
+
+#include "mrvIcons/Annotations.h"
 
 #include "mrvPanels/mrvNotesPanel.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -105,7 +90,7 @@ namespace mrv
                     App* app = App::ui->app;
                     auto settings = app->settings();
                     settings->setValue(key,
-                                       static_cast<int>(ag->is_collapsed()));
+                                       static_cast<int>(!ag->is_collapsed()));
 
                     notesPanel->refresh();
                 },
@@ -134,7 +119,7 @@ namespace mrv
             value = settings->getValue<std::any>(key);
             open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
             if (!open)
-                ag->close();
+                ag->set_collapsed(true);
 
         }
 

@@ -8,10 +8,27 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Window.H>
+
 #include <cctype>
+#include <ctime>
+#include <cstdio>
 
 namespace mrv
 {
+    std::string current_timestamp_string()
+    {
+        std::time_t t = std::time(nullptr);
+        std::tm tmv;
+#if defined(_WIN32)
+        localtime_s(&tmv, &t);
+#else
+        localtime_r(&t, &tmv);
+#endif
+        char buf[32];
+        std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M", &tmv);
+        return std::string(buf);
+    }
+
     AnnotationWidget::AnnotationWidget(
         int X, int Y, int W, int H,
         const OTIO_NS::RationalTime& time,
@@ -34,6 +51,11 @@ namespace mrv
         input_->textcolor(FL_BLACK);
         input_->box(FL_FLAT_BOX);
         input_->value(note_->text.c_str());
+
+        if (note_->date == "Today")
+        {
+            note_->date = current_timestamp_string();
+        }
 
         end();
         resizable(input_);
@@ -207,7 +229,7 @@ namespace mrv
 
         // Creation date (regular weight, right-aligned)
         fl_font(FL_HELVETICA, 12);
-        fl_color(fl_gray_ramp(10));
+        fl_color(FL_FOREGROUND_COLOR);
         fl_draw(note_->date.c_str(), x(), y(), w() - 10, TITLE_H,
                 (Fl_Align)(FL_ALIGN_RIGHT | FL_ALIGN_INSIDE));
 
@@ -219,4 +241,18 @@ namespace mrv
         fl_line(x() + 1, y() + TITLE_H, x() + w() - 2, y() + TITLE_H);
     }
 
+    // Set whether the display of the annotation should be like the one at
+    // a current time.
+    void AnnotationWidget::at_current_time(bool value)
+    {
+        if (value)
+        {
+            color(FL_CYAN);
+        }
+        else
+        {
+            color(FL_BACKGROUND_COLOR);
+        }
+        redraw();
+    }
 }

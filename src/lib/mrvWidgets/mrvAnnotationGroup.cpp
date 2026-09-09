@@ -46,11 +46,12 @@ namespace mrv
     // Change button label based on open/closed state of pack
     void AnnotationGroup::relabel_button()
     {
+        bool open = !is_collapsed();
         char buf[256];
         // Draw arrow in label
         //    Text to the right of arrow based on parent's label()
         //
-        if (collapsed_)
+        if (open)
             snprintf(buf, 256, "@2>  %s", label() ? label() : "(no label)");
         else
             snprintf(buf, 256, "@>  %s", label() ? label() : "(no label)");
@@ -62,7 +63,7 @@ namespace mrv
     {
         // Size self based on if open() or close()
         int gh = button_->h() + (GROUP_MARGIN * 2);
-        if (is_collapsed())
+        if (!is_collapsed())
             gh +=contents_->h(); // include content's height if we're 'open'
 
         // Note: resizable() set to zero, so this just resizes us, not children.
@@ -76,7 +77,7 @@ namespace mrv
             x() + GROUP_MARGIN,       // x always inset (leaves room for ROUND
                                       // box)
             y() + GROUP_MARGIN,       // y always inset ("")
-            w() - (GROUP_MARGIN * 2) - TOOLS_MARGIN, // width tracks group's w()
+            w() - (GROUP_MARGIN * 2) - (TOOLS_MARGIN * 2), // width tracks group's w()
             button_->h());            // height fixed
 
 
@@ -86,7 +87,7 @@ namespace mrv
         // it. visible() will control whether it's drawn or not. it's seen or
         // not.
         //
-       contents_->resize(
+        contents_->resize(
             x() + GROUP_MARGIN,                // x always same as button
             y() + button_->h() + GROUP_MARGIN * 2, // y always "below button"
             w() - (GROUP_MARGIN * 2),          // width tracks group's w()
@@ -104,16 +105,16 @@ namespace mrv
     void AnnotationGroup::toggle_tab_cb(Fl_Button* w, void* data)
     {
         mrv::AnnotationGroup* g = (mrv::AnnotationGroup*)data;
-        if (g->is_collapsed())
-            g->close();
-        else
-            g->open(); // toggle open/close state
+        g->toggle_collapsed();
     }
 
     // CTOR
     AnnotationGroup::AnnotationGroup(
         const int x, const int y, const int w, const int h, const char* l) :
-        Fl_Group(x, y, w, h, l)
+        Fl_Group(x, y, w, h, l),
+        collapsed_(false),
+        expanded_h_(h),
+        pad_(4)
     {
         // Disable label from being shown; we show the label only in the button.
         labeltype(FL_NO_LABEL);
@@ -132,8 +133,8 @@ namespace mrv
         button_->callback((Fl_Callback*)toggle_tab_cb, this);
 
         add_btn_ = new Fl_Button(x + w - (GROUP_MARGIN + TOOLS_MARGIN * 2),
-                             y + GROUP_MARGIN,
-                             TOOLS_MARGIN, BUTTON_H, "+");
+                                 y + GROUP_MARGIN,
+                                 TOOLS_MARGIN, BUTTON_H, "+");
         add_btn_->copy_tooltip(_("Add a new note at the current time."));
         add_btn_->callback(add_button_cb, this);
 
@@ -143,7 +144,7 @@ namespace mrv
         remove_btn_->copy_tooltip(_("Remove the current note."));
         remove_btn_->callback(remove_button_cb, this);
 
-       contents_ = new Pack(
+        contents_ = new Pack(
             button_->x(),                    // lines up with button on x
             y + button_->y() + button_->h() + (GROUP_MARGIN * 2), // just below button
             w - (GROUP_MARGIN * 2), // width same as group within margin
@@ -151,11 +152,11 @@ namespace mrv
 
         // end()contents_; we don't want it to begin() sucking up child widgets
         // on return
-       contents_->end();
-       Fl_Group::end();
+        contents_->end();
+        Fl_Group::end();
 
-       relabel_button(); // relabel button once pack created
-       resizable(0); // prevent FLTK auto-sizing -- we handle children ourself
+        relabel_button(); // relabel button once pack created
+        resizable(0); // prevent FLTK auto-sizing -- we handle children ourself
     }
 
     AnnotationGroup::~AnnotationGroup()
@@ -201,28 +202,7 @@ namespace mrv
     {
         Fl_Group::resize(X, Y, W, H); // let group resize
         layout();                     // let layout() handle child pos/sizes
-    }
-
-    // Open the widget
-    void AnnotationGroup::open()
-    {
-        if (is_collapsed())
-            return; // already open? do nothing
-        contents_->show();
-        relabel_button();
-        layout();           // layout changed
-        mrv::relayout(this);
-    }
-
-    // Close the widget
-    void AnnotationGroup::close()
-    {
-        if (!is_collapsed())
-            return; // already closed? do nothing
-        contents_->hide();
-        relabel_button();
-        layout();           // layout changed
-        mrv::relayout(this);
+        if (!collapsed_) expanded_h_ = H;
     }
 
     AnnotationWidget*
@@ -309,16 +289,16 @@ namespace mrv
             Fl_Group::resize(x(), y(), w(), expanded_h_);
         }
 
-        // Keep the add/remove buttons pinned to the header's right edge
-        // even if our width changed while collapsed.
-        const int btn_w = 24;
-        const int btn_h = HEADER_H - 6;
-        const int btn_y = y() + (HEADER_H - btn_h) / 2;
-        add_btn_->resize(x() + w() - pad_ - btn_w, btn_y, btn_w, btn_h);
-        remove_btn_->resize(x() + w() - pad_ - 2 * btn_w - pad_, btn_y, btn_w, btn_h);
+        add_btn_->position(x() + w() - (GROUP_MARGIN + TOOLS_MARGIN * 2),
+                           y() + GROUP_MARGIN);
+
+        remove_btn_->position(x() + w() - (GROUP_MARGIN + TOOLS_MARGIN),
+                              y() + GROUP_MARGIN);
 
         contents_->redraw();
         mrv::relayout(this);
+
+        relabel_button(); // relabel button once pack created
         redraw();
     }
 
