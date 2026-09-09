@@ -155,14 +155,30 @@ namespace mrv
         contents_->end();
         Fl_Group::end();
 
+        empty_box_ = new Fl_Box(
+            contents_->x(), contents_->y(), contents_->w(), 32,
+            _("No annotations added yet."));
+        empty_box_->box(FL_NO_BOX);
+        empty_box_->labelfont(FL_HELVETICA_ITALIC);
+        empty_box_->labelsize(12);
+        empty_box_->labelcolor(fl_gray_ramp(10));
+        empty_box_->align(FL_ALIGN_CENTER);
+
         relabel_button(); // relabel button once pack created
         resizable(0); // prevent FLTK auto-sizing -- we handle children ourself
+
+        update_empty_state(); // annotations_ is empty at construction -> shows it
     }
 
     AnnotationGroup::~AnnotationGroup()
     {
-       contents_->clear();
-       Fl_Group::clear(); // delete button_ andcontents_
+        // If the box was detached (annotations_ non-empty at destruction time),
+        // contents_->clear() won't reach it -- free it ourselves.
+        if (!empty_box_->parent())
+            delete empty_box_;
+
+        contents_->clear();
+        Fl_Group::clear(); // delete button_ andcontents_
     }
 
     void AnnotationGroup::spacing(int x)
@@ -175,6 +191,33 @@ namespace mrv
     {
         contents_->clear();
         redraw();
+    }
+
+    // New helper -- keeps the placeholder in sync with annotations_.
+    void AnnotationGroup::update_empty_state()
+    {
+        bool empty = annotations_.empty();
+        bool showing = empty_box_->visible();
+
+        if (empty && !showing)
+        {
+            contents_->add(empty_box_);
+            empty_box_->show();
+        }
+        else if (!empty && showing)
+        {
+            contents_->remove(empty_box_);
+            empty_box_->hide();
+        }
+        else
+        {
+            return; // no change needed
+        }
+
+        // Recompute sizes right away so callers' subsequent redraw()/relayout()
+        // calls operate on correct geometry.
+        contents_->layout();
+        layout();
     }
 
     // // DEBUG
@@ -219,6 +262,8 @@ namespace mrv
         note->expand_callback([this](AnnotationWidget *w) { enforce_single_active(w); });
         annotations_.push_back(note);
 
+        update_empty_state();   // box goes away as soon as a note exists
+
         // The new note starts fully expanded; make sure it's the only one.
         enforce_single_active(note);
 
@@ -252,6 +297,8 @@ namespace mrv
                 }
             }
         }
+
+        update_empty_state();   // box reappears once the list is empty
 
         layout();
         contents_->redraw();

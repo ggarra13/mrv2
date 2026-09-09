@@ -14,6 +14,8 @@
 
 #include <memory>
 
+class Fl_Box;
+
 namespace mrv
 {
 
@@ -83,8 +85,13 @@ namespace mrv
         Fl_Button* remove_btn_;
         Fl_Button* button_;
         Pack* contents_;
+        Fl_Box*  empty_box_ = nullptr;   // "No annotations added yet." placeholder
 
         std::vector<AnnotationWidget *> annotations_;
+
+        // Shows empty_box_ inside contents_ when annotations_ is empty,
+        // removes it otherwise. Safe to call any time annotations_ changes.
+        void update_empty_state();
 
         // Collapses every annotation in the group except keep_active.
         void enforce_single_active(AnnotationWidget *keep_active);
