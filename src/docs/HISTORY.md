@@ -5,17 +5,18 @@ v1.7.6
 
 - Windows: Added Text Insert icon to avoid the Vulkan dreaded ghosted square when annotating text.
 
-- UI: Added hand drawn annotations and erasing without a Solo License.  Note that area tools and other drawing tools like arrows remain on the Solo License.
+- UI: Added pencil annotations and erasing without a Solo License.  Note that area tools and other drawing tools like arrows remain on the Solo License.  This is a compromise between features present on all viewers and features only on mrv2/vmrv2 so that those that unlocked a Solo License, won't feel cheated.
+- UI: Added a Notes Panel to display and edit the list of review notes easily, as suggested by Serban Jipa.
 
-- Core: Added SVG reader.  Works with all .svg with paths.  Does not currently decode SVGs with text, though.
+- Core: Added support for OpenEXR's colorInteropID with the new Auto ICS button and its tooltip describing what it chose.  Auto ICS works with image files.  For videos, you should rely on **Preferences->OCIO->No OCIO on Videos or sRGB/BT709** data as it is faster.
+- Core: Added SVG reader.  Works with all .svg with paths.  Does not currently decode SVGs with text yet, though.
 - Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the features depend on your hardware and drivers.
 - Core: Added the NVidia headers to the build, so the Linux branch will compile without the need for local files.
 - Core: Added OpenColorIO's LUT inversion on Color Panel.
 
-Library updates:
-    - OpenColorIO 2.5.2
-    - OpenEXR 3.4.15
-    - libtiff 4.7.2
+- Libraries:
+    * OpenEXR 3.4.15
+    * libtiff 4.7.2
 	
 Fixes:
 
