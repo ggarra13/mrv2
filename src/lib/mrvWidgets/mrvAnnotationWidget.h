@@ -107,6 +107,7 @@ public:
     // a current time.
     void at_current_time(bool);
 
+    void select_color();
 
     // Height reserved for the title row, public so callers can lay
     // things out around the widget if they need to.

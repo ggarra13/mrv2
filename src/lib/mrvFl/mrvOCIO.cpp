@@ -37,13 +37,13 @@ namespace mrv
 
         OCIO::ConstConfigRcPtr OCIOconfig = nullptr;
 
-        std::string autoICS(bool& declaredUnmatched,
-                            std::string& declaredName,
-                            std::string& declaredSource)
+        std::string autoICS(bool& autoUnmatched,
+                            std::string& autoName,
+                            std::string& autoSource)
         {
-            declaredUnmatched = false;
-            declaredName.clear();
-            declaredSource = "file";
+            autoUnmatched = false;
+            autoName.clear();
+            autoSource = "file";
 
 #ifdef TLRENDER_OCIO
             if (!OCIOconfig)
@@ -94,7 +94,7 @@ namespace mrv
                 i != tags.end() && !i->second.empty())
             {
                 declared = true;
-                declaredName = i->second;
+                autoName = i->second;
                 setCandidates({ i->second.c_str() });
                 std::cerr << "colorInteropID=" << i->second
                           << std::endl;
@@ -234,7 +234,7 @@ namespace mrv
                             if (match)
                             {
                                 declared = true;
-                                declaredName = k.name;
+                                autoName = k.name;
 
                                 candidates.clear();
                                 for (const auto candidate : k.candidates)
@@ -252,7 +252,7 @@ namespace mrv
                         if (!declared)
                         {
                             declared = true;
-                            declaredName = "OpenEXR chromaticities";
+                            autoName = "OpenEXR chromaticities";
                         }
                     }
                 }
@@ -287,7 +287,7 @@ namespace mrv
                     transfer == "iec61966-2-1")
                 {
                     declared = true;
-                    declaredName = "sRGB";
+                    autoName = "sRGB";
                     setCandidates({
                             "srgb_tx",
                             "sRGB - Texture",
@@ -298,7 +298,7 @@ namespace mrv
                          transfer == "bt709")
                 {
                     declared = true;
-                    declaredName = "Rec.709 / BT.1886";
+                    autoName = "Rec.709 / BT.1886";
                     setCandidates({
                             "rec1886_rec709_display",
                             "Rec.1886 Rec.709 - Display",
@@ -309,7 +309,7 @@ namespace mrv
                          transfer == "smpte2084")
                 {
                     declared = true;
-                    declaredName = "Rec.2100 PQ";
+                    autoName = "Rec.2100 PQ";
                     setCandidates({
                             "rec2100_pq_display",
                             "Rec.2100-PQ - Display"
@@ -319,7 +319,7 @@ namespace mrv
                          transfer == "arib-std-b67")
                 {
                     declared = true;
-                    declaredName = "Rec.2100 HLG";
+                    autoName = "Rec.2100 HLG";
                     setCandidates({
                             "rec2100_hlg_display",
                             "Rec.2100-HLG - Display"
@@ -344,8 +344,8 @@ namespace mrv
                 path.getExtension() == ".exr")
             {
                 declared = true;
-                declaredName = "Rec.709 primaries";
-                declaredSource = "EXR default";
+                autoName = "Rec.709 primaries";
+                autoSource = "EXR default";
 
                 setCandidates({
                         "lin_rec709",
@@ -393,7 +393,7 @@ namespace mrv
 
                     if (!name.empty())
                     {
-                        declaredSource = "OCIO file rule";
+                        autoSource = "OCIO file rule";
 
                         if (const auto colorSpace =
                             OCIOconfig->getColorSpace(name.c_str()))
@@ -407,7 +407,7 @@ namespace mrv
                 }
             }
 
-            declaredUnmatched = declared;
+            autoUnmatched = declared;
 #endif
 
             return {};

@@ -2137,14 +2137,15 @@ namespace mrv
             ui->uiCOLORS->show();
         }
 
-        if (uiPrefs->uiOCIOUseAutoICS->value())
-        {
-            ui->uiAutoICS->value(1);
-        }
-        else
+        if (!uiPrefs->uiOCIOUseAutoICS->value())
         {
             ui->uiAutoICS->value(0);
         }
+        else
+        {
+            ui->uiAutoICS->value(1);
+        }
+        ui->uiAutoICS->do_callback();
 
         // Handle image options
         auto imageOptions = app->imageOptions();

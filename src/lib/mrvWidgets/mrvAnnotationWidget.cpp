@@ -1,4 +1,7 @@
 // mrvAnnotationWidget.cpp
+
+#include "mrvFlmm/Flmm_ColorA_Chooser.h"
+
 #include "mrvWidgets/mrvAnnotationWidget.h"
 #include "mrvWidgets/mrvLayoutUtil.h"
 
@@ -107,7 +110,8 @@ namespace mrv
 
     void AnnotationWidget::set_collapsed(bool collapse)
     {
-        if (collapse == is_collapsed()) return;
+        if (collapse == is_collapsed())
+            return;
 
         if (collapse) {
             // Only capture expanded_h_ here: at this point we know we were
@@ -149,13 +153,25 @@ namespace mrv
             collapsed_ = false;
             shrunk_ = false;
 
-            if (expand_cb_) expand_cb_(this);
+            if (expand_cb_) {
+                expand_cb_(this);
+            }
         }
 
-        //if (window()) window()->redraw();  // let an Fl_Pack re-flow siblings
-        //redraw();
-
         mrv::relayout(this);
+    }
+
+    void AnnotationWidget::select_color()
+    {
+        uchar r, g, b, a = 255;
+        Fl::get_color(note_->circle_color, r, g, b, a);
+
+        int ret = flmm_color_a_chooser(_("Select Circle Color"), r, g, b, a);
+        if (ret)
+        {
+            note_->circle_color = fl_rgb_color(r, g, b);
+            redraw();
+        }
     }
 
     int AnnotationWidget::handle(int event)
@@ -164,8 +180,19 @@ namespace mrv
         case FL_PUSH: {
             int ex = Fl::event_x();
             int ey = Fl::event_y();
+
+            const int circle_d = 14;
+            const int circle_r = circle_d / 2;
+            int cx = x() + 10 + circle_r;
+            int cy = y() + TITLE_H / 2;
             if (ex >= x() && ex <= x() + w() &&
                 ey >= y() && ey <= y() + TITLE_H) {
+                if (ex >= cx - circle_r && ex <= cx + circle_d)
+                {
+                    select_color();
+                    return 1;
+                }
+
                 toggle_collapsed();
                 return 1;
             }
@@ -183,7 +210,7 @@ namespace mrv
         case FL_MOVE: {
             int ey = Fl::event_y();
             bool over_title = (ey >= y() && ey <= y() + TITLE_H);
-            fl_cursor(over_title ? FL_CURSOR_HAND : FL_CURSOR_DEFAULT);
+            fl_cursor(over_title ? FL_CURSOR_ARROW : FL_CURSOR_DEFAULT);
             if (over_title) return 1;
             break;
         }
@@ -218,8 +245,11 @@ namespace mrv
         fl_arc(cx - circle_r, cy - circle_r, circle_d, circle_d, 0.0, 360.0);
 
         // Timecode (bold, left of center, after the circle)
+        Fl_Color text_color = FL_FOREGROUND_COLOR;
+        if (color() == FL_CYAN)
+            text_color = fl_contrast(FL_WHITE, color());
         fl_font(FL_HELVETICA_BOLD, 13);
-        fl_color(FL_FOREGROUND_COLOR);
+        fl_color(text_color);
         int tc_x = cx + circle_r + 8;
         int tc_w = w() / 2;
 
@@ -229,7 +259,7 @@ namespace mrv
 
         // Creation date (regular weight, right-aligned)
         fl_font(FL_HELVETICA, 12);
-        fl_color(FL_FOREGROUND_COLOR);
+        fl_color(text_color);
         fl_draw(note_->date.c_str(), x(), y(), w() - 10, TITLE_H,
                 (Fl_Align)(FL_ALIGN_RIGHT | FL_ALIGN_INSIDE));
 

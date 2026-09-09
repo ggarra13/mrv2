@@ -261,15 +261,22 @@ namespace mrv
     {
         for (AnnotationWidget *w : annotations_) {
             if (time.almost_equal(w->time(), 1e-5))
+            {
                 w->color(FL_CYAN);
+            }
             else
+            {
+                w->set_collapsed(true);
                 w->color(FL_BACKGROUND_COLOR);
+            }
         }
     }
 
     void AnnotationGroup::setPlayer(TimelinePlayer* player)
     {
         player_ = player;
+        if (!player)
+            return;
         currentTimeObserver =
             observer::ValueObserver<OTIO_NS::RationalTime>::create(
                 player->player()->observeCurrentTime(),
@@ -308,7 +315,7 @@ namespace mrv
             if (w != keep_active && !w->is_collapsed()) {
                 w->set_collapsed(true);
             }
-            else
+            else if (w == keep_active && !w->is_collapsed())
             {
                 if (player_)
                     player_->seek(w->time());
@@ -356,6 +363,7 @@ namespace mrv
         AnnotationWidget* n = add_annotation(player_->currentTime(), note);
         n->input()->insert(0);
         n->input()->take_focus();
+        n->color(FL_CYAN);
 
         layout();
         redraw();

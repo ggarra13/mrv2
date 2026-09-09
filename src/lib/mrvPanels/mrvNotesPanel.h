@@ -18,9 +18,6 @@ namespace mrv
             virtual ~NotesPanel();
 
             void add_controls() override;
-
-        private:
-            MRV2_PRIVATE();
         };
     } // namespace panel
 

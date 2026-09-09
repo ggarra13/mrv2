@@ -25,12 +25,7 @@ namespace mrv
     namespace panel
     {
 
-        struct NotesPanel::Private
-        {
-        };
-
         NotesPanel::NotesPanel(ViewerUI* ui) :
-            _r(new Private),
             PanelWidget(ui)
         {
             add_group("Notes");
@@ -96,7 +91,7 @@ namespace mrv
                 },
                 ag);
 
-            ag->setPlayer(player);
+            ag->setPlayer(nullptr);
 
             ag->begin();
 
@@ -108,12 +103,15 @@ namespace mrv
                 {
                     if (auto s = std::dynamic_pointer_cast<tl::draw::NoteShape>(shape))
                     {
-                        ag->add_annotation(annotation->time, s);
+                        auto w = ag->add_annotation(annotation->time, s);
+                        w->set_collapsed(true);
                     }
                 }
             }
 
             ag->end();
+
+            ag->setPlayer(player);
 
             key = prefix + "Notes";
             value = settings->getValue<std::any>(key);

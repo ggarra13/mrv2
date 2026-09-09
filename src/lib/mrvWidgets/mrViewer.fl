@@ -892,7 +892,7 @@ if (reason == FL_REASON_CLOSED)
         xywh {0 0 934 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar
+          label MenuBar open
           xywh {0 0 934 30} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {open
@@ -1126,57 +1126,29 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             } {
               Fl_Button uiAutoICS {
                 label {Auto  ICS}
-                callback {auto player = uiView->getTimelinePlayer();
-if (!player)
-    return;
-    
-tl::file::Path path = player->path();
-std::string extension = path.getExtension();
-if (extension != ".exr")
-    return;
-
-std::string help = _("Automatically select Input Color Space from file and OpenEXR metadata. ");
-
-int value = !o->value();
-
-bool declaredUnmatched;
-std::string declaredName;
-std::string declaredSource;
-std::string name;
+                callback {int value = o->value();
 
 if (value)
 {
-  name = mrv::ocio::autoICS(declaredUnmatched,
-  	                    declaredName,
-               	            declaredSource);
-}
-
-if (!name.empty())
-{
-    mrv::ocio::setIcs(name);
-    std::string tooltip = tl::string::Format("{0}Currently: {1} from {2}").
-                          arg(help).arg(declaredName).arg(declaredSource);
-    o->copy_tooltip(tooltip.c_str());
-    o->labelcolor(fl_rgb_color(255, 255, 255));
-    o->value(1);                      
+  o->labelcolor(fl_rgb_color(255, 255, 255));
+  o->color(FL_CYAN);
 }
 else
 {
-    o->copy_tooltip(help.c_str());
-    o->labelcolor(FL_FOREGROUND_COLOR);
-    o->value(0);      
-}} selected
-                tooltip {Automatically select Input Color Space from file and OpenEXR metadata.} xywh {247 30 38 29} down_box DOWN_BOX selection_color 14 labelsize 10 align 144
-                class {mrv::Button}
+  o->labelcolor(FL_FOREGROUND_COLOR);
+  o->color(FL_BACKGROUND_COLOR);
+}
+o->redraw();}
+                tooltip {Automatically select Input Color Space from file and OpenEXR metadata.} xywh {247 30 38 29} type Toggle down_box DOWN_BOX selection_color 14 labelsize 10 align 16
               }
               Fl_Menu_Button uiICS {
                 label {Input Color Space}
                 user_data this user_data_type {ViewerUI*}
-                callback {// We actually turn if off, not on.
-uiAutoICS->value(1);
+                callback {// Turn off uiAutoICS
+uiAutoICS->value(0);
 uiAutoICS->do_callback();
 
-uiView->updateOCIOOptions();} open
+uiView->updateOCIOOptions();} open selected
                 tooltip {OCIO input color space for the image} xywh {285 30 155 29} down_box DOWN_BOX labelsize 10 align 112
                 code3 {o->disable_submenus();}
                 class {mrv::PopupMenu}

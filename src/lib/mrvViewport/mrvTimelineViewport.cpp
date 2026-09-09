@@ -62,6 +62,7 @@
 
 #include <tlCore/HDR.h>
 #include <tlCore/Matrix.h>
+#include <tlCore/StringFormat.h>
 
 #include <FL/Fl.H>
 
@@ -3826,6 +3827,37 @@ namespace mrv
             return _p->tagData;
         }
 
+
+        void TimelineViewport::setAutoICS()
+        {
+            TLRENDER_P();
+
+            static const std::string help =
+                _("Automatically select Input Color Space from file "
+                  "and OpenEXR metadata. ");
+
+            bool autoUnmatched;
+            std::string autoName;
+            std::string autoSource;
+            std::string name = ocio::autoICS(autoUnmatched,
+                                             autoName,
+                                             autoSource);
+
+            if (!name.empty())
+            {
+                ocio::setIcs(name);
+                const std::string tooltip = string::Format("{0}Currently: {1} from {2}")
+                                            .arg(help)
+                                            .arg(autoName)
+                                            .arg(autoSource);
+                p.ui->uiAutoICS->copy_tooltip(tooltip.c_str());
+            }
+            else
+            {
+                p.ui->uiAutoICS->copy_tooltip(help.c_str());
+            }
+        }
+
         void TimelineViewport::_getHDR() noexcept
         {
             TLRENDER_P();
@@ -3896,9 +3928,7 @@ namespace mrv
                     // Handle OCIO Auto ICS
                     if (p.ui->uiAutoICS->value())
                     {
-                        // Set it to 0 so the callback turns it to 1.
-                        p.ui->uiAutoICS->value(0);
-                        p.ui->uiAutoICS->do_callback();
+                        setAutoICS();
                     }
 
                     // We pass BT709 metadata unless OCIO changes it in
