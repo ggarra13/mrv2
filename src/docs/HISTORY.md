@@ -8,6 +8,7 @@ v1.7.6
 - UI: Added pencil annotations and erasing without a Solo License.  Note that area tools and other drawing tools like arrows remain on the Solo License.  This is a compromise between features present on all viewers and features only on mrv2/vmrv2 so that those that unlocked a Solo License, won't feel cheated.
 - UI: Added a Notes Panel to display and edit the list of review notes easily, as suggested by Serban Jipa.
 
+- Core: MacOS OpenGL M1 builds no longer come with USD support.  This is for two reasons: Apple now provides a Preview.app to see the USD on M1+ boxes and the newest USD repository's compilation is broken on M1+ (works only on Linux).
 - Core: Added HW decoding and encoding on aarch64 platforms.
 - Core: Added support for OpenEXR's colorInteropID with the new Auto ICS button and its tooltip describing what it chose.  Auto ICS works with image files.  For videos, you should rely on **Preferences->OCIO->No OCIO on Videos or sRGB/BT709** data as it is faster.
 - Core: Added SVG reader.  Works with all .svg with paths.  Does not currently decode SVGs with text yet, though.
