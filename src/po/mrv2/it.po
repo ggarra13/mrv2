@@ -6,6 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"POT-Creation-Date: 2026-09-10 10:19-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: it\n"
@@ -302,6 +303,7 @@ msgstr "Salva un file di sessione."
 msgid "Save and reload session file restarting mrv2."
 msgstr "Salva e ricarica il file di sessione riavviando mrv2."
 
+#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Complemento Python duplicato {0} in {1} e {2}."
 
@@ -1121,6 +1123,7 @@ msgstr ""
 "Ottenere tutte le istruzioni URL/file/IA per il fotogramma corrente come "
 "file JSON."
 
+#, c++-format
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Canali: {1} {2} {3}"
 
@@ -1295,9 +1298,11 @@ msgstr "Posizione delle preferenze:"
 msgid "Temp Location: "
 msgstr "Percorso temporaneo: "
 
+#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "Impossibile leggere lo script python '{0}'"
 
+#, c++-format
 msgid "Running python script '{0}'"
 msgstr "Eseguire lo script del python '{0}'"
 
@@ -1310,6 +1315,7 @@ msgstr "Errore di Python:"
 msgid "Caching..."
 msgstr "Memorizzazione nella cache..."
 
+#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Il nome file '{0}' non esiste o non ha permessi di lettura."
 
@@ -1319,9 +1325,11 @@ msgstr "Stampa il log sulla console."
 msgid "Show this message."
 msgstr "Mostra questo messaggio."
 
+#, c++-format
 msgid "Cannot parse option \"{0}\": {1}"
 msgstr "Impossibile analizzare l'opzione \"{0}\": {1}"
 
+#, c++-format
 msgid "Cannot parse argument \"{0}\": {1}"
 msgstr "Impossibile analizzare l'argomento \"{0}\": {1}"
 
@@ -1455,6 +1463,7 @@ msgstr "Editor/Editor esterno"
 msgid "Scripts/Add To Script List"
 msgstr "Scritti/Aggiungi all'elenco script"
 
+#, c-format
 msgid "Scripts/%s"
 msgstr "Scritti/%s"
 
@@ -1465,6 +1474,7 @@ msgstr ""
 "Digitare qui il vostro codice python. Selezionare un'area per eseguire solo "
 "una porzione di esso. Premere Invio tastiera per eseguire."
 
+#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "Il file Python {0} esiste già. Vuoi sovrascriverlo?"
 
@@ -1486,18 +1496,22 @@ msgstr "Il flusso è in uno stato di errore irricuperabile."
 msgid "Type your editor command"
 msgstr "Digita il tuo comando editor"
 
+#, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr "{0} verrà sostituito con il numero di riga. {1} con il nome del file"
 
+#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "Errore di espressione regolare: {0}"
 
+#, c++-format
 msgid "Could not open python editor: {0}"
 msgstr "Impossibile aprire l'editor python: {0}"
 
 msgid "Search String:"
 msgstr "Stringa di ricerca:"
 
+#, c-format
 msgid "No occurrences of '%s' found!"
 msgstr "Nessun evento di «%s» trovato!"
 
@@ -1534,11 +1548,24 @@ msgstr "Con i metadati"
 msgid "Without Metadata"
 msgstr "Senza metadati"
 
+#, c++-format
 msgid "Streaming {0} {1}..."
 msgstr "Streaming {0} {1}..."
 
 msgid "Stop streaming"
 msgstr "Smettila di trasmettere in streaming"
+
+msgid "Complexity"
+msgstr "Complexità"
+
+msgid "Draw Mode"
+msgstr "Modalità di disegno"
+
+msgid "Stage Cache"
+msgstr "Cache per stadio"
+
+msgid "Disk Cache in GB"
+msgstr "Cache disco in GB"
 
 msgid "Type"
 msgstr "Tipo"
@@ -1708,6 +1735,9 @@ msgid ""
 msgstr ""
 "Questo ripristinerà tutte le impostazioni al loro valore predefinito. Sei "
 "sicuro di voler continuare?"
+
+msgid "Notes"
+msgstr "Note"
 
 msgid "Set the verbosity of the logs."
 msgstr "ログの詳細レベルを設定します。"
@@ -1881,9 +1911,11 @@ msgstr "1:16"
 msgid "Pick"
 msgstr "Scegli"
 
+#, c-format
 msgid "%.3f seconds "
 msgstr "%.3f secondi"
 
+#, c-format
 msgid "Video Stream #%d"
 msgstr "Stream video #%d"
 
@@ -2151,6 +2183,7 @@ msgstr "Ultima data modificata del file"
 msgid "Load an image or movie file"
 msgstr "Carica un file immagine o filmato"
 
+#, c-format
 msgid "Audio Stream #%d"
 msgstr "ऑडियो स्ट्रीम #%d"
 
@@ -2169,6 +2202,7 @@ msgstr "Numero di canali audio"
 msgid "Format"
 msgstr "Formato"
 
+#, c-format
 msgid "%d Hz."
 msgstr "%d Hz."
 
@@ -2178,6 +2212,7 @@ msgstr "Frequenza"
 msgid "Frequency of audio"
 msgstr "Frequenza dell'audio"
 
+#, c-format
 msgid "%d kb/s"
 msgstr "%d kb/s"
 
@@ -2202,6 +2237,7 @@ msgstr "Durata"
 msgid "Duration of Audio"
 msgstr "Durata dell'audio"
 
+#, c-format
 msgid "Subtitle Stream #%d"
 msgstr "Sottotitolo Stream #%d"
 
@@ -2386,6 +2422,9 @@ msgstr "LUT"
 msgid "Enabled"
 msgstr "Abilitato"
 
+msgid "Direction"
+msgstr "Direzione"
+
 msgid "Order"
 msgstr "Ordine"
 
@@ -2531,12 +2570,11 @@ msgstr "All"
 msgid "Makes the following annotation show on all frames."
 msgstr "Rende la seguente annotazione mostrare su tutti i fotogrammi."
 
-msgid "Notes"
-msgstr "Note"
-
+#, c++-format
 msgid "STUN server is {0}"
 msgstr "Il server STUN è {0}"
 
+#, c++-format
 msgid "TURN server is {0}"
 msgstr "Il server TURN è {0}"
 
@@ -2560,12 +2598,15 @@ msgid "No Web RTC Studio set.  Please update Preferences->WebRTC->Studio"
 msgstr ""
 "Nessuno studio WebRTC configurato. Aggiorna Preferenze->WebRTC->Studio"
 
+#, c++-format
 msgid "The room ID is: {0}"
 msgstr "L'ID della stanza è: {0}"
 
+#, c++-format
 msgid "The player ID is: {0}"
 msgstr "L'ID del player è: {0}"
 
+#, c++-format
 msgid "Downloading {0}..."
 msgstr "Download di {0}..."
 
@@ -2575,9 +2616,11 @@ msgstr "Ascolto del server sulla porta"
 msgid "ComfyUI listening on port "
 msgstr "ComfyUI in ascolto sulla porta"
 
+#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr "Server protocol version is {0}. Client protocol version is {1}"
 
+#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "Il file remoto {0} non esiste nel filesystem locale."
 
@@ -2587,6 +2630,7 @@ msgstr "Non connesso tramite WebRTC; impossibile recuperare il file remoto."
 msgid "Peer not connected."
 msgstr "Peer non connesso."
 
+#, c++-format
 msgid ""
 "{0} is only reachable via relay (TURN), which would consume VPS bandwidth. "
 "Skipping fetch to avoid unexpected costs."
@@ -2594,6 +2638,7 @@ msgstr ""
 "{0} è raggiungibile solo tramite relay (TURN), che consumerebbe la larghezza"
 " di banda del VPS. Recupero del file ignorato per evitare costi imprevisti."
 
+#, c++-format
 msgid "Already fetching {0} from another sync request; skipping duplicate."
 msgstr ""
 "Recupero di {0} già in corso da un'altra richiesta di sincronizzazione; "
@@ -2612,15 +2657,18 @@ msgstr ""
 msgid "Download failed."
 msgstr "Download non riuscito."
 
+#, c++-format
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr ""
 "Il file remoto {0} non è stato trovato localmente e non è disponibile alcun "
 "peer da cui recuperarlo."
 
+#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "Il file remoto {0} corrisponde al nome del file {1} ma non al percorso."
 
+#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Il file remoto {0} non corrisponde al nome del file locale."
 
@@ -2630,11 +2678,13 @@ msgstr "- Cosa?"
 msgid "ERROR:\t"
 msgstr "Errore:"
 
+#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 msgstr "Espressione regolare creata da {0}. È: {1}"
 
+#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "Iterazione {0} controllerà versione={1}"
 
@@ -2648,27 +2698,34 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Esempio: gizmo_v003.0001.exr"
 
+#, c++-format
 msgid "Could not replace {0} with {1}"
 msgstr "Impossibile sostituire {0} con {1}"
 
 msgid "Annotation already existed at this time"
 msgstr "L'annotazione esisteva già in questo momento"
 
+#, c++-format
 msgid "Failed to open the file {0} for writing."
 msgstr "Aprire il file {0} per la scrittura non è riuscito."
 
+#, c++-format
 msgid "Failed to write to the file {0}."
 msgstr "Scrivere nel file {0} non è riuscita."
 
+#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "Sessione salvata in \"{0}\"."
 
+#, c++-format
 msgid "Failed to open the file '{0}' for reading."
 msgstr "Aprire il file '{0}' per la lettura non è riuscito."
 
+#, c++-format
 msgid "Failed to load the file '{0}."
 msgstr "Caricamento del file '{0} non riuscito."
 
+#, c++-format
 msgid ""
 "Movie File '{0}' is not readable.\n"
 "\n"
@@ -2678,6 +2735,7 @@ msgstr ""
 "\n"
 "Vuoi sostituirlo con un altro?"
 
+#, c++-format
 msgid ""
 "Sequence '{0}' is not readable.\n"
 "\n"
@@ -2687,6 +2745,7 @@ msgstr ""
 "\n"
 "Vuoi sostituirla con un'altra?"
 
+#, c++-format
 msgid ""
 "Audio File '{0}' is not readable.\n"
 "\n"
@@ -2696,9 +2755,11 @@ msgstr ""
 "\n"
 "Vuoi sostituirlo con un altro?"
 
+#, c++-format
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "Preferenze di lettura da \"{0}{1}\"."
 
+#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "Recuperare {0} non è riuscito."
 
@@ -2714,9 +2775,11 @@ msgstr ""
 "Il debanding non è impostato su Nessuno. Questo può far apparire le immagini"
 " sfocate."
 
+#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "Impossibile aprire il tema di colore da \"{0}\"."
 
+#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "Temi di colore caricati da \"{0}\"."
 
@@ -2727,27 +2790,34 @@ msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 "Impostazione della configurazione OCIO dalla variabile di ambiente OCIO."
 
+#, c++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Le mappature dei percorsi sono state caricate da \"{0}{1}\"."
 
+#, c++-format
 msgid "Error deleting directory: \"{0}\"."
 msgstr "Errore durante l'eliminazione della directory: \"{0}\"."
 
+#, c++-format
 msgid "Cleaned directory: \"{0}\"."
 msgstr "Directory ripulita: \"{0}\"."
 
+#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Caricamento di tasti di avviamento da \"{0}{1}.prefs\"."
 
 msgid "Resetting hotkeys to default."
 msgstr "Ripristino dei tasti rapidi ai valori predefiniti."
 
+#, c++-format
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "Le mappature dei percorsi sono state salvate in \"{0}{1}\"."
 
+#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Le tastiere sono state salvate in \"{0}{1}.prefs\"."
 
+#, c++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Le preferenze sono state salvate su: \"{0}{1}\"."
 
@@ -2757,6 +2827,7 @@ msgstr "Rimozione"
 msgid "OCIO config is now:"
 msgstr "La configurazione di OCIO è ora:"
 
+#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "File OCIO \"{0}\" non trovato o non leggibile."
 
@@ -2766,57 +2837,74 @@ msgstr "Impostazione della configurazione OCIO a impostazione predefinita:"
 msgid "Setting OCIO config to built-in:"
 msgstr "Impostazione della configurazione OCIO in built-in:"
 
+#, c++-format
 msgid "Path mapping for {0} already exists!"
 msgstr "La mappatura del percorso per {0} esiste già!"
 
+#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "Confrontando {0} al prefisso {1}"
 
+#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "Trovata una corrispondenza. Il file ora è {0}"
 
 msgid "OCIO config file cannot be empty."
 msgstr "Il file di configurazione OCIO non può essere vuoto."
 
+#, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "La configurazione OCIO '{0}' non esiste o non è leggibile."
 
+#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "OCIO Ics invalidi «{0}»."
 
+#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr "Look OCIO non valido \"{0}\"."
 
+#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "Visualizzazione OCIO non valida/Vedi \"{0}\"."
 
+#, c++-format
 msgid "Could not split '{0}' into display and view."
 msgstr "Impossibile dividere '{0}' in visualizzazione e visualizzazione."
 
+#, c++-format
 msgid "No default view for display '{0}'.  Does display exist?"
 msgstr "Nessuna vista predefinita per il display '{0}'. Esiste il display?"
 
+#, c++-format
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Impostazione OCIO Preset '{0}'."
 
+#, c++-format
 msgid "Preset '{0}' not found."
 msgstr "Preimpostazione \"{0}\" non trovata."
 
+#, c++-format
 msgid "OCIO Preset '{0}' already exists!"
 msgstr "OCIO Preset '{0}' esiste già!"
 
+#, c++-format
 msgid "Failed to load the file '{0}'."
 msgstr "Caricamento del file «{0}» non riuscito."
 
+#, c++-format
 msgid "Loaded {0} ocio presets from \"{1}\"."
 msgstr "Caricato {0} preimpostazioni ocio da \"{1}\"."
 
+#, c++-format
 msgid "Failed to open the file '{0}' for saving."
 msgstr "Aprire il file «{0}» per il salvataggio non è riuscito."
 
+#, c++-format
 msgid "Failed to save the file '{0}'."
 msgstr "Salvare il file '{0} non è riuscito."
 
+#, c++-format
 msgid "OCIO presets have been saved to \"{0}\"."
 msgstr "I preset OCIO sono stati salvati in \"{0}\"."
 
@@ -2847,6 +2935,7 @@ msgstr "Russo"
 msgid "Japanese"
 msgstr "Giapponese"
 
+#, c++-format
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -2854,6 +2943,7 @@ msgstr ""
 "Hai bisogno di riavviare mrv2 per cambiare linguaggio in {0}. Sei sicuro di "
 "voler continuare?"
 
+#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "Imposta linguaggio a {0}, numeri a {1}"
 
@@ -2986,11 +3076,13 @@ msgstr ""
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.Funzione @B12@C7@b@.Hotkey"
 
+#, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
 msgstr "Hotkey «%s» già usato in «%s». Vuoi sostituirlo?"
 
+#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -3161,22 +3253,26 @@ msgstr "Indice non valido per aggiungere clip alla timeline."
 msgid "Could not get current path."
 msgstr "Impossibile ottenere il percorso attuale."
 
+#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr ""
 "L'elemento EDL \"{0}\" non è più caricato. Non è possibile annullare o "
 "rifare."
 
+#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "Impossibile incollare {0}. Errore {1}."
 
 msgid "Items selected must be on the same track."
 msgstr "Gli elementi selezionati devono essere sulla stessa traccia."
 
+#, c++-format
 msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
 msgstr ""
 "Gli elementi selezionati devono essere contigui sulla traccia. Sinistra {0}."
 " Destra {1}."
 
+#, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
 msgstr "Selezionare due o quattro elementi contigui. Selezionati {0}."
 
@@ -3186,9 +3282,11 @@ msgstr "Selezionare due clip video contigui."
 msgid "Please select two contiguous audio clips."
 msgstr "Selezionare due clip audio contigui."
 
+#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "Impossibile salvare il file.otio: {0}"
 
+#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "Errore nel salvare {0}. {1}"
 
@@ -3201,6 +3299,7 @@ msgstr "Il file di destinazione non è valido."
 msgid "Unknown media reference"
 msgstr "Riferimento dei media sconosciuti"
 
+#, c++-format
 msgid "Track #{0} - {1}"
 msgstr "Traccia #{0} - {1}"
 
@@ -3210,9 +3309,11 @@ msgstr "Attualmente non è possibile concatenare un file.otio."
 msgid "Cannot currently concatenate a directory."
 msgstr "Attualmente non è possibile concatenare una directory."
 
+#, c++-format
 msgid "Could not append video track {0}"
 msgstr "Impossibile aggiungere la traccia video {0}"
 
+#, c++-format
 msgid "Could not append audio track {0}"
 msgstr "Impossibile aggiungere la traccia audio {0}"
 
@@ -3451,15 +3552,18 @@ msgstr "Modifica annotazione testo"
 msgid "No item selected"
 msgstr "Nessun elemento selezionato"
 
+#, c-format
 msgid "%s - Page %d"
 msgstr "%s - Pagina %d"
 
+#, c++-format
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Frame {0} - TC: {1} - {2} Secs."
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "Immagine troppo grande. Salva la dimensione della vista."
 
+#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Dimensione viewport: {0} - X={1}, Y={2}"
 
@@ -3571,6 +3675,13 @@ msgstr "Collegamento"
 msgid "(no image)"
 msgstr "(nessuna immagine)"
 
+msgid ""
+"Automatically select Input Color Space\n"
+"from file and OpenEXR metadata.  "
+msgstr ""
+"Seleziona automaticamente lo spazio colore di ingresso\n"
+"dal file e dai metadati OpenEXR.  "
+
 msgid "Unknown action mode in "
 msgstr "Modalità di azione sconosciuta in"
 
@@ -3591,12 +3702,15 @@ msgstr ""
 msgid "Cannot save an NDI stream"
 msgstr "Impossibile salvare un flusso NDI"
 
+#, c++-format
 msgid "Saving movie to {0}."
 msgstr "Salvataggio del film in {0}."
 
+#, c++-format
 msgid "Saving audio to {0}."
 msgstr "Salvataggio audio in {0}."
 
+#, c++-format
 msgid "Saving pictures to {0}."
 msgstr "Salvataggio delle immagini in {0}."
 
@@ -3622,55 +3736,101 @@ msgstr ""
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "Il profilo HAP ha bisogno di un'estensione.mov. Cambiandolo in.mov"
 
+#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "Esistono già nuovi file {0}! Impossibile sovrascriverlo."
 
-msgid "{0}: Cannot open writer plugin."
-msgstr "{0}: Impossibile aprire il plugin scrittore."
+#, c++-format
+msgid "Rotated image info: {0}"
+msgstr "Informazioni sull'immagine rotante: {0}"
 
-msgid "Image info: {0} {1}"
-msgstr "Informazioni sull'immagine: {0} {1}"
-
+#, c++-format
 msgid "Scaled image info: {0}"
 msgstr "Informazioni sull'immagine scalata: {0}"
 
+#, c++-format
+msgid "{0}: Cannot open writer plugin."
+msgstr "{0}: Impossibile aprire il plugin scrittore."
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr "Informazioni sull'immagine: {0} {1}"
+
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Immagine troppo grande per salvare le annotazioni. Sarà scalato alla "
+"dimensione della vista."
+
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr ""
 "Il plugin scrittore non ha ottenuto le informazioni di output. Predefinito a"
 " {0}"
 
-msgid "Using profile {0}, pixel format {1}."
-msgstr "Utilizzando profilo {0}, formato pixel {1}."
-
-msgid "Using preset {0}."
-msgstr "Usando preimpostazione {0}."
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Informazioni buffer offscreen: {0}"
-
+#, c++-format
 msgid "Output info: {0} {1}"
 msgstr "Informazioni sull'uscita: {0} {1}"
 
+#, c++-format
+msgid "Using profile {0}, pixel format {1}."
+msgstr "Utilizzando profilo {0}, formato pixel {1}."
+
+#, c++-format
+msgid "Using preset {0}."
+msgstr "Usando preimpostazione {0}."
+
+#, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Salvataggio di film senza audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "Salvataggio di film con audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "Risparmio audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "Salvataggio delle immagini senza audio %<PRId64> - %<PRId64>"
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio solo nella timeline, ma non cercando di salvare l'audio."
 
+#, c++-format
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Formato e tipo OpenGL non valido"
+
+#, c++-format
+msgid "OpenGL info: {0}"
+msgstr "Informazioni OpenGL: {0}"
+
+#, c++-format
 msgid "Saving... {0}"
 msgstr "Salvataggio... {0}"
 
+msgid "Unsupported output format"
+msgstr "Formato di output non supportato"
+
+#, c++-format
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Dati video vuoti al momento {0}. Ripetizione della cornice."
+
+#, c++-format
 msgid "Render size: {0}"
 msgstr "रेंडर आकार: {0}"
+
+#, c++-format
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr "Informazioni buffer offscreen: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Formato di output non supportato: "
 
 msgid "2.35"
 msgstr "2.35"
@@ -3681,44 +3841,22 @@ msgstr "1.85"
 msgid "1.66"
 msgstr "1.66"
 
+#, c-format
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "Cache: "
 
-msgid "HDR monitor min. nits = {0}"
-msgstr "Luminosità minima del monitor HDR (nit) = {0}"
-
-msgid "HDR monitor max. nits = {0}"
-msgstr "Luminosità massima del monitor HDR (nit) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR non trovato o non configurato."
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr "Monitor HDR non rilevato da Vulkan o dal gestore delle finestre."
-
-msgid "Vulkan color space is {0}"
-msgstr "Lo spazio colore Vulkan è {0}"
-
-msgid "Vulkan format is {0}"
-msgstr "Il formato Vulkan è {0}"
-
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "Passato al monitor HDR attivo all'indice {0}"
-
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr "Passato al monitor con supporto HDR ma inattivo all'indice {0}"
-
-msgid "Changed to SDR monitor at index {0}"
-msgstr "Passato al monitor SDR all'indice {0}"
-
 msgid "Edit Text"
 msgstr "Modifica testo"
 
+#, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' non è un file, una directory o un URL."
+
+msgid "Invalid font for text drawing"
+msgstr "Tipo di carattere non valido per il disegno di testo"
 
 msgid "Could not convert message to shape: "
 msgstr "Impossibile convertire il messaggio in forma:"
@@ -3732,9 +3870,11 @@ msgstr "Impossibile riprodurre – l’annotazione audio è vuota"
 msgid "Status is not saved"
 msgstr "Lo stato non è stato salvato"
 
+#, c++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Il file di annotazione audio {0} è mancante o non esiste!"
 
+#, c++-format
 msgid "Unhandled buffer format: {0} for output: {1}"
 msgstr "Formato di buffer non supportato: {0} per l'output: {1}"
 
@@ -3840,6 +3980,7 @@ msgstr "File/Chiudi tutto"
 msgid "File/Save and Reload Session"
 msgstr "File/Salva e ricarica sessione"
 
+#, c-format
 msgid "File/Recent/%s"
 msgstr "File/Recente/%s"
 
@@ -4089,6 +4230,7 @@ msgstr "Riproduzione/Annotazione/Cancella"
 msgid "Playback/Annotation/Clear All"
 msgstr "Riproduzione/Annotazione/Cancella tutto"
 
+#, c-format
 msgid "View/Mask/%s"
 msgstr "Visualizza/Maschera/%s"
 
@@ -4161,9 +4303,11 @@ msgstr "Timeline/Transizioni"
 msgid "Timeline/Markers"
 msgstr "Timeline/Marcatori"
 
+#, c++-format
 msgid "Timeline/Visible Tracks/{0}"
 msgstr "Timeline/Tracce visibili/{0}"
 
+#, c++-format
 msgid "Timeline/Media Reference/{0}"
 msgstr "Timeline/Riferimento media/{0}"
 
@@ -4221,12 +4365,14 @@ msgstr "Immagine/Confronta la modalità/Verticale"
 msgid "Image/Compare Mode/Tile"
 msgstr "Immagine/Confronta la modalità/Piastrelle"
 
+#, c-format
 msgid "Image/Go to/%s"
 msgstr "Immagine/Vai a/%s"
 
 msgid "Image/Compare/Toggle A and B"
 msgstr "Immagine/Confronta/Attiva - disattiva A e B"
 
+#, c-format
 msgid "Image/Compare/%s"
 msgstr "Immagine/Confronta/%s"
 
@@ -4293,24 +4439,31 @@ msgstr "OCIO/Attiva Disattiva"
 msgid "OCIO/Current"
 msgstr "OCIO/Attualità"
 
+#, c-format
 msgid "OCIO/         ICS: %s"
 msgstr "OCIO/         ICS: %s"
 
+#, c-format
 msgid "OCIO/     Display: %s"
 msgstr "OCIO/     Display: %s"
 
+#, c-format
 msgid "OCIO/        View: %s"
 msgstr "OCIO/        Vista: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/  Monitor #%d Display: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/  Monitor #%d    Vista: %s"
 
+#, c-format
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/        Look: %s"
 
+#, c-format
 msgid "OCIO/        LUT: %s"
 msgstr "OCIO/        LUT: %s"
 
@@ -4362,6 +4515,7 @@ msgstr "Sincronizzazione/Accettare/Annotazioni"
 msgid "Sync/Accept/Audio"
 msgstr "Sincronizzazione/Accettare/Audio"
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -4369,6 +4523,7 @@ msgstr ""
 "In '{0}' ci si aspettava una funzione come valore o tupla contenente una "
 "funzione Python e una stringa con le opzioni del menu."
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -4469,6 +4624,7 @@ msgstr "Modalità ampia lista"
 msgid "Detail mode"
 msgstr "Modalità dettaglio"
 
+#, c-format
 msgid ""
 "Could not create directory '%s'. You may not have permission to perform this"
 " operation."
@@ -4476,12 +4632,15 @@ msgstr ""
 "Impossibile creare la directory «%s». È possibile che non abbia il permesso "
 "di eseguire questa operazione."
 
+#, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "Si è verificato un errore durante il tentativo di eliminare '%s'. %s"
 
+#, c-format
 msgid "File '%s' already exists!"
 msgstr "Il file «%s» esiste già!"
 
+#, c-format
 msgid "Unable to rename '%s' to '%s'"
 msgstr "Impossibile rinominare «%s» a «%s»"
 
@@ -4623,6 +4782,7 @@ msgstr "Attivo compresso OpenUSD"
 msgid "OpenUSD ASCII Asset"
 msgstr "Attivo OpenUSD ASCII"
 
+#, c-format
 msgid "Another process using the file."
 msgstr "Un altro processo che utilizza il file."
 
@@ -4722,9 +4882,11 @@ msgstr "Con msvc"
 msgid "mrv2 depends on:"
 msgstr "mrv2 dipende da:"
 
+#, c++-format
 msgid "Total Physical Memory: {0} Gb"
 msgstr "Memoria fisica totale: {0} GB"
 
+#, c++-format
 msgid "Total Virtual Memory: {0} Gb"
 msgstr "Memoria virtuale totale: {0} GB"
 
@@ -4776,6 +4938,7 @@ msgstr "Scatola di trascinamento"
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "Tipo sconosciuto per mrvoCIOBrowser"
 
+#, c++-format
 msgid ""
 "Wayland Compositor supports Float on Top only through hotkeys.  Press {0}."
 msgstr ""
@@ -4789,6 +4952,7 @@ msgstr ""
 "Wayland non supporta Float in alto. Utilizza il gestore di finestre per "
 "impostare un tasto di accensione per esso."
 
+#, c++-format
 msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr ""
 "Nessuna tastiera GNOME Shell per fluttuare in alto. Impostare globalemente "
@@ -4880,8 +5044,25 @@ msgstr "Intervallo"
 msgid "Mean"
 msgstr "Media"
 
+#, c-format
 msgid "Track #%d - %s"
 msgstr "Traccia #%d - %s"
+
+msgid "Select Circle Color"
+msgstr "Seleziona il colore del cerchio"
+
+msgid "Add a new note at the current time."
+msgstr "Aggiungi una nuova nota al tempo corrente."
+
+msgid "Remove the current note."
+msgstr "Rimuovi la nota corrente."
+
+msgid "No annotations added yet."
+msgstr "Nessuna annotazione aggiunta."
+
+#, c++-format
+msgid "This frame already has a note at {0}, frame {1}."
+msgstr "Questo fotogramma ha già una nota a {0}, fotogramma {1}."
 
 msgid "Same Size"
 msgstr "Stessa dimensione"
@@ -5200,66 +5381,67 @@ msgid ""
 "  Hardware encoding is only supported on newer MacBook\n"
 "  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
 "  AV1 are supported or soon will be.\n"
+"  NVidia supports H264, HEVC and, depending on HW and drivers, AV1.\n"
 "  "
 msgstr ""
 "\n"
-" L'impostazione Profilo consente di selezionare\n"
-" il codec e il profilo per il salvataggio video.\n"
+"  L'impostazione Profilo consente di selezionare\n"
+"  il codec e il profilo per il salvataggio dei video.\n"
 "\n"
-" Ogni profilo ha i suoi vantaggi e svantaggi.\n"
+"  Ogni profilo presenta vantaggi e svantaggi.\n"
 "\n"
-" Nessuno - Questo è compatibile con mpeg4 con i film in DVD.\n"
-" H264    - Solo se mrv2 è stato compilato come GPL. Uno\n"
-"           dei codec più popolari, ma ora sta\n"
-"           diventando obsoleto.\n"
-" ProRes - ProRes è una famiglia di codec sviluppata da \n"
-"          Apple.\n"
-"          La versione Normale raggiunge un equilibrio \n"
-"          tra qualità e dimensione del file. \n"
-" ProRes_Proxy - ProRes più compresso, che offre le\n"
-"                dimensioni di file più piccole. \n"
-"                Adatto per l'editing offline.\n"
-" ProRes_LT - Più compresso del normale ProRes ma \n"
-"             inferiore a Proxy. Ottimo per l'editing offline.\n"
-" ProRes_HQ - Meno compresso del normale ProRes. \n"
-"             Spesso utilizzato per la masterizzazione e la\n"
-"             consegna finale.\n"
-" ProRes_4444 - Formato ProRes di massima qualità, \n"
-"               che offre un campionamento cromatico 4:4:4\n"
-"               completo (informazioni sul colore \n"
-"               per ogni pixel).\n"
-"               Conserva il massimo dei dettagli e della\n"
-"               precisione del colore,\n"
-"               ideale per flussi di lavoro di fascia alta \n"
-"               come la gradazione del colore e gli effetti visivi.\n"
-"               Supporta i canali alfa per la \n"
-"               composizione grafica con \n"
-"               trasparenza.\n"
-" ProRes_XQ - Versione di massima qualità di ProRes 4444, \n"
-"             progettata per immagini ad alta gamma dinamica (HDR).\n"
-" VP9 - Codec sviluppato da Google. Rapporto di compressione elevato. \n"
-"       Supporta un'ampia gamma di formati pixel per bilanciare spazio\n"
-"       su disco e qualità. Adatto per la distribuzione di fascia alta\n"
-"       per Web o recensioni online.\n"
-" Cineform - Codec sviluppato da GoPro, che rivaleggia con ProRes in\n"
-"            termini di funzionalità, ad eccezione di HDR.\n"
-"            È stato interrotto nel 2021, ma la maggior\n"
-"            parte dei pacchetti potrebbe supportarlo.\n"
-"            Non comprime bene come ProRes o VP9.\n"
-"            Supporta i canali alfa per la composizione di grafica\n"
-"            con trasparenza.\n"
-" AV1 - Codec di nuova generazione che sta ottenendo il supporto di\n"
-"       Google, Netflix e Amazon. Comprime meglio di VP9 o H264 per\n"
-"       la stessa qualità, ma richiede più risorse del computer.\n"
-"       Ottimale per le recensioni video.\n"
-" HAP - codec RGB/A ottimizzato per una riproduzione veloce con\n"
-"       decodifica CPU. Non comprime molto bene.\n"
-"       Ha bisogno di preset hap-alpha* per salvare il canale alfa.\n"
+"  None - Compatibile con MPEG4 e i film su DVD.\n"
+"  H264 - Solo se mrv2 è stato compilato come GPL. È uno\n"
+"         dei codec più popolari, ma sta ormai\n"
+"         diventando obsoleto.\n"
+"  ProRes - ProRes è una famiglia di codec sviluppata da\n"
+"           Apple.\n"
+"           La versione Normal offre un equilibrio tra\n"
+"           qualità e dimensioni del file.\n"
+"  ProRes_Proxy - ProRes con la maggiore compressione, che offre\n"
+"                 le dimensioni del file più ridotte.\n"
+"                 Indicato per il montaggio offline.\n"
+"  ProRes_LT - Più compresso del ProRes normale, ma\n"
+"              meno di Proxy. Indicato per il montaggio offline.\n"
+"  ProRes_HQ - Meno compresso del ProRes normale.\n"
+"              Utilizzato spesso per il mastering e la\n"
+"              consegna finale.\n"
+"  ProRes_4444 - Formato ProRes di massima qualità,\n"
+"                con campionamento della crominanza 4:4:4\n"
+"                completo (informazioni sul colore per ogni pixel).\n"
+"                Preserva il massimo livello di dettaglio e precisione\n"
+"                del colore, ideale per flussi di lavoro di fascia alta\n"
+"                come il color grading e gli effetti visivi.\n"
+"                Supporta i canali alfa per il compositing\n"
+"                di grafica con trasparenza.\n"
+"  ProRes_XQ - Versione di ProRes 4444 di massima qualità,\n"
+"              progettata per immagini ad alta gamma dinamica (HDR).\n"
+"  VP9 - Codec sviluppato da Google. Elevato rapporto di compressione.\n"
+"        Supporta un'ampia gamma di formati pixel per\n"
+"        bilanciare spazio su disco e qualità.\n"
+"        Indicato per la distribuzione di alta qualità sul Web\n"
+"        o per le revisioni online.\n"
+"  Cineform - Codec sviluppato da GoPro che rivaleggia con\n"
+"             ProRes per funzionalità, ad eccezione dell'HDR.\n"
+"             È stato dismesso nel 2021, ma la maggior parte dei\n"
+"             pacchetti potrebbe ancora supportarlo.\n"
+"             Non comprime bene quanto ProRes o VP9.\n"
+"             Supporta i canali alfa per il compositing\n"
+"             di grafica con trasparenza.\n"
+"  AV1 - Codec di nuova generazione che sta ottenendo sempre più\n"
+"        supporto da Google, Netflix e Amazon. Comprime meglio di VP9\n"
+"        o H264 a parità di qualità, ma richiede maggiori risorse\n"
+"        di calcolo. Ottimale per le revisioni video.\n"
+"  HAP - Codec RGB/A ottimizzato per la riproduzione rapida con\n"
+"        decodifica tramite CPU. Non offre una compressione molto efficace.\n"
+"        Richiede i preset hap-alpha* per salvare il canale alfa.\n"
 "\n"
-" La codifica hardware è supportata solo sui MacBook più recenti\n"
-" Pro con chip M1 o più recenti. H264, Prores, VP9 e\n"
-" AV1 sono supportati o lo saranno presto.\n"
-" "
+"  La codifica hardware è supportata solo sui MacBook Pro più recenti\n"
+"  con chip M1 o successivi. H264, ProRes, VP9 e AV1 sono supportati\n"
+"  o lo saranno presto.\n"
+"  NVIDIA supporta H264, HEVC e, a seconda dell'hardware e dei driver,\n"
+"  AV1.\n"
+"  "
 
 msgid "Pixel Format Help"
 msgstr "Aiuto al formato del pixel"
@@ -5773,6 +5955,14 @@ msgstr ""
 
 msgid "ICS, View, Look"
 msgstr "ICS, vista, guarda"
+
+msgid "Auto  ICS"
+msgstr "Auto  ICS"
+
+msgid "Automatically select Input Color Space from file and OpenEXR metadata."
+msgstr ""
+"Seleziona automaticamente lo spazio colore di ingresso dal file e dai "
+"metadati OpenEXR."
 
 msgid "Input Color Space"
 msgstr "Spazio colore di ingresso"
@@ -6918,6 +7108,16 @@ msgstr "Confezioni incorporate"
 msgid "Pick a config.ocio file from disk."
 msgstr "Scegliere un file config.ocio dal disco."
 
+msgid "Set Auto ICS as default"
+msgstr "Imposta ICS automatico come predefinito"
+
+msgid ""
+"Set Auto ICS as a default so that Input Color Space is selected from file "
+"name or OpenEXR metadata.."
+msgstr ""
+"Imposta ICS automatico come predefinito, in modo che lo spazio colore di "
+"ingresso venga selezionato dal nome del file o dai metadati OpenEXR."
+
 msgid "Use Default Display and View"
 msgstr "Usa la visualizzazione e la visualizzazione predefinite"
 
@@ -7591,24 +7791,31 @@ msgstr "Dividere"
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.Remote @B12@C7@b@.Local"
 
+#, c++-format
 msgid "Unknown licese plan '{0}'"
 msgstr "Piano di licenza sconosciuto '{0}'"
 
+#, c++-format
 msgid "License plan '{0}'"
 msgstr "Piano di licenza «{0}»"
 
+#, c++-format
 msgid "Supports annotations '{0}'"
 msgstr "Supporta le annotazioni «{0}»"
 
+#, c++-format
 msgid "Supports editing '{0}'"
 msgstr "Supporta la modifica «{0}»"
 
+#, c++-format
 msgid "Supports layers '{0}'"
 msgstr "Supporta i livelli «{0}»"
 
+#, c++-format
 msgid "Supports python '{0}'"
 msgstr "Supporta Python «{0}»"
 
+#, c++-format
 msgid "Supports voice annotations '{0}'"
 msgstr "Supporta le annotazioni vocali «{0}»"
 
@@ -7621,9 +7828,11 @@ msgstr "Vincolata al computer"
 msgid "Floating"
 msgstr "Fluttuante"
 
+#, c++-format
 msgid "Found floating license at '{0}'"
 msgstr "Licenza floating trovata in '{0}'"
 
+#, c++-format
 msgid "Did not find floating license at '{0}'"
 msgstr "Licenza floating non trovata in '{0}'"
 
@@ -7633,13 +7842,16 @@ msgstr "Data di scadenza non valida"
 msgid "License expired"
 msgstr "Licenza scaduta"
 
+#, c++-format
 msgid "{0} is not readable. Using system default."
 msgstr ""
 "{0} non è leggibile. Verrà utilizzato il valore predefinito del sistema."
 
+#, c++-format
 msgid "{0} Active Licenses from {1}."
 msgstr "{0} licenze attive da {1}."
 
+#, c++-format
 msgid "Valid license for {0}"
 msgstr "Licenza valida per {0}"
 
@@ -7649,6 +7861,7 @@ msgstr "Impossibile rilasciare la licenza flottante."
 msgid "Released Floating License"
 msgstr "Licenza fluttuante rilasciata"
 
+#, c++-format
 msgid "Your {0} license will expire on {1}."
 msgstr "La tua licenza {0} scadrà il {1}."
 
@@ -8054,6 +8267,9 @@ msgstr "Commutare la flotta secondaria in alto"
 msgid "Toggle NDI"
 msgstr "Commuta NDI"
 
+msgid "Toggle Notes"
+msgstr "Attiva/disattiva note"
+
 msgid "Toggle WebRTC"
 msgstr "Attiva/disattiva WebRTC"
 
@@ -8134,9 +8350,6 @@ msgstr "Modalità spruzzo"
 
 msgid "Area Selection Mode"
 msgstr "Modalità di selezione dell'area"
-
-msgid "Draw Mode"
-msgstr "Modalità di disegno"
 
 msgid "Erase Mode"
 msgstr "Modalità di cancellazione"
@@ -8246,6 +8459,33 @@ msgstr "host_statistics64 non riuscito"
 msgid "task info failed"
 msgstr "Informazione dell'attività non riuscita"
 
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "Luminosità minima del monitor HDR (nit) = {0}"
+
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "Luminosità massima del monitor HDR (nit) = {0}"
+
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "Monitor HDR non trovato o non configurato."
+
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
+#~ msgstr "Monitor HDR non rilevato da Vulkan o dal gestore delle finestre."
+
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Lo spazio colore Vulkan è {0}"
+
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Il formato Vulkan è {0}"
+
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "Passato al monitor HDR attivo all'indice {0}"
+
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
+#~ msgstr "Passato al monitor con supporto HDR ma inattivo all'indice {0}"
+
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "Passato al monitor SDR all'indice {0}"
+
 #~ msgid "BGR"
 #~ msgstr "BGR"
 
@@ -8306,15 +8546,6 @@ msgstr "Informazione dell'attività non riuscita"
 #~ msgid "Shutdown"
 #~ msgstr "Chiusura"
 
-#~ msgid "Complexity"
-#~ msgstr "Complexità"
-
-#~ msgid "Stage Cache"
-#~ msgstr "Cache per stadio"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache disco in GB"
-
 #~ msgid "Drop a clip here to create a playlist."
 #~ msgstr "Lascia un clip qui per creare una playlist."
 
@@ -8362,35 +8593,6 @@ msgstr "Informazione dell'attività non riuscita"
 
 #~ msgid "Play"
 #~ msgstr "Gioca"
-
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Informazioni sull'immagine rotante: {0}"
-
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr ""
-#~ "Immagine troppo grande per salvare le annotazioni. Sarà scalato alla "
-#~ "dimensione della vista."
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Formato e tipo OpenGL non valido"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Informazioni OpenGL: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "Formato di output non supportato"
-
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "Dati video vuoti al momento {0}. Ripetizione della cornice."
-
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "छवि परत '{0}' जानकारी: {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "Formato di output non supportato: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Tipo di carattere non valido per il disegno di testo"
 
 #~ msgid "GLSL Version:\t"
 #~ msgstr "Versione GLSL:\t"
