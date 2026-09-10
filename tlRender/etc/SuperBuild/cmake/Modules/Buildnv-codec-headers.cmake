@@ -1,9 +1,5 @@
 include(ExternalProject)
 
-# Headers only, needed at build time: FFmpeg's NVDEC support compiles
-# against these, and the driver libraries are loaded at run time -- so
-# a build carrying them runs on every machine, and uses the NVIDIA
-# path where a driver answers.
 ExternalProject_Add(
     nv-codec-headers
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/nv-codec-headers

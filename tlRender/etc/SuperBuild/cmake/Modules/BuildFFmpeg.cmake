@@ -511,53 +511,57 @@ if (NOT FFmpeg_FOUND)
     endif()
 
     # Finally HW decoders and encoders.
-    
     if(NOT APPLE)
 	list(APPEND FFmpeg_CONFIGURE_ARGS
 	    --disable-videotoolbox
 	    --disable-audiotoolbox)
+
+	if(DEFINED ENV{GITHUB_ACTIONS})
+	    message(STATUS "Running on GitHub Actions - No Windows HW acceleration")
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--disable-vulkan)
+	else()
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--enable-vulkan)
+	endif()
+
 	if (UNIX)
-	    if(DEFINED ENV{GITHUB_ACTIONS})
-		message(STATUS "Running on GitHub Actions - No Linux HW acceleration")
+	    if (FFmpeg_HW_ACCEL_NVIDIA)
 		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --disable-vulkan)
-	    else()
+		    --enable-ffnvcodec
+		    --enable-nvdec
+		    --enable-nvenc
+		    --enable-encoder=av1_nvenc
+		    --enable-encoder=h264_nvenc
+		    --enable-encoder=hevc_nvenc)
+	    endif()
+	    if (FFmpeg_HW_ACCEL_VAAPI)
 		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --enable-vulkan)
-		if (FFmpeg_HW_ACCEL_NVIDIA)
-		    list(APPEND FFmpeg_CONFIGURE_ARGS
-			--enable-ffnvcodec
-			--enable-nvdec
-			--enable-nvenc
-			--enable-encoder=av1_nvenc
-			--enable-encoder=h264_nvenc
-			--enable-encoder=hevc_nvenc)
-		endif()
-		if (FFmpeg_HW_ACCEL_VAAPI)
-		    list(APPEND FFmpeg_CONFIGURE_ARGS
-			--enable-vaapi
-			--enable-encoder=av1_vaapi
-			--enable-encoder=hevc_vaapi
-			--enable-encoder=h264_vaapi
-			--enable-encoder=vp8_vaapi
-			--enable-encoder=vp9_vaapi
-			--enable-encoder=mjpeg_vaapi
-			--enable-encoder=mpeg2_vaapi)
-		endif()
+		    --enable-vaapi
+		    --enable-encoder=av1_vaapi
+		    --enable-encoder=hevc_vaapi
+		    --enable-encoder=h264_vaapi
+		    --enable-encoder=vp8_vaapi
+		    --enable-encoder=vp9_vaapi
+		    --enable-encoder=mjpeg_vaapi
+		    --enable-encoder=mpeg2_vaapi)
 	    endif()
 	elseif(WIN32)
-	    if(DEFINED ENV{GITHUB_ACTIONS})
-		message(STATUS "Running on GitHub Actions - No Windows HW acceleration")
+	    if (FFmpeg_HW_ACCEL_NVIDIA)
 		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --disable-vulkan)
-	    else()
-		if (FFmpeg_HW_ACCEL_D3D12VA)
-		    list(APPEND FFmpeg_CONFIGURE_ARGS
-			--enable-encoder=av1_d3d12va
-			--enable-encoder=hevc_d3d12va
-			--enable-encoder=h264_d3d12va
-		    )
-		endif()
+		    --enable-ffnvcodec
+		    --enable-nvdec
+		    --enable-nvenc
+		    --enable-encoder=av1_nvenc
+		    --enable-encoder=h264_nvenc
+		    --enable-encoder=hevc_nvenc)
+	    endif()
+	    if (FFmpeg_HW_ACCEL_D3D12VA)
+		list(APPEND FFmpeg_CONFIGURE_ARGS
+		    --enable-encoder=av1_d3d12va
+		    --enable-encoder=hevc_d3d12va
+		    --enable-encoder=h264_d3d12va
+		)
 	    endif()
 	endif()
     else()
