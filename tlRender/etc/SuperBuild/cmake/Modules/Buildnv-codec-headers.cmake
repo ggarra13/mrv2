@@ -6,7 +6,7 @@ include(ExternalProject)
 # path where a driver answers.
 ExternalProject_Add(
     nv-codec-headers
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/nv-codec-headers
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/nv-codec-headers
     # Alternative repo (older)
     # URL https://github.com/FFmpeg/nv-codec-headers/archive/refs/tags/n12.2.72.0.tar.gz
     GIT_REPOSITORY "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git"
