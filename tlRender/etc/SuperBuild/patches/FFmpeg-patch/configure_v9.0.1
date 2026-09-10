@@ -5142,7 +5142,7 @@ tmpfile(){
     eval $1=$tmp
 }
 
-#trap 'rm -rf -- "$FFTMPDIR"' EXIT
+trap 'rm -rf -- "$FFTMPDIR"' EXIT
 trap 'exit 2' INT
 
 tmpfile TMPASM .asm
