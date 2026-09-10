@@ -177,10 +177,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-cargo-
     
-      - name: Get machine name
-        run: |
-          echo "Machine name: $RUNNER_NAME"
-
       # Install Vulkan SDK
       - name: Install Vulkan SDK
         env:
@@ -213,6 +209,13 @@ jobs:
             # Convert to Windows path for WINDOWS_VULKAN_SDK
             WINDOWS_PATH=$(cygpath -w "$VULKAN_DIR")
 
+            echo "VULKAN_SDK=${VULKAN_DIR}"
+            echo "Directory contains:"
+            ls ${VULKAN_DIR}
+            
+            echo "Include Directory contains:"
+            ls ${VULKAN_DIR}/include
+            
             echo "VULKAN_SDK=$VULKAN_DIR" >> $GITHUB_ENV
             echo "WINDOWS_VULKAN_SDK=$WINDOWS_PATH" >> $GITHUB_ENV
             echo "$VULKAN_DIR/bin" >> $GITHUB_PATH

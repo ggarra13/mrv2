@@ -656,6 +656,9 @@ namespace mrv
             setConfig(ocio::ocioDefault);
         }
 
+        ocio.get("use_ocio_auto_ics", tmp, 0);
+        uiPrefs->uiOCIOUseAutoICS->value(tmp);
+
         ocio.get("use_default_display_view", tmp, 0);
         uiPrefs->uiOCIOUseDefaultDisplayView->value(tmp);
 
@@ -1560,6 +1563,8 @@ namespace mrv
             Fl_Preferences ocio(view, "ocio");
 
             ocio.set("config", uiPrefs->uiPrefsOCIOConfig->value());
+            ocio.set("use_ocio_auto_ics",
+                     uiPrefs->uiOCIOUseAutoICS->value());
             ocio.set(
                 "use_default_display_view",
                 uiPrefs->uiOCIOUseDefaultDisplayView->value());
@@ -2132,6 +2137,16 @@ namespace mrv
             ui->uiCOLORS->show();
         }
 
+        if (!uiPrefs->uiOCIOUseAutoICS->value())
+        {
+            ui->uiAutoICS->value(0);
+        }
+        else
+        {
+            ui->uiAutoICS->value(1);
+        }
+        ui->uiAutoICS->do_callback();
+
         // Handle image options
         auto imageOptions = app->imageOptions();
         int alphaBlend = uiPrefs->uiPrefsAlphaBlend->value();
@@ -2205,15 +2220,6 @@ namespace mrv
             hud |= HudDisplay::kMemory;
 
         view->setHudDisplay((HudDisplay)hud);
-
-        //
-        // Handle fullscreen and presentation mode
-        //
-        if (uiPrefs->uiWindowFixedPosition->value() ||
-            uiPrefs->uiWindowFixedSize->value())
-        {
-            ui->uiView->resizeWindow();
-        }
 
         bool frameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
         view->setFrameView(frameView);

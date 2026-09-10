@@ -2,10 +2,28 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
 #include <tlDraw/Shape.h>
+
+#include <cstdio>
+#include <ctime>
 
 namespace tl
 {
+    std::string current_timestamp_string()
+    {
+        std::time_t t = std::time(nullptr);
+        std::tm tmv;
+#if defined(_WIN32)
+        localtime_s(&tmv, &t);
+#else
+        localtime_r(&t, &tmv);
+#endif
+        char buf[32];
+        std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M", &tmv);
+        return std::string(buf);
+    }
+
     namespace draw
     {
         void to_json(nlohmann::json& j, const Shape& value)
@@ -47,6 +65,8 @@ namespace tl
         {
             to_json(j, static_cast<const Shape&>(value));
             j["text"] = value.text;
+            j["circle_color"] = value.circle_color;
+            j["date"] = value.date;
             j["type"] = "Note";
         }
 
@@ -54,6 +74,14 @@ namespace tl
         {
             from_json(j, static_cast<Shape&>(value));
             j.at("text").get_to(value.text);
+            if (j.contains("circle_color"))
+                j.at("circle_color").get_to(value.circle_color);
+            else
+                value.circle_color = FL_RED;
+            if (j.contains("date"))
+                j.at("date").get_to(value.date);
+            else
+                value.date = current_timestamp_string();
         }
 
     } // namespace draw

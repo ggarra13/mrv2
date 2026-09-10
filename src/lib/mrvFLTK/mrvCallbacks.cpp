@@ -133,6 +133,7 @@ namespace mrv
 #ifdef TLRENDER_NDI
         {_("NDI"), (Fl_Callback*)ndi_panel_cb},
 #endif
+        {_("Notes"), (Fl_Callback*)notes_panel_cb},
 #ifdef MRV2_PYBIND11
         {_("Python"), (Fl_Callback*)python_panel_cb},
 #endif
@@ -167,10 +168,10 @@ namespace mrv
             c->uiStartFrame->setTime(start);
             c->uiEndFrame->setTime(end);
 
-            if (panel::annotationsPanel)
-            {
-                panel::annotationsPanel->notes->value("");
-            }
+            // if (panel::annotationsPanel)
+            // {
+            //     panel::annotationsPanel->notes->value("");
+            // }
         }
 
     } // namespace
@@ -1156,6 +1157,8 @@ namespace mrv
             panel::devicesPanel->save();
         if (panel::annotationsPanel)
             panel::annotationsPanel->save();
+        if (panel::notesPanel)
+            panel::notesPanel->save();
         if (panel::imageInfoPanel)
             panel::imageInfoPanel->save();
         if (panel::histogramPanel)

@@ -442,6 +442,8 @@ namespace mrv
                 hotkey = kToggleWaveform.hotkey();
             else if (tmp == "NDI")
                 hotkey = kToggleNDI.hotkey();
+            else if (tmp == "Notes")
+                hotkey = kToggleNotes.hotkey();
             else if (tmp == "WebRTC")
                 hotkey = kToggleWebRTC.hotkey();
             else if (tmp == "USD")
@@ -556,6 +558,13 @@ namespace mrv
             else if (tmp == _("Logs"))
             {
                 if (logsPanel)
+                    item->set();
+                else
+                    item->clear();
+            }
+            else if (tmp == _("Notes"))
+            {
+                if (notesPanel)
                     item->set();
                 else
                     item->clear();

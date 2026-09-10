@@ -25,11 +25,15 @@ namespace tl
         TLRENDER_ENUM_IMPL(LUTOrder, "PostColorConfig", "PreColorConfig");
         TLRENDER_ENUM_SERIALIZE_IMPL(LUTOrder);
 
+        TLRENDER_ENUM_IMPL(LUTDirection, "Forward", "Inverse");
+        TLRENDER_ENUM_SERIALIZE_IMPL(LUTDirection);
+
         void to_json(nlohmann::json& j, const LUTOptions& value)
         {
             j["enabled"] = value.enabled;
             j["fileName"] = value.fileName;
             j["order"] = value.order;
+            j["direction"] = value.direction;
         }
 
         void from_json(const nlohmann::json& j, LUTOptions& value)
@@ -37,8 +41,16 @@ namespace tl
             j.at("enabled").get_to(value.enabled);
             j.at("fileName").get_to(value.fileName);
             j.at("order").get_to(value.order);
+            if (j.contains("direction"))
+            {
+                j.at("direction").get_to(value.direction);
+            }
+            else
+            {
+                value.direction = LUTDirection::Forward;
+            }
         }
-        
+
         std::vector<std::string> getLUTFormatNames()
         {
             std::vector<std::string> out;
@@ -69,6 +81,6 @@ namespace tl
             return out;
         }
 
-        
+
     } // namespace timeline
 } // namespace tl

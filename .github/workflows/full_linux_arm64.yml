@@ -97,6 +97,10 @@ jobs:
       - name: Install pyFLTK's dependencies
         run: |
           sudo apt-get install -y swig bison libpcre2-dev
+          
+      - name: Install VAAPI
+        run: |
+          sudo apt install libva-dev
 
       - name: Synchronize clock
         run: |

@@ -12,6 +12,8 @@
 #include <tlCore/Vector.h>
 #include <tlCore/Matrix.h>
 
+#include <FL/fl_draw.H>
+
 #include <cmath>
 #include <limits>
 #include <vector>
@@ -69,7 +71,9 @@ namespace tl
 
 
         public:
+            Fl_Color circle_color = FL_RED;
             std::string text;
+            std::string date = "Today";
         };
 
         void to_json(nlohmann::json&, const Shape&);

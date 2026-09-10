@@ -91,10 +91,13 @@ decl {\#include "mrvWidgets/mrvTimelineGroup.h"} {public global
 decl {\#include "mrvFl/mrvLanguages.h"} {public global
 }
 
-decl {\#include "mrvFLTK/mrvCallbacks.h"} {public global
+decl {\#include "mrvFl/mrvPreferences.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvPreferences.h"} {public global
+decl {\#include "mrvFl/mrvOCIO.h"} {public global
+}
+
+decl {\#include "mrvFLTK/mrvCallbacks.h"} {public global
 }
 
 decl {\#include "mrvUI/mrvUtil.h"} {public global
@@ -115,6 +118,9 @@ decl {\#include "mrvOS/mrvI8N.h"} {public global
 decl {\#include "mrvApp/mrvSettingsObject.h"} {private local
 }
 
+decl {\#include "tlCore/StringFormat.h"} {private global
+}
+
 decl {\#include "mrvAboutUI.h"} {public global
 }
 
@@ -130,9 +136,9 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {open
-  xywh {200 473 934 56} resizable
-  class Fl_Double_Window visible
+widget_class PixelToolBarClass {
+  xywh {0 0 934 56} hide resizable
+  class Fl_Double_Window
 } {
   Fl_Group {} {open
     xywh {0 0 933 30} box FLAT_BOX color 96
@@ -362,7 +368,7 @@ o->disable_label();}
             label F
             callback {select_character(uiPixelValue);
 ui->uiView->updatePixelBar();
-ui->uiView->redraw();} open selected
+ui->uiView->redraw();} open
             tooltip {Displays:
 * Linear (Gamma, Gain and LUT in a linear scale where 1.0 is SDR white).    
 * Full Pixel Values (Gamma, Gain and LUT)
@@ -879,8 +885,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {1324 495 934 674} type Double color 1 align 80 resizable
-      class {mrv::MainWindow} size_range {934 674 0 0} visible
+      xywh {0 0 934 674} type Double color 1 align 80 hide resizable
+      class {mrv::MainWindow} size_range {934 674 0 0}
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 934 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
@@ -935,7 +941,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar
+          label TopBar open
           xywh {0 30 934 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -958,7 +964,7 @@ model->setLayer(item, o->value());} open
           }
           Fl_Group uiCOLORS {
             label {Exposure, Saturation, and Gamma}
-            xywh {247 30 686 29} labeltype NO_LABEL
+            xywh {247 30 686 29} labeltype NO_LABEL hide
           } {
             Fl_Group {} {
               label {Exposure and Gain} open
@@ -1112,24 +1118,48 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             }
           }
           Fl_Group uiOCIO {
-            label {ICS, View, Look}
-            xywh {247 30 686 29} labeltype NO_LABEL hide
+            label {ICS, View, Look} open
+            xywh {247 30 686 29} labeltype NO_LABEL
           } {
             Fl_Group {} {open
               xywh {247 30 686 29}
             } {
+              Fl_Button uiAutoICS {
+                label {Auto  ICS}
+                callback {int value = o->value();
+
+if (value)
+{
+  uiView->setAutoICS();
+  
+  o->labelcolor(fl_rgb_color(255, 255, 255));
+  o->color(FL_CYAN);
+  o->value(value);
+}
+else
+{
+  o->labelcolor(FL_FOREGROUND_COLOR);
+  o->color(FL_BACKGROUND_COLOR);
+}
+o->redraw();} selected
+                tooltip {Automatically select Input Color Space from file and OpenEXR metadata.} xywh {247 30 38 29} type Toggle down_box DOWN_BOX selection_color 14 labelsize 10 align 144
+              }
               Fl_Menu_Button uiICS {
                 label {Input Color Space}
                 user_data this user_data_type {ViewerUI*}
-                callback {uiView->updateOCIOOptions();} open
-                tooltip {OCIO input color space for the image} xywh {247 30 193 29} down_box DOWN_BOX labelsize 10 align 112
+                callback {// Turn off uiAutoICS
+uiAutoICS->value(0);
+uiAutoICS->do_callback();
+
+uiView->updateOCIOOptions();} open
+                tooltip {OCIO input color space for the image} xywh {285 30 155 29} down_box DOWN_BOX labelsize 10 align 112
                 code3 {o->disable_submenus();}
                 class {mrv::PopupMenu}
               } {}
               Fl_Menu_Button uiOCIOView {
                 label View
                 user_data this user_data_type {ViewerUI*}
-                callback {uiView->updateOCIOOptions();}
+                callback {uiView->updateOCIOOptions();} open
                 tooltip {OCIO Display/View} xywh {440 30 271 29} down_box DOWN_BOX labelsize 10 align 80
                 code3 {o->disable_submenus();}
                 class {mrv::PopupMenu}
@@ -1155,7 +1185,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             xywh {0 86 934 472} labeltype NO_LABEL hide resizable
           }
           Fl_Pack uiViewGroup {
-            label ViewGroup open
+            label ViewGroup
             xywh {0 59 934 501} type HORIZONTAL box FLAT_BOX labeltype NO_LABEL
             code3 {o->fixed( uiToolsGroup, uiToolsGroup->w() );
 uiMain->workspace = uiViewGroup;}
@@ -1232,7 +1262,7 @@ uiMain->workspace = uiViewGroup;}
                   }
                 }
               }
-              Fl_Group uiActionGroup {
+              Fl_Group uiActionGroup {open
                 xywh {0 59 42 501} box FLAT_BOX
               } {
                 Fl_Button uiScrub {
@@ -1258,10 +1288,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::feature_needs_solo_or_later())
-   return;
-
-uiView->setActionMode( mrv::ActionMode::kDraw );
+                  callback {uiView->setActionMode( mrv::ActionMode::kDraw );
 
 if (Fl::event_clicks() >= 1)
 {
@@ -1273,11 +1300,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiErase {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::feature_needs_solo_or_later())
-   return;
-    
-    
-uiView->setActionMode( mrv::ActionMode::kErase );
+                  callback {uiView->setActionMode( mrv::ActionMode::kErase );
 
 if (Fl::event_clicks() >= 1)
 {
@@ -1501,7 +1524,7 @@ uiMain->set_dock(o);}
             }
           }
           Fl_Group uiTimelineGroup {
-            label uiTimelineGroup open
+            label uiTimelineGroup
             xywh {0 560 934 30} box FLAT_BOX color 51 labeltype NO_LABEL
             class {mrv::TimelineGroup}
           } {

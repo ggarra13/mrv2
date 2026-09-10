@@ -482,29 +482,11 @@ fi
 build_swig=0
 if command -v swig > /dev/null 2>&1; then
     swig -version
-    if check_broken_swig_version; then
-	echo
-	echo "swig broken!!! Trying to compile from source."
-	echo
-	build_swig=1
-    fi
 else
-    build_swig=1
     echo
-    echo "swig NOT found!!! Trying to compile from source."
+    echo "swig NOT found!!!  Cannot compile pyFLTK"
     echo
-fi
-
-if [[ "$build_swig" == "1" ]]; then
-    . etc/common/build_swig.sh
-    if command -v swig > /dev/null 2>&1; then
-	swig -version
-    else
-	echo
-	echo "swig NOT found!!! Cannot compile pyFLTK."
-	echo
-	exit 1
-    fi
+    exit 1
 fi
 
 if command -v perl > /dev/null 2>&1; then

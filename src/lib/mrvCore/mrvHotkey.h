@@ -322,6 +322,7 @@ namespace mrv
     extern Hotkey kTogglePythonConsole;
     extern Hotkey kToggleAbout;
     extern Hotkey kToggleNDI;
+    extern Hotkey kToggleNotes;
     extern Hotkey kToggleStereo3D;
     extern Hotkey kToggleUSD;
     extern Hotkey kToggleWebRTC;

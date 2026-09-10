@@ -588,24 +588,27 @@ namespace mrv
             bool create = false;
             std::string otioFile;
 
+            bool refreshCache = hasEmptyTracks(stack);
+
             if (file::isTemporaryEDL(path))
             {
                 otioFile = path.get();
             }
             else
             {
+                create = true;
+                otioFile = otioFilename(ui);
                 if (file::isOTIOZ(path))
                 {
                     std::string dir = mrv::tmppath() + "/media";
                     destItem->timeline->expandOTIOZ(dir);
                     destItem->timeline.reset();
                     makePathsToTemp(timeline, ui);
-                }
-                create = true;
-                otioFile = otioFilename(ui);
-            }
 
-            bool refreshCache = hasEmptyTracks(stack);
+                    // needed to update Files Panel and I/O cache.
+                    refreshCache = true;
+                }
+            }
 
             timeline->to_json_file(otioFile);
             destItem->path = file::Path(otioFile);

@@ -23,7 +23,7 @@ namespace
     const char* kModule = "ocio";
 
     static std::string kInactive = _("None");
-    
+
 } // namespace
 
 namespace mrv
@@ -35,7 +35,383 @@ namespace mrv
         std::vector<std::string> looks;
         std::vector<std::string> views;
 
-        OCIO::ConstConfigRcPtr OCIOconfig;
+        OCIO::ConstConfigRcPtr OCIOconfig = nullptr;
+
+        std::string autoICS(bool& autoUnmatched,
+                            std::string& autoName,
+                            std::string& autoSource)
+        {
+            autoUnmatched = false;
+            autoName.clear();
+            autoSource = "file";
+
+#ifdef TLRENDER_OCIO
+            if (!OCIOconfig)
+                return {};
+
+            const auto view = App::ui->uiView;
+            if (!view)
+                return {};
+
+            const auto player = view->getTimelinePlayer();
+            if (!player)
+                return {};
+
+            const auto videoFrame = view->getVideoFrame();
+
+            image::Tags tags;
+            if (!videoFrame.empty() &&
+                !videoFrame[0].layers.empty() &&
+                videoFrame[0].layers[0].image)
+            {
+                tags = videoFrame[0].layers[0].image->getTags();
+            }
+
+            std::vector<std::string> candidates;
+            bool declared = false;
+
+            /*
+             * The candidates are ordered from the preferred/canonical spelling
+             * to aliases that may occur in different OCIO configurations.
+             */
+            const auto setCandidates =
+                [&](std::initializer_list<const char*> names)
+                    {
+                        candidates.clear();
+                        candidates.reserve(names.size());
+                        for (const char* name : names)
+                            candidates.emplace_back(name);
+                    };
+
+            /*
+             * 1. OpenEXR colorInteropID
+             *
+             * This is the strongest declaration because it is explicitly an
+             * interoperable color-space identifier rather than something we
+             * have inferred from primaries.
+             */
+            if (const auto i = tags.find("colorInteropID");
+                i != tags.end() && !i->second.empty())
+            {
+                declared = true;
+                autoName = i->second;
+                setCandidates({ i->second.c_str() });
+                std::cerr << "colorInteropID=" << i->second
+                          << std::endl;
+            }
+
+            /*
+             * 2. OpenEXR chromaticities
+             *
+             * Match against recognized standard RGB primary sets.  The values
+             * are CIE xy:
+             *
+             *       R          G          B          white
+             *
+             * Rec.709:
+             *       .64,.33    .30,.60    .15,.06    .3127,.3290
+             *
+             * P3-D65:
+             *       .68,.32    .265,.69    .15,.06    .3127,.3290
+             *
+             * Rec.2020:
+             *       .708,.292   .17,.797   .131,.046  .3127,.3290
+             *
+             * ACES2065-1:
+             *       .7347,.2653  0,1       .0001,-.077 .32168,.33767
+             *
+             * ACEScg:
+             *       .713,.293    .165,.83   .128,.044  .32168,.33767
+             */
+            if (!declared)
+            {
+                if (const auto i = tags.find("Chromaticities");
+                    i != tags.end() && !i->second.empty())
+                {
+                    float c[8] = {};
+                    std::istringstream ss(i->second);
+
+                    bool valid = true;
+                    for (float& value : c)
+                    {
+                        if (!(ss >> value))
+                        {
+                            valid = false;
+                            break;
+                        }
+                    }
+
+                    if (valid)
+                    {
+                        struct KnownPrimaries
+                        {
+                            std::array<float, 8> xy;
+                            const char* name;
+                            std::initializer_list<const char*> candidates;
+                        };
+
+                        /*
+                         * 0.02 is deliberately large enough to tolerate
+                         * rounded metadata, but still substantially smaller
+                         * than the separation between these standard sets.
+                         */
+                        constexpr float tolerance = 0.02F;
+
+                        const KnownPrimaries known[] =
+                            {
+                                {
+                                    { 0.640F, 0.330F,
+                                      0.300F, 0.600F,
+                                      0.150F, 0.060F,
+                                      0.3127F, 0.3290F },
+                                    "Rec.709 / sRGB primaries",
+                                    {
+                                        "lin_rec709",
+                                        "lin_srgb",
+                                        "Linear Rec.709 (sRGB)",
+                                        "Linear Rec.709"
+                                    }
+                                },
+                                {
+                                    { 0.680F, 0.320F,
+                                      0.265F, 0.690F,
+                                      0.150F, 0.060F,
+                                      0.3127F, 0.3290F },
+                                    "P3-D65 primaries",
+                                    {
+                                        "lin_p3d65",
+                                        "Linear P3-D65"
+                                    }
+                                },
+                                {
+                                    { 0.708F, 0.292F,
+                                      0.170F, 0.797F,
+                                      0.131F, 0.046F,
+                                      0.3127F, 0.3290F },
+                                    "Rec.2020 primaries",
+                                    {
+                                        "lin_rec2020",
+                                        "Linear Rec.2020"
+                                    }
+                                },
+                                {
+                                    { 0.7347F, 0.2653F,
+                                      0.0000F, 1.0000F,
+                                      0.0001F, -0.0770F,
+                                      0.32168F, 0.33767F },
+                                    "ACES2065-1 primaries",
+                                    {
+                                        "aces2065_1",
+                                        "ACES2065-1"
+                                    }
+                                },
+                                {
+                                    { 0.713F, 0.293F,
+                                      0.165F, 0.830F,
+                                      0.128F, 0.044F,
+                                      0.32168F, 0.33767F },
+                                    "ACEScg primaries",
+                                    {
+                                        "acescg",
+                                        "ACEScg"
+                                    }
+                                }
+                            };
+
+                        for (const auto& k : known)
+                        {
+                            bool match = true;
+
+                            for (size_t n = 0; n < 8; ++n)
+                            {
+                                if (std::abs(c[n] - k.xy[n]) >= tolerance)
+                                {
+                                    match = false;
+                                    break;
+                                }
+                            }
+
+                            if (match)
+                            {
+                                declared = true;
+                                autoName = k.name;
+
+                                candidates.clear();
+                                for (const auto candidate : k.candidates)
+                                    candidates.emplace_back(candidate);
+
+                                break;
+                            }
+                        }
+
+                        /*
+                         * We still regard the presence of chromaticities as a
+                         * declaration even if they don't correspond to one of
+                         * our known standard spaces.
+                         */
+                        if (!declared)
+                        {
+                            declared = true;
+                            autoName = "OpenEXR chromaticities";
+                        }
+                    }
+                }
+            }
+
+            /*
+             * 3. Video color metadata.
+             *
+             * These describe an encoded/video color space, so they are handled
+             * separately from OpenEXR chromaticities.
+             *
+             * Only use them when no stronger declaration has already been found.
+             */
+            if (!declared)
+            {
+                std::string primaries;
+                std::string transfer;
+
+                if (const auto i = tags.find("Video Color Primaries");
+                    i != tags.end())
+                {
+                    primaries = i->second;
+                }
+
+                if (const auto i = tags.find("Video Color TRC");
+                    i != tags.end())
+                {
+                    transfer = i->second;
+                }
+
+                if (primaries == "bt709" &&
+                    transfer == "iec61966-2-1")
+                {
+                    declared = true;
+                    autoName = "sRGB";
+                    setCandidates({
+                            "srgb_tx",
+                            "sRGB - Texture",
+                            "sRGB"
+                        });
+                }
+                else if (primaries == "bt709" &&
+                         transfer == "bt709")
+                {
+                    declared = true;
+                    autoName = "Rec.709 / BT.1886";
+                    setCandidates({
+                            "rec1886_rec709_display",
+                            "Rec.1886 Rec.709 - Display",
+                            "Rec.709"
+                        });
+                }
+                else if (primaries == "bt2020" &&
+                         transfer == "smpte2084")
+                {
+                    declared = true;
+                    autoName = "Rec.2100 PQ";
+                    setCandidates({
+                            "rec2100_pq_display",
+                            "Rec.2100-PQ - Display"
+                        });
+                }
+                else if (primaries == "bt2020" &&
+                         transfer == "arib-std-b67")
+                {
+                    declared = true;
+                    autoName = "Rec.2100 HLG";
+                    setCandidates({
+                            "rec2100_hlg_display",
+                            "Rec.2100-HLG - Display"
+                        });
+                }
+            }
+
+
+            const file::Path& path = player->path();
+            const std::string& extension = path.getExtension();
+
+            /*
+             * 4. OpenEXR's implicit default.
+             *
+             * The OpenEXR specification says that when the chromaticities
+             * attribute is absent, the RGB primaries and white point should be
+             * assumed to be Rec.709-3.
+             *
+             * The data is scene-linear, hence the linear Rec.709 candidates.
+             */
+            if (!declared &&
+                path.getExtension() == ".exr")
+            {
+                declared = true;
+                autoName = "Rec.709 primaries";
+                autoSource = "EXR default";
+
+                setCandidates({
+                        "lin_rec709",
+                        "lin_srgb",
+                        "Linear Rec.709 (sRGB)",
+                        "Linear Rec.709"
+                    });
+            }
+
+            /*
+             * Resolve the declaration against the current OCIO configuration.
+             *
+             * getColorSpace() also accepts aliases in OCIO configurations, so
+             * there is no need to enumerate all color spaces ourselves.
+             */
+            for (const auto& candidate : candidates)
+            {
+                try
+                {
+                    if (const auto colorSpace =
+                        OCIOconfig->getColorSpace(candidate.c_str()))
+                    {
+                        return colorSpace->getName();
+                    }
+                }
+                catch (const std::exception&)
+                {
+                    // Try the next spelling/alias.
+                }
+            }
+
+            /*
+             * Nothing explicitly declared by the image could be resolved.
+             *
+             * At this point we can fall back to OCIO's filepath rules.  This is
+             * an inference from the configuration, not a declaration in the
+             * file itself.
+             */
+            if (!declared)
+            {
+                try
+                {
+                    const std::string name =
+                        OCIOconfig->getColorSpaceFromFilepath(path.get().c_str());
+
+                    if (!name.empty())
+                    {
+                        autoSource = "OCIO file rule";
+
+                        if (const auto colorSpace =
+                            OCIOconfig->getColorSpace(name.c_str()))
+                        {
+                            return colorSpace->getName();
+                        }
+                    }
+                }
+                catch (const std::exception&)
+                {
+                }
+            }
+
+            autoUnmatched = declared;
+#endif
+
+            return {};
+        }
 
         void setup()
         {
@@ -419,7 +795,7 @@ namespace mrv
                 return "";
 
             std::string ics = item->label();
-            
+
             // char pathname[1024];
             // int ret = uiICS->item_pathname(pathname, 1024, item);
             // if (ret != 0)
@@ -488,8 +864,15 @@ namespace mrv
                     throw std::runtime_error(err);
                 }
             }
-            uiICS->value(value);
-            uiICS->do_callback();
+            if (uiICS->value() != value)
+            {
+                auto uiAutoICS = App::ui->uiAutoICS;
+                const int enabled = uiAutoICS->value();
+                uiICS->value(value);
+                uiICS->do_callback();
+                uiAutoICS->value(enabled);
+                uiAutoICS->do_callback();
+            }
         }
 
         int icsIndex(const std::string& name)
@@ -649,7 +1032,7 @@ namespace mrv
             splitView(name, display, view);
 
             std::string parenthesized = view + " (" + display + ")";
-            
+
             int value = -1;
             for (int i = 0; i < uiOCIOView->children(); ++i)
             {
@@ -665,7 +1048,7 @@ namespace mrv
                 std::string path = pathname;
                 if (path[0] == '/')
                     path = path.substr(1, path.size());
-                
+
                 if (name == path || parenthesized == path)
                 {
                     value = i;

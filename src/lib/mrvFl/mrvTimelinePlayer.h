@@ -344,6 +344,10 @@ namespace mrv
 
         //! @{
 
+        //! Get annotation for a specific time or nullptr if not available.
+        std::shared_ptr< draw::Annotation >
+        getAnnotation(const OTIO_NS::RationalTime&) const;
+
         //! Get annotation for current time
         std::shared_ptr< draw::Annotation > getAnnotation() const;
 
@@ -402,18 +406,21 @@ namespace mrv
         std::vector< std::shared_ptr<voice::Annotation > >
         getAllVoiceAnnotations() const;
 
-        //! Set frame annotations in timeline player for current frame (time).
+        //! Set frame voice  annotations in timeline player for current frame
         void setFrameAnnotation(const std::shared_ptr< voice::Annotation >&);
 
-        //! Set all annotations in timeline player.
+        //! Set all voice annotations in timeline player.
         void setAllAnnotations(
             const std::vector< std::shared_ptr< voice::Annotation >>&);
 
-        //! Remove an annotation from list.
+        //! Remove a voice annotation from list.
         void removeAnnotation(const std::shared_ptr< voice::Annotation >&);
 #endif
 
         //! @}
+
+        //! Clear all annotations in timeline player for current frame (time).
+        void clearFrameAnnotation(const OTIO_NS::RationalTime& time);
 
         //! Clear all annotations in timeline player for current frame (time).
         void clearFrameAnnotation();

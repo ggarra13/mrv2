@@ -37,6 +37,9 @@ if (NOT FFmpeg_FOUND)
     set(FFmpeg_VERSION 9.0.1)
 
     set(FFmpeg_DEPENDENCIES ZLIB ${OpenSSL_DEP})
+    if(nv-codec-headers_DEP)
+	list(APPEND FFmpeg_DEPENDENCIES ${nv-codec-headers_DEP})
+    endif()
     if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
 	if(UNIX)
 	    list(APPEND FFmpeg_DEPENDENCIES ${NASM_DEP})
@@ -51,6 +54,15 @@ if (NOT FFmpeg_FOUND)
     
     # Intel/AMD hwaccel for decoding and encoding
     set(FFmpeg_HW_ACCEL_VAAPI ON)
+
+    # Vulkan    hwaccel for decoding and encoding
+    set(FFmpeg_HW_ACCEL_VULKAN OFF)
+
+    if (NOT APPLE)
+	if (DEFINED ENV{VULKAN_SDK} AND NOT "$ENV{VULKAN_SDK}" STREQUAL "")
+	    set(FFmpeg_HW_ACCEL_VULKAN ON)
+	endif()
+    endif()
 
     if(WIN32)
 	include(functions/Msys2)
@@ -511,54 +523,53 @@ if (NOT FFmpeg_FOUND)
     endif()
 
     # Finally HW decoders and encoders.
-    
     if(NOT APPLE)
 	list(APPEND FFmpeg_CONFIGURE_ARGS
 	    --disable-videotoolbox
 	    --disable-audiotoolbox)
+
+	if (FFmpeg_HW_ACCEL_VULKAN)
+	    set(VULKAN_SDK "$ENV{VULKAN_SDK}")
+	    if (WIN32)
+		convert_path_for_msys2(${VULKAN_SDK} VULKAN_SDK)
+		message(STATUS "FFmpeg MSys2 converted path=${VULKAN_SDK}")
+	    endif()
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--enable-vulkan
+		--extra-cflags=-I${VULKAN_SDK}/include
+		--extra-cxxflags=-I${VULKAN_SDK}/include
+	    )
+	endif()
+
+	if (FFmpeg_HW_ACCEL_NVIDIA)
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--enable-ffnvcodec
+		--enable-nvdec
+		--enable-nvenc
+		--enable-encoder=av1_nvenc
+		--enable-encoder=h264_nvenc
+		--enable-encoder=hevc_nvenc)
+	endif()
+
 	if (UNIX)
-	    if(DEFINED ENV{GITHUB_ACTIONS})
-		message(STATUS "Running on GitHub Actions - No Linux HW acceleration")
+	    if (FFmpeg_HW_ACCEL_VAAPI)
 		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --disable-vulkan)
-	    else()
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --enable-vulkan)
-		if (FFmpeg_HW_ACCEL_NVIDIA)
-		    list(APPEND FFmpeg_CONFIGURE_ARGS
-			--enable-ffnvcodec
-			--enable-nvdec
-			--enable-nvenc
-			--enable-encoder=av1_nvenc
-			--enable-encoder=h264_nvenc
-			--enable-encoder=hevc_nvenc)
-		endif()
-		if (FFmpeg_HW_ACCEL_VAAPI)
-		    list(APPEND FFmpeg_CONFIGURE_ARGS
-			--enable-vaapi
-			--enable-encoder=av1_vaapi
-			--enable-encoder=hevc_vaapi
-			--enable-encoder=h264_vaapi
-			--enable-encoder=vp8_vaapi
-			--enable-encoder=vp9_vaapi
-			--enable-encoder=mjpeg_vaapi
-			--enable-encoder=mpeg2_vaapi)
-		endif()
+		    --enable-vaapi
+		    --enable-encoder=av1_vaapi
+		    --enable-encoder=hevc_vaapi
+		    --enable-encoder=h264_vaapi
+		    --enable-encoder=vp8_vaapi
+		    --enable-encoder=vp9_vaapi
+		    --enable-encoder=mjpeg_vaapi
+		    --enable-encoder=mpeg2_vaapi)
 	    endif()
 	elseif(WIN32)
-	    if(DEFINED ENV{GITHUB_ACTIONS})
-		message(STATUS "Running on GitHub Actions - No Windows HW acceleration")
+	    if (FFmpeg_HW_ACCEL_D3D12VA)
 		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --disable-vulkan)
-	    else()
-		if (FFmpeg_HW_ACCEL_D3D12VA)
-		    if (FFmpeg_HW_ACCEL_NVIDIA)
-			list(APPEND FFmpeg_CONFIGURE_ARGS
-			    --enable-ffnvcodec
-			    --enable-nvdec
-			    --enable-nvenc)
-		    endif()
-		endif()
+		    --enable-encoder=av1_d3d12va
+		    --enable-encoder=hevc_d3d12va
+		    --enable-encoder=h264_d3d12va
+		)
 	    endif()
 	endif()
     else()

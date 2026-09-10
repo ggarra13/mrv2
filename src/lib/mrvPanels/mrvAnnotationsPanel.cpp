@@ -170,16 +170,16 @@ namespace mrv
                         return;
                     const Fl_Menu_Item* item = c->mvalue();
                     std::string selectedFontName = item->label();
-                    
+
                     const std::vector<fs::path>& fontList = image::discoverSystemFonts();
                     if (fontList.empty())
                     {
                         LOG_ERROR("No fonts installed on this system.");
                         return;
                     }
-                    
+
                     fs::path out = fontList[0];
-            
+
                     for (const auto& path : fontList)
                     {
                         auto u8 = path.filename().u8string();
@@ -194,7 +194,7 @@ namespace mrv
                             break;
                         }
                     }
-                    
+
                     auto u8 = out.u8string();
                     w->fontPath = std::string(u8.begin(), u8.end());
 #endif
@@ -221,7 +221,7 @@ namespace mrv
 #ifdef OPENGL_BACKEND
                     int fontSize = o->value() * pct * p.ui->uiView->viewZoom()
                                    * pixels_per_unit;
-                    
+
                     w->textsize(fontSize);
                     w->redraw();
 #endif
@@ -231,7 +231,7 @@ namespace mrv
                     int fontSize = o->value() * pct * pixels_per_unit;
                     w->fontSize = fontSize;
 #endif
-                    
+
                     p.ui->uiView->redrawWindows();
                 });
 
@@ -515,15 +515,34 @@ namespace mrv
             b = cg->button();
             b->labelsize(14);
             b->size(b->w(), 18);
+            b->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                    if (cg->is_open())
+                        cg->close();
+                    else
+                        cg->open();
+
+                    const std::string& prefix = annotationsPanel->tab_prefix();
+                    const std::string key = prefix + "Notes";
+
+                    App* app = App::ui->app;
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
+
+                    annotationsPanel->refresh();
+                },
+                cg);
             cg->begin();
-            
+
             Fl_Group* ng = new Fl_Group(X, 25, cg->w(), 200);
             ng->begin();
-            
+
             auto nV = new Widget<Fl_Multiline_Input>(X, 25, cg->w(), 180);
             notes = nV;
             notes->cursor_color(FL_RED);
-            notes->textsize(16);
+            notes->textsize(14);
             notes->textcolor(FL_BLACK);
             notes->wrap(true);
             notes->when(FL_WHEN_CHANGED);
@@ -541,7 +560,7 @@ namespace mrv
                     }
                 });
             ng->end();
-            
+
             cg->end();
 
             key = prefix + "Notes";

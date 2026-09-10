@@ -235,6 +235,7 @@ namespace mrv
     Hotkey kToggleLogs(false, false, false, false, 0);
     Hotkey kToggleAbout(false, false, false, false, 0);
     Hotkey kToggleNDI(false, false, false, false, 0);
+    Hotkey kToggleNotes(false, false, false, false, 0);
     Hotkey kToggleUSD(false, false, false, true, 'u');
     Hotkey kToggleStereo3D(false, false, false, false, 0);
     Hotkey kToggleEditMode(false, false, false, false, 'e');
@@ -588,6 +589,7 @@ namespace mrv
         HotkeyEntry(
             _("Toggle Secondary Float On Top"), &kToggleSecondaryFloatOnTop),
         HotkeyEntry(_("Toggle NDI"), &kToggleNDI),
+        HotkeyEntry(_("Toggle Notes"), &kToggleNotes),
         HotkeyEntry(_("Toggle WebRTC"), &kToggleWebRTC),
         HotkeyEntry(_("Toggle USD"), &kToggleUSD),
         HotkeyEntry(_("Toggle Stereo 3D"), &kToggleStereo3D),

@@ -1,12 +1,42 @@
 v1.7.6
 ======
 
-- Bug/MacOS:  "Help->Update mrv2" would always download and install the amd64 version of the installer.
+- Bug/MacOS:  "Help->Update mrv2" would always download and install the amd64 version of the installer.  It was fixed in v1.7.5.
 
+- Windows: Added Text Insert icon to avoid the Vulkan dreaded ghosted square when annotating text.
+
+- UI: Added pencil annotations and erasing without a Solo License.  Note that area tools and other drawing tools like arrows remain on the Solo License.  This is a compromise between features present on all viewers and features only on mrv2/vmrv2 so that those that unlocked a Solo License, won't feel cheated.
+
+- UI: Added a Notes Panel to display and edit the list of review notes easily, as suggested by Serban Jipa.
+
+- Core: MacOS OpenGL M1 builds no longer come with USD support.  This is for two reasons: Apple now provides a Preview.app to see the USD on M1+ boxes and the newest USD repository's compilation is broken on M1+ (works only on Linux).
+
+- Core: Added HW decoding and encoding on aarch64 platforms (untested).
+
+- Core: Added support for OpenEXR's colorInteropID with the new Auto ICS button and its tooltip describing what it chose.  Auto ICS works with image files.  For videos, on Vulkan, you should rely on **Preferences->OCIO->No OCIO on Videos or sRGB/BT709** data as it is faster.  On the OpenGL backend, you can indeed use OCIO, but it will be slower.
+
+- Core: Added SVG reader.  Works with all .svg with paths.  Does not currently decode SVGs with text yet, though.
+
+- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the speed and support depend on your hardware and drivers.
+
+- Core: Added Vulkan HW decoding on Windows too.
+
+- Core: Added the NVidia headers to the build, so the Linux branch will compile without the need for local files.
+
+- Core: Added OpenColorIO's LUT inversion on Color Panel.
+
+- Libraries:
+    * OpenEXR 3.4.15
+    * libtiff 4.7.2
+	
+Fixes:
+
+- UI/Core: Made editing .otioz files properly update the Files Panel icon.
+- UI/Core: Fixed annotations creating a long line when trying to create an all frame and a current frame annotation on the same frame.
+- UI/Core: Fixed the compilation of pyFLTK with newer swig (v4.5.0+).
+- OpenGL/Core: Fixed OpenGL display of YUV_444P_U16 and similar movies.  One plane was missing.  Vulkan backend was fine.
 - Windows: Fixed minor memory leak on the cursor icon.
 
-- Core: Added SVG reader.  Works with most .svg with paths.  Does not decode those with text.
-- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the features depend on your harware and drivers.
 
 
 v1.7.5

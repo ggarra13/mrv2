@@ -72,7 +72,7 @@ namespace mrv
                 key = prefix + "/Screen";
                 value = settings->getValue<std::any>(key);
                 screen = std_any_empty(value) ? 0 : std_any_cast<int>(value);
-                
+
                 key = prefix + "/WindowX";
                 value = settings->getValue<std::any>(key);
                 X = std_any_empty(value) ? X : std_any_cast<int>(value);
@@ -84,7 +84,7 @@ namespace mrv
                 key = prefix + "/WindowW";
                 value = settings->getValue<std::any>(key);
                 W = std_any_empty(value) ? W : std_any_cast<int>(value);
-                
+
                 key = prefix + "/WindowH";
                 value = settings->getValue<std::any>(key);
                 H = std_any_empty(value) ? H : std_any_cast<int>(value);
@@ -96,7 +96,7 @@ namespace mrv
 
                 //
                 // Windows' default heights based on images loaded
-                // 
+                //
                 if (label == "Files" || label == "Compare" ||
                     label == "Stereo 3D")
                 {
@@ -120,6 +120,7 @@ namespace mrv
 
             g = new PanelGroup(dock, window, X, Y, W, H, screen, _(lbl));
             g->setLabel(label);
+            g->layout_callback([this] { resized(); });
 
             begin_group();
             add_controls();
@@ -139,10 +140,9 @@ namespace mrv
             g->begin();
         }
 
-        void PanelWidget::end_group()
+        void PanelWidget::resized()
         {
             TLRENDER_P();
-            g->end();
 
             if (g->docked())
             {
@@ -157,7 +157,15 @@ namespace mrv
                     Pack* pack = g->get_pack();
                     group->size(pack->w(), group->h());
                 }
+
             }
+        }
+
+        void PanelWidget::end_group()
+        {
+            g->end();
+
+            resized();
         }
 
         void PanelWidget::undock()
@@ -180,7 +188,7 @@ namespace mrv
             std::string key = prefix + "/Window";
             int window = !g->docked();
 
-            
+
             settings->setValue(key, window);
 
             key += "/Visible";
@@ -192,7 +200,7 @@ namespace mrv
 
                 key = prefix + "/Screen";
                 settings->setValue(key, w->screen_num());
-                
+
                 // \@bug: Wayland currently cannot store properly the absolute
                 //        positions of panel windows, but we can use relative
                 //        positions to the main window.

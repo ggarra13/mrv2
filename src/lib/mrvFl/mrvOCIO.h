@@ -23,13 +23,16 @@ namespace mrv
         void setup();
 
         void defaultIcs();
-        
+
         std::string config();
         void setConfig(const std::string config);
 
         int icsIndex(const std::string&);
         std::string ics();
         void setIcs(const std::string&);
+        std::string autoICS(bool& declaredUnmatched,
+                            std::string& declaredName,
+                            std::string& declaredSource);
 
         int lookIndex(const std::string&);
         std::string look();
@@ -49,7 +52,7 @@ namespace mrv
 
         int viewIndex(const std::string&);
         std::string view();
-        
+
         // Set view (display/view combined).
         void setView(const std::string&);
 
@@ -77,6 +80,6 @@ namespace mrv
 
         //! Save OCIO presets to disk.
         bool savePresets(const std::string& fileName);
-        
+
     } // namespace ocio
 } // namespace mrv
