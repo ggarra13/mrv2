@@ -552,12 +552,11 @@ if (NOT FFmpeg_FOUND)
 		    --disable-vulkan)
 	    else()
 		if (FFmpeg_HW_ACCEL_D3D12VA)
-		    if (FFmpeg_HW_ACCEL_NVIDIA)
-			list(APPEND FFmpeg_CONFIGURE_ARGS
-			    --enable-ffnvcodec
-			    --enable-nvdec
-			    --enable-nvenc)
-		    endif()
+		    list(APPEND FFmpeg_CONFIGURE_ARGS
+			--enable-encoder=av1_d3d12va
+			--enable-encoder=hevc_d3d12va
+			--enable-encoder=h264_d3d12va
+		    )
 		endif()
 	    endif()
 	endif()
