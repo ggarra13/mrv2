@@ -9,6 +9,8 @@ v1.7.6
 
 - UI: Added a Notes Panel to display and edit the list of review notes easily, as suggested by Serban Jipa.
 
+- UI: Updated translations to supported languages.
+
 - Core: MacOS OpenGL M1 builds no longer come with USD support.  This is for two reasons: Apple now provides a Preview.app to see the USD on M1+ boxes and the newest USD repository's compilation is broken on M1+ (works only on Linux).
 
 - Core: Added HW decoding and encoding on aarch64 platforms (untested).
