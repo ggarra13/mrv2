@@ -11,3 +11,5 @@ ExternalProject_Add(
     BUILD_COMMAND ""
     INSTALL_COMMAND make install PREFIX=${CMAKE_INSTALL_PREFIX}
     BUILD_IN_SOURCE 1)
+
+set(nv-codec-headers_DEP nv-codec-headers)
