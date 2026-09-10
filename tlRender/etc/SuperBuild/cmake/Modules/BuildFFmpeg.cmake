@@ -52,6 +52,15 @@ if (NOT FFmpeg_FOUND)
     # Intel/AMD hwaccel for decoding and encoding
     set(FFmpeg_HW_ACCEL_VAAPI ON)
 
+    # Vulkan    hwaccel for decoding and encoding
+    set(FFmpeg_HW_ACCEL_VULKAN OFF)
+
+    if (NOT APPLE)
+	if (DEFINED ENV{VULKAN_SDK} AND NOT "$ENV{VULKAN_SDK}" STREQUAL "")
+	    set(FFmpeg_HW_ACCEL_VULKAN ON)
+	endif()
+    endif()
+
     if(WIN32)
 	include(functions/Msys2)
     endif()
@@ -521,8 +530,17 @@ if (NOT FFmpeg_FOUND)
 	    list(APPEND FFmpeg_CONFIGURE_ARGS
 		--disable-vulkan)
 	else()
-	    list(APPEND FFmpeg_CONFIGURE_ARGS
-		--enable-vulkan)
+	    if (FFmpeg_HW_ACCEL_VULKAN)
+		set(VULKAN_SDK "$ENV{VULKAN_SDK}")
+		if (WIN32)
+		    convert_path_for_msys2("$ENV{VULKAN_SDK}" VULKAN_SDK)
+		endif()
+		list(APPEND FFmpeg_CONFIGURE_ARGS
+		    --enable-vulkan
+		    --extra-cflags=-I${VULKAN_SDK}/include
+		    --extra-cxxflags=-I${VULKAN_SDK}/include
+		)
+	    endif()
 	endif()
 
 	if (UNIX)

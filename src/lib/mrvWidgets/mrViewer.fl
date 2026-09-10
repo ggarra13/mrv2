@@ -1142,7 +1142,7 @@ else
   o->color(FL_BACKGROUND_COLOR);
 }
 o->redraw();} selected
-                tooltip {Automatically select Input Color Space from file and OpenEXR metadata.} xywh {247 30 38 29} type Toggle down_box DOWN_BOX selection_color 14 labelsize 10 align 16
+                tooltip {Automatically select Input Color Space from file and OpenEXR metadata.} xywh {247 30 38 29} type Toggle down_box DOWN_BOX selection_color 14 labelsize 10 align 144
               }
               Fl_Menu_Button uiICS {
                 label {Input Color Space}

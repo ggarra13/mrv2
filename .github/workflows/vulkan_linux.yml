@@ -193,6 +193,10 @@ jobs:
             exit 1
           fi
 
+      - name: Install VAAPI
+        run: |
+          sudo apt install libva-dev
+
       - name: Synchronize clock
         run: |
           sudo apt-get install -y ntp
