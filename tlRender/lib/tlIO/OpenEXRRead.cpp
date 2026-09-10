@@ -24,6 +24,7 @@ using namespace Imath;
 
 #include <array>
 #include <cstring>
+#include <limits>
 #include <sstream>
 
 namespace tl
@@ -662,12 +663,18 @@ namespace tl
                     image::Info vulkanInfo = imageInfo;
 
 #ifdef VULKAN_BACKEND
+                    float fakeA = 1.F;
                     if (!_useRGBOnly)
                     {
                         if (vulkanInfo.pixelType == image::PixelType::RGB_F16)
                             vulkanInfo.pixelType = image::PixelType::RGBA_F16;
-                        if (vulkanInfo.pixelType == image::PixelType::RGB_F32)
+                        else if (vulkanInfo.pixelType == image::PixelType::RGB_F32)
                             vulkanInfo.pixelType = image::PixelType::RGBA_F32;
+                        else if (vulkanInfo.pixelType == image::PixelType::RGB_U32)
+                        {
+                            fakeA = std::numeric_limits<uint32_t>::max();
+                            vulkanInfo.pixelType = image::PixelType::RGBA_U32;
+                        }
                     }
 #endif
                     out.image = image::Image::create(vulkanInfo);
@@ -743,7 +750,7 @@ namespace tl
                                 Imf::Slice(
                                     _layers[layer].channels[0].pixelType,
                                     sliceBase + (3 * channelByteCount),
-                                    cb, scb, 1, 1, 1.F));
+                                    cb, scb, 1, 1, fakeA));
                         }
                     }
 #endif
@@ -1032,13 +1039,19 @@ namespace tl
                         image::Info vulkanInfo = imageInfo;
 
 #ifdef VULKAN_BACKEND
+                        float fakeA = 1.F;
                         if (!_useRGBOnly)
                         {
                             // Use RGBA_* channels for tighly packing in Vulkan
                             if (vulkanInfo.pixelType == image::PixelType::RGB_F16)
                                 vulkanInfo.pixelType = image::PixelType::RGBA_F16;
-                            if (vulkanInfo.pixelType == image::PixelType::RGB_F32)
+                            else if (vulkanInfo.pixelType == image::PixelType::RGB_F32)
                                 vulkanInfo.pixelType = image::PixelType::RGBA_F32;
+                            else if (vulkanInfo.pixelType == image::PixelType::RGB_U32)
+                            {
+                                vulkanInfo.pixelType = image::PixelType::RGBA_U32;
+                                fakeA = std::numeric_limits<uint32_t>::max();
+                            }
                         }
 #endif
 
@@ -1084,7 +1097,7 @@ namespace tl
                                             reinterpret_cast<char*>(
                                                 out.image->getData()) +
                                             (3 * channelByteCount),
-                                            cb, scb, 1, 1, 1.F));
+                                            cb, scb, 1, 1, fakeA));
                                 }
                             }
 #endif
@@ -1127,7 +1140,7 @@ namespace tl
                                             reinterpret_cast<char*>(
                                                 out.image->getData()) +
                                             (3 * channelByteCount),
-                                            cb, scb, 1, 1, 1.F));
+                                            cb, scb, 1, 1, fakeA));
                                 }
                             }
 #endif

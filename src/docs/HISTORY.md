@@ -3,15 +3,13 @@ v1.7.6
 
 - Bug/MacOS:  "Help->Update mrv2" would always download and install the amd64 version of the installer.  It was fixed in v1.7.5.
 
-- Windows: Added Text Insert icon to avoid the Vulkan dreaded ghosted square when annotating text.
-
 - UI: Added pencil annotations and erasing without a Solo License.  Note that area tools and other drawing tools like arrows remain on the Solo License.  This is a compromise between features present on all viewers and features only on mrv2/vmrv2 so that those that unlocked a Solo License, won't feel cheated.
 
 - UI: Added a Notes Panel to display and edit the list of review notes easily, as suggested by Serban Jipa.
 
 - UI: Updated translations to supported languages.
 
-- Core: MacOS OpenGL M1 builds no longer come with USD support.  This is for two reasons: Apple now provides a Preview.app to see the USD on M1+ boxes and the newest USD repository's compilation is broken on M1+ (works only on Linux).
+- Core: MacOS OpenGL M1 builds no longer come with USD support so they load faster now.  This is for two reasons: Apple now provides a Preview.app to see the USD on M1+ boxes and the newest USD repository's compilation is broken on M1+ (works only on Linux).
 
 - Core: Added HW decoding and encoding on aarch64 platforms (untested).
 
@@ -19,7 +17,7 @@ v1.7.6
 
 - Core: Added SVG reader.  Works with all .svg with paths.  Does not currently decode SVGs with text yet, though.
 
-- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the speed and support depend on your hardware and drivers.
+- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the speed and support depend on your hardware and drivers.  It should now work on all platforms, including aarch64.
 
 - Core: Added Vulkan HW decoding on Windows too.
 
@@ -27,7 +25,12 @@ v1.7.6
 
 - Core: Added OpenColorIO's LUT inversion on Color Panel.
 
-- Libraries:
+- Core: Fixed support for Original pixels on OpenEXR's UINT format.
+
+- Core: Added semi-planar pixel formats to color picker pixel toolbar's
+  	O(riginal) colors.
+
+- Updated Libraries:
     * OpenEXR 3.4.15
     * libtiff 4.7.2
 	
@@ -38,6 +41,7 @@ Fixes:
 - UI/Core: Fixed the compilation of pyFLTK with newer swig (v4.5.0+).
 - OpenGL/Core: Fixed OpenGL display of YUV_444P_U16 and similar movies.  One plane was missing.  Vulkan backend was fine.
 - Windows: Fixed minor memory leak on the cursor icon.
+- Windows: Added Text Insert icon to avoid the Vulkan dreaded ghosted square when annotating text.
 
 
 
