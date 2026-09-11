@@ -3367,6 +3367,9 @@ namespace mrv
             return;
         shape->text = text;
 
+        if (panel::notesPanel)
+            panel::notesPanel->refresh();
+
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Create Note Annotation", text);
     }

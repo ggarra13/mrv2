@@ -19,7 +19,7 @@ v1.7.6
 
 - Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the speed and support depend on your hardware and drivers.  It should now work on all platforms, including aarch64.
 
-- Core: Added Vulkan HW decoding on Windows too.
+- Core: Added CUDA decoding on Windows.
 
 - Core: Added the NVidia headers to the build, so the Linux branch will compile without the need for local files.
 
@@ -27,8 +27,9 @@ v1.7.6
 
 - Core: Fixed support for Original pixels on OpenEXR's UINT format.
 
-- Core: Added semi-planar pixel formats to color picker pixel toolbar's
-  	O(riginal) colors.
+- Core: Added semi-planar pixel formats to color picker pixel toolbar's O(riginal) colors.
+
+- Core: Improved the memory usage of the Vulkan backend.
 
 - Updated Libraries:
     * OpenEXR 3.4.15
@@ -36,10 +37,12 @@ v1.7.6
 	
 Fixes:
 
+- Vulkan: Fixed a major bug between MAX_FRAMES_IN_FLIGHT and FrameData resources which could lead to random crashes.
 - UI/Core: Made editing .otioz files properly update the Files Panel icon.
 - UI/Core: Fixed annotations creating a long line when trying to create an all frame and a current frame annotation on the same frame.
 - UI/Core: Fixed the compilation of pyFLTK with newer swig (v4.5.0+).
 - OpenGL/Core: Fixed OpenGL display of YUV_444P_U16 and similar movies.  One plane was missing.  Vulkan backend was fine.
+- Core: Fixed reading of UINT OpenEXR frames on the Vulkan backend.
 - Windows: Fixed minor memory leak on the cursor icon.
 - Windows: Added Text Insert icon to avoid the Vulkan dreaded ghosted square when annotating text.
 

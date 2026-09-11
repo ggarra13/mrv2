@@ -511,7 +511,7 @@ namespace mrv
                 cg->close();
 
 
-            cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Notes"));
+            cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Frame Note"));
             b = cg->button();
             b->labelsize(14);
             b->size(b->w(), 18);
