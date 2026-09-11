@@ -6,7 +6,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hdr v1.3.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-10 10:19-0300\n"
 "PO-Revision-Date: 2025-04-08 12:30-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language: ru\n"
@@ -50,7 +49,6 @@ msgstr "Русский"
 msgid "Japanese"
 msgstr "Японский"
 
-#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "Установить язык: {0}, формат чисел: {1}"
 
@@ -195,11 +193,9 @@ msgstr "HDR-монитор найден."
 msgid "HDR monitor not found or not configured."
 msgstr "HDR-монитор не найден или не настроен."
 
-#, c++-format
 msgid "HDR monitor min. nits = {0}"
 msgstr "Минимальная яркость HDR-монитора (нит) = {0}"
 
-#, c++-format
 msgid "HDR monitor max. nits = {0}"
 msgstr "Максимальная яркость HDR-монитора (нит) = {0}"
 

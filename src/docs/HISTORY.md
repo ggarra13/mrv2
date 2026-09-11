@@ -31,9 +31,10 @@ v1.7.6
 
 - Core: Improved the memory usage of the Vulkan backend.
 
-- Updated Libraries:
+- Updated Libraries and utilities:
     * OpenEXR 3.4.15
     * libtiff 4.7.2
+    * swig v4.5.0
 	
 Fixes:
 
