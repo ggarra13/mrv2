@@ -1,5 +1,4 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
 # This file is distributed under the same license as the hdr package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hdr v1.7.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-10 10:21-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +48,6 @@ msgstr ""
 msgid "Japanese"
 msgstr ""
 
-#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr ""
 
@@ -195,11 +192,9 @@ msgstr ""
 msgid "HDR monitor not found or not configured."
 msgstr ""
 
-#, c++-format
 msgid "HDR monitor min. nits = {0}"
 msgstr ""
 
-#, c++-format
 msgid "HDR monitor max. nits = {0}"
 msgstr ""
 
