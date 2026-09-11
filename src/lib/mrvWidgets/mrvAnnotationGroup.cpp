@@ -150,11 +150,6 @@ namespace mrv
             w - (GROUP_MARGIN * 2), // width same as group within margin
             10);                    // changes when child add()ed
 
-        // end()contents_; we don't want it to begin() sucking up child widgets
-        // on return
-        contents_->end();
-        Fl_Group::end();
-
         empty_box_ = new Fl_Box(
             contents_->x(), contents_->y(), contents_->w(), 32,
             _("No annotations added yet."));
@@ -163,6 +158,11 @@ namespace mrv
         empty_box_->labelsize(12);
         empty_box_->labelcolor(fl_gray_ramp(10));
         empty_box_->align(FL_ALIGN_CENTER);
+
+        // end() contents_; we don't want it to begin() sucking up child widgets
+        // on return
+        contents_->end();
+        Fl_Group::end();
 
         relabel_button(); // relabel button once pack created
         resizable(0); // prevent FLTK auto-sizing -- we handle children ourself
@@ -175,10 +175,12 @@ namespace mrv
         // If the box was detached (annotations_ non-empty at destruction time),
         // contents_->clear() won't reach it -- free it ourselves.
         if (!empty_box_->parent())
+        {
             delete empty_box_;
+        }
 
         contents_->clear();
-        Fl_Group::clear(); // delete button_ andcontents_
+        Fl_Group::clear(); // delete button_ and contents_
     }
 
     void AnnotationGroup::spacing(int x)

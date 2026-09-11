@@ -172,6 +172,10 @@ namespace mrv
             mrv::TimeUnits units = mrv::TimeUnits::Timecode;
 
             // Render data
+
+            //! Main counter for vlk::MAX_FRAMES_IN_FLIGHT
+            uint32_t frameIndex = 0;
+
             std::shared_ptr<ui::Style> style;
             std::shared_ptr<image::FontSystem> fontSystem;
             std::shared_ptr<timeline_vlk::Render> render;
@@ -831,6 +835,9 @@ namespace mrv
 
             VkCommandBuffer cmd = getCurrentCommandBuffer();
 
+            // Get frameIndex
+            frameIndex = frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
+
             bool changed_screen = false;
             if (p.screen_index != this->screen_num())
             {
@@ -909,7 +916,7 @@ namespace mrv
 
                         // Clear color in new render pass.
                         p.render->begin(
-                            cmd, p.buffer, m_currentFrameIndex, renderSize,
+                            cmd, p.buffer, frameIndex, renderSize,
                             renderOptions);
                         const math::Matrix4x4f ortho = math::ortho(
                             0.F, static_cast<float>(renderSize.w),
@@ -953,7 +960,7 @@ namespace mrv
 
                 begin_render_pass(cmd);
 
-                p.shader->bind(m_currentFrameIndex);
+                p.shader->bind(frameIndex);
                 const auto pm = math::ortho(
                     0.F, static_cast<float>(renderSize.w),
                     0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
@@ -1003,7 +1010,7 @@ namespace mrv
                           VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
                     ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
 
-                    p.vao->bind(m_currentFrameIndex);
+                    p.vao->bind(frameIndex);
                     p.vao->draw(cmd, p.vbo);
                 }
             }

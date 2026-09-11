@@ -251,7 +251,7 @@ namespace
 
 namespace mrv
 {
-    
+
     monitor::Capabilities getHDRCapabilities(int screen_num)
     {
         monitor::Capabilities out;
@@ -351,7 +351,7 @@ namespace mrv
         pl_shader shader = nullptr;
         pl_shader_obj state = nullptr;
         const pl_shader_res* res = nullptr;
-        
+
         std::vector<pl_shader_var> pcUBOvars;
         void* pcUBOData = nullptr;
         size_t pcUBOSize = 0;
@@ -405,7 +405,7 @@ namespace mrv
         {
             throw std::runtime_error("pl_gpu_dummy_create failed!");
         }
-        
+
         pl_shader_params shader_params;
         memset(&shader_params, 0, sizeof(pl_shader_params));
 
@@ -433,11 +433,11 @@ namespace mrv
         pcUBOvars.clear();
         free(pcUBOData);
         pcUBOSize = 0;
-            
+
         pl_gpu_dummy_destroy(&gpu);
         pl_log_destroy(&log);
     }
-    
+
     struct NDIView::Private
     {
         // FLTK state variables
@@ -563,7 +563,7 @@ namespace mrv
     void NDIView::init_colorspace()
     {
         TLRENDER_P();
-        
+
         Fl_Vk_Window::init_colorspace();
 
         bool valid_colorspace = false;
@@ -581,13 +581,13 @@ namespace mrv
         }
 
         p.screen_index = this->screen_num();
-        
+
         if (valid_colorspace)
         {
             LOG_STATUS(_("HDR monitor found."));
-            
+
             p.monitor = getHDRCapabilities(p.screen_index);
-            
+
             _getMonitorNits(false);
         }
         else
@@ -638,7 +638,7 @@ namespace mrv
                 const uint16_t* row_y = p_y + (y * stride_words);
                 const uint16_t* row_uv = p_uv + (y * stride_words);
                 const uint16_t* row_alpha = p_alpha + (y * stride_words);
-        
+
                 for (int x = 0; x < w; ++x)
                 {
                     // Extract Y and Alpha
@@ -667,7 +667,7 @@ namespace mrv
                     }
 
                     // Store as RGBA float
-                    int rgba_index = (y * w + x) * 4; 
+                    int rgba_index = (y * w + x) * 4;
                     rgba[rgba_index] = R;
                     rgba[rgba_index + 1] = G;
                     rgba[rgba_index + 2] = B;
@@ -679,11 +679,11 @@ namespace mrv
         case NDIlib_FourCC_type_P216:
         {
             LOG_DEBUG("P216");
-            
+
             const int stride_words = stride_in_bytes / 2;
             uint16_t* p_y = (uint16_t*)video_frame;
-            const uint16_t* p_uv = p_y + h * stride_words;            
-            
+            const uint16_t* p_uv = p_y + h * stride_words;
+
             // Determine BT.601 or BT.709 based on resolution
             bool useBT709 = (w >= 1280 && h >= 720);
 
@@ -697,17 +697,17 @@ namespace mrv
                 // Calculate base pointers for the current row
                 const uint16_t* row_y = p_y + (y * stride_words);
                 const uint16_t* row_uv = p_uv + (y * stride_words);
-        
+
                 for (int x = 0; x < w; ++x)
                 {
                     // Extract Y and Alpha
                     float Yf = row_y[x] / 65535.0f;
-                    
+
                     // Extract U and V (4:2:2 interleaved means 1 UV pair per 2 pixels)
                     int uv_idx = (x / 2) * 2;
                     float Uf = (row_uv[uv_idx] - 32768) / 65535.0f;
                     float Vf = (row_uv[uv_idx + 1] - 32768) / 65535.0f;
-                    
+
                     float R, G, B;
 
                     float Y_linear = Yf;
@@ -766,7 +766,7 @@ namespace mrv
 
         VkResult result;
         m_textures.reserve(16);  // reserve up to 16 textures for libplacebo.
-        
+
         uint32_t tex_width = 1, tex_height = 1;
         image::Info info;
         if (p.image)
@@ -778,7 +778,7 @@ namespace mrv
             info = image::Info(1, 1, image::PixelType::RGBA_F16);
         }
         m_textures.push_back(vlk::Texture::create(ctx, info));
-        
+
         // Transition image layout to TRANSFER_SHADER_READ_OPTIMAL
         VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
         m_textures[0]->transitionToShaderRead(cmd);
@@ -846,7 +846,7 @@ namespace mrv
     {
         if (m_renderPass != VK_NULL_HANDLE)
             return;
-        
+
         VkAttachmentDescription attachments[2];
         attachments[0] = VkAttachmentDescription();
         attachments[0].format = ctx.format;
@@ -901,29 +901,29 @@ namespace mrv
         vlk::VertexInputStateInfo vi;
         vi.bindingDescriptions = p.vbo->getBindingDescription();
         vi.attributeDescriptions = p.vbo->getAttributes();
-            
+
         // Defaults are fine
         vlk::InputAssemblyStateInfo ia;
-        
+
         // Defaults are fine
         vlk::RasterizationStateInfo rs;
-        
+
         // Defaults are fine
         vlk::ViewportStateInfo vp;
-        
+
         // Defaults are fine
         vlk::DynamicStateInfo dynamicState;
         dynamicState.dynamicStates = {
             VK_DYNAMIC_STATE_VIEWPORT,
             VK_DYNAMIC_STATE_SCISSOR
         };
-        
+
         vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
         colorBlendAttachment.blendEnable = VK_FALSE;
-        
+
         vlk::ColorBlendStateInfo cb;
         cb.attachments.push_back(colorBlendAttachment);
-        
+
         vlk::DepthStencilStateInfo ds;
         ds.depthTestEnable = mode() & FL_DEPTH ? VK_TRUE : VK_FALSE;
         ds.depthWriteEnable = mode() & FL_DEPTH ? VK_TRUE : VK_FALSE;
@@ -937,7 +937,7 @@ namespace mrv
         // Get the vertex and fragment shaders
         std::vector<vlk::PipelineCreationState::ShaderStageInfo>
             shaderStages(2);
-        
+
         shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
         shaderStages[0].name = p.shader->getName();
         shaderStages[0].module = p.shader->getVertex();
@@ -969,7 +969,7 @@ namespace mrv
             {
                 vkDestroyPipeline(device, m_pipeline, nullptr);
             }
-            
+
             m_pipeline = pipelineState.create(device);
             p.pipelineState = pipelineState;
         }
@@ -983,7 +983,7 @@ namespace mrv
             vkDestroyDescriptorSetLayout(device(), m_desc_layout, nullptr);
             m_desc_layout = VK_NULL_HANDLE;
         }
-        
+
         std::vector<VkDescriptorSetLayoutBinding> bindings;
 
         // Main texture at binding 0
@@ -1029,11 +1029,11 @@ namespace mrv
             pushConstantRange.stageFlags = p.shader->getPushStageFlags();
             pushConstantRange.offset = 0;
             pushConstantRange.size = pushSize;
-            
+
             pipelineLayoutInfo.pushConstantRangeCount = 1;
             pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
         }
-            
+
         result = vkCreatePipelineLayout(
             device(), &pipelineLayoutInfo, nullptr, &m_pipeline_layout);
         VK_CHECK(result);
@@ -1046,7 +1046,7 @@ namespace mrv
             vkDestroyDescriptorPool(device(), m_desc_pool, nullptr);
             m_desc_pool = VK_NULL_HANDLE;
         }
-        
+
         VkDescriptorPoolSize poolSize = {};
         poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         poolSize.descriptorCount =
@@ -1065,7 +1065,7 @@ namespace mrv
 
     void NDIView::prepare_descriptor_set()
     {
-        
+
         VkDescriptorSetAllocateInfo allocInfo = {};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         allocInfo.descriptorPool = m_desc_pool;
@@ -1120,7 +1120,7 @@ namespace mrv
         m_clearColor = {2.F, 2.F, 2.F, 0.F};
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
-        
+
 
         if (!NDIlib_initialize())
             throw std::runtime_error("Could not initialize NDI library");
@@ -1200,7 +1200,7 @@ namespace mrv
             // missing.
             image::HDRData data = p.hdrData;
             auto m_previous_hdr_metadata = m_hdr_metadata;
-            
+
             if (p.monitor.red.x > 0)
             {
                 data.primaries[image::Red].x = p.monitor.red.x;
@@ -1258,7 +1258,7 @@ namespace mrv
             m_hdr_metadata.displayPrimaryGreen = { 0.300F, 0.600F };
             m_hdr_metadata.displayPrimaryBlue = { 0.15F, 0.060F };
             m_hdr_metadata.whitePoint = { 0.3127F, 0.3290F };
-                
+
             // Max display capability
             m_hdr_metadata.maxLuminance = 100.F;
             m_hdr_metadata.minLuminance = 0.1F;
@@ -1284,7 +1284,7 @@ namespace mrv
             m_textures[0]->copy(reinterpret_cast<const uint8_t*>(p.image->getData()), imageSize);
         }
     }
-    
+
     bool NDIView::vk_draw_begin()
     {
         // Change background color here
@@ -1295,13 +1295,13 @@ namespace mrv
     void NDIView::draw()
     {
         TLRENDER_P();
-        
+
         VkCommandBuffer cmd = getCurrentCommandBuffer();
-        
+
         // Clear the frame
         begin_render_pass(cmd);
         end_render_pass(cmd);
-        
+
         // Check if the window changed screen.
         bool changed_screen = false;
         if (p.screen_index != this->screen_num())
@@ -1333,7 +1333,7 @@ namespace mrv
             update_texture(cmd);
             _fillVariables(cmd, p.placeboData->res);
         }
-        
+
         begin_render_pass(cmd);
 
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
@@ -1384,15 +1384,15 @@ namespace mrv
     void NDIView::_getMonitorNits(bool quiet)
     {
         TLRENDER_P();
-        
+
 
         if (p.monitor.hdr_enabled)
-        {                
+        {
             std::string msg =
                 string::Format(_("HDR monitor min. nits = {0}")).
                 arg(p.monitor.min_nits);
             LOG_STATUS(msg);
-                
+
             msg = string::Format(_("HDR monitor max. nits = {0}")).
                   arg(p.monitor.max_nits);
             LOG_STATUS(msg);
@@ -1404,11 +1404,11 @@ namespace mrv
                 colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                 format() = VK_FORMAT_B8G8R8A8_UNORM;
             }
-                
+
             p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
             p.monitor.min_nits = 0.001F;
             p.monitor.max_nits = 100.F;
-                
+
             LOG_STATUS(_("HDR monitor not found or not configured."));
         }
     }
@@ -1467,11 +1467,11 @@ namespace mrv
                         try
                         {
                             rapidxml::xml_document<> doc;
-                            
+
                             // Copy the read-only memory to a mutable string
                             std::string meta_copy((const char*)video_frame.p_metadata);
                             doc.parse<0>(&meta_copy[0]);
-                            
+
                             // Get root node
                             rapidxml::xml_node<>* root =
                                 doc.first_node("ndi_color_info");
@@ -1506,7 +1506,7 @@ namespace mrv
                                 {
                                     rapidxml::xml_attribute<>* attr_transfer =
                                         root->first_attribute("transfer");
-                                    
+
                                     rapidxml::xml_attribute<>* attr_matrix =
                                         root->first_attribute("matrix");
                                     rapidxml::xml_attribute<>* attr_primaries =
@@ -1565,7 +1565,7 @@ namespace mrv
                             m_swapchain_needs_recreation = true;
                         }
                     }
-                    
+
                     if (!init && video_frame.p_data)
                     {
                         _copy(video_frame.p_data,
@@ -1611,7 +1611,7 @@ namespace mrv
     void NDIView::updateSources(const std::vector<std::string>& NDIsources)
     {
         TLRENDER_P();
-        
+
         p.NDISources->setIfChanged(NDIsources);
 
         if (NDIsources.size() == 1)
@@ -1662,7 +1662,7 @@ namespace mrv
 
             FindData* find_data = new FindData;
             find_data->self = this;
-            
+
             for (int i = 0; i < no_sources; ++i)
             {
                 if (std::regex_match(sources[i].p_ndi_name, kRemoteRegex))
@@ -1685,7 +1685,7 @@ namespace mrv
 
 
         p.shader.reset();
-        
+
         p.vao.reset();
         p.vbo.reset();
 
@@ -1716,40 +1716,40 @@ namespace mrv
                                   const std::size_t pushConstantsMaxSize)
     {
         TLRENDER_P();
-            
+
         // Collect non-floats and floats separately to optimize push constants
         std::vector<struct pl_shader_var> non_floats;
         std::vector<struct pl_shader_var> floats;
-    
+
         for (int i = 0; i < res->num_variables; ++i) {
             const struct pl_shader_var shader_var = res->variables[i];
             const struct pl_var var = shader_var.var;
             const std::string glsl_type = pl_var_glsl_type_name(var);
             const bool is_float = (glsl_type == "float");
-        
+
             if (is_float) {
                 floats.push_back(shader_var);
             } else {
                 non_floats.push_back(shader_var);
             }
         }
-    
+
         // Combine into a grouped list: non-floats first, then floats
         std::vector<struct pl_shader_var> all_grouped;
         all_grouped.reserve(non_floats.size() + floats.size());
         all_grouped.insert(all_grouped.end(), non_floats.begin(), non_floats.end());
         all_grouped.insert(all_grouped.end(), floats.begin(), floats.end());
-    
+
         // Now pack into push constants until we can't fit more
         std::vector<struct pl_shader_var> push_vars;
         std::vector<struct pl_shader_var> ubo_vars;
-    
+
         for (const auto &shader_var : all_grouped)
         {
             const struct pl_var var = shader_var.var;
             const struct pl_var_layout layout = pl_std430_layout(currentOffset,
                                                                  &var);
-        
+
             if (layout.offset + layout.size > pushConstantsMaxSize) {
                 ubo_vars.push_back(shader_var);
             } else {
@@ -1757,7 +1757,7 @@ namespace mrv
                 currentOffset = layout.offset + layout.size;
             }
         }
-    
+
         // Generate push constant block if there are variables for it
         if (!push_vars.empty())
         {
@@ -1773,7 +1773,7 @@ namespace mrv
             }
             s << "};\n";
         }
-    
+
         // Generate UBO block if there are remaining variables
         if (!ubo_vars.empty())
         {
@@ -1795,7 +1795,7 @@ namespace mrv
             memset(p.placeboData->pcUBOData, 0, offset);
         }
     }
-            
+
     void NDIView::prepare_shader()
     {
         TLRENDER_P();
@@ -1805,15 +1805,15 @@ namespace mrv
 
         // if (p.placeboData->shader)
         //     pl_shader_free(&p.placeboData->shader);
-        
+
         pl_shader_params shader_params;
         memset(&shader_params, 0, sizeof(pl_shader_params));
-                
+
         shader_params.id = 1;
         shader_params.gpu = p.placeboData->gpu;
         shader_params.dynamic_constants = false;
-            
-        pl_shader_reset(p.placeboData->shader, &shader_params);        
+
+        pl_shader_reset(p.placeboData->shader, &shader_params);
 
         pl_color_map_params cmap = pl_color_map_high_quality_params;
 
@@ -1827,16 +1827,16 @@ namespace mrv
         if (p.hasHDRData)
         {
             const auto& prims = data.primaries;
-            
+
             // Detect primaries from received data
-            bool isP3 = 
+            bool isP3 =
                 std::abs(prims[0].x - 0.680F) < 0.001F &&
                 std::abs(prims[0].y - 0.320F) < 0.001F &&
                 std::abs(prims[1].x - 0.265F) < 0.001F &&
                 std::abs(prims[1].y - 0.690F) < 0.001F &&
                 std::abs(prims[2].x - 0.150F) < 0.001F &&
                 std::abs(prims[2].y - 0.060F) < 0.001F;
-            
+
             bool isBT709 =
                 std::abs(prims[0].x - 0.640F) < 0.001F &&
                 std::abs(prims[0].y - 0.330F) < 0.001F &&
@@ -1844,7 +1844,7 @@ namespace mrv
                 std::abs(prims[1].y - 0.600F) < 0.001F &&
                 std::abs(prims[2].x - 0.150F) < 0.001F &&
                 std::abs(prims[2].y - 0.060F) < 0.001F;
-            
+
             bool isBT2020 =
                 std::abs(prims[0].x - 0.708F) < 0.001F &&
                 std::abs(prims[0].y - 0.292F) < 0.001F &&
@@ -1852,7 +1852,7 @@ namespace mrv
                 std::abs(prims[1].y - 0.797F) < 0.001F &&
                 std::abs(prims[2].x - 0.131F) < 0.001F &&
                 std::abs(prims[2].y - 0.046F) < 0.001F;
-            
+
             if (isP3)
             {
                 // Check white point to differentiate P3 D65 vs DCI P3
@@ -1884,7 +1884,7 @@ namespace mrv
                 // Unknown primaries - default to BT.2020
                 src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             }
-            
+
             // Set transfer function from HDRData EOTF
             switch (data.eotf)
             {
@@ -1973,7 +1973,7 @@ namespace mrv
                 dst_colorspace.hdr.prim.blue = raw->blue;
                 dst_colorspace.hdr.prim.white = raw->white;
             }
-            
+
             // For SDR content on HDR monitor, enable tone mapping to fit SDR
             // into HDR
             if (!p.hasHDRData)
@@ -1994,7 +1994,7 @@ namespace mrv
 
             dst_colorspace.hdr.min_luma = 0.F;
             dst_colorspace.hdr.max_luma = 203.0F; // SDR peak
-                            
+
             if (p.hasHDRData)
                 cmap.tone_mapping_function = &pl_tone_map_spline;
             else
@@ -2007,43 +2007,43 @@ namespace mrv
         {
             // Display-referred content is already color-graded for a specific
             // display. Check if source matches destination.
-            
+
             bool primariesMatch = (src_colorspace.primaries == dst_colorspace.primaries);
             bool transferMatch = (src_colorspace.transfer == dst_colorspace.transfer);
-            bool luminanceMatch = 
+            bool luminanceMatch =
                 std::abs(src_colorspace.hdr.max_luma - dst_colorspace.hdr.max_luma) < 100.0F;
-            
+
             if (primariesMatch && transferMatch && luminanceMatch)
             {
                 // Perfect match - disable all transformations for 1:1 pass-through
                 cmap.tone_mapping_function = nullptr;
-                
+
                 LOG_STATUS("Display-referred: Perfect match, 1:1 pass-through");
             }
             else if (primariesMatch && transferMatch && !luminanceMatch)
             {
                 // Same primaries/transfer, different luminance - only tone map
                 cmap.tone_mapping_function = &pl_tone_map_spline;
-                
+
                 LOG_STATUS("Display-referred: Luminance mismatch, tone mapping enabled");
             }
             else
             {
                 // Primaries or transfer differ - let libplacebo handle gamut mapping
                 cmap.tone_mapping_function = &pl_tone_map_spline;
-                
+
                 LOG_STATUS("Display-referred: Primaries/transfer mismatch, "
                            "gamut mapping enabled");
             }
         }
-        
+
         pl_color_map_args color_map_args;
         memset(&color_map_args, 0, sizeof(pl_color_map_args));
 
         color_map_args.src = src_colorspace;
         color_map_args.dst = dst_colorspace;
         color_map_args.prelinearized = false;
-        
+
         // Reuse results if possible
         color_map_args.state = &p.placeboData->state;
 
@@ -2204,7 +2204,7 @@ namespace mrv
             if (p.shader && p.placeboData->pcUBOSize > 0)
                  p.shader->createUniformData("pcUBO", p.placeboData->pcUBOSize);
 
-            
+
             auto bindingSet = p.shader->createBindingSet();
 
             for (const auto& texture : m_textures)
@@ -2215,14 +2215,14 @@ namespace mrv
             p.shader->createPush("placeboPC", pushSize, vlk::kShaderFragment);
         }
     }
-    
+
     void NDIView::_fillVariables(VkCommandBuffer cmd, const struct pl_shader_res* res)
     {
         TLRENDER_P();
-        
+
         if (!res)
             return;
-        
+
         size_t pushSize = p.shader->getPushSize();
         if (pushSize > 0)
         {
@@ -2243,22 +2243,22 @@ namespace mrv
                         continue;
                     if (j == 1 && !is_float)
                         continue;
-                            
+
                     // Ensure the variable type is float-based
                     if (var.type != PL_VAR_FLOAT)
                     {
                         throw std::runtime_error("libplacebo created a variable that is not float");
                     }
-                            
+
                     const struct pl_var_layout& dst_layout = pl_std430_layout(currentOffset, &var);
                     const struct pl_var_layout& src_layout = pl_var_host_layout(0, &var);
-                            
+
                     memcpy_layout(pushData.data(), dst_layout,
                                   shader_var.data, src_layout);
                     currentOffset = dst_layout.offset + dst_layout.size;
                 }
             }
-                    
+
             vkCmdPushConstants(cmd, pipelineLayout,
                                VK_SHADER_STAGE_FRAGMENT_BIT, 0,
                                pushData.size(), pushData.data());
@@ -2278,7 +2278,7 @@ namespace mrv
 
                 currentOffset = dst_layout.offset + dst_layout.size;
             }
-                
+
             p.shader->setUniformData("pcUBO", p.placeboData->pcUBOData,
                                      p.placeboData->pcUBOSize);
         }
@@ -2406,7 +2406,7 @@ namespace mrv
     std::string NDIView::_fragmentSource()
     {
         TLRENDER_P();
-        
+
         std::string fragShader = tl::string::Format(R"(
 #version 450
 

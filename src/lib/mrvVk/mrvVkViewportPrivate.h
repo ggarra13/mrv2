@@ -24,8 +24,8 @@ namespace mrv
         struct Viewport::VKPrivate
         {
             std::weak_ptr<system::Context> context;
-            
-            // Main command buffer, stored for convenience.
+
+            //! Main command buffer, stored for convenience.
             VkCommandBuffer  cmd = VK_NULL_HANDLE;
 
             //! Boolean to for creating an overlay offscreenBuffer for
@@ -35,7 +35,7 @@ namespace mrv
             //! Boolean used to turn on dynamic read pixels.
             //! We must not read pixels when vk.buffer is just created.
             bool readPixels = false;
-            
+
             //! This is for compositing pipelines
             VkRenderPass     loadRenderPass = VK_NULL_HANDLE;
             VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
@@ -68,13 +68,13 @@ namespace mrv
             //! Annotation mesh
             std::shared_ptr<vlk::VBO> avbo;
             std::shared_ptr<vlk::VAO> avao;
-            
+
             //! Lines drawn into the rendered annotations.
             std::shared_ptr<vulkan::Lines> lines;
 
             //! Lines drawn into the viewport (safe areas, selection, cursor).
             std::shared_ptr<vulkan::Lines> viewport;
-            
+
             bool init_debug = false;
         };
 

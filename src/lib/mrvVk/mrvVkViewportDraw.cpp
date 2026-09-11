@@ -354,7 +354,7 @@ namespace mrv
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
 
-            render->begin(vk.cmd, annotationBuffer, m_currentFrameIndex,
+            render->begin(vk.cmd, annotationBuffer, frameIndex,
                           renderSize, renderOptions);
             render->setOCIOOptions(timeline::OCIOOptions());
             render->setLUTOptions(timeline::LUTOptions());
@@ -480,7 +480,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            shader->bind(m_currentFrameIndex);
+            shader->bind(frameIndex);
             shader->setUniform("transform.mvp", orthoMatrix,
                                vlk::kShaderVertex);
             timeline::Channels channels = timeline::Channels::Color;
@@ -502,7 +502,7 @@ namespace mrv
             {
                 // Draw calls for the composition geometry (e.g., a
                 // screen-filling quad)
-                vk.avao->bind(m_currentFrameIndex);
+                vk.avao->bind(frameIndex);
                 vk.avao->draw(cmd, vbo);
             }
         }

@@ -57,11 +57,9 @@ namespace mrv
             int Y = 20;
 
             auto view = p.ui->uiView;
-            if (!view) return;
 
-            auto player = view->getTimelinePlayer();
-            if (!player)
-                return;
+            TimelinePlayer* player;
+            player = view->getTimelinePlayer();
 
             g->clear();
             g->begin();
@@ -92,6 +90,9 @@ namespace mrv
                 ag);
 
             ag->setPlayer(nullptr);
+
+            if (!player)
+                return;
 
             ag->begin();
 

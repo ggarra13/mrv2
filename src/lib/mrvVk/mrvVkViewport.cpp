@@ -721,6 +721,9 @@ namespace mrv
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
 
+            // Clamp frameIndex
+            frameIndex = frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
+
             // Clear the frame
             begin_render_pass(cmd);
             end_render_pass(cmd);
@@ -996,7 +999,7 @@ namespace mrv
                 }
 
                 vk.render->begin(
-                    cmd, vk.buffer, m_currentFrameIndex, renderSize,
+                    cmd, vk.buffer, frameIndex, renderSize,
                     renderOptions);
                 vk.render->applyTransforms();
 
@@ -1233,7 +1236,7 @@ namespace mrv
                 begin_render_pass(cmd);
 
                 // Bind the shaders to the current frame index.
-                vk.shader->bind(m_currentFrameIndex);
+                vk.shader->bind(frameIndex);
 
                 // Bind the main composition pipeline (created/managed outside this
                 // draw loop)
@@ -1265,7 +1268,7 @@ namespace mrv
                           VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
                     ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
 
-                    vk.vao->bind(m_currentFrameIndex);
+                    vk.vao->bind(frameIndex);
                     vk.vao->draw(cmd, vk.vbo);
                 }
             }
