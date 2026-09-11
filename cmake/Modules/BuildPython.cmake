@@ -28,6 +28,10 @@ set(Python_PATCH )
 set(Python_ENV )
 set(Python_PATH $ENV{PATH} )
 set(Python_OPTIMIZATIONS --enable-optimizations)
+set(Python_TESTS)
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(Python_TESTS --disable-test-modules)
+endif()
 
 if(APPLE)
 
@@ -84,7 +88,7 @@ if(APPLE)
 	${Python_OPTIMIZATIONS}
 	--enable-shared
 	--with-openssl=${_openssl_LOC}
-	--disable-test-modules
+	${Python_TESTS}
 	--prefix=${CMAKE_INSTALL_PREFIX}
     )
     set( Python_BUILD make -j ${NPROCS} )
@@ -113,7 +117,7 @@ elseif(UNIX)
 	--enable-shared
         --prefix=${CMAKE_INSTALL_PREFIX}
 	--without-ensurepip
-	--disable-test-modules
+	${Python_TESTS}
     )
     
     # Build command
