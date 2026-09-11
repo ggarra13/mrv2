@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Environment variables &mdash; mrv2 v1.7.1 documentation</title>
+  <title>Environment variables &mdash; mrv2 v1.7.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=5cc1adc0"></script>
+      <script src="../_static/documentation_options.js?v=97483d0d"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -96,10 +96,11 @@
              
   <section id="environment-variables">
 <h1>Environment variables<a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h1>
-<dl class="simple">
-<dt>EDITOR          - Editor to use as external editor in the Python Panel.</dt><dd><p>Default: vim.</p>
-</dd>
-</dl>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
+EDITOR          - Editor to use as external editor in the Python Panel.</p>
+<blockquote>
+<div><p>Default: vim.</p>
+</div></blockquote>
 <p>FLTK_BACKEND    - Linux only: if set to x11, overrides Wayland to use XWayland.
 HOME            - if set, where the .filmaura directory, license and preference</p>
 <blockquote>
@@ -109,11 +110,15 @@ HOME            - if set, where the .filmaura directory, license and preference<
 <dt>LANGUAGE        - Language to used in the UI (Usually set by the OS or mrv2</dt><dd><p>preferences).</p>
 </dd>
 </dl>
-<p>OCIO            - OCIO override for OpenColorIO’s config file.
-MRV2_STUDIOPATH - global variable where to look up preferences settings first</p>
+<p>OCIO            - OCIO override for OpenColorIO’s config file.</p>
+<p>MRV2_LICENSE_SERVER - Server to connect to obtain a (v)mrv2 license.
+MRV2_LICENSEPATH    - Path to the floating license mrv2_licenses.lic.
+MRV2_STUDIOPATH     - Where to look up preferences settings first</p>
 <blockquote>
 <div><p>for a studio setting (before the user settings).</p>
 </div></blockquote>
+<p>MRV2_WEBRTC_STUDIO  - Name of the studio for WebRTC connections.
+<a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
 </section>
 
 

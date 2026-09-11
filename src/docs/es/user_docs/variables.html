@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Variables de Entorno &mdash; documentación de mrv2 - v1.7.1</title>
+  <title>Variables de Entorno &mdash; documentación de mrv2 - v1.7.6</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=e753318c"></script>
+      <script src="../_static/documentation_options.js?v=2cdaa141"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/translations.js?v=f85f4cfb"></script>
@@ -97,15 +97,23 @@
              
   <section id="variables-de-entorno">
 <h1>Variables de Entorno<a class="headerlink" href="#variables-de-entorno" title="Link to this heading"></a></h1>
-<p>EDITOR          - Editor a usar en el panel Python.  Por defecto: vim.
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
+EDITOR          - Editor a usar en el panel Python.  Por defecto: vim.
 FLTK_BACKEND    - Sólo Linux: seteado a x11, pasa Wayland a usar XWayland.
 HOME            - Si está seteado, donde ubicar el directorio .filmaura, licencia y seteos de preferencias que serán grabados.
 LANGUAGE        - Languaje a ser usado en la interfaz (Usualmente seteado por el OS).
-OCIO            - Dónde se ubica el archivo config de OpenColorIO.
-MRV2_STUDIOPATH - Variable global para ubicar los seteos de preferencia del</p>
+OCIO            - Dónde se ubica el archivo config de OpenColorIO.</p>
+<p>MRV2_LICENSE_SERVER - Servidor a conectar para obtener una licencia (v)mrv2.
+MRV2_LICENSEPATH    - Carpeta a donde la licencia flotante mrv2_licenses.lic</p>
 <blockquote>
-<div><p>estudio (antes que los del usuario).</p>
+<div><p>está.</p>
 </div></blockquote>
+<dl class="simple">
+<dt>MRV2_STUDIOPATH     - Variable para ubicar los seteos de preferencia del</dt><dd><p>estudio (antes que los del usuario).</p>
+</dd>
+</dl>
+<p>MRV2_WEBRTC_STUDIO  - Nombre del estudio a utilizar con conecciones WebRTC.
+<a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
 </section>
 
 

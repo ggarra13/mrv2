@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema de Plug-ins &mdash; documentación de mrv2 - v1.7.1</title>
+  <title>Sistema de Plug-ins &mdash; documentación de mrv2 - v1.7.6</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=e753318c"></script>
+      <script src="../_static/documentation_options.js?v=2cdaa141"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/translations.js?v=f85f4cfb"></script>
@@ -121,16 +121,16 @@ semi-comas (Windows) indicando dónde residen los plug-ins.</p>
         <span class="k">pass</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">hola</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hola desde un plugin de python&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Hola desde un plugin de python"</span><span class="p">)</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Esta función crea un nuevo menu llamado Menu con dos entradas.</span>
 <span class="sd">    Una llamada Hola con una línea divisoria que llama al método self.hola</span>
 <span class="sd">    y una llamada Reproducir que ejecuta la reproducción del clip actual.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">menus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Menu/Hola&quot;</span> <span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hola</span><span class="p">,</span> <span class="s2">&quot;__divider__&quot;</span><span class="p">)</span> <span class="p">},</span>
-                 <span class="s2">&quot;Menu/Reproducir&quot;</span> <span class="p">:</span> <span class="n">timeline</span><span class="o">.</span><span class="n">playForwards</span> <span class="p">}</span>
+        <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">"Menu/Hola"</span> <span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hola</span><span class="p">,</span> <span class="s2">"__divider__"</span><span class="p">)</span> <span class="p">},</span>
+                 <span class="s2">"Menu/Reproducir"</span> <span class="p">:</span> <span class="n">timeline</span><span class="o">.</span><span class="n">playForwards</span> <span class="p">}</span>
         <span class="k">return</span> <span class="n">menu</span>
 </pre></div>
 </div>

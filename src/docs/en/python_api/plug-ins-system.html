@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plug-in System &mdash; mrv2 v1.7.1 documentation</title>
+  <title>Plug-in System &mdash; mrv2 v1.7.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=5cc1adc0"></script>
+      <script src="../_static/documentation_options.js?v=97483d0d"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -120,16 +120,16 @@ plug-ins reside.</p>
         <span class="k">pass</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello from a python plugin&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Hello from a python plugin"</span><span class="p">)</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This function creates a new menu called Menu with two entries.</span>
 <span class="sd">    One called Hello with a divider line that calls the self.hello method</span>
 <span class="sd">    and one called Play that triggers playback of the current clip.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">menus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;Menu/Hello&quot;</span> <span class="p">:</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">hello</span><span class="p">,</span> <span class="s2">&quot;__divider__&quot;</span> <span class="p">),</span>
-                 <span class="s2">&quot;Menu/Play&quot;</span>  <span class="p">:</span> <span class="n">timeline</span><span class="o">.</span><span class="n">playForwards</span><span class="p">}</span>
+        <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">"Menu/Hello"</span> <span class="p">:</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">hello</span><span class="p">,</span> <span class="s2">"__divider__"</span> <span class="p">),</span>
+                 <span class="s2">"Menu/Play"</span>  <span class="p">:</span> <span class="n">timeline</span><span class="o">.</span><span class="n">playForwards</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">menu</span>
 </pre></div>
 </div>
