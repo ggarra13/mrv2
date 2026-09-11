@@ -96,8 +96,6 @@ namespace mrv
                 declared = true;
                 autoName = i->second;
                 setCandidates({ i->second.c_str() });
-                std::cerr << "colorInteropID=" << i->second
-                          << std::endl;
             }
 
             /*
