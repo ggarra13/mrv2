@@ -8,7 +8,6 @@
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvFl/mrvConvertImage.h"
 #include "mrvOptions/mrvSaveOptions.h"
 #include "mrvFl/mrvIO.h"
 
@@ -18,6 +17,7 @@
 
 #include "mrvWidgets/mrvProgressReport.h"
 
+#include "mrvImage/mrvConvertImage.h"
 #include "mrvImage/mrvOperations.h"
 
 #include "mrvCore/mrvLocale.h"
@@ -435,22 +435,12 @@ namespace mrv
             std::shared_ptr<image::Image> bufferImage;
             std::shared_ptr<image::Image> scaleImage;
 
+            std::shared_ptr<vlk::OffscreenBuffer> buffer;
+            bool hasOutputInfo = true;
+
             if (hasVideo)
             {
-                // Create scaleImage if resolution is not the same.
-                if (resolution != SaveResolution::kSameSize)
-                {
-                    scaleInfo.size = renderSize;
-                    scaleInfo.pixelType = outputInfo.pixelType;
-                    scaleImage = image::Image::create(scaleInfo);
-
-                    msg = tl::string::Format(_("Image info: {0} {1}"))
-                          .arg(scaleInfo.size)
-                          .arg(scaleInfo.pixelType);
-                    LOG_STATUS(msg);
-                }
-
-                else if (resolution == SaveResolution::kHalfSize)
+                if (resolution == SaveResolution::kHalfSize)
                 {
                     renderSize.w /= 2;
                     renderSize.h /= 2;
@@ -472,6 +462,8 @@ namespace mrv
 
                 if (image::PixelType::kNone == outputInfo.pixelType)
                 {
+                    hasOutputInfo = false;
+
                     outputInfo.pixelType = image::PixelType::RGBA_U8;
                     offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
 #ifdef TLRENDER_EXR
@@ -511,13 +503,6 @@ namespace mrv
 #ifdef TLRENDER_EXR
                 ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
-                //
-                // Create output image
-                //
-                outputImage = image::Image::create(outputInfo);
-
-                ioInfo.videoTime = videoTime;
-                ioInfo.video.push_back(outputInfo);
 
 #ifdef TLRENDER_FFMPEG
                 if (hasVideo && savingMovie)
@@ -527,53 +512,23 @@ namespace mrv
                         entries[(int)options.ffmpegProfile];
 
                     msg = tl::string::Format(
-                              _("Using profile {0}, pixel format {1}."))
-                              .arg(profileName)
-                              .arg(options.ffmpegPixelFormat);
+                        _("Using profile {0}, pixel format {1}."))
+                          .arg(profileName)
+                          .arg(options.ffmpegPixelFormat);
                     LOG_STATUS(msg);
                     if (!options.ffmpegPreset.empty())
                     {
                         msg = tl::string::Format(_("Using preset {0}."))
-                                  .arg(options.ffmpegPreset);
+                              .arg(options.ffmpegPreset);
                         LOG_STATUS(msg);
                     }
                 }
 #endif
-            }
 
-            if (hasAudio)
-            {
-                ioInfo.audio = info.audio;
-                ioInfo.audioTime = audioTime;
-            }
-
-            auto writer = writerPlugin->write(path, ioInfo, ioOptions);
-            if (!writer)
-            {
-                throw std::runtime_error(
-                    string::Format("{0}: Cannot open").arg(file));
-            }
-
-            const auto videoFrame = view->getVideoFrame();
-            if (!videoFrame.empty() &&
-                !videoFrame[0].layers.empty() &&
-                videoFrame[0].layers[0].image)
-            {
-                auto hdrData = videoFrame[0].layers[0].image->getHDR();
-                if (hdrData)
-                {
-                    writer->setHDR(*hdrData);
-                }
-                writer->writeHeader();
-            }
-
-            //
-            // Create image buffer (main FBO).
-            //
-            math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
-            std::shared_ptr<vlk::OffscreenBuffer> buffer;
-            if (hasVideo)
-            {
+                //
+                // Create image buffer (main FBO).
+                //
+                math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
                 if (!interactive)
                 {
                     Fl::check();
@@ -591,7 +546,6 @@ namespace mrv
 
                 if (options.annotations)
                 {
-
                     if (!annotationImage)
                     {
                         image::Info annotationInfo = outputInfo;
@@ -605,6 +559,19 @@ namespace mrv
 
                 bufferInfo = outputInfo;
                 bufferInfo.pixelType = offscreenBufferOptions.colorType;
+
+                // Use 16-bit output pixel type if buffer has more depth and
+                // we are saving a movie file
+                if (savingMovie &&
+                    outputInfo.pixelType == image::PixelType::RGBA_U8)
+                {
+                    if (bufferInfo.pixelType != image::PixelType::RGBA_U8)
+                        outputInfo.pixelType = image::PixelType::RGBA_U16;
+                }
+
+                //
+                // Create buffer image
+                //
                 bufferInfo.size.w = width;
                 bufferInfo.size.h = height;
                 bufferImage = image::Image::create(bufferInfo);
@@ -612,13 +579,64 @@ namespace mrv
                 msg = tl::string::Format(_("Offscreen Buffer info: {0}"))
                       .arg(offscreenBufferOptions.colorType);
                 LOG_STATUS(msg);
+
+                //
+                // Create scaleImage if resolution is not the same.
+                //
+                if (resolution != SaveResolution::kSameSize)
+                {
+                    // Scale image has to have the same size as the buffer
+                    scaleInfo.size = bufferInfo.size;
+                    // But, the pixel type of the output buffer.
+                    scaleInfo.pixelType = outputInfo.pixelType;
+                    scaleImage = image::Image::create(scaleInfo);
+
+                    msg = tl::string::Format(_("Image info: {0} {1}"))
+                          .arg(scaleInfo.size)
+                          .arg(scaleInfo.pixelType);
+                    LOG_STATUS(msg);
+                }
+
+                //
+                // Create output image
+                //
+                outputImage = image::Image::create(outputInfo);
+
+                ioInfo.videoTime = videoTime;
+                ioInfo.video.push_back(outputInfo);
+
+                msg = tl::string::Format(_("Output info: {0} {1}"))
+                      .arg(outputInfo.size)
+                      .arg(outputInfo.pixelType);
+                LOG_STATUS(msg);
             }
 
+            if (hasAudio)
+            {
+                ioInfo.audio = info.audio;
+                ioInfo.audioTime = audioTime;
+            }
 
-            msg = tl::string::Format(_("Output info: {0} {1}"))
-                  .arg(outputInfo.size)
-                  .arg(outputInfo.pixelType);
-            LOG_STATUS(msg);
+            auto writer = writerPlugin->write(path, ioInfo, ioOptions);
+            if (!writer)
+            {
+                throw std::runtime_error(
+                    string::Format("{0}: Cannot open").arg(file));
+            }
+
+            const auto videoFrame = view->getVideoFrame();
+            std::shared_ptr<image::HDRData> hdrData;
+            if (!videoFrame.empty() &&
+                !videoFrame[0].layers.empty() &&
+                videoFrame[0].layers[0].image)
+            {
+                hdrData = videoFrame[0].layers[0].image->getHDR();
+                if (hdrData)
+                {
+                    writer->setHDR(*hdrData);
+                }
+                writer->writeHeader();
+            }
 
 
             // Turn off hud so it does not get captured by readPixels.
@@ -954,17 +972,9 @@ namespace mrv
                     if (scaleImage)
                     {
                         if (outputImage != scaleImage &&
-                            (scaleImage->getWidth() != outputImage->getWidth() ||
-                             scaleImage->getHeight() != outputImage->getHeight()))
+                            (scaleImage->getSize() != outputImage->getSize()))
                         {
-                            int numChannels = image::getChannelCount(outputImage->getPixelType());
-                            scaleImageLinear(scaleImage->getData(),
-                                             scaleImage->getWidth(),
-                                             scaleImage->getHeight(),
-                                             outputImage->getData(),
-                                             outputImage->getWidth(),
-                                             outputImage->getHeight(),
-                                             numChannels);
+                            scaleImageLinear(scaleImage, outputImage);
                         }
                         else
                         {
@@ -978,7 +988,6 @@ namespace mrv
 
                     if (videoTime.contains(currentTime))
                     {
-
                         const auto videoFrame = view->getVideoFrame();
                         if (!videoFrame.empty() &&
                             !videoFrame[0].layers.empty() &&
@@ -991,7 +1000,13 @@ namespace mrv
                             }
                         }
 
-                        const auto& tags = view->getTags();
+                        auto tags = view->getTags();
+                        if (saveEXR)
+                        {
+                            std::string ics = ocio::ics();
+                            if (!ics.empty() && ics != _("None"))
+                                tags["colorInteropID"] = ics;
+                        }
                         outputImage->setTags(tags);
 
                         writer->writeVideo(currentTime, outputImage);

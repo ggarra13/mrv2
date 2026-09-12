@@ -1,12 +1,12 @@
-mrv2 v1.7.5: Professional VFX Review for Everyone
-================================
+mrv2 v1.7.6: Professional VFX Review for Everyone
+=========================================
 
 I'm excited to announce the latest update to mrv2 and vmrv2 -- the open-source, high-performance professional players and review tools for the VFX, Animation and CG communities.
 
 Whether you are working on Windows, Linux or macOS, mrv2 is designed to handle demanding workflows with ease.
 
 Two Engines, One Goal
--------------------------
+----------------------------------
 
 We now ship in two specialized versions to fit your hardware:
 
@@ -14,12 +14,12 @@ We now ship in two specialized versions to fit your hardware:
 * vmrv2 (Vulkan): Cutting-edge performance with support for Dynamic HDR.
 
 Choose your Tier
-------------------
+-------------------------
 
 While mrv2 remains open-source, we offer Donationware Licenses to unlock	professional grade features and support further development.
 
 Get Started
-------------
+----------------
 
 Explore the documentation, watch tutorials, and download the latest binaries:
 
@@ -36,7 +36,7 @@ Support the project via PayPal to receive your license key.
 
 -------------------------------------------------------------------------------
 
-(v)mrv2 v1.7.5
+(v)mrv2 v1.7.6
 
 Open source professional players and review tools for VFX, animation and CGI for Windows, Linux and macOS has a new version.
 
