@@ -9,6 +9,7 @@ v1.7.7
 
 Fixes:
 
+- Fixed HW decoding to select HW decoders first before software decoders when HW decoding is on.  Previously, the software decoder, depending on codec, would come first.
 - Fixed automatic bit selection of main framebuffer for YUV_420P_U10 and 16-bit semi-planar formats.  They were defaulting to 8 bits instead of 16 bits.
 - Fixed saving pictures and videos with half or quarter resolution on the Vulkan backend.
 - Fixed + button in Notes Panel adding two annotations.

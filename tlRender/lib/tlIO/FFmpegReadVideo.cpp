@@ -371,6 +371,43 @@ namespace tl
                     }
                 }
 
+                // avcodec_find_decoder() returns the first registered
+                // decoder for this codec ID, which for some codecs (e.g.
+                // AV1) is a software-only external library such as
+                // libdav1d rather than FFmpeg's native decoder. Such
+                // decoders never publish a hardware configuration, so
+                // when hwAccel is requested but the chosen decoder has
+                // none, look for another registered decoder for the same
+                // codec ID that does support hardware acceleration and
+                // use that one instead. Without this, _initHwAccel()
+                // finds nothing to attach to and decoding stays fully in
+                // software even though a real HW decoder is available.
+                if (_options.hwAccel && avVideoCodec &&
+                    !avcodec_get_hw_config(avVideoCodec, 0))
+                {
+                    const AVCodec* p = nullptr;
+                    void* iter = nullptr;
+                    while ((p = av_codec_iterate(&iter)))
+                    {
+                        if (!av_codec_is_decoder(p) ||
+                            p->id != avVideoCodecParameters->codec_id ||
+                            !avcodec_get_hw_config(p, 0))
+                        {
+                            continue;
+                        }
+                        std::string msg = string::Format(
+                            "Switching from decoder \"{0}\" to \"{1}\" "
+                            "to allow hardware decoding.")
+                            .arg(avVideoCodec->name ? avVideoCodec->name
+                                                     : "?")
+                            .arg(p->name ? p->name : "?");
+                        LOG_STATUS(msg);
+                        avVideoCodec = p;
+                        avVideoCodecParameters->codec_id = avVideoCodec->id;
+                        break;
+                    }
+                }
+
                 if (!avVideoCodec)
                 {
                     const AVCodecDescriptor *desc =
