@@ -544,7 +544,6 @@ namespace mrv
                 }
             }
 
-            auto tags = view->getTags();
             if (saveEXR)
             {
                 std::string ics = ocio::ics();
