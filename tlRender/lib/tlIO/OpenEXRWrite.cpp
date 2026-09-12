@@ -83,16 +83,16 @@ namespace tl
                 std::stringstream ss(i->second);
                 ss >> _speed;
             }
-            i = options.find("OpenEXR/Chromaticities");
-            if (i != options.end())
-            {
-                _hasChromaticities = true;
-                std::stringstream ss(i->second);
-                ss >> _chromaticities.red.x   >> _chromaticities.red.y
-                   >> _chromaticities.green.x >> _chromaticities.green.y
-                   >> _chromaticities.blue.x  >> _chromaticities.blue.y
-                   >> _chromaticities.white.x >> _chromaticities.white.y;
-            }
+            // i = options.find("OpenEXR/Chromaticities");
+            // if (i != options.end())
+            // {
+            //     _hasChromaticities = true;
+            //     std::stringstream ss(i->second);
+            //     ss >> _chromaticities.red.x   >> _chromaticities.red.y
+            //        >> _chromaticities.green.x >> _chromaticities.green.y
+            //        >> _chromaticities.blue.x  >> _chromaticities.blue.y
+            //        >> _chromaticities.white.x >> _chromaticities.white.y;
+            // }
         }
 
         Write::Write() :
@@ -169,12 +169,40 @@ namespace tl
                 Imath::V2f(0.F, 0.F), 1.F, Imf::INCREASING_Y, _compression);
             header.zipCompressionLevel() = _zipCompressionLevel;
             header.dwaCompressionLevel() = _dwaCompressionLevel;
-            if (_hasChromaticities)
+
+            auto hdr = image->getHDR();
+            if (hdr)
             {
-                addChromaticities(header, _chromaticities);
+                Imf::Chromaticities chromaticities;
+
+                const float rx = hdr->primaries[0].x;
+                const float ry = hdr->primaries[0].y;
+
+                const float gx = hdr->primaries[1].x;
+                const float gy = hdr->primaries[1].y;
+
+                const float bx = hdr->primaries[2].x;
+                const float by = hdr->primaries[2].y;
+
+                const float wx = hdr->primaries[3].x;
+                const float wy = hdr->primaries[3].y;
+
+                chromaticities.red.x = rx;
+                chromaticities.red.y = ry;
+
+                chromaticities.green.x = gx;
+                chromaticities.green.y = gy;
+
+                chromaticities.blue.x = bx;
+                chromaticities.blue.y = by;
+
+                chromaticities.white.x = wx;
+                chromaticities.white.y = wy;
+
+                addChromaticities(header, chromaticities);
                 addWhiteLuminance(header, 1.F);
-                Imath::V2f adoptedNeutral(_chromaticities.white.x,
-                                          _chromaticities.white.y);
+                Imath::V2f adoptedNeutral(chromaticities.white.x,
+                                          chromaticities.white.y);
                 addAdoptedNeutral(header, adoptedNeutral);
             }
 

@@ -96,7 +96,7 @@ namespace mrv
 
             ag->begin();
 
-
+            auto time = player->currentTime();
             auto annotations = player->getAllAnnotations();
             for (auto annotation : annotations)
             {
@@ -105,7 +105,10 @@ namespace mrv
                     if (auto s = std::dynamic_pointer_cast<tl::draw::NoteShape>(shape))
                     {
                         auto w = ag->add_annotation(annotation->time, s);
-                        w->set_collapsed(true);
+                        if (time != annotation->time)
+                            w->set_collapsed(true);
+                        else
+                            w->set_collapsed(false);
                     }
                 }
             }

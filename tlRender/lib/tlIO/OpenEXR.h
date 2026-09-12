@@ -99,8 +99,6 @@ namespace tl
         private:
             TLRENDER_PRIVATE();
 
-            bool _hasChromaticities = false;
-            Imf::Chromaticities _chromaticities;
             Imf::Compression _compression = Imf::ZIP_COMPRESSION;
             float _dwaCompressionLevel = 45.F;
             int _zipCompressionLevel = 4;

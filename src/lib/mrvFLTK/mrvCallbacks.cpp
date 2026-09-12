@@ -3330,6 +3330,9 @@ namespace mrv
         {
             player->clearFrameAnnotation();
         }
+
+        if (panel::notesPanel)
+            panel::notesPanel->refresh();
     }
 
     void add_note_annotation_cb(ViewerUI* ui, const std::string& text)
