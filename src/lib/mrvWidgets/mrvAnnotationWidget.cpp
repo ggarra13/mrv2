@@ -1,5 +1,7 @@
 // mrvAnnotationWidget.cpp
 
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
 #include "mrvFlmm/Flmm_ColorA_Chooser.h"
 
 #include "mrvWidgets/mrvAnnotationWidget.h"
@@ -54,6 +56,8 @@ namespace mrv
         input_->textcolor(FL_BLACK);
         input_->box(FL_FLAT_BOX);
         input_->value(note_->text.c_str());
+        input_->when(FL_WHEN_CHANGED);
+        input_->callback((Fl_Callback*)note_changed_cb, nullptr);
 
         if (note_->date == "Today")
         {
@@ -284,5 +288,13 @@ namespace mrv
             color(FL_BACKGROUND_COLOR);
         }
         redraw();
+    }
+
+    void AnnotationWidget::note_changed_cb(Fl_Multiline_Input* o, void* d)
+    {
+        if (panel::annotationsPanel)
+        {
+            panel::annotationsPanel->notes->value(o->value());
+        }
     }
 }

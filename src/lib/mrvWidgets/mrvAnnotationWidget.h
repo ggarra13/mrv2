@@ -109,6 +109,8 @@ public:
 
     void select_color();
 
+    static void note_changed_cb(Fl_Multiline_Input* o, void* data);
+
     // Height reserved for the title row, public so callers can lay
     // things out around the widget if they need to.
     static const int TITLE_H = 28;
