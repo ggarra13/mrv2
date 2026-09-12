@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.3.5)  # was v2.3.4
+set(FLTK_GIT_TAG v2.3.6)  # was v2.3.5
 
 if(MRV2_VK)
     message(STATUS "Using ggarra13's private FLTK branch")
