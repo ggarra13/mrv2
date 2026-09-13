@@ -72,6 +72,7 @@ namespace tl
                 "tl::TIMELINEUI::MarkerItem",
                 timeRange,
                 timeRange,
+                timeRange,
                 scale,
                 options,
                 displayOptions,
@@ -88,7 +89,7 @@ namespace tl
 
             _textUpdate();
         }
-    
+
         MarkerItem::~MarkerItem()
         {}
 

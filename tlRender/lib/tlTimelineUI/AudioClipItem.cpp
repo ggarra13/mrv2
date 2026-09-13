@@ -271,7 +271,8 @@ namespace tl
                                 _timeRange.start_time().rate())
                                 .round();
                         OTIO_NS::TimeRange trimmedRange = _trimmedRange;
-                        if (trimmedRange.start_time() < p.ioInfo->audioTime->start_time())
+                        if (_data->options.compat &&
+                            trimmedRange.start_time() < p.ioInfo->audioTime->start_time())
                         {
                             //! \bug If the trimmed range is less than the media time,
                             //! assume the media time is wrong (e.g., ALab trailer) and

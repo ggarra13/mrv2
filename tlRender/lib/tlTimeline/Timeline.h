@@ -56,6 +56,7 @@ namespace tl
             First = kNone
         };
         TLRENDER_ENUM(Spatial);
+        TLRENDER_ENUM_SERIALIZE(Spatial);
 
         //! Timeline options.
         struct Options

@@ -4,8 +4,9 @@ v1.7.7
 - Improved FBO depth when saving HDR movies.
 - Added automatically saving of "colorInteropID" metadata when saving OpenEXR images.
 - Added automatically saving of chromaticities to OpenEXRs if HDR data is present in a movie.
-- Saving pictures on the Vulkan backend does not turn off tone-mapping.  Only when saving movies, tone mapping is turned off.
 - Notes Panel and Annotations Panel's Frame Note are now synchronized both ways and will display the text entered.
+- Added OTIO's Spatial Coordinates and compatibility setting to the Settings Panel.
+
 
 Fixes:
 

@@ -126,6 +126,11 @@
              static_cast<int>(timeline::FileSequenceAudio::BaseName);
          p.defaultValues["FileSequence/AudioFileName"] = std::string();
          p.defaultValues["FileSequence/AudioDirectory"] = std::string();
+
+         p.defaultValues["OTIO/Spatial"] =
+             static_cast<int>(timeline::Spatial::Coordinates);
+         p.defaultValues["OTIO/Compatibility"] = true;
+
          const timeline::PlayerOptions playerOptions;
          p.defaultValues["Performance/TimerMode"] =
              static_cast<int>(playerOptions.timerMode);

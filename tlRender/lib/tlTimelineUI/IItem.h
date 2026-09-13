@@ -122,7 +122,9 @@ namespace tl
             void _init(
                 const std::string& objectName,
                 const OTIO_NS::TimeRange& timeRange,
-                const OTIO_NS::TimeRange& trimmedRange, double scale,
+                const OTIO_NS::TimeRange& trimmedRange,
+                const OTIO_NS::TimeRange& availableRange,
+                double scale,
                 const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<system::Context>&,
@@ -175,6 +177,7 @@ namespace tl
 
             OTIO_NS::TimeRange _timeRange = time::invalidTimeRange;
             OTIO_NS::TimeRange _trimmedRange = time::invalidTimeRange;
+            OTIO_NS::TimeRange _availableRange = time::invalidTimeRange;
             bool _selected = false;
             double _scale = 500.0;
             ItemOptions _options;

@@ -62,6 +62,7 @@ namespace tl
             "None",
             "Coordinates",
             "Normalize");
+        TLRENDER_ENUM_SERIALIZE_IMPL(Spatial);
 
 
         namespace
@@ -610,6 +611,8 @@ namespace tl
                 lines.push_back(
                     string::Format("    File sequence audio directory: {0}")
                         .arg(options.fileSequenceAudioDirectory));
+                lines.push_back(string::Format("    * Compatability: {0}").
+                                arg(options.compat));
                 lines.push_back(string::Format("    Video request count: {0}")
                                     .arg(options.videoRequestCount));
                 lines.push_back(string::Format("    Audio request count: {0}")
@@ -1871,6 +1874,7 @@ namespace tl
                 OTIO_NS::TimeRange availableRange = clip->available_range();
                 OTIO_NS::TimeRange trimmedRange = clip->trimmed_range();
                 if (p.options.compat &&
+                    ioInfo.videoTime.has_value() &&
                     availableRange.start_time() > ioInfo.videoTime->start_time())
                 {
                     //! \bug If the available range is greater than the media
@@ -1902,8 +1906,9 @@ namespace tl
             if (read && timeRangeOpt.has_value())
             {
                 const io::Info& ioInfo = read->getInfo().get();
-                opentime::TimeRange trimmedRange = clip->trimmed_range();
+                OTIO_NS::TimeRange trimmedRange = clip->trimmed_range();
                 if (p.options.compat &&
+                    ioInfo.audioTime.has_value() &&
                     trimmedRange.start_time() < ioInfo.audioTime->start_time())
                 {
                     //! \bug If the trimmed range is less than the media time,
@@ -2389,7 +2394,7 @@ namespace tl
 
         std::shared_ptr<audio::Audio> Timeline::Private::padAudioToOneSecond(
             const std::shared_ptr<audio::Audio>& audio, double seconds,
-            const opentime::TimeRange& timeRange)
+            const OTIO_NS::TimeRange& timeRange)
         {
             std::list<std::shared_ptr<audio::Audio> > list;
             const double s =

@@ -2179,6 +2179,7 @@ namespace mrv
 
         timeline::Options options;
 
+        // Handle FileSequence options
         options.fileSequenceAudio = static_cast<timeline::FileSequenceAudio>(
             p.settings->getValue<int>("FileSequence/Audio"));
         options.fileSequenceAudioFileName =
@@ -2186,12 +2187,20 @@ namespace mrv
         options.fileSequenceAudioDirectory =
             p.settings->getValue<std::string>("FileSequence/AudioDirectory");
 
+        // Handle OTIO options
+        options.spatial = static_cast<timeline::Spatial>(p.settings->getValue<int>("OTIO/Spatial"));
+        options.compat = p.settings->getValue<bool>("OTIO/Compatibility");
+
+        // Handle Performance options
         options.videoRequestCount =
             p.settings->getValue<int>("Performance/VideoRequestCount");
         options.audioRequestCount =
             p.settings->getValue<int>("Performance/AudioRequestCount");
 
+        // Handle I/O options
         options.ioOptions = _getIOOptions();
+
+        // Handle Misc. options
         options.pathOptions.seqMaxDigits = std::min(
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits"), 255);
 

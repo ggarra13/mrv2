@@ -3589,7 +3589,7 @@ namespace mrv
         // Check if item is a movie.
         auto item = model->observeA()->get();
         auto path = item->path;
-        if (!file::isMovie(path))
+        if (!file::isMovie(path) && !file::isOTIO(path))
             return;
 
         refresh_media_cb(m, d);

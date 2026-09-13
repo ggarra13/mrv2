@@ -291,9 +291,22 @@ namespace tl
                                         _timeRange.duration().value(),
                                 _timeRange.duration().rate())
                                 .floor();
+                        OTIO_NS::TimeRange trimmedRange = _trimmedRange;
+                        const OTIO_NS::TimeRange availableRange = _availableRange;
+                        if (_data->options.compat &&
+                            availableRange.start_time() > p.ioInfo->videoTime->start_time())
+                        {
+                            //! \bug If the available range is greater than the media time,
+                            //! assume the media time is wrong) and
+                            //! compensate for it.
+                            trimmedRange = OTIO_NS::TimeRange(
+                                trimmedRange.start_time() - availableRange.start_time(),
+                                trimmedRange.duration());
+                        }
+
                         const OTIO_NS::RationalTime mediaTime =
                             timeline::toVideoMediaTime(
-                                time, _timeRange, _trimmedRange,
+                                time, _timeRange, trimmedRange,
                                 p.ioInfo->videoTime->duration().rate());
 
                         const std::string cacheKey = io::getVideoCacheKey(

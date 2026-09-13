@@ -50,7 +50,8 @@ namespace tl
                 OTIO_NS::RationalTime(0.0, timeRange.duration().rate()),
                 timeRange.duration());
             IItem::_init(
-                "tl::TIMELINEUI::TimelineItem", timeRange, trimmedRange, scale,
+                "tl::TIMELINEUI::TimelineItem", timeRange, trimmedRange,
+                trimmedRange, scale,
                 options, displayOptions, itemData, context, parent);
             TLRENDER_P();
 

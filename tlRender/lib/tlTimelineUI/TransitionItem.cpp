@@ -42,7 +42,7 @@ namespace tl
                 std::vector<std::shared_ptr<image::Glyph> > durationGlyphs;
             };
             DrawData draw;
-            
+
             const OTIO_NS::Transition* otioTransition = nullptr;
         };
 
@@ -76,7 +76,7 @@ namespace tl
             }
 
             IItem::_init(
-                "tl::TIMELINEUI::TransitionItem", timeRange, trimmedRange,
+                "tl::TIMELINEUI::TransitionItem", timeRange, trimmedRange, timeRange,
                 scale, options, displayOptions, itemData, context, parent);
         }
 
@@ -86,7 +86,7 @@ namespace tl
         }
 
         TransitionItem::~TransitionItem() {}
-        
+
         std::shared_ptr<TransitionItem> TransitionItem::create(
             const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Transition>&
                 transition,
@@ -107,13 +107,13 @@ namespace tl
         {
             return _p->otioTransition;
         }
-        
+
         void TransitionItem::setDurationLabel(const std::string& value)
         {
             _p->durationLabel = value;
             _p->draw.durationGlyphs.clear();
         }
-        
+
         void TransitionItem::sizeHintEvent(const ui::SizeHintEvent& event)
         {
             IItem::sizeHintEvent(event);
@@ -195,7 +195,7 @@ namespace tl
             const bool durationVisible =
                 math::intersects(drawRect, durationGeometry) &&
                 !math::intersects(durationGeometry, labelGeometry);
-            
+
             std::vector<timeline::TextInfo> textInfos;
 
             if (labelVisible)
@@ -227,7 +227,7 @@ namespace tl
                         durationGeometry.min.x,
                         durationGeometry.min.y + p.size.fontMetrics.ascender));
             }
-            
+
             for (const auto& textInfo : textInfos)
             {
                 event.render->drawText(textInfo, math::Vector2i(),
