@@ -1,3 +1,20 @@
+v1.7.7
+======
+
+- Improved FBO depth when saving HDR movies.
+- Added automatically saving of "colorInteropID" metadata when saving OpenEXR images.
+- Added automatically saving of chromaticities to OpenEXRs if HDR data is present in a movie.
+- Saving pictures on the Vulkan backend does not turn off tone-mapping.  Only when saving movies, tone mapping is turned off.
+- Notes Panel and Annotations Panel's Frame Note are now synchronized both ways and will display the text entered.
+
+Fixes:
+
+- Fixed HW decoding to select HW decoders first before software decoders when HW decoding is on.  Previously, the software decoder, depending on codec, would come first.
+- Fixed automatic bit selection of main framebuffer for YUV_420P_U10 and 16-bit semi-planar formats.  They were defaulting to 8 bits instead of 16 bits.
+- Fixed saving pictures and videos with half or quarter resolution on the Vulkan backend.
+- Fixed + button in Notes Panel adding two annotations.
+
+
 v1.7.6
 ======
 

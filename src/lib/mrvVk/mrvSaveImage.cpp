@@ -8,13 +8,13 @@
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvFl/mrvConvertImage.h"
 #include "mrvOptions/mrvSaveOptions.h"
 #include "mrvFLTK/mrvSave.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvNetwork/mrvTCP.h"
 
+#include "mrvImage/mrvConvertImage.h"
 #include "mrvImage/mrvOperations.h"
 
 #include "mrvCore/mrvLocale.h"
@@ -116,7 +116,6 @@ namespace mrv
 
             vlk::OffscreenBufferOptions offscreenBufferOptions;
 
-            std::cerr << "saving with pic" << std::endl;
             image::Size renderSize;
 
             int layerId = ui->uiColorChannel->value();
@@ -198,20 +197,7 @@ namespace mrv
             std::shared_ptr<image::Image> bufferImage;
             std::shared_ptr<image::Image> scaleImage;
 
-            // Create scaleImage if resolution is not the same.
-            if (resolution != SaveResolution::kSameSize)
-            {
-                scaleInfo.size = renderSize;
-                scaleInfo.pixelType = outputInfo.pixelType;
-                scaleImage = image::Image::create(scaleInfo);
-
-                msg = tl::string::Format(_("Image info: {0} {1}"))
-                      .arg(scaleInfo.size)
-                      .arg(scaleInfo.pixelType);
-                LOG_STATUS(msg);
-            }
-
-            else if (resolution == SaveResolution::kHalfSize)
+            if (resolution == SaveResolution::kHalfSize)
             {
                 renderSize.w /= 2;
                 renderSize.h /= 2;
@@ -292,7 +278,6 @@ namespace mrv
                 LOG_ERROR("No Video FBO");
                 return 1;
             }
-            offscreenBufferOptions = buffer->getOptions();
 
             if (options.annotations)
             {
@@ -313,21 +298,6 @@ namespace mrv
                 annotationInfo.pixelType = image::PixelType::RGBA_U8;
                 annotationImage = image::Image::create(annotationInfo);
             }
-
-            const size_t width = buffer->getWidth();
-            const size_t height = buffer->getHeight();
-
-            bufferInfo = outputInfo;
-            bufferInfo.pixelType = offscreenBufferOptions.colorType;
-            bufferInfo.size.w = width;
-            bufferInfo.size.h = height;
-            bufferImage = image::Image::create(bufferInfo);
-
-            std::string msg =
-                tl::string::Format(_("Offscreen Buffer info: {0}"))
-                .arg(offscreenBufferOptions.colorType);
-            LOG_STATUS(msg);
-
 
             // Turn off hud so it does not get captured by readPixels.
             view->setHudActive(false);
@@ -379,6 +349,44 @@ namespace mrv
 #ifdef TLRENDER_EXR
             ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
+
+            //
+            // Create buffer image
+            //
+            const size_t width = buffer->getWidth();
+            const size_t height = buffer->getHeight();
+            offscreenBufferOptions = buffer->getOptions();
+
+            bufferInfo = outputInfo;
+            bufferInfo.pixelType = offscreenBufferOptions.colorType;
+            bufferInfo.size.w = width;
+            bufferInfo.size.h = height;
+            bufferImage = image::Image::create(bufferInfo);
+
+            msg = tl::string::Format(_("Offscreen Buffer info: {0}"))
+                  .arg(offscreenBufferOptions.colorType);
+            LOG_STATUS(msg);
+
+            //
+            // Create scaleImage if resolution is not the same.
+            //
+            if (resolution != SaveResolution::kSameSize)
+            {
+                // Scale image has to have the same size as the buffer
+                scaleInfo.size = bufferInfo.size;
+                // But, the pixel type of the output buffer.
+                scaleInfo.pixelType = outputInfo.pixelType;
+                scaleImage = image::Image::create(scaleInfo);
+
+                msg = tl::string::Format(_("Image info: {0} {1}"))
+                      .arg(scaleInfo.size)
+                      .arg(scaleInfo.pixelType);
+                LOG_STATUS(msg);
+            }
+
+            //
+            // Create output image
+            //
             outputImage = image::Image::create(outputInfo);
 
             ioInfo.videoTime = oneFrameTimeRange;
@@ -516,17 +524,9 @@ namespace mrv
             if (scaleImage)
             {
                 if (outputImage != scaleImage &&
-                    (scaleImage->getWidth() != outputImage->getWidth() ||
-                     scaleImage->getHeight() != outputImage->getHeight()))
+                    (scaleImage->getSize() != outputImage->getSize()))
                 {
-                    int numChannels = image::getChannelCount(outputImage->getPixelType());
-                    scaleImageLinear(scaleImage->getData(),
-                                     scaleImage->getWidth(),
-                                     scaleImage->getHeight(),
-                                     outputImage->getData(),
-                                     outputImage->getWidth(),
-                                     outputImage->getHeight(),
-                                     numChannels);
+                    scaleImageLinear(scaleImage, outputImage);
                 }
                 else
                 {
@@ -536,6 +536,25 @@ namespace mrv
             else
             {
                 outputImage = bufferImage;
+            }
+
+            const auto videoFrame = view->getVideoFrame();
+            if (!videoFrame.empty() &&
+                !videoFrame[0].layers.empty() &&
+                videoFrame[0].layers[0].image)
+            {
+                auto hdrData = videoFrame[0].layers[0].image->getHDR();
+                if (hdrData)
+                {
+                    outputImage->setHDR(*hdrData);
+                }
+            }
+
+            if (saveEXR)
+            {
+                std::string ics = ocio::ics();
+                if (!ics.empty() && ics != _("None"))
+                    tags["colorInteropID"] = ics;
             }
 
             outputImage->setTags(tags);

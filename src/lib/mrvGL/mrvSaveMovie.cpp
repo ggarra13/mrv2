@@ -576,10 +576,8 @@ namespace mrv
                 outputInfo = writerPlugin->getWriteInfo(outputInfo);
                 if (image::PixelType::kNone == outputInfo.pixelType)
                 {
-#ifdef OPENGL_BACKEND
                     outputInfo.pixelType = image::PixelType::RGB_U8;
                     offscreenBufferOptions.colorType = image::PixelType::RGB_U8;
-#endif
 #ifdef TLRENDER_EXR
                     if (saveEXR)
                     {
@@ -1081,7 +1079,14 @@ namespace mrv
                             if (hdrData)
                                 outputImage->setHDR(*hdrData);
                         }
-                        const auto& tags = view->getTags();
+
+                        auto tags = view->getTags();
+                        if (saveEXR)
+                        {
+                            std::string ics = ocio::ics();
+                            if (!ics.empty() && ics != _("None"))
+                                tags["colorInteropID"] = ics;
+                        }
                         outputImage->setTags(tags);
                         writer->writeVideo(currentTime, outputImage);
                     }

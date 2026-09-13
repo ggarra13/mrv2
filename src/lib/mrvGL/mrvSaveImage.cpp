@@ -45,7 +45,7 @@ namespace
 
 namespace mrv
 {
-    
+
     int _save_single_frame(
         std::string file, const ViewerUI* ui, SaveOptions options,
         const int32_t frameIndex)
@@ -154,7 +154,7 @@ namespace mrv
                 LOG_STATUS(msg);
             }
 
-                    
+
             // Create the renderer.
             render = timeline_gl::Render::create(context);
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
@@ -175,7 +175,7 @@ namespace mrv
             io::Info ioInfo;
             image::Info outputInfo;
             outputInfo.size = renderSize;
-            
+
             auto tags = ui->uiView->getTags();
 
 
@@ -202,7 +202,7 @@ namespace mrv
                 }
                 if (options.exrSaveContents == SaveContents::kDisplayWindow)
                     dataWindow = displayWindow;
-                
+
                 outputInfo.size.w = dataWindow.max.x - dataWindow.min.x + 1;
                 outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
             }
@@ -320,7 +320,7 @@ namespace mrv
                       .arg(outputInfo.pixelType);
                 LOG_STATUS(msg);
             }
-            
+
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
             if (image::PixelType::kNone == outputInfo.pixelType)
             {
@@ -346,7 +346,7 @@ namespace mrv
                 outputInfo.pixelType = image::PixelType::RGB_F32;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
             }
-            
+
 #ifdef TLRENDER_EXR
             if (saveEXR)
             {
@@ -367,7 +367,7 @@ namespace mrv
             ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
             outputImage = image::Image::create(outputInfo);
-            
+
             ioInfo.video.push_back(outputInfo);
             ioInfo.videoTime = oneFrameTimeRange;
 
@@ -471,12 +471,12 @@ namespace mrv
 
                 glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-                
+
                 glReadPixels(
                     X, Y, outputInfo.size.w, outputInfo.size.h, format, type,
                     outputImage->getData());
 #endif
-                
+
             }
             else
             {
@@ -491,7 +491,7 @@ namespace mrv
                     render->begin(offscreenBufferSize);
                     render->setOCIOOptions(view->getOCIOOptions());
                     render->setLUTOptions(view->lutOptions());
-                    
+
                     render->drawVideo(
                         {videoData},
                         {math::Box2i(0, 0, renderSize.w, renderSize.h)},
@@ -499,17 +499,17 @@ namespace mrv
                         {timeline::DisplayOptions()},
                         timeline::CompareOptions(),
                         ui->uiView->getBackgroundOptions());
-                    
+
                     render->end();
                 }
 
                 // Read back the image
-                
+
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                
+
 
                 glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
-                
+
                 glPixelStorei(
                     GL_PACK_SWAP_BYTES,
                     outputInfo.layout.endian != memory::getEndian());
@@ -529,7 +529,26 @@ namespace mrv
                              outputImage->getHeight(), format, type,
                              outputImage->getData());
 
-                
+
+            }
+
+            const auto videoFrame = view->getVideoFrame();
+            if (!videoFrame.empty() &&
+                !videoFrame[0].layers.empty() &&
+                videoFrame[0].layers[0].image)
+            {
+                auto hdrData = videoFrame[0].layers[0].image->getHDR();
+                if (hdrData)
+                {
+                    outputImage->setHDR(*hdrData);
+                }
+            }
+
+            if (saveEXR)
+            {
+                std::string ics = ocio::ics();
+                if (!ics.empty() && ics != _("None"))
+                    tags["colorInteropID"] = ics;
             }
 
             outputImage->setTags(tags);

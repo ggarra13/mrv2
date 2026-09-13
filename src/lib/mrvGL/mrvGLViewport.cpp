@@ -292,12 +292,18 @@ namespace mrv
                             case image::PixelType::RGBA_U16:
                             case image::PixelType::LA_U16:
                                 hasAlpha = true;
+                            case image::PixelType::YUV_420P_U10:
+                            case image::PixelType::YUV_422P_U10:
+                            case image::PixelType::YUV_444P_U10:
                             case image::PixelType::YUV_420P_U12:
                             case image::PixelType::YUV_422P_U12:
                             case image::PixelType::YUV_444P_U12:
                             case image::PixelType::YUV_420P_U16:
                             case image::PixelType::YUV_422P_U16:
                             case image::PixelType::YUV_444P_U16:
+                            case image::PixelType::YUV_420SP_U16:
+                            case image::PixelType::YUV_422SP_U16:
+                            case image::PixelType::YUV_444SP_U16:
                             case image::PixelType::RGB_U16:
                             case image::PixelType::L_U16:
                                 gl.colorBufferType = image::PixelType::RGBA_U16;

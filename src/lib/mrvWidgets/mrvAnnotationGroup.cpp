@@ -91,7 +91,7 @@ namespace mrv
             x() + GROUP_MARGIN,                // x always same as button
             y() + button_->h() + GROUP_MARGIN * 2, // y always "below button"
             w() - (GROUP_MARGIN * 2),          // width tracks group's w()
-           contents_->h()); // leave height ofcontents_ alone
+            contents_->h()); // leave height ofcontents_ alone
 
         // DEBUG
 
@@ -139,8 +139,8 @@ namespace mrv
         add_btn_->callback(add_button_cb, this);
 
         remove_btn_ = new Fl_Button(x + w - (GROUP_MARGIN + TOOLS_MARGIN),
-                                y + GROUP_MARGIN,
-                                TOOLS_MARGIN, BUTTON_H, "-");
+                                    y + GROUP_MARGIN,
+                                    TOOLS_MARGIN, BUTTON_H, "-");
         remove_btn_->copy_tooltip(_("Remove the current note."));
         remove_btn_->callback(remove_button_cb, this);
 
@@ -374,10 +374,10 @@ namespace mrv
 
     }
 
-    AnnotationWidget *AnnotationGroup::add_annotation()
+    void AnnotationGroup::add_annotation()
     {
         if (!player_)
-            return nullptr;
+            return;
 
         auto annotation = player_->getAnnotation();
         if (annotation)
@@ -386,40 +386,19 @@ namespace mrv
             for (auto& shape : annotation->shapes)
             {
                 auto note = std::dynamic_pointer_cast<tl::draw::NoteShape>(shape);
-                if (note)
-                {
-                    std::string err = string::Format(_("This frame already has a note at {0}, frame {1}.")).arg(time.to_timecode()).arg(time.to_frames());
-                    LOG_ERROR(err);
-                    for (AnnotationWidget *w : annotations_) {
-                        if (w->time().almost_equal(time, 1e-5))
-                        {
-                            return w;
-                        }
-                    }
+                if (!note)
+                    continue;
+
+                std::string err = string::Format(_("This frame already has a note at {0}, frame {1}.")).arg(time.to_timecode()).arg(time.to_frames());
+                LOG_ERROR(err);
+                for (AnnotationWidget *w : annotations_) {
+                    if (w->time().almost_equal(time, 1e-5))
+                        return;
                 }
             }
         }
 
         add_note_annotation_cb(App::ui, "");
-
-        annotation = player_->getAnnotation();
-        if (!annotation)
-            return nullptr;
-
-        auto note = std::dynamic_pointer_cast<tl::draw::NoteShape>(annotation->lastShape());
-        if (!note)
-            return nullptr;
-
-        AnnotationWidget* n = add_annotation(player_->currentTime(), note);
-        n->input()->insert(0);
-        n->input()->take_focus();
-        n->color(FL_CYAN);
-
-        layout();
-
-        mrv::relayout(this);
-        redraw();
-        return n;
     }
 
     void AnnotationGroup::remove_annotation()

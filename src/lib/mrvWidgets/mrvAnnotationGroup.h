@@ -64,7 +64,7 @@ namespace mrv
 
         // Adds a blank annotation with an auto-generated timecode/date.
         // This is what the header's [+] button calls.
-        AnnotationWidget *add_annotation();
+        void add_annotation();
 
         // Removes a specific annotation belonging to this group.
         void remove_annotation(AnnotationWidget *note);
