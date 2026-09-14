@@ -239,7 +239,7 @@ namespace mrv2
         {
             if (value.color.enabled)
             {
-                App::ui->uiGain->value(1.0);
+                App::ui->uiGain->value(value.color.brightness.x);
                 App::ui->uiSaturation->value(value.color.saturation.x);
             }
             if (value.levels.enabled)

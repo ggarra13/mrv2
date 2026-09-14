@@ -7,9 +7,18 @@ v1.7.7
 - Notes Panel and Annotations Panel's Frame Note are now synchronized both ways and will display the text entered.
 - Added OTIO's Spatial Coordinates and compatibility setting to the Settings Panel.
 - Added (L) to the channel/layer display.
+- Added the (L) (Lumma) channel selection on the Layer's pull-down.
 - Made (R), (G), (B), (A) and (L) channel selection be persistant when changing clips.
 - Made gain, gamma and saturation persistant when changing clips.
+- Closing all the clips, resets gain, gamma and saturation.
+- Python: Fixed the following code fragment to modify the exposure/gain.
 
+```
+        d = cmd.displayColors()
+	d.color.enabled = True
+	d.color.brightness = mrv2.math.Vector3f(2, 0, 0)
+	cmd.setDisplayColors(d)
+```
 
 Fixes:
 

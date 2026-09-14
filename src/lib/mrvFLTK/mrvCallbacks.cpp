@@ -1120,6 +1120,21 @@ namespace mrv
         App::unsaved_annotations = false;
 
 
+        auto d = timeline::DisplayOptions();
+        App::app->setDisplayOptions(d);
+
+        ui->uiGain->value(1.F);
+        ui->uiGain->do_callback();
+
+        ui->uiGamma->value(1.F);
+        ui->uiGamma->do_callback();
+
+        ui->uiSaturation->value(1.F);
+        ui->uiSaturation->do_callback();
+
+        ui->uiView->updateDisplayOptions();
+
+
         if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeAll", 0);
 

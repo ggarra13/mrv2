@@ -1791,9 +1791,9 @@ namespace tl
                 throw std::runtime_error(string::Format("Cannot initialize sws context: \"{0}\"").arg(_fileName));
             }
 
+#ifdef OPENGL_BACKEND
             const auto params = _avCodecParameters[_avStream];
 
-#ifdef OPENGL_BACKEND
             // \@bug:
             //    We don't do a BT2020_NCL to BT709 conversion in
             //    software which is slow.
