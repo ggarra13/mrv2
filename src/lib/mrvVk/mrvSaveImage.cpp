@@ -405,6 +405,9 @@ namespace mrv
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
 
+            // Turn off tonemapping so libplacebo does not get used.
+            view->setToneMapping(false);
+
             if (options.annotations)
             {
                 view->setSaveOverlay(true);
@@ -414,6 +417,20 @@ namespace mrv
                 view->setSaveOverlay(false);
             }
 
+            timeline::HDROptions savedHdrOptions;
+            bool restoreHdrOptions = false;
+
+            // We set it to 1 and not options.exportLinearHDR for now
+            if (saveEXR && 1) //options.exportLinearHDR)   // new SaveOptions flag
+            {
+                savedHdrOptions = view->getHDROptions();
+                timeline::HDROptions linearOptions = savedHdrOptions;
+                linearOptions.tonemap = false;  // this is changed with
+                                                // setToneMapping above
+                linearOptions.linearize = true;
+                view->setHDROptions(linearOptions);
+                restoreHdrOptions = true;
+            }
 
             view->redraw();
             view->flush(); // needed
@@ -559,12 +576,22 @@ namespace mrv
 
             outputImage->setTags(tags);
             writer->writeVideo(currentTime, outputImage);
+
+            if (restoreHdrOptions)
+            {
+                view->setHDROptions(savedHdrOptions);
+                view->redraw();
+            }
         }
         catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
             ret = -1;
         }
+
+        // Turn on tonemapping so libplacebo gets used.
+        view->setToneMapping(true);
+
         return ret;
     }
 

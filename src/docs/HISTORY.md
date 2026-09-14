@@ -6,6 +6,9 @@ v1.7.7
 - Added automatically saving of chromaticities to OpenEXRs if HDR data is present in a movie.
 - Notes Panel and Annotations Panel's Frame Note are now synchronized both ways and will display the text entered.
 - Added OTIO's Spatial Coordinates and compatibility setting to the Settings Panel.
+- Added (L) to the channel/layer display.
+- Made (R), (G), (B), (A) and (L) channel selection be persistant when changing clips.
+- Made gain, gamma and saturation persistant when changing clips.
 
 
 Fixes:
@@ -14,6 +17,7 @@ Fixes:
 - Fixed automatic bit selection of main framebuffer for YUV_420P_U10 and 16-bit semi-planar formats.  They were defaulting to 8 bits instead of 16 bits.
 - Fixed saving pictures and videos with half or quarter resolution on the Vulkan backend.
 - Fixed + button in Notes Panel adding two annotations.
+- Fixed one standing validation error on Wipe comparison.
 
 
 v1.7.6

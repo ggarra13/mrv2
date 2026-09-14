@@ -945,7 +945,7 @@ else
           xywh {0 30 934 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
-            label Layers
+            label Layers open
             xywh {0 30 247 29} color 1397969664 labeltype NO_LABEL
           } {
             Fl_Menu_Button uiColorChannel {
@@ -954,16 +954,19 @@ else
               callback {const auto& player = uiView->getTimelinePlayer();
 if (!player) return;
 
-player->setVideoLayer( o->value() );
+int layerId = o->value();
+player->setVideoLayer(layerId);
 auto model = v->app->filesModel();
 auto item = model->observeA()->get();
-model->setLayer(item, o->value());} open
+model->setLayer(item, layerId);
+uiView->updateVideoLayers(layerId);} open selected
               tooltip {Allows you to select different image channels or layers.} xywh {0 30 247 29} down_box DOWN_BOX labelsize 10 resizable
+              code2 {o->disable_label_on_popup();}
               class {mrv::PopupMenu}
             } {}
           }
           Fl_Group uiCOLORS {
-            label {Exposure, Saturation, and Gamma}
+            label {Exposure, Saturation, and Gamma} open
             xywh {247 30 686 29} labeltype NO_LABEL hide
           } {
             Fl_Group {} {
@@ -1118,7 +1121,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             }
           }
           Fl_Group uiOCIO {
-            label {ICS, View, Look} open
+            label {ICS, View, Look}
             xywh {247 30 686 29} labeltype NO_LABEL
           } {
             Fl_Group {} {open
@@ -1141,7 +1144,7 @@ else
   o->labelcolor(FL_FOREGROUND_COLOR);
   o->color(FL_BACKGROUND_COLOR);
 }
-o->redraw();} selected
+o->redraw();}
                 tooltip {Automatically select Input Color Space from file and OpenEXR metadata.} xywh {247 30 38 29} type Toggle down_box DOWN_BOX selection_color 14 labelsize 10 align 144
               }
               Fl_Menu_Button uiICS {

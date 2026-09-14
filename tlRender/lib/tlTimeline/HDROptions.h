@@ -25,7 +25,7 @@ namespace tl
         };
         TLRENDER_ENUM(HDRGamutMapping);
         TLRENDER_ENUM_SERIALIZE(HDRGamutMapping);
-        
+
         enum class HDRTonemapAlgorithm {
             ST2094_40,
             ST2094_10,
@@ -48,9 +48,12 @@ namespace tl
 
         //! Tonemap options.
         struct HDROptions
-        {            
+        {
             //! Use libplacebo tonemapping (used for videos mainly)
             bool tonemap = false;
+
+            // Decode EOTF to linear light, not gamut/tone remap
+            bool linearize = false;
 
             //! Peak detection variables.
             bool peak_detection = false;

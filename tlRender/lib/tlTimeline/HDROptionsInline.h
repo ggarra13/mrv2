@@ -9,6 +9,7 @@ namespace tl
         inline bool HDROptions::operator==(const HDROptions& other) const
         {
             return (tonemap == other.tonemap &&
+                    linearize == other.linearize &&
                     peak_detection == other.peak_detection &&
                     peak_percentile == other.peak_percentile &&
                     peak_smoothing_period == other.peak_smoothing_period &&

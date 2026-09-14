@@ -1053,10 +1053,12 @@ namespace mrv
 
             updateDisplayOptions();
 
+
             if (p.displayOptions.empty())
                 return;
 
             const auto& d = p.displayOptions[0];
+            App::app->setDisplayOptions(d);
 
             if (d.hdrInfo == timeline::HDRInformation::Inactive)
             {
@@ -1112,6 +1114,7 @@ namespace mrv
             p.hdrOptions.peak_scene_low_limit = value.peak_scene_low_limit;
             p.hdrOptions.peak_scene_high_limit = value.peak_scene_high_limit;
 
+            p.hdrOptions.linearize = value.linearize;
             p.hdrOptions.algorithm = value.algorithm;
             p.hdrOptions.gamutMapping = value.gamutMapping;
             redrawWindows();
@@ -2406,20 +2409,15 @@ namespace mrv
             if (p.videoData.empty())
             {
                 p.displayOptions.resize(1); // needed for image filters
-                p.ui->uiGain->value(1.0f);
-                p.ui->uiGainInput->value(1.0f);
-                p.ui->uiGamma->value(1.0f);
-                p.ui->uiGammaInput->value(1.0f);
-                p.ui->uiSaturation->value(1.0f);
-                p.ui->uiSaturationInput->value(1.0f);
-                _pushColorMessage("saturation", 1.0f);
-                _pushColorMessage("gain", 1.0f);
-                _pushColorMessage("gamma", 1.0f);
+
+                // \@note:
+                // We don't reset gain/gamma/saturation here as there's
+                // a small time when video data is empty and there's a
+                // switch to a new clip.
                 return;
             }
 
-            timeline::DisplayOptions d;
-            d = p.displayOptions[0];
+            timeline::DisplayOptions d = App::app->displayOptions();
 
             // Get these from the toggle menus
 
@@ -2493,6 +2491,10 @@ namespace mrv
 
             const auto& videos = info.video;
 
+            int layerId = p.ui->uiColorChannel->value();
+            if (layerId < 0)
+                layerId = 0;
+
             p.ui->uiColorChannel->clear();
 
             std::string name;
@@ -2511,13 +2513,14 @@ namespace mrv
             }
             else
             {
-                const Fl_Menu_Item* item = p.ui->uiColorChannel->child(idx);
-                p.ui->uiColorChannel->copy_label(item->label());
+                p.ui->uiColorChannel->value(layerId);
+
+                _updateLayers();
             }
         }
 
-        // This function is needed to force the repositioning of the window/view
-        // before querying, for example, the mouse coordinates.
+        // This function is needed to force the repositioning of the
+        // window/view before querying, for example, the mouse coordinates.
         void TimelineViewport::_refresh() noexcept
         {
             redraw();
@@ -2716,16 +2719,9 @@ namespace mrv
             w->maximize();
         }
 
-        void TimelineViewport::_updateDisplayOptions(
-            const timeline::DisplayOptions& d) noexcept
+        void TimelineViewport::_updateLayers()
         {
             TLRENDER_P();
-
-            p.displayOptions.resize(p.videoData.size());
-            for (auto& display : p.displayOptions)
-            {
-                display = d;
-            }
 
             const TimelinePlayer* player = getTimelinePlayer();
             if (!player)
@@ -2737,12 +2733,13 @@ namespace mrv
             if (videos.empty())
                 return;
 
-            int layer = p.ui->uiColorChannel->value();
-            if (layer < 0)
-                layer = 0;
+            int layerId = p.ui->uiColorChannel->value();
+            layerId = std::clamp(layerId, 0,
+                                 static_cast<int>(videos.size()-1));
 
-            std::string name = mrv::color::layer(videos[layer].name);
+            std::string name = mrv::color::layer(videos[layerId].name);
 
+            auto d = App::app->displayOptions();
             switch (d.channels)
             {
             case timeline::Channels::Red:
@@ -2757,17 +2754,35 @@ namespace mrv
             case timeline::Channels::Alpha:
                 name += " (A)";
                 break;
+            case timeline::Channels::Lumma:
+                name += " (L)";
+                break;
             case timeline::Channels::Color:
             default:
                 break;
             }
 
+            p.ui->uiColorChannel->copy_label(name.c_str());
+            p.ui->uiColorChannel->redraw();
+        }
+
+        void TimelineViewport::_updateDisplayOptions(
+            const timeline::DisplayOptions& d) noexcept
+        {
+            TLRENDER_P();
+
+            p.displayOptions.resize(p.videoData.size());
+            for (auto& display : p.displayOptions)
+            {
+                display = d;
+            }
+
+            _updateLayers();
+
             const auto outputDevice = App::app->outputDevice();
             if (outputDevice)
                 outputDevice->setDisplayOptions({d});
 
-            p.ui->uiColorChannel->copy_label(name.c_str());
-            p.ui->uiColorChannel->redraw();
             redraw();
         }
 
@@ -3976,8 +3991,8 @@ namespace mrv
             if (hdrData)
             {
                 // When we have video data, we must tonemap it with libplacebo.
+                p.hdrOptions.tonemap = p.tonemap;
                 p.hdrOptions.hdrData = *hdrData;
-                p.hdrOptions.tonemap = true;
 
                 if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
                     p.ocio_disabled = true;
@@ -4024,6 +4039,7 @@ namespace mrv
                     // A linear or log image.  Do not tonemap with
                     // libplacebo.
                     p.hdrOptions.tonemap = false;
+                    p.hdrOptions.linearize = false;
 
                     // Make sure ocio is enabled.
                     p.ocio_disabled = false;

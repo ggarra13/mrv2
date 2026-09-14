@@ -1457,6 +1457,7 @@ namespace mrv
             o.channels = channel;
         }
         app->setDisplayOptions(o);
+        ui->uiView->updateDisplayOptions();
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 

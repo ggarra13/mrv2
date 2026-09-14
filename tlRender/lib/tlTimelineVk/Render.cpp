@@ -2570,96 +2570,101 @@ namespace tl
         {
             TLRENDER_P();
 
-           // 1. Identify what specifically changed
-           const bool tonemapChanged = (value.tonemap != p.hdrOptions.tonemap);
-           const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
-           const bool peakDetectionChanged = (value.peak_detection != p.hdrOptions.peak_detection);
-           const bool algorithmChanged = (value.algorithm != p.hdrOptions.algorithm);
-           const bool oldIsHDRPlus = image::isHDRPlus(p.hdrOptions.hdrData);
-           const bool oldIsDolby = image::isHDRDolbyVision(p.hdrOptions.hdrData);
+            // 1. Identify what specifically changed
+            const bool linearizeChanged = (value.linearize != p.hdrOptions.linearize);
+            const bool tonemapChanged = (value.tonemap != p.hdrOptions.tonemap);
+            const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
+            const bool peakDetectionChanged = (value.peak_detection != p.hdrOptions.peak_detection);
+            const bool algorithmChanged = (value.algorithm != p.hdrOptions.algorithm);
+            const bool oldIsHDRPlus = image::isHDRPlus(p.hdrOptions.hdrData);
+            const bool oldIsDolby = image::isHDRDolbyVision(p.hdrOptions.hdrData);
 
-           // Determine if we should run Peak Detection
-           // Requirement: Tonemap ON, Peak Detection ON, and
-           // NOT HDR10+/Dolby
-           const bool isHDRPlus = image::isHDRPlus(value.hdrData);
-           const bool isDolby = image::isHDRDolbyVision(value.hdrData);
+            // Determine if we should run Peak Detection
+            // Requirement: Tonemap ON, Peak Detection ON, and
+            // NOT HDR10+/Dolby
+            const bool isHDRPlus = image::isHDRPlus(value.hdrData);
+            const bool isDolby = image::isHDRDolbyVision(value.hdrData);
 
-           const bool metadataChanged = (isHDRPlus != oldIsHDRPlus) ||
-                                        (isDolby != oldIsDolby);
+            const bool metadataChanged = (isHDRPlus != oldIsHDRPlus) ||
+                                         (isDolby != oldIsDolby);
 
-           if (tonemapChanged || algorithmChanged || metadataChanged)
-           {
-#if defined(TLRENDER_LIBPLACEBO)
-               if (p.placeboData && p.placeboData->state)
-               {
-                   pl_shader_obj_destroy(&p.placeboData->state);
-                   p.placeboData->state = NULL;
-               }
-#endif
-           }
-
-           // 2. Optimization: Initialize update flag based on Option changes
-           bool updateDisplayShader = (tonemapChanged || hdrDataChanged ||
-                                       peakDetectionChanged ||
-                                       algorithmChanged ||
-                                       metadataChanged);
-
-           p.hdrOptions = value;
-
-#if defined(TLRENDER_LIBPLACEBO)
-            if (p.hdrOptions.tonemap)
+            if (linearizeChanged || tonemapChanged || algorithmChanged ||
+                metadataChanged)
             {
-                const bool effectivePeakDetection =
-                    p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
-
-                if (!p.placeboData || peakDetectionChanged || hdrDataChanged ||
-                    metadataChanged)
+#if defined(TLRENDER_LIBPLACEBO)
+                if (p.placeboData && p.placeboData->state)
                 {
-                    if (p.placeboData)
-                    {
-                        for (auto& tex : p.placeboData->textures)
-                        {
-                            p.garbage[p.frameIndex].textures.push_back(tex);
-                        }
-                    }
-
-                    // This ensures we have a valid object even if
-                    // 'effectivePeakDetection' is false
-                    p.placeboData.reset(new LibPlaceboData(ctx, effectivePeakDetection));
+                    pl_shader_obj_destroy(&p.placeboData->state);
+                    p.placeboData->state = NULL;
                 }
+#endif
+            }
 
-                // --- LOGIC B: Run Peak Detection Compute Shader ---
-                // Only run the expensive compute shader if actually enabled and valid.
-                if (effectivePeakDetection && p.buffers["video"])
-                {
-                    // Persistent states
-                    static float previous_avg = 0.F;
-                    static float current_avg = PL_COLOR_SDR_WHITE;
-                    static float current_peak = PL_COLOR_SDR_WHITE;
+            // 2. Optimization: Initialize update flag based on Option changes
+            bool updateDisplayShader = (tonemapChanged || hdrDataChanged ||
+                                        peakDetectionChanged ||
+                                        algorithmChanged ||
+                                        linearizeChanged ||
+                                        metadataChanged);
 
-                    // IMPORTANT: If peak detection was just enabled or content changed,
-                    // reset the "previous" values so the first frame of detection always
-                    // triggers a "New Shot" recreation.
-                    if (peakDetectionChanged || hdrDataChanged)
-                    {
-                        previous_avg = 0.F;
-                    }
+            p.hdrOptions = value;
 
-                    const std::string shaderName = "hdr_peak_detection";
-                    const auto shader = p.compute[shaderName];
-                    const auto img = p.buffers["video"];
+#if defined(TLRENDER_LIBPLACEBO)
+            const bool needsPlacebo = p.hdrOptions.tonemap || p.hdrOptions.linearize;
+            if (needsPlacebo)
+            {
+               const bool effectivePeakDetection =
+                   p.hdrOptions.tonemap &&
+                   p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
 
-                    _createBindingSet(shader);
+               if (!p.placeboData || peakDetectionChanged || hdrDataChanged ||
+                   metadataChanged || linearizeChanged)
+               {
+                   if (p.placeboData)
+                   {
+                       for (auto& tex : p.placeboData->textures)
+                       {
+                           p.garbage[p.frameIndex].textures.push_back(tex);
+                       }
+                   }
 
-                    shader->bind(p.frameIndex);
-                    shader->setFBO("img", img);
+                   // This ensures we have a valid object even if
+                   // 'effectivePeakDetection' is false
+                   p.placeboData.reset(new LibPlaceboData(ctx, effectivePeakDetection));
+               }
 
-                    const std::string pipelineLayoutName = shaderName;
-                    _bindComputeDescriptorSets(pipelineLayoutName,
-                                               shader);
+               // --- LOGIC B: Run Peak Detection Compute Shader ---
+               // Only run the expensive compute shader if actually enabled and valid.
+               if (effectivePeakDetection && p.buffers["video"])
+               {
+                   // Persistent states
+                   static float previous_avg = 0.F;
+                   static float current_avg = PL_COLOR_SDR_WHITE;
+                   static float current_peak = PL_COLOR_SDR_WHITE;
 
-                    VkCommandBuffer cmd = p.placeboData->ssboCmds[p.frameIndex];
-                    vkResetCommandBuffer(cmd, 0);
+                   // IMPORTANT: If peak detection was just enabled or content changed,
+                   // reset the "previous" values so the first frame of detection always
+                   // triggers a "New Shot" recreation.
+                   if (peakDetectionChanged || hdrDataChanged)
+                   {
+                       previous_avg = 0.F;
+                   }
+
+                   const std::string shaderName = "hdr_peak_detection";
+                   const auto shader = p.compute[shaderName];
+                   const auto img = p.buffers["video"];
+
+                   _createBindingSet(shader);
+
+                   shader->bind(p.frameIndex);
+                   shader->setFBO("img", img);
+
+                   const std::string pipelineLayoutName = shaderName;
+                   _bindComputeDescriptorSets(pipelineLayoutName,
+                                              shader);
+
+                   VkCommandBuffer cmd = p.placeboData->ssboCmds[p.frameIndex];
+                   vkResetCommandBuffer(cmd, 0);
 
                     VkCommandBufferBeginInfo beginInfo = {};
                     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -2732,7 +2737,8 @@ namespace tl
             }
             else
             {
-                // Only destroy data if Tone Mapping is completely OFF
+                // Only destroy data if tone-mapping and linearize is
+                // completely OFF
                 if (p.placeboData)
                 {
                     for (auto& tex : p.placeboData->textures)
@@ -3059,13 +3065,13 @@ namespace tl
                         cmap.inverse_tone_mapping = false;
                         cmap.metadata = PL_HDR_METADATA_NONE;
                     }
-                }
+                } // p.monitor.hdr_enabled
 
 
                 //
                 //  If OCIO is active, do not use libplacebo for tone-mapping.
                 //
-                if (p.ocioData &&
+                if (!p.hdrOptions.linearize && p.ocioData &&
                     (p.ocioData->icsDesc || p.ocioData->shaderDesc))
                 {
                     dst_colorspace.primaries = src_colorspace.primaries;
@@ -3076,6 +3082,23 @@ namespace tl
 
                     cmap.gamut_mapping = nullptr;
                     cmap.tone_mapping_function = nullptr;
+                }
+
+                if (p.hdrOptions.linearize)
+                {
+                    // Just undo the source EOTF. Keep native primaries so the
+                    // pixel values line up with the chromaticities we attach
+                    // separately via outputImage->setHDR(). No display remap,
+                    // no tone curve.
+                    memset(&dst_colorspace, 0, sizeof(pl_color_space));
+                    dst_colorspace.primaries = src_colorspace.primaries;
+                    dst_colorspace.transfer  = PL_COLOR_TRC_LINEAR;
+                    dst_colorspace.hdr = src_colorspace.hdr;
+
+                    cmap.gamut_mapping = nullptr;
+                    cmap.tone_mapping_function = nullptr;
+                    cmap.inverse_tone_mapping = false;
+                    cmap.metadata = PL_HDR_METADATA_NONE;
                 }
 
                 pl_color_space_infer(&src_colorspace);

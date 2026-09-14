@@ -573,6 +573,8 @@ namespace mrv
             void _stopVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice);
             void _stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice);
 
+            void _updateLayers();
+
             void _stopVoiceRecording();
             void _stopVoicePlaying();
 
