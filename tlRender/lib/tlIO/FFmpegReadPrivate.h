@@ -82,6 +82,7 @@ namespace tl
             std::shared_ptr<image::Image> popBuffer();
 
         private:
+            void _close();
             int _decode(
                 const bool backwards, const OTIO_NS::RationalTime& targetTime,
                 OTIO_NS::RationalTime& currentTime);
