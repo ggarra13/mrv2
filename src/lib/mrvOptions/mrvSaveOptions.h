@@ -16,7 +16,7 @@ namespace mrv
 {
     //! Resolution to save
     enum class SaveResolution { kSameSize, kHalfSize, kQuarterSize };
-    
+
     enum class SaveContents   { kDataWindow, kDisplayWindow };
 
     struct SaveOptions
@@ -44,6 +44,7 @@ namespace mrv
 #endif
 
 #ifdef TLRENDER_EXR
+        bool exrLinearize = false; // whether to linearize exr.
         Imf::Compression exrCompression = Imf::ZIP_COMPRESSION;
         tl::image::PixelType exrPixelType = tl::image::PixelType::RGBA_F16;
         SaveContents exrSaveContents = SaveContents::kDataWindow;

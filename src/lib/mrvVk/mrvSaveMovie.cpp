@@ -134,6 +134,10 @@ namespace mrv
 
         std::string newFile = directory + baseName + number + suffix + extension;
 
+
+        timeline::HDROptions savedHdrOptions;
+        bool restoreHdrOptions = false;
+
         try
         {
 
@@ -374,6 +378,24 @@ namespace mrv
 
             player->start();
             waitForFrame(player, startTime);
+
+            // If options.exportLinearHDR, we'll try to export a linear HDR
+            // with metadata.
+            // \@bug:
+            //       Note that libplacebo and OpenColorIO have different
+            //       concepts of white.  Also, OpenColorIO and OpenEXR cannot
+            //       parse HDR10+ metadata.
+            if (saveEXR && options.exrLinearize)
+            {
+                LOG_STATUS(_("Saving OpenEXR linearized"));
+                savedHdrOptions = view->getHDROptions();
+                timeline::HDROptions linearOptions = savedHdrOptions;
+                linearOptions.tonemap = false;  // this is changed with
+                                                // setToneMapping above
+                linearOptions.linearize = true;
+                view->setHDROptions(linearOptions);
+                restoreHdrOptions = true;
+            }
 
             bool interactive = view->visible_r();
             if (interactive)
@@ -643,7 +665,8 @@ namespace mrv
             view->setHudActive(false);
 
             // Turn off tonemapping so libplacebo does not get used.
-            view->setToneMapping(false);
+            if (savingMovie || options.exrLinearize)
+                view->setToneMapping(false);
 
             // Prepare annotations without HUD, cursors, and overlay with
             // a centered and frame image for easier checking.
@@ -1048,11 +1071,17 @@ namespace mrv
             LOG_ERROR(e.what());
         }
 
+        if (restoreHdrOptions)
+        {
+            view->setHDROptions(savedHdrOptions);
+        }
+
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
         view->setSaveOverlay(false);
         view->setToneMapping(true);
+        view->redraw();
 
         player->seek(currentTime);
         player->setMute(mute);

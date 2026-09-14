@@ -33,12 +33,13 @@ class SaveImageOptionsUI {open
 } {
   decl {bool cancel = false;} {public local
   }
+  decl {bool save_linearize = false;} {public local
+  }
   decl {bool valid_for_exr = false;} {private local
   }
   decl {std::string extension;} {private local
   }
-  Function {select_pixel_type(Fl_Choice* o)} {open
-  } {
+  Function {select_pixel_type(Fl_Choice* o)} {} {
     code {auto settings = mrv::App::app->settings();
 const std::string& saved =
         settings->getValue<std::string>("SaveImage/PixelType");
@@ -54,8 +55,7 @@ for (int i = 0; i < o->size(); ++i)
 }
 o->value(0);} {}
   }
-  Function {select_compression(Fl_Choice* o)} {open
-  } {
+  Function {select_compression(Fl_Choice* o)} {} {
     code {auto settings = mrv::App::app->settings();
 const std::string& saved =
         settings->getValue<std::string>("SaveImage/Compression");
@@ -79,17 +79,14 @@ for (int i = 0; i < o->size(); ++i)
        return;
     }
 }
-o->value(0);} {selected
-    }
+o->value(0);} {}
   }
-  Function {select_contents(Fl_Choice* o)} {open
-  } {
+  Function {select_contents(Fl_Choice* o)} {} {
     code {auto settings = mrv::App::app->settings();
 int v = settings->getValue<int>("SaveImage/Contents");
 o->value(v);} {}
   }
-  Function {fill_compression(Fl_Choice* o)} {open
-  } {
+  Function {fill_compression(Fl_Choice* o)} {} {
     code {std::string name;
 
 o->clear();
@@ -107,7 +104,7 @@ o->menu_end();
   } {
     Fl_Window uiMain {
       label {Save Image Options} open
-      xywh {0 0 523 511} type Double align 5 hide modal
+      xywh {0 0 523 562} type Double align 5 hide modal
     } {
       Fl_Group {} {
         label {Common Settings}
@@ -164,15 +161,19 @@ o->value(value);}
       }
       Fl_Group OpenEXROptions {
         label {OpenEXR Options} open
-        xywh {71 183 380 236} box ROUNDED_FRAME color 56
+        xywh {71 183 380 288} box ROUNDED_FRAME color 56
       } {
+        Fl_Check_Button EXRLinearize {
+          label {Linearize EXR} selected
+          tooltip {If saving an EXR, try to linearize the result and save metadata to later use with OpenImageIO.  Note:  this may not match exactly movies with libplacebo, as they use slightly different math.} xywh {183 208 238 24} down_box DOWN_BOX
+        }
         Fl_Choice PixelType {
           label {Pixel Type}
           callback {const Fl_Menu_Item* item = o->mvalue();
 const std::string& label = item->label();
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/PixelType", label);}
-          tooltip {OpenEXR's Pixel Type} xywh {243 205 170 29} down_box BORDER_BOX
+          tooltip {OpenEXR's Pixel Type} xywh {243 253 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
             label Half
@@ -200,11 +201,11 @@ else if (label == "dwaa" || label == "dwab")
 }
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/Compression", label);} open
-          tooltip {OpenEXR's Compression Type} xywh {243 248 170 29} down_box BORDER_BOX
+          tooltip {OpenEXR's Compression Type} xywh {243 296 170 29} down_box BORDER_BOX
           code3 {fill_compression(o);}
         } {}
         Fl_Group ZipCompressionGroup {open
-          xywh {86 292 327 30} deactivate
+          xywh {86 340 327 30} deactivate
         } {
           Fl_Value_Input ZipCompressionLevel {
             label {ZIP Compression}
@@ -213,18 +214,18 @@ settings->setValue("SaveImage/Compression", label);} open
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/ZipCompressionLevel", o->value());}
-            xywh {245 292 46 30} color 2561189888 minimum 1 maximum 9 step 1 value 4 textcolor 56
+            xywh {245 340 46 30} color 2561189888 minimum 1 maximum 9 step 1 value 4 textcolor 56
           }
           Fl_Slider ZipCompressionSlider {
             user_data ZipCompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->do_callback();
 v->redraw();}
-            xywh {293 292 120 30} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
+            xywh {293 340 120 30} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
           }
         }
         Fl_Group DWACompressionGroup {open
-          xywh {86 330 327 28} deactivate
+          xywh {86 378 327 28} deactivate
         } {
           Fl_Value_Input DWACompressionLevel {
             label {DWA Compression}
@@ -233,14 +234,14 @@ v->redraw();}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/DWACompressionLevel", o->value());}
-            xywh {242 330 50 27} color 2561189888 maximum 1e+06 step 0.1 value 45 textcolor 56
+            xywh {242 378 50 27} color 2561189888 maximum 1e+06 step 0.1 value 45 textcolor 56
           }
           Fl_Slider DWACompressionSlider {
             user_data DWACompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->do_callback();
 v->redraw();}
-            xywh {293 330 120 28} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
+            xywh {293 378 120 28} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
           }
         }
         Fl_Choice Contents {
@@ -248,7 +249,7 @@ v->redraw();}
           user_data this user_data_type {SaveImageOptionsUI*}
           callback {auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/Contents", o->value());} open
-          tooltip {OpenEXR's Contents to Save} xywh {243 367 170 32} down_box BORDER_BOX
+          tooltip {OpenEXR's Contents to Save} xywh {243 415 170 32} down_box BORDER_BOX
         } {
           MenuItem {} {
             label {Data Window}
@@ -261,20 +262,20 @@ settings->setValue("SaveImage/Contents", o->value());} open
         }
       }
       Fl_Group {} {open
-        xywh {134 442 262 34}
+        xywh {133 503 262 34}
       } {
         Fl_Button {} {
           label Ok
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {134 442 90 34}
+          xywh {133 503 90 34}
         }
         Fl_Button {} {
           label Cancel
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {cancel = true;
 v->hide();}
-          xywh {306 442 90 34}
+          xywh {305 503 90 34}
         }
       }
     }

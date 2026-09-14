@@ -29,7 +29,7 @@ void mrv2_io(py::module& m)
 #endif
 #ifdef TLRENDER_EXR
                 ,
-                Imf::Compression, tl::image::PixelType,
+            bool, Imf::Compression, tl::image::PixelType,
             mrv::SaveContents, int, float
 #endif
                 >(),
@@ -51,6 +51,7 @@ void mrv2_io(py::module& m)
 #endif
 #ifdef TLRENDER_EXR
             ,
+            py::arg("exrLinearize") = false,
             py::arg("exrCompression") = Imf::ZIP_COMPRESSION,
             py::arg("exrPixelType") = tl::image::PixelType::RGBA_F16,
             py::arg("exrSaveContents") = mrv::SaveContents::kDataWindow,
