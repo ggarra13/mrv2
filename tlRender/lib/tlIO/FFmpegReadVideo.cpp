@@ -817,10 +817,16 @@ namespace tl
                         _info.yuvCoefficients = image::YUVCoefficients::BT601;
                         break;
 
+                    case AVCOL_SPC_UNSPECIFIED:
+                    case AVCOL_SPC_RESERVED:
                     default:
-                        // A safe default is usually Rec.709, though strictly speaking
-                        // you might want to guess based on video resolution.
-                        _info.yuvCoefficients = image::YUVCoefficients::REC709;
+                        if (params->color_primaries == AVCOL_PRI_BT2020)
+                            _info.yuvCoefficients = image::YUVCoefficients::BT2020;
+                        else if (params->color_primaries == AVCOL_PRI_SMPTE170M ||
+                                 params->color_primaries == AVCOL_PRI_BT470BG)
+                            _info.yuvCoefficients = image::YUVCoefficients::BT601;
+                        else
+                            _info.yuvCoefficients = image::YUVCoefficients::REC709;
                         break;
                     }
 
@@ -1787,10 +1793,12 @@ namespace tl
 
             const auto params = _avCodecParameters[_avStream];
 
+#ifdef OPENGL_BACKEND
             // \@bug:
             //    We don't do a BT2020_NCL to BT709 conversion in
             //    software which is slow.
-            if (params->color_space != AVCOL_SPC_BT2020_NCL &&
+            if (!image::isHDR(_hdr) &&
+                params->color_space != AVCOL_SPC_BT2020_NCL &&
                 (params->color_space != AVCOL_SPC_UNSPECIFIED ||
                  width < 4096 || height < 2160))
             {
@@ -1849,6 +1857,7 @@ namespace tl
                     out_full, brightness, contrast, saturation);
 
             }
+#endif
         }
 
         float ReadVideo::_getRotation(const AVStream* st)
