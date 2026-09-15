@@ -588,7 +588,7 @@ namespace mrv
             }
             else
             {
-                return "(unknown version)";
+                return "(unknown version " + wm + ")";
             }
 
             try
@@ -653,7 +653,7 @@ namespace mrv
             {
                 version_command = "cinnamon --version";
             }
-            else if (compositor == "gnome-shell")
+            else if (compositor == "gnome-shell" || compositor == "mutter")
             {
                 version_command = "gnome-shell --version";
             }
@@ -687,7 +687,7 @@ namespace mrv
             }
             else
             {
-                return "(unknown version)";
+                return "(unknown version " + compositor + ")";
             }
 
             try

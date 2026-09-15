@@ -3614,6 +3614,7 @@ namespace mrv
         if (!file::isMovie(path) && !file::isOTIO(path))
             return;
 
+        refresh_file_cache_cb(m, d);
         refresh_media_cb(m, d);
     }
 

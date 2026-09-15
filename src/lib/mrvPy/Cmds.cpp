@@ -239,12 +239,19 @@ namespace mrv2
         {
             if (value.color.enabled)
             {
-                App::ui->uiGain->value(value.color.brightness.x);
-                App::ui->uiSaturation->value(value.color.saturation.x);
+                const float gain = value.color.brightness.x;
+                App::ui->uiGain->value(gain);
+                App::ui->uiGainInput->value(gain);
+
+                const float saturation = value.color.saturation.x;
+                App::ui->uiSaturation->value(saturation);
+                App::ui->uiSaturationInput->value(saturation);
             }
             if (value.levels.enabled)
             {
-                App::ui->uiGamma->value(value.levels.gamma);
+                const float gamma = value.levels.gamma;
+                App::ui->uiGamma->value(gamma);
+                App::ui->uiGammaInput->value(gamma);
             }
             App::app->setDisplayOptions(value);
         }

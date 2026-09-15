@@ -2433,14 +2433,12 @@ namespace mrv
             }
 
             d.exrDisplay.enabled = false;
-            if (d.exrDisplay.exposure < 0.001F)
-                d.exrDisplay.exposure = d.color.brightness.x;
 
             float gain = p.ui->uiGain->value();
             _pushColorMessage("gain", gain);
-            d.color.brightness.x = d.exrDisplay.exposure * gain;
-            d.color.brightness.y = d.exrDisplay.exposure * gain;
-            d.color.brightness.z = d.exrDisplay.exposure * gain;
+            d.color.brightness.x = gain;
+            d.color.brightness.y = gain;
+            d.color.brightness.z = gain;
 
             float saturation = p.ui->uiSaturation->value();
             p.ui->uiSaturationInput->value(saturation);
