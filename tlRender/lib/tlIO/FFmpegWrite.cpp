@@ -2293,14 +2293,13 @@ namespace tl
             case image::PixelType::RGBA_U8:
             case image::PixelType::RGBA_U16:
             {
-                const size_t channelCount =
-                    image::getChannelCount(info.pixelType);
-                for (size_t i = 0; i < channelCount; i++)
-                {
-                    p.avFrame2->data[i] +=
-                        p.avFrame2->linesize[i] * (info.size.h - 1);
-                    p.avFrame2->linesize[i] = -p.avFrame2->linesize[i];
-                }
+                // Every type the plugin accepts is packed -- GRAY8, GRAY16,
+                // RGB24, RGB48, RGBA, RGBA64 -- so the pixels are all in the
+                // first plane whatever the depth, and that is the only one
+                // there is to turn over.
+                p.avFrame2->data[0] +=
+                    p.avFrame2->linesize[0] * (info.size.h - 1);
+                p.avFrame2->linesize[0] = -p.avFrame2->linesize[0];
                 break;
             }
             case image::PixelType::YUV_420P_U8:
@@ -2309,11 +2308,27 @@ namespace tl
             case image::PixelType::YUV_420P_U16:
             case image::PixelType::YUV_422P_U16:
             case image::PixelType::YUV_444P_U16:
-                //! \bug How do we flip YUV data?
-                throw std::runtime_error(
-                    string::Format("{0}: Incompatible pixel type")
-                        .arg(p.fileName));
-                break;
+            {
+                // Flip each plane by its own height. Chroma is vertically
+                // subsampled (half height) only for 4:2:0; full height
+                // otherwise.
+                const bool halfChromaH =
+                    image::PixelType::YUV_420P_U8  == info.pixelType ||
+                    image::PixelType::YUV_420P_U16 == info.pixelType;
+                const int planeH[3] = {
+                    static_cast<int>(info.size.h),
+                    static_cast<int>(halfChromaH ? info.size.h / 2 : info.size.h),
+                    static_cast<int>(halfChromaH ? info.size.h / 2 : info.size.h) };
+                for (int i = 0; i < 3; ++i)
+                {
+                    if (p.avFrame2->data[i] && p.avFrame2->linesize[i])
+                    {
+                        p.avFrame2->data[i] += p.avFrame2->linesize[i] * (planeH[i] - 1);
+                        p.avFrame2->linesize[i] = -p.avFrame2->linesize[i];
+                    }
+                }
+            }
+            break;
             default:
                 throw std::runtime_error(
                     string::Format("{0}: Incompatible pixel type")
@@ -2351,7 +2366,7 @@ namespace tl
                 {
                     throw std::runtime_error(
                             "Saving videos with HDR data per frame "
-                            "requires VPX and a .mkv container");
+                            "requires VP9 and a .mkv container");
                 }
             }
             else

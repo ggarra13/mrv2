@@ -13,7 +13,10 @@ v1.7.7
 - Python: Improved the cmd.setDisplayOptions() to reflect in the UI properly.
 - Python: Improved Python online docs for display options.
 - Core: Improved memory on HW decoding frames.  Switching back and forth between HW and SW decoding works better now.
-- Core/UI/Vulkan:  Added a "Export Mode" options to control how the colors are exported into the pictures (Baked HDR, Scene Linear or Baked SDR -matching OpenGL).
+- Core/UI/Vulkan:  Added a "Export Mode" options to control how the colors are exported into the pictures.
+     * Baked HDR (bakes the HDR transform in the picture.  Will only look good in an HDR display)
+     * Scene Linear (linearizes the data for OpenEXR, with metadata.  Will look good when the proper OCIO transform is used)
+     * Baked SDR (bakes the HDR transform in an SDR space.  Will match OpenGL SDR, but will clip HDR data).
 
 Fixes:
 
