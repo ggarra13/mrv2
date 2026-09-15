@@ -3084,10 +3084,6 @@ namespace tl
 
                 switch (p.hdrOptions.exportMode)
                 {
-                case timeline::HDRExportMode::BakedHDR:
-                    dst_colorspace.hdr.min_luma = 0.F;
-                    dst_colorspace.hdr.max_luma = 10000.F;
-                    break;
                 case timeline::HDRExportMode::LinearHDR:
                     memset(&dst_colorspace, 0, sizeof(pl_color_space));
                     dst_colorspace.primaries = src_colorspace.primaries;
@@ -3105,6 +3101,14 @@ namespace tl
                     dst_colorspace.transfer  = src_colorspace.transfer;
                     dst_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE;
                     dst_colorspace.hdr.min_luma = 0.f;
+                    break;
+                case timeline::HDRExportMode::BakedHDR:
+                    if (vkColorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT)
+                    {
+                        dst_colorspace.hdr.min_luma = 0.F;
+                        dst_colorspace.hdr.max_luma = 10000.F;
+                    }
+                default:
                     break;
                 }
 
