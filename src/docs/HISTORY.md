@@ -9,7 +9,7 @@ v1.7.7
 - Added the (L) (Lumma) channel selection on the Layer's pull-down.
 - Made (R), (G), (B), (A) and (L) channel selection be persistant when changing clips.
 - Made gain, gamma and saturation persistant when changing clips.
-- Closing all the clips, resets gain, gamma and saturation.
+- Closing all the clips now resets gain, gamma and saturation.
 - Python: Improved the cmd.setDisplayOptions() to reflect in the UI properly.
 - Python: Improved Python online docs for display options.
 - Core: Improved memory on HW decoding frames.  Switching back and forth between HW and SW decoding works better now.
