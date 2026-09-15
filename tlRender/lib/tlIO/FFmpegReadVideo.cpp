@@ -397,7 +397,7 @@ namespace tl
                             {
                                 continue;
                             }
-                            std::string msg = string::Format(
+                            const std::string msg = string::Format(
                                 "Switching from decoder \"{0}\" to \"{1}\" "
                                 "to allow hardware decoding.")
                                               .arg(avVideoCodec->name ? avVideoCodec->name
@@ -1230,15 +1230,7 @@ namespace tl
                 if (!_options.hwDriver.empty())
                 {
                     if (name != _options.hwDriver)
-                    {
-                        std::string msg = string::Format("HW Driver '{0}' "
-                                                         "does not match "
-                                                         "'{1}'.")
-                                          .arg(name)
-                                          .arg(_options.hwDriver);
-                        LOG_STATUS(msg);
                         continue;
-                    }
                 }
 
                 // Find a hardware configuration for this codec and device type.

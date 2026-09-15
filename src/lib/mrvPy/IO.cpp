@@ -20,7 +20,11 @@ void mrv2_io(py::module& m)
     py::class_<mrv::SaveOptions>(io, "SaveOptions")
         .def(
             py::init<
-                bool, bool, bool, mrv::SaveResolution
+            bool,
+            bool,
+            bool,
+            mrv::SaveResolution,
+            tl::timeline::HDRExportMode
 #ifdef TLRENDER_FFMPEG
                 ,
                 tl::ffmpeg::Profile, std::string, std::string,
@@ -29,13 +33,15 @@ void mrv2_io(py::module& m)
 #endif
 #ifdef TLRENDER_EXR
                 ,
-            bool, Imf::Compression, tl::image::PixelType,
+            Imf::Compression, tl::image::PixelType,
             mrv::SaveContents, int, float
 #endif
                 >(),
-            py::arg("annotations") = false, py::arg("video") = true,
+            py::arg("annotations") = false,
+            py::arg("video") = true,
             py::arg("saveVideo") = true,
-            py::arg("resolution") = mrv::SaveResolution::kSameSize
+            py::arg("resolution") = mrv::SaveResolution::kSameSize,
+            py::arg("exportMode") = tl::timeline::HDRExportMode::BakedHDR
 #ifdef TLRENDER_FFMPEG
             ,
             py::arg("ffmpegProfile") = tl::ffmpeg::Profile::kNone,
@@ -51,7 +57,6 @@ void mrv2_io(py::module& m)
 #endif
 #ifdef TLRENDER_EXR
             ,
-            py::arg("exrLinearize") = false,
             py::arg("exrCompression") = Imf::ZIP_COMPRESSION,
             py::arg("exrPixelType") = tl::image::PixelType::RGBA_F16,
             py::arg("exrSaveContents") = mrv::SaveContents::kDataWindow,
@@ -64,6 +69,8 @@ void mrv2_io(py::module& m)
             _("Save annotations."))
         .def_readwrite(
             "resolution", &mrv::SaveOptions::resolution, _("Save resolution."))
+        .def_readwrite(
+            "exportMode", &mrv::SaveOptions::exportMode, _("HDR Export Mode."))
 #ifdef TLRENDER_FFMPEG
         .def_readwrite(
             "ffmpegProfile", &mrv::SaveOptions::ffmpegProfile,

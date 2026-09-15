@@ -529,12 +529,15 @@ namespace mrv
             return;
 
         mrv::SaveOptions options;
+        int value;
+
         options.annotations =
             static_cast<bool>(saveOptions.Annotations->value());
         options.resolution =
             static_cast<SaveResolution>(saveOptions.Resolution->value());
+        value = saveOptions.ExportMode->value();
+        options.exportMode = static_cast<tl::timeline::HDRExportMode>(value);
 
-        int value;
 
 #ifdef TLRENDER_EXR
         value = saveOptions.PixelType->value();
@@ -546,8 +549,6 @@ namespace mrv
         options.exrCompression = static_cast<Imf::Compression>(value);
         value = saveOptions.Contents->value();
         options.exrSaveContents = static_cast<mrv::SaveContents>(value);
-        value = saveOptions.EXRLinearize->value();
-        options.exrLinearize = static_cast<bool>(value);
         options.zipCompressionLevel =
             static_cast<int>(saveOptions.ZipCompressionLevel->value());
         options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
@@ -797,6 +798,8 @@ namespace mrv
                 static_cast<bool>(saveOptions.AnnotationFramesOnly->value());
 
             int value;
+            value = saveOptions.ExportMode->value();
+            options.exportMode = static_cast<tl::timeline::HDRExportMode>(value);
 
 #ifdef TLRENDER_EXR
             value = saveOptions.PixelType->value();
@@ -812,10 +815,6 @@ namespace mrv
                 static_cast<int>(saveOptions.ZipCompressionLevel->value());
             options.dwaCompressionLevel =
                 saveOptions.DWACompressionLevel->value();
-
-            value = saveOptions.EXRLinearize->value();
-            options.exrLinearize = static_cast<bool>(value);
-
 #endif
         }
 

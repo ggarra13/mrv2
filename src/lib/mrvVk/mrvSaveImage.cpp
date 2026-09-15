@@ -420,22 +420,15 @@ namespace mrv
             timeline::HDROptions savedHdrOptions;
             bool restoreHdrOptions = false;
 
-            // If options.exrLinearize is on, we'll try to export a linear HDR
-            // with metadata.
             // \@bug:
             //       Note that libplacebo and OpenColorIO have different
             //       concepts of white.  Also, OpenColorIO and OpenEXR cannot
             //       parse HDR10+ metadata.
-            if (saveEXR && options.exrLinearize)
-            {
-                savedHdrOptions = view->getHDROptions();
-                timeline::HDROptions linearOptions = savedHdrOptions;
-                linearOptions.tonemap = false;  // this is changed with
-                                                // setToneMapping above
-                linearOptions.linearize = true;
-                view->setHDROptions(linearOptions);
-                restoreHdrOptions = true;
-            }
+            savedHdrOptions = view->getHDROptions();
+            timeline::HDROptions linearOptions = savedHdrOptions;
+            linearOptions.exportMode = options.exportMode;
+            view->setHDROptions(linearOptions);
+            restoreHdrOptions = true;
 
             view->redraw();
             view->flush(); // needed

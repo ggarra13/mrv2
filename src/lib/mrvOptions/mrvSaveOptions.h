@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <tlTimeline/HDROptions.h>
+
 #ifdef TLRENDER_FFMPEG
 #    include <tlIO/FFmpeg.h>
 #endif
@@ -11,6 +13,7 @@
 #ifdef TLRENDER_EXR
 #    include <tlIO/OpenEXR.h>
 #endif
+
 
 namespace mrv
 {
@@ -30,6 +33,9 @@ namespace mrv
 
         SaveResolution resolution = SaveResolution::kSameSize;
 
+        tl::timeline::HDRExportMode exportMode =
+            tl::timeline::HDRExportMode::LinearHDR;
+
 #ifdef TLRENDER_FFMPEG
         tl::ffmpeg::Profile ffmpegProfile = tl::ffmpeg::Profile::kNone;
         std::string ffmpegPreset;
@@ -44,7 +50,6 @@ namespace mrv
 #endif
 
 #ifdef TLRENDER_EXR
-        bool exrLinearize = false; // whether to linearize exr.
         Imf::Compression exrCompression = Imf::ZIP_COMPRESSION;
         tl::image::PixelType exrPixelType = tl::image::PixelType::RGBA_F16;
         SaveContents exrSaveContents = SaveContents::kDataWindow;

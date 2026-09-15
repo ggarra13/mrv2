@@ -1,4 +1,4 @@
-v1.7.7
+v1.7.7	
 ======
 
 - Improved FBO depth when saving HDR movies.
@@ -11,6 +11,9 @@ v1.7.7
 - Made gain, gamma and saturation persistant when changing clips.
 - Closing all the clips, resets gain, gamma and saturation.
 - Python: Improved the cmd.setDisplayOptions() to reflect in the UI properly.
+- Python: Improved Python online docs for display options.
+- Core: Improved memory on HW decoding frames.  Switching back and forth between HW and SW decoding works better now.
+- Core/UI/Vulkan:  Added a "Bake tonemap" and "Linearize EXR" options to control how the colors are exported into the pictures.
 
 Fixes:
 
@@ -19,6 +22,8 @@ Fixes:
 - Fixed saving pictures and videos with half or quarter resolution on the Vulkan backend.
 - Fixed + button in Notes Panel adding two annotations.
 - Fixed one standing validation error on Wipe comparison.
+- Fixed saving of images from a video on OpenGL backend, which could hang.
+- Fixed saving of images with padded zeros in the Vulkan backend.
 
 
 v1.7.6

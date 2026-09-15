@@ -21,6 +21,7 @@
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/CompareOptions.h>
 #include <tlTimeline/DisplayOptions.h>
+#include <tlTimeline/HDROptions.h>
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/Player.h>
 
@@ -248,6 +249,12 @@ void mrv2_enums(py::module& m)
         .value("BaseName", timeline::FileSequenceAudio::BaseName)
         .value("FileName", timeline::FileSequenceAudio::FileName)
         .value("Directory", timeline::FileSequenceAudio::Directory)
+        .export_values();
+
+    py::enum_<timeline::HDRExportMode>(image, "HDRExportMode")
+        .value("BakedHDR", timeline::HDRExportMode::BakedHDR)
+        .value("LinearHDR", timeline::HDRExportMode::LinearHDR)
+        .value("BakedSDR", timeline::HDRExportMode::BakedSDR)
         .export_values();
 
 #ifdef TLRENDER_USD

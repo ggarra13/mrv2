@@ -2571,7 +2571,7 @@ namespace tl
             TLRENDER_P();
 
             // 1. Identify what specifically changed
-            const bool linearizeChanged = (value.linearize != p.hdrOptions.linearize);
+            const bool exportModeChanged = (value.exportMode != p.hdrOptions.exportMode);
             const bool tonemapChanged = (value.tonemap != p.hdrOptions.tonemap);
             const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
             const bool peakDetectionChanged = (value.peak_detection != p.hdrOptions.peak_detection);
@@ -2588,7 +2588,7 @@ namespace tl
             const bool metadataChanged = (isHDRPlus != oldIsHDRPlus) ||
                                          (isDolby != oldIsDolby);
 
-            if (linearizeChanged || tonemapChanged || algorithmChanged ||
+            if (exportModeChanged || tonemapChanged || algorithmChanged ||
                 metadataChanged)
             {
 #if defined(TLRENDER_LIBPLACEBO)
@@ -2604,21 +2604,20 @@ namespace tl
             bool updateDisplayShader = (tonemapChanged || hdrDataChanged ||
                                         peakDetectionChanged ||
                                         algorithmChanged ||
-                                        linearizeChanged ||
+                                        exportModeChanged ||
                                         metadataChanged);
 
             p.hdrOptions = value;
 
 #if defined(TLRENDER_LIBPLACEBO)
-            const bool needsPlacebo = p.hdrOptions.tonemap || p.hdrOptions.linearize;
-            if (needsPlacebo)
+            if (p.hdrOptions.tonemap)
             {
                const bool effectivePeakDetection =
                    p.hdrOptions.tonemap &&
                    p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
 
                if (!p.placeboData || peakDetectionChanged || hdrDataChanged ||
-                   metadataChanged || linearizeChanged)
+                   metadataChanged || exportModeChanged)
                {
                    if (p.placeboData)
                    {
@@ -2737,8 +2736,7 @@ namespace tl
             }
             else
             {
-                // Only destroy data if tone-mapping and linearize is
-                // completely OFF
+                // Only destroy data if tone-mapping is completely OFF
                 if (p.placeboData)
                 {
                     for (auto& tex : p.placeboData->textures)
@@ -3071,7 +3069,7 @@ namespace tl
                 //
                 //  If OCIO is active, do not use libplacebo for tone-mapping.
                 //
-                if (!p.hdrOptions.linearize && p.ocioData &&
+                if (p.ocioData &&
                     (p.ocioData->icsDesc || p.ocioData->shaderDesc))
                 {
                     dst_colorspace.primaries = src_colorspace.primaries;
@@ -3084,12 +3082,13 @@ namespace tl
                     cmap.tone_mapping_function = nullptr;
                 }
 
-                if (p.hdrOptions.linearize)
+                switch (p.hdrOptions.exportMode)
                 {
-                    // Just undo the source EOTF. Keep native primaries so the
-                    // pixel values line up with the chromaticities we attach
-                    // separately via outputImage->setHDR(). No display remap,
-                    // no tone curve.
+                case timeline::HDRExportMode::BakedHDR:
+                    dst_colorspace.hdr.min_luma = 0.F;
+                    dst_colorspace.hdr.max_luma = 10000.F;
+                    break;
+                case timeline::HDRExportMode::LinearHDR:
                     memset(&dst_colorspace, 0, sizeof(pl_color_space));
                     dst_colorspace.primaries = src_colorspace.primaries;
                     dst_colorspace.transfer  = PL_COLOR_TRC_LINEAR;
@@ -3099,6 +3098,14 @@ namespace tl
                     cmap.tone_mapping_function = nullptr;
                     cmap.inverse_tone_mapping = false;
                     cmap.metadata = PL_HDR_METADATA_NONE;
+                    break;
+                case timeline::HDRExportMode::BakedSDR:
+                    memset(&dst_colorspace, 0, sizeof(dst_colorspace));
+                    dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+                    dst_colorspace.transfer  = src_colorspace.transfer;
+                    dst_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE;
+                    dst_colorspace.hdr.min_luma = 0.f;
+                    break;
                 }
 
                 pl_color_space_infer(&src_colorspace);

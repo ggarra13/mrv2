@@ -1114,7 +1114,7 @@ namespace mrv
             p.hdrOptions.peak_scene_low_limit = value.peak_scene_low_limit;
             p.hdrOptions.peak_scene_high_limit = value.peak_scene_high_limit;
 
-            p.hdrOptions.linearize = value.linearize;
+            p.hdrOptions.exportMode = value.exportMode;
             p.hdrOptions.algorithm = value.algorithm;
             p.hdrOptions.gamutMapping = value.gamutMapping;
             redrawWindows();
@@ -4037,7 +4037,6 @@ namespace mrv
                     // A linear or log image.  Do not tonemap with
                     // libplacebo.
                     p.hdrOptions.tonemap = false;
-                    p.hdrOptions.linearize = false;
 
                     // Make sure ocio is enabled.
                     p.ocio_disabled = false;

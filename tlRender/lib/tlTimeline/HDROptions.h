@@ -2,6 +2,8 @@
 // Copyright (c) 2021-2024 Gonzalo Garramuño
 // All rights reserved.
 
+#pragma once
+
 #include <tlCore/HDR.h>
 #include <tlCore/Monitor.h>
 
@@ -46,14 +48,24 @@ namespace tl
         TLRENDER_ENUM(HDRTonemapAlgorithm);
         TLRENDER_ENUM_SERIALIZE(HDRTonemapAlgorithm);
 
+        enum class HDRExportMode {
+            BakedHDR,
+            LinearHDR,
+            BakedSDR,
+            Count,
+            First = BakedHDR
+        };
+        TLRENDER_ENUM(HDRExportMode);
+        TLRENDER_ENUM_SERIALIZE(HDRExportMode);
+
         //! Tonemap options.
         struct HDROptions
         {
-            //! Use libplacebo tonemapping (used for videos mainly)
+            //! Use libplacebo tone-mapping (used for videos mainly).
             bool tonemap = false;
 
-            // Decode EOTF to linear light, not gamut/tone remap
-            bool linearize = false;
+            //! How to handle tone-mapping export.
+            HDRExportMode exportMode = HDRExportMode::BakedHDR;
 
             //! Peak detection variables.
             bool peak_detection = false;
