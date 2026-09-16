@@ -6,27 +6,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"POT-Creation-Date: 2026-09-16 11:17-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid ""
 "\n"
 "USD module.\n"
 "\n"
-"Contains all classes and enums related to USD (Universal Scene "
-"Description). \n"
+"Contains all classes and enums related to USD (Universal Scene Description). \n"
 msgstr ""
 "\n"
 "Модуль долл. США.\n"
 "\n"
-"Содержит все классы и энумы, относящиеся к доллару США (всеобщее описание "
-"сцены).\n"
+"Содержит все классы и энумы, относящиеся к доллару США (всеобщее описание сцены).\n"
 
 msgid "Render Width"
 msgstr "Рендер-широкоугольник"
@@ -306,12 +304,13 @@ msgstr "Сохранить сессионный файл."
 msgid "Save and reload session file restarting mrv2."
 msgstr "Сохранить и перезагрузить файл сеанса, перезапустив mrv2."
 
+#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Дублированный мешок Python {0} в {1} и {2}."
 
 msgid ""
-"Expected a tuple containing a Python function and a string with menu options "
-"in it."
+"Expected a tuple containing a Python function and a string with menu options"
+" in it."
 msgstr "Ожидал тюльку, содержащую функцию Python и строку с опциями меню."
 
 msgid ""
@@ -400,8 +399,7 @@ msgid ""
 "        Dictionary of menu entries as keys with callbacks as values.\n"
 "\n"
 "\n"
-"        :return: A dictionary of menu entries and their corresponding "
-"callbacks.\n"
+"        :return: A dictionary of menu entries and their corresponding callbacks.\n"
 "        :rtype: dict\n"
 "\n"
 "        \"\"\"\n"
@@ -442,12 +440,10 @@ msgstr ""
 "\n"
 "    def menus(self):\n"
 "        \"\"\"\n"
-"        Словарь пунктов меню в качестве ключей и обратных вызовов в качестве "
-"значений.\n"
+"        Словарь пунктов меню в качестве ключей и обратных вызовов в качестве значений.\n"
 "\n"
 "\n"
-"        :return: Словарь пунктов меню и их соответствующих обратных "
-"вызовов.\n"
+"        :return: Словарь пунктов меню и их соответствующих обратных вызовов.\n"
 "        :rtype: dict\n"
 "\n"
 "        \"\"\"\n"
@@ -563,8 +559,7 @@ msgstr ""
 "\n"
 "Модуль изображений.\n"
 "\n"
-"Содержит все классы и перечисления, связанные с элементами управления "
-"изображением.\n"
+"Содержит все классы и перечисления, связанные с элементами управления изображением.\n"
 
 msgid "Red Channel."
 msgstr "Красный канал."
@@ -593,23 +588,26 @@ msgstr "Включённые уровни."
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
 msgstr "Добавить :class:`mrv2.math.Vector3f` к изображению."
 
-#, fuzzy
 msgid ""
 "Change a :class:`mrv2.math.Vector3f` of brightness (gain) to image.  Only "
 "the x channel is used."
-msgstr "Изменить :class:`mrv2.math.Vector3f` яркости изображения."
+msgstr ""
+"Измените яркость (усиление) изображения с помощью "
+":class:`mrv2.math.Vector3f`. Используется только канал x."
 
-#, fuzzy
 msgid ""
 "Change a :class:`mrv2.math.Vector3f` of contrast to image.  Only the x "
 "channel is used."
-msgstr "Изменить :class:`mrv2.math.Vector3f` контраста изображения."
+msgstr ""
+"Измените контраст изображения с помощью :class:`mrv2.math.Vector3f`. "
+"Используется только канал x."
 
-#, fuzzy
 msgid ""
 "Change a :class:`mrv2.math.Vector3f` of saturation to image. Only the x "
 "channel is used."
-msgstr "Изменить :class:`mrv2.math.Vector3f` насыщенности изображения."
+msgstr ""
+"Измените насыщенность изображения с помощью :class:`mrv2.math.Vector3f`. "
+"Используется только канал x."
 
 msgid "Change tint of image to image between 0 and 1."
 msgstr "Сменить изображение на изображение между 0 и 1."
@@ -897,7 +895,8 @@ msgid "Speed (FPS) of the File Media."
 msgstr "Скорость (PFS) файловой среды."
 
 msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
-msgstr "Состояние воспроизведения :class:`mrv2.timeline.Playbacks` медиафайла."
+msgstr ""
+"Состояние воспроизведения :class:`mrv2.timeline.Playbacks` медиафайла."
 
 msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
 msgstr "Состояние цикла :class:`mrv2.timeline.Loop` медиафайла."
@@ -929,9 +928,8 @@ msgstr "Сохранить аннотации."
 msgid "Save resolution."
 msgstr "Сохранить разрешение."
 
-#, fuzzy
 msgid "HDR Export Mode."
-msgstr "Больше"
+msgstr "Режим экспорта HDR."
 
 msgid "FFmpeg Profile."
 msgstr "Профиль FFmpeg."
@@ -979,14 +977,12 @@ msgid ""
 "\n"
 "Command module.\n"
 "\n"
-"Used to run main commands and get arguments and set the display, image, "
-"compare, LUT options.\n"
+"Used to run main commands and get arguments and set the display, image, compare, LUT options.\n"
 msgstr ""
 "\n"
 "Командный модуль.\n"
 "\n"
-"Используется для выполнения основных команд, получения аргументов и "
-"установки дисплея, изображения, сравнения, опции LUT.\n"
+"Используется для выполнения основных команд, получения аргументов и установки дисплея, изображения, сравнения, опции LUT.\n"
 
 msgid "Open file with optional audio."
 msgstr "Открыть файл с факультативным звуком."
@@ -1141,13 +1137,14 @@ msgstr "Получить все голосовые аннотации .wav дл�
 
 msgid "Get all voice and mouse directions for current frame as a JSON file."
 msgstr ""
-"Получить все голосовые и мышиные направления для текущего кадра в виде файла "
-"JSON."
+"Получить все голосовые и мышиные направления для текущего кадра в виде файла"
+" JSON."
 
 msgid "Get all URL/File/AI directions for current frame as a JSON file."
 msgstr ""
 "Получить все инструкции URL/файла/ИИ для текущего кадра в виде JSON-файла."
 
+#, c++-format
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Каналы: {1} {2} {3}"
 
@@ -1252,8 +1249,8 @@ msgid "Python Script to run and exit."
 msgstr "Скрипт Python для выполнения и выхода."
 
 msgid ""
-"Python Arguments to pass to the Python script as a single quoted string like "
-"\"arg1 'arg2 asd' arg3\", stored in cmd.argv."
+"Python Arguments to pass to the Python script as a single quoted string like"
+" \"arg1 'arg2 asd' arg3\", stored in cmd.argv."
 msgstr ""
 "Python Arguments для передачи Питонскому сценарию как одна цитируемая "
 "струна, как \"arg1 'arg2 asd' arg3\", хранимая в смд.argv."
@@ -1324,9 +1321,11 @@ msgstr "Предпочтение Местоположение:"
 msgid "Temp Location: "
 msgstr "Временное расположение: "
 
+#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "Не удаётся прочитать Python скрипт \" {0}"
 
+#, c++-format
 msgid "Running python script '{0}'"
 msgstr "Сценарий Python '{0}'"
 
@@ -1339,6 +1338,7 @@ msgstr "Ошибка Python:"
 msgid "Caching..."
 msgstr "Кэширование..."
 
+#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Файловое имя \" {0}\" не существует или не имеет разрешения на чтение."
 
@@ -1348,9 +1348,11 @@ msgstr "Распечатайте журнал на консоли."
 msgid "Show this message."
 msgstr "Покажите это сообщение."
 
+#, c++-format
 msgid "Cannot parse option \"{0}\": {1}"
 msgstr "Невозможно обработать вариант \" {0}\": {1}"
 
+#, c++-format
 msgid "Cannot parse argument \"{0}\": {1}"
 msgstr "Невозможно обдумать аргумент \" {0}: {1}"
 
@@ -1484,6 +1486,7 @@ msgstr "Редактор/Внешний редактор"
 msgid "Scripts/Add To Script List"
 msgstr "Скрипты/Добавить в список скриптов"
 
+#, c-format
 msgid "Scripts/%s"
 msgstr "Скрипты/%s"
 
@@ -1494,6 +1497,7 @@ msgstr ""
 "Введите код Python здесь. Выберите область для выполнения только части. "
 "Нажмите Keypad Enter для запуска."
 
+#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "Файл Python {0} уже существует. Вы хотите переписать его?"
 
@@ -1515,18 +1519,22 @@ msgstr "Речок находится в непоправимом состоян
 msgid "Type your editor command"
 msgstr "Введите команду редактора"
 
+#, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr "{0} будет заменено номером строчки {1} именем файла."
 
+#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "Ошибка регулярного выражения: {0}"
 
+#, c++-format
 msgid "Could not open python editor: {0}"
 msgstr "Невозможно открыть редактор Python: {0}"
 
 msgid "Search String:"
 msgstr "Поиск Структуры:"
 
+#, c-format
 msgid "No occurrences of '%s' found!"
 msgstr "Никаких совпадений '%s' не найдено!"
 
@@ -1563,11 +1571,24 @@ msgstr "С метаданными"
 msgid "Without Metadata"
 msgstr "Без метаданных"
 
+#, c++-format
 msgid "Streaming {0} {1}..."
 msgstr "Сверкает {0} {1}..."
 
 msgid "Stop streaming"
 msgstr "Прекратить поток"
+
+msgid "Complexity"
+msgstr "Сложность"
+
+msgid "Draw Mode"
+msgstr "Режим рисования"
+
+msgid "Stage Cache"
+msgstr "Сценический кэш"
+
+msgid "Disk Cache in GB"
+msgstr "Дисковый кэш в GB"
 
 msgid "Type"
 msgstr "Тип"
@@ -1670,19 +1691,13 @@ msgid ""
 "\n"
 "* None: Ignore the spatial coordinates.\n"
 "* Coordinates: Use the spatial coordinates when clips provide them.\n"
-"* Normalize: Use the spatial coordinates, and display clips without them at "
-"the size of the first clip.  Use this to play clips of differing resolutions "
-"at the same size."
+"* Normalize: Use the spatial coordinates, and display clips without them at the size of the first clip.  Use this to play clips of differing resolutions at the same size."
 msgstr ""
-"Используйте пространственные координаты в файлах OTIO для задания положения "
-"и размера клипов.\n"
+"Используйте пространственные координаты в файлах OTIO для задания положения и размера клипов.\n"
 "\n"
 "* Нет: Игнорировать пространственные координаты.\n"
-"* Координаты: Использовать пространственные координаты, если они указаны для "
-"клипа.\n"
-"* Нормализовать: Использовать пространственные координаты и отображать клипы "
-"без них в размере первого клипа.  Используйте этот параметр, чтобы "
-"воспроизводить клипы с разным разрешением в одном размере."
+"* Координаты: Использовать пространственные координаты, если они указаны для клипа.\n"
+"* Нормализовать: Использовать пространственные координаты и отображать клипы без них в размере первого клипа.  Используйте этот параметр, чтобы воспроизводить клипы с разным разрешением в одном размере."
 
 msgid "Compatibility"
 msgstr "Совместимость"
@@ -1752,8 +1767,8 @@ msgid ""
 msgstr ""
 "Это значение контролирует количество строк, которые использует FFmpeg. Для "
 "большинства фильмов его следует оставить на 0. Некоторые фильмы будут "
-"показывать черные рамки. Для любого подобного, вы должны установить их на 1, "
-"нажмите Enter и перезагрузите файл фильма."
+"показывать черные рамки. Для любого подобного, вы должны установить их на 1,"
+" нажмите Enter и перезагрузите файл фильма."
 
 msgid "Default Settings"
 msgstr "Параметры по умолчанию"
@@ -1938,9 +1953,11 @@ msgstr "1:16"
 msgid "Pick"
 msgstr "Выбрать"
 
+#, c-format
 msgid "%.3f seconds "
 msgstr "%.3f секунды"
 
+#, c-format
 msgid "Video Stream #%d"
 msgstr "Видеопоток #%d"
 
@@ -2209,6 +2226,7 @@ msgstr "Последняя изменённая дата файла"
 msgid "Load an image or movie file"
 msgstr "Загрузить изображение или файл фильма"
 
+#, c-format
 msgid "Audio Stream #%d"
 msgstr "Аудиопоток #%d"
 
@@ -2227,6 +2245,7 @@ msgstr "Количество аудиоканалов"
 msgid "Format"
 msgstr "Формат"
 
+#, c-format
 msgid "%d Hz."
 msgstr "%d Hz."
 
@@ -2236,6 +2255,7 @@ msgstr "Периодичность"
 msgid "Frequency of audio"
 msgstr "Частота звука"
 
+#, c-format
 msgid "%d kb/s"
 msgstr "%d кб/с"
 
@@ -2260,6 +2280,7 @@ msgstr "Продолжительность"
 msgid "Duration of Audio"
 msgstr "Продолжительность звука"
 
+#, c-format
 msgid "Subtitle Stream #%d"
 msgstr "Субтитры #%d"
 
@@ -2360,8 +2381,7 @@ msgid ""
 msgstr ""
 "Прочистить файлы A и B\n"
 "\n"
-"Использовать клавишу опции + левую кнопку мыши для перемещения стирания в X "
-"или Y"
+"Использовать клавишу опции + левую кнопку мыши для перемещения стирания в X или Y"
 
 msgid ""
 "Wipe between the A and B files\n"
@@ -2370,8 +2390,7 @@ msgid ""
 msgstr ""
 "Прочистить файлы A и B\n"
 "\n"
-"Используйте клавишу Alt + левую кнопку мыши, чтобы передвинуть стирку в X "
-"или Y."
+"Используйте клавишу Alt + левую кнопку мыши, чтобы передвинуть стирку в X или Y."
 
 msgid "Overlay the A and B files with optional transparencyy"
 msgstr "Наложить на файлы A и B факультативную прозрачность"
@@ -2589,9 +2608,11 @@ msgstr "Делает следующую аннотацию на всех кад�
 msgid "Frame Note"
 msgstr "Примечание к кадру"
 
+#, c++-format
 msgid "STUN server is {0}"
 msgstr "STUN-сервер: {0}"
 
+#, c++-format
 msgid "TURN server is {0}"
 msgstr "TURN-сервер: {0}"
 
@@ -2607,17 +2628,21 @@ msgstr ""
 "действия лицензии истёк"
 
 msgid "No Signaling server set.  Please update Preferences->WebRTC->Signaling"
-msgstr "Сервер сигнализации не задан. Обновите Настройки->WebRTC->Сигнализация"
+msgstr ""
+"Сервер сигнализации не задан. Обновите Настройки->WebRTC->Сигнализация"
 
 msgid "No Web RTC Studio set.  Please update Preferences->WebRTC->Studio"
 msgstr "Студия WebRTC не задана. Обновите Настройки->WebRTC->Студия"
 
+#, c++-format
 msgid "The room ID is: {0}"
 msgstr "Идентификатор комнаты: {0}"
 
+#, c++-format
 msgid "The player ID is: {0}"
 msgstr "Идентификатор проигрывателя: {0}"
 
+#, c++-format
 msgid "Downloading {0}..."
 msgstr "Загрузка {0}..."
 
@@ -2627,9 +2652,11 @@ msgstr "Слушание сервера в порту"
 msgid "ComfyUI listening on port "
 msgstr "Слушание в порту"
 
+#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr "Версия протокола сервера {0}. Версия протокола клиента {1}"
 
+#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "Удалённый файл {0} не существует в местной файловой системе."
 
@@ -2639,6 +2666,7 @@ msgstr "Нет подключения через WebRTC; невозможно п
 msgid "Peer not connected."
 msgstr "Пир не подключён."
 
+#, c++-format
 msgid ""
 "{0} is only reachable via relay (TURN), which would consume VPS bandwidth. "
 "Skipping fetch to avoid unexpected costs."
@@ -2647,6 +2675,7 @@ msgstr ""
 "пропускной способности VPS. Получение файла пропускается, чтобы избежать "
 "неожиданных расходов."
 
+#, c++-format
 msgid "Already fetching {0} from another sync request; skipping duplicate."
 msgstr ""
 "Файл {0} уже загружается по другому запросу синхронизации; повторный запрос "
@@ -2656,25 +2685,27 @@ msgid "Transfers"
 msgstr "Передачи"
 
 msgid ""
-"The timeline downloaded, but the following referenced media could not be "
-"found on the server:\n"
+"The timeline downloaded, but the following referenced media could not be found on the server:\n"
 "\n"
 msgstr ""
-"Таймлайн был загружен, но следующие связанные медиафайлы не удалось найти на "
-"сервере:\n"
+"Таймлайн был загружен, но следующие связанные медиафайлы не удалось найти на сервере:\n"
 "\n"
 
 msgid "Download failed."
 msgstr "Не удалось выполнить загрузку."
 
+#, c++-format
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr ""
 "Удалённый файл {0} не найден локально, и нет доступного пира, с которого "
 "можно его получить."
 
+#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
-msgstr "Дистанционный файл {0} совпадает с именем файла {1}, но не с дорожкой."
+msgstr ""
+"Дистанционный файл {0} совпадает с именем файла {1}, но не с дорожкой."
 
+#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Удалённый файл {0} не совпадает с местным именем файла."
 
@@ -2684,6 +2715,7 @@ msgstr "Уорн:"
 msgid "ERROR:\t"
 msgstr "ТЕРРОРИЗМ:"
 
+#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
@@ -2691,6 +2723,7 @@ msgstr ""
 "Регулярное выражение, созданное из {0}:\n"
 "{1}"
 
+#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "Итерация {0} проверяет версию {1}"
 
@@ -2698,33 +2731,40 @@ msgid ""
 "No versioning in this clip.  Please create an image or directory named with "
 "a versioning string."
 msgstr ""
-"В этом клипе нет версий. Создайте изображение или каталог, названный строкой "
-"версий."
+"В этом клипе нет версий. Создайте изображение или каталог, названный строкой"
+" версий."
 
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Пример: gizmo_v003 0001.exr"
 
+#, c++-format
 msgid "Could not replace {0} with {1}"
 msgstr "Невозможно заменить {0} на {1}"
 
 msgid "Annotation already existed at this time"
 msgstr "Аннотация уже существовала на данный момент."
 
+#, c++-format
 msgid "Failed to open the file {0} for writing."
 msgstr "Не удалось открыть файл {0} для записи."
 
+#, c++-format
 msgid "Failed to write to the file {0}."
 msgstr "Не удалось записать в файл {0}."
 
+#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "Сеанс сохранен на \" {0}\"."
 
+#, c++-format
 msgid "Failed to open the file '{0}' for reading."
 msgstr "Не удалось открыть файл \" {0}\" для чтения."
 
+#, c++-format
 msgid "Failed to load the file '{0}."
 msgstr "Не удалось загрузить файл '{0}'."
 
+#, c++-format
 msgid ""
 "Movie File '{0}' is not readable.\n"
 "\n"
@@ -2734,6 +2774,7 @@ msgstr ""
 "\n"
 "Хотите заменить его другим?"
 
+#, c++-format
 msgid ""
 "Sequence '{0}' is not readable.\n"
 "\n"
@@ -2743,6 +2784,7 @@ msgstr ""
 "\n"
 "Хотите заменить её другой?"
 
+#, c++-format
 msgid ""
 "Audio File '{0}' is not readable.\n"
 "\n"
@@ -2752,9 +2794,11 @@ msgstr ""
 "\n"
 "Хотите заменить его другим?"
 
+#, c++-format
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "Предпочтение чтения от \" {0} {1}\"."
 
+#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "Не удалось получить {0}."
 
@@ -2762,16 +2806,19 @@ msgid ""
 "FFmpeg YUV to RGB Conversion is on in Settings Panel.  mrv2 will play back "
 "movies slower."
 msgstr ""
-"FFmpeg YUV в RGB преобразуется в Group. mrv2 будет играть фильмы помедленнее."
+"FFmpeg YUV в RGB преобразуется в Group. mrv2 будет играть фильмы "
+"помедленнее."
 
 msgid "Debanding is not set to None.  This can make images show blurred"
 msgstr ""
 "Дебэндинг не установлен в значение «Нет». Это может привести к тому, что "
 "изображения будут выглядеть размытыми."
 
+#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "Невозможно открыть цветную тему из \" {0}\"."
 
+#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "Загруженные цветные темы из \" {0}\"."
 
@@ -2781,27 +2828,34 @@ msgstr "Сделать орио-конфигурацию из предпочте
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Запуск OCIO Conig из переменной окружающей среды OCIO."
 
+#, c++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Картирование путей было загружено с \" {0} {1}\"."
 
+#, c++-format
 msgid "Error deleting directory: \"{0}\"."
 msgstr "Ошибка при удалении каталога: «{0}»."
 
+#, c++-format
 msgid "Cleaned directory: \"{0}\"."
 msgstr "Каталог очищен: «{0}»."
 
+#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Загрузка хот-дога из \"{0}{1}.prefs\"."
 
 msgid "Resetting hotkeys to default."
 msgstr "Сброс горячих клавиш к значениям по умолчанию."
 
+#, c++-format
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "Картирование путей было сохранено до \" {0} {1}\"."
 
+#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys были сохранены на \"{0}{1}.prefs\"."
 
+#, c++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Преференции были сохранены следующим образом: \"{0}{1}\"."
 
@@ -2811,6 +2865,7 @@ msgstr "Удаление"
 msgid "OCIO config is now:"
 msgstr "OCIO config теперь:"
 
+#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "Файл OCIO \" {0} не найден или не читается."
 
@@ -2820,58 +2875,75 @@ msgstr "Настроить концерн OCIO по умолчанию:"
 msgid "Setting OCIO config to built-in:"
 msgstr "Установка встроенной орио-конфигурации:"
 
+#, c++-format
 msgid "Path mapping for {0} already exists!"
 msgstr "Картирование путей для {0} уже существует!"
 
+#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "Сопоставление {0} с префиксом {1}"
 
+#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "Нашел совпадение. Файл сейчас {0}"
 
 msgid "OCIO config file cannot be empty."
 msgstr "Файл OCIO config не может быть пустым."
 
+#, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "Конфигурация OCIO \" {0} не существует или не читается."
 
+#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "Неверный ОКИО Ics '{0}'."
 
+#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr "Неверный OCIO выглядит '{0}'."
 
+#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "Неверное отображение OCIO/Вид '{0}'."
 
+#, c++-format
 msgid "Could not split '{0}' into display and view."
 msgstr "Невозможно разделить \" {0}\" на отображение и просмотр."
 
+#, c++-format
 msgid "No default view for display '{0}'.  Does display exist?"
 msgstr ""
 "Нет просмотра по умолчанию для отображения \" {0}\". Существует ли дисплей?"
 
+#, c++-format
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Установка OCIO Preset '{0}'."
 
+#, c++-format
 msgid "Preset '{0}' not found."
 msgstr "Предположить '{0}' не найдено."
 
+#, c++-format
 msgid "OCIO Preset '{0}' already exists!"
 msgstr "OCIO Preset '{0}' уже существует!"
 
+#, c++-format
 msgid "Failed to load the file '{0}'."
 msgstr "Не удалось загрузить файл \" {0}\"."
 
+#, c++-format
 msgid "Loaded {0} ocio presets from \"{1}\"."
 msgstr "Заряженные {0} осио предваряют от \" {1}\"."
 
+#, c++-format
 msgid "Failed to open the file '{0}' for saving."
 msgstr "Не удалось открыть файл \" {0}\" для сохранения."
 
+#, c++-format
 msgid "Failed to save the file '{0}'."
 msgstr "Не удалось сохранить файл \" {0}\"."
 
+#, c++-format
 msgid "OCIO presets have been saved to \"{0}\"."
 msgstr "Предварительные установки OCIO были сохранены на \" {0}\"."
 
@@ -2902,6 +2974,7 @@ msgstr "Русский"
 msgid "Japanese"
 msgstr "Японский"
 
+#, c++-format
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -2909,6 +2982,7 @@ msgstr ""
 "Нужно перезагрузить mrv2, чтобы заменить язык на {0} Ты уверена, что хочешь "
 "продолжить?"
 
+#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "Указать язык {0}, Числа {1}"
 
@@ -3041,6 +3115,7 @@ msgstr ""
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 
+#, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
@@ -3048,6 +3123,7 @@ msgstr ""
 "Hotkey \"%s\" уже используется в \"%s\".\n"
 "Хочешь отключить его?"
 
+#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -3092,7 +3168,8 @@ msgid "Freehand Drawing Tool"
 msgstr "Инструмент свободного рисования"
 
 msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
-msgstr "Инструмент «Ластик».   ALT + Левая кнопка мыши, чтобы стереть область."
+msgstr ""
+"Инструмент «Ластик».   ALT + Левая кнопка мыши, чтобы стереть область."
 
 msgid "Polygon Tool"
 msgstr "Многоугольный режим."
@@ -3215,20 +3292,24 @@ msgstr "Неверный индекс для добавления в графи�
 msgid "Could not get current path."
 msgstr "Невозможно найти текущий путь."
 
+#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr ""
 "Элемент EDL \" {0} больше не загружен. Не может отменить или переделать."
 
+#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "Невозможно вставить {0}. Ошибка {1}."
 
 msgid "Items selected must be on the same track."
 msgstr "Выбранные элементы должны находиться на одной дорожке."
 
+#, c++-format
 msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
 msgstr ""
 "Выбранные элементы на дорожке должны быть смежными. Слева {0}. Справа {1}."
 
+#, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
 msgstr "Пожалуйста, выберите два или четыре смежных элемента. Выбрано {0}."
 
@@ -3238,9 +3319,11 @@ msgstr "Пожалуйста, выберите два смежных видео�
 msgid "Please select two contiguous audio clips."
 msgstr "Пожалуйста, выберите два смежных аудиоклипа."
 
+#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "Невозможно сохранить файл.otio: {0}"
 
+#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "Ошибка сохранения {0}. {1}"
 
@@ -3253,6 +3336,7 @@ msgstr "Файл назначения недействителен."
 msgid "Unknown media reference"
 msgstr "Неизвестная ссылка на средства массовой информации"
 
+#, c++-format
 msgid "Track #{0} - {1}"
 msgstr "Дорожка # {0} - {1}"
 
@@ -3262,9 +3346,11 @@ msgstr "В настоящее время невозможно создать ф�
 msgid "Cannot currently concatenate a directory."
 msgstr "В настоящее время не удалось создать каталог."
 
+#, c++-format
 msgid "Could not append video track {0}"
 msgstr "Невозможно добавить видео дорожку {0}"
 
+#, c++-format
 msgid "Could not append audio track {0}"
 msgstr "Не удалось добавить звуковую дорожку {0}"
 
@@ -3502,15 +3588,18 @@ msgstr "Изменить текст Аннотация"
 msgid "No item selected"
 msgstr "Не выбранный элемент"
 
+#, c-format
 msgid "%s - Page %d"
 msgstr "%s - page %d"
 
+#, c++-format
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Рамка {0} - ТС: {1} - S: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "Слишком большое изображение, сохранит размер смотрового портала."
 
+#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
 
@@ -3633,8 +3722,8 @@ msgid "Unknown action mode in "
 msgstr "Неизвестный режим действия в"
 
 msgid ""
-"Cannot create an annotation here for all frames.  A current frame annotation "
-"already exists."
+"Cannot create an annotation here for all frames.  A current frame annotation"
+" already exists."
 msgstr ""
 "Невозможно создать аннотацию для всех рамок. Аннотация течений уже "
 "существует."
@@ -3643,18 +3732,21 @@ msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
 msgstr ""
-"Невозможно создать аннотацию для текущей структуры. Аннотация всех рамок уже "
-"существует."
+"Невозможно создать аннотацию для текущей структуры. Аннотация всех рамок уже"
+" существует."
 
 msgid "Cannot save an NDI stream"
 msgstr "Не удалось сохранить поток NDI"
 
+#, c++-format
 msgid "Saving movie to {0}."
 msgstr "Сбережение фильма до {0}."
 
+#, c++-format
 msgid "Saving audio to {0}."
 msgstr "Сохранение звука до {0}."
 
+#, c++-format
 msgid "Saving pictures to {0}."
 msgstr "Сохранение фотографий до {0}."
 
@@ -3662,7 +3754,8 @@ msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
 msgstr "Прорецензии должны быть дополнены фильмом.mov, изменить его на.mov."
 
 msgid ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
+".mp4"
 msgstr "Профиль VP9 нуждается в.mp4,.mkv или.webm расширения фильма."
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
@@ -3675,53 +3768,99 @@ msgstr "Профиль GoPro Cineform требует расширения фил
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "Профиль HAP требует расширения.mov."
 
+#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "Новый файл {0} уже существует! Не может переписать его."
 
-msgid "{0}: Cannot open writer plugin."
-msgstr "{0}: Не удаётся открыть пиджак."
+#, c++-format
+msgid "Rotated image info: {0}"
+msgstr "Информация о поворачиваемых изображениях: {0}"
 
+#, c++-format
 msgid "Scaled image info: {0}"
 msgstr "Расширенная информация об изображениях: {0}"
 
-msgid "Writer plugin did not get output info.  Defaulting to {0}"
-msgstr "Писатель не получил информацию о выходе. По умолчанию {0}"
+#, c++-format
+msgid "{0}: Cannot open writer plugin."
+msgstr "{0}: Не удаётся открыть пиджак."
 
-msgid "Using profile {0}, pixel format {1}."
-msgstr "Используя профиль {0}, пиксельный формат {1}."
-
-msgid "Using preset {0}."
-msgstr "Использование предварительного оборудования {0}."
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Информация о буфере вне экрана: {0}"
-
+#, c++-format
 msgid "Image info: {0} {1}"
 msgstr "Фотография: {0} {1}"
 
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Фотография слишком большая, чтобы сохранить аннотации. Расширится до размера"
+" смотрового портала."
+
+#, c++-format
+msgid "Writer plugin did not get output info.  Defaulting to {0}"
+msgstr "Писатель не получил информацию о выходе. По умолчанию {0}"
+
+#, c++-format
 msgid "Output info: {0} {1}"
 msgstr "Результаты: {0} {1}"
 
+#, c++-format
+msgid "Using profile {0}, pixel format {1}."
+msgstr "Используя профиль {0}, пиксельный формат {1}."
+
+#, c++-format
+msgid "Using preset {0}."
+msgstr "Использование предварительного оборудования {0}."
+
+#, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Спасение фильма без звука %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "Спасение фильма с Audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "Сбережение звука %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "Securing Pictures without Audio %<PRId64> - %<PRId64>"
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Звук только в хронологии, но не в попытке сохранить звук."
 
+#, c++-format
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Неверный формат и тип OpenGL"
+
+#, c++-format
+msgid "OpenGL info: {0}"
+msgstr "Информация OpenGL: {0}"
+
+#, c++-format
 msgid "Saving... {0}"
 msgstr "Спасаю... {0}"
 
+msgid "Unsupported output format"
+msgstr "Неподдерживаемый формат вывода"
+
+#, c++-format
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
+
+#, c++-format
 msgid "Render size: {0}"
 msgstr "Размер рендеринга: {0}"
+
+#, c++-format
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Информация о слое изображения '{0}': {1} {2}"
+
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr "Информация о буфере вне экрана: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Неподдерживаемый формат вывода: "
 
 msgid "2.35"
 msgstr "2.35"
@@ -3732,44 +3871,22 @@ msgstr "1.85"
 msgid "1.66"
 msgstr "1.66"
 
+#, c-format
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "Кэш: "
 
-msgid "HDR monitor min. nits = {0}"
-msgstr "Минимальная яркость HDR-монитора (нит) = {0}"
-
-msgid "HDR monitor max. nits = {0}"
-msgstr "Максимальная яркость HDR-монитора (нит) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR-монитор не найден или не настроен."
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr "HDR-монитор не обнаружен Vulkan или оконным менеджером."
-
-msgid "Vulkan color space is {0}"
-msgstr "Цветовое пространство Vulkan: {0}"
-
-msgid "Vulkan format is {0}"
-msgstr "Формат Vulkan: {0}"
-
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "Переключено на активный HDR-монитор с индексом {0}"
-
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr "Переключено на монитор с поддержкой HDR, но неактивный, с индексом {0}"
-
-msgid "Changed to SDR monitor at index {0}"
-msgstr "Переключено на SDR-монитор с индексом {0}"
-
 msgid "Edit Text"
 msgstr "Изменить текст"
 
+#, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' не является файлом, каталогом или URL."
+
+msgid "Invalid font for text drawing"
+msgstr "Неверный шрифт для текстового рисунка"
 
 msgid "Could not convert message to shape: "
 msgstr "Невозможно преобразовать сообщение в форму:"
@@ -3783,9 +3900,11 @@ msgstr "Воспроизведение невозможно – аудио-ан�
 msgid "Status is not saved"
 msgstr "Статус не сохранён"
 
+#, c++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Файл аудиоаннотации {0} отсутствует или не существует!"
 
+#, c++-format
 msgid "Unhandled buffer format: {0} for output: {1}"
 msgstr "Неподдерживаемый формат буфера: {0} для вывода: {1}"
 
@@ -3794,8 +3913,7 @@ msgid ""
 "\n"
 "Do you want to upgrade?"
 msgstr ""
-"Для использования этой функции требуется пожертвование уровня Solo или "
-"выше.\n"
+"Для использования этой функции требуется пожертвование уровня Solo или выше.\n"
 "\n"
 "Хотите выполнить обновление?"
 
@@ -3804,8 +3922,7 @@ msgid ""
 "\n"
 "Do you want to upgrade?"
 msgstr ""
-"Для использования этой функции требуется пожертвование уровня Standard или "
-"выше.\n"
+"Для использования этой функции требуется пожертвование уровня Standard или выше.\n"
 "\n"
 "Хотите выполнить обновление?"
 
@@ -3814,8 +3931,7 @@ msgid ""
 "\n"
 "Do you want to upgrade?"
 msgstr ""
-"Для использования этой функции требуется пожертвование уровня Edit или "
-"выше.\n"
+"Для использования этой функции требуется пожертвование уровня Edit или выше.\n"
 "\n"
 "Хотите выполнить обновление?"
 
@@ -3894,6 +4010,7 @@ msgstr "Файл/Закрыть все"
 msgid "File/Save and Reload Session"
 msgstr "Файл/Сохранить и перезагрузить сеанс"
 
+#, c-format
 msgid "File/Recent/%s"
 msgstr "Файл/Последние/%s"
 
@@ -4143,6 +4260,7 @@ msgstr "Воспроизведение/Аннотация/Очистить"
 msgid "Playback/Annotation/Clear All"
 msgstr "Воспроизведение/Аннотация/Очистить все"
 
+#, c-format
 msgid "View/Mask/%s"
 msgstr "Вид/Маска/%s"
 
@@ -4215,9 +4333,11 @@ msgstr "Таймлайн/Переходы"
 msgid "Timeline/Markers"
 msgstr "Таймлайн/Маркеры"
 
+#, c++-format
 msgid "Timeline/Visible Tracks/{0}"
 msgstr "Таймлайн/Видимые дорожки/{0}"
 
+#, c++-format
 msgid "Timeline/Media Reference/{0}"
 msgstr "Таймлайн/Ссылка на медиафайл/{0}"
 
@@ -4275,12 +4395,14 @@ msgstr "Фотография/Режим сравнения/Вертикальн�
 msgid "Image/Compare Mode/Tile"
 msgstr "Фотография/Режим сравнения/Тяжелый"
 
+#, c-format
 msgid "Image/Go to/%s"
 msgstr "Фотография/Перейти/%s"
 
 msgid "Image/Compare/Toggle A and B"
 msgstr "Изображение/Сравнение/Переключить A и B"
 
+#, c-format
 msgid "Image/Compare/%s"
 msgstr "Фотография/Сравнить/%s"
 
@@ -4347,24 +4469,31 @@ msgstr "OCIO/Переключить"
 msgid "OCIO/Current"
 msgstr "OCIO/Текущая"
 
+#, c-format
 msgid "OCIO/         ICS: %s"
 msgstr "OCIO/         ICS: %s"
 
+#, c-format
 msgid "OCIO/     Display: %s"
 msgstr "OCIO/     Display: %s"
 
+#, c-format
 msgid "OCIO/        View: %s"
 msgstr "OCIO/        View: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/  Монитор #%d Показать: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/  Монитор #%d    View: %s"
 
+#, c-format
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/        Look: %s"
 
+#, c-format
 msgid "OCIO/        LUT: %s"
 msgstr "OCIO/        LUT: %s"
 
@@ -4416,6 +4545,7 @@ msgstr "Синхронизация/Принять/Аннотации"
 msgid "Sync/Accept/Audio"
 msgstr "Синхронизация/Принять/Звук"
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -4423,6 +4553,7 @@ msgstr ""
 "В \" {0}\" ожидается функция как значение или тюль, содержащий функцию "
 "Python и строку с опциями меню."
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -4523,19 +4654,23 @@ msgstr "Режим широкого списка"
 msgid "Detail mode"
 msgstr "Детальный режим"
 
+#, c-format
 msgid ""
-"Could not create directory '%s'. You may not have permission to perform this "
-"operation."
+"Could not create directory '%s'. You may not have permission to perform this"
+" operation."
 msgstr ""
-"Невозможно создать каталог '%s'. Вы можете не иметь разрешения на выполнение "
-"этой операции."
+"Невозможно создать каталог '%s'. Вы можете не иметь разрешения на выполнение"
+" этой операции."
 
+#, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "Произошла ошибка при попытке удалить '%s'. %s"
 
+#, c-format
 msgid "File '%s' already exists!"
 msgstr "Файл '%s' уже существует!"
 
+#, c-format
 msgid "Unable to rename '%s' to '%s'"
 msgstr "Невозможно переименовать '%s' в '%s'"
 
@@ -4677,6 +4812,7 @@ msgstr "Сжимаемый актив Open$"
 msgid "OpenUSD ASCII Asset"
 msgstr "Активы ASCII Open$"
 
+#, c-format
 msgid "Another process using the file."
 msgstr "Другой процесс с использованием файла."
 
@@ -4776,9 +4912,11 @@ msgstr "С msvc"
 msgid "mrv2 depends on:"
 msgstr "mrv2 зависит от:"
 
+#, c++-format
 msgid "Total Physical Memory: {0} Gb"
 msgstr "Общий объём физической памяти: {0} ГБ"
 
+#, c++-format
 msgid "Total Virtual Memory: {0} Gb"
 msgstr "Общий объём виртуальной памяти: {0} ГБ"
 
@@ -4830,6 +4968,7 @@ msgstr "Драконья коробка"
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "Неизвестный тип mrvOCIOBrowser"
 
+#, c++-format
 msgid ""
 "Wayland Compositor supports Float on Top only through hotkeys.  Press {0}."
 msgstr ""
@@ -4843,6 +4982,7 @@ msgstr ""
 "Уэйланд не поддерживает Float наверху. Используй своего менеджера окна, "
 "чтобы установить хижину для этого."
 
+#, c++-format
 msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr ""
 "Нет горячей клавиши GNOME Shell для \"Плавать сверху\". Установка глобально "
@@ -4852,8 +4992,7 @@ msgid "Session: "
 msgstr "Сессия:"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows "
-"below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
@@ -4868,8 +5007,7 @@ msgid "Continue"
 msgstr "Продолжить"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows "
-"below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
@@ -4936,6 +5074,7 @@ msgstr "Диапазон"
 msgid "Mean"
 msgstr "Средняя"
 
+#, c-format
 msgid "Track #%d - %s"
 msgstr "Дорожка #%d - %s"
 
@@ -4951,6 +5090,7 @@ msgstr "Удалить текущую заметку."
 msgid "No annotations added yet."
 msgstr "Аннотации ещё не добавлены."
 
+#, c++-format
 msgid "This frame already has a note at {0}, frame {1}."
 msgstr "Для этого кадра уже есть заметка в {0}, кадр {1}."
 
@@ -5106,19 +5246,16 @@ msgstr "Сохранить напоминания"
 
 msgid ""
 "Save Annotations burned into the movie or sequence.\n"
-"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's "
-"pixel type.\n"
+"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.\n"
 "\n"
 "Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.\n"
 "\n"
 "However, it is limited to the size of your screen."
 msgstr ""
 "Сохранить ссылки, сожженные в фильме или последовательности.\n"
-"Он также позволяет сохранить OpenEXRs из 8-битного фильма и изменить тип "
-"пикселя OpenEXR.\n"
+"Он также позволяет сохранить OpenEXRs из 8-битного фильма и изменить тип пикселя OpenEXR.\n"
 "\n"
-"Кроме того, это позволяет сохранить сопоставления A/B или Triled и выпечку "
-"OCIO.\n"
+"Кроме того, это позволяет сохранить сопоставления A/B или Triled и выпечку OCIO.\n"
 "\n"
 "Однако он ограничен размером с ваш экран."
 
@@ -5333,8 +5470,7 @@ msgstr ""
 "  Аппаратное кодирование поддерживается только на новых MacBook Pro\n"
 "  с чипами M1 или новее. H264, ProRes, VP9 и AV1 уже поддерживаются\n"
 "  или получат поддержку в ближайшее время.\n"
-"  NVIDIA поддерживает H264, HEVC и, в зависимости от аппаратного обеспечения "
-"и драйверов, AV1.\n"
+"  NVIDIA поддерживает H264, HEVC и, в зависимости от аппаратного обеспечения и драйверов, AV1.\n"
 "  "
 
 msgid "Pixel Format Help"
@@ -5629,15 +5765,13 @@ msgstr "F"
 
 msgid ""
 "Displays:\n"
-"* Linear (Gamma, Gain and LUT in a linear scale where 1.0 is SDR "
-"white).    \n"
+"* Linear (Gamma, Gain and LUT in a linear scale where 1.0 is SDR white).    \n"
 "* Full Pixel Values (Gamma, Gain and LUT)\n"
 "* Original (No Gamma, No Gain, No Lut)\n"
 "* Nits Pixel Values (Monitor units in Vulkan)"
 msgstr ""
 "Отображает:\n"
-"* Линейные значения (гамма, усиление и LUT в линейной шкале, где 1.0 — это "
-"белый SDR).\n"
+"* Линейные значения (гамма, усиление и LUT в линейной шкале, где 1.0 — это белый SDR).\n"
 "* Полные значения пикселей (гамма, усиление и LUT)\n"
 "* Оригинал (без гаммы, без усиления, без LUT)\n"
 "* Значения пикселей в нитах (единицы монитора в Vulkan)"
@@ -5651,24 +5785,20 @@ msgid ""
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
 "Y' (Lumma) is the weighted pixel value according to:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"L (Lightness) is the human perception of luminance of the image which is non "
-"linear.\n"
+"L (Lightness) is the human perception of luminance of the image which is non linear.\n"
 "According to CIE No.15.2:\n"
 "      L = (116 * Y ^ 1/3 - 16) / 100\n"
-"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = "
-"1.0 (white)."
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white)."
 msgstr ""
 "Переключение расчета яркости.\n"
 "Y (Люминанс) — это значение пикселя согласно Rec709:\n"
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
 "Y' (Люма) — это взвешенное значение пикселя согласно:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"L (Светлота) — это восприятие яркости изображения человеком, которое "
-"нелинейно.\n"
+"L (Светлота) — это восприятие яркости изображения человеком, которое нелинейно.\n"
 "Согласно CIE No.15.2:\n"
 "      L = (116 * Y ^ 1/3 - 16) / 100\n"
-"Пиксель с Y = 0.18 (L = 0.5) будет казаться примерно в два раза темнее, чем "
-"пиксель с Y = L = 1.0 (белый)."
+"Пиксель с Y = 0.18 (L = 0.5) будет казаться примерно в два раза темнее, чем пиксель с Y = L = 1.0 (белый)."
 
 msgid "Luminance of image pixel under mouse."
 msgstr "Яркость пикселя изображения под мышью."
@@ -5774,7 +5904,8 @@ msgstr "Позволяет вам отрегулировать рамку."
 
 msgid "Mute audio or switch audio tracks with the right mouse button."
 msgstr ""
-"Выключите аудио- или переключайте звуковые дорожки с правильной кнопкой мыши."
+"Выключите аудио- или переключайте звуковые дорожки с правильной кнопкой "
+"мыши."
 
 msgid "Audio Volume"
 msgstr "Звуковой объем"
@@ -5997,17 +6128,6 @@ msgstr "Запрос ИИ"
 msgid "AI prompt to feed the image to AI."
 msgstr "Запрос ИИ для передачи изображения в ИИ."
 
-#, fuzzy
-msgid "Baked Display HDR"
-msgstr "Показать RGBA"
-
-msgid "Scene Linear HDR"
-msgstr ""
-
-#, fuzzy
-msgid "Baked Display SDR"
-msgstr "Показать RGBA"
-
 msgid "Half"
 msgstr "Половина"
 
@@ -6028,13 +6148,6 @@ msgstr "Только аннотационные рамки"
 
 msgid "Save only the annotation frames, not the whole sequence."
 msgstr "Сохранить только аннотационные рамки, а не всю последовательность."
-
-#, fuzzy
-msgid "Export Mode"
-msgstr "Больше"
-
-msgid "HDR (Vulkan) Export mode."
-msgstr ""
 
 msgid "OpenEXR Options"
 msgstr "Параметры OpenEXR"
@@ -6391,12 +6504,10 @@ msgstr "Единовременные случаи"
 
 msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
-"If you try to open several mrv2s with different images, all these images "
-"will be sent to the already open mrv2."
+"If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2."
 msgstr ""
 "При выборе допускается только один случай mrv2.\n"
-"Если вы попытаетесь открыть несколько mrv2 с различными изображениями, все "
-"эти изображения будут отправлены на уже открытый mrv2."
+"Если вы попытаетесь открыть несколько mrv2 с различными изображениями, все эти изображения будут отправлены на уже открытый mrv2."
 
 msgid "Auto Refit Image"
 msgstr "Автомобильная модификация изображения"
@@ -6407,8 +6518,8 @@ msgid ""
 "size of the window."
 msgstr ""
 "При выборе, mrv2 будет применять на каждом проигрываемом видео операцию "
-"подходящего изображения. Это фактически означает, что видео будет умножаться "
-"автоматически, исходя из размера окна."
+"подходящего изображения. Это фактически означает, что видео будет умножаться"
+" автоматически, исходя из размера окна."
 
 msgid "Raise on Enter"
 msgstr "Подняться на входе"
@@ -6417,7 +6528,8 @@ msgid ""
 "When selected, mrv2 will raise the window to the front once you enter the "
 "view window."
 msgstr ""
-"При выборе mrv2 поднимет окно вперед, как только вы войдете в окно просмотра."
+"При выборе mrv2 поднимет окно вперед, как только вы войдете в окно "
+"просмотра."
 
 msgid "Window at Start"
 msgstr "Окно при запуске"
@@ -6465,8 +6577,10 @@ msgid "Topbar"
 msgstr "Топбар"
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
-msgstr "При выборе mrv2 начнётся с своего канала, выиграет, гамма будет видна."
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
+msgstr ""
+"При выборе mrv2 начнётся с своего канала, выиграет, гамма будет видна."
 
 msgid "Pixel Toolbar"
 msgstr "Панель пикселя"
@@ -6484,8 +6598,8 @@ msgid ""
 "This is a macOS setting only.  When selected the menus will appear on the "
 "system toolbar instead of the mrv2 toolbar."
 msgstr ""
-"Это только macOS. При выборе меню появится на панели инструментов системы, а "
-"не на панели инструментов mrv2."
+"Это только macOS. При выборе меню появится на панели инструментов системы, а"
+" не на панели инструментов mrv2."
 
 msgid "Tool Dock"
 msgstr "Панель инструментов"
@@ -6502,7 +6616,8 @@ msgstr "При выборе mrv2 начинается с видимого сте
 msgid "Only One Panel"
 msgstr "Только одна группа"
 
-msgid "When selected, mrv2 will start with the only one panel option selected."
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
 msgstr "При выборе mrv2 начнётся с единственного выбранного варианта панели."
 
 msgid "View Window"
@@ -6605,8 +6720,8 @@ msgid ""
 "If selected, the natlve file chooser will be used.  If unselected, mrv2's "
 "standard file chooser will be used."
 msgstr ""
-"Если выбрано, будет использован выбравший файл natlve. В случае невыбранного "
-"будет использован выбранный стандартный файл mrv2."
+"Если выбрано, будет использован выбравший файл natlve. В случае невыбранного"
+" будет использован выбранный стандартный файл mrv2."
 
 msgid "Fonts"
 msgstr "Шрифты"
@@ -6686,8 +6801,8 @@ msgid "Fixed Position"
 msgstr "Стационарное положение"
 
 msgid ""
-"When this option is set, mrv2 will open in the position you set here (except "
-"if the window goes out of the Desktop).  If Always Save on Exit is on, the "
+"When this option is set, mrv2 will open in the position you set here (except"
+" if the window goes out of the Desktop).  If Always Save on Exit is on, the "
 "values are recakculated upon exiting the program."
 msgstr ""
 "Когда эта опция установлена, mrv2 будет открыта в положении, которое вы "
@@ -6728,8 +6843,8 @@ msgid ""
 "Fixed Size depending what you want to save."
 msgstr ""
 "Fills the Fixed Position and Fixed Size values with the current values of "
-"the viewer. Remember to also check the boxes for Fixed Position and/or Fixed "
-"Size depending what you want to save."
+"the viewer. Remember to also check the boxes for Fixed Position and/or Fixed"
+" Size depending what you want to save."
 
 msgid "Screen:"
 msgstr "Экран:"
@@ -6818,9 +6933,10 @@ msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr "Удалить EDL во временной папке при выходе"
 
 msgid ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary "
-"folder."
-msgstr "При выборе из временной папки будут удалены временные EDL (Playlists)."
+"When selected, temporary EDLs (Playlists) will be removed from the temporary"
+" folder."
+msgstr ""
+"При выборе из временной папки будут удалены временные EDL (Playlists)."
 
 msgid "Video Start Frame"
 msgstr "Строка запуска видео"
@@ -6856,8 +6972,8 @@ msgid "HDR Peak Detection"
 msgstr "Обнаружение пиков HDR"
 
 msgid ""
-"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds "
-"per frame."
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
 msgstr ""
 "Если видеоклип не является HDR10+ или Dolby Vision, разрешает динамические "
 "пороги для каждого кадра."
@@ -6875,8 +6991,7 @@ msgstr ""
 msgid "Smoothing Period"
 msgstr "Период сглаживания"
 
-msgid ""
-"How long it takes for brightness detection to \"catch up\" to a new scene."
+msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
 msgstr ""
 "Время, необходимое системе определения яркости для адаптации к новой сцене."
 
@@ -6934,12 +7049,12 @@ msgid "Sensitivity"
 msgstr "Чувствительность"
 
 msgid ""
-"This setting controls the sensitivity of scrubbing.  Smaller values make the "
-"mouse move jump more frames while higher values does the opposite."
+"This setting controls the sensitivity of scrubbing.  Smaller values make the"
+" mouse move jump more frames while higher values does the opposite."
 msgstr ""
 "Эта регулировка контролирует чувствительность скруббирования.  Меньшие "
-"значения заставляют мышь двигать больше кадров, в то время как более высокие "
-"значения делают обратное."
+"значения заставляют мышь двигать больше кадров, в то время как более высокие"
+" значения делают обратное."
 
 msgid ""
 "Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
@@ -7022,8 +7137,8 @@ msgid "Use Default Display and View"
 msgstr "Использовать по умолчанию показ и просмотр"
 
 msgid ""
-"When this option is on, and your config.ocio has a default display and view, "
-"it will be used to be set as default."
+"When this option is on, and your config.ocio has a default display and view,"
+" it will be used to be set as default."
 msgstr ""
 "Когда эта опция включена, и у вашей конфег.ocio есть по умолчанию дисплей и "
 "обзор, она будет установлена как по умолчанию."
@@ -7065,8 +7180,8 @@ msgid "16-bits"
 msgstr "16 бит"
 
 msgid ""
-"The name of the OCIO default image color space for 16-bit images (cin, tiff, "
-"etc.)"
+"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
+" etc.)"
 msgstr ""
 "Название цветового пространства OCIO для 16-битных изображений (cin, tiff и "
 "т.д.)"
@@ -7084,7 +7199,8 @@ msgstr ""
 msgid "half"
 msgstr "половина"
 
-msgid "The name of the OCIO default image color space for OpenEXR half images."
+msgid ""
+"The name of the OCIO default image color space for OpenEXR half images."
 msgstr "Название цветового пространства OCIO для полуснимков OpenEXR."
 
 msgid "float"
@@ -7115,8 +7231,8 @@ msgstr "Версия Regex"
 msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
+"automatically be created a regular expression to match versions defined with"
+" _v in the name of the file, directory or both. For example: "
 "gizmo_v001.0001.exr"
 msgstr ""
 "Регулярное выражение, используемое для совпадения с версиями клипов. Нужно "
@@ -7206,8 +7322,8 @@ msgid "Blit"
 msgstr "Blit"
 
 msgid ""
-"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
-"card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics"
+" card and OS one can perform better then the other."
 msgstr ""
 "Вьюпорты могут отображаться с помощью блиттинга или шейдеров. В зависимости "
 "от видеокарты и ОС один из методов может работать лучше другого."
@@ -7237,8 +7353,8 @@ msgstr "API"
 
 msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
 msgstr ""
-"Audio API для использования в платформах, которые поддерживают несколько API "
-"(только Linux)"
+"Audio API для использования в платформах, которые поддерживают несколько API"
+" (только Linux)"
 
 msgid "Output Device"
 msgstr "Выходное устройство"
@@ -7281,7 +7397,8 @@ msgid "Use ComfyUI Pipe"
 msgstr "Использовать ComfyUI трубу"
 
 msgid ""
-"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
 msgstr ""
 "Эта установка открывает трубу для связи с ComfyUI mrv2_save_exr_node.py"
 
@@ -7312,8 +7429,8 @@ msgstr "TURN-сервер"
 
 msgid "Studio name to prefix to all Room connections.  Use some unique name."
 msgstr ""
-"Имя студии, добавляемое в качестве префикса ко всем подключениям к комнатам. "
-"Используйте уникальное имя."
+"Имя студии, добавляемое в качестве префикса ко всем подключениям к комнатам."
+" Используйте уникальное имя."
 
 msgid "Clean directory at Start up"
 msgstr "Очищать каталог при запуске"
@@ -7348,7 +7465,8 @@ msgstr "Отрегулирует поведение окна журнала в �
 msgid "Check for Updates"
 msgstr "Проверка обновления"
 
-msgid "Allows you to automatically download updates of mrv2 when it starts up."
+msgid ""
+"Allows you to automatically download updates of mrv2 when it starts up."
 msgstr "Позволяет вам автоматически загружать обновления mrv2 при запуске."
 
 msgid "Allow Screen Saver"
@@ -7458,8 +7576,8 @@ msgstr "Нажмите для удаления выбранного предва
 
 msgid ""
 "Select, Add or Delete an OCIO Preset that stores: config filename, Input "
-"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-"
-"bits, half and float images. "
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, "
+"32-bits, half and float images. "
 msgstr ""
 "Выберите, добавьте или удалите OCIO Preset, который хранит: config Pame, "
 "Introduction Color Space, View, LUT, настройки и по умолчанию для 8-битных, "
@@ -7681,24 +7799,31 @@ msgstr "Разделение"
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 
+#, c++-format
 msgid "Unknown licese plan '{0}'"
 msgstr "Неизвестный тарифный план лицензии «{0}»"
 
+#, c++-format
 msgid "License plan '{0}'"
 msgstr "Лицензионный план «{0}»"
 
+#, c++-format
 msgid "Supports annotations '{0}'"
 msgstr "Поддерживает аннотации «{0}»"
 
+#, c++-format
 msgid "Supports editing '{0}'"
 msgstr "Поддерживает редактирование «{0}»"
 
+#, c++-format
 msgid "Supports layers '{0}'"
 msgstr "Поддерживает слои «{0}»"
 
+#, c++-format
 msgid "Supports python '{0}'"
 msgstr "Поддерживает Python «{0}»"
 
+#, c++-format
 msgid "Supports voice annotations '{0}'"
 msgstr "Поддерживает голосовые аннотации «{0}»"
 
@@ -7711,9 +7836,11 @@ msgstr "Привязанная к узлу"
 msgid "Floating"
 msgstr "Плавающая"
 
+#, c++-format
 msgid "Found floating license at '{0}'"
 msgstr "Найдена плавающая лицензия в '{0}'"
 
+#, c++-format
 msgid "Did not find floating license at '{0}'"
 msgstr "Плавающая лицензия не найдена в '{0}'"
 
@@ -7723,13 +7850,16 @@ msgstr "Недействительная дата истечения срока"
 msgid "License expired"
 msgstr "Срок действия лицензии истёк"
 
+#, c++-format
 msgid "{0} is not readable. Using system default."
 msgstr ""
 "{0} не может быть прочитан. Используется значение по умолчанию системы."
 
+#, c++-format
 msgid "{0} Active Licenses from {1}."
 msgstr "{0} активных лицензий от {1}."
 
+#, c++-format
 msgid "Valid license for {0}"
 msgstr "Действительная лицензия для {0}"
 
@@ -7739,6 +7869,7 @@ msgstr "Не удалось освободить плавающую лиценз
 msgid "Released Floating License"
 msgstr "Плавающая лицензия освобождена"
 
+#, c++-format
 msgid "Your {0} license will expire on {1}."
 msgstr "Ваша лицензия {0} истекает {1}."
 
@@ -8228,9 +8359,6 @@ msgstr "Режим скруба"
 msgid "Area Selection Mode"
 msgstr "Режим выделения области"
 
-msgid "Draw Mode"
-msgstr "Режим рисования"
-
 msgid "Erase Mode"
 msgstr "Стереть режим"
 
@@ -8339,58 +8467,65 @@ msgstr "shop_statistics64 не сработал"
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
 
-#~ msgid "Complexity"
-#~ msgstr "Сложность"
+#, c++-format
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "Минимальная яркость HDR-монитора (нит) = {0}"
 
-#~ msgid "Stage Cache"
-#~ msgstr "Сценический кэш"
+#, c++-format
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "Максимальная яркость HDR-монитора (нит) = {0}"
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Дисковый кэш в GB"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR-монитор не найден или не настроен."
 
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Информация о поворачиваемых изображениях: {0}"
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
+#~ msgstr "HDR-монитор не обнаружен Vulkan или оконным менеджером."
 
-#~ msgid ""
-#~ "Image too big for Save Annotations.  Will scale to the viewport size."
+#, c++-format
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Цветовое пространство Vulkan: {0}"
+
+#, c++-format
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Формат Vulkan: {0}"
+
+#, c++-format
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "Переключено на активный HDR-монитор с индексом {0}"
+
+#, c++-format
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
 #~ msgstr ""
-#~ "Фотография слишком большая, чтобы сохранить аннотации. Расширится до "
-#~ "размера смотрового портала."
+#~ "Переключено на монитор с поддержкой HDR, но неактивный, с индексом {0}"
 
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Неверный формат и тип OpenGL"
+#, c++-format
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "Переключено на SDR-монитор с индексом {0}"
 
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Информация OpenGL: {0}"
+#, fuzzy
+#~ msgid "Baked Display HDR"
+#~ msgstr "Показать RGBA"
 
-#~ msgid "Unsupported output format"
-#~ msgstr "Неподдерживаемый формат вывода"
+#, fuzzy
+#~ msgid "Baked Display SDR"
+#~ msgstr "Показать RGBA"
 
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
-
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "Информация о слое изображения '{0}': {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "Неподдерживаемый формат вывода: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Неверный шрифт для текстового рисунка"
+#, fuzzy
+#~ msgid "Export Mode"
+#~ msgstr "Больше"
 
 #~ msgid "Linearize EXR"
 #~ msgstr "Линеаризовать EXR"
 
 #~ msgid ""
-#~ "If saving an EXR, try to linearize the result and save metadata to later "
-#~ "use with OpenImageIO.  Note:  this may not match exactly movies with "
+#~ "If saving an EXR, try to linearize the result and save metadata to later use"
+#~ " with OpenImageIO.  Note:  this may not match exactly movies with "
 #~ "libplacebo, as they use slightly different math."
 #~ msgstr ""
-#~ "При сохранении EXR попробуйте линеаризовать результат и сохранить "
-#~ "метаданные для последующего использования с OpenImageIO.  Примечание: "
-#~ "результат может не в точности соответствовать фильмам, обработанным с "
-#~ "помощью libplacebo, поскольку в них используются несколько отличающиеся "
-#~ "вычисления."
+#~ "При сохранении EXR попробуйте линеаризовать результат и сохранить метаданные"
+#~ " для последующего использования с OpenImageIO.  Примечание: результат может "
+#~ "не в точности соответствовать фильмам, обработанным с помощью libplacebo, "
+#~ "поскольку в них используются несколько отличающиеся вычисления."
 
 #~ msgid "BGR"
 #~ msgstr "BGR"
@@ -8405,22 +8540,21 @@ msgstr "Ошибка информации о задаче"
 #~ ".otioz files cannot be edited.  Please unzip them first and use the "
 #~ "'content.otio' file"
 #~ msgstr ""
-#~ "Файлы .otioz нельзя редактировать. Сначала распакуйте их и используйте "
-#~ "файл «content.otio»."
+#~ "Файлы .otioz нельзя редактировать. Сначала распакуйте их и используйте файл "
+#~ "«content.otio»."
 
 #~ msgid "Start a server.  Use -port to specify a port number."
 #~ msgstr "Запуск сервера. Используйте порт для указания номера порта."
 
 #~ msgid "Connect to a server at <value>.  Use -port to specify a port number."
 #~ msgstr ""
-#~ "Подключиться к серверу на <значение> Использовать -порт для указания "
-#~ "номера порта."
+#~ "Подключиться к серверу на <значение> Использовать -порт для указания номера "
+#~ "порта."
 
 #~ msgid ""
 #~ "Port number for the server to listen to or for the client to connect to."
 #~ msgstr ""
-#~ "Номер порта для сервера, чтобы слушать или чтобы клиент подключался к "
-#~ "нему."
+#~ "Номер порта для сервера, чтобы слушать или чтобы клиент подключался к нему."
 
 #~ msgid "Client"
 #~ msgstr "Клиент"
@@ -8444,8 +8578,8 @@ msgstr "Ошибка информации о задаче"
 #~ "Port to connect to.  Make sure your firewall and router allows read/write "
 #~ "through it."
 #~ msgstr ""
-#~ "Порт для подключения. Убедитесь, что ваш файервол и маршрутизатор "
-#~ "позволяют читать/ писать через него."
+#~ "Порт для подключения. Убедитесь, что ваш файервол и маршрутизатор позволяют "
+#~ "читать/ писать через него."
 
 #~ msgid "Create"
 #~ msgstr "Создать"
@@ -8463,8 +8597,7 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "Создать хронологию из выбранного клипа."
 
 #~ msgid ""
-#~ "Save current EDL to a permanent location, making paths relative if "
-#~ "possible."
+#~ "Save current EDL to a permanent location, making paths relative if possible."
 #~ msgstr ""
 #~ "Сохранить текущий EDL в постоянное место, делая маршруты относительными, "
 #~ "если возможно."
@@ -8518,12 +8651,10 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 #~ msgid ""
-#~ "Share the room ID with the persons that will review the session with "
-#~ "you.\n"
+#~ "Share the room ID with the persons that will review the session with you.\n"
 #~ "\n"
 #~ msgstr ""
-#~ "Поделитесь идентификатором комнаты с людьми, которые будут просматривать "
-#~ "сеанс вместе с вами.\n"
+#~ "Поделитесь идентификатором комнаты с людьми, которые будут просматривать сеанс вместе с вами.\n"
 #~ "\n"
 
 #~ msgid "WebRTC Server"
@@ -8555,25 +8686,20 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
-#~ "rt.rate` seconds.\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt.rate` seconds.\n"
 #~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Класс RationalTime представляет собой измерение времени в :math:`rt.value/"
-#~ "rt.rate` секундах.\n"
-#~ "Он может быть пересчитан в другой :class:`~RationalTime` с другим "
-#~ "частотным значением.\n"
+#~ "Класс RationalTime представляет собой измерение времени в :math:`rt.value/rt.rate` секундах.\n"
+#~ "Он может быть пересчитан в другой :class:`~RationalTime` с другим частотным значением.\n"
 
 #~ msgid ""
 #~ "\n"
-#~ "Returns true if the time is invalid. The time is considered invalid if "
-#~ "the value or the rate are a NaN value\n"
+#~ "Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value\n"
 #~ "or if the rate is less than or equal to zero.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Возвращение верно, если время является недействительным. Время считается "
-#~ "недействительным, если значение или ставка являются значением NN\n"
+#~ "Возвращение верно, если время является недействительным. Время считается недействительным, если значение или ставка являются значением NN\n"
 #~ "или если ставка меньше или равна нулю.\n"
 
 #~ msgid "Returns the time value for time converted to new_rate."
@@ -8586,45 +8712,36 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "Returns the time value for \"self\" converted to new_rate."
 #~ msgstr ""
-#~ "Возвращает значение времени для себя, преобразованного в новый "
-#~ "formula_rate."
+#~ "Возвращает значение времени для себя, преобразованного в новый formula_rate."
 
 #~ msgid ""
 #~ "\n"
-#~ "Compute the duration of samples from first to last (excluding last). This "
-#~ "is not the same as distance.\n"
+#~ "Compute the duration of samples from first to last (excluding last). This is not the same as distance.\n"
 #~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 "
-#~ "frames. Result will be in the rate of start_time.\n"
+#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Вычислить продолжительность проб от первого до последнего (за исключением "
-#~ "последнего). Это не то же самое, что расстояние.\n"
+#~ "Вычислить продолжительность проб от первого до последнего (за исключением последнего). Это не то же самое, что расстояние.\n"
 #~ "\n"
-#~ "Например, продолжительность клипа от 10 до 15 кадра равна 5 кадрам. "
-#~ "Результат будет в скорости начала_время.\n"
+#~ "Например, продолжительность клипа от 10 до 15 кадра равна 5 кадрам. Результат будет в скорости начала_время.\n"
 
 #~ msgid ""
 #~ "\n"
-#~ "Compute the duration of samples from first to last (including last). This "
-#~ "is not the same as distance.\n"
+#~ "Compute the duration of samples from first to last (including last). This is not the same as distance.\n"
 #~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 "
-#~ "frames. Result will be in the rate of start_time.\n"
+#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Вычислить продолжительность проб от первого до последнего (в том числе "
-#~ "последнего). Это не то же самое, что расстояние.\n"
+#~ "Вычислить продолжительность проб от первого до последнего (в том числе последнего). Это не то же самое, что расстояние.\n"
 #~ "\n"
-#~ "Например, продолжительность клипа от 10 до 15 кадра равна 6 кадрам. "
-#~ "Результат будет в скорости начала_время.\n"
+#~ "Например, продолжительность клипа от 10 до 15 кадра равна 6 кадрам. Результат будет в скорости начала_время.\n"
 
 #~ msgid ""
-#~ "Returns the first valid timecode rate that has the least difference from "
-#~ "the given value."
+#~ "Returns the first valid timecode rate that has the least difference from the"
+#~ " given value."
 #~ msgstr ""
-#~ "Возвращает первую действительную скорость времени, которая имеет "
-#~ "наименьшее отличие от указанной величины."
+#~ "Возвращает первую действительную скорость времени, которая имеет наименьшее "
+#~ "отличие от указанной величины."
 
 #~ msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
 #~ msgstr "Преобразуйте номер кадра и частоту в объект :class:`~RationalTime`."
@@ -8639,8 +8756,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "Преобразование во временной код (``HH:MM:SS;FRAME``)"
 
 #~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
-#~ "a :class:`~RationalTime`."
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a "
+#~ ":class:`~RationalTime`."
 #~ msgstr ""
 #~ "Преобразовать строку временн*х кодов (``HH:MM:SS;FRAME``) в :class: "
 #~ "`~RationalTime`."
@@ -8654,17 +8771,13 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The TimeRange class represents a range in time. It encodes the start time "
-#~ "and the duration,\n"
-#~ "meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
-#~ "time range) and\n"
+#~ "The TimeRange class represents a range in time. It encodes the start time and the duration,\n"
+#~ "meaning that :meth:`end_time_inclusive` (last portion of a sample in the time range) and\n"
 #~ ":meth:`end_time_exclusive` can be computed.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Класс TimeRange представляет диапазон времени. Он кодирует время начала и "
-#~ "продолжительность,\n"
-#~ "что означает возможность вычисления :meth:`end_time_inclusive` (последняя "
-#~ "часть выборки в диапазоне времени)\n"
+#~ "Класс TimeRange представляет диапазон времени. Он кодирует время начала и продолжительность,\n"
+#~ "что означает возможность вычисления :meth:`end_time_inclusive` (последняя часть выборки в диапазоне времени)\n"
 #~ "и :meth:`end_time_exclusive`.\n"
 
 #~ msgid ""
@@ -8677,23 +8790,18 @@ msgstr "Ошибка информации о задаче"
 #~ "If the time range starts at (0, 24) with duration (10.5, 24):\n"
 #~ "(10, 24)\n"
 #~ "\n"
-#~ "In other words, the last frame with data, even if the last frame is "
-#~ "fractional.\n"
+#~ "In other words, the last frame with data, even if the last frame is fractional.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Время проведения последней выборки, содержащей данные во временном "
-#~ "диапазоне.\n"
+#~ "Время проведения последней выборки, содержащей данные во временном диапазоне.\n"
 #~ "\n"
-#~ "Если временной интервал начинается с (0, 24) с продолжительностью (10, "
-#~ "24), то он составляет:\n"
+#~ "Если временной интервал начинается с (0, 24) с продолжительностью (10, 24), то он составляет:\n"
 #~ "(9, 24)\n"
 #~ "\n"
-#~ "Если временной интервал начинается с (0, 24) с продолжительностью (10.5, "
-#~ "24):\n"
+#~ "Если временной интервал начинается с (0, 24) с продолжительностью (10.5, 24):\n"
 #~ "(10, 24)\n"
 #~ "\n"
-#~ "Иными словами, последняя рамка с данными, даже если последняя рамка "
-#~ "является частичной.\n"
+#~ "Иными словами, последняя рамка с данными, даже если последняя рамка является частичной.\n"
 
 #~ msgid ""
 #~ "\n"
@@ -8708,19 +8816,17 @@ msgstr "Ошибка информации о задаче"
 #~ "\n"
 #~ "Время первого образца вне временных рамок.\n"
 #~ "\n"
-#~ "Если стартовая рамка - 10, а продолжительность - 5, то "
-#~ "конец_время_исключительно - 15,\n"
+#~ "Если стартовая рамка - 10, а продолжительность - 5, то конец_время_исключительно - 15,\n"
 #~ "Потому что последний раз с данными в этом диапазоне - 14.\n"
 #~ "\n"
-#~ "Если стартовая рамка равна 10, а продолжительность - 5,5, то "
-#~ "конец_время_исключительно\n"
+#~ "Если стартовая рамка равна 10, а продолжительность - 5,5, то конец_время_исключительно\n"
 #~ "15.5, потому что последний раз с данными в этом диапазоне - 15.\n"
 
 #~ msgid ""
 #~ "Construct a new :class:`~TimeRange` that is this one extended by other."
 #~ msgstr ""
-#~ "Создать новый :class:`~TimeRange`, который является расширением текущего "
-#~ "за счет другого."
+#~ "Создать новый :class:`~TimeRange`, который является расширением текущего за "
+#~ "счет другого."
 
 #~ msgid ""
 #~ "\n"
@@ -8807,10 +8913,8 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The start of `this` strictly precedes end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` strictly antecedes start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
+#~ "The start of `this` strictly precedes end of `other` by a value >= `epsilon_s`.\n"
+#~ "The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [ this ]\n"
@@ -8819,10 +8923,8 @@ msgstr "Ошибка информации о задаче"
 #~ "The converse would be ``other.overlaps(this)``\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Начало `this` строго предшествует окончанию `other` на значение >= "
-#~ "`epsilon_s`.\n"
-#~ "Окончание `this` строго предшествует началу `other` на значение >= "
-#~ "`epsilon_s`.\n"
+#~ "Начало `this` строго предшествует окончанию `other` на значение >= `epsilon_s`.\n"
+#~ "Окончание `this` строго предшествует началу `other` на значение >= `epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [ this ]\n"
@@ -8892,8 +8994,7 @@ msgstr "Ошибка информации о задаче"
 #~ msgid ""
 #~ "\n"
 #~ "The start of `this` strictly equals the start of `other`.\n"
-#~ "The end of `this` strictly precedes the end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
+#~ "The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [ this ]\n"
@@ -8903,8 +9004,7 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr ""
 #~ "\n"
 #~ "Начало `this` строго равно началу `other`.\n"
-#~ "Окончание `this` строго предшествует окончанию `other` на значение >= "
-#~ "`epsilon_s`.\n"
+#~ "Окончание `this` строго предшествует окончанию `other` на значение >= `epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [ this ]\n"
@@ -8935,8 +9035,7 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The start of `this` strictly antecedes the start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
+#~ "The start of `this` strictly antecedes the start of `other` by a value >= `epsilon_s`.\n"
 #~ "The end of `this` strictly equals the end of `other`.\n"
 #~ "::\n"
 #~ "\n"
@@ -8946,8 +9045,7 @@ msgstr "Ошибка информации о задаче"
 #~ "The converse would be ``other.finishes(this)``\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Начало `this` строго предшествует началу `other` на значение >= "
-#~ "`epsilon_s`.\n"
+#~ "Начало `this` строго предшествует началу `other` на значение >= `epsilon_s`.\n"
 #~ "Окончание `this` строго равно окончанию `other`.\n"
 #~ "::\n"
 #~ "\n"
@@ -8958,10 +9056,8 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The start of `this` precedes or equals the end of `other` by a value >= "
-#~ "`epsilon_s`.\n"
-#~ "The end of `this` antecedes or equals the start of `other` by a value >= "
-#~ "`epsilon_s`.\n"
+#~ "The start of `this` precedes or equals the end of `other` by a value >= `epsilon_s`.\n"
+#~ "The end of `this` antecedes or equals the start of `other` by a value >= `epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [    this    ]           OR      [    other    ]\n"
@@ -8970,10 +9066,8 @@ msgstr "Ошибка информации о задаче"
 #~ "The converse would be ``other.finishes(this)``\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Начало `this` предшествует или равно окончанию `other` на значение >= "
-#~ "`epsilon_s`.\n"
-#~ "Окончание `this` предшествует или равно началу `other` на значение >= "
-#~ "`epsilon_s`.\n"
+#~ "Начало `this` предшествует или равно окончанию `other` на значение >= `epsilon_s`.\n"
+#~ "Окончание `this` предшествует или равно началу `other` на значение >= `epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [    this    ]           ИЛИ      [    other    ]\n"
@@ -8983,33 +9077,25 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and "
-#~ "end :class:`~RationalTime`\\s (exclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (exclusive).\n"
 #~ "\n"
-#~ "For example, if start_time is 1 and end_time is 10, the returned will "
-#~ "have a duration of 9.\n"
+#~ "For example, if start_time is 1 and end_time is 10, the returned will have a duration of 9.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Создает :class:`~TimeRange` из начального и "
-#~ "конечного :class:`~RationalTime`\\s (исключительно).\n"
+#~ "Создает :class:`~TimeRange` из начального и конечного :class:`~RationalTime`\\s (исключительно).\n"
 #~ "\n"
-#~ "Например, если start_time равно 1, а end_time равно 10, возвращаемый "
-#~ "диапазон будет иметь продолжительность 9.\n"
+#~ "Например, если start_time равно 1, а end_time равно 10, возвращаемый диапазон будет иметь продолжительность 9.\n"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and "
-#~ "end :class:`~RationalTime`\\s (inclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (inclusive).\n"
 #~ "\n"
-#~ "For example, if start_time is 1 and end_time is 10, the returned will "
-#~ "have a duration of 10.\n"
+#~ "For example, if start_time is 1 and end_time is 10, the returned will have a duration of 10.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Создает :class:`~TimeRange` из начального и "
-#~ "конечного :class:`~RationalTime`\\s (включительно).\n"
+#~ "Создает :class:`~TimeRange` из начального и конечного :class:`~RationalTime`\\s (включительно).\n"
 #~ "\n"
-#~ "Например, если start_time равно 1, а end_time равно 10, возвращаемый "
-#~ "диапазон будет иметь продолжительность 10.\n"
+#~ "Например, если start_time равно 1, а end_time равно 10, возвращаемый диапазон будет иметь продолжительность 10.\n"
 
 #~ msgid "Preview Thumbnails on Panels"
 #~ msgstr "Просмотр табличек с пальцами на табличках"
@@ -9071,8 +9157,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgid ""
 #~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
 #~ msgstr ""
-#~ "Порог для определения смены кадра или сцены при включённом определении "
-#~ "пиков HDR."
+#~ "Порог для определения смены кадра или сцены при включённом определении пиков"
+#~ " HDR."
 
 #~ msgid "Monitor "
 #~ msgstr "Монитор"
@@ -9106,8 +9192,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "Обнаружен формат Vulkan: {0}"
 
 #~ msgid ""
-#~ "Your Wayland compositor does not support Float on Top.  Go to the title "
-#~ "bar of the Window and click RMB->->More Actions->Keep Above Others"
+#~ "Your Wayland compositor does not support Float on Top.  Go to the title bar "
+#~ "of the Window and click RMB->->More Actions->Keep Above Others"
 #~ msgstr ""
 #~ "Ваш композитор Wayland не поддерживает режим Float on Top. Перейдите к "
 #~ "строке заголовка окна и нажмите ПКМ → «Дополнительные действия» → «Поверх "
@@ -9123,8 +9209,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "Строка статуса"
 
 #~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this "
-#~ "option is on, the pixel toolbar will be hidden automatically."
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
+#~ "is on, the pixel toolbar will be hidden automatically."
 #~ msgstr ""
-#~ "Pixel Bar может замедлить воспроизведение при высоких разрешениях. Когда "
-#~ "эта опция включена, панель пикселя будет скрыта автоматически."
+#~ "Pixel Bar может замедлить воспроизведение при высоких разрешениях. Когда эта"
+#~ " опция включена, панель пикселя будет скрыта автоматически."
