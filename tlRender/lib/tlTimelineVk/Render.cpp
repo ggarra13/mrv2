@@ -2985,7 +2985,7 @@ namespace tl
                     dst_colorspace.transfer  = PL_COLOR_TRC_PQ;
                     dst_colorspace.hdr.min_luma = p.monitor.min_nits;
                     dst_colorspace.hdr.max_luma = std::min(p.monitor.max_nits,
-                                                           10000);
+                                                           10000.F);
 
                     if (p.monitor.red.x > 0)
                     {
