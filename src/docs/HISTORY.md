@@ -13,7 +13,7 @@ v1.7.7
 - Python: Improved the cmd.setDisplayOptions() to reflect in the UI properly.
 - Python: Improved Python online docs for display options.
 - Core: Improved memory on HW decoding frames.  Switching back and forth between HW and SW decoding works better now.
-- Core/UI/Vulkan:  Added a "Export Mode" options to control how the colors are exported into the pictures (Baked HDR, Scene Linear or Baked SDR -matching OpenGL).
+- Core/UI/Vulkan:  Added a "Export Mode" options to control how the colors are exported into the pictures (Baked HDR, Scene Linear or Baked SDR -matching OpenGL-).
 
 Fixes:
 
