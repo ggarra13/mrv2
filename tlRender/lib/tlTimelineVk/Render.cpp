@@ -2984,7 +2984,8 @@ namespace tl
                     dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                     dst_colorspace.transfer  = PL_COLOR_TRC_PQ;
                     dst_colorspace.hdr.min_luma = p.monitor.min_nits;
-                    dst_colorspace.hdr.max_luma = p.monitor.max_nits;
+                    dst_colorspace.hdr.max_luma = std::min(p.monitor.max_nits,
+                                                           10000);
 
                     if (p.monitor.red.x > 0)
                     {
@@ -3103,11 +3104,6 @@ namespace tl
                     dst_colorspace.hdr.min_luma = 0.f;
                     break;
                 case timeline::HDRExportMode::BakedHDR:
-                    if (vkColorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT)
-                    {
-                        dst_colorspace.hdr.min_luma = 0.F;
-                        dst_colorspace.hdr.max_luma = 10000.F;
-                    }
                 default:
                     break;
                 }
