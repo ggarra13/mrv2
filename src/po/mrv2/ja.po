@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-16 11:17-0300\n"
+"POT-Creation-Date: 2026-09-16 12:45-0300\n"
 "PO-Revision-Date: 2026-07-27 22:27+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -1552,18 +1552,6 @@ msgstr "{0} {1} をストリーミング中..."
 
 msgid "Stop streaming"
 msgstr "ストリーミング停止"
-
-msgid "Complexity"
-msgstr "複雑さ"
-
-msgid "Draw Mode"
-msgstr "描画モード"
-
-msgid "Stage Cache"
-msgstr "ステージキャッシュ"
-
-msgid "Disk Cache in GB"
-msgstr "ディスクキャッシュ (GB)"
 
 msgid "Type"
 msgstr "タイプ"
@@ -3697,31 +3685,16 @@ msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新しいファイル {0} はすでに存在します！上書きできません。"
 
 #, c++-format
-msgid "Rotated image info: {0}"
-msgstr "回転画像情報 : {0}"
+msgid "{0}: Cannot open writer plugin."
+msgstr "{0}: ライタープラグインを開けません。"
 
 #, c++-format
 msgid "Scaled image info: {0}"
 msgstr "スケーリングされた画像情報 : {0}"
 
 #, c++-format
-msgid "{0}: Cannot open writer plugin."
-msgstr "{0}: ライタープラグインを開けません。"
-
-#, c++-format
-msgid "Image info: {0} {1}"
-msgstr "画像情報: {0} {1}"
-
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr "画像が大きすぎて注釈を保存できません。ビューポートサイズにスケールします。"
-
-#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "ライタープラグインが出力情報を取得しませんでした。デフォルトの {0} に設定します"
-
-#, c++-format
-msgid "Output info: {0} {1}"
-msgstr "出力情報 : {0} {1}"
 
 #, c++-format
 msgid "Using profile {0}, pixel format {1}."
@@ -3730,6 +3703,18 @@ msgstr "プロファイル {0}、ピクセル形式 {1} を使用中。"
 #, c++-format
 msgid "Using preset {0}."
 msgstr "プリセット{0} を使用中。"
+
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr "オフスクリーンバッファ情報 : {0}"
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr "画像情報: {0} {1}"
+
+#, c++-format
+msgid "Output info: {0} {1}"
+msgstr "出力情報 : {0} {1}"
 
 #, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -3751,38 +3736,12 @@ msgid "Audio only in timeline, but not trying to save audio."
 msgstr "オーディオはタイムラインにのみありますが、オーディオを保存しようとしていません。"
 
 #, c++-format
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: 無効なOpenGL形式とタイプ"
-
-#, c++-format
-msgid "OpenGL info: {0}"
-msgstr "OpenGL情報 : {0}"
-
-#, c++-format
 msgid "Saving... {0}"
 msgstr "保存中... {0}"
-
-msgid "Unsupported output format"
-msgstr "サポートされていない出力形式"
-
-#, c++-format
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
 
 #, c++-format
 msgid "Render size: {0}"
 msgstr "レンダーサイズ: {0}"
-
-#, c++-format
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "画像レイヤー '{0}' 情報 : {1} {2}"
-
-#, c++-format
-msgid "Offscreen Buffer info: {0}"
-msgstr "オフスクリーンバッファ情報 : {0}"
-
-msgid "Unsupported output format: "
-msgstr "サポートされていない出力形式 : "
 
 msgid "2.35"
 msgstr "2.35"
@@ -3800,15 +3759,46 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "キャッシュ : "
 
+#, c++-format
+msgid "HDR monitor min. nits = {0}"
+msgstr "HDR モニターの最小輝度 = {0}"
+
+#, c++-format
+msgid "HDR monitor max. nits = {0}"
+msgstr "HDR モニターの最大輝度 = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR モニターが見つからないか、設定されていません。"
+
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "HDR モニターが Vulkan またはウィンドウマネージャーによって検出されませんでした。"
+
+#, c++-format
+msgid "Vulkan color space is {0}"
+msgstr "Vulkan の色空間は {0}です"
+
+#, c++-format
+msgid "Vulkan format is {0}"
+msgstr "Vulkan  のフォーマットは {0} です"
+
+#, c++-format
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "インデックス {0} のアクティブな HDR モニターに切り替えました"
+
+#, c++-format
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "インデックス {0} の HDR 対応だが非アクティブなモニターに切り替えました"
+
+#, c++-format
+msgid "Changed to SDR monitor at index {0}"
+msgstr "インデックス {0} の SDR モニターに変更しました"
+
 msgid "Edit Text"
 msgstr "テキストを編集"
 
 #, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' はファイル、ディレクトリ、または URL ではありません。"
-
-msgid "Invalid font for text drawing"
-msgstr "テキスト描画用の無効なフォント"
 
 msgid "Could not convert message to shape: "
 msgstr "メッセージを図形に変換できませんでした : "
@@ -6032,6 +6022,15 @@ msgstr "AI プロンプト"
 msgid "AI prompt to feed the image to AI."
 msgstr "画像を AI に入力するための AI プロンプト。"
 
+msgid "Baked Display HDR"
+msgstr "ベイク済みディスプレイHDR"
+
+msgid "Scene Linear HDR"
+msgstr "シーンリニアHDR"
+
+msgid "Baked Display SDR"
+msgstr "ベイク済みディスプレイSDR"
+
 msgid "Half"
 msgstr "ハーフ"
 
@@ -6052,6 +6051,12 @@ msgstr "注釈フレームのみ"
 
 msgid "Save only the annotation frames, not the whole sequence."
 msgstr "注釈フレームのみを保存し、シーケンス全体は保存しません。"
+
+msgid "Export Mode"
+msgstr "エクスポートモード"
+
+msgid "HDR (Vulkan) Export mode."
+msgstr "HDR（Vulkan）エクスポートモード。"
 
 msgid "OpenEXR Options"
 msgstr "OpenEXR オプション"
@@ -8172,6 +8177,9 @@ msgstr "スクラブモード"
 msgid "Area Selection Mode"
 msgstr "領域選択モード"
 
+msgid "Draw Mode"
+msgstr "描画モード"
+
 msgid "Erase Mode"
 msgstr "消去モード"
 
@@ -8280,51 +8288,46 @@ msgstr "host_statistics64 に失敗しました"
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました"
 
-#, c++-format
-#~ msgid "HDR monitor min. nits = {0}"
-#~ msgstr "HDR モニターの最小輝度 = {0}"
+#~ msgid "Complexity"
+#~ msgstr "複雑さ"
+
+#~ msgid "Stage Cache"
+#~ msgstr "ステージキャッシュ"
+
+#~ msgid "Disk Cache in GB"
+#~ msgstr "ディスクキャッシュ (GB)"
 
 #, c++-format
-#~ msgid "HDR monitor max. nits = {0}"
-#~ msgstr "HDR モニターの最大輝度 = {0}"
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "回転画像情報 : {0}"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR モニターが見つからないか、設定されていません。"
-
-#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
-#~ msgstr "HDR モニターが Vulkan またはウィンドウマネージャーによって検出されませんでした。"
+#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr "画像が大きすぎて注釈を保存できません。ビューポートサイズにスケールします。"
 
 #, c++-format
-#~ msgid "Vulkan color space is {0}"
-#~ msgstr "Vulkan の色空間は {0}です"
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: 無効なOpenGL形式とタイプ"
 
 #, c++-format
-#~ msgid "Vulkan format is {0}"
-#~ msgstr "Vulkan  のフォーマットは {0} です"
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL情報 : {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "サポートされていない出力形式"
 
 #, c++-format
-#~ msgid "Changed to HDR active monitor at index {0}"
-#~ msgstr "インデックス {0} のアクティブな HDR モニターに切り替えました"
+#~ msgid "Empty video data at time {0}.  Repeating frame."
+#~ msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
 
 #, c++-format
-#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
-#~ msgstr "インデックス {0} の HDR 対応だが非アクティブなモニターに切り替えました"
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "画像レイヤー '{0}' 情報 : {1} {2}"
 
-#, c++-format
-#~ msgid "Changed to SDR monitor at index {0}"
-#~ msgstr "インデックス {0} の SDR モニターに変更しました"
+#~ msgid "Unsupported output format: "
+#~ msgstr "サポートされていない出力形式 : "
 
-#, fuzzy
-#~ msgid "Baked Display HDR"
-#~ msgstr "RGBA 表示"
-
-#, fuzzy
-#~ msgid "Baked Display SDR"
-#~ msgstr "RGBA 表示"
-
-#, fuzzy
-#~ msgid "Export Mode"
-#~ msgstr "露出を上げる"
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "テキスト描画用の無効なフォント"
 
 #~ msgid "Linearize EXR"
 #~ msgstr "EXRを線形化"

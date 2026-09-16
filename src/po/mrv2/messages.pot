@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-16 11:17-0300\n"
+"POT-Creation-Date: 2026-09-16 12:45-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1448,18 +1448,6 @@ msgid "Streaming {0} {1}..."
 msgstr ""
 
 msgid "Stop streaming"
-msgstr ""
-
-msgid "Complexity"
-msgstr ""
-
-msgid "Draw Mode"
-msgstr ""
-
-msgid "Stage Cache"
-msgstr ""
-
-msgid "Disk Cache in GB"
 msgstr ""
 
 msgid "Type"
@@ -3535,7 +3523,7 @@ msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
 #, c++-format
-msgid "Rotated image info: {0}"
+msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
 #, c++-format
@@ -3543,22 +3531,7 @@ msgid "Scaled image info: {0}"
 msgstr ""
 
 #, c++-format
-msgid "{0}: Cannot open writer plugin."
-msgstr ""
-
-#, c++-format
-msgid "Image info: {0} {1}"
-msgstr ""
-
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-
-#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
-msgstr ""
-
-#, c++-format
-msgid "Output info: {0} {1}"
 msgstr ""
 
 #, c++-format
@@ -3567,6 +3540,18 @@ msgstr ""
 
 #, c++-format
 msgid "Using preset {0}."
+msgstr ""
+
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr ""
+
+#, c++-format
+msgid "Output info: {0} {1}"
 msgstr ""
 
 #, c-format
@@ -3589,37 +3574,11 @@ msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
 #, c++-format
-msgid "{0}: Invalid OpenGL format and type"
-msgstr ""
-
-#, c++-format
-msgid "OpenGL info: {0}"
-msgstr ""
-
-#, c++-format
 msgid "Saving... {0}"
-msgstr ""
-
-msgid "Unsupported output format"
-msgstr ""
-
-#, c++-format
-msgid "Empty video data at time {0}.  Repeating frame."
 msgstr ""
 
 #, c++-format
 msgid "Render size: {0}"
-msgstr ""
-
-#, c++-format
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr ""
-
-#, c++-format
-msgid "Offscreen Buffer info: {0}"
-msgstr ""
-
-msgid "Unsupported output format: "
 msgstr ""
 
 msgid "2.35"
@@ -3638,14 +3597,45 @@ msgstr ""
 msgid "Cache: "
 msgstr ""
 
+#, c++-format
+msgid "HDR monitor min. nits = {0}"
+msgstr ""
+
+#, c++-format
+msgid "HDR monitor max. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor not found or not configured."
+msgstr ""
+
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr ""
+
+#, c++-format
+msgid "Vulkan color space is {0}"
+msgstr ""
+
+#, c++-format
+msgid "Vulkan format is {0}"
+msgstr ""
+
+#, c++-format
+msgid "Changed to HDR active monitor at index {0}"
+msgstr ""
+
+#, c++-format
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr ""
+
+#, c++-format
+msgid "Changed to SDR monitor at index {0}"
+msgstr ""
+
 msgid "Edit Text"
 msgstr ""
 
 #, c++-format
 msgid "'{0}' is not a file, directory or url."
-msgstr ""
-
-msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -5715,6 +5705,15 @@ msgstr ""
 msgid "AI prompt to feed the image to AI."
 msgstr ""
 
+msgid "Baked Display HDR"
+msgstr ""
+
+msgid "Scene Linear HDR"
+msgstr ""
+
+msgid "Baked Display SDR"
+msgstr ""
+
 msgid "Half"
 msgstr ""
 
@@ -5734,6 +5733,12 @@ msgid "Annotation Frames Only"
 msgstr ""
 
 msgid "Save only the annotation frames, not the whole sequence."
+msgstr ""
+
+msgid "Export Mode"
+msgstr ""
+
+msgid "HDR (Vulkan) Export mode."
 msgstr ""
 
 msgid "OpenEXR Options"
@@ -7821,6 +7826,9 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
+msgstr ""
+
+msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"
