@@ -269,7 +269,8 @@ sign_bundle() {
         fi
     done < <(find "${bundle}" -name "python*" -type f -print0)
 
-    # ── 5. Every other Mach-O binary in Contents/MacOS and Contents/bin ───────
+    # ── 5. Every other Mach-O binary in Contents/MacOS, Contents/bin, and
+    #      Contents/Resources/bin (mrv2/hdr/license_helper live here) ────────
     info "Signing executables…"
     while IFS= read -r -d '' exe; do
         # Skip symlinks (they don't need signing) and already-handled dirs.
@@ -279,6 +280,7 @@ sign_bundle() {
             _sign_macho "${exe}" "${ENTITLEMENTS}"
         fi
     done < <(find "${bundle}/Contents/MacOS" "${bundle}/Contents/bin" \
+                  "${bundle}/Contents/Resources/bin" \
                   -maxdepth 3 -type f -print0 2>/dev/null)
 
     # ── 6. Shell-script launchers (mrv2.sh / launcher.sh / hdr.sh) ───────────
@@ -287,7 +289,8 @@ sign_bundle() {
     while IFS= read -r -d '' sh; do
         info "  sh:    ${sh#"${bundle}/"}"
         _sign_plain "${sh}"
-    done < <(find "${bundle}/Contents/MacOS" -name "*.sh" -type f -print0 2>/dev/null)
+    done < <(find "${bundle}/Contents/MacOS" "${bundle}/Contents/Resources/bin" \
+                  -name "*.sh" -type f -print0 2>/dev/null)
 
     # ── 7. Sign the whole app bundle last ─────────────────────────────────────
     info "Signing top-level bundle…"
