@@ -375,7 +375,7 @@ create_dmg() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 sign_dmg() {
-    local dmg="${PACKAGE_DIRECTORY}/${DMG_NAME}"
+    local dmg="${PACKAGE_DIR}/${DMG_NAME}"
     step "Signing DMG: ${dmg}"
     [[ -f "${dmg}" ]] || die "DMG not found: ${dmg}\nRun 'create-dmg' or point BUILD_DIR at the CPack output directory."
 
@@ -399,7 +399,7 @@ notarize() {
 	echo "Need NOTARYTOOL_PROFILE set."
 	exit 0
     fi
-    local target="${1:-${PACKAGE_DIRECTORY}/${DMG_NAME}}"
+    local target="${1:-${PACKAGE_DIR}/${DMG_NAME}}"
     step "Notarizing: $(basename "${target}")"
     [[ -f "${target}" ]] || die "File not found for notarization: ${target}"
 
@@ -414,7 +414,8 @@ notarize() {
 
     if echo "${output}" | grep -q "status: Accepted"; then
         ok "Notarization accepted by Apple."
-    else submission UUID and fetch the detailed log for diagnosis.
+    else
+        # Extract the submission UUID and fetch the detailed log for diagnosis.
         local uuid
         uuid=$(echo "${output}" | grep -Eo 'id: [0-9a-f-]{36}' | head -1 | awk '{print $2}')
         if [[ -n "${uuid}" ]]; then
