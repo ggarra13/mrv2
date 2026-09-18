@@ -30,7 +30,7 @@ do
 	else
 	    if [[ -d $FILE ]]; then
 		chmod 0755 $FILE
-	    else
+	    elif [[ -e $FILE ]]; then
 		chmod 0644 $FILE
 		dos2unix $FILE
 		git add $FILE
