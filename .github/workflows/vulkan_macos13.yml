@@ -134,11 +134,12 @@ jobs:
       # Because the keychain is ephemeral we must do this on every run.
       - name: Store notarytool credentials
         run: |
+          KEYCHAIN_PATH="$HOME/Library/Keychains/${KEYCHAIN_NAME}-db"
           xcrun notarytool store-credentials "${NOTARYTOOL_PROFILE}" \
             --apple-id  "${APPLE_ID}" \
             --team-id   "${TEAM_ID}" \
             --password  "${APP_PASSWORD}" \
-            --keychain  "${KEYCHAIN_NAME}"
+            --keychain  "${KEYCHAIN_PATH}"
           
       - uses: actions/cache@v5
         with:
