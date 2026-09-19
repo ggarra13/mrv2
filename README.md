@@ -62,23 +62,12 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
 
 ## Notes on installation
 
-- The macOS application is currently not notarized nor code signed.
-  On macOS you install it by opening the .dmg file.  Before you do so, you need
-  to do a simple step.
-  You need to open /Applications/Terminal.app and run this command on your
-  .dmg file.
-  
-  ```
-  xattr -d com.apple.quarantine /path/to/your.dmg
-  ```
-  
-  Then, you need to further follow some steps as in the README.md file provided
-  inside the .dmg.
-  
-  NOTE:  From v1.7.5 on, the easiest way to upgrade mrv2 / vmrv2 on macOS is
-         to use the Help->Upgrade mrv2 menu of the mrv2 you already installed.
-		 The script takes some minutes to run and then it will prompt you
-		 for your password.
+- The macOS application is **NOW** notarized and code-signed.
+  On macOS you install it by opening the .dmg file and dragging the mrv2/vmrv2
+  icon to the Applications Folder.
+  When you start it, it will warn you about having downloaded the file from
+  the Internet.  Just Select Open and then give permissions to access your
+  folders/network.
   
 - Windows, like macOS, also protect you from installing files
   from the Internet.
