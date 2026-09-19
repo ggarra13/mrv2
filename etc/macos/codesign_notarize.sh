@@ -210,15 +210,10 @@ _sign_macho() {
     [[ -n "${ents}" && -f "${ents}" ]] &&
         args+=(--entitlements "${ents}")
 
-    # Wrapped in `if` rather than left bare: under `set -eo pipefail`, a bare
-    # failing codesign call here would kill the whole script instantly, with
-    # no diagnostic and before the real pass/fail gate — the
-    # `codesign --verify --deep --strict` at the end of sign_bundle(), which
-    # reports failures clearly via die() — ever gets to run. An `if` test is
-    # exempt from errexit by bash's own rules, so this reports the problem
-    # without aborting the run over it.
-    if ! codesign "${args[@]}" "${target}" 2>&1 | grep -v "^$"; then
+    local output
+    if ! output=$(codesign "${args[@]}" "${target}" 2>&1); then
         warn "codesign reported an issue signing: ${target}"
+        [[ -n "${output}" ]] && echo "${output}"
     fi
 }
 
