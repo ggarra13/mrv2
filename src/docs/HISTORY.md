@@ -1,3 +1,11 @@
+v1.7.8
+======
+
+- Fixed precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
+- The macOS versions of mrv2 and vmrv2 are now code-signed and notarized.  You should be able to install them much more easily by just dragging the icons to the Applications folder.
+
+
+
 v1.7.7	
 ======
 

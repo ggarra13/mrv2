@@ -2142,7 +2142,9 @@ namespace mrv
             right_range = tmp_range;
         }
 
-        if (left_range.end_time_exclusive() != right_range.start_time())
+        OTIO_NS::RationalTime end_time_exc = left_range.end_time_exclusive();
+        OTIO_NS::RationalTime right_start_time = right_range.start_time();
+        if (!end_time_exc.almost_equal(right_start_time))
         {
             std::string err = string::Format(
                 _("Items selected must be contiguous on the track. "
