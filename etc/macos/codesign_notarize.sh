@@ -588,7 +588,10 @@ fi
 
 export BUILD_DIR="${ROOT_DIR}/Release/"
 export PACK_DIR="${BUILD_DIR}/mrv2/src/mrv2-build/_CPack_Packages/Darwin/DragNDrop/${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}"
-export PACKAGE_DIRECTORY="packages/${BUILD_DIR}"
+
+if [[ -z "$PACKAGE_DIRECTORY" ]]; then
+    export PACKAGE_DIRECTORY="packages/${BUILD_DIR}"
+fi
 
 # Name of the DMG produced by CPack (or the one this script creates).
 DMG_NAME="${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}.dmg"
