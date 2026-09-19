@@ -210,7 +210,16 @@ _sign_macho() {
     [[ -n "${ents}" && -f "${ents}" ]] &&
         args+=(--entitlements "${ents}")
 
-    codesign "${args[@]}" "${target}"
+    # Wrapped in `if` rather than left bare: under `set -eo pipefail`, a bare
+    # failing codesign call here would kill the whole script instantly, with
+    # no diagnostic and before the real pass/fail gate — the
+    # `codesign --verify --deep --strict` at the end of sign_bundle(), which
+    # reports failures clearly via die() — ever gets to run. An `if` test is
+    # exempt from errexit by bash's own rules, so this reports the problem
+    # without aborting the run over it.
+    if ! codesign "${args[@]}" "${target}" 2>&1 | grep -v "^$"; then
+        warn "codesign reported an issue signing: ${target}"
+    fi
 }
 
 # Sign a plain file (shell script, resource) — no hardened-runtime flag needed.
@@ -234,6 +243,15 @@ sign_bundle() {
     [[ -d "${bundle}" ]] || { warn "Bundle not found, skipping: ${bundle}"; return 0; }
 
     step "Signing bundle: $(basename "${bundle}")"
+
+    # Normalize permissions before signing. Files copied in from Homebrew
+    # (e.g. the Vulkan ICD manifests under Contents/Resources/etc/vulkan,
+    # copied by prepackage_macos.cmake's file(COPY ... FOLLOW_SYMLINK_CHAIN)
+    # with no FILE_PERMISSIONS override) keep the Cellar's usual read-only
+    # mode, which can make codesign unable to seal the bundle as a whole
+    # ("Permission denied" on the top-level bundle sign). Best-effort only —
+    # a failure here shouldn't abort the run.
+    chmod -R u+rwX "${bundle}" 2>/dev/null || true
 
     # ── 1. Individual .dylib files ────────────────────────────────────────────
     info "Signing .dylib files…"
