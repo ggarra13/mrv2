@@ -416,6 +416,75 @@ function( get_macos_runtime_dependencies TARGET )
 endfunction()
 
 #
+# Function used to copy a macOS library or .framework *directly* into an
+# app bundle's Resources/lib directory, recursively pulling in every
+# non-system dependency it references (transitively) so the copy is
+# self-contained.
+#
+# Unlike install_macos_target_with_deps() (which drops discovered
+# dependencies into CMAKE_INSTALL_PREFIX/lib, i.e. the pre-packaging
+# staging area), this installs straight into DEST_LIB_DIR, so it is safe
+# to call for libraries that are copied into an .app bundle from *outside*
+# the staging tree (e.g. Vulkan libraries pulled from the Vulkan SDK or
+# Homebrew), and it will also pick up incidental extra dependencies that
+# only show up on some macOS/toolchain versions (e.g. libpsl.dylib pulled
+# in by curl/openssl in the Vulkan/MoltenVK chain).
+#
+# Bookkeeping is keyed by "DEST_LIB_DIR|library", so the same library can
+# be correctly re-processed for more than one app bundle (mrv2.app,
+# hdr.app, ...) in the same packaging run without being skipped the
+# second time.
+#
+set(INSTALLED_BUNDLE_DEPS "" CACHE INTERNAL
+    "Libraries already copied into an app bundle, keyed by DEST_LIB_DIR|library")
+
+function( install_macos_lib_with_deps LIBFILE DEST_LIB_DIR )
+    if ( NOT EXISTS "${LIBFILE}" )
+	message( WARNING "install_macos_lib_with_deps: ${LIBFILE} does not exist" )
+	return()
+    endif()
+
+    set( _key "${DEST_LIB_DIR}|${LIBFILE}" )
+    list(FIND INSTALLED_BUNDLE_DEPS "${_key}" _already_installed)
+    if (_already_installed GREATER -1)
+	return()
+    endif()
+    list(APPEND INSTALLED_BUNDLE_DEPS "${_key}")
+    set(INSTALLED_BUNDLE_DEPS "${INSTALLED_BUNDLE_DEPS}" CACHE INTERNAL
+	"Libraries already copied into an app bundle, keyed by DEST_LIB_DIR|library")
+
+    file(INSTALL
+	DESTINATION "${DEST_LIB_DIR}"
+	TYPE SHARED_LIBRARY
+	FOLLOW_SYMLINK_CHAIN
+	FILES "${LIBFILE}"
+    )
+
+    execute_process(COMMAND otool -L "${LIBFILE}" OUTPUT_VARIABLE ldd_out)
+    string (REPLACE "\n" ";" ldd_out_lines "${ldd_out}")
+    foreach (line ${ldd_out_lines})
+	string(REGEX REPLACE " \\(.*\\)" "" pruned "${line}")
+	string(REGEX REPLACE ":$" "" pruned "${pruned}")
+	string(STRIP "${pruned}" dep_filename)
+
+	if ("${dep_filename}" STREQUAL "" OR "${dep_filename}" STREQUAL "${LIBFILE}")
+	    continue()
+	endif()
+	if (NOT IS_ABSOLUTE "${dep_filename}")
+	    continue()
+	endif()
+
+	is_macos_system_lib("${dep_filename}" sys_lib)
+	if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
+	    # Collapse .framework/Versions/A/Name paths down to the
+	    # .framework bundle itself.
+	    string( REGEX REPLACE ".framework/.*$" ".framework" framework "${dep_filename}" )
+	    install_macos_lib_with_deps( "${framework}" "${DEST_LIB_DIR}" )
+	endif()
+    endforeach()
+endfunction()
+
+#
 # Internal helper: rewrite every absolute LC_LOAD_DYLIB entry in BINARY
 # (dylib or executable) to @rpath/<basename>, skipping system libs and
 # already-relative references.
