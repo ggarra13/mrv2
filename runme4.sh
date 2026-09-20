@@ -80,7 +80,7 @@ if [[ -d $dir ]]; then
     cd -
 fi
 
-dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
+dir=$BUILD_DIR/deps/tlRender/src/tlRender-build/
 if [[ ! -d $dir ]]; then
     echo "tlRender directory:"
     echo $dir
