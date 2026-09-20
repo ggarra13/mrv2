@@ -24,6 +24,12 @@ namespace tl
         public:
             virtual ~IWrite();
 
+            //! Set video header metadata.
+            virtual void setHDR(const image::HDRData&) {};
+
+            //! Write the header.
+            virtual void writeHeader() {};
+
             //! Write video data.
             virtual void writeVideo(
                 const otio::RationalTime&,

@@ -17,10 +17,12 @@
 
 #include "mrvIcons/Settings.h"
 
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvPopupMenu.h"
 #include "mrvWidgets/mrvSpinner.h"
-#include "mrvWidgets/mrvCollapsibleGroup.h"
+#include "mrvWidgets/mrvVersion.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvSettingsPanel.h"
@@ -199,12 +201,12 @@ namespace mrv
             {
                 m->add(_(i.c_str()));
             }
-            m->value(settings->getValue<int>("ImageSequence/Audio"));
+            m->value(settings->getValue<int>("FileSequence/Audio"));
             mW->callback(
                 [=](auto o)
                 {
                     int v = o->value();
-                    settings->setValue("ImageSequence/Audio", v);
+                    settings->setValue("FileSequence/Audio", v);
                 });
 
             Fl_Input* i;
@@ -215,14 +217,14 @@ namespace mrv
             i->textcolor(FL_BLACK);
             i->cursor_color(FL_RED);
             std::string file =
-                settings->getValue<std::string>("ImageSequence/AudioFileName");
+                settings->getValue<std::string>("FileSequence/AudioFileName");
 
             i->value(file.c_str());
             iW->callback(
                 [=](auto o)
                 {
                     std::string file = o->value();
-                    settings->setValue("ImageSequence/AudioFileName", file);
+                    settings->setValue("FileSequence/AudioFileName", file);
                 });
 
             auto inW = new Widget<Fl_Int_Input>(
@@ -247,12 +249,92 @@ namespace mrv
 
             key = prefix + "File Sequences";
             value = settings->getValue<std::any>(key);
-            open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+            open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+            if (!open)
+                cg->close();
+
+
+            cg = new CollapsibleGroup(
+                g->x(), 110, g->w(), 20, "OTIO");
+            b = cg->button();
+            b->labelsize(14);
+            b->size(b->w(), 18);
+            b->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                    if (cg->is_open())
+                        cg->close();
+                    else
+                        cg->open();
+
+                    const std::string& prefix = settingsPanel->tab_prefix();
+                    const std::string key = prefix + "OTIO";
+
+                    App* app = App::app;
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
+
+                    settingsPanel->refresh();
+                },
+                cg);
+
+            cg->begin();
+
+            bg = new Fl_Group(g->x(), 230, g->w(), 24);
+            bg->box(FL_NO_BOX);
+            bg->begin();
+
+            mW = new Widget< Fl_Choice >(
+                g->x() + 130, 230, g->w() - 130, 20, _("Spatial Coordinates"));
+            m = mW;
+            m->labelsize(12);
+            m->align(FL_ALIGN_LEFT);
+            for (const auto& i : timeline::getSpatialLabels())
+            {
+                m->add(i.c_str());
+            }
+            m->copy_tooltip(_(R"(Use the Spatial Coordinates in OTIO files to position and size the clips.
+
+* None: Ignore the spatial coordinates.
+* Coordinates: Use the spatial coordinates when clips provide them.
+* Normalize: Use the spatial coordinates, and display clips without them at the size of the first clip.  Use this to play clips of differing resolutions at the same size.)"));
+            m->value(settings->getValue<int>("OTIO/Spatial"));
+
+            mW->callback(
+                [=](auto o)
+                {
+                    int v = o->value();
+                    settings->setValue("OTIO/Spatial", v);
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+
+            bg->end();
+
+            auto cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, 250, g->w(), 20,
+                _("Compatibility"));
+            c = cV;
+            c->labelsize(12);
+            c->value(settings->getValue<bool>("OTIO/Compatibility"));
+            cV->callback(
+                [=](auto w)
+                {
+                    int v = w->value();
+                    settings->setValue("OTIO/Compatibility", v);
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+
+            cg->end();
+
+            key = prefix + "OTIO";
+            value = settings->getValue<std::any>(key);
+            open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
 
             cg =
-                new CollapsibleGroup(g->x(), 210, g->w(), 20, _("Performance"));
+                new CollapsibleGroup(g->x(), 210, g->w(), 22 * 7, _("Performance"));
             cg->spacing(2);
             b = cg->button();
             b->labelsize(14);
@@ -279,7 +361,7 @@ namespace mrv
 
             cg->begin();
 
-            bg = new Fl_Group(g->x(), 230, g->w(), 22 * 7);
+            bg = new Fl_Group(g->x(), 230, g->w(), 22 * 8);
             bg->box(FL_NO_BOX);
             bg->begin();
 
@@ -375,7 +457,7 @@ namespace mrv
 
             bg->end();
 
-            auto cV = new Widget< Fl_Check_Button >(
+            cV = new Widget< Fl_Check_Button >(
                 g->x() + 90, 398, g->w(), 20,
                 _("FFmpeg YUV to RGB conversion"));
             c = cV;
@@ -409,12 +491,65 @@ namespace mrv
                     refresh_movie_cb(nullptr, p.ui);
                 });
 
-            bg = new Fl_Group(g->x(), 440, g->w(), 30);
+            cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, 440, g->w(), 20, _("FFmpeg HW Accel"));
+            c = cV;
+            c->labelsize(12);
+            c->value(
+                settings->getValue<bool>("Performance/FFmpegHWAccel"));
+            c->tooltip(_("When this setting is on, the player will try to decode the movie in the GPU if possible."));
+            cV->callback(
+                [=](auto w)
+                {
+                    int v = w->value();
+                    settings->setValue("Performance/FFmpegHWAccel", v);
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+
+            PopupMenu* pm;
+            auto pV = new Widget< PopupMenu >(
+                g->x() + 90, 480, g->w(), 20, _("FFmpeg HW Driver"));
+            pm = pV;
+            pm->add(_("Default HW Driver"));
+
+            int selection = 0;
+
+            std::string selected = settings->getValue<std::string>("Performance/FFmpegHWDriver");
+
+            int idx = 1;
+            std::vector<std::string> hw_decoders = ffmpeg_hardware_decoders();
+            for (auto decoder : hw_decoders)
+            {
+                if (decoder == selected)
+                    selection = idx;
+                pm->add(decoder.c_str());
+                ++idx;
+            }
+            pm->labelsize(12);
+            pm->value(selection);
+            pm->tooltip(_("Select what driver to use for your GPU."));
+            pV->callback(
+                [=](auto w)
+                {
+                    Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
+                    if (!item || !item->label())
+                        return;
+
+                    std::string label = item->label();
+                    if (label == _("Default HW Driver"))
+                    {
+                        label = "";
+                    }
+                    settings->setValue("Performance/FFmpegHWDriver", label);
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+
+            bg = new Fl_Group(g->x(), 480, g->w(), 30);
             bg->box(FL_NO_BOX);
             bg->begin();
 
             spW = new Widget<Spinner>(
-                g->x() + 160, 440, g->w() - 160, 20, _("FFmpeg I/O threads"));
+                g->x() + 160, 520, g->w() - 160, 20, _("FFmpeg I/O threads"));
             sp = spW;
             digits = settings->getValue<int>("Performance/FFmpegThreadCount");
             sp->value(digits);

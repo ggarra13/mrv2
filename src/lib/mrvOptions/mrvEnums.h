@@ -51,7 +51,7 @@ namespace mrv
         kScrubLoopInactive,
         kScrubLoopActive
     };
-    
+
     enum ThumnailsSize
     {
         kThumbnailNone,

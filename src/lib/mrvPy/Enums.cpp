@@ -21,6 +21,7 @@
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/CompareOptions.h>
 #include <tlTimeline/DisplayOptions.h>
+#include <tlTimeline/HDROptions.h>
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/Player.h>
 
@@ -207,6 +208,7 @@ void mrv2_enums(py::module& m)
         .value("A", timeline::CompareMode::A)
         .value("B", timeline::CompareMode::B)
         .value("Wipe", timeline::CompareMode::Wipe)
+        .value("Butterfly", timeline::CompareMode::Butterfly)
         .value("Overlay", timeline::CompareMode::Overlay)
         .value("Difference", timeline::CompareMode::Difference)
         .value("Add", timeline::CompareMode::Add)
@@ -244,8 +246,14 @@ void mrv2_enums(py::module& m)
 
     py::enum_<timeline::ImageSeqAudio>(timeline, "ImageSeqAudio")
         .value("kNone", timeline::ImageSeqAudio::kNone)
-        .value("Extension", timeline::ImageSeqAudio::Ext)
+        .value("Ext", timeline::ImageSeqAudio::Ext)
         .value("FileName", timeline::ImageSeqAudio::FileName)
+        .export_values();
+
+    py::enum_<timeline::HDRExportMode>(image, "HDRExportMode")
+        .value("BakedHDR", timeline::HDRExportMode::BakedHDR)
+        .value("LinearHDR", timeline::HDRExportMode::LinearHDR)
+        .value("BakedSDR", timeline::HDRExportMode::BakedSDR)
         .export_values();
 
 #ifdef TLRENDER_USD

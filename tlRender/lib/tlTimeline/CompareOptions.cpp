@@ -18,7 +18,7 @@ namespace tl
     {
         TLRENDER_ENUM_IMPL(
             CompareMode, "A", "B", "Wipe", "Overlay", "Difference",
-            "Multiply", "Add", "Horizontal", "Vertical", "Tile");
+            "Multiply", "Add", "Horizontal", "Vertical", "Tile", "Butterfly");
         TLRENDER_ENUM_SERIALIZE_IMPL(CompareMode);
 
         TLRENDER_ENUM_IMPL(CompareTimeMode, "Relative", "Absolute");
@@ -36,10 +36,10 @@ namespace tl
             //! rendered at; the layers are positioned within it when they are
             //! drawn. The canvas already describes the display geometry, so
             //! the pixel aspect ratio is not applied a second time.
-            std::vector<image::Info> getInfos(const std::vector<VideoFrame>& videoFrames)
+            std::vector<image::Info> getInfos(const std::vector<VideoFrame>& videoFrame)
             {
                 std::vector<image::Info> out;
-                for (const auto& i : videoFrames)
+                for (const auto& i : videoFrame)
                 {
                     image::Info info;
                     for (const auto& layer : i.layers)
@@ -221,6 +221,15 @@ namespace tl
                             AspectRatioOptions(),
                             getInfos(videoFrame));
         }
+        std::vector<math::Box2i> getBoxes(
+            const CompareMode mode,
+            const std::vector<DisplayOptions>& display,
+            const std::vector<VideoFrame>& videoFrame)
+        {
+            CompareOptions options;
+            options.mode = mode;
+            return getBoxes(options, display, videoFrame);
+        }
 
         math::Size2i getRenderSize(
             const CompareOptions& options,
@@ -254,16 +263,6 @@ namespace tl
             return out;
         }
 
-        std::vector<math::Box2i> getBoxes(
-            const CompareMode mode,
-            const std::vector<DisplayOptions>& display,
-            const std::vector<VideoFrame>& videoFrame)
-        {
-            CompareOptions options;
-            options.mode = mode;
-            return getBoxes(options, display, videoFrame);
-        }
-
         math::Size2i getRenderSize(
             const CompareOptions& options,
             const AspectRatioOptions& aspectRatioOptions,
@@ -273,6 +272,7 @@ namespace tl
                                  getInfos(videoFrame));
         }
 
+        //! Get the render size for the given compare mode.
         math::Size2i getRenderSize(
             const CompareOptions& options,
             const std::vector<DisplayOptions>& display,
@@ -284,19 +284,19 @@ namespace tl
                                  videoFrame);
         }
 
-        otime::RationalTime getCompareTime(
-            const otime::RationalTime& sourceTime,
-            const otime::TimeRange& sourceTimeRange,
-            const otime::TimeRange& compareTimeRange, CompareTimeMode mode)
+        opentime::RationalTime getCompareTime(
+            const opentime::RationalTime& sourceTime,
+            const opentime::TimeRange& sourceTimeRange,
+            const opentime::TimeRange& compareTimeRange, CompareTimeMode mode)
         {
-            otime::RationalTime out;
+            opentime::RationalTime out;
             switch (mode)
             {
             case CompareTimeMode::Relative:
             {
-                const otime::RationalTime relativeTime =
+                const opentime::RationalTime relativeTime =
                     sourceTime - sourceTimeRange.start_time();
-                const otime::RationalTime relativeTimeRescaled =
+                const opentime::RationalTime relativeTimeRescaled =
                     relativeTime.rescaled_to(compareTimeRange.duration().rate())
                         .floor();
                 out = compareTimeRange.start_time() + relativeTimeRescaled;

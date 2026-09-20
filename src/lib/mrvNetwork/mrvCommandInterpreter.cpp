@@ -238,7 +238,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                otime::RationalTime value = message["value"];
+                OTIO_NS::RationalTime value = message["value"];
                 player->seek(value);
             }
             else if (c == "Timeline Key Press")
@@ -340,7 +340,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                otime::TimeRange value = message["value"];
+                OTIO_NS::TimeRange value = message["value"];
                 player->setInOutRange(value);
             }
             else if (c == "setSpeed")
@@ -691,7 +691,7 @@ namespace mrv
                 clear_note_annotation_cb(ui);
                 if (annotationsPanel)
                 {
-                    annotationsPanel->notes->value("");
+                    //annotationsPanel->notes->value("");
                 }
             }
             else if (c == "Create Note Annotation")
@@ -706,7 +706,7 @@ namespace mrv
                 add_note_annotation_cb(ui, text);
                 if (annotationsPanel)
                 {
-                    annotationsPanel->notes->value(text.c_str());
+                    //annotationsPanel->notes->value(text.c_str());
                 }
             }
             else if (c == "Create Shape")
@@ -875,7 +875,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                const otime::RationalTime& time = message["value"];
+                const OTIO_NS::RationalTime& time = message["value"];
                 player->updateVideoCache(time);
             }
             else if (c == "clearCache")
@@ -1282,18 +1282,6 @@ namespace mrv
                 if ((!value && webrtcPanel) || (value && !webrtcPanel))
                     webrtc_panel_cb(nullptr, ui);
             }
-            else if (c == "Network Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && networkPanel) || (value && !networkPanel))
-                    network_panel_cb(nullptr, ui);
-            }
             else if (c == "USD Panel")
             {
 #ifdef TLRENDER_USD
@@ -1336,18 +1324,6 @@ namespace mrv
                 if ((!value && pythonPanel) || (value && !pythonPanel))
                     python_panel_cb(nullptr, ui);
 #endif
-            }
-            else if (c == "Playlist Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && playlistPanel) || (value && !playlistPanel))
-                    playlist_panel_cb(nullptr, ui);
             }
             else if (c == "Settings Panel")
             {

@@ -8,7 +8,7 @@
 
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
-#include "mrvNetwork/mrvConnectionHandler.h"
+#include "mrvNetwork/mrvTCP.h"
 
 #include <tlTimelineUI/IItem.h>
 

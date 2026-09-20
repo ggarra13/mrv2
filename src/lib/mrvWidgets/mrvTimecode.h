@@ -22,13 +22,13 @@ namespace mrv
         ~Timecode();
 
         //! Get the time value.
-        const otime::RationalTime& time() const;
+        const OTIO_NS::RationalTime& time() const;
 
         //! Get the time units.
         TimeUnits units() const;
 
         //! Set the time value.
-        void setTime(const otime::RationalTime&) noexcept;
+        void setTime(const OTIO_NS::RationalTime&) noexcept;
 
         //! Set the time units.
         void setUnits(TimeUnits);

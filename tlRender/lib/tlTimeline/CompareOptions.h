@@ -25,6 +25,7 @@ namespace tl
             Horizontal,
             Vertical,
             Tile,
+            Butterfly,
 
             Count,
             First = A
@@ -50,6 +51,7 @@ namespace tl
             math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
             float wipeRotation = 0.F;
             float overlay = .5F;
+            float differenceGain = 1.F;
             bool  fitToA = true;
 
             bool operator==(const CompareOptions&) const;
@@ -105,10 +107,10 @@ namespace tl
             const std::vector<VideoFrame>&);
 
         //! Get a compare time.
-        otime::RationalTime getCompareTime(
-            const otime::RationalTime& sourceTime,
-            const otime::TimeRange& sourceTimeRange,
-            const otime::TimeRange& compareTimeRange, CompareTimeMode);
+        opentime::RationalTime getCompareTime(
+            const opentime::RationalTime& sourceTime,
+            const opentime::TimeRange& sourceTimeRange,
+            const opentime::TimeRange& compareTimeRange, CompareTimeMode);
     } // namespace timeline
 } // namespace tl
 

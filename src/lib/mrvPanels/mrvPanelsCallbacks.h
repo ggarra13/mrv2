@@ -20,7 +20,7 @@
 #include "mrvPanels/mrvHistogramPanel.h"
 #include "mrvPanels/mrvImageInfoPanel.h"
 #include "mrvPanels/mrvLogsPanel.h"
-#include "mrvPanels/mrvPlaylistPanel.h"
+#include "mrvPanels/mrvNotesPanel.h"
 #include "mrvPanels/mrvSettingsPanel.h"
 #include "mrvPanels/mrvStatsPanel.h"
 #include "mrvPanels/mrvStereo3DPanel.h"
@@ -28,7 +28,6 @@
 #include "mrvPanels/mrvWaveformPanel.h"
 
 #ifdef MRV2_NETWORK
-#    include "mrvPanels/mrvNetworkPanel.h"
 #    include "mrvPanels/mrvWebRTCPanel.h"
 #endif
 
@@ -55,12 +54,12 @@ namespace mrv
         extern ColorPanel* colorPanel;
         extern FilesPanel* filesPanel;
         extern ComparePanel* comparePanel;
-        extern PlaylistPanel* playlistPanel;
         extern SettingsPanel* settingsPanel;
         extern LogsPanel* logsPanel;
         extern DevicesPanel* devicesPanel;
         extern ColorAreaPanel* colorAreaPanel;
         extern AnnotationsPanel* annotationsPanel;
+        extern NotesPanel* notesPanel;
         extern ImageInfoPanel* imageInfoPanel;
         extern HistogramPanel* histogramPanel;
         extern VectorscopePanel* vectorscopePanel;
@@ -71,9 +70,6 @@ namespace mrv
         extern StatsPanel* statsPanel;
 #ifdef MRV2_PYBIND11
         extern PythonPanel* pythonPanel;
-#endif
-#ifdef MRV2_NETWORK
-        extern NetworkPanel* networkPanel;
 #endif
 #ifdef MRV2_NETWORK
         extern WebRTCPanel* webrtcPanel;
@@ -120,10 +116,9 @@ namespace mrv
         void histogram_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void image_info_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void logs_panel_cb(Fl_Widget* w, ViewerUI* ui);
-        void network_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void ndi_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void notes_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void python_panel_cb(Fl_Widget* w, ViewerUI* ui);
-        void playlist_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void usd_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);

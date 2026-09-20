@@ -118,10 +118,10 @@ namespace mrv
         auto context = ui->app->getContext();
 
         // Get I/O cache and store its size.
-        auto ioSystem = context->getSystem<io::System>();
-        auto cache = ioSystem->getCache();
+        auto ioSystem = context->getSystem<io::WriteSystem>();
+        // auto cache = ioSystem->getCache();
 
-        size_t oldCacheSize = cache->getMax();
+        // size_t oldCacheSize = cache->getMax();
 
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
@@ -205,8 +205,8 @@ namespace mrv
             std::string inputFile = Aitem->path.get();
 
             // Make I/O cache be 1Gb to deal with long movies fine.
-            size_t bytes = memory::gigabyte;
-            cache->setMax(bytes);
+            // size_t bytes = memory::gigabyte;
+            // cache->setMax(bytes);
 
             auto context = ui->app->getContext();
             auto timeline = player->timeline();
@@ -472,7 +472,7 @@ namespace mrv
                 }
 
                 outputInfo.size = renderSize;
-                outputInfo = writerPlugin->getWriteInfo(outputInfo);
+                outputInfo = writerPlugin->getInfo(outputInfo);
 
                 if (image::PixelType::kNone == outputInfo.pixelType)
                 {
@@ -1097,7 +1097,7 @@ namespace mrv
 
         App::unsaved_annotations = false;
 
-        cache->setMax(oldCacheSize);
+        // cache->setMax(oldCacheSize);
     }
 
 } // namespace mrv

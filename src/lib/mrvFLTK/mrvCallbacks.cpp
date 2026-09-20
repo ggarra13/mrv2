@@ -130,13 +130,10 @@ namespace mrv
         {_("Histogram"), (Fl_Callback*)histogram_panel_cb},
         {_("Logs"), (Fl_Callback*)logs_panel_cb},
         {_("Media Information"), (Fl_Callback*)image_info_panel_cb},
-#ifdef MRV2_NETWORK
-        {_("Network"), (Fl_Callback*)network_panel_cb},
-#endif
 #ifdef TLRENDER_NDI
         {_("NDI"), (Fl_Callback*)ndi_panel_cb},
 #endif
-        {_("Playlist"), (Fl_Callback*)playlist_panel_cb},
+        {_("Notes"), (Fl_Callback*)notes_panel_cb},
 #ifdef MRV2_PYBIND11
         {_("Python"), (Fl_Callback*)python_panel_cb},
 #endif
@@ -164,17 +161,17 @@ namespace mrv
                 panel::imageInfoPanel->setTimelinePlayer(nullptr);
             ui->uiTimeline->setTimelinePlayer(nullptr);
             ui->uiTimeline->redraw();
-            otio::RationalTime start = otio::RationalTime(1, 24);
-            otio::RationalTime end = otio::RationalTime(50, 24);
+            OTIO_NS::RationalTime start = OTIO_NS::RationalTime(1, 24);
+            OTIO_NS::RationalTime end = OTIO_NS::RationalTime(50, 24);
             TimelineClass* c = ui->uiTimeWindow;
             c->uiFrame->setTime(start);
             c->uiStartFrame->setTime(start);
             c->uiEndFrame->setTime(end);
 
-            if (panel::annotationsPanel)
-            {
-                panel::annotationsPanel->notes->value("");
-            }
+            // if (panel::annotationsPanel)
+            // {
+            //     panel::annotationsPanel->notes->value("");
+            // }
         }
 
     } // namespace
@@ -459,6 +456,15 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void compare_butterfly_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::Butterfly;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void compare_horizontal_cb(Fl_Widget* w, ViewerUI* ui)
     {
         auto model = App::app->filesModel();
@@ -523,12 +529,15 @@ namespace mrv
             return;
 
         mrv::SaveOptions options;
+        int value;
+
         options.annotations =
             static_cast<bool>(saveOptions.Annotations->value());
         options.resolution =
             static_cast<SaveResolution>(saveOptions.Resolution->value());
+        value = saveOptions.ExportMode->value();
+        options.exportMode = static_cast<tl::timeline::HDRExportMode>(value);
 
-        int value;
 
 #ifdef TLRENDER_EXR
         value = saveOptions.PixelType->value();
@@ -789,6 +798,8 @@ namespace mrv
                 static_cast<bool>(saveOptions.AnnotationFramesOnly->value());
 
             int value;
+            value = saveOptions.ExportMode->value();
+            options.exportMode = static_cast<tl::timeline::HDRExportMode>(value);
 
 #ifdef TLRENDER_EXR
             value = saveOptions.PixelType->value();
@@ -1108,6 +1119,21 @@ namespace mrv
         App::unsaved_annotations = false;
 
 
+        auto d = timeline::DisplayOptions();
+        App::app->setDisplayOptions(d);
+
+        ui->uiGain->value(1.F);
+        ui->uiGain->do_callback();
+
+        ui->uiGamma->value(1.F);
+        ui->uiGamma->do_callback();
+
+        ui->uiSaturation->value(1.F);
+        ui->uiSaturation->do_callback();
+
+        ui->uiView->updateDisplayOptions();
+
+
         if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeAll", 0);
 
@@ -1143,8 +1169,6 @@ namespace mrv
             panel::colorAreaPanel->save();
         if (panel::comparePanel)
             panel::comparePanel->save();
-        if (panel::playlistPanel)
-            panel::playlistPanel->save();
         if (panel::settingsPanel)
             panel::settingsPanel->save();
         if (panel::logsPanel)
@@ -1153,6 +1177,8 @@ namespace mrv
             panel::devicesPanel->save();
         if (panel::annotationsPanel)
             panel::annotationsPanel->save();
+        if (panel::notesPanel)
+            panel::notesPanel->save();
         if (panel::imageInfoPanel)
             panel::imageInfoPanel->save();
         if (panel::histogramPanel)
@@ -1170,10 +1196,6 @@ namespace mrv
 #ifdef TLRENDER_NDI
         if (panel::ndiPanel)
             panel::ndiPanel->save();
-#endif
-#ifdef MRV2_NETWORK
-        if (panel::networkPanel)
-            panel::networkPanel->save();
 #endif
 #ifdef TLRENDER_USD
         if (panel::usdPanel)
@@ -1211,12 +1233,6 @@ namespace mrv
         panel::filesPanel = nullptr;
         delete panel::comparePanel;
         panel::comparePanel = nullptr;
-        delete panel::playlistPanel;
-        panel::playlistPanel = nullptr;
-#ifdef MRV2_NETWORK
-        delete panel::networkPanel;
-        panel::networkPanel = nullptr;
-#endif
 #ifdef TLRENDER_NDI
         delete panel::ndiPanel;
         panel::ndiPanel = nullptr;
@@ -1303,36 +1319,80 @@ namespace mrv
 
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.imageFilters.minify = timeline::ImageFilter::Nearest;
-        ui->app->setDisplayOptions(o);
+        // Legacy code
+        {
+            timeline::DisplayOptions o = ui->app->displayOptions();
+            o.imageFilters.minify = timeline::ImageFilter::Nearest;
+            ui->app->setDisplayOptions(o);
+        }
+
+        // New code
+        {
+            timeline::ImageOptions o = ui->app->imageOptions();
+            o.imageFilters.minify = timeline::ImageFilter::Nearest;
+            ui->app->setImageOptions(o);
+        }
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();
     }
 
     void minify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.imageFilters.minify = timeline::ImageFilter::Linear;
-        ui->app->setDisplayOptions(o);
+        // Legacy code
+        {
+            timeline::DisplayOptions o = ui->app->displayOptions();
+            o.imageFilters.minify = timeline::ImageFilter::Linear;
+            ui->app->setDisplayOptions(o);
+        }
+
+        // New code
+        {
+            timeline::ImageOptions o = ui->app->imageOptions();
+            o.imageFilters.minify = timeline::ImageFilter::Nearest;
+            ui->app->setImageOptions(o);
+        }
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();
     }
 
     void magnify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.imageFilters.magnify = timeline::ImageFilter::Nearest;
-        ui->app->setDisplayOptions(o);
+        // Legacy code
+        {
+            timeline::DisplayOptions o = ui->app->displayOptions();
+            o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+            ui->app->setDisplayOptions(o);
+        }
+
+        // New code
+        {
+            timeline::ImageOptions o = ui->app->imageOptions();
+            o.imageFilters.magnify = timeline::ImageFilter::Linear;
+            ui->app->setImageOptions(o);
+        }
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();
     }
 
     void magnify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.imageFilters.magnify = timeline::ImageFilter::Linear;
-        ui->app->setDisplayOptions(o);
+        // Legacy code
+        {
+            timeline::DisplayOptions o = ui->app->displayOptions();
+            o.imageFilters.magnify = timeline::ImageFilter::Linear;
+            ui->app->setDisplayOptions(o);
+        }
+
+        // New code
+        {
+            timeline::ImageOptions o = ui->app->imageOptions();
+            o.imageFilters.magnify = timeline::ImageFilter::Linear;
+            ui->app->setImageOptions(o);
+        }
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();
     }
@@ -1417,6 +1477,7 @@ namespace mrv
             o.channels = channel;
         }
         app->setDisplayOptions(o);
+        ui->uiView->updateDisplayOptions();
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -2106,14 +2167,14 @@ namespace mrv
 
     void playback_toggle_in_out_points_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        static otime::TimeRange inOut = time::invalidTimeRange;
+        static OTIO_NS::TimeRange inOut = time::invalidTimeRange;
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player) return;
 
         TimelineClass* c = ui->uiTimeWindow;
-        const otime::TimeRange& inOutRange = player->inOutRange();
-        const otime::TimeRange& timeRange = player->timeRange();
+        const OTIO_NS::TimeRange& inOutRange = player->inOutRange();
+        const OTIO_NS::TimeRange& timeRange = player->timeRange();
         if (timeRange != inOutRange)
         {
             inOut = inOutRange;
@@ -2441,7 +2502,7 @@ namespace mrv
         if (!player)
             return;
         auto time = player->currentTime();
-        time += otime::RationalTime(10.0, 1.0).rescaled_to(time.rate());
+        time += OTIO_NS::RationalTime(10.0, 1.0).rescaled_to(time.rate());
         player->seek(time);
     }
 
@@ -2451,7 +2512,7 @@ namespace mrv
         if (!player)
             return;
         auto time = player->currentTime();
-        time -= otime::RationalTime(10.0, 1.0).rescaled_to(time.rate());
+        time -= OTIO_NS::RationalTime(10.0, 1.0).rescaled_to(time.rate());
         player->seek(time);
     }
 
@@ -2467,7 +2528,7 @@ namespace mrv
         const auto track = tracks[0];
 
         const auto item =
-            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+            OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(track->child_at_time(time));
         if (!item)
             return;
 
@@ -2480,7 +2541,7 @@ namespace mrv
         }
 
         auto rate = track->trimmed_range().end_time_exclusive().rate();
-        range = otime::TimeRange::range_from_start_end_time(
+        range = OTIO_NS::TimeRange::range_from_start_end_time(
             range.start_time().rescaled_to(rate).round(),
             range.end_time_exclusive().rescaled_to(rate).round());
         player->setInOutRange(range);
@@ -2506,7 +2567,7 @@ namespace mrv
         const auto track = tracks[0];
 
         const auto item =
-            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+            OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(track->child_at_time(time));
         if (!item)
             return;
 
@@ -2514,7 +2575,7 @@ namespace mrv
         if (index >= track->children().size())
             index = 0;
         const auto child = track->children()[index];
-        const auto next_item = otio::dynamic_retainer_cast<otio::Item>(child);
+        const auto next_item = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(child);
         if (!next_item)
             return;
         const auto range = next_item->trimmed_range_in_parent().value();
@@ -2534,7 +2595,7 @@ namespace mrv
         const auto track = tracks[0];
 
         const auto item =
-            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+            OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(track->child_at_time(time));
         if (!item)
             return;
 
@@ -2542,7 +2603,7 @@ namespace mrv
         if (index < 0)
             index = track->children().size() - 1;
         const auto child = track->children()[index];
-        const auto prev_item = otio::dynamic_retainer_cast<otio::Item>(child);
+        const auto prev_item = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(child);
         if (!prev_item)
             return;
         const auto range = prev_item->trimmed_range_in_parent().value();
@@ -2557,9 +2618,9 @@ namespace mrv
         if (!player)
             return;
         auto currentTime = player->currentTime().round();
-        std::vector< otime::RationalTime > times = player->getAnnotationTimes();
+        std::vector< OTIO_NS::RationalTime > times = player->getAnnotationTimes();
         std::sort(
-            times.begin(), times.end(), std::greater<otime::RationalTime>());
+            times.begin(), times.end(), std::greater<OTIO_NS::RationalTime>());
         for (const auto& time : times)
         {
             const auto& roundedTime = time.round();
@@ -2585,7 +2646,7 @@ namespace mrv
         if (!player)
             return;
         const auto& currentTime = player->currentTime().round();
-        std::vector< otime::RationalTime > times = player->getAnnotationTimes();
+        std::vector< OTIO_NS::RationalTime > times = player->getAnnotationTimes();
         std::sort(times.begin(), times.end());
         for (const auto& time : times)
         {
@@ -3290,6 +3351,9 @@ namespace mrv
         {
             player->clearFrameAnnotation();
         }
+
+        if (panel::notesPanel)
+            panel::notesPanel->refresh();
     }
 
     void add_note_annotation_cb(ViewerUI* ui, const std::string& text)
@@ -3326,6 +3390,9 @@ namespace mrv
         if (!shape)
             return;
         shape->text = text;
+
+        if (panel::notesPanel)
+            panel::notesPanel->refresh();
 
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Create Note Annotation", text);
@@ -3449,6 +3516,11 @@ namespace mrv
 
         auto newIndex = model->observeAIndex()->get();
         model->setA(newIndex);
+
+        if (item->playback != timeline::Playback::Stop)
+        {
+            App::app->startPlayback();
+        }
     }
 
     void set_stereo_cb(Fl_Menu_* m, void* d)
@@ -3538,9 +3610,10 @@ namespace mrv
         // Check if item is a movie.
         auto item = model->observeA()->get();
         auto path = item->path;
-        if (!file::isMovie(path))
+        if (!file::isMovie(path) && !file::isOTIO(path))
             return;
 
+        refresh_file_cache_cb(m, d);
         refresh_media_cb(m, d);
     }
 

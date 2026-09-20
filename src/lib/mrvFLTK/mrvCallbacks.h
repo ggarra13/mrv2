@@ -10,8 +10,6 @@
 
 #include "mrvEdit/mrvEditCallbacks.h"
 
-#include "mrvApp/mrvPlaylistsModel.h"
-
 #include "mrvCore/mrvBackend.h"
 
 #include <FL/Fl_Widget.H> // For Fl_Callback
@@ -83,6 +81,7 @@ namespace mrv
     void compare_difference_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_add_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_multiply_cb(Fl_Widget* w, ViewerUI* ui);
+    void compare_butterfly_cb(Fl_Widget* w, ViewerUI* ui);
 
     void compare_horizontal_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_vertical_cb(Fl_Widget* w, ViewerUI* ui);

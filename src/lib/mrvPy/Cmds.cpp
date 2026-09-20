@@ -239,12 +239,19 @@ namespace mrv2
         {
             if (value.color.enabled)
             {
-                App::ui->uiGain->value(1.0);
-                App::ui->uiSaturation->value(value.color.saturation.x);
+                const float gain = value.color.brightness.x;
+                App::ui->uiGain->value(gain);
+                App::ui->uiGainInput->value(gain);
+
+                const float saturation = value.color.saturation.x;
+                App::ui->uiSaturation->value(saturation);
+                App::ui->uiSaturationInput->value(saturation);
             }
             if (value.levels.enabled)
             {
-                App::ui->uiGamma->value(value.levels.gamma);
+                const float gamma = value.levels.gamma;
+                App::ui->uiGamma->value(gamma);
+                App::ui->uiGammaInput->value(gamma);
             }
             App::app->setDisplayOptions(value);
         }
@@ -458,7 +465,7 @@ namespace mrv2
          * @param options (annotations and OpenEXR options)
          */
         void saveMultipleFrames(
-            const std::string& file, std::vector<otime::RationalTime> times,
+            const std::string& file, std::vector<OTIO_NS::RationalTime> times,
             const SaveOptions opts = SaveOptions())
         {
             save_multiple_frames(file, times, App::ui, opts);
@@ -472,7 +479,7 @@ namespace mrv2
          * @param options (annotations and OpenEXR options)
          */
         void saveMultipleAnnotationFrames(
-            const std::string& file, std::vector<otime::RationalTime> times,
+            const std::string& file, std::vector<OTIO_NS::RationalTime> times,
             SaveOptions opts = SaveOptions())
         {
             opts.annotations = true;
@@ -692,13 +699,13 @@ Used to run main commands and get arguments and set the display, image, compare,
         "saveMultipleAnnotationFrames",
         &mrv2::cmd::saveMultipleAnnotationFrames,
         _("Save multiple annotation frames."), py::arg("fileName"),
-        py::arg("times") = std::vector<mrv::otime::RationalTime>(),
+        py::arg("times") = std::vector<OTIO_NS::RationalTime>(),
         py::arg("options") = mrv::SaveOptions());
 
     cmds.def(
         "saveMultipleFrames", &mrv2::cmd::saveMultipleFrames,
         _("Save multiple frames."), py::arg("fileName"),
-        py::arg("times") = std::vector<mrv::otime::RationalTime>(),
+        py::arg("times") = std::vector<OTIO_NS::RationalTime>(),
         py::arg("options") = mrv::SaveOptions());
 
     cmds.def(

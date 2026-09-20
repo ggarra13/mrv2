@@ -8,8 +8,6 @@
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
 
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
 #include "mrvFl/mrvIO.h"
 
 #include "mrvUI/mrvDesktop.h"
@@ -38,22 +36,22 @@ namespace
 namespace mrv
 {
     using namespace panel;
-    
+
     static void file_sort_loaded_cb(Fl_Menu_*, void*)
     {
         filesPanel->setSort(Sort::Loaded);
     }
-    
+
     static void file_sort_file_name_cb(Fl_Menu_*, void*)
     {
         filesPanel->setSort(Sort::FileName);
     }
-    
+
     static void file_sort_directory_cb(Fl_Menu_*, void*)
     {
         filesPanel->setSort(Sort::Directory);
     }
-    
+
     static void file_sort_user_cb(Fl_Menu_*, void*)
     {
         filesPanel->setSort(Sort::User);
@@ -146,22 +144,15 @@ namespace mrv
 
                 if (math::contains(box, pos))
                 {
+                    if (!mrv::feature_needs_edit_or_later())
+                    {
+                        panel::redrawThumbnails();
+                        return 1;
+                    }
                     add_clip_to_timeline_cb(p.index, ui);
                     panel::redrawThumbnails();
                     return 1;
                 }
-
-                if (playlistPanel)
-                {
-                    const math::Box2i& box = playlistPanel->global_box();
-                    if (math::contains(box, pos))
-                    {
-                        playlistPanel->add(pos, p.index, ui);
-                        panel::redrawThumbnails();
-                        return 1;
-                    }
-                }
-                panel::redrawThumbnails();
                 return 1;
             }
             break;

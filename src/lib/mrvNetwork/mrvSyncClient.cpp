@@ -10,10 +10,8 @@
 
 #include "mrvEdit/mrvEditCallbacks.h"
 
-#include "mrvNetwork/mrvHashFile.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
-#include "mrvNetwork/mrvConnectionHandler.h"
 #include "mrvNetwork/mrvCommandInterpreter.h"
 
 #include "mrvOptions/mrvCompareOptions.h"

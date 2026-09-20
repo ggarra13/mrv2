@@ -164,10 +164,6 @@ extern "C"
 #   include <rtc/version.h>
 #endif
 
-#ifdef MRV2_NETWORK
-#   include <mrvNetwork/xxhash.h>
-#endif
-
 #ifdef MRV2_PYBIND11
 #    include <pybind11/pybind11.h>
 #endif
@@ -775,6 +771,31 @@ namespace mrv
 #endif
     }
 
+    std::vector<std::string> ffmpeg_hardware_decoders()
+    {
+        std::vector<std::string> out;
+#ifdef TLRENDER_FFMPEG
+        enum AVHWDeviceType type = AV_HWDEVICE_TYPE_NONE;
+        while ((type = av_hwdevice_iterate_types(type)) !=
+               AV_HWDEVICE_TYPE_NONE)
+        {
+            std::string device = av_hwdevice_get_type_name(type);
+            out.push_back(device);
+        }
+#endif
+        return out;
+    }
+
+    void ffmpeg_hw_decoders(mrv::TextBrowser* b)
+    {
+        std::vector<std::string> decoders = ffmpeg_hardware_decoders();
+        for (auto decoder : decoders)
+        {
+            decoder += "\n";
+            b->add(decoder.c_str());
+        }
+    }
+
     void ffmpeg_protocols(mrv::TextBrowser* b)
     {
 #ifdef TLRENDER_FFMPEG
@@ -1111,12 +1132,6 @@ namespace mrv
           << "(C) 2016-Present Pixar" << endl
           << endl;
 #endif
-#ifdef MRV2_NETWORK
-        o << "xxHash v" << XXH_VERSION_MAJOR << "." << XXH_VERSION_MINOR
-          << XXH_VERSION_RELEASE << endl
-          << "Copyright (C) 2012-2023 Yann Collet" << endl
-          << endl;
-#endif
         o << "yaml-cpp" << endl
           << "Copyright (c) 2008-2015 Jesse Beder." << endl
           << endl;
@@ -1131,17 +1146,10 @@ namespace mrv
         }
     }
 
-    void cpu_information(mrv::TextBrowser* b)
+    const std::string cpu_info()
     {
-        const std::string& lines = GetCpuCaps(&gCpuCaps);
-
-        std::stringstream o(lines);
-
-        std::string line;
-        while (std::getline(o, line, '\n'))
-        {
-            b->add(line.c_str());
-        }
+        std::string out;
+        out += GetCpuCaps(&gCpuCaps);
 
         uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
             totalPhysMem, physMemUsed, physMemUsedByMe;
@@ -1150,16 +1158,28 @@ namespace mrv
             totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
             totalPhysMem, physMemUsed, physMemUsedByMe);
 
-
-        b->add("");
-        std::string msg;
-        msg = tl::string::Format(
+        out += "\n";
+        out += tl::string::Format(
             _("Total Physical Memory: {0} Gb")).arg(totalPhysMem / 1024.0);
-        b->add(msg.c_str());
-        msg = tl::string::Format(
+        out += "\n";
+        out += "\n";
+        out += tl::string::Format(
             _("Total Virtual Memory: {0} Gb")).arg(totalVirtualMem / 1024.0);
-        b->add(msg.c_str());
 
+        return out;
+    }
+
+    void cpu_information(mrv::TextBrowser* b)
+    {
+        const std::string lines = cpu_info();
+
+        std::stringstream o(lines);
+
+        std::string line;
+        while (std::getline(o, line, '\n'))
+        {
+            b->add(line.c_str());
+        }
     }
 
     std::string gpu_list(ViewerUI* ui)
@@ -1255,20 +1275,9 @@ namespace mrv
         if (!versionString)
             versionString = (char*)_("Unknown");
 
-        int gl_version_major = 0;
-        sscanf((const char *)versionString, "%d", &gl_version_major);
-
-        char* GLSLString = nullptr;
-        if (gl_version_major >= 3)
-        {
-            GLSLString = (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
-        }
-        if (!GLSLString)
-            GLSLString = (char*)_("Unknown");
         o << _("Vendor:\t") << vendorString << endl
           << _("Renderer:\t") << rendererString << endl
           << _("Version:\t") << versionString << endl
-          << _("GLSL Version:\t") << GLSLString << endl
           << endl;
 
         // Get maximum texture resolution for gfx card

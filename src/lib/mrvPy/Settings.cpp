@@ -108,7 +108,7 @@ namespace mrv2
         void setFileSequenceAudio(const timeline::ImageSeqAudio value)
         {
             mrv::settings()->setValue(
-                "ImageSequence/Audio", static_cast<int>(value));
+                "FileSequence/Audio", static_cast<int>(value));
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
@@ -116,7 +116,7 @@ namespace mrv2
         timeline::ImageSeqAudio fileSequenceAudio()
         {
             return static_cast<timeline::ImageSeqAudio>(
-                mrv::settings()->getValue<int>("ImageSequence/Audio"));
+                mrv::settings()->getValue<int>("FileSequence/Audio"));
         }
 
         /**
@@ -141,7 +141,6 @@ namespace mrv2
             return mrv::settings()->getValue<std::string>(
                 "FileSequence/AudioFileName");
         }
-
 
         /**
          * Set the maximum file sequqnce digits.

@@ -103,6 +103,12 @@ namespace tl
             YUV_422P_U16,
             YUV_444P_U16,
 
+            YUV_420SP_U8,   //!< Semi-planar 4:2:0 8-bit (e.g. hardware-decoded NV12)
+            YUV_420SP_U16,  //!< Semi-planar 4:2:0 16-bit (e.g. hardware-decoded P010)
+            YUV_422SP_U8,   //!< Semi-planar 4:2:2 8-bit (e.g. hardware-decoded NV16)
+            YUV_422SP_U16,  //!< Semi-planar 4:2:2 16-bit (e.g. hardware-decoded P216)
+            YUV_444SP_U8,   //!< Semi-planar 4:4:4 8-bit (e.g. hardware-decoded NV16)
+            YUV_444SP_U16,  //!< Semi-planar 4:4:4 16-bit (e.g. hardware-decoded P216)
             ARGB_4444_Premult,
 
             Count,

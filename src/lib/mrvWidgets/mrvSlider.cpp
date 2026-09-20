@@ -1,438 +1,485 @@
+// BSD 3-Clause License
 //
-// "$Id$"
+// Copyright (c) 2024, mrv2 project contributors.
+// All rights reserved.
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
-// Port to fltk1.4 by Gonzalo Garramuño.
+// ---------------------------------------------------------------------
+// See mrvSlider.h for a description of what this widget does. The value
+// <-> pixel mapping supports three modes, chosen from the range
+// [minimum(), maximum()]:
 //
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
+//   * linear             -- used whenever slider_type() == kNORMAL.
+//   * logarithmic        -- kLOG with a strictly positive minimum().
+//   * squared / signed    -- kLOG with minimum() <= 0 (gives extra
+//                            resolution near zero on both sides).
 //
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems on the following page:
-//
-//    http://www.fltk.org/str.php
-//
+// This file is an original implementation and does not derive from
+// FLTK2's fltk::Slider sources.
+// ---------------------------------------------------------------------
 
-#include <math.h>
-#include <FL/fl_draw.H>
-#include <FL/Enumerations.H>
+#include <cmath>
+#include <cstdio>
+#include <cstring>
+
 #include <FL/Fl.H>
+#include <FL/Enumerations.H>
+#include <FL/fl_draw.H>
 
 #include "mrvFl/mrvPreferences.h"
 
 #include "mrvSlider.h"
 
+namespace
+{
+    using tl::math::Box2i;
+
+    // Describes the drawable track as a start point, an end point, and a
+    // unit step (dx, dy) between them, so that the tick-drawing code can
+    // stay orientation-agnostic.
+    struct TrackGeometry
+    {
+        int originX, originY; // near edge of the tick line
+        int labelX, labelY;   // near edge of the (shorter) label tick line
+        int farX, farY;       // far edge of the tick line
+        int stepX, stepY;     // unit vector along the track, in pixels
+        int length;           // track length in pixels
+    };
+
+    TrackGeometry trackGeometry(const Box2i& r, int knobSize, bool horiz)
+    {
+        TrackGeometry g{};
+        if (horiz)
+        {
+            g.originX = g.labelX = g.farX = r.x() + (knobSize - 1) / 2;
+            g.stepX = 1;
+            g.stepY = 0;
+            g.originY = r.y();
+            g.farY = r.max.y;
+            g.labelY = g.originY + 1 + r.h() / 4;
+            g.length = r.w();
+        }
+        else
+        {
+            g.originX = r.x();
+            g.farX = r.max.x;
+            g.labelX = g.originX + 1 + r.w() / 4;
+            g.stepX = 0;
+            g.stepY = 1;
+            g.originY = g.labelY = g.farY = r.y() + (knobSize - 1) / 2;
+            g.length = r.h();
+        }
+        return g;
+    }
+
+    // Renders a tick value compactly ("1000", "0.005", "-3.2" ...),
+    // trimming redundant leading zeroes the way a ruler label would.
+    const char* formatTickLabel(char* buffer, size_t bufSize, double v)
+    {
+        if (std::fabs(v) >= 1.0)
+        {
+            std::snprintf(buffer, bufSize, "%g", v);
+            return buffer;
+        }
+        std::snprintf(buffer, bufSize, "%.3g", v);
+        char* p = buffer;
+        bool negative = v < 0;
+        if (negative)
+            ++p;
+        while (p[0] == '0' && p[1])
+            ++p;
+        if (negative)
+            *--p = '-';
+        return p;
+    }
+
+    // Parameters that control how far apart tick marks/labels are placed.
+    struct TickSpacing
+    {
+        double mul = 1.0, div = 1.0;
+        int minorEvery = 5;   // every Nth tick is drawn "major" (longer)
+        int labelEvery = 10;  // every Nth tick gets a printed number
+        int growEvery = 10000; // ticks get 10x further apart every N steps
+    };
+
+    // Works out a "nice" tick increment (a multiple of 1/2/5 * 10^k) for
+    // the given range and mapping so ticks don't end up cluttered or too
+    // sparse for the available pixel width.
+    TickSpacing computeTickSpacing(
+        double lo, double hi, int pixelWidth, int minSpacingPx, double step,
+        bool logMapped)
+    {
+        TickSpacing s;
+        if (!logMapped)
+        {
+            double perPixel = (hi - lo) * minSpacingPx / pixelWidth;
+            if (perPixel < step)
+                perPixel = step;
+            while (s.mul * 5 <= perPixel)
+                s.mul *= 10;
+            while (s.mul > perPixel * 2 * s.div)
+                s.div *= 10;
+            if (perPixel * s.div > s.mul * 2)
+            {
+                s.mul *= 5;
+                s.minorEvery = 2;
+            }
+            else if (perPixel * s.div > s.mul)
+            {
+                s.mul *= 2;
+                s.labelEvery = 5;
+            }
+        }
+        else if (lo > 0)
+        {
+            while (s.mul * 5 <= lo)
+                s.mul *= 10;
+            while (s.mul > lo * 2 * s.div)
+                s.div *= 10;
+            s.growEvery = 10;
+            double ratioPerTick =
+                std::exp(minSpacingPx * std::log(hi / lo) / pixelWidth * 3);
+            if (ratioPerTick >= 5)
+            {
+                s.mul *= 10;
+                s.minorEvery = s.labelEvery = 1;
+                s.growEvery = 1;
+            }
+            else if (ratioPerTick >= 2)
+            {
+                s.mul *= 5;
+                s.minorEvery = s.growEvery = s.labelEvery = 2;
+            }
+        }
+        else
+        {
+            // squared mapping: slope is zero at the edge, so estimate it
+            // from the value one pixel in instead.
+            double perPixel =
+                hi * minSpacingPx * minSpacingPx / (double(pixelWidth) * pixelWidth);
+            if (lo < 0)
+                perPixel *= 4;
+            if (perPixel < step)
+                perPixel = step;
+            while (s.mul < perPixel)
+                s.mul *= 10;
+            while (s.mul >= 10 * perPixel * s.div)
+                s.div *= 10;
+            s.growEvery = 10;
+        }
+        return s;
+    }
+
+    // Value <-> unit-fraction mapping shared by slider_position() and
+    // position_value(). "unit fraction" is 0 at minimum()/maximum()
+    // (whichever is nearer the track origin) and 1 at the far end.
+    double valueToUnitFraction(double value, double lo, double hi, bool logMapped)
+    {
+        if (!logMapped)
+            return (value - lo) / (hi - lo);
+        if (lo > 0)
+            return value <= lo ? 0.0
+                                : (std::log(value) - std::log(lo)) /
+                                      (std::log(hi) - std::log(lo));
+        if (lo == 0)
+            return value <= 0.0 ? 0.0 : std::sqrt(value / hi);
+        // signed squared mapping, centered at 0
+        return value < 0 ? (1.0 - std::sqrt(value / lo)) * 0.5
+                          : (1.0 + std::sqrt(value / hi)) * 0.5;
+    }
+
+} // namespace
+
 namespace mrv
 {
 
-    static char* printtick(char* buffer, double v)
+    void Slider::draw_ticks(const Box2i& r, int minSpacingPx)
     {
-        if (fabs(v) >= 1)
-        {
-            snprintf(buffer, 20, "%g", v);
-            return buffer;
-        }
-        else
-        {
-            snprintf(buffer, 20, "%.3g", v);
-            char* p = buffer;
-            if (v < 0)
-                p++;
-            while (p[0] == '0' && p[1])
-                p++;
-            if (v < 0)
-                *--p = '-';
-            return p;
-        }
-    }
-
-    void Slider::draw_ticks(const tl::math::Box2i& r, int min_spacing)
-    {
-        int x1, sx1, y1, sy1, x2, y2, dx, dy, w;
-        if (horizontal())
-        {
-            sx1 = x1 = x2 = r.x() + (slider_size() - 1) / 2;
-            dx = 1;
-            y1 = r.y();
-            y2 = r.max.y;
-            dy = 0;
-            sy1 = y1 + 1 + r.h() / 4;
-            w = r.w();
-        }
-        else
-        {
-            x1 = r.x();
-            x2 = r.max.x;
-            dx = 0;
-            sx1 = x1 + 1 + r.w() / 4;
-            sy1 = y1 = y2 = r.y() + (slider_size() - 1) / 2;
-            dy = 1;
-            w = r.h();
-        }
-        if (w <= 0)
+        const bool horiz = horizontal();
+        const TrackGeometry g = trackGeometry(r, slider_size(), horiz);
+        if (g.length <= 0)
             return;
-        double A = minimum();
-        double B = maximum();
-        if (A > B)
-        {
-            A = B;
-            B = minimum();
-        }
 
-        if (min_spacing < 1)
-            min_spacing = 10; // fix for fill sliders
+        double lo = minimum();
+        double hi = maximum();
+        if (lo > hi)
+            std::swap(lo, hi);
 
-        double mul = 1; // how far apart tick marks are
-        double div = 1;
-        int smallmod = 5; // how many tick marks apart "larger" ones are
-        int nummod = 10;  // how many tick marks apart numbers are
-        int powincr = 10000;
+        if (minSpacingPx < 1)
+            minSpacingPx = 10; // fallback for zero-thickness "fill" sliders
 
-        if (!log())
-        {
-            double derivative = (B - A) * min_spacing / w;
-            if (derivative < step())
-                derivative = step();
-            while (mul * 5 <= derivative)
-                mul *= 10;
-            while (mul > derivative * 2 * div)
-                div *= 10;
-            if (derivative * div > mul * 2)
-            {
-                mul *= 5;
-                smallmod = 2;
-            }
-            else if (derivative * div > mul)
-            {
-                mul *= 2;
-                nummod = 5;
-            }
-        }
-        else if (A > 0)
-        {
-            // log slider
-            while (mul * 5 <= A)
-                mul *= 10;
-            while (mul > A * 2 * div)
-                div *= 10;
-            powincr = 10;
-            double d = exp(min_spacing * ::log(B / A) / w * 3);
-            if (d >= 5)
-            {
-                mul *= 10;
-                smallmod = nummod = 1;
-                powincr = 1;
-            }
-            else if (d >= 2)
-            {
-                mul *= 5;
-                smallmod = powincr = nummod = 2;
-            }
-        }
-        else
-        {
-            // squared slider, derivative at edge is zero, use value at 1 pixel
-            double derivative = B * min_spacing * min_spacing / (w * w);
-            if (A < 0)
-                derivative *= 4;
-            if (derivative < step())
-                derivative = step();
-            while (mul < derivative)
-                mul *= 10;
-            while (mul >= 10 * derivative * div)
-                div *= 10;
-            powincr = 10;
-            // if (derivative > num) {num *= 5; smallmod = powincr = nummod =
-            // 2;}
-        }
+        const TickSpacing sp = computeTickSpacing(
+            lo, hi, g.length, minSpacingPx, step(), log());
 
         fl_push_clip(r.x(), r.y(), r.w(), r.h());
 
-        Fl_Color textcolor = this->labelcolor();
         if (Preferences::schemes.name == "Black")
-        {
-            _tick_color = fl_rgb_color(70, 70, 70);
-        }
-        Fl_Color linecolor = _tick_color;
+            m_tickColor = fl_rgb_color(70, 70, 70);
+        const Fl_Color lineColor = m_tickColor;
+        const Fl_Color textColor = labelcolor();
 
-        fl_color(linecolor);
+        fl_color(lineColor);
         fl_font(fl_font(), labelsize());
+        const float labelBaselineOffset =
+            horiz ? g.originY + fl_size() - fl_descent() : g.originY - 1;
 
-        float yt = horizontal() ? y1 + fl_size() - fl_descent() : y1 - 1;
-        double v;
-        char buffer[20];
-        char* p;
-        int t;
-        float x, y;
-        for (int n = 0;; n++)
+        char buf[20];
+
+        auto drawOneTick = [&](double v, bool major)
         {
-            // every ten they get further apart for log slider:
-            if (n > powincr)
+            if (!(v > lo && v < hi))
+                return;
+            const int t = slider_position(v, g.length);
+            if (major)
+            {
+                fl_line(
+                    g.originX + g.stepX * t, g.originY + g.stepY * t,
+                    g.farX + g.stepX * t, g.farY + g.stepY * t);
+            }
+            else
+            {
+                fl_line(
+                    g.labelX + g.stepX * t, g.labelY + g.stepY * t,
+                    g.farX + g.stepX * t, g.farY + g.stepY * t);
+            }
+        };
+
+        auto drawOneLabel = [&](double v)
+        {
+            const int t = slider_position(v, g.length);
+            const char* text = formatTickLabel(buf, sizeof(buf), v);
+            const float lx = g.originX + g.stepX * t + 1;
+            const float ly = labelBaselineOffset + g.stepY * t + fl_descent();
+            const bool tooCloseX =
+                g.stepX && (lx < r.x() + 3 * minSpacingPx ||
+                            lx >= r.max.x - 5 * minSpacingPx);
+            const bool tooCloseY =
+                g.stepY && (ly < r.y() + 5 * minSpacingPx ||
+                            ly >= r.max.y - 3 * minSpacingPx);
+            if (tooCloseX || tooCloseY)
+                return;
+            fl_color(textColor);
+            fl_draw(text, lx, ly);
+            fl_color(lineColor);
+        };
+
+        double mul = sp.mul;
+        for (int n = 0;; ++n)
+        {
+            // Ticks get progressively further apart on log sliders.
+            if (n > sp.growEvery)
             {
                 mul *= 10;
                 n = (n - 1) / 10 + 1;
             }
-            v = mul * n / div;
-            if (v >= fabs(A) && v >= fabs(B))
+            const double v = mul * n / sp.div;
+            if (v >= std::fabs(lo) && v >= std::fabs(hi))
                 break;
-            if (n % smallmod)
+
+            const bool major = (n % sp.minorEvery) == 0;
+            drawOneTick(v, major);
+            if (v && (-v > lo) && (-v < hi))
+                drawOneTick(-v, major);
+
+            if (major && (n % sp.labelEvery) == 0)
             {
-                if (v > A && v < B)
-                {
-                    t = slider_position(v, w);
-                    fl_line(
-                        sx1 + dx * t, sy1 + dy * t, x2 + dx * t, y2 + dy * t);
-                }
-                if (v && -v > A && -v < B)
-                {
-                    t = slider_position(-v, w);
-                    fl_line(
-                        sx1 + dx * t, sy1 + dy * t, x2 + dx * t, y2 + dy * t);
-                }
-            }
-            else
-            {
-                if (v > A && v < B)
-                {
-                    t = slider_position(v, w);
-                    fl_line(x1 + dx * t, y1 + dy * t, x2 + dx * t, y2 + dy * t);
-                    if (n % nummod == 0)
-                    {
-                        p = printtick(buffer, v);
-                        x = x1 + dx * t + 1;
-                        y = yt + dy * t + fl_descent();
-                        if (dx && (x < r.x() + 3 * min_spacing ||
-                                   x >= r.max.x - 5 * min_spacing))
-                            ;
-                        else if (
-                            dy && (y < r.y() + 5 * min_spacing ||
-                                   y >= r.max.y - 3 * min_spacing))
-                            ;
-                        else
-                        {
-                            fl_color(textcolor);
-                            fl_draw(p, x, y);
-                            fl_color(linecolor);
-                        }
-                    }
-                }
-                if (v && -v > A && -v < B)
-                {
-                    t = slider_position(-v, w);
-                    fl_line(x1 + dx * t, y1 + dy * t, x2 + dx * t, y2 + dy * t);
-                    if (n % nummod == 0)
-                    {
-                        p = printtick(buffer, v);
-                        x = x1 + dx * t + 1;
-                        y = yt + dy * t + fl_descent();
-                        if (dx && (x < r.x() + 3 * min_spacing ||
-                                   x >= r.max.x - 5 * min_spacing))
-                            ;
-                        else if (
-                            dy && (y < r.y() + 5 * min_spacing ||
-                                   y >= r.max.y - 3 * min_spacing))
-                            ;
-                        else
-                        {
-                            fl_color(textcolor);
-                            fl_draw(p, x, y);
-                            fl_color(linecolor);
-                        }
-                    }
-                }
+                if (v > lo && v < hi)
+                    drawOneLabel(v);
+                if (v && -v > lo && -v < hi)
+                    drawOneLabel(-v);
             }
         }
 
-        // draw the end ticks with numbers:
-
-        v = minimum();
-        t = slider_position(v, w);
-        fl_line(x1 + dx * t, y1 + dy * t, x2 + dx * t, y2 + dy * t);
-        p = printtick(buffer, v);
-        x = x1 + dx * t + 1;
-        y = yt + dy * t + fl_descent();
-        fl_color(textcolor);
-        fl_draw(p, x, y);
-        fl_color(linecolor);
-
-        v = maximum();
-        t = slider_position(v, w);
-        fl_line(x1 + dx * t, y1 + dy * t, x2 + dx * t, y2 + dy * t);
-        p = printtick(buffer, v);
-        x = x1 + dx * t + 1;
-        if (dx)
+        // Always label the two endpoints explicitly, even if the loop
+        // above landed a regular tick very close to them.
+        for (double endpoint : {minimum(), maximum()})
         {
-            float w = fl_width(p);
-            if (x + w > r.max.x)
-                x -= 2 + w;
+            const int t = slider_position(endpoint, g.length);
+            fl_line(
+                g.originX + g.stepX * t, g.originY + g.stepY * t,
+                g.farX + g.stepX * t, g.farY + g.stepY * t);
+            const char* text = formatTickLabel(buf, sizeof(buf), endpoint);
+            fl_color(textColor);
+            fl_draw(
+                text, g.originX + g.stepX * t + 1,
+                labelBaselineOffset + g.stepY * t + fl_descent());
+            fl_color(lineColor);
         }
-        y = yt + dy * t + fl_descent();
-        fl_color(textcolor);
-        fl_draw(p, x, y);
 
         fl_pop_clip();
     }
 
-    int Slider::slider_position(double value, int w)
+    int Slider::slider_position(double value, int trackWidth)
     {
-        double A = minimum();
-        double B = maximum();
-        if (B == A)
-            return 0;
-        bool flip = B < A;
+        double lo = minimum();
+        double hi = maximum();
+        bool flip = hi < lo;
         if (flip)
-        {
-            A = B;
-            B = minimum();
-        }
+            std::swap(lo, hi);
         if (!horizontal())
             flip = !flip;
-        // if both are negative, make the range positive:
-        if (B <= 0)
+
+        // If the whole range sits at or below zero, mirror it to positive
+        // so the log/squared math (which assumes hi > 0) still applies.
+        if (hi <= 0)
         {
             flip = !flip;
-            double t = A;
-            A = -B;
-            B = -t;
+            std::swap(lo, hi);
+            lo = -lo;
+            hi = -hi;
             value = -value;
         }
-        double fraction;
-        if (!log())
-        {
-            // linear slider
-            fraction = (value - A) / (B - A);
-        }
-        else if (A > 0)
-        {
-            // logatithmic slider
-            if (value <= A)
-                fraction = 0;
-            else
-                fraction = (::log(value) - ::log(A)) / (::log(B) - ::log(A));
-        }
-        else if (A == 0)
-        {
-            // squared slider
-            if (value <= 0)
-                fraction = 0;
-            else
-                fraction = sqrt(value / B);
-        }
-        else
-        {
-            // squared signed slider
-            if (value < 0)
-                fraction = (1 - sqrt(value / A)) * .5;
-            else
-                fraction = (1 + sqrt(value / B)) * .5;
-        }
+
+        double fraction = valueToUnitFraction(value, lo, hi, log());
         if (flip)
-            fraction = 1 - fraction;
-        w -= slider_size();
-        if (w <= 0)
+            fraction = 1.0 - fraction;
+
+        trackWidth -= slider_size();
+        if (trackWidth <= 0)
             return 0;
-        if (fraction >= 1)
-            return w;
-        else if (fraction <= 0)
+        if (fraction >= 1.0)
+            return trackWidth;
+        if (fraction <= 0.0)
             return 0;
-        else
-            return int(fraction * w + .5);
+        return int(fraction * trackWidth + 0.5);
     }
 
-    double Slider::position_value(int X, int w)
+    double Slider::position_value(int pixelOffset, int trackWidth)
     {
-        w -= slider_size();
-        if (w <= 0)
+        trackWidth -= slider_size();
+        if (trackWidth <= 0)
             return minimum();
-        double A = minimum();
-        double B = maximum();
-        bool flip = B < A;
+
+        double lo = minimum();
+        double hi = maximum();
+        bool flip = hi < lo;
         if (flip)
-        {
-            A = B;
-            B = minimum();
-        }
+            std::swap(lo, hi);
         if (!horizontal())
             flip = !flip;
         if (flip)
-            X = w - X;
-        double fraction = double(X) / w;
-        if (fraction <= 0)
-            return A;
-        if (fraction >= 1)
-            return B;
-        // if both are negative, make the range positive:
-        flip = (B <= 0);
-        if (flip)
+            pixelOffset = trackWidth - pixelOffset;
+
+        double fraction = double(pixelOffset) / trackWidth;
+        if (fraction <= 0.0)
+            return lo;
+        if (fraction >= 1.0)
+            return hi;
+
+        const bool mirrored = (hi <= 0);
+        if (mirrored)
         {
-            double t = A;
-            A = -B;
-            B = -t;
-            fraction = 1 - fraction;
+            std::swap(lo, hi);
+            lo = -lo;
+            hi = -hi;
+            fraction = 1.0 - fraction;
         }
-        double value;
-        double derivative;
+
+        double value, slope;
         if (!log())
         {
-            // linear slider
-            value = fraction * (B - A) + A;
-            derivative = (B - A) / w;
+            value = fraction * (hi - lo) + lo;
+            slope = (hi - lo) / trackWidth;
         }
-        else if (A > 0)
+        else if (lo > 0)
         {
-            // log slider
-            double d = (::log(B) - ::log(A));
-            value = exp(fraction * d + ::log(A));
-            derivative = value * d / w;
+            const double logSpan = std::log(hi) - std::log(lo);
+            value = std::exp(fraction * logSpan + std::log(lo));
+            slope = value * logSpan / trackWidth;
         }
-        else if (A == 0)
+        else if (lo == 0)
         {
-            // squared slider
-            value = fraction * fraction * B;
-            derivative = 2 * fraction * B / w;
+            value = fraction * fraction * hi;
+            slope = 2 * fraction * hi / trackWidth;
         }
         else
         {
-            // squared signed slider
-            fraction = 2 * fraction - 1;
-            if (fraction < 0)
-                B = A;
-            value = fraction * fraction * B;
-            derivative = 4 * fraction * B / w;
+            double signedFraction = 2 * fraction - 1;
+            double edge = signedFraction < 0 ? lo : hi;
+            value = signedFraction * signedFraction * edge;
+            slope = 4 * signedFraction * edge / trackWidth;
         }
-        // find nicest multiple of 10,5, or 2 of step() that is close to 1
-        // pixel:
-        if (step() && derivative > step())
+
+        // Snap to the nicest multiple of 10/5/2 * step() that is close to
+        // one pixel of movement, so dragging lands on tidy values.
+        if (step() && slope > step())
         {
-            double w = log10(derivative);
-            double l = ceil(w);
-            int num = 1;
-            int i;
-            for (i = 0; i < l; i++)
-                num *= 10;
-            int denom = 1;
-            for (i = -1; i >= l; i--)
-                denom *= 10;
-            if (l - w > 0.69897)
-                denom *= 5;
-            else if (l - w > 0.30103)
-                denom *= 2;
-            value = floor(value * denom / num + .5) * num / denom;
+            const double logSlope = std::log10(slope);
+            const double ceilLogSlope = std::ceil(logSlope);
+            double numerator = 1.0;
+            for (int i = 0; i < ceilLogSlope; ++i)
+                numerator *= 10;
+            double denominator = 1.0;
+            for (int i = -1; i >= ceilLogSlope; --i)
+                denominator *= 10;
+            const double frac = ceilLogSlope - logSlope;
+            if (frac > 0.69897)
+                denominator *= 5;
+            else if (frac > 0.30103)
+                denominator *= 2;
+            value = std::floor(value * denominator / numerator + 0.5) *
+                    numerator / denominator;
         }
-        if (flip)
-            return -value;
-        return value;
+
+        return mirrored ? -value : value;
+    }
+
+    int Slider::handleDrag(int event, const Box2i& r)
+    {
+        const bool horiz = horizontal();
+        const int trackLen = horiz ? r.w() : r.h();
+        const int mousePos =
+            horiz ? Fl::event_x() - r.x() : Fl::event_y() - r.y();
+
+        if (trackLen <= slider_size())
+            return 1;
+
+        static int grabOffset;
+        int knobPos = slider_position(value(), trackLen);
+
+        if (event == FL_PUSH)
+        {
+            grabOffset = mousePos - knobPos;
+            // Clicking directly on the knob just starts a drag from here.
+            if (grabOffset >= (slider_size() ? 0 : -8) &&
+                grabOffset <= slider_size())
+                return 1;
+            if (Fl::event_button() > FL_LEFT_MOUSE)
+                // Non-primary click: snap the near edge of the knob to the
+                // cursor (useful for scrollbar-style paging).
+                grabOffset = (grabOffset < 0) ? 0 : slider_size();
+            else
+                // Primary click: center the knob under the cursor.
+                grabOffset = slider_size() / 2;
+        }
+
+        for (;;)
+        {
+            int X = mousePos - grabOffset;
+            if (X < 0)
+            {
+                X = 0;
+                grabOffset = mousePos < 0 ? 0 : mousePos;
+            }
+            else if (X > trackLen - slider_size())
+            {
+                X = trackLen - slider_size();
+                grabOffset = mousePos - X;
+                if (grabOffset > slider_size())
+                    grabOffset = slider_size();
+            }
+
+            handle_drag(position_value(X, trackLen));
+
+            // A push that lands outside the knob and doesn't move the
+            // value yet should still relocate the knob under the cursor.
+            if (event == FL_PUSH && value() == previous_value())
+            {
+                grabOffset = slider_size() / 2;
+                event = FL_DRAG;
+                continue;
+            }
+            return 1;
+        }
     }
 
     int Slider::handle(int event)
@@ -440,7 +487,7 @@ namespace mrv
         if (slider_type() != kLOG)
             return Fl_Slider::handle(event);
 
-        tl::math::Box2i r(x(), y(), w(), h());
+        const Box2i r(x(), y(), w(), h());
 
         switch (event)
         {
@@ -449,83 +496,25 @@ namespace mrv
             damage(FL_DAMAGE_ALL);
             redraw();
             return 1;
+
         case FL_PUSH:
-            damage(FL_DAMAGE_EXPOSE); // DAMAGE_HIGHLIGHT
+            damage(FL_DAMAGE_EXPOSE);
             redraw();
             handle_push();
+            return handleDrag(event, r);
+
         case FL_DRAG:
-        {
-            // figure out the space the slider moves in and where the event is:
-            int w, mx;
-            if (horizontal())
-            {
-                w = r.w();
-                mx = Fl::event_x() - r.x();
-            }
-            else
-            {
-                w = r.h();
-                mx = Fl::event_y() - r.y();
-            }
-            if (w <= slider_size())
-                return 1;
-            static int offcenter;
-            int X = slider_position(value(), w);
-            if (event == FL_PUSH)
-            {
-                offcenter = mx - X;
-                // we are done if they clicked on the slider:
-                if (offcenter >= (slider_size() ? 0 : -8) &&
-                    offcenter <= slider_size())
-                    return 1;
-                if (Fl::event_button() > FL_LEFT_MOUSE)
-                {
-                    // Move the near end of the slider to the cursor.
-                    // This is good for scrollbars.
-                    offcenter = (offcenter < 0) ? 0 : slider_size();
-                }
-                else
-                {
-                    // Center the slider under the cursor, what most toolkits do
-                    offcenter = slider_size() / 2;
-                }
-            }
-            double v;
-        RETRY:
-            X = mx - offcenter;
-            if (X < 0)
-            {
-                X = 0;
-                offcenter = mx;
-                if (offcenter < 0)
-                    offcenter = 0;
-            }
-            else if (X > (w - slider_size()))
-            {
-                X = w - slider_size();
-                offcenter = mx - X;
-                if (offcenter > slider_size())
-                    offcenter = slider_size();
-            }
-            v = position_value(X, w);
-            handle_drag(v);
-            // make sure a click outside the sliderbar moves it:
-            if (event == FL_PUSH && value() == previous_value())
-            {
-                offcenter = slider_size() / 2;
-                event = FL_DRAG;
-                goto RETRY;
-            }
-            return 1;
-        }
+            return handleDrag(event, r);
+
         case FL_RELEASE:
             handle_release();
-            redraw(); // DAMAGE_HIGHLIGHT);
+            redraw();
             return 1;
+
         case FL_KEYBOARD:
-            // Only arrows in the correct direction are used.  This allows the
-            // opposite arrows to be used to navigate between a set of parallel
-            // sliders.
+            // Only the arrow keys aligned with this slider's axis are
+            // consumed, leaving the perpendicular ones free to move focus
+            // between a row/column of sliders.
             switch (Fl::event_key())
             {
             case FL_Up:
@@ -537,28 +526,29 @@ namespace mrv
             case FL_Right:
                 if (!horizontal())
                     return 0;
+                break;
             }
+            return Fl_Slider::handle(event);
+
         default:
             return Fl_Slider::handle(event);
         }
-        return 1;
     }
 
     void Slider::draw()
     {
         draw_box();
 
-        tl::math::Box2i r(
+        const Box2i r(
             x() + Fl::box_dx(box()), y() + Fl::box_dy(box()),
             w() - Fl::box_dw(box()), h() - Fl::box_dh(box()));
         draw_ticks(r, 10);
 
-        int X = r.x() + slider_position(value(), r.w() - 10);
-        int Y = r.y();
-        int W = 10;
-        int H = r.h();
-        Fl_Color c = fl_lighter(color());
-        draw_box(FL_EMBOSSED_BOX, X, Y, W, H, c);
+        const int knobWidth = 10;
+        const int X = r.x() + slider_position(value(), r.w() - knobWidth);
+        const Fl_Color knobColor = fl_lighter(color());
+        draw_box(FL_EMBOSSED_BOX, X, r.y(), knobWidth, r.h(), knobColor);
+
         clear_damage();
     }
 

@@ -52,7 +52,8 @@ namespace
         const auto plugins = ioSystem->getPlugins();
         for (auto plugin : plugins)
         {
-            auto extensions = plugin->getExts(static_cast<int>(io::FileType::Movie));
+            auto extensions =
+                plugin->getExts(static_cast<int>(io::FileType::Movie));
             for (auto& extension : extensions)
             {
                 if (!result.empty())
@@ -71,7 +72,8 @@ namespace
         const auto plugins = ioSystem->getPlugins();
         for (auto plugin : plugins)
         {
-            auto extensions = plugin->getExts(static_cast<int>(io::FileType::Sequence));
+            auto extensions =
+                plugin->getExts(static_cast<int>(io::FileType::Sequence));
             for (auto& extension : extensions)
             {
                 if (!result.empty())
@@ -90,7 +92,8 @@ namespace
         const auto plugins = ioSystem->getPlugins();
         for (auto plugin : plugins)
         {
-            auto extensions = plugin->getExts(static_cast<int>(io::FileType::Audio));
+            auto extensions =
+                plugin->getExts(static_cast<int>(io::FileType::Audio));
             for (auto& extension : extensions)
             {
                 if (!result.empty())
@@ -105,11 +108,12 @@ namespace
     getSaveAudioPattern(const std::shared_ptr<tl::system::Context>& context)
     {
         std::string result;
-        const auto ioSystem = context->getSystem<io::WriteSystem>();
+        const auto ioSystem = context->getSystem<io::ReadSystem>();
         const auto plugins = ioSystem->getPlugins();
         for (auto plugin : plugins)
         {
-            auto extensions = plugin->getExts(static_cast<int>(io::FileType::Audio));
+            auto extensions =
+                plugin->getExts(static_cast<int>(io::FileType::Audio));
             for (auto& extension : extensions)
             {
                 if (extension == ".ac3" || extension == ".m4a" ||

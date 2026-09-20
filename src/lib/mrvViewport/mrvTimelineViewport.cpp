@@ -62,6 +62,7 @@
 
 #include <tlCore/HDR.h>
 #include <tlCore/Matrix.h>
+#include <tlCore/StringFormat.h>
 
 #include <FL/Fl.H>
 
@@ -135,18 +136,11 @@ namespace mrv
         bool TimelineViewport::Private::displayWindow = false;
         bool TimelineViewport::Private::ignoreDisplayWindow = false;
         float TimelineViewport::Private::pixelAspectRatio = -1.F;
-        std::string TimelineViewport::Private::helpText;
-        float TimelineViewport::Private::helpTextFade;
         bool TimelineViewport::Private::hudActive = true;
         HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
         image::Tags TimelineViewport::Private::tagData;
         short TimelineViewport::Private::ghostNext = 5;
         short TimelineViewport::Private::ghostPrevious = 5;
-
-        static void drawTimeoutText_cb(TimelineViewport* view)
-        {
-            view->clearHelpText();
-        }
 
         void TimelineViewport::_init()
         {
@@ -189,39 +183,6 @@ namespace mrv
         TimelineViewport::getVideoFrame() const noexcept
         {
             return _p->videoData;
-        }
-
-        void TimelineViewport::clearHelpText()
-        {
-            TLRENDER_P();
-            p.helpTextFade -= kHelpTimeout;
-            if (mrv::is_equal(p.helpTextFade, 0.F))
-            {
-                Fl::remove_timeout((Fl_Timeout_Handler)drawTimeoutText_cb, this);
-                p.helpText.clear();
-            }
-            else
-            {
-                Fl::repeat_timeout(
-                    kHelpTimeout, (Fl_Timeout_Handler)drawTimeoutText_cb, this);
-            }
-            redrawWindows();
-        }
-
-        void TimelineViewport::setHelpText(const std::string& text)
-        {
-            TLRENDER_P();
-            if (text == p.helpText)
-                return;
-
-            p.helpText = text;
-            p.helpTextFade = kHelpTextFade;
-
-            Fl::remove_timeout((Fl_Timeout_Handler)drawTimeoutText_cb, this);
-            Fl::add_timeout(
-                kHelpTimeout, (Fl_Timeout_Handler)drawTimeoutText_cb, this);
-
-            redrawWindows();
         }
 
         void TimelineViewport::undo()
@@ -411,12 +372,6 @@ namespace mrv
             p.ui->uiText->value(0);
             p.ui->uiVoice->value(0);
             p.ui->uiLink->value(0);
-            if (!mrv::feature_needs_solo_or_later())
-            {
-                p.actionMode = ActionMode::kScrub;
-                p.ui->uiScrub->value(1);
-                return;
-            }
 
             switch (mode)
             {
@@ -438,51 +393,117 @@ namespace mrv
                 p.ui->uiStatus->copy_label(_("Erase"));
                 break;
             case ActionMode::kCircle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiCircle->value(1);
                 p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(OutlineCircle));
                 p.ui->uiStatus->copy_label(_("Circle"));
                 break;
             case ActionMode::kFilledCircle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiCircle->value(1);
                 p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(FilledCircle));
                 p.ui->uiStatus->copy_label(_("Filled Circle"));
                 break;
             case ActionMode::kRectangle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiRectangle->value(1);
                 p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(OutlineRectangle));
                 p.ui->uiStatus->copy_label(_("Rectangle"));
                 break;
             case ActionMode::kFilledRectangle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiRectangle->value(1);
                 p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(FilledRectangle));
                 p.ui->uiStatus->copy_label(_("Filled Rectangle"));
                 break;
             case ActionMode::kArrow:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiArrow->value(1);
                 p.ui->uiStatus->copy_label(_("Arrow"));
                 break;
             case ActionMode::kText:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiText->value(1);
                 p.ui->uiStatus->copy_label(_("Text"));
                 break;
             case ActionMode::kVoice:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiVoice->value(1);
                 p.ui->uiStatus->copy_label(_("Voice"));
                 break;
             case ActionMode::kRotate:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiStatus->copy_label(_("Rotate"));
                 break;
             case ActionMode::kPolygon:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiPolygon->value(1);
                 p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(OutlinePolygon));
                 p.ui->uiStatus->copy_label(_("Polygon"));
                 break;
             case ActionMode::kFilledPolygon:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiPolygon->value(1);
                 p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(FilledPolygon));
                 p.ui->uiStatus->copy_label(_("Filled Polygon"));
                 break;
             case ActionMode::kLink:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiLink->value(1);
                 p.ui->uiStatus->copy_label(_("Link"));
                 break;
@@ -501,9 +522,39 @@ namespace mrv
             if (n == p.lastCursor)
                 return;
 
+#ifdef OPENGL_BACKEND
             if (window())
                 window()->cursor(n);
+#endif
 
+#ifdef VULKAN_BACKEND
+#   ifdef _WIN32
+            if (window())
+            {
+                if (n == FL_CURSOR_CROSS)
+                {
+                    static std::unique_ptr<Fl_PNG_Image> rgba_cross {
+                        load_png("crosshair.png")
+                    };
+                    window()->cursor(rgba_cross.get(), 16, 16);
+                }
+                else if (n == FL_CURSOR_INSERT)
+                {
+                    static std::unique_ptr<Fl_PNG_Image> rgba_insert {
+                        load_png("textcursor.png")
+                    };
+                    window()->cursor(rgba_insert.get(), 16, 16);
+                }
+                else
+                {
+                    window()->cursor(n);
+                }
+            }
+#   else
+                if (window())
+                    window()->cursor(n);
+#   endif
+#endif
             p.lastCursor = n;
         }
 
@@ -561,7 +612,7 @@ namespace mrv
                 return;
 
             const auto& t = player->currentTime();
-            auto time = t + otime::RationalTime(dx, t.rate());
+            auto time = t + OTIO_NS::RationalTime(dx, t.rate());
 
             // Stop at end/beginning if not looping.
             int behavior = p.ui->uiPrefs->uiPrefsScrubbingLoopMode->value();
@@ -1002,10 +1053,12 @@ namespace mrv
 
             updateDisplayOptions();
 
+
             if (p.displayOptions.empty())
                 return;
 
             const auto& d = p.displayOptions[0];
+            App::app->setDisplayOptions(d);
 
             if (d.hdrInfo == timeline::HDRInformation::Inactive)
             {
@@ -1061,6 +1114,7 @@ namespace mrv
             p.hdrOptions.peak_scene_low_limit = value.peak_scene_low_limit;
             p.hdrOptions.peak_scene_high_limit = value.peak_scene_high_limit;
 
+            p.hdrOptions.exportMode = value.exportMode;
             p.hdrOptions.algorithm = value.algorithm;
             p.hdrOptions.gamutMapping = value.gamutMapping;
             redrawWindows();
@@ -1069,6 +1123,18 @@ namespace mrv
         const timeline::HDROptions& TimelineViewport::getHDROptions() const noexcept
         {
             return _p->hdrOptions;
+        }
+
+        void TimelineViewport::setToneMapping(const bool value) noexcept
+        {
+            TLRENDER_P();
+
+            if (p.tonemap == value)
+                return;
+
+            p.tonemap = value;
+            _getHDR();
+            redrawWindows();
         }
 
         void TimelineViewport::setTimelinePlayer(TimelinePlayer* player) noexcept
@@ -1374,12 +1440,23 @@ namespace mrv
             if (p.selection.min.x >= 0)
             {
                 image::Size videoSize;
-                if (!values.empty() && !values[0].layers.empty())
+                if (!values.empty())
                 {
-                    const auto image = values[0].layers[0].image;
-                    if (image && image->isValid())
+                    if (!values[0].layers.empty())
                     {
-                        videoSize = image->getSize();
+                        auto image = values[0].layers[0].image;
+                        if (image && image->isValid())
+                        {
+                            videoSize = image->getSize();
+                        }
+                        else
+                        {
+                            image = values[0].layers[0].imageB;
+                            if (image && image->isValid())
+                            {
+                                videoSize = image->getSize();
+                            }
+                        }
                     }
                 }
 
@@ -1398,30 +1475,35 @@ namespace mrv
                 {
                     resizeWindow();
                 }
-                else if (p.frameView)
-                {
-                    frameView();
-                }
 
                 const auto& renderSize = getRenderSize();
                 if (renderSize.isValid())
                 {
+                    if (p.frameView)
+                        frameView();
+
                     p.resizeWindow = false;
                 }
-            }
-            else if (p.frameView && p.switchClip)
-            {
-                frameView();
             }
 
             if (p.switchClip && !values.empty() && !values[0].layers.empty())
             {
-                const auto image = values[0].layers[0].image;
+                auto image = values[0].layers[0].image;
                 if (image && image->isValid())
                 {
-                    const auto& videoSize = image->getSize();
-                    p.videoSize = videoSize;
+                    p.videoSize = image->getSize();
                 }
+                else
+                {
+                    image = values[0].layers[0].imageB;
+                    if (image && image->isValid())
+                    {
+                        p.videoSize = image->getSize();
+                    }
+                }
+
+                if (p.frameView)
+                    frameView();
 
                 p.switchClip = false;
                 p.droppedFrames = 0;
@@ -1460,7 +1542,7 @@ namespace mrv
                         while (1)
                         {
                             currentTime -=
-                                otio::RationalTime(1, currentTime.rate());
+                                OTIO_NS::RationalTime(1, currentTime.rate());
                             const auto& videoData =
                                 timeline->getVideo(currentTime, ioOptions)
                                 .future.get();
@@ -2327,20 +2409,15 @@ namespace mrv
             if (p.videoData.empty())
             {
                 p.displayOptions.resize(1); // needed for image filters
-                p.ui->uiGain->value(1.0f);
-                p.ui->uiGainInput->value(1.0f);
-                p.ui->uiGamma->value(1.0f);
-                p.ui->uiGammaInput->value(1.0f);
-                p.ui->uiSaturation->value(1.0f);
-                p.ui->uiSaturationInput->value(1.0f);
-                _pushColorMessage("saturation", 1.0f);
-                _pushColorMessage("gain", 1.0f);
-                _pushColorMessage("gamma", 1.0f);
+
+                // \@note:
+                // We don't reset gain/gamma/saturation here as there's
+                // a small time when video data is empty and there's a
+                // switch to a new clip.
                 return;
             }
 
-            timeline::DisplayOptions d;
-            d = p.displayOptions[0];
+            timeline::DisplayOptions d = App::app->displayOptions();
 
             // Get these from the toggle menus
 
@@ -2356,14 +2433,12 @@ namespace mrv
             }
 
             d.exrDisplay.enabled = false;
-            if (d.exrDisplay.exposure < 0.001F)
-                d.exrDisplay.exposure = d.color.brightness.x;
 
             float gain = p.ui->uiGain->value();
             _pushColorMessage("gain", gain);
-            d.color.brightness.x = d.exrDisplay.exposure * gain;
-            d.color.brightness.y = d.exrDisplay.exposure * gain;
-            d.color.brightness.z = d.exrDisplay.exposure * gain;
+            d.color.brightness.x = gain;
+            d.color.brightness.y = gain;
+            d.color.brightness.z = gain;
 
             float saturation = p.ui->uiSaturation->value();
             p.ui->uiSaturationInput->value(saturation);
@@ -2414,6 +2489,10 @@ namespace mrv
 
             const auto& videos = info.video;
 
+            int layerId = p.ui->uiColorChannel->value();
+            if (layerId < 0)
+                layerId = 0;
+
             p.ui->uiColorChannel->clear();
 
             std::string name;
@@ -2432,22 +2511,18 @@ namespace mrv
             }
             else
             {
-                const Fl_Menu_Item* item = p.ui->uiColorChannel->child(idx);
-                p.ui->uiColorChannel->copy_label(item->label());
+                p.ui->uiColorChannel->value(layerId);
+
+                _updateLayers();
             }
         }
 
-        // This function is needed to force the repositioning of the window/view
-        // before querying, for example, the mouse coordinates.
+        // This function is needed to force the repositioning of the
+        // window/view before querying, for example, the mouse coordinates.
         void TimelineViewport::_refresh() noexcept
         {
             redraw();
             Fl::flush(); // force the redraw
-        }
-
-        bool TimelineViewport::getPresentationMode() const noexcept
-        {
-            return _p->presentation;
         }
 
         bool TimelineViewport::_hasSecondaryViewport() const noexcept
@@ -2511,7 +2586,13 @@ namespace mrv
             w->fill_menu(p.ui->uiMenuBar);
         }
 
-        //! Set or unset the window to full screen and hide/show all bars
+        //! Get presentation mode.
+        bool TimelineViewport::getPresentationMode() const noexcept
+        {
+            return _p->presentation;
+        }
+
+        //! Set or unset the window to full screen and hide/show all bars.
         void TimelineViewport::setPresentationMode(bool active) noexcept
         {
             TLRENDER_P();
@@ -2636,16 +2717,9 @@ namespace mrv
             w->maximize();
         }
 
-        void TimelineViewport::_updateDisplayOptions(
-            const timeline::DisplayOptions& d) noexcept
+        void TimelineViewport::_updateLayers()
         {
             TLRENDER_P();
-
-            p.displayOptions.resize(p.videoData.size());
-            for (auto& display : p.displayOptions)
-            {
-                display = d;
-            }
 
             const TimelinePlayer* player = getTimelinePlayer();
             if (!player)
@@ -2657,12 +2731,13 @@ namespace mrv
             if (videos.empty())
                 return;
 
-            int layer = p.ui->uiColorChannel->value();
-            if (layer < 0)
-                layer = 0;
+            int layerId = p.ui->uiColorChannel->value();
+            layerId = std::clamp(layerId, 0,
+                                 static_cast<int>(videos.size()-1));
 
-            std::string name = mrv::color::layer(videos[layer].name);
+            std::string name = mrv::color::layer(videos[layerId].name);
 
+            auto d = App::app->displayOptions();
             switch (d.channels)
             {
             case timeline::Channels::Red:
@@ -2677,17 +2752,35 @@ namespace mrv
             case timeline::Channels::Alpha:
                 name += " (A)";
                 break;
+            case timeline::Channels::Lumma:
+                name += " (L)";
+                break;
             case timeline::Channels::Color:
             default:
                 break;
             }
 
+            p.ui->uiColorChannel->copy_label(name.c_str());
+            p.ui->uiColorChannel->redraw();
+        }
+
+        void TimelineViewport::_updateDisplayOptions(
+            const timeline::DisplayOptions& d) noexcept
+        {
+            TLRENDER_P();
+
+            p.displayOptions.resize(p.videoData.size());
+            for (auto& display : p.displayOptions)
+            {
+                display = d;
+            }
+
+            _updateLayers();
+
             const auto outputDevice = App::app->outputDevice();
             if (outputDevice)
                 outputDevice->setDisplayOptions({d});
 
-            p.ui->uiColorChannel->copy_label(name.c_str());
-            p.ui->uiColorChannel->redraw();
             redraw();
         }
 
@@ -2824,10 +2917,16 @@ namespace mrv
             case image::PixelType::YUV_420P_U8:
             case image::PixelType::YUV_422P_U8:
             case image::PixelType::YUV_444P_U8:
+            case image::PixelType::YUV_420SP_U8:
+            case image::PixelType::YUV_422SP_U8:
+            case image::PixelType::YUV_444SP_U8:
                 break;
             case image::PixelType::YUV_420P_U16:
             case image::PixelType::YUV_422P_U16:
             case image::PixelType::YUV_444P_U16:
+            case image::PixelType::YUV_420SP_U16:
+            case image::PixelType::YUV_422SP_U16:
+            case image::PixelType::YUV_444SP_U16:
                 break;
             case image::PixelType::RGB_U10:
                 offset *= sizeof(uint32_t);
@@ -3323,6 +3422,126 @@ namespace mrv
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
             }
+            case image::PixelType::YUV_420SP_U8:
+            {
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0);
+                offset = Y * stride + X;
+                rgba.r = data[offset] / 255.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1);
+                offset = (Y / 2) * stride + (X / 2) * 2;
+                rgba.g = data[offset] / 255.0f;
+                rgba.b = data[offset + 1] / 255.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_422SP_U8:
+            {
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0);
+                offset = Y * stride + X;
+                rgba.r = data[offset] / 255.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1);
+                offset = Y * stride + (X / 2) * 2;
+                rgba.g = data[offset] / 255.0f;
+                rgba.b = data[offset + 1] / 255.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_444SP_U8:
+            {
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0);
+                offset = Y * stride + X;
+                rgba.r = data[offset] / 255.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1);
+                offset = Y * stride + X * 2;
+                rgba.g = data[offset] / 255.0f;
+                rgba.b = data[offset + 1] / 255.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_420SP_U16:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 65535.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = (Y / 2) * stride + (X / 2) * 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 65535.0f;
+                rgba.b = f[offset + 1] / 65535.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_422SP_U16:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 65535.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = Y * stride + (X / 2) * 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 65535.0f;
+                rgba.b = f[offset + 1] / 65535.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_444SP_U16:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 65535.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = Y * stride + X * 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 65535.0f;
+                rgba.b = f[offset + 1] / 65535.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
             default:
                 break;
             }
@@ -3681,7 +3900,7 @@ namespace mrv
             }
             else
             {
-                data.time = otime::RationalTime(0.F, 24.F);
+                data.time = OTIO_NS::RationalTime(0.F, 24.F);
                 activate();
             }
 
@@ -3747,6 +3966,14 @@ namespace mrv
             return _p->tagData;
         }
 
+
+        void TimelineViewport::setAutoICS()
+        {
+            TLRENDER_P();
+
+            _getHDR();
+        }
+
         void TimelineViewport::_getHDR() noexcept
         {
             TLRENDER_P();
@@ -3762,8 +3989,8 @@ namespace mrv
             if (hdrData)
             {
                 // When we have video data, we must tonemap it with libplacebo.
+                p.hdrOptions.tonemap = p.tonemap;
                 p.hdrOptions.hdrData = *hdrData;
-                p.hdrOptions.tonemap = true;
 
                 if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
                     p.ocio_disabled = true;
@@ -3787,17 +4014,17 @@ namespace mrv
                 const auto extension = path.getExtension();
                 if (file::isMovie(extension))
                 {
-                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.tonemap = p.tonemap;
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
 
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
-                    {
                         p.ocio_disabled = true;
-                    }
+                    else
+                        p.ocio_disabled = false;
                 }
                 else if (file::isSRGB(extension))
                 {
-                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.tonemap = p.tonemap;
                     p.hdrOptions.hdrData = image::nameToPrimaries("SRGB");
 
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
@@ -3813,6 +4040,35 @@ namespace mrv
 
                     // Make sure ocio is enabled.
                     p.ocio_disabled = false;
+
+                    // Handle OCIO Auto ICS
+                    if (p.ui->uiAutoICS->value())
+                    {
+                        const std::string help =
+                            _("Automatically select Input Color Space\n"
+                              "from file and OpenEXR metadata.  ");
+
+                        bool autoUnmatched;
+                        std::string autoName;
+                        std::string autoSource;
+                        std::string name = ocio::autoICS(autoUnmatched,
+                                                         autoName,
+                                                         autoSource);
+
+                        if (!name.empty() && name != p.ocioOptions.input)
+                        {
+                            ocio::setIcs(name);
+                            std::string tooltip = string::Format("{0}Currently: {1} from {2}")
+                                                  .arg(help)
+                                                  .arg(autoName)
+                                                  .arg(autoSource);
+                            p.ui->uiAutoICS->copy_tooltip(tooltip.c_str());
+                        }
+                        else
+                        {
+                            p.ui->uiAutoICS->copy_tooltip(help.c_str());
+                        }
+                    }
 
                     // We pass BT709 metadata unless OCIO changes it in
                     // Viewport::_updateHDRMetadata().

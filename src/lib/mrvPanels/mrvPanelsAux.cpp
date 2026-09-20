@@ -15,10 +15,10 @@ namespace mrv
 {
     namespace panel
     {
-        image::Size calculateImageSize()
+        image::Size calculateImageSize(int thumbnailType)
         {
             image::Size out;
-            switch(App::ui->uiPrefs->uiPrefsPanelThumbnails->value())
+            switch(thumbnailType)
             {
             case kThumbnailNormal:
                 out = image::Size(128, 64);
@@ -30,7 +30,7 @@ namespace mrv
             }
             return out;
         }
-        
+
         std::string getLayerName(
             const std::shared_ptr<FilesModelItem>& item, const uint16_t layerId)
         {

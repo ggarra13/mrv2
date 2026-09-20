@@ -5,7 +5,6 @@
 #pragma once
 
 #include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
 
@@ -15,12 +14,6 @@ namespace mrv
     {
         mrv::App* app = mrv::App::app;
         return app->filesModel();
-    }
-
-    inline const std::shared_ptr<mrv::PlaylistsModel>& playlistModel()
-    {
-        mrv::App* app = mrv::App::app;
-        return app->playlistsModel();
     }
 
     inline mrv::SettingsObject* settings()

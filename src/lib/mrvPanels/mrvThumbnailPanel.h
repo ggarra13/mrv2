@@ -20,9 +20,18 @@
 class ViewerUI;
 class Fl_Widget;
 
+namespace tl
+{
+    namespace timeline
+    {
+        class Timeline;
+    }
+}
+
 namespace mrv
 {
     class ThumbnailCreator;
+    class FilesModelItem;
 
     namespace panel
     {
@@ -42,10 +51,15 @@ namespace mrv
 
         protected:
 
+            void _createThumbnail(
+                Fl_Widget* widget, const std::shared_ptr<FilesModelItem>&,
+                const OTIO_NS::RationalTime& time, const int layerId = 0,
+                const std::string& mediaReferenceKey = "");
 
             void _createThumbnail(
                 Fl_Widget* widget, const file::Path& path,
-                const otime::RationalTime& time, const int layerId = 0,
+                const std::shared_ptr<timeline::Timeline>& timeline,
+                const OTIO_NS::RationalTime& time, const int layerId = 0,
                 const std::string& mediaReferenceKey = "");
 
             void _cancelRequests();
@@ -57,9 +71,12 @@ namespace mrv
             //! Whether to clear the cache for the thumbnails.
             bool _clearCache = false;
 
-            std::shared_ptr<TIMELINEUI::ThumbnailSystem> thumbnailSystem;
-
-            std::map<Fl_Widget*, TIMELINEUI::ThumbnailRequest> thumbnailRequests;
+#ifdef OPENGL_BACKEND
+            std::map<Fl_Widget*, timelineui::ThumbnailRequest> thumbnailRequests;
+#endif
+#ifdef VULKAN_BACKEND
+            std::map<Fl_Widget*, timelineui_vk::ThumbnailRequest> thumbnailRequests;
+#endif
         };
 
     } // namespace panel

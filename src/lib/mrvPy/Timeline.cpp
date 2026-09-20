@@ -27,7 +27,7 @@ namespace mrv2
 
     namespace timeline
     {
-        void setInOutRange(const otio::TimeRange& value);
+        void setInOutRange(const OTIO_NS::TimeRange& value);
 
         /**
          * @brief Return the current timeline position in frames.
@@ -41,7 +41,7 @@ namespace mrv2
             if (!player)
                 return 0;
 
-            otime::RationalTime t = player->currentTime();
+            OTIO_NS::RationalTime t = player->currentTime();
             return t.to_frames();
         }
 
@@ -71,11 +71,11 @@ namespace mrv2
          *
          * @return TimeRange
          */
-        otio::TimeRange inOutRange()
+        OTIO_NS::TimeRange inOutRange()
         {
             auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
-                return otio::TimeRange();
+                return OTIO_NS::TimeRange();
 
             return player->inOutRange();
         }
@@ -125,7 +125,7 @@ namespace mrv2
             if (!player)
                 return 0.0;
 
-            otime::RationalTime t = player->currentTime();
+            OTIO_NS::RationalTime t = player->currentTime();
             return t.to_seconds();
         }
 
@@ -134,7 +134,7 @@ namespace mrv2
          *
          * @param t RationalTime
          */
-        void seek(const otime::RationalTime& t)
+        void seek(const OTIO_NS::RationalTime& t)
         {
             auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
@@ -152,7 +152,7 @@ namespace mrv2
             auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
-            otime::RationalTime t(frame, player->defaultSpeed());
+            OTIO_NS::RationalTime t(frame, player->defaultSpeed());
             player->seek(t);
         }
 
@@ -166,7 +166,7 @@ namespace mrv2
             auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
-            otime::RationalTime t(seconds, 1.0);
+            OTIO_NS::RationalTime t(seconds, 1.0);
             player->seek(t);
         }
 
@@ -184,17 +184,17 @@ namespace mrv2
          *
          * @param value RationalTime.
          */
-        void setIn(const otio::RationalTime& value)
+        void setIn(const OTIO_NS::RationalTime& value)
         {
             auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
 
-            otio::TimeRange range = player->inOutRange();
+            OTIO_NS::TimeRange range = player->inOutRange();
             const auto& endTime = range.end_time_exclusive();
 
             auto new_range =
-                otime::TimeRange::range_from_start_end_time(value, endTime);
+                OTIO_NS::TimeRange::range_from_start_end_time(value, endTime);
             setInOutRange(new_range);
         }
 
@@ -209,10 +209,10 @@ namespace mrv2
             if (!player)
                 return;
 
-            otio::TimeRange range = player->inOutRange();
+            OTIO_NS::TimeRange range = player->inOutRange();
             const auto& endTime = range.end_time_exclusive();
-            otime::RationalTime time =
-                otime::RationalTime(value, endTime.rate());
+            OTIO_NS::RationalTime time =
+                OTIO_NS::RationalTime(value, endTime.rate());
             setIn(time);
         }
 
@@ -227,9 +227,9 @@ namespace mrv2
             if (!player)
                 return;
 
-            otio::TimeRange range = player->inOutRange();
+            OTIO_NS::TimeRange range = player->inOutRange();
             const auto& endTime = range.end_time_exclusive();
-            otime::RationalTime time = otime::RationalTime(value, 1.0);
+            OTIO_NS::RationalTime time = opentime::RationalTime(value, 1.0);
             setIn(time);
         }
 
@@ -238,7 +238,7 @@ namespace mrv2
          *
          * @param value TimeRange.
          */
-        void setInOutRange(const otio::TimeRange& value)
+        void setInOutRange(const OTIO_NS::TimeRange& value)
         {
             auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
@@ -254,17 +254,17 @@ namespace mrv2
          *
          * @param value RationalTime.
          */
-        void setOut(const otio::RationalTime& value)
+        void setOut(const OTIO_NS::RationalTime& value)
         {
             auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
 
-            otio::TimeRange range = player->inOutRange();
+            OTIO_NS::TimeRange range = player->inOutRange();
             const auto& startTime = range.start_time();
 
             auto new_range =
-                otime::TimeRange::range_from_start_end_time(startTime, value);
+                OTIO_NS::TimeRange::range_from_start_end_time(startTime, value);
             setInOutRange(new_range);
         }
 
@@ -279,10 +279,10 @@ namespace mrv2
             if (!player)
                 return;
 
-            otio::TimeRange range = player->inOutRange();
+            OTIO_NS::TimeRange range = player->inOutRange();
             const auto& startTime = range.start_time();
-            otime::RationalTime time =
-                otime::RationalTime(value, startTime.rate());
+            OTIO_NS::RationalTime time =
+                OTIO_NS::RationalTime(value, startTime.rate());
             setOut(time);
         }
 
@@ -297,9 +297,9 @@ namespace mrv2
             if (!player)
                 return;
 
-            otio::TimeRange range = player->inOutRange();
+            OTIO_NS::TimeRange range = player->inOutRange();
             const auto& startTime = range.start_time();
-            otime::RationalTime time = otime::RationalTime(value, 1.0);
+            OTIO_NS::RationalTime time = opentime::RationalTime(value, 1.0);
             setOut(time);
         }
 
@@ -316,7 +316,7 @@ namespace mrv2
          *
          * @return RationalTime
          */
-        otime::RationalTime time()
+        OTIO_NS::RationalTime time()
         {
             auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
@@ -332,11 +332,11 @@ namespace mrv2
          *
          * @return TimeRange
          */
-        otio::TimeRange timeRange()
+        OTIO_NS::TimeRange timeRange()
         {
             auto player = App::ui->uiView->getTimelinePlayer();
             if (!player)
-                return otio::TimeRange();
+                return OTIO_NS::TimeRange();
 
             return player->timeRange();
         }
@@ -402,7 +402,7 @@ Contains all functions related to the timeline control.
     timeline.def("stop", &mrv2::timeline::stop, _("Play forwards."));
     timeline.def(
         "seek",
-        py::overload_cast<const otime::RationalTime&>(&mrv2::timeline::seek),
+        py::overload_cast<const OTIO_NS::RationalTime&>(&mrv2::timeline::seek),
         _("Seek to a time in timeline."), py::arg("time"));
     timeline.def(
         "seek", py::overload_cast<const int64_t&>(&mrv2::timeline::seek),
@@ -425,7 +425,7 @@ Contains all functions related to the timeline control.
 
     timeline.def(
         "setIn",
-        py::overload_cast<const otime::RationalTime&>(&mrv2::timeline::setIn),
+        py::overload_cast<const OTIO_NS::RationalTime&>(&mrv2::timeline::setIn),
         _("Set the in time of the selected time range of the timeline."));
     timeline.def(
         "setIn", py::overload_cast<const int64_t&>(&mrv2::timeline::setIn),
@@ -436,7 +436,7 @@ Contains all functions related to the timeline control.
 
     timeline.def(
         "setOut",
-        py::overload_cast<const otime::RationalTime&>(&mrv2::timeline::setOut),
+        py::overload_cast<const OTIO_NS::RationalTime&>(&mrv2::timeline::setOut),
         _("Set the out time of the selected time range of the timeline."));
     timeline.def(
         "setOut", py::overload_cast<const int64_t&>(&mrv2::timeline::setOut),

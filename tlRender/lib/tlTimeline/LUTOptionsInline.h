@@ -9,7 +9,7 @@ namespace tl
         inline bool LUTOptions::operator==(const LUTOptions& other) const
         {
             return enabled == other.enabled && fileName == other.fileName &&
-                   order == other.order;
+                   order == other.order && direction == other.direction;
         }
 
         inline bool LUTOptions::operator!=(const LUTOptions& other) const

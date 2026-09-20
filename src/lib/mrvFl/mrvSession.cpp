@@ -43,7 +43,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 17;
+    const int kSessionVersion = 19;
 } // namespace
 
 namespace
@@ -166,17 +166,14 @@ namespace mrv
                 {"Color", (colorPanel != nullptr)},
                 {"Color Area", (colorAreaPanel != nullptr)},
                 {"Compare", (comparePanel != nullptr)},
-                {"Playlist", (playlistPanel != nullptr)},
                 {"Media Information", (imageInfoPanel != nullptr)},
                 {"Annotations", (annotationsPanel != nullptr)},
+                {"Notes", (notesPanel != nullptr)},
                 {"Devices", (devicesPanel != nullptr)},
                 {"Environment Map", (environmentMapPanel != nullptr)},
                 {"Settings", (settingsPanel != nullptr)},
 #ifdef MRV2_PYBIND11
                 {"Python", (pythonPanel != nullptr)},
-#endif
-#ifdef MRV2_NETWORK
-                {"Network", (networkPanel != nullptr)},
 #endif
 #ifdef TLRENDER_NDI
                 {"NDI", (ndiPanel != nullptr)},
@@ -200,12 +197,12 @@ namespace mrv
                 colorAreaPanel->save();
             if (comparePanel)
                 comparePanel->save();
-            if (playlistPanel)
-                playlistPanel->save();
             if (imageInfoPanel)
                 imageInfoPanel->save();
             if (annotationsPanel)
                 annotationsPanel->save();
+            if (notesPanel)
+                notesPanel->save();
 #ifdef TLRENDER_NDI
             if (ndiPanel)
                 ndiPanel->save();
@@ -217,10 +214,6 @@ namespace mrv
 #ifdef MRV2_PYBIND11
             if (pythonPanel)
                 pythonPanel->save();
-#endif
-#ifdef MRV2_NETWORK
-            if (networkPanel)
-                networkPanel->save();
 #endif
 #ifdef TLRENDER_USD
             if (usdPanel)
@@ -855,7 +848,7 @@ namespace mrv
 
                         if (version >= 11)
                         {
-                            otime::TimeRange inOutRange;
+                            OTIO_NS::TimeRange inOutRange;
                             j["inOutRange"].get_to(inOutRange);
                             player->setInOutRange(inOutRange);
 
@@ -876,14 +869,14 @@ namespace mrv
                                 {
                                     c->uiEndFrame->setTime(
                                         inOutRange.end_time_exclusive() -
-                                        otime::RationalTime(
+                                        OTIO_NS::RationalTime(
                                             1.0, inOutRange.duration().rate()));
                                     c->uiEndButton->value(1);
                                 }
                             }
                         }
 
-                        otime::RationalTime time;
+                        OTIO_NS::RationalTime time;
                         j["time"].get_to(time);
                         player->seek(time);
 
@@ -927,6 +920,12 @@ namespace mrv
                         {
                             auto actionMode = session["actionMode"];
                             view->setActionMode(actionMode);
+                        }
+
+                        if (version >= 18)
+                        {
+                            if (notesPanel)
+                                notesPanel->refresh();
                         }
 
                     }

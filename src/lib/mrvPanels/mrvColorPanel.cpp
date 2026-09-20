@@ -38,6 +38,7 @@ namespace mrv
             Fl_Check_Button* lutOn = nullptr;
             Input* lutFilename = nullptr;
             Fl_Choice* lutOrder = nullptr;
+            Fl_Choice* lutDirection = nullptr;
 
             Fl_Check_Button* colorOn = nullptr;
             HorSlider* addSlider = nullptr;
@@ -193,6 +194,27 @@ namespace mrv
             gb = new Fl_Group(g->x(), 20, g->w(), 20);
             gb->begin();
             auto mW = new Widget< Fl_Choice >(
+                g->x() + 100, 21, g->w() - 100, 20, _("Direction"));
+            m = _r->lutDirection = mW;
+            m->labelsize(12);
+            m->align(FL_ALIGN_LEFT);
+            m->add("Forward");
+            m->add("Inverse");
+            m->value(0);
+            mW->callback(
+                [=](auto o)
+                {
+                    timeline::LUTDirection direction = (timeline::LUTDirection)o->value();
+                    auto lutOptions = App::app->lutOptions();
+                    lutOptions.direction = direction;
+                    App::app->setLUTOptions(lutOptions);
+                });
+
+            gb->end();
+
+            gb = new Fl_Group(g->x(), 20, g->w(), 20);
+            gb->begin();
+            mW = new Widget< Fl_Choice >(
                 g->x() + 100, 21, g->w() - 100, 20, _("Order"));
             m = _r->lutOrder = mW;
             m->labelsize(12);

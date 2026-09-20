@@ -14,17 +14,16 @@ set(HEADERS
     mrvHistogramPanel.h
     mrvImageInfoPanel.h
     mrvLogsPanel.h
+    mrvNotesPanel.h
     mrvPanelsAux.h
     mrvPanelsCallbacks.h
     mrvPanelWidget.h
-    mrvPlaylistPanel.h
     mrvSettingsPanel.h
     mrvStatsPanel.h
     mrvStereo3DPanel.h
     mrvThumbnailPanel.h
     mrvVectorscopePanel.h
     mrvWaveformPanel.h
-    mrvWebRTCPanel.h
 )
 
 set(SOURCES
@@ -39,17 +38,16 @@ set(SOURCES
     mrvImageInfoPanel.cpp
     mrvEnvironmentMapPanel.cpp
     mrvLogsPanel.cpp
+    mrvNotesPanel.cpp
     mrvPanelWidget.cpp
     mrvPanelsAux.cpp
     mrvPanelsCallbacks.cpp
-    mrvPlaylistPanel.cpp
     mrvSettingsPanel.cpp
     mrvStatsPanel.cpp
     mrvStereo3DPanel.cpp
     mrvThumbnailPanel.cpp
     mrvVectorscopePanel.cpp
     mrvWaveformPanel.cpp
-    mrvWebRTCPanel.cpp
 )
 	
 if(TLRENDER_USD)
@@ -74,11 +72,19 @@ if(MRV2_PYBIND11)
 endif()
 
 if(MRV2_NETWORK)
-    list( APPEND HEADERS mrvNetworkPanel.h )
-    list( APPEND SOURCES mrvNetworkPanel.cpp )
+    list(APPEND HEADERS mrvWebRTCPanel.h)
+    list(APPEND SOURCES mrvWebRTCPanel.cpp)
 endif()
 
 set(LIBRARIES mrvFl mrvEdit)
+# if(MRV2_PYBIND11)
+#     list( APPEND LIBRARIES pybind11::embed )
+#     if(UNIX AND NOT APPLE)
+# 	# \@note: still needed?
+# 	# Needed for python3.10 on Rocky and Ubuntu 20.04
+# 	list( APPEND LIBRARIES "util" )
+#     endif()
+# endif()
 
 add_library(mrvPanels ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

@@ -20,6 +20,7 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPopupMenu.h"
 
+#include "mrvIcons/Butterfly.h"
 #include "mrvIcons/Compare.h"
 #include "mrvIcons/CompareA.h"
 #include "mrvIcons/CompareB.h"
@@ -139,11 +140,12 @@ namespace mrv
 
             const auto player = p.ui->uiView->getTimelinePlayer();
 
-            otio::RationalTime time = otio::RationalTime(0.0, 1.0);
+            OTIO_NS::RationalTime time = OTIO_NS::RationalTime(0.0, 1.0);
             if (player)
                 time = player->currentTime();
 
-            size = panel::calculateImageSize();
+            int thumbnailType = p.ui->uiPrefs->uiPrefsComparePanelThumbnails->value();
+            size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
             int Y = g->y();
@@ -208,8 +210,7 @@ namespace mrv
                 _r->map[i] = b;
 
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     const std::string layer = getLayerName(media, layerId);
                     label = protocol + dir + "\n" + file + layer;
@@ -220,7 +221,13 @@ namespace mrv
                 }
                 b->copy_label(label.c_str());
 
-                _createThumbnail(b, path, time, layerId,
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
+
+                _createThumbnail(b, media, time, layerId,
                                  media->mediaReferenceKey);
 
                 Y += size.h;
@@ -394,6 +401,18 @@ namespace mrv
 
             bW = new Widget< Button >(X + 60, Y, 30, 30);
             b = bW;
+            b->bind_image(MRV2_LOAD_SVG(Butterfly));
+            b->tooltip(_("Show the halves of the A and B files,\n"
+                         "one of them mirrored"));
+
+            bW->callback(
+                [=](auto w)
+                {
+                    compare_butterfly_cb(nullptr, p.ui);
+                });
+
+            bW = new Widget< Button >(X + 90, Y, 30, 30);
+            b = bW;
             b->bind_image(MRV2_LOAD_SVG(Prev));
             b->tooltip(_("Previous filename"));
             bW->callback(
@@ -403,7 +422,7 @@ namespace mrv
                         p.ui->app->filesModel()->prevB();
                 });
 
-            bW = new Widget< Button >(X + 90, Y, 30, 30);
+            bW = new Widget< Button >(X + 120, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(Next));
             b->tooltip(_("Next filename"));
@@ -580,7 +599,7 @@ namespace mrv
             const auto player = p.ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
-            otio::RationalTime time;
+            OTIO_NS::RationalTime time;
 
             const auto& model = p.ui->app->filesModel();
             const auto& files = model->observeFiles();
@@ -589,6 +608,8 @@ namespace mrv
             auto Aindex = model->observeAIndex()->get();
             auto Bindices = model->observeBIndexes()->get();
             auto o = model->observeCompareOptions()->get();
+
+            int thumbnailType = p.ui->uiPrefs->uiPrefsComparePanelThumbnails->value();
 
             for (int i = 0; i < numFiles; ++i)
             {
@@ -633,8 +654,7 @@ namespace mrv
                 b->redraw();
 
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     const std::string layer = getLayerName(media, layerId);
                     label = protocol + dir + "\n" + file + layer;
@@ -645,7 +665,13 @@ namespace mrv
                 }
                 b->copy_label(label.c_str());
 
-                _createThumbnail(b, path, time, layerId,
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
+
+                _createThumbnail(b, media, time, layerId,
                                  media->mediaReferenceKey);
             }
         }

@@ -49,7 +49,7 @@ namespace fs = std::filesystem;
 namespace
 {
     const char* kModule = "pref";
-    const int kPreferencesVersion = 9;
+    const int kPreferencesVersion = 10;
 } // namespace
 
 extern float kCrops[];
@@ -67,8 +67,6 @@ namespace mrv
     bool Preferences::native_file_chooser;
 
     std::string Preferences::root;
-    int Preferences::debug = 0;
-    int Preferences::logLevel = 0;
     std::string Preferences::hotkeys_file = "mrv2.keys";
 
     int Preferences::language_index = 0; // English
@@ -303,7 +301,14 @@ namespace mrv
             default_panel_thumbnails = 0;
         gui.get("panel_thumbnails_size", tmp, default_panel_thumbnails);
 
-        uiPrefs->uiPrefsPanelThumbnails->value(tmp);
+        gui.get("files_panel_thumbnails_size", tmp, default_panel_thumbnails);
+        uiPrefs->uiPrefsFilesPanelThumbnails->value(tmp);
+
+        gui.get("compare_panel_thumbnails_size", tmp, default_panel_thumbnails);
+        uiPrefs->uiPrefsComparePanelThumbnails->value(tmp);
+
+        gui.get("stereo3D_panel_thumbnails_size", tmp, default_panel_thumbnails);
+        uiPrefs->uiPrefsStereo3DPanelThumbnails->value(tmp);
 
         gui.get("panel_thumbnails_manually", tmp, 0);
         uiPrefs->uiPrefsManualPanelThumbnails->value(tmp);
@@ -651,6 +656,9 @@ namespace mrv
             setConfig(ocio::ocioDefault);
         }
 
+        ocio.get("use_ocio_auto_ics", tmp, 0);
+        uiPrefs->uiOCIOUseAutoICS->value(tmp);
+
         ocio.get("use_default_display_view", tmp, 0);
         uiPrefs->uiOCIOUseDefaultDisplayView->value(tmp);
 
@@ -800,6 +808,8 @@ namespace mrv
         uiPrefs->uiPrefsPixelRGBA->value(tmp);
 
         pixel_toolbar.get("pixel_values", tmp, 0);
+        if (version < kPreferencesVersion)
+            tmp += 2;
         uiPrefs->uiPrefsPixelValues->value(tmp);
 
         pixel_toolbar.get("HSV_pixel", tmp, 0);
@@ -1458,7 +1468,15 @@ namespace mrv
         gui.set("timeline_video_offset", uiPrefs->uiStartTimeOffset->value());
         gui.set(
             "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
-        gui.set("panel_thumbnails_size", uiPrefs->uiPrefsPanelThumbnails->value());
+
+        // Thumbnails sizes on all panels
+        gui.set("files_panel_thumbnails_size",
+                uiPrefs->uiPrefsFilesPanelThumbnails->value());
+        gui.set("compare_panel_thumbnails_size",
+                uiPrefs->uiPrefsComparePanelThumbnails->value());
+        gui.set("stereo3D_panel_thumbnails_size",
+                uiPrefs->uiPrefsStereo3DPanelThumbnails->value());
+
         gui.set("panel_thumbnails_manually",
                 uiPrefs->uiPrefsManualPanelThumbnails->value());
         gui.set("remove_edls", uiPrefs->uiPrefsRemoveEDLs->value());
@@ -1545,6 +1563,8 @@ namespace mrv
             Fl_Preferences ocio(view, "ocio");
 
             ocio.set("config", uiPrefs->uiPrefsOCIOConfig->value());
+            ocio.set("use_ocio_auto_ics",
+                     uiPrefs->uiOCIOUseAutoICS->value());
             ocio.set(
                 "use_default_display_view",
                 uiPrefs->uiOCIOUseDefaultDisplayView->value());
@@ -2117,6 +2137,16 @@ namespace mrv
             ui->uiCOLORS->show();
         }
 
+        if (!uiPrefs->uiOCIOUseAutoICS->value())
+        {
+            ui->uiAutoICS->value(0);
+        }
+        else
+        {
+            ui->uiAutoICS->value(1);
+        }
+        ui->uiAutoICS->do_callback();
+
         // Handle image options
         auto imageOptions = app->imageOptions();
         int alphaBlend = uiPrefs->uiPrefsAlphaBlend->value();
@@ -2191,15 +2221,6 @@ namespace mrv
 
         view->setHudDisplay((HudDisplay)hud);
 
-        //
-        // Handle fullscreen and presentation mode
-        //
-        if (uiPrefs->uiWindowFixedPosition->value() ||
-            uiPrefs->uiWindowFixedSize->value())
-        {
-            ui->uiView->resizeWindow();
-        }
-
         bool frameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
         view->setFrameView(frameView);
 
@@ -2233,7 +2254,16 @@ namespace mrv
         }
 
         if (normal)
-            view->setFullScreenMode(false);
+        {
+            if (view->getPresentationMode())
+            {
+                view->setPresentationMode(false);
+            }
+            else
+            {
+                view->setFullScreenMode(false);
+            }
+        }
 
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(3);
         int maximized = r->value();

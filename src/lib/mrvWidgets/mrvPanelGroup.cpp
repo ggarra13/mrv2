@@ -335,6 +335,9 @@ namespace mrv
             int sw = scroll->scrollbar.visible() ? scroll->scrollbar.w() : 0;
             pack->size(pack->w() - sw, pack->h());
         }
+
+        if (_layout_cb)
+            _layout_cb();
     }
 
     // Constructors for docked/floating window

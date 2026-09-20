@@ -18,7 +18,8 @@ namespace mrv
             box(FL_ENGRAVED_BOX);
             selection_color(FL_YELLOW);
             align(
-                FL_ALIGN_LEFT | FL_ALIGN_INSIDE | FL_ALIGN_IMAGE_NEXT_TO_TEXT);
+                FL_ALIGN_LEFT | FL_ALIGN_INSIDE | FL_ALIGN_IMAGE_NEXT_TO_TEXT |
+                FL_ALIGN_CLIP);
             labelsize(12);
             label_image_spacing(8);
         }
@@ -34,7 +35,7 @@ namespace mrv
                 value() ? (down_box() ? down_box() : fl_down(box())) : box(),
                 col);
             draw_backdrop();
-            
+
             draw_label();
         }
     };

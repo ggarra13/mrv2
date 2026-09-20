@@ -49,13 +49,14 @@ namespace mrv
             virtual void end_group();
 
             void clear_controls();
+            void resized();
             void refresh();
 
             //! Return the group box in global coordinates.
             math::Box2i global_box() const;
-            
+
             bool is_panel() const { return g->docked(); };
-            
+
             virtual void save();
 
             virtual void dock();

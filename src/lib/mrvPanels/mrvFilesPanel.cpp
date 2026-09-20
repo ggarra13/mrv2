@@ -136,7 +136,7 @@ namespace mrv
 
             const auto player = p.ui->uiView->getTimelinePlayer();
 
-            otio::RationalTime time = otio::RationalTime(0.0, 1.0);
+            OTIO_NS::RationalTime time = OTIO_NS::RationalTime(0.0, 1.0);
             if (player)
                 time = player->currentTime();
 
@@ -164,11 +164,11 @@ namespace mrv
                     std::string key;
                     if (r.sort == Sort::FileName)
                     {
-                        key = path.getFileName(listdir);
+                        key = string::toLower(path.getFileName(listdir));
                     }
                     else if (r.sort == Sort::Directory)
                     {
-                        key = path.getDirectory();
+                        key = string::toLower(path.getDirectory());
                     }
                     else if (r.sort == Sort::User)
                     {
@@ -192,7 +192,8 @@ namespace mrv
                 }
             }
 
-            size = panel::calculateImageSize();
+            int thumbnailType = p.ui->uiPrefs->uiPrefsFilesPanelThumbnails->value();
+            size = panel::calculateImageSize(thumbnailType);
 
 
             for (const auto i : ordered)
@@ -254,8 +255,7 @@ namespace mrv
                 }
 
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     const std::string layer = getLayerName(media, layerId);
                     label = protocol + dir + "\n" + file + layer;
@@ -266,7 +266,13 @@ namespace mrv
                 }
                 b->copy_label(label.c_str());
 
-                _createThumbnail(b, path, time, layerId,
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
+
+                _createThumbnail(b, media, time, layerId,
                                  media->mediaReferenceKey);
             }
 
@@ -338,7 +344,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_R();
 
-            otio::RationalTime time = otio::RationalTime(0.0, 1.0);
+            OTIO_NS::RationalTime time = OTIO_NS::RationalTime(0.0, 1.0);
 
             const auto player = p.ui->uiView->getTimelinePlayer();
             if (!player)
@@ -347,6 +353,9 @@ namespace mrv
             const auto& model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
+
+            int thumbnailType = p.ui->uiPrefs->uiPrefsFilesPanelThumbnails->value();
+            image::Size size = panel::calculateImageSize(thumbnailType);
 
             for (auto& m : r.map)
             {
@@ -378,8 +387,7 @@ namespace mrv
                 }
 
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     const std::string layer = getLayerName(media, layerId);
                     label = protocol + dir + "\n" + file + layer;
@@ -390,7 +398,13 @@ namespace mrv
                 }
                 b->copy_label(label.c_str());
 
-                _createThumbnail(b, path, time, layerId,
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
+
+                _createThumbnail(b, media, time, layerId,
                                  media->mediaReferenceKey);
             }
         }

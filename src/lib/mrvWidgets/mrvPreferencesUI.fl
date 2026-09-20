@@ -588,9 +588,17 @@ o->redraw();}
                   }
                 }
                 Fl_Choice uiPrefsPixelValues {
-                  label {Pixel Values}
+                  label {Pixel Values} open
                   xywh {485 160 255 25} down_box BORDER_BOX align 132
                 } {
+                  MenuItem {} {
+                    label Linear
+                    xywh {15 15 100 20}
+                  }
+                  MenuItem {} {
+                    label Nits
+                    xywh {25 25 100 20}
+                  }
                   MenuItem {} {
                     label {Full Lut, Gamma and Gain}
                     xywh {5 5 100 20}
@@ -828,12 +836,12 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
-                label Thumbnails
+                label Thumbnails open
                 xywh {325 63 480 316} box ROUNDED_BOX
               } {
-                Fl_Choice uiPrefsPanelThumbnails {
-                  label Panels open
-                  tooltip {How to display timeline thumbnails in panels.} xywh {398 97 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                Fl_Choice uiPrefsFilesPanelThumbnails {
+                  label {Files Panel} open
+                  tooltip {How to display timeline thumbnails in Files Panel.} xywh {398 84 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code3 {o->value(2);}
                 } {
                   MenuItem {} {
@@ -849,9 +857,63 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                     xywh {45 45 100 20}
                   }
                 }
+                Fl_Choice uiPrefsComparePanelThumbnails {
+                  label {Compare Panel} open
+                  tooltip {How to display timeline thumbnails in Compare Panel.} xywh {398 125 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  code3 {o->value(1);}
+                } {
+                  MenuItem {} {
+                    label None
+                    xywh {55 55 100 20}
+                  }
+                  MenuItem {} {
+                    label Small
+                    xywh {55 55 100 20}
+                  }
+                  MenuItem {} {
+                    label Normal
+                    xywh {55 55 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsPlaylistPanelThumbnails {
+                  label {Playlist Panel} open
+                  tooltip {How to display timeline thumbnails in Playlist Panel.} xywh {398 164 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  code3 {o->value(2);}
+                } {
+                  MenuItem {} {
+                    label None
+                    xywh {65 65 100 20}
+                  }
+                  MenuItem {} {
+                    label Small
+                    xywh {65 65 100 20}
+                  }
+                  MenuItem {} {
+                    label Normal
+                    xywh {65 65 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsStereo3DPanelThumbnails {
+                  label {Stereo Panel} open
+                  tooltip {How to display timeline thumbnails in Stereo Panel.} xywh {398 202 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  code3 {o->value(1);}
+                } {
+                  MenuItem {} {
+                    label None
+                    xywh {75 75 100 20}
+                  }
+                  MenuItem {} {
+                    label Small
+                    xywh {75 75 100 20}
+                  }
+                  MenuItem {} {
+                    label Normal
+                    xywh {75 75 100 20}
+                  }
+                }
                 Fl_Choice uiPrefsEditThumbnails {
                   label {Edit Viewport} open
-                  tooltip {How to display timeline thumbnails by default.} xywh {398 140 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  tooltip {How to display timeline thumbnails by default.} xywh {398 258 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code3 {o->value(1);}
                 } {
                   MenuItem {} {
@@ -873,11 +935,11 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                 }
                 Fl_Check_Button uiPrefsTimelineThumbnails {
                   label {Preview Thumbnails above Timeline}
-                  tooltip {Preview Thumbnails in a rectangle above Timeline} xywh {398 185 370 20} down_box DOWN_BOX value 1
+                  tooltip {Preview Thumbnails in a rectangle above Timeline} xywh {398 301 370 20} down_box DOWN_BOX value 1
                 }
                 Fl_Check_Button uiPrefsManualPanelThumbnails {
                   label {Refresh Thumbnails on Panels Manuallly}
-                  tooltip {When this option is on, thumbnails in panels won't be refreshed automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail.} xywh {398 228 370 20} down_box DOWN_BOX
+                  tooltip {When this option is on, thumbnails in panels won't be refreshed automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail.} xywh {398 344 370 20} down_box DOWN_BOX
                 }
               }
             }
@@ -1327,8 +1389,8 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label OCIO
-              xywh {288 37 555 361} box EMBOSSED_BOX align 5 hide
+              label OCIO open
+              xywh {288 37 555 361} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label OCIO open
@@ -1337,7 +1399,7 @@ v->uiPrefsFPS->value( g );}
                 Fl_Input uiPrefsOCIOConfig {
                   label {OCIO Config File}
                   user_data main user_data_type {ViewerUI*}
-                  tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {323 182 424 31} color 20 align 1 when 11 textcolor 56
+                  tooltip {This is the path to your config.ocio file.  It can be set with the environment variable OCIO, which takes precedence over any saved setting.} xywh {323 162 424 31} color 20 align 1 when 11 textcolor 56
                 }
                 Fl_Choice {} {
                   label {Built-in Configs}
@@ -1386,19 +1448,23 @@ unsetenv( L"OCIO" );
 unsetenv( "OCIO" );
 \#endif
 uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
-                  tooltip {Pick a config.ocio file from disk.} xywh {751 182 55 31}
+                  tooltip {Pick a config.ocio file from disk.} xywh {751 162 55 31}
+                }
+                Fl_Light_Button uiOCIOUseAutoICS {
+                  label {Set Auto ICS as default} selected
+                  tooltip {Set Auto ICS as a default so that Input Color Space is selected from file name or OpenEXR metadata..} xywh {404 203 350 30} value 1
                 }
                 Fl_Light_Button uiOCIOUseDefaultDisplayView {
                   label {Use Default Display and View}
-                  tooltip {When this option is on, and your config.ocio has a default display and view, it will be used to be set as default.} xywh {404 236 350 30}
+                  tooltip {When this option is on, and your config.ocio has a default display and view, it will be used to be set as default.} xywh {404 240 350 30}
                 }
                 Fl_Light_Button uiOCIONotOnVideos {
                   label {No OCIO on Videos or sRGB/BT709 data}
-                  tooltip {If playing a video or showing an SDR image, OCIO will be turned off automatically.} xywh {403 314 350 30}
+                  tooltip {If playing a video or showing an SDR image, OCIO will be turned off automatically.} xywh {403 318 350 30}
                 }
                 Fl_Light_Button uiOCIOUseActiveViews {
                   label {Use Active Views and Active Displays}
-                  tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {404 274 350 30}
+                  tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {404 278 350 30}
                 }
               }
             }
@@ -1988,8 +2054,8 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
               }
             }
             Fl_Group {} {
-              label WebRTC open
-              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5
+              label WebRTC
+              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {318 69 508 314}
@@ -2027,7 +2093,7 @@ else if (value == 2)
                     xywh {60 60 100 20}
                   }
                   MenuItem {} {
-                    label Custom selected
+                    label Custom
                     xywh {70 70 100 20}
                   }
                 }

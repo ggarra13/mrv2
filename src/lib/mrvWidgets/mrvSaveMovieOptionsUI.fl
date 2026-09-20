@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0500
+version 1.050020
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -42,8 +42,8 @@ class SaveMovieOptionsUI {open
   Function {SaveMovieOptionsUI(bool hasAudio = true, bool audioOnly = false)} {open
   } {
     Fl_Window uiMain {
-      label {Save Movie Options}
-      xywh {834 81 465 613} type Double align 0 hide modal
+      label {Save Movie Options} open
+      xywh {0 0 465 613} type Double align 0 hide modal
     } {
       Fl_Group {} {
         label {Common Settings}
@@ -59,13 +59,13 @@ It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel 
 Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.
 
 However, it is limited to the size of your screen.} xywh {160 48 20 20} down_box DOWN_BOX
-          code0 {auto settings = mrv::App::app->settings();}
-          code1 {int value = settings->getValue<int>("SaveMovie/Annotations");}
-          code2 {o->value(value);}
+          code3 {auto settings = mrv::App::app->settings();
+int value = settings->getValue<int>("SaveMovie/Annotations");
+o->value(value);}
         }
       }
       Fl_Group VideoOptions {
-        label {Video Options}
+        label {Video Options} open
         xywh {34 114 390 280} box ROUNDED_FRAME color 56
       } {
         Fl_Choice Resolution {
@@ -109,7 +109,8 @@ add_hardware(o, v->Hardware);
 const Fl_Menu_Item* item = o->mvalue();
 if (!item) return;
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Profile", std::string(item->label()));} open
+std::string profile = item->label();
+settings->setValue("SaveMovie/Profile", profile);} open
           tooltip {FFMpeg's Profile settings.} xywh {170 225 170 29} down_box BORDER_BOX
         } {}
         Fl_Button {} {
@@ -171,7 +172,7 @@ if (!item) return;
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/AudioCodec", std::string(item->label()));} open
           tooltip {FFMpeg's Audio Codec settings.} xywh {172 444 170 29} down_box BORDER_BOX
-          code0 {add_audio_codecs(o);}
+          code3 {add_audio_codecs(o);}
         } {}
         Fl_Box {} {
           label {Note that while saving with audio, the audio will not be heard.}
@@ -198,18 +199,18 @@ v->hide();}
     }
     Fl_Window uiHelpWindow {
       label {Help Window}
-      xywh {696 505 638 327} type Double hide resizable modal
+      xywh {0 0 638 327} type Double hide resizable modal
     } {
       Fl_Text_Display uiHelp {
         xywh {37 29 563 268} textfont 4 resizable
-        code0 {Fl_Text_Buffer* b = new Fl_Text_Buffer;}
-        code1 {o->buffer(b);}
-        code2 {o->textcolor(FL_BLACK);}
+        code3 {Fl_Text_Buffer* b = new Fl_Text_Buffer;
+o->buffer(b);
+o->textcolor(FL_BLACK);}
       }
     }
     Fl_Window uiAdvancedSettings {
       label {Advanced Settings}
-      xywh {1185 376 411 310} type Double hide hotspot modal
+      xywh {0 0 416 355} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
         label Override
@@ -224,8 +225,11 @@ settings->setValue("SaveMovie/Override", value);}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color Range", value);}
+settings->setValue("SaveMovie/Color Range", value);} open
         tooltip {FFMpeg's Color Range for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
+        code2 {auto settings = mrv::App::app->settings();
+int value = settings->getValue<int>("SaveMovie/Color Range");
+o->value(value);}
       } {
         MenuItem {} {
           label {TV (Legal Range)}
@@ -236,197 +240,303 @@ settings->setValue("SaveMovie/Color Range", value);}
           xywh {10 10 100 20}
         }
       }
-      Fl_Choice ColorSpace {
-        label {Color Space}
+      Fl_Choice Presets {
+        label Presets
         callback {int value = o->value();
+
+int i = 0;
+if (value == 0)  // BT709
+{
+  i = ColorSpace->find_index("bt709");
+  if (i >= 0)
+  {
+     ColorSpace->value(i);
+     ColorSpace->do_callback();
+  }
+  
+  i = ColorPrimaries->find_index("bt709");
+  if (i >= 0)
+  {
+     ColorPrimaries->value(i);
+     ColorPrimaries->do_callback();
+  }
+  
+  i = ColorTRC->find_index("bt709");
+  if (i >= 0)
+  {
+      ColorTRC->value(i);
+      ColorTRC->do_callback();
+  }
+}
+else if (value == 1)  // HDR
+{
+  i = ColorSpace->find_index("bt2020nc");
+  if (i >= 0)
+  {
+     ColorSpace->value(i);
+     ColorSpace->do_callback();
+  }
+  
+  i = ColorPrimaries->find_index("bt2020");
+  if (i >= 0)
+  {
+     ColorPrimaries->value(i);
+     ColorPrimaries->do_callback();
+  }
+  
+  i = ColorTRC->find_index("bt2100 (smpte2084)");
+  if (i >= 0)
+  {
+      ColorTRC->value(i);
+      ColorTRC->do_callback();
+  }
+}} open
+        tooltip {FFMpeg's Color Range for the codec selected} xywh {129 105 170 29} down_box BORDER_BOX
+      } {
+        MenuItem {} {
+          label bt709
+          xywh {0 0 100 20}
+        }
+        MenuItem {} {
+          label HDR
+          xywh {10 10 100 20}
+        }
+      }
+      Fl_Group {} {open
+        xywh {15 140 388 132} box UP_FRAME
+      } {
+        Fl_Choice ColorSpace {
+          label {Color Space}
+          callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Color Space", value);}
-        tooltip {FFMpeg's Color Space for the codec selected} xywh {129 102 170 29} down_box BORDER_BOX
-      } {
-        MenuItem {} {
-          label BGR
-          xywh {0 0 100 20}
+          tooltip {FFMpeg's Color Space for the codec selected} xywh {168 195 170 29} down_box BORDER_BOX
+        } {
+          MenuItem {} {
+            label bt709
+            xywh {10 10 100 20}
+          }
+          MenuItem {} {
+            label gbr
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label unknown
+            xywh {60 60 100 20}
+          }
+          MenuItem {} {
+            label reserved
+            xywh {70 70 100 20}
+          }
+          MenuItem {} {
+            label fcc
+            xywh {20 20 100 20}
+          }
+          MenuItem {} {
+            label {bt601 (bt470bg)}
+            xywh {40 40 100 20}
+          }
+          MenuItem {} {
+            label smpte170m
+            xywh {30 30 100 20}
+          }
+          MenuItem {} {
+            label smpte240m
+            xywh {40 40 100 20}
+          }
+          MenuItem {} {
+            label ycgco
+            xywh {50 50 100 20}
+          }
+          MenuItem {} {
+            label bt2020nc
+            xywh {50 50 100 20}
+          }
+          MenuItem {} {
+            label bt2020c
+            xywh {60 60 100 20}
+          }
+          MenuItem {} {
+            label smpte2085
+            xywh {70 70 100 20}
+          }
+          MenuItem {} {
+            label {chroma-derived-nc}
+            xywh {80 80 100 20}
+          }
+          MenuItem {} {
+            label {chroma-derived-c}
+            xywh {90 90 100 20}
+          }
+          MenuItem {} {
+            label ictcp
+            xywh {90 90 100 20}
+          }
+          MenuItem {} {
+            label {ipt-c2}
+            xywh {100 100 100 20}
+          }
+          MenuItem {} {
+            label {ycgco-re}
+            xywh {110 110 100 20}
+          }
+          MenuItem {} {
+            label {ycgco-ro}
+            xywh {120 120 100 20}
+          }
         }
-        MenuItem {} {
-          label bt709
-          xywh {10 10 100 20}
-        }
-        MenuItem {} {
-          label FCC
-          xywh {20 20 100 20}
-        }
-        MenuItem {} {
-          label SMPTE240m
-          xywh {30 30 100 20}
-        }
-        MenuItem {} {
-          label bt601
-          xywh {40 40 100 20}
-        }
-        MenuItem {} {
-          label bt2020
-          xywh {50 50 100 20}
-        }
-        MenuItem {} {
-          label unspecified
-          xywh {60 60 100 20}
-        }
-        MenuItem {} {
-          label reserved
-          xywh {70 70 100 20}
-        }
-      }
-      Fl_Choice ColorPrimaries {
-        label {Color Primaries}
-        callback {int value = o->value();
+        Fl_Choice ColorPrimaries {
+          label {Color Primaries}
+          callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Color Primaries", value);}
-        tooltip {FFMpeg's Color Primaries setting for the codec selected.} xywh {130 146 170 29} down_box BORDER_BOX
-      } {
-        MenuItem {} {
-          label bt709
-          xywh {0 0 100 20}
+          tooltip {FFMpeg's Color Primaries setting for the codec selected.} xywh {169 152 170 29} down_box BORDER_BOX
+        } {
+          MenuItem {} {
+            label bt709
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label unspecified
+            xywh {10 10 100 20}
+          }
+          MenuItem {} {
+            label reserved
+            xywh {20 20 100 20}
+          }
+          MenuItem {} {
+            label bt470m
+            xywh {30 30 100 20}
+          }
+          MenuItem {} {
+            label SMPTE170m
+            xywh {40 40 100 20}
+          }
+          MenuItem {} {
+            label SMPTE240m
+            xywh {50 50 100 20}
+          }
+          MenuItem {} {
+            label Film
+            xywh {60 60 100 20}
+          }
+          MenuItem {} {
+            label bt2020
+            xywh {70 70 100 20}
+          }
+          MenuItem {} {
+            label SMPTE428
+            xywh {50 50 100 20}
+          }
+          MenuItem {} {
+            label SMPTE431
+            xywh {60 60 100 20}
+          }
+          MenuItem {} {
+            label SMPTE432
+            xywh {70 70 100 20}
+          }
+          MenuItem {} {
+            label EBU3213
+            xywh {80 80 100 20}
+          }
         }
-        MenuItem {} {
-          label unspecified
-          xywh {10 10 100 20}
-        }
-        MenuItem {} {
-          label reserved
-          xywh {20 20 100 20}
-        }
-        MenuItem {} {
-          label bt470m
-          xywh {30 30 100 20}
-        }
-        MenuItem {} {
-          label SMPTE170m
-          xywh {40 40 100 20}
-        }
-        MenuItem {} {
-          label SMPTE240m
-          xywh {50 50 100 20}
-        }
-        MenuItem {} {
-          label Film
-          xywh {60 60 100 20}
-        }
-        MenuItem {} {
-          label bt2020
-          xywh {70 70 100 20}
-        }
-        MenuItem {} {
-          label SMPTE428
-          xywh {50 50 100 20}
-        }
-        MenuItem {} {
-          label SMPTE431
-          xywh {60 60 100 20}
-        }
-        MenuItem {} {
-          label SMPTE432
-          xywh {70 70 100 20}
-        }
-        MenuItem {} {
-          label EBU3213
-          xywh {80 80 100 20}
-        }
-      }
-      Fl_Choice ColorTRC {
-        label {Color TRC}
-        user_data this user_data_type {SaveMovieOptionsUI*}
-        callback {int value = o->value();
+        Fl_Choice ColorTRC {
+          label {Color TRC}
+          user_data this user_data_type {SaveMovieOptionsUI*}
+          callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color TRC", value);}
-        tooltip {FFMpeg's Color Transfer Function settings for the codec selected.} xywh {129 190 170 29} down_box BORDER_BOX
-      } {
-        MenuItem {} {
-          label bt709
-          xywh {10 10 100 20}
-        }
-        MenuItem {} {
-          label unspecified
-          xywh {20 20 100 20}
-        }
-        MenuItem {} {
-          label reserved
-          xywh {30 30 100 20}
-        }
-        MenuItem {} {
-          label gamma22
-          xywh {40 40 100 20}
-        }
-        MenuItem {} {
-          label gamma28
-          xywh {50 50 100 20}
-        }
-        MenuItem {} {
-          label bt601
-          xywh {60 60 100 20}
-        }
-        MenuItem {} {
-          label smpte240m
-          xywh {70 70 100 20}
-        }
-        MenuItem {} {
-          label linear
-          xywh {80 80 100 20}
-        }
-        MenuItem {} {
-          label log
-          xywh {90 90 100 20}
-        }
-        MenuItem {} {
-          label logsqrt
-          xywh {100 100 100 20}
-        }
-        MenuItem {} {
-          label {iec61966-2-4}
-          xywh {110 110 100 20}
-        }
-        MenuItem {} {
-          label bt1361
-          xywh {120 120 100 20}
-        }
-        MenuItem {} {
-          label {iec61966-2-1}
-          xywh {120 120 100 20}
-        }
-        MenuItem {} {
-          label {bt2020-10}
-          xywh {130 130 100 20}
-        }
-        MenuItem {} {
-          label {bt2020-12}
-          xywh {140 140 100 20}
-        }
-        MenuItem {} {
-          label bt2100
-          xywh {150 150 100 20}
-        }
-        MenuItem {} {
-          label hlg
-          xywh {160 160 100 20}
+settings->setValue("SaveMovie/Color TRC", value);} open
+          tooltip {FFMpeg's Color Transfer Function settings for the codec selected.} xywh {168 236 170 26} down_box BORDER_BOX
+        } {
+          MenuItem {} {
+            label bt709
+            xywh {10 10 100 20}
+          }
+          MenuItem {} {
+            label unspecified
+            xywh {20 20 100 20}
+          }
+          MenuItem {} {
+            label reserved
+            xywh {30 30 100 20}
+          }
+          MenuItem {} {
+            label gamma22
+            xywh {40 40 100 20}
+          }
+          MenuItem {} {
+            label gamma28
+            xywh {50 50 100 20}
+          }
+          MenuItem {} {
+            label bt601
+            xywh {60 60 100 20}
+          }
+          MenuItem {} {
+            label smpte240m
+            xywh {70 70 100 20}
+          }
+          MenuItem {} {
+            label linear
+            xywh {80 80 100 20}
+          }
+          MenuItem {} {
+            label log
+            xywh {90 90 100 20}
+          }
+          MenuItem {} {
+            label logsqrt
+            xywh {100 100 100 20}
+          }
+          MenuItem {} {
+            label {iec61966-2-4}
+            xywh {110 110 100 20}
+          }
+          MenuItem {} {
+            label bt1361
+            xywh {120 120 100 20}
+          }
+          MenuItem {} {
+            label {iec61966-2-1}
+            xywh {120 120 100 20}
+          }
+          MenuItem {} {
+            label {bt2020-10}
+            xywh {130 130 100 20}
+          }
+          MenuItem {} {
+            label {bt2020-12}
+            xywh {140 140 100 20}
+          }
+          MenuItem {} {
+            label {bt2100 (smpte2084)}
+            xywh {150 150 100 20}
+          }
+          MenuItem {} {
+            label hlg
+            xywh {160 160 100 20}
+          }
         }
       }
       Fl_Group {} {
-        xywh {85 242 244 29}
+        xywh {79 280 250 36}
       } {
         Fl_Button {} {
           label Ok
           user_data uiAdvancedSettings user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {85 242 90 29}
+          xywh {79 286 96 29}
         }
         Fl_Button {} {
           label Cancel
           user_data uiAdvancedSettings user_data_type {Fl_Double_Window*}
           callback {Override->value(0);
 v->hide();}
-          xywh {239 242 90 29}
+          xywh {239 286 90 29}
         }
       }
     }
@@ -447,7 +557,6 @@ else
    add_hardware(Profile, Hardware);
    add_pixel_formats(Profile, PixelFormat);      
    add_advanced_override(Override);
-   add_advanced_color_range(ColorRange);
    add_advanced_color_space(ColorSpace);
    add_advanced_color_primaries(ColorPrimaries);   
    add_advanced_color_trc(ColorTRC);
@@ -522,6 +631,7 @@ HAP - RGB/A codec which is optimized for fast playback with
 Hardware encoding is only supported on newer MacBook
 Pro with M1 or newer chips.  H264, Prores, VP9 and
 AV1 are supported or soon will be.
+NVidia supports H264, HEVC and, depending on HW and drivers, AV1.
 )"));
 uiHelpWindow->show();} {}
   }
@@ -589,23 +699,28 @@ and how it was created.  Useful to indicate,
 for example, if a set of 8-bit images were 
 bt709 or some other color space.
 
+Currently the override comes with two presets:
+bt709 for SDR work, and HDR for HDR work.
+
 If you don't know what those settings do, 
-DON'T MESS WITH THEM!
+leave it all at bt709.
 )"));
 uiHelpWindow->show();} {}
   }
-  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {} {
+  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {user_data_type {SaveMovieOptionsUI*} open
+  } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 const std::string codec = item->label();
 
 v->deactivate();
 
-if (codec == "H264")
+if (codec == "H264" || codec == "HEVC")
 {    
-\#ifdef __APPLE__
    v->activate();
-\#endif
+   v->value(1);
+   v->do_callback();
+   v->deactivate();
 }
 else if (codec == "ProRes")
 {
@@ -637,16 +752,23 @@ else if (codec == "ProRes_4444")
    v->activate();
 \#endif
 }
-else if (codec == "VP9")
+else if (codec == "AV1" || codec == "AV1_AOM")
 {
-\#ifdef __APPLE__
+\#ifndef __linux__
    v->activate();
 \#endif
+}
+else
+{
+   v->value(0);
+   v->do_callback();
+   v->deactivate();
 }
 
 auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
-v->value(value);} {}
+v->value(value);} {selected
+    }
   }
   Function {add_h264_sw_formats(Fl_Choice* v)} {} {
     code {v->add("YUV_420P");
@@ -656,8 +778,7 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -779,6 +900,13 @@ else if (codec == "HAP")
 {  
    v->add("RGBA_U8");
 }
+else if (codec == "HEVC")
+{
+   v->add("YUV_420P");
+   v->add("YUV_420P_10LE");
+   v->add("YUV_444P");
+   v->add("YUV_444P_10LE");
+}
 
 if (v->size() > 0)
 {
@@ -798,8 +926,7 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {selected
-    }
+}} {}
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
@@ -854,14 +981,11 @@ else
   v->deactivate();
 }} {}
   }
-  Function {add_profiles(Fl_Choice* o)} {} {
+  Function {add_profiles(Fl_Choice* o)} {user_data_type {SaveMovieOptionsUI*} open
+  } {
     code {auto entries = tl::ffmpeg::getProfileLabels();
 for (auto entry : entries)
 {
-\#ifndef TLRENDER_X264
-   if (entry == "H264")
-      continue;
-\#endif
 \#ifndef TLRENDER_SVTAV1
    if (entry == "AV1")
       continue;
@@ -872,26 +996,27 @@ for (auto entry : entries)
 \#endif
     o->add(gettext(entry.c_str()));
 }
-    if (o->size() > 0)
-    {
-        auto settings = mrv::App::app->settings();
-        const std::string& saved =
-            settings->getValue<std::string>("SaveMovie/Profile");
-        for (int i = 0; i < o->size(); ++i)
+if (o->size() > 0)
+{
+   auto settings = mrv::App::app->settings();
+   const std::string& saved =
+        settings->getValue<std::string>("SaveMovie/Profile");
+   for (int i = 0; i < o->size(); ++i)
+   {
+        const Fl_Menu_Item* const item = &o->menu()[i];
+        if (!item->label())
+            continue;
+        const std::string& profile = item->label();
+        if (saved == profile)
         {
-            const Fl_Menu_Item* const item = &o->menu()[i];
-            if (!item->label())
-                continue;
-            const std::string& profile = item->label();
-            if (saved == profile)
-            {
-                o->value(i);
-                o->activate();
-                return;
-            }
+            o->value(i);
+            o->activate();
+            o->do_callback();
+            return;
         }
     }
-    o->value(0);} {}
+}
+o->value(0);} {}
   }
   Function {add_resolution(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
@@ -902,15 +1027,6 @@ o->value(value);} {}
     code {auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/Override");
 v->value(value);} {}
-  }
-  Function {add_advanced_color_range(Fl_Choice* o)} {} {
-    code {const auto& settings = mrv::App::app->settings();
-int value;
-if (!settings->hasValue("SaveMovie/Color Range"))
-   value = o->find_index("PC");
-else
-   value = settings->getValue<int>("SaveMovie/Color Range");
-o->value(value);} {}
   }
   Function {add_advanced_color_space(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
@@ -930,7 +1046,7 @@ o->value(value);} {}
     code {const auto& settings = mrv::App::app->settings();
 int value;
 if (!settings->hasValue("SaveMovie/Color TRC"))
-   value = o->find_index("iec61966-2-1");
+   value = o->find_index("bt709");
 else
    value = settings->getValue<int>("SaveMovie/Color TRC");
 o->value(value);} {}

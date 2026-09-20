@@ -199,6 +199,9 @@ namespace mrv
         //! Returns whether the filename is a temporary EDL.
         bool isTemporaryEDL(const Path& path);
 
+        //! Returns whether the filename if an .otioz file.
+        bool isOTIOZ(const Path& path);
+
         //! Returns whether the filename is an .otio or .otioz file.
         bool isOTIO(const Path& path);
 

@@ -17,12 +17,16 @@ namespace mrv
     void ffmpeg_subtitle_codecs(mrv::TextBrowser* b);
     void ffmpeg_protocols(mrv::TextBrowser* b);
     void ffmpeg_codec_information(mrv::TextBrowser* b);
+    std::vector<std::string> ffmpeg_hardware_decoders();
+    void ffmpeg_hw_decoders(mrv::TextBrowser* b);
 
     const char* backend();
     const char* version();
     const std::string build_date();
     const std::string build_info();
     const std::string running_info();
+    const std::string cpu_info();
+    const std::string gpu_info();
 
     void about_message(mrv::TextBrowser* b);
     void thanks_message(mrv::TextBrowser* b);

@@ -426,8 +426,6 @@ namespace mrv
                 hotkey = kToggleColorInfo.hotkey();
             else if (tmp == "Compare")
                 hotkey = kToggleCompare.hotkey();
-            else if (tmp == "Playlist")
-                hotkey = kTogglePlaylist.hotkey();
             else if (tmp == "Devices")
                 hotkey = kToggleDevices.hotkey();
             else if (tmp == "Settings")
@@ -444,8 +442,8 @@ namespace mrv
                 hotkey = kToggleWaveform.hotkey();
             else if (tmp == "NDI")
                 hotkey = kToggleNDI.hotkey();
-            else if (tmp == "Network")
-                hotkey = kToggleNetwork.hotkey();
+            else if (tmp == "Notes")
+                hotkey = kToggleNotes.hotkey();
             else if (tmp == "WebRTC")
                 hotkey = kToggleWebRTC.hotkey();
             else if (tmp == "USD")
@@ -536,13 +534,6 @@ namespace mrv
                 else
                     item->clear();
             }
-            else if (tmp == _("Playlist"))
-            {
-                if (playlistPanel)
-                    item->set();
-                else
-                    item->clear();
-            }
             else if (tmp == _("Devices"))
             {
                 if (devicesPanel)
@@ -571,6 +562,13 @@ namespace mrv
                 else
                     item->clear();
             }
+            else if (tmp == _("Notes"))
+            {
+                if (notesPanel)
+                    item->set();
+                else
+                    item->clear();
+            }
 #ifdef MRV2_PYBIND11
             else if (tmp == _("Python"))
             {
@@ -584,15 +582,6 @@ namespace mrv
             {
 #ifdef TLRENDER_NDI
                 if (ndiPanel)
-                    item->set();
-                else
-                    item->clear();
-#endif
-            }
-            else if (tmp == _("Network"))
-            {
-#ifdef MRV2_NETWORK
-                if (networkPanel)
                     item->set();
                 else
                     item->clear();
@@ -2040,7 +2029,7 @@ namespace mrv
 #endif
 
         if (dynamic_cast< DummyClient* >(tcp) == nullptr ||
-            panel::networkPanel || panel::webrtcPanel)
+            panel::webrtcPanel)
         {
             mode = FL_MENU_TOGGLE;
 

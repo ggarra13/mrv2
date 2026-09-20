@@ -1196,9 +1196,9 @@ namespace mrv
                 };
                 // Max display capability
                 m_hdr_metadata.maxLuminance =
-                    data.displayMasteringLuminance.getMax();
+                    data.displayMasteringLuminance.max();
                 m_hdr_metadata.minLuminance =
-                    data.displayMasteringLuminance.getMin();
+                    data.displayMasteringLuminance.min();
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
             }

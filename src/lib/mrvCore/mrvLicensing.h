@@ -4,14 +4,19 @@
 
 #pragma once
 
+#include <tlCore/Error.h>
+#include <tlCore/String.h>
 #include <tlCore/Util.h>
 
 #include <nlohmann/json.hpp>
 
+#include <array>
+#include <string>
 #include <vector>
 
 namespace mrv
 {
+
     //! License Status.
     enum class License
     {

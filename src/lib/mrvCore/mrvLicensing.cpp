@@ -46,6 +46,7 @@
 #    include <openssl/x509_vfy.h>
 #endif
 
+#include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 #include <tlCore/Error.h>
 
@@ -302,6 +303,8 @@ namespace
 
 namespace mrv
 {
+    using namespace tl;
+
     TLRENDER_ENUM_IMPL(LicenseType, _("Demo"), _("Node-Locked"), _("Floating"));
     TLRENDER_ENUM_SERIALIZE_IMPL(LicenseType);
 
