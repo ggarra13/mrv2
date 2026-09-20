@@ -25,20 +25,20 @@ namespace tl
         {
             std::atomic<size_t> objectCount = 0;
         }
-        
+
         size_t Shader::getObjectCount()
         {
             return objectCount;
         }
-        
+
         struct Shader::Private
         {
             VkShaderModule vertex = VK_NULL_HANDLE;
             std::string vertexSource = "unavailable - binary shader";
-            
+
             VkShaderModule fragment = VK_NULL_HANDLE;
             std::string fragmentSource = "unavailable - binary shader";
-            
+
             VkPipeline computePipeline = VK_NULL_HANDLE;
             VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
             VkShaderModule compute = VK_NULL_HANDLE;
@@ -76,7 +76,7 @@ namespace tl
                 throw e;
             }
         }
-        
+
         void Shader::_createFragmentShader(const std::string& source)
         {
             TLRENDER_P();
@@ -108,7 +108,7 @@ namespace tl
                 throw e;
             }
         }
-        
+
         void Shader::_createComputeShader(const std::string& source)
         {
             TLRENDER_P();
@@ -140,20 +140,20 @@ namespace tl
                 throw e;
             }
         }
-        
+
         void Shader::_init(const uint32_t* vertexBytes,
                            const uint32_t vertexLength,
                            const std::string& fragmentSource,
                            const std::string& name)
         {
             TLRENDER_P();
-            
+
             p.vertex = create_shader_module(ctx.device, vertexBytes, vertexLength);
             shaderName = name;
-            
+
             _createFragmentShader(fragmentSource);
         }
-        
+
         void Shader::_init(const uint32_t* vertexBytes,
                            const uint32_t vertexLength,
                            const uint32_t* fragmentBytes,
@@ -161,14 +161,14 @@ namespace tl
                            const std::string& name)
         {
             TLRENDER_P();
-            
+
             p.vertex = create_shader_module(ctx.device, vertexBytes, vertexLength);
             p.fragment = create_shader_module(ctx.device, fragmentBytes, fragmentLength);
             shaderName = name;
 
             ++objectCount;
         }
-        
+
         void Shader::_init(const std::string& vertexSource,
                            const std::string& fragmentSource,
                            const std::string& name)
@@ -176,25 +176,25 @@ namespace tl
             TLRENDER_P();
 
             shaderName = name;
-            
+
             _createVertexShader(vertexSource);
             _createFragmentShader(fragmentSource);
-            
+
             ++objectCount;
         }
-        
+
         void Shader::_init(const std::string& computeSource,
                            const std::string& name)
         {
             TLRENDER_P();
 
             shaderName = name;
-            
+
             _createComputeShader(computeSource);
-            
+
             ++objectCount;
         }
-        
+
         void Shader::_init(const uint32_t* computeBytes,
                            const uint32_t  computeLength,
                            const std::string& name)
@@ -204,7 +204,7 @@ namespace tl
             p.compute = create_shader_module(ctx.device, computeBytes, computeLength);
 
             shaderName = name;
-            
+
             ++objectCount;
         }
 
@@ -225,7 +225,7 @@ namespace tl
 
             if (p.vertex != VK_NULL_HANDLE)
                 vkDestroyShaderModule(device, p.vertex, nullptr);
-            
+
             if (p.compute != VK_NULL_HANDLE)
                 vkDestroyShaderModule(device, p.compute, nullptr);
 
@@ -234,9 +234,9 @@ namespace tl
 
             if (p.pipelineLayout != VK_NULL_HANDLE)
                 vkDestroyPipelineLayout(device, p.pipelineLayout, nullptr);
-            
+
             activeBindingSet.reset();
-            
+
             --objectCount;
         }
 
@@ -248,7 +248,7 @@ namespace tl
             out->_init(computeSource, name);
             return out;
         }
-        
+
         std::shared_ptr<Shader> Shader::create(
             Fl_Vk_Context& ctx,
             const uint32_t* computeBytes,
@@ -259,7 +259,7 @@ namespace tl
             out->_init(computeBytes, computeLength, name);
             return out;
         }
-        
+
         std::shared_ptr<Shader> Shader::create(
             Fl_Vk_Context& ctx, const std::string& vertexSource,
             const std::string& fragmentSource, const std::string& name)
@@ -281,7 +281,7 @@ namespace tl
             out->_init(vertexBytes, vertexLength, fragmentSource, name);
             return out;
         }
-            
+
         //! Create a new shader.
         std::shared_ptr<Shader> Shader::create(
             Fl_Vk_Context& ctx,
@@ -311,7 +311,7 @@ namespace tl
         {
             return _p->fragment;
         }
-        
+
         const std::string& Shader::getVertexSource() const
         {
             return _p->vertexSource;
@@ -321,7 +321,7 @@ namespace tl
         {
             return _p->fragmentSource;
         }
-        
+
         const std::string& Shader::getComputeSource() const
         {
             return _p->computeSource;
@@ -331,14 +331,14 @@ namespace tl
         {
             activeBindingSet = value;
         }
-        
+
         const VkDescriptorSet Shader::getDescriptorSet() const
         {
             if (!activeBindingSet)
                 throw std::runtime_error("No activeBindingSet.  Call useBindingSet first");
             return activeBindingSet->getDescriptorSet(frameIndex);
         }
-        
+
         const VkDescriptorSetLayout Shader::getDescriptorSetLayout() const
         {
             if (activeLayout->handle == VK_NULL_HANDLE)
@@ -349,7 +349,7 @@ namespace tl
         }
 
         const VkDescriptorPool Shader::getDescriptorPool() const
-        {            
+        {
             if (!activeBindingSet)
                 throw std::runtime_error("No activeBindingSet.  Call create/useBindingSet first");
             return activeBindingSet->getDescriptorPool(frameIndex);
@@ -397,15 +397,6 @@ namespace tl
                                             activeBindingSet->getDescriptorSet(frameIndex),
                                             texture);
         }
-        
-        void
-        Shader::addFBO(const std::string& name, const ShaderFlags stageFlags)
-        {
-            FBOBinding binding;
-            binding.binding = current_binding_index++;
-            binding.stageFlags = getVulkanShaderFlags(stageFlags);
-            fboBindings.insert(std::make_pair(name, binding));
-        }
 
         void Shader::setFBO(
             const std::string& name,
@@ -426,7 +417,7 @@ namespace tl
                                         activeBindingSet->getDescriptorSet(frameIndex),
                                         fbo);
         }
-        
+
         void Shader::setStorageBuffer(
             const std::string& name,
             const uint8_t* data,
@@ -434,21 +425,21 @@ namespace tl
         {
             if (!activeBindingSet)
                 throw std::runtime_error("No activeBindingSet for Shader " + name);
-    
+
             // We pass the specific data and size to the binding set
             activeBindingSet->updateStorageBuffer(ctx, name, data, size, frameIndex);
         }
 
-        
+
         void Shader::setStorageImage(
-            const std::string& name, 
+            const std::string& name,
             const std::shared_ptr<Texture>& texture)
         {
             if (!activeBindingSet)
                 throw std::runtime_error("No activeBindingSet for Shader " + name);
-    
-            activeBindingSet->updateStorageImage(name, 
-                                                 activeBindingSet->getDescriptorSet(frameIndex), 
+
+            activeBindingSet->updateStorageImage(name,
+                                                 activeBindingSet->getDescriptorSet(frameIndex),
                                                  texture);
         }
 
@@ -475,16 +466,6 @@ namespace tl
                 std::cerr << "\tbinding " << texture.binding
                           << " = COMBINED_IMAGE_SAMPLER" << std::endl;
             }
-
-            // FBOs
-            for (const auto& [name, fbo] : fboBindings)
-            {
-                if ((fbo.stageFlags & VK_SHADER_STAGE_VERTEX_BIT) == 0)
-                    continue;
-                std::cerr << name << std::endl;
-                std::cerr << "\tbinding " << fbo.binding
-                          << " = COMBINED_IMAGE_SAMPLER" << std::endl;
-            }
         }
 
         void Shader::debugFragmentDescriptorSets()
@@ -509,22 +490,11 @@ namespace tl
                 std::cerr << "\tbinding " << texture.binding
                           << " = COMBINED_IMAGE_SAMPLER" << std::endl;
             }
-
-            // FBOs
-            for (const auto& [name, fbo] : fboBindings)
-            {
-                if ((fbo.stageFlags & VK_SHADER_STAGE_FRAGMENT_BIT) == 0)
-                    continue;
-                std::cerr << name << std::endl;
-                std::cerr << "\tbinding " << fbo.binding
-                          << " = COMBINED_IMAGE_SAMPLER" << std::endl;
-            }
         }
 
         void Shader::debugDescriptorSets()
         {
-            if (ubos.empty() && textureBindings.empty() && fboBindings.empty()
-                && ssbos.empty())
+            if (ubos.empty() && textureBindings.empty() && ssbos.empty())
             {
                 std::cerr << "Shader (" << shaderName << "): has NO bindings"
                           << std::endl;
@@ -533,28 +503,6 @@ namespace tl
             else
             {
                 std::cerr << "Shader (" << shaderName << "): has these bindings"
-                          << std::endl;
-            }
-
-            // UBOs
-            for (const auto& [name, ubo] : ubos)
-            {
-                std::cerr << name << std::endl;
-                std::cerr << "\tbinding " << ubo.layoutBinding.binding
-                          << " = UNIFORM_BUFFER" << std::endl;
-                std::cerr << "\t        "
-                          << (ubo.layoutBinding.stageFlags &
-                                      VK_SHADER_STAGE_VERTEX_BIT
-                                  ? "vertex "
-                                  : " ")
-                          << (ubo.layoutBinding.stageFlags &
-                                      VK_SHADER_STAGE_FRAGMENT_BIT
-                                  ? "fragment "
-                                  : " ")
-                          << (ubo.layoutBinding.stageFlags &
-                                      VK_SHADER_STAGE_COMPUTE_BIT
-                                  ? "compute "
-                                  : " ")
                           << std::endl;
             }
 
@@ -577,25 +525,6 @@ namespace tl
                           << std::endl;
             }
 
-            // FBOs
-            for (const auto& [name, fbo] : fboBindings)
-            {
-                std::cerr << name << std::endl;
-                std::cerr << "\tbinding " << fbo.binding
-                          << " = COMBINED_IMAGE_SAMPLER" << std::endl;
-                std::cerr << "\t        "
-                          << (fbo.stageFlags & VK_SHADER_STAGE_VERTEX_BIT
-                                  ? "vertex "
-                                  : " ")
-                          << (fbo.stageFlags & VK_SHADER_STAGE_FRAGMENT_BIT
-                                  ? "fragment "
-                                  : " ")
-                          << (fbo.stageFlags & VK_SHADER_STAGE_COMPUTE_BIT
-                                  ? "compute "
-                                  : " ")
-                          << std::endl;
-            }
-            
             // SSBOs
             for (const auto& [name, ssbo] : ssbos)
             {
@@ -626,9 +555,9 @@ namespace tl
             pushStageFlags = getVulkanShaderFlags(stageFlags);
         }
 
-        /** 
+        /**
          * Used by compute only.
-         * 
+         *
          */
         void Shader::createPipelineLayout()
         {
@@ -669,7 +598,7 @@ namespace tl
                 pushConstantRange.stageFlags = pushStageFlags;
                 pushConstantRange.offset = 0;
                 pushConstantRange.size = static_cast<uint32_t>(pushSize);
-        
+
                 pipelineLayoutInfo.pushConstantRangeCount = 1;
                 pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
             }
@@ -679,7 +608,7 @@ namespace tl
                 throw std::runtime_error("Failed to create pipeline layout!");
             }
         }
-        
+
 
         void Shader::createComputePipeline()
         {
@@ -702,7 +631,7 @@ namespace tl
             pipelineInfo.stage.pName = "main"; // Entry point in your GLSL
 
             // 2. Link the layout
-            pipelineInfo.layout = p.pipelineLayout; 
+            pipelineInfo.layout = p.pipelineLayout;
 
             // 3. Create the pipeline
             if (vkCreateComputePipelines(
@@ -711,14 +640,14 @@ namespace tl
                 throw std::runtime_error("Failed to create compute pipeline!");
             }
         }
-        
+
         void Shader::dispatch(VkCommandBuffer cmd,
                               uint32_t groupCountX,
                               uint32_t groupCountY,
                               uint32_t groupCountZ)
         {
             TLRENDER_P();
-            
+
             // Bind the compute pipeline
             vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE,
                               p.computePipeline);
@@ -726,9 +655,9 @@ namespace tl
             // Bind the descriptor set for the current frame
             VkDescriptorSet ds = getDescriptorSet();
             vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_COMPUTE,
-                                    p.pipelineLayout, 
+                                    p.pipelineLayout,
                                     0, 1, &ds, 0, nullptr);
-            
+
             // Run the shader
             vkCmdDispatch(cmd, groupCountX, groupCountY, groupCountZ);
         }
@@ -737,29 +666,29 @@ namespace tl
         {
             return activeBindingSet->mapSSBO(name, frameIndex);
         }
-        
+
         void Shader::clearSSBO(VkCommandBuffer cmd, const std::string& name)
         {
             activeBindingSet->clearSSBO(cmd, name, frameIndex);
         }
-        
+
         void Shader::unmapSSBO(const std::string& name)
         {
             activeBindingSet->unmapSSBO(name, frameIndex);
         }
-        
+
         std::shared_ptr<ShaderBindingSet> Shader::createBindingSet()
         {
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
-    
+
             auto bindingSet = std::make_shared<ShaderBindingSet>(device,
                                                                  ctx.allocator);
             bindingSet->shaderName = shaderName;
-            
+
             std::vector<VkDescriptorSetLayoutBinding> bindings;
             std::vector<VkDescriptorPoolSize> poolSizes;
-            
+
             // StorageBuffers
             for (const auto& [name, sbb] : storageBufferBindings) {
                 VkDescriptorSetLayoutBinding layoutBinding = {};
@@ -819,27 +748,6 @@ namespace tl
                 poolSizes.push_back(poolSize);
             }
 
-            // FBOs
-            for (const auto& [_, element] : fboBindings)
-            {
-                VkDescriptorSetLayoutBinding layoutBinding = {};
-
-                layoutBinding.binding = element.binding;
-                layoutBinding.descriptorCount = 1;
-                layoutBinding.descriptorType =
-                    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                layoutBinding.stageFlags = element.stageFlags;
-                layoutBinding.pImmutableSamplers = nullptr;
-
-                bindings.push_back(layoutBinding);
-
-                VkDescriptorPoolSize poolSize{};
-                poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                // One FBO descriptor per frame per binding
-                poolSize.descriptorCount = MAX_FRAMES_IN_FLIGHT;
-                poolSizes.push_back(poolSize);
-            }
-            
             // SSBOs
             for (const auto& [_, ssbo] : ssbos)
             {
@@ -849,7 +757,7 @@ namespace tl
                 poolSize.descriptorCount = MAX_FRAMES_IN_FLIGHT;
                 poolSizes.push_back(poolSize);
             }
-            
+
             // Create descriptor pool. (One pool per frame)
             // maxSets should be 1 if allocating 1 set per pool.
             VkDescriptorPoolCreateInfo poolInfo = {};
@@ -888,13 +796,13 @@ namespace tl
 
             activeLayout = std::make_shared<vlk::DescriptorSetLayout>(device,
                                                                       descriptorSetLayout);
-            
+
             // Allocate descriptor sets for each frame, from their respective
             // pools
             std::vector<VkDescriptorSetLayout> layouts(
                 MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
 
-            
+
             VkDescriptorSetAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
             allocInfo.descriptorSetCount = 1; // Allocating one set at a time
@@ -921,7 +829,7 @@ namespace tl
             // to avoid validation errors. However, the simplest is to ensure
             // setTexture/setFBO is called for each frame's descriptor set
             // before that set is first bound in a command buffer.
-        
+
             // Step 3: populate UBOs for each uniform
             for (const auto& [name, uboTemplate] : ubos)
             {
@@ -948,11 +856,11 @@ namespace tl
                     // This flag ensures the memory is accessible by the CPU
                     // for writing.
                     allocInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT;
-                    // Ensure the memory is coherent. 
+                    // Ensure the memory is coherent.
                     // This forces VMA to select a memory type that doesn't
                     // require manual flushing.
                     allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-                    
+
                     VmaAllocation allocation;
                     vmaCreateBuffer(ctx.allocator, &bufferInfo, &allocInfo,
                                     &ubo.buffers[i], &allocation,
@@ -984,7 +892,7 @@ namespace tl
                 ShaderBindingSet::StorageBufferParameter sb;
                 sb.binding = sbb.binding;
                 sb.stageFlags = sbb.stageFlags;
-                    
+
                 sb.buffers.resize(MAX_FRAMES_IN_FLIGHT, nullptr);
                 sb.currentSizes.resize(MAX_FRAMES_IN_FLIGHT, 0);
 
@@ -999,17 +907,8 @@ namespace tl
                 textureInfo.stageFlags = texBinding.stageFlags;
                 bindingSet->textures[name] = textureInfo;
             }
-            
-            // Step 6: FBO bindings
-            for (const auto& [name, fboBinding] : fboBindings)
-            {
-                ShaderBindingSet::FBOParameter fboInfo;
-                fboInfo.binding = fboBinding.binding;
-                fboInfo.stageFlags = fboBinding.stageFlags;
-                bindingSet->fbos[name] = fboInfo;
-            }
-            
-            // Step 7: Storage Image bindings
+
+            // Step 6: Storage Image bindings
             for (const auto& [name, imageBinding] : storageImageBindings)
             {
                 ShaderBindingSet::StorageImageParameter imageInfo;
@@ -1018,7 +917,7 @@ namespace tl
                 bindingSet->storageImages[name] = imageInfo;
             }
 
-            // Step 8: populate SSBOs for each uniform
+            // Step 7: populate SSBOs for each uniform
             for (const auto& [name, ssboTemplate] : ssbos)
             {
                 ShaderBindingSet::SSBOParameter ssbo;
@@ -1028,8 +927,8 @@ namespace tl
                 ssbo.buffers.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
                 ssbo.infos.resize(MAX_FRAMES_IN_FLIGHT);
                 ssbo.allocation.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
-              
-                
+
+
 
                 for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
                 {
@@ -1048,12 +947,12 @@ namespace tl
                     // for writing.
                     allocInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
                                       VMA_ALLOCATION_CREATE_MAPPED_BIT;
-                    
-                    // Ensure the memory is coherent. 
+
+                    // Ensure the memory is coherent.
                     // This forces VMA to select a memory type that doesn't
                     // require manual flushing.
                     allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-                    
+
                     VmaAllocation allocation;
                     vmaCreateBuffer(ctx.allocator, &bufferInfo, &allocInfo,
                                     &ssbo.buffers[i], &allocation,
@@ -1081,10 +980,10 @@ namespace tl
 
             // Copy the descriptorSetLayout
             bindingSet->descriptorSetLayout = activeLayout;
-            
+
             // Make this set active
             activeBindingSet = bindingSet;
-            
+
             return bindingSet;
         }
 

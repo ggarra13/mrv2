@@ -58,7 +58,7 @@ namespace mrv
     namespace
     {
         int getIndex(
-            const otio::SerializableObject::Retainer<otio::Composable>&
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Composable>&
                 composable)
         {
             int out = -1;
@@ -172,6 +172,10 @@ namespace mrv
             mrv::TimeUnits units = mrv::TimeUnits::Timecode;
 
             // Render data
+
+            //! Main counter for vlk::MAX_FRAMES_IN_FLIGHT
+            uint32_t frameIndex = 0;
+
             std::shared_ptr<ui::Style> style;
             std::shared_ptr<image::FontSystem> fontSystem;
             std::shared_ptr<timeline_vlk::Render> render;
@@ -194,8 +198,8 @@ namespace mrv
             std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
                 cacheInfoObserver;
 
-            std::vector<otime::RationalTime> annotationTimes;
-            otime::TimeRange timeRange = time::invalidTimeRange;
+            std::vector<OTIO_NS::RationalTime> annotationTimes;
+            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
         };
 
         TimelineWidget::TimelineWidget(
@@ -295,12 +299,12 @@ namespace mrv
             Fl::remove_timeout(timerEvent_cb, this);
         }
 
-        std::vector<const otio::Item* > TimelineWidget::getSelectedItems() const
+        std::vector<const OTIO_NS::Item* > TimelineWidget::getSelectedItems() const
         {
             return _p->timelineWidget->getSelectedItems();
         }
 
-        std::vector<const otio::Transition* >
+        std::vector<const OTIO_NS::Transition* >
         TimelineWidget::getSelectedTransitions() const
         {
             return _p->timelineWidget->getSelectedTransitions();
@@ -576,18 +580,16 @@ namespace mrv
             }
 
             const image::Size size(kTHUMB_WIDTH, kTHUMB_HEIGHT);
-            const otio::RationalTime& timelineTime = _posToTime(_toUI(Fl::event_x()));
-            otio::RationalTime time = timelineTime;
+            const auto& time = _posToTime(_toUI(Fl::event_x()));
 
             if (auto thumbnailSystem = p.thumbnailSystem.lock())
             {
-                const auto timeline = timeline::Timeline::create(p.context.lock(), path);
-                auto mediaPath = timeline->getMediaPath(time);
                 p.thumbnail.request =
-                    thumbnailSystem->getThumbnail(path, mediaPath, size.h, time);
+                    thumbnailSystem->getThumbnail(path, size.h, time,
+                                                  mediaReferenceKey);
             }
 
-            timeToText(buffer, timelineTime, _p->units);
+            timeToText(buffer, time, _p->units);
             p.box->copy_label(buffer);
             return 1;
         }
@@ -713,7 +715,7 @@ namespace mrv
                         math::Matrix4x4f pm;
                         p.shader->createUniform(
                             "transform.mvp", pm, vlk::kShaderVertex);
-                        p.shader->addFBO("textureSampler");
+                        p.shader->addTexture("textureSampler");
                         p.shader->addPush("opacity", 1.0, vlk::kShaderFragment);
                         p.shader->createBindingSet();
                     }
@@ -761,7 +763,7 @@ namespace mrv
             prepare_shaders();
             prepare_mesh();
             prepare_render_pass();
-            prepare_pipeline_layout(); // Main shader layout
+            prepare_pipeline_layout();
             prepare_pipeline();
         }
 
@@ -832,6 +834,9 @@ namespace mrv
             const math::Size2i renderSize(pixel_w(), pixel_h());
 
             VkCommandBuffer cmd = getCurrentCommandBuffer();
+
+            // Get frameIndex
+            frameIndex = frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
 
             bool changed_screen = false;
             if (p.screen_index != this->screen_num())
@@ -911,7 +916,7 @@ namespace mrv
 
                         // Clear color in new render pass.
                         p.render->begin(
-                            cmd, p.buffer, m_currentFrameIndex, renderSize,
+                            cmd, p.buffer, frameIndex, renderSize,
                             renderOptions);
                         const math::Matrix4x4f ortho = math::ortho(
                             0.F, static_cast<float>(renderSize.w),
@@ -955,7 +960,7 @@ namespace mrv
 
                 begin_render_pass(cmd);
 
-                p.shader->bind(m_currentFrameIndex);
+                p.shader->bind(frameIndex);
                 const auto pm = math::ortho(
                     0.F, static_cast<float>(renderSize.w),
                     0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
@@ -1005,7 +1010,7 @@ namespace mrv
                           VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
                     ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
 
-                    p.vao->bind(m_currentFrameIndex);
+                    p.vao->bind(frameIndex);
                     p.vao->draw(cmd, p.vbo);
                 }
             }
@@ -1955,11 +1960,11 @@ namespace mrv
 
         void TimelineWidget::_styleUpdate() {}
 
-        otime::RationalTime TimelineWidget::_posToTime(int value) noexcept
+        OTIO_NS::RationalTime TimelineWidget::_posToTime(int value) noexcept
         {
             TLRENDER_P();
 
-            otime::RationalTime out = time::invalidTime;
+            OTIO_NS::RationalTime out = time::invalidTime;
             if (p.player && p.timelineWidget)
             {
                 _setGeometry(); // needed, as Linux could have issues when
@@ -1969,7 +1974,7 @@ namespace mrv
                 const double normalized = (value - geometry.min.x) /
                                           static_cast<double>(geometry.w());
                 out = (p.timeRange.start_time() +
-                       otime::RationalTime(
+                       OTIO_NS::RationalTime(
                            p.timeRange.duration().value() * normalized,
                            p.timeRange.duration().rate()))
                           .round();

@@ -104,10 +104,7 @@ namespace mrv
             // m_debugSync = true;
         }
 
-        Viewport::~Viewport()
-        {
-            destroy();
-        }
+        Viewport::~Viewport() {}
 
         void Viewport::setContext(const std::weak_ptr<system::Context>& context)
         {
@@ -662,7 +659,7 @@ namespace mrv
                     // Create parameters for shader.
                     vk.shader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
-                    vk.shader->addFBO("textureSampler"); // default is fragment
+                    vk.shader->addTexture("textureSampler"); // default is fragment
                     float opacity = 1.F;
                     vk.shader->addPush("opacity", opacity, vlk::kShaderFragment);
                     vk.shader->createBindingSet();
@@ -685,7 +682,7 @@ namespace mrv
                         "vk.annotationShader");
                     vk.annotationShader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
-                    vk.annotationShader->addFBO("textureSampler");
+                    vk.annotationShader->addTexture("textureSampler");
                     int channels = 0; // Color Channel
                     vk.annotationShader->createUniform("channels", channels);
                     vk.annotationShader->createBindingSet();
@@ -723,6 +720,9 @@ namespace mrv
 
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
+
+            // Clamp frameIndex
+            frameIndex = frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
 
             // Clear the frame
             begin_render_pass(cmd);
@@ -825,8 +825,6 @@ namespace mrv
                         video = p.lastVideoFrame;
                     }
 
-                    // std::cerr << "\t\tdraw " << video.time << std::endl;
-
                     if (!video.layers.empty() && video.layers[0].image &&
                         video.layers[0].image->isValid())
                     {
@@ -850,12 +848,18 @@ namespace mrv
                         case image::PixelType::RGBA_U16:
                         case image::PixelType::LA_U16:
                             hasAlpha = true;
+                        case image::PixelType::YUV_420P_U10:
+                        case image::PixelType::YUV_422P_U10:
+                        case image::PixelType::YUV_444P_U10:
                         case image::PixelType::YUV_420P_U12:
                         case image::PixelType::YUV_422P_U12:
                         case image::PixelType::YUV_444P_U12:
                         case image::PixelType::YUV_420P_U16:
                         case image::PixelType::YUV_422P_U16:
                         case image::PixelType::YUV_444P_U16:
+                        case image::PixelType::YUV_420SP_U16:
+                        case image::PixelType::YUV_422SP_U16:
+                        case image::PixelType::YUV_444SP_U16:
                         case image::PixelType::RGB_U16:
                         case image::PixelType::L_U16:
                             vk.colorBufferType = image::PixelType::RGBA_U16;
@@ -999,7 +1003,7 @@ namespace mrv
                 }
 
                 vk.render->begin(
-                    cmd, vk.buffer, m_currentFrameIndex, renderSize,
+                    cmd, vk.buffer, frameIndex, renderSize,
                     renderOptions);
                 vk.render->applyTransforms();
 
@@ -1093,7 +1097,7 @@ namespace mrv
                 panel::annotationsPanel->notes->value("");
             }
 
-            const otime::RationalTime& currentTime = player->currentTime();
+            const OTIO_NS::RationalTime& currentTime = player->currentTime();
 
             const auto& voannotations = p.player->getVoiceAnnotations();
 
@@ -1236,7 +1240,7 @@ namespace mrv
                 begin_render_pass(cmd);
 
                 // Bind the shaders to the current frame index.
-                vk.shader->bind(m_currentFrameIndex);
+                vk.shader->bind(frameIndex);
 
                 // Bind the main composition pipeline (created/managed outside this
                 // draw loop)
@@ -1268,7 +1272,7 @@ namespace mrv
                           VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
                     ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
 
-                    vk.vao->bind(m_currentFrameIndex);
+                    vk.vao->bind(frameIndex);
                     vk.vao->draw(cmd, vk.vbo);
                 }
             }
@@ -1436,9 +1440,6 @@ namespace mrv
 
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD(alpha);
-
-            if (!p.helpText.empty())
-                _drawHelpText();
 
             if (p.selection.min.x >= 0)
             {
@@ -2094,7 +2095,7 @@ namespace mrv
             std::cerr << "Tonemapping Enabled: " << (p.hdrOptions.tonemap ? "YES" : "NO") << std::endl;
             std::cerr << "HDR Data Max CLL: " << p.hdrOptions.hdrData.maxCLL << std::endl;
             std::cerr << "HDR Data Max FALL: " << p.hdrOptions.hdrData.maxFALL << std::endl;
-            std::cerr << "HDR Data Max Luminance: " << p.hdrOptions.hdrData.displayMasteringLuminance.max() << std::endl;
+            std::cerr << "HDR Data Max Luminance: " << p.hdrOptions.hdrData.displayMasteringLuminance.getMax() << std::endl;
 
             // OCIO state
             const int screen_idx = this->screen_num();

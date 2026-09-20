@@ -327,7 +327,7 @@ namespace mrv
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
             const std::shared_ptr<tl::timeline_vlk::Render>& render,
-            const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
+            const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
             const std::vector<std::shared_ptr<voice::Annotation> >& voannotations,
             const math::Size2i& renderSize)
@@ -335,7 +335,7 @@ namespace mrv
             void Viewport::_drawAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
                 const std::shared_ptr<tl::timeline_vlk::Render>& render,
-                const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
+                const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
                 const std::vector<std::shared_ptr<bool> >& voannotations,
                 const math::Size2i& renderSize)
@@ -354,7 +354,7 @@ namespace mrv
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
 
-            render->begin(vk.cmd, annotationBuffer, m_currentFrameIndex,
+            render->begin(vk.cmd, annotationBuffer, frameIndex,
                           renderSize, renderOptions);
             render->setOCIOOptions(timeline::OCIOOptions());
             render->setLUTOptions(timeline::LUTOptions());
@@ -379,7 +379,7 @@ namespace mrv
                     {
                         for (short i = p.ghostPrevious - 1; i > 0; --i)
                         {
-                            otime::RationalTime offset(i, time.rate());
+                            OTIO_NS::RationalTime offset(i, time.rate());
                             if ((time - offset).floor() == annotationTime.floor())
                             {
                                 alphamult = 1.F - (float)i / p.ghostPrevious;
@@ -391,7 +391,7 @@ namespace mrv
                     {
                         for (short i = 1; i < p.ghostNext; ++i)
                         {
-                            otime::RationalTime offset(i, time.rate());
+                            OTIO_NS::RationalTime offset(i, time.rate());
                             if ((time + offset).floor() == annotationTime.floor())
                             {
                                 alphamult = 1.F - (float)i / p.ghostNext;
@@ -480,7 +480,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            shader->bind(m_currentFrameIndex);
+            shader->bind(frameIndex);
             shader->setUniform("transform.mvp", orthoMatrix,
                                vlk::kShaderVertex);
             timeline::Channels channels = timeline::Channels::Color;
@@ -502,7 +502,7 @@ namespace mrv
             {
                 // Draw calls for the composition geometry (e.g., a
                 // screen-filling quad)
-                vk.avao->bind(m_currentFrameIndex);
+                vk.avao->bind(frameIndex);
                 vk.avao->draw(cmd, vbo);
             }
         }
@@ -768,7 +768,7 @@ namespace mrv
             const auto player = p.player;
 
             const auto& path = player->path();
-            const otime::RationalTime& time = p.videoData[0].time;
+            const OTIO_NS::RationalTime& time = p.videoData[0].time;
             int64_t frame = time.to_frames();
 
             vk.render->setViewport(math::Box2i(0, 0, viewportSize.w,
@@ -792,7 +792,7 @@ namespace mrv
             }
 
             bool otioClip = false;
-            otime::RationalTime clipTime;
+            OTIO_NS::RationalTime clipTime;
             if (p.hud & HudDisplay::kFilename)
             {
                 std::string fullname = createStringFromPathAndTime(path, time);
@@ -882,7 +882,7 @@ namespace mrv
                     (p.actionMode != ActionMode::kScrub ||
                      p.lastEvent != FL_DRAG))
                 {
-                    const otime::TimeRange& range = player->timeRange();
+                    const OTIO_NS::TimeRange& range = player->timeRange();
                     const int64_t maxFrames = range.duration().to_frames();
 
                     // Calculate skipped frames
@@ -937,8 +937,8 @@ namespace mrv
             tmp.clear();
             if (p.hud & HudDisplay::kFrameCount)
             {
-                const otime::TimeRange& range = player->timeRange();
-                const otime::RationalTime& duration =
+                const OTIO_NS::TimeRange& range = player->timeRange();
+                const OTIO_NS::RationalTime& duration =
                     range.end_time_inclusive() - range.start_time();
                 snprintf(buf, 512, "FC: %" PRId64, (int64_t)duration.to_frames());
                 tmp += buf;
@@ -1062,55 +1062,6 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
             vk.render->drawMask(p.masking);
-        }
-
-        void Viewport::_drawHelpText() const noexcept
-        {
-            TLRENDER_P();
-            if (!p.player || !p.fontSystem)
-                return;
-
-            MRV2_VK();
-
-            Viewport* self = const_cast< Viewport* >(this);
-            uint16_t fontSize = 16 * self->pixels_per_unit();
-
-            const image::Color4f labelColor(255.F, 255.F, 255.F, p.helpTextFade);
-
-            char buf[512];
-            const image::FontInfo fontInfo(kFontFamily, fontSize);
-            const image::FontMetrics fontMetrics =
-                p.fontSystem->getMetrics(fontInfo);
-            const int labelSpacing = fontInfo.size / 2;
-            auto lineHeight = fontMetrics.lineHeight;
-            const math::Size2i labelSize =
-                p.fontSystem->getSize(p.helpText, fontInfo);
-
-            const auto& viewportSize = getViewportSize();
-
-            timeline::RenderOptions renderOptions;
-            renderOptions.clear = false;
-
-            const math::Box2i labelBox(0, 20, viewportSize.w - 20, viewportSize.h);
-            math::Box2i box = math::Box2i(
-                labelBox.max.x + 1 - labelSpacing * 2 - labelSize.w, labelBox.min.y,
-                labelSize.w + labelSpacing * 2, fontMetrics.lineHeight);
-            auto pos = math::Vector2i(
-                labelBox.max.x + 1 - labelSpacing - labelSize.w,
-                labelBox.min.y + fontMetrics.ascender);
-
-            vk.render->begin(viewportSize, renderOptions);
-            vk.render->setOCIOOptions(timeline::OCIOOptions());
-            vk.render->setLUTOptions(timeline::LUTOptions());
-
-            vk.render->drawRect(
-                box, image::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
-
-            std::vector<timeline::TextInfo> textInfos;
-            _appendText(textInfos, p.helpText, fontInfo, pos, lineHeight);
-            _drawText(textInfos, math::Vector2i(), labelColor);
-
-            vk.render->end();
         }
 
         void Viewport::_updateHDRMetadata()
@@ -1244,8 +1195,10 @@ namespace mrv
                     data.primaries[image::HDRPrimaries::White][1],
                 };
                 // Max display capability
-                m_hdr_metadata.maxLuminance = data.displayMasteringLuminance.max();
-                m_hdr_metadata.minLuminance = data.displayMasteringLuminance.min();
+                m_hdr_metadata.maxLuminance =
+                    data.displayMasteringLuminance.getMax();
+                m_hdr_metadata.minLuminance =
+                    data.displayMasteringLuminance.getMin();
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
             }

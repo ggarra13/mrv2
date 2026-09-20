@@ -104,10 +104,6 @@ namespace mrv
             //! Right mouse menu
             Fl_Menu_Button* popupMenu = nullptr;
 
-            //! Temporary help text displayed in HUD
-            static std::string helpText;
-            static float helpTextFade;
-
             //! HUD display flags (OR-ed together).
             static bool hudActive;
             static HudDisplay hud;
@@ -210,6 +206,9 @@ namespace mrv
             bool monitor_first_run = true;
             int screen_index = 0;
             monitor::Capabilities monitor;
+
+            //! libplacebo toggle.
+            bool tonemap = true;
 
             //! Tablet information.
             float pressure = 0.F;

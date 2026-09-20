@@ -365,6 +365,60 @@ namespace tl
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
+            case image::PixelType::YUV_420SP_U8:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                infoTmp = image::Info(info.size.w / 2, info.size.h / 2,
+                                      image::PixelType::LA_U8);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                break;
+            }
+            case image::PixelType::YUV_420SP_U16:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                infoTmp = image::Info(info.size.w / 2, info.size.h / 2,
+                                      image::PixelType::LA_U16);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                break;
+            }
+            case image::PixelType::YUV_422SP_U8:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                infoTmp = image::Info(
+                    image::Size(info.size.w / 2, info.size.h),
+                    image::PixelType::LA_U8);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                break;
+            }
+            case image::PixelType::YUV_422SP_U16:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                infoTmp = image::Info(
+                    image::Size(info.size.w / 2, info.size.h),
+                    image::PixelType::LA_U16);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                break;
+            }
+            case image::PixelType::YUV_444SP_U8:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                infoTmp = image::Info(info.size, image::PixelType::LA_U8);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                break;
+            }
+            case image::PixelType::YUV_444SP_U16:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                infoTmp = image::Info(info.size, image::PixelType::LA_U16);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                break;
+            }
             default:
             {
                 auto texture = vlk::Texture::create(ctx, info, options);
@@ -448,7 +502,7 @@ namespace tl
             }
             case image::PixelType::YUV_444P_U8:
             {
-                if (3 == textures.size())
+                if (2 == textures.size())
                 {
                     if (image->getPlaneCount() == 1)
                     {
@@ -458,9 +512,6 @@ namespace tl
                         const std::size_t h = info.size.h;
                         textures[1]->copy(
                             image->getData() + (w * h), textures[1]->getInfo());
-                        textures[2]->copy(
-                            image->getData() + (w * h) + (w * h),
-                            textures[2]->getInfo());
                     }
                     else
                     {
@@ -470,9 +521,6 @@ namespace tl
                         textures[1]->copy(image->getPlaneData(1),
                                           textures[1]->getInfo(),
                                           image->getLineSize(1));
-                        textures[2]->copy(image->getPlaneData(2),
-                                          textures[2]->getInfo(),
-                                          image->getLineSize(2));
                     }
                 }
                 break;
@@ -707,8 +755,59 @@ namespace tl
                 textures[0]->copy(
                     reinterpret_cast<uint8_t*>(dst.data()),
                     dst.size() * sizeof(uint32_t));
+                break;
             }
-            break;
+            case image::PixelType::YUV_420SP_U8:
+            case image::PixelType::YUV_422SP_U8:
+            case image::PixelType::YUV_444SP_U8:
+            {
+                if (2 == textures.size())
+                {
+                    if (image->getPlaneCount() == 1)
+                    {
+                        const std::size_t w = info.size.w;
+                        const std::size_t h = info.size.h;
+                        textures[0]->copy(image->getData(), textures[0]->getInfo());
+                        textures[1]->copy(image->getData() + (w * h), textures[1]->getInfo());
+                    }
+                    else
+                    {
+                        textures[0]->copy(image->getPlaneData(0),
+                                          textures[0]->getInfo(),
+                                          image->getLineSize(0));
+                        textures[1]->copy(image->getPlaneData(1),
+                                          textures[1]->getInfo(),
+                                          image->getLineSize(1));
+                    }
+                }
+                break;
+            }
+            case image::PixelType::YUV_420SP_U16:
+            case image::PixelType::YUV_422SP_U16:
+            case image::PixelType::YUV_444SP_U16:
+            {
+                if (2 == textures.size())
+                {
+                    if (image->getPlaneCount() == 1)
+                    {
+                        const std::size_t w = info.size.w;
+                        const std::size_t h = info.size.h;
+                        textures[0]->copy(image->getData(), textures[0]->getInfo());
+                        textures[1]->copy(image->getData() + (w * h) * 2,
+                                          textures[1]->getInfo());
+                    }
+                    else
+                    {
+                        textures[0]->copy(image->getPlaneData(0),
+                                          textures[0]->getInfo(),
+                                          image->getLineSize(0));
+                        textures[1]->copy(image->getPlaneData(1),
+                                          textures[1]->getInfo(),
+                                          image->getLineSize(1));
+                    }
+                }
+                break;
+            }
             default:
                 if (1 == textures.size())
                 {
@@ -923,12 +1022,29 @@ namespace tl
         {
             TLRENDER_P();
 
+            // ----------------------------------------------------------------
+            //  Pool initialization – create the pool on first use.
+            //
+            //  The pool is a member of Private:
+            //    std::shared_ptr<vlk::VAOPool> vaoPool;
+            //
+            //  Call  p.vaoPool->bind(p.frameIndex)  once per frame, e.g. in
+            //  Render::begin() - NOT here
+            // ----------------------------------------------------------------
+            if (!p.vaoPool)
+            {
+                VkDeviceSize slotSize =
+                    static_cast<VkDeviceSize>(64 * memory::megabyte);
+                p.vaoPool = vlk::VAOPool::create(ctx, slotSize);
+            }
+
             for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
             {
                 p.garbage[i].pipelines.reserve(20);
                 p.garbage[i].pipelineLayouts.reserve(20);
                 p.garbage[i].bindingSets.reserve(20);
                 p.garbage[i].buffers.reserve(20);
+                p.garbage[i].textures.reserve(20);
             }
         }
 
@@ -987,6 +1103,7 @@ namespace tl
             p.fbo = fbo;
             p.renderPass = fbo->getClearRenderPass();
             p.frameIndex = frameIndex;
+            p.vaoPool->bind(frameIndex);
 
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
             const VkColorComponentFlags allMask[] =
@@ -1040,12 +1157,19 @@ namespace tl
             g.pipelines.clear();
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
+            g.textures.clear();
             g.buffers.clear();
 
             const math::Matrix4x4f transform;
             const image::Color4f color(1.F, 1.F, 1.F);
 
             // Shader used to draw a 2D mesh with a texture * color
+            //
+            // "rect" and "wipe" use the same vertex source
+            // (vertex2NoUVsSource()), the same fragment source
+            // (meshFragmentSource()), and the same uniform/push/binding
+            // setup, so build the pipeline once here and share it below
+            // instead of creating two identical pipelines.
             if (!p.shaders["rect"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -1065,6 +1189,7 @@ namespace tl
                     "color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["rect"]);
             }
+            p.shaders["wipe"] = p.shaders["rect"];
 
             // Shader used to draw a 3d mesh with a texture * push color
             if (!p.shaders["mesh"])
@@ -1131,7 +1256,12 @@ namespace tl
                 _createBindingSet(p.shaders["text"]);
             }
 
-            // Shader to read one mesh with 3 vertex and uvs and a simple textue.
+            // Shader used to draw a textured quad modulated by a push color.
+            // "texture", "overlay", and "dissolve" all use the same vertex
+            // source (vertexSource()), the same fragment source
+            // (textureFragmentSource()), and the same uniform/texture/push
+            // setup, so build the pipeline once and share it below instead of
+            // creating three identical pipelines.
             if (!p.shaders["texture"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -1153,7 +1283,33 @@ namespace tl
 
                 _createBindingSet(p.shaders["texture"]);
             }
+            p.shaders["overlay"] = p.shaders["texture"];
+            p.shaders["dissolve"] = p.shaders["texture"];
 
+            if (!p.shaders["butterfly"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["butterfly"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    butterflyFragment_spv,
+                    butterflyFragment_spv_len, "butterfly");
+#else
+                p.shaders["butterfly"] = vlk::Shader::create(
+                    ctx,
+                    vertexSource(),
+                    butterflyFragmentSource(),
+                    "butterfly");
+#endif
+
+                p.shaders["butterfly"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["butterfly"]->addTexture("textureSampler");
+                p.shaders["butterfly"]->addTexture("textureSamplerB");
+
+                _createBindingSet(p.shaders["butterfly"]);
+            }
             // Shader used to read an RGB or YUV image
             if (!p.shaders["image"])
             {
@@ -1180,27 +1336,6 @@ namespace tl
 
                 _createBindingSet(p.shaders["image"]);
             }
-            if (!p.shaders["overlay"])
-            {
-#if USE_PRECOMPILED_SHADERS
-                p.shaders["overlay"] = vlk::Shader::create(
-                    ctx,
-                    Vertex3_spv,
-                    Vertex3_spv_len,
-                    textureFragment_spv,
-                    textureFragment_spv_len, "overlay");
-#else
-                p.shaders["overlay"] = vlk::Shader::create(
-                    ctx, vertexSource(), textureFragmentSource(), "overlay");
-#endif
-
-                p.shaders["overlay"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["overlay"]->addFBO("textureSampler");
-                p.shaders["overlay"]->addPush("color", color, vlk::kShaderFragment);
-
-                _createBindingSet(p.shaders["overlay"]);
-            }
             if (!p.shaders["difference"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -1218,8 +1353,8 @@ namespace tl
 
                 p.shaders["difference"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["difference"]->addFBO("textureSampler");
-                p.shaders["difference"]->addFBO("textureSamplerB");
+                p.shaders["difference"]->addTexture("textureSampler");
+                p.shaders["difference"]->addTexture("textureSamplerB");
 
                 _createBindingSet(p.shaders["difference"]);
             }
@@ -1240,8 +1375,8 @@ namespace tl
 
                 p.shaders["multiply"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["multiply"]->addFBO("textureSampler");
-                p.shaders["multiply"]->addFBO("textureSamplerB");
+                p.shaders["multiply"]->addTexture("textureSampler");
+                p.shaders["multiply"]->addTexture("textureSamplerB");
 
                 _createBindingSet(p.shaders["multiply"]);
             }
@@ -1262,30 +1397,10 @@ namespace tl
 
                 p.shaders["add"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["add"]->addFBO("textureSampler");
-                p.shaders["add"]->addFBO("textureSamplerB");
+                p.shaders["add"]->addTexture("textureSampler");
+                p.shaders["add"]->addTexture("textureSamplerB");
 
                 _createBindingSet(p.shaders["add"]);
-            }
-            if (!p.shaders["dissolve"])
-            {
-#if USE_PRECOMPILED_SHADERS
-                p.shaders["dissolve"] = vlk::Shader::create(
-                    ctx,
-                    Vertex3_spv,
-                    Vertex3_spv_len,
-                    textureFragment_spv,
-                    textureFragment_spv_len, "dissolve");
-#else
-                p.shaders["dissolve"] = vlk::Shader::create(
-                    ctx, vertexSource(), textureFragmentSource(), "dissolve");
-#endif
-                p.shaders["dissolve"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["dissolve"]->addFBO("textureSampler");
-                p.shaders["dissolve"]->addPush(
-                    "color", color, vlk::kShaderFragment);
-                _createBindingSet(p.shaders["dissolve"]);
             }
             if (!p.shaders["hard"])
             {
@@ -1298,7 +1413,7 @@ namespace tl
                     hardFragment_spv_len, "hard");
 #else
                 p.shaders["hard"] = vlk::Shader::create(
-                    ctx, vertex2Source(), softFragmentSource(), "hard");
+                    ctx, vertex2Source(), hardFragmentSource(), "hard");
 #endif
                 p.shaders["hard"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
@@ -1323,24 +1438,7 @@ namespace tl
                 p.shaders["soft"]->addPush("color", color);
                 _createBindingSet(p.shaders["soft"]);
             }
-            if (!p.shaders["wipe"])
-            {
-#if USE_PRECOMPILED_SHADERS
-                p.shaders["wipe"] = vlk::Shader::create(
-                    ctx,
-                    Vertex2NoUVs_spv,
-                    Vertex2NoUVs_spv_len,
-                    meshFragment_spv,
-                    meshFragment_spv_len, "wipe");
-#else
-                p.shaders["wipe"] = vlk::Shader::create(
-                    ctx, vertex2NoUVsSource(), meshFragmentSource(), "wipe");
-#endif
-                p.shaders["wipe"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["wipe"]->addPush("color", color, vlk::kShaderFragment);
-                _createBindingSet(p.shaders["wipe"]);
-            }
+            // "wipe" is set above, sharing the "rect" pipeline.
 #if USE_DUMMY_SHADER
             if (!p.shaders["dummy"])
             {
@@ -1352,6 +1450,7 @@ namespace tl
                 _createBindingSet(p.shaders["dummy"]);
             }
 #endif
+#if USE_OPENUSD
             if (!p.shaders["pbr"])
             {
                 p.shaders["pbr"] = vlk::Shader::create(
@@ -1377,6 +1476,7 @@ namespace tl
 
                 _createBindingSet(p.shaders["pbr"]);
             }
+#endif
             if (!p.compute["rgbf16_to_rgbaf16"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -1445,7 +1545,7 @@ namespace tl
                                                                           "hdr_peak_detection");
 #endif
                     hdr::PeakData peakData;
-                    p.compute["hdr_peak_detection"]->addFBO("img", vlk::kShaderCompute);
+                    p.compute["hdr_peak_detection"]->addTexture("img", vlk::kShaderCompute);
                     p.compute["hdr_peak_detection"]->addSSBO("PeakData", peakData, vlk::kShaderCompute);
                     _createBindingSet(p.compute["hdr_peak_detection"]);
                     p.compute["hdr_peak_detection"]->createComputePipeline();
@@ -1467,20 +1567,16 @@ namespace tl
             {
                 p.vbos["image"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["image"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["rect"] || p.vbos["rect"]->getSize() != 6)
             {
                 p.vbos["rect"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
-                p.vaos["rect"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["text"])
             {
                 p.vbos["text"] = vlk::VBO::create(2 * 3,
                                                   vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["text"] = vlk::VAO::create(ctx);
-
                 {
                     const std::string pipelineName = "text";
                     const std::string pipelineLayoutName = "text";
@@ -1495,19 +1591,16 @@ namespace tl
             {
                 p.vbos["texture"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["texture"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["wipe"] || p.vbos["wipe"]->getSize() != 3)
             {
                 p.vbos["wipe"] =
                     vlk::VBO::create(1 * 3, vlk::VBOType::Pos2_F32);
-                p.vaos["wipe"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["video"] || p.vbos["video"]->getSize() != 6)
             {
                 p.vbos["video"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["video"] = vlk::VAO::create(ctx);
             }
 
             if (renderOptions.clear)
@@ -1848,7 +1941,7 @@ namespace tl
 
             // --- Process 3D Textures ---
             const unsigned num3DTextures = shaderDesc->getNum3DTextures();
-            int index = 5;
+            int index = 5;  // Start of binding index
             for (unsigned i = 0; i < num3DTextures; ++i)
             {
                 const char* textureName = nullptr;
@@ -2009,7 +2102,9 @@ namespace tl
             for (const auto& [_, textureList] : sortedTextures)
             {
                 for (const auto& texture: textureList)
+                {
                     textures.push_back(texture);
+                }
             }
         }
 
@@ -2196,6 +2291,13 @@ namespace tl
                 return;
 
 #if defined(TLRENDER_OCIO)
+            if (p.ocioData)
+            {
+                for (auto& tex : p.ocioData->textures)
+                {
+                    p.garbage[p.frameIndex].textures.push_back(tex);
+                }
+            }
             p.ocioData.reset();
 #endif // TLRENDER_OCIO
 
@@ -2365,10 +2467,18 @@ namespace tl
         void Render::setLUTOptions(const timeline::LUTOptions& value)
         {
             TLRENDER_P();
+
             if (value == p.lutOptions)
                 return;
 
 #if defined(TLRENDER_OCIO)
+            if (p.lutData)
+            {
+                for (auto& tex : p.lutData->textures)
+                {
+                    p.garbage[p.frameIndex].textures.push_back(tex);
+                }
+            }
             p.lutData.reset();
 #endif // TLRENDER_OCIO
 
@@ -2393,6 +2503,10 @@ namespace tl
                     throw std::runtime_error("Cannot create OCIO transform");
                 }
                 p.lutData->transform->setSrc(p.lutOptions.fileName.c_str());
+                p.lutData->transform->setDirection(
+                    timeline::LUTDirection::Inverse == p.lutOptions.direction ?
+                    OCIO::TRANSFORM_DIR_INVERSE :
+                    OCIO::TRANSFORM_DIR_FORWARD);
                 p.lutData->transform->validate();
 
                 p.lutData->processor =
@@ -2430,7 +2544,7 @@ namespace tl
                 }
                 catch (const std::exception& e)
                 {
-                    p.ocioData.reset();
+                    p.lutData.reset();
                     throw e;
                 }
             }
@@ -2456,88 +2570,100 @@ namespace tl
         {
             TLRENDER_P();
 
-           // 1. Identify what specifically changed
-           const bool tonemapChanged = (value.tonemap != p.hdrOptions.tonemap);
-           const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
-           const bool peakDetectionChanged = (value.peak_detection != p.hdrOptions.peak_detection);
-           const bool algorithmChanged = (value.algorithm != p.hdrOptions.algorithm);
-           const bool oldIsHDRPlus = image::isHDRPlus(p.hdrOptions.hdrData);
-           const bool oldIsDolby = image::isHDRDolbyVision(p.hdrOptions.hdrData);
+            // 1. Identify what specifically changed
+            const bool exportModeChanged = (value.exportMode != p.hdrOptions.exportMode);
+            const bool tonemapChanged = (value.tonemap != p.hdrOptions.tonemap);
+            const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
+            const bool peakDetectionChanged = (value.peak_detection != p.hdrOptions.peak_detection);
+            const bool algorithmChanged = (value.algorithm != p.hdrOptions.algorithm);
+            const bool oldIsHDRPlus = image::isHDRPlus(p.hdrOptions.hdrData);
+            const bool oldIsDolby = image::isHDRDolbyVision(p.hdrOptions.hdrData);
 
-           // Determine if we should run Peak Detection
-           // Requirement: Tonemap ON, Peak Detection ON, and
-           // NOT HDR10+/Dolby
-           const bool isHDRPlus = image::isHDRPlus(value.hdrData);
-           const bool isDolby = image::isHDRDolbyVision(value.hdrData);
+            // Determine if we should run Peak Detection
+            // Requirement: Tonemap ON, Peak Detection ON, and
+            // NOT HDR10+/Dolby
+            const bool isHDRPlus = image::isHDRPlus(value.hdrData);
+            const bool isDolby = image::isHDRDolbyVision(value.hdrData);
 
-           const bool metadataChanged = (isHDRPlus != oldIsHDRPlus) ||
-                                        (isDolby != oldIsDolby);
+            const bool metadataChanged = (isHDRPlus != oldIsHDRPlus) ||
+                                         (isDolby != oldIsDolby);
 
-           if (tonemapChanged || algorithmChanged || metadataChanged)
-           {
+            if (exportModeChanged || tonemapChanged || algorithmChanged ||
+                metadataChanged)
+            {
 #if defined(TLRENDER_LIBPLACEBO)
-               if (p.placeboData && p.placeboData->state)
-               {
-                   pl_shader_obj_destroy(&p.placeboData->state);
-                   p.placeboData->state = NULL;
-               }
+                if (p.placeboData && p.placeboData->state)
+                {
+                    pl_shader_obj_destroy(&p.placeboData->state);
+                    p.placeboData->state = NULL;
+                }
 #endif
-           }
+            }
 
-           // 2. Optimization: Initialize update flag based on Option changes
-           bool updateDisplayShader = (tonemapChanged || hdrDataChanged ||
-                                       peakDetectionChanged ||
-                                       algorithmChanged ||
-                                       metadataChanged);
+            // 2. Optimization: Initialize update flag based on Option changes
+            bool updateDisplayShader = (tonemapChanged || hdrDataChanged ||
+                                        peakDetectionChanged ||
+                                        algorithmChanged ||
+                                        exportModeChanged ||
+                                        metadataChanged);
 
-           p.hdrOptions = value;
+            p.hdrOptions = value;
 
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.tonemap)
             {
-                const bool effectivePeakDetection =
-                    p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
+               const bool effectivePeakDetection =
+                   p.hdrOptions.tonemap &&
+                   p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
 
-                if (!p.placeboData || peakDetectionChanged || hdrDataChanged ||
-                    metadataChanged)
-                {
-                    // This ensures we have a valid object even if
-                    // 'effectivePeakDetection' is false
-                    p.placeboData.reset(new LibPlaceboData(ctx, effectivePeakDetection));
-                }
+               if (!p.placeboData || peakDetectionChanged || hdrDataChanged ||
+                   metadataChanged || exportModeChanged)
+               {
+                   if (p.placeboData)
+                   {
+                       for (auto& tex : p.placeboData->textures)
+                       {
+                           p.garbage[p.frameIndex].textures.push_back(tex);
+                       }
+                   }
 
-                // --- LOGIC B: Run Peak Detection Compute Shader ---
-                // Only run the expensive compute shader if actually enabled and valid.
-                if (effectivePeakDetection && p.buffers["video"])
-                {
-                    // Persistent states
-                    static float previous_avg = 0.F;
-                    static float current_avg = PL_COLOR_SDR_WHITE;
-                    static float current_peak = PL_COLOR_SDR_WHITE;
+                   // This ensures we have a valid object even if
+                   // 'effectivePeakDetection' is false
+                   p.placeboData.reset(new LibPlaceboData(ctx, effectivePeakDetection));
+               }
 
-                    // IMPORTANT: If peak detection was just enabled or content changed,
-                    // reset the "previous" values so the first frame of detection always
-                    // triggers a "New Shot" recreation.
-                    if (peakDetectionChanged || hdrDataChanged)
-                    {
-                        previous_avg = 0.F;
-                    }
+               // --- LOGIC B: Run Peak Detection Compute Shader ---
+               // Only run the expensive compute shader if actually enabled and valid.
+               if (effectivePeakDetection && p.buffers["video"])
+               {
+                   // Persistent states
+                   static float previous_avg = 0.F;
+                   static float current_avg = PL_COLOR_SDR_WHITE;
+                   static float current_peak = PL_COLOR_SDR_WHITE;
 
-                    const std::string shaderName = "hdr_peak_detection";
-                    const auto shader = p.compute[shaderName];
-                    const auto img = p.buffers["video"];
+                   // IMPORTANT: If peak detection was just enabled or content changed,
+                   // reset the "previous" values so the first frame of detection always
+                   // triggers a "New Shot" recreation.
+                   if (peakDetectionChanged || hdrDataChanged)
+                   {
+                       previous_avg = 0.F;
+                   }
 
-                    _createBindingSet(shader);
+                   const std::string shaderName = "hdr_peak_detection";
+                   const auto shader = p.compute[shaderName];
+                   const auto img = p.buffers["video"];
 
-                    shader->bind(p.frameIndex);
-                    shader->setFBO("img", img);
+                   _createBindingSet(shader);
 
-                    const std::string pipelineLayoutName = shaderName;
-                    _bindComputeDescriptorSets(pipelineLayoutName,
-                                               shaderName);
+                   shader->bind(p.frameIndex);
+                   shader->setFBO("img", img);
 
-                    VkCommandBuffer cmd = p.placeboData->ssboCmds[p.frameIndex];
-                    vkResetCommandBuffer(cmd, 0);
+                   const std::string pipelineLayoutName = shaderName;
+                   _bindComputeDescriptorSets(pipelineLayoutName,
+                                              shader);
+
+                   VkCommandBuffer cmd = p.placeboData->ssboCmds[p.frameIndex];
+                   vkResetCommandBuffer(cmd, 0);
 
                     VkCommandBufferBeginInfo beginInfo = {};
                     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -2610,7 +2736,14 @@ namespace tl
             }
             else
             {
-                // Only destroy data if Tone Mapping is completely OFF
+                // Only destroy data if tone-mapping is completely OFF
+                if (p.placeboData)
+                {
+                    for (auto& tex : p.placeboData->textures)
+                    {
+                        p.garbage[p.frameIndex].textures.push_back(tex);
+                    }
+                }
                 p.placeboData.reset();
             }
 #endif // TLRENDER_LIBPLACEBO
@@ -2851,7 +2984,8 @@ namespace tl
                     dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                     dst_colorspace.transfer  = PL_COLOR_TRC_PQ;
                     dst_colorspace.hdr.min_luma = p.monitor.min_nits;
-                    dst_colorspace.hdr.max_luma = p.monitor.max_nits;
+                    dst_colorspace.hdr.max_luma = std::min(p.monitor.max_nits,
+                                                           10000.F);
 
                     if (p.monitor.red.x > 0)
                     {
@@ -2930,7 +3064,7 @@ namespace tl
                         cmap.inverse_tone_mapping = false;
                         cmap.metadata = PL_HDR_METADATA_NONE;
                     }
-                }
+                } // p.monitor.hdr_enabled
 
 
                 //
@@ -2947,6 +3081,31 @@ namespace tl
 
                     cmap.gamut_mapping = nullptr;
                     cmap.tone_mapping_function = nullptr;
+                }
+
+                switch (p.hdrOptions.exportMode)
+                {
+                case timeline::HDRExportMode::LinearHDR:
+                    memset(&dst_colorspace, 0, sizeof(pl_color_space));
+                    dst_colorspace.primaries = src_colorspace.primaries;
+                    dst_colorspace.transfer  = PL_COLOR_TRC_LINEAR;
+                    dst_colorspace.hdr = src_colorspace.hdr;
+
+                    cmap.gamut_mapping = nullptr;
+                    cmap.tone_mapping_function = nullptr;
+                    cmap.inverse_tone_mapping = false;
+                    cmap.metadata = PL_HDR_METADATA_NONE;
+                    break;
+                case timeline::HDRExportMode::BakedSDR:
+                    memset(&dst_colorspace, 0, sizeof(dst_colorspace));
+                    dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+                    dst_colorspace.transfer  = src_colorspace.transfer;
+                    dst_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE;
+                    dst_colorspace.hdr.min_luma = 0.f;
+                    break;
+                case timeline::HDRExportMode::BakedHDR:
+                default:
+                    break;
                 }
 
                 pl_color_space_infer(&src_colorspace);
@@ -3085,6 +3244,13 @@ namespace tl
                 {
                     if (p.placeboData)
                     {
+                        if (p.placeboData)
+                        {
+                            for (auto& tex : p.placeboData->textures)
+                            {
+                                p.garbage[p.frameIndex].textures.push_back(tex);
+                            }
+                        }
                         p.placeboData->textures.clear();
                         _addTextures(p.placeboData->textures,
                                      p.placeboData->res);
@@ -3201,7 +3367,7 @@ namespace tl
 
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
-                p.shaders["display"]->addFBO("textureSampler");
+                p.shaders["display"]->addTexture("textureSampler");
 
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData && p.ocioData->icsDesc)
