@@ -835,9 +835,6 @@ namespace mrv
 
             VkCommandBuffer cmd = getCurrentCommandBuffer();
 
-            // Get frameIndex
-            frameIndex = frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
-
             bool changed_screen = false;
             if (p.screen_index != this->screen_num())
             {

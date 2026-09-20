@@ -191,9 +191,9 @@ namespace tl
                         std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
                         p.thumbnailMutex.stopped = true;
                     }
+                    _thumbnailCancel();
                     p.thumbnailThread.buffer.reset();
                     p.thumbnailThread.render.reset();
-                    _thumbnailCancel();
                     if (p.thumbnailThread.commandPool != VK_NULL_HANDLE)
                     {
                         vkDestroyCommandPool(ctx.device,
