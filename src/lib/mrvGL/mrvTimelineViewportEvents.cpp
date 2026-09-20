@@ -84,7 +84,7 @@ namespace mrv
     namespace opengl
     {
 
-        void TimelineViewport::_handleDragLeftMouseButtonShapes() noexcept
+        int TimelineViewport::_handleDragLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
 
@@ -92,11 +92,11 @@ namespace mrv
 
             auto player = getTimelinePlayer();
             if (!player)
-                return;
+                return 0;
 
             auto annotation = player->getAnnotation();
             if (p.actionMode != ActionMode::kScrub && !annotation)
-                return;
+                return 0;
 
             if (isDrawAction(p.actionMode) && !p.showAnnotations)
             {
@@ -150,7 +150,7 @@ namespace mrv
                     _createAnnotationShape(false); // erasing is never a laser
 
                     redrawWindows();
-                    return;
+                    return 1;
                 }
 
                 // We already switched earlier in this same stroke (the
@@ -168,7 +168,7 @@ namespace mrv
             {
                 auto shape = dynamic_cast< GLRectangleShape* >(s.get());
                 if (!shape)
-                    return;
+                    return 0;
 
                 shape->pts[1].x = pnt.x;
                 shape->pts[2].x = pnt.x;
@@ -177,14 +177,14 @@ namespace mrv
 
                 _updateAnnotationShape();
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kPolygon:
             case ActionMode::kFilledPolygon:
             {
                 auto shape = dynamic_cast< GLPathShape* >(s.get());
                 if (!shape)
-                    return;
+                    return 0;
 
                 auto& lastPoint = shape->pts.back();
                 lastPoint = pnt;
@@ -197,13 +197,13 @@ namespace mrv
 
                 _updateAnnotationShape();
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kDraw:
             {
                 auto shape = dynamic_cast< GLPathShape* >(s.get());
                 if (!shape)
-                    return;
+                    return 0;
 
                 shape->pts.push_back(pnt);
 
@@ -214,13 +214,13 @@ namespace mrv
 
                 _addAnnotationShapePoint();
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kErase:
             {
                 auto shape = dynamic_cast< GLErasePathShape* >(s.get());
                 if (!shape)
-                    return;
+                    return 0;
 
                 if (shape->rectangle)
                 {
@@ -243,13 +243,13 @@ namespace mrv
                 }
 
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kArrow:
             {
                 auto shape = dynamic_cast< GLArrowShape* >(s.get());
                 if (!shape)
-                    return;
+                    return 0;
 
                 Imath::V2d p1 = shape->pts[0];
                 Imath::V2d lineVector = pnt - p1;
@@ -283,14 +283,14 @@ namespace mrv
                 _updateAnnotationShape();
 
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kFilledCircle:
             case ActionMode::kCircle:
             {
                 auto shape = dynamic_cast< GLCircleShape* >(s.get());
                 if (!shape)
-                    return;
+                    return 0;
 
                 shape->radius =
                     2.0F * abs(shape->center.x - pnt.x) * pixels_per_unit();
@@ -298,7 +298,7 @@ namespace mrv
                     shape->radius = shape->pen_size / 2;
                 _updateAnnotationShape();
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kText:
             {
@@ -313,15 +313,15 @@ namespace mrv
 #endif
                     redrawWindows();
                 }
-                return;
+                return 1;
             }
             case ActionMode::kScrub:
             case ActionMode::kVoice:
             case ActionMode::kLink:
-                return;
+                return 1;
             default:
                 LOG_ERROR(_("Unknown action mode in ") << __FUNCTION__);
-                return;
+                return 0;
             }
         }
 
@@ -430,7 +430,7 @@ namespace mrv
             return ret;
         }
 
-        void TimelineViewport::_handlePushLeftMouseButtonShapes() noexcept
+        int TimelineViewport::_handlePushLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
 
@@ -450,7 +450,7 @@ namespace mrv
 
             auto player = getTimelinePlayer();
             if (!player)
-                return;
+                return 0;
 
             auto annotation = player->getAnnotation();
             bool all_frames =
@@ -459,7 +459,7 @@ namespace mrv
             {
                 annotation = player->createAnnotation(all_frames);
                 if (!annotation)
-                    return;
+                    return 0;
             }
             else
             {
@@ -482,7 +482,7 @@ namespace mrv
                               "An all frames annotation already exists.");
                     }
                     LOG_ERROR(error);
-                    return;
+                    return 0;
                 }
             }
 
@@ -595,7 +595,7 @@ namespace mrv
                     shape =
                         std::dynamic_pointer_cast<GLFilledPolygonShape>(s);
                     if (!shape)
-                        return;
+                        return 0;
                 }
                 shape->pts.push_back(pnt);
 
@@ -629,7 +629,7 @@ namespace mrv
                     auto s = annotation->lastShape();
                     shape = std::dynamic_pointer_cast<GLPolygonShape>(s);
                     if (!shape)
-                        return;
+                        return 0;
                 }
 
                 shape->pts.push_back(pnt);
@@ -767,7 +767,7 @@ namespace mrv
 #endif
                     w->textsize(fontSize);
                     redrawWindows();
-                    return;
+                    return 1;
                 }
 
                 w = new MultilineInput(
@@ -785,16 +785,18 @@ namespace mrv
                 this->add(w);
 
                 redrawWindows();
-                return;
+                return 1;
             }
             default:
-                return;
+                return 0;
             }
             // Create annotation menus if not there already
             App::unsaved_annotations = true;
             p.ui->uiMain->update_title_bar();
             p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
             p.ui->uiUndoDraw->activate();
+
+            return 1;
         }
 
         int TimelineViewport::_handleReleaseLeftMouseButtonShapes() noexcept

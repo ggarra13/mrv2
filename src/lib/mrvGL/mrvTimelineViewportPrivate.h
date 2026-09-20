@@ -103,10 +103,6 @@ namespace mrv
             //! Right mouse menu
             Fl_Menu_Button* popupMenu = nullptr;
 
-            //! Temporary help text displayed in HUD
-            static std::string helpText;
-            static float helpTextFade;
-
             //! HUD display flags (ORed together).
             static bool hudActive;
             static HudDisplay hud;
@@ -207,6 +203,9 @@ namespace mrv
             //! Tablet information.
             float pressure = 0.F;
             math::Vector2f lastPenPosition;
+
+            // libplacebo toggle.
+            bool tonemap = true;
         };
     }  // namespace opengl
 } // namespace mrv

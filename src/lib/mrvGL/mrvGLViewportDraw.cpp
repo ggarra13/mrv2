@@ -420,7 +420,7 @@ namespace mrv
             if (!player)
                 return;
 
-            const otime::RationalTime& time = player->currentTime();
+            const OTIO_NS::RationalTime& time = player->currentTime();
 
             const auto& annotations =
                 player->getAnnotations(p.ghostPrevious, p.ghostNext);
@@ -445,7 +445,7 @@ namespace mrv
                     {
                         for (short i = p.ghostPrevious - 1; i > 0; --i)
                         {
-                            otime::RationalTime offset(i, time.rate());
+                            OTIO_NS::RationalTime offset(i, time.rate());
                             if ((time - offset).floor() == annotationTime.floor())
                             {
                                 alphamult = 1.F - (float)i / p.ghostPrevious;
@@ -457,7 +457,7 @@ namespace mrv
                     {
                         for (short i = 1; i < p.ghostNext; ++i)
                         {
-                            otime::RationalTime offset(i, time.rate());
+                            OTIO_NS::RationalTime offset(i, time.rate());
                             if ((time + offset).floor() == annotationTime.floor())
                             {
                                 alphamult = 1.F - (float)i / p.ghostNext;
@@ -567,7 +567,7 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
-            const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
+            const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
             const std::vector<std::shared_ptr<voice::Annotation>>& voannotations,
             const math::Size2i& renderSize)
@@ -601,7 +601,7 @@ namespace mrv
                     {
                         for (short i = p.ghostPrevious - 1; i > 0; --i)
                         {
-                            otime::RationalTime offset(i, time.rate());
+                            OTIO_NS::RationalTime offset(i, time.rate());
                             if ((time - offset).floor() == annotationTime.floor())
                             {
                                 alphamult = 1.F - (float)i / p.ghostPrevious;
@@ -613,7 +613,7 @@ namespace mrv
                     {
                         for (short i = 1; i < p.ghostNext; ++i)
                         {
-                            otime::RationalTime offset(i, time.rate());
+                            OTIO_NS::RationalTime offset(i, time.rate());
                             if ((time + offset).floor() == annotationTime.floor())
                             {
                                 alphamult = 1.F - (float)i / p.ghostNext;
@@ -661,7 +661,7 @@ namespace mrv
 #else
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
-            const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
+            const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
             const std::vector<bool>& voannotations,
             const math::Size2i& renderSize)
@@ -695,7 +695,7 @@ namespace mrv
                     {
                         for (short i = p.ghostPrevious - 1; i > 0; --i)
                         {
-                            otime::RationalTime offset(i, time.rate());
+                            OTIO_NS::RationalTime offset(i, time.rate());
                             if ((time - offset).floor() == annotationTime.floor())
                             {
                                 alphamult = 1.F - (float)i / p.ghostPrevious;
@@ -707,7 +707,7 @@ namespace mrv
                     {
                         for (short i = 1; i < p.ghostNext; ++i)
                         {
-                            otime::RationalTime offset(i, time.rate());
+                            OTIO_NS::RationalTime offset(i, time.rate());
                             if ((time + offset).floor() == annotationTime.floor())
                             {
                                 alphamult = 1.F - (float)i / p.ghostNext;
@@ -1051,7 +1051,7 @@ namespace mrv
             const auto player = p.player;
 
             const auto& path = player->path();
-            const otime::RationalTime& time = p.videoData[0].time;
+            const OTIO_NS::RationalTime& time = p.videoData[0].time;
             int64_t frame = time.to_frames();
 
             timeline::RenderOptions renderOptions;
@@ -1069,7 +1069,7 @@ namespace mrv
             }
 
             bool otioClip = false;
-            otime::RationalTime clipTime;
+            OTIO_NS::RationalTime clipTime;
             if (p.hud & HudDisplay::kFilename)
             {
                 std::string fullname = createStringFromPathAndTime(path, time);
@@ -1158,7 +1158,7 @@ namespace mrv
                 if (player->playback() != timeline::Playback::Stop &&
                     (p.actionMode != ActionMode::kScrub || p.lastEvent != FL_DRAG))
                 {
-                    const otime::TimeRange& range = player->timeRange();
+                    const OTIO_NS::TimeRange& range = player->timeRange();
                     const int64_t maxFrames = range.duration().to_frames();
 
                     // Calculate skipped frames
@@ -1213,8 +1213,8 @@ namespace mrv
             tmp.clear();
             if (p.hud & HudDisplay::kFrameCount)
             {
-                const otime::TimeRange& range = player->timeRange();
-                const otime::RationalTime& duration =
+                const OTIO_NS::TimeRange& range = player->timeRange();
+                const OTIO_NS::RationalTime& duration =
                     range.end_time_inclusive() - range.start_time();
                 snprintf(buf, 512, "FC: %" PRId64, (int64_t)duration.to_frames());
                 tmp += buf;
@@ -1332,61 +1332,6 @@ namespace mrv
             TLRENDER_P();
             if (p.masking > 0.0001F)
                 _drawCropMask(renderSize);
-        }
-
-        void Viewport::_drawHelpText() const noexcept
-        {
-            TLRENDER_P();
-            if (!p.player)
-                return;
-            if (!p.fontSystem)
-                return;
-
-            MRV2_GL();
-
-            static const std::string fontFamily = "NotoSans-Regular";
-            Viewport* self = const_cast< Viewport* >(this);
-            uint16_t fontSize = 16 * self->pixels_per_unit();
-
-            const image::Color4f labelColor(255.F, 255.F, 255.F, p.helpTextFade);
-
-            char buf[512];
-            const image::FontInfo fontInfo(fontFamily, fontSize);
-            const image::FontMetrics fontMetrics =
-                p.fontSystem->getMetrics(fontInfo);
-            const int labelSpacing = fontInfo.size / 2;
-            auto lineHeight = fontMetrics.lineHeight;
-            const math::Size2i labelSize =
-                p.fontSystem->getSize(p.helpText, fontInfo);
-
-            const auto& viewportSize = getViewportSize();
-
-            timeline::RenderOptions renderOptions;
-            renderOptions.clear = false;
-
-            const math::Box2i labelBox(0, 20, viewportSize.w - 20, viewportSize.h);
-            math::Box2i box = math::Box2i(
-                labelBox.max.x + 1 - labelSpacing * 2 - labelSize.w, labelBox.min.y,
-                labelSize.w + labelSpacing * 2, fontMetrics.lineHeight);
-            auto pos = math::Vector2i(
-                labelBox.max.x + 1 - labelSpacing - labelSize.w,
-                labelBox.min.y + fontMetrics.ascender);
-
-            gl.render->begin(viewportSize, renderOptions);
-            gl.render->setOCIOOptions(timeline::OCIOOptions());
-            gl.render->setLUTOptions(timeline::LUTOptions());
-
-            gl.render->drawRect(
-                box, image::Color4f(0.F, 0.F, 0.F, 0.7F * p.helpTextFade));
-
-            std::vector<timeline::TextInfo> textInfos;
-            _appendText(textInfos,
-                        p.fontSystem->getGlyphs(p.helpText, fontInfo),
-                        pos, lineHeight);
-
-            _drawText(textInfos, pos, labelColor);
-
-            gl.render->end();
         }
 
         void Viewport::_createPBOs(const math::Size2i& renderSize)

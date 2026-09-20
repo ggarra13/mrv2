@@ -122,15 +122,13 @@ namespace mrv
 
             if (auto context = gl.context.lock())
             {
+                gl.render = timeline_gl::Render::create(context);
+                p.fontSystem = image::FontSystem::create(context);
+
+                gl.lines = std::make_shared<opengl::Lines>();
+
                 try
                 {
-                    gl.render = timeline_gl::Render::create(context);
-                    p.fontSystem = image::FontSystem::create(context);
-                    
-                    gl.lines = std::make_shared<opengl::Lines>();
-
-                    make_current();
-                    
                     const std::string& vertexSource = timeline_gl::vertexSource();
                     gl.shader =
                         gl::Shader::create(vertexSource, textureFragmentSource());
@@ -294,12 +292,18 @@ namespace mrv
                             case image::PixelType::RGBA_U16:
                             case image::PixelType::LA_U16:
                                 hasAlpha = true;
+                            case image::PixelType::YUV_420P_U10:
+                            case image::PixelType::YUV_422P_U10:
+                            case image::PixelType::YUV_444P_U10:
                             case image::PixelType::YUV_420P_U12:
                             case image::PixelType::YUV_422P_U12:
                             case image::PixelType::YUV_444P_U12:
                             case image::PixelType::YUV_420P_U16:
                             case image::PixelType::YUV_422P_U16:
                             case image::PixelType::YUV_444P_U16:
+                            case image::PixelType::YUV_420SP_U16:
+                            case image::PixelType::YUV_422SP_U16:
+                            case image::PixelType::YUV_444SP_U16:
                             case image::PixelType::RGB_U16:
                             case image::PixelType::L_U16:
                                 gl.colorBufferType = image::PixelType::RGBA_U16;
@@ -878,8 +882,6 @@ namespace mrv
                 if (p.hudActive && p.hud != HudDisplay::kNone)
                     _drawHUD(alpha);
 
-                if (!p.helpText.empty())
-                    _drawHelpText();
             }
 
 #ifdef USE_OPENGL2
