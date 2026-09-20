@@ -11,11 +11,10 @@ endfunction()
 
 function(install_mrv2_lib_glob _libglob)
     file(GLOB _libs "${_libglob}")
+    set(_dest "${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib")
     foreach( _lib ${_libs} )
 	message(STATUS "Copying ${_lib} to ${mrv2_NAME}")
-	file(COPY ${_lib}
-	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib)
-	install_macos_target_with_deps( ${_lib} )
+	install_macos_lib_with_deps( "${_lib}" "${_dest}" )
     endforeach()
 endfunction()
 
@@ -46,9 +45,8 @@ function(install_vulkan_lib_glob _libglob APPNAME)
 	file(GLOB _libs "${VULKAN_SDK}/lib/${_libglob}.dylib")
 	foreach( _lib ${_libs} )
 	    if (EXISTS ${_lib})
-		file(COPY ${_lib}
-		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
-		    FOLLOW_SYMLINK_CHAIN)
+		install_macos_lib_with_deps( "${_lib}"
+		    "${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib" )
 		set(_vulkan_found TRUE)
 	    endif()
 	endforeach()
@@ -63,9 +61,8 @@ function(install_vulkan_lib_glob _libglob APPNAME)
     file(GLOB _libs "/opt/homebrew/lib/${_libglob}.dylib")
     foreach( _lib ${_libs} )
 	if (EXISTS ${_lib})
-	    file(COPY ${_lib}
-		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
-		FOLLOW_SYMLINK_CHAIN)
+	    install_macos_lib_with_deps( "${_lib}"
+		"${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib" )
 	    set(_vulkan_found TRUE)
 	endif()
     endforeach()
@@ -77,9 +74,8 @@ function(install_vulkan_lib_glob _libglob APPNAME)
     if (NOT _vulkan_found)
 	file(GLOB _libs "/usr/local/lib/${_libglob}.dylib")
 	foreach( _lib ${_libs} )
-	    file(COPY ${_lib}
-		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
-		FOLLOW_SYMLINK_CHAIN)
+	    install_macos_lib_with_deps( "${_lib}"
+		"${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib" )
 	    set(_vulkan_found TRUE)
 	endforeach()
     endif()
@@ -349,11 +345,10 @@ if (EXISTS ${CPACK_PREPACKAGE}/hdr.app)
     #
     function(install_hdr_lib_glob _libglob)
 	file(GLOB _libs "${_libglob}")
+	set(_dest "${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/lib")
 	foreach( _lib ${_libs} )
 	    message(STATUS "Copying ${_lib} to hdr")
-	    file(COPY ${_lib}
-		DESTINATION ${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/lib)
-	    install_macos_target_with_deps( ${_lib} )
+	    install_macos_lib_with_deps( "${_lib}" "${_dest}" )
 	endforeach()
     endfunction()
     
@@ -387,6 +382,22 @@ if (EXISTS ${CPACK_PREPACKAGE}/hdr.app)
     # Install .mo translation files
     #
     copy_mo_files(hdr hdr)
+
+    #
+    # Rewrite install names / load commands to @rpath now that hdr.app's
+    # lib dir is complete (see the matching comment for ${mrv2_NAME}.app
+    # above for why this is needed).
+    #
+    set(_hdr_bundle_lib_dir "${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/lib")
+    set(_hdr_bundle_bin_dir "${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/bin")
+    file(GLOB _hdr_bundle_bin_candidates "${_hdr_bundle_bin_dir}/*")
+    set(_hdr_bundle_exes)
+    foreach(_f ${_hdr_bundle_bin_candidates})
+	if (NOT IS_DIRECTORY "${_f}")
+	    list(APPEND _hdr_bundle_exes "${_f}")
+	endif()
+    endforeach()
+    fixup_macos_rpath( "${_hdr_bundle_lib_dir}" EXECUTABLES ${_hdr_bundle_exes} )
 endif()
 
 if ("${mrv2_NAME}" STREQUAL "mrv2")
@@ -395,6 +406,30 @@ if ("${mrv2_NAME}" STREQUAL "mrv2")
 	"${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib/libfltk_vk*")
     file(REMOVE ${_files})
 endif()
+
+#
+# Now that every library (main libs, Vulkan libs, and everything they
+# transitively depend on) has been copied into
+# ${mrv2_NAME}.app/Contents/Resources/lib, rewrite every dylib's own
+# install name (LC_ID_DYLIB) and every absolute LC_LOAD_DYLIB reference
+# -- including references between two bundled libraries, e.g.
+# libfltk_vk.dylib -> libglslang.dylib -- to use @rpath, and make sure
+# each library/executable carries the rpath entries it needs to resolve
+# @rpath at runtime. Without this step, only the libraries linked
+# directly against the main executable end up relocatable; anything a
+# bundled library depends on keeps pointing at the build machine's
+# /usr/local or /opt/homebrew paths.
+#
+set(_mrv2_bundle_lib_dir "${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib")
+set(_mrv2_bundle_bin_dir "${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin")
+file(GLOB _mrv2_bundle_bin_candidates "${_mrv2_bundle_bin_dir}/*")
+set(_mrv2_bundle_exes)
+foreach(_f ${_mrv2_bundle_bin_candidates})
+    if (NOT IS_DIRECTORY "${_f}")
+	list(APPEND _mrv2_bundle_exes "${_f}")
+    endif()
+endforeach()
+fixup_macos_rpath( "${_mrv2_bundle_lib_dir}" EXECUTABLES ${_mrv2_bundle_exes} )
 
 
 #
