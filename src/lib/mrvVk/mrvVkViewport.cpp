@@ -990,6 +990,7 @@ namespace mrv
             locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
+            renderOptions.vaoSize = 16 * memory::megabyte;
 
             _updateHDRMetadata();
 

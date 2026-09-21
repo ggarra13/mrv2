@@ -1,39 +1,182 @@
+v1.7.8
+======
+
+- Fixed precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
+- The macOS versions of mrv2 and vmrv2 are now code-signed and notarized.  You should be able to install them much more easily by just dragging the icons to the Applications folder.
+- Improved the start-up of the Vulkan version of mrv2.
+- Improved the performance of loading pictures.
+
+
+
+v1.7.7	
+======
+
+- Improved FBO depth when saving HDR movies.
+- Added automatically saving of "colorInteropID" metadata when saving OpenEXR images.
+- Added automatically saving of chromaticities to OpenEXRs if HDR data is present in a movie.
+- Notes Panel and Annotations Panel's Frame Note are now synchronized both ways and will display the text entered.
+- Added OTIO's Spatial Coordinates and compatibility setting to the Settings Panel.
+- Added the (L) (Lumma) channel selection on the Layer's pull-down.
+- Made (R), (G), (B), (A) and (L) channel selection be persistant when changing clips.
+- Made gain, gamma and saturation persistant when changing clips.
+- Closing all the clips now resets gain, gamma and saturation.
+- Python: Improved the cmd.setDisplayOptions() to reflect in the UI properly.
+- Python: Improved Python online docs for display options.
+- Core: Improved memory on HW decoding frames.  Switching back and forth between HW and SW decoding works better now.
+- Core/UI/Vulkan:  Added a "Export Mode" options to control how the colors are exported into the pictures.
+     * Baked HDR (bakes the HDR transform in the picture.  Will only look good in an HDR display)
+     * Scene Linear (linearizes the data for OpenEXR, with metadata.  Will look good when the proper OCIO transform is used)
+     * Baked SDR (bakes the HDR transform in an SDR space.  Will match OpenGL SDR, but will clip HDR data).
+
+Fixes:
+
+- Fixed HW decoding to select HW decoders first before software decoders when HW decoding is on.  Previously, the software decoder, depending on codec, would come first.
+- Fixed automatic bit selection of main framebuffer for YUV_420P_U10 and 16-bit semi-planar formats.  They were defaulting to 8 bits instead of 16 bits.
+- Fixed saving pictures and videos with half or quarter resolution on the Vulkan backend.
+- Fixed + button in Notes Panel adding two annotations.
+- Fixed one standing validation error on Wipe comparison.
+- Fixed saving of images from a video on OpenGL backend, which could hang.
+- Fixed saving of images with padded zeros in the Vulkan backend.
+
+
+v1.7.6
+======
+
+- Bug/MacOS:  "Help->Update mrv2" would always download and install the amd64 version of the installer.  It was fixed in v1.7.5.
+
+- UI: Added pencil annotations and erasing without a Solo License.  Note that area tools and other drawing tools like arrows remain on the Solo License.  This is a compromise between features present on all viewers and features only on mrv2/vmrv2 so that those that unlocked a Solo License, won't feel cheated.
+
+- UI: Added a Notes Panel to display and edit the list of review notes easily, as suggested by Serban Jipa.
+
+- UI: Updated translations to supported languages.
+
+- Core: MacOS OpenGL M1 builds no longer come with USD support so they load faster now.  This is for two reasons: Apple now provides a Preview.app to see the USD on M1+ boxes and the newest USD repository's compilation is broken on M1+ (works only on Linux).
+
+- Core: Added HW decoding and encoding on aarch64 platforms (untested).
+
+- Core: Added support for OpenEXR's colorInteropID with the new Auto ICS button and its tooltip describing what it chose.  Auto ICS works with image files.  For videos, on Vulkan, you should rely on **Preferences->OCIO->No OCIO on Videos or sRGB/BT709** data as it is faster.  On the OpenGL backend, you can indeed use OCIO, but it will be slower.
+
+- Core: Added SVG reader.  Works with all .svg with paths.  Does not currently decode SVGs with text yet, though.
+
+- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the speed and support depend on your hardware and drivers.  It should now work on all platforms, including aarch64.
+
+- Core: Added CUDA decoding on Windows.
+
+- Core: Added the NVidia headers to the build, so the Linux branch will compile without the need for local files.
+
+- Core: Added OpenColorIO's LUT inversion on Color Panel.
+
+- Core: Fixed support for Original pixels on OpenEXR's UINT format.
+
+- Core: Added semi-planar pixel formats to color picker pixel toolbar's O(riginal) colors.
+
+- Core: Improved the memory usage of the Vulkan backend.
+
+- Updated Libraries and utilities:
+    * OpenEXR 3.4.15
+    * libtiff 4.7.2
+    * swig v4.5.0
+	
+Fixes:
+
+- Vulkan: Fixed a major bug between MAX_FRAMES_IN_FLIGHT and FrameData resources which could lead to random crashes.
+- UI/Core: Made editing .otioz files properly update the Files Panel icon.
+- UI/Core: Fixed annotations creating a long line when trying to create an all frame and a current frame annotation on the same frame.
+- UI/Core: Fixed the compilation of pyFLTK with newer swig (v4.5.0+).
+- OpenGL/Core: Fixed OpenGL display of YUV_444P_U16 and similar movies.  One plane was missing.  Vulkan backend was fine.
+- Core: Fixed reading of UINT OpenEXR frames on the Vulkan backend.
+- Windows: Fixed minor memory leak on the cursor icon.
+- Windows: Added Text Insert icon to avoid the Vulkan dreaded ghosted square when annotating text.
+
+
+
+v1.7.5
+======
+
+- Bug/Core: Fix a potential race (crash) condition in FFmpeg's log callback.
+- UI/Core: Added to Settings->Performance a pulldown select the HW driver.
+
+- Vulkan: Improved performance of movies with changing HDR metadata and destroying textures.
+- Vulkan: Fixed validation error when OCIO and libplacebo were used together.
+- Vulkan: Fixed one validation error when saving and no tonemapping.
+- Vulkan/Linux: Added HW decoding under Vulkan on both backends.  Allows HW decoding of prores, h264, hevc, av1, and vpx.  Note that performance is wildly dependant on the graphics card.
+
+- HDR: Added Saving of HDR movies with stream metadata.
+- HDR: Added Saving of HDR movies with frame metadata (HDR10+).  Tested using VPX, Pixel Format YUV_420P_U10_LE and a .mkv container.  Well done FFmpeg 9.0.1 and VPX!
+
+- Linux: Fixed a random crash when reloading the file requester.
+
+- Core: Fixed an infringing file on the BSD-3 license (mrvSlider.cpp).
+
+- Build: Made all temporary build directories to be in $BUILD_DIR/deps.
+
+- Libraries: Updated libvpx to v1.16.0, with aarch64 and Neon assembler
+  	     optimizations.  Also added runtime-cpu-detection.
+	     This improves 8K playback to 45-50FPS on my old NVidia 3080 RTX.
+	     Well done, Google!
+- Libraries: Updated libdav1d to v1.5.4.
+- Libraries: Updated Svt-AV1 to v4.2.0.
+- Libraries: Updated FFmpeg to v9.0.1.
+
+v1.7.4
+======
+
+- UI: Fixed a resizing of the clip to zoom of 1 in WebRTC transmissions and in Compare B mode.
+- UI/Core: Added Butterfly compare mode.
+- UI: Added Default Panel Sizes for each Panel in the Preferences->Thumbnails, so you can have, for example, the Files Panel displaying the full thumbnail information, while the compare panel displays the small thumbnail.
+- UI: Fixed clipping of file names on the Compare Panel.
+- UI/Core: Improved thumbnails performance of all files, particularly .otio files.
+- UI: Fixed a bug when going into Presentation mode, and opening the Preferences window and then going back to Normal mode.  It was mainly a Windows bug.
+- UI: Added LogLevel to change the display of messages in the Logs Panel.
+
+- Edit: .otioz files are now loaded in memory.
+- Edit: Added the ability to edit .otioz files.
+- Edit: Adding clips to a timeline with dissolves now keeps the dissolves intact instead of removing them.
+- Edit: Improved the performance of editing .otio files when dragging clips to the Timeline Viewport.  This removes the clunky file switching that used to happen.
+- Edit: The Playlist panel has been removed.  Now all clip concatenation operations happen directly by dragging clips to the Timeline Viewport.
+- UI/Edit: Removed some duplicated messages of an Edit donation.  Now in demo mode, you can open the timeline viewport to see the .otio tracks, but you just cannot edit them.
+
+- OpenEXR: Improved loading performance a tad.
+- OpenEXR: Fixed layer information (like lossy compression for the layer not the part number).
+- OpenEXR: Fixed ghosted DWA and ZIP compression settings when saving EXR images.
+
+- Vulkan: Made Offscreen buffers use the memory allocator for better performance.  This makes creating the 4K buffers much faster.  Noticeable at the first annotation.
+
+- Network: TCP network connections have been deprecated in favor of WebRTC connections.
+- WebRTC: Added project and room id command-line flags.
+
+- OTIO: Improved the loading of .otioz files as they are now read in memory.  However, they can no longer be edited.  If you need to edit an .otioz file, you should unzip it first.
+- OTIO: Multiple Media References are now allowed.
+- OTIO: Spatial Coordinates are now interpreted.
+
+- Wayland: Fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on long .otioz or .otio files).
+
+- Core: Added support for hardware video decoding of NV12 formats (ie. YUV420SP_U8, YUV420SP_U16, YUV422SP_U8 and YUV422SP_U16).  The decoding is subject to the graphic cards' capabilities, thou.
+
+- Vulkan: Optimized shader pipeline.
+- OpenGL: Optimized shader pipeline.
+
+
 v1.7.3
 ======
 
-This is a major upgrade and bug fix release.
-
-- Install: Fixed Linux installers trying to place opentimelineio's python module in my /home directory.
-
 - UI: Fixed tooltip of "Advance forward one frame" button in all languages.
-- UI/Core: Added listing of GLSL version in Help->About->HW on OpenGL backend.
 - UI: Fixed "Window/Preferences" not showing up in Japanese due to weird gettext bug.
 - UI: You can now easily drag a clip to the timeline view to create a new .otio EDL timeline, without having to go first to the Playlist Panel.
-- UI: Thumbnails clear their cache correctly now.
 
-- NDI: Minor improvement to NDI reading in the player.
-
-- Core: Fixed a bug that would make sequences not load up if they were in the current directory.
-- Core: Fixed sequences sometimes not being detected on Windows due to different path separators.
-- Core: Fixed Thumbnail crashes on file requester on Linux.
-- Core: Now each panel has its own thumbnail cache.
-- Core: Fixed an OpenGL error (crash) on texture counting. 
-- Core: Fixed a bug in OpenEXR reader on Vulkan backend when the image was promoted to 4 channels.
-- Core: Fixed a minor bug in OpenEXR reading code.
-- Core: OpenTimelineIO timelines now open faster (specially .otioz ones).
-- Core: OpenTimelineIO clips now tonemap each clip found if it is a movie, an HDR movie, a bt709 or an sRGB image, all will get tonemapped correctly.  Of course dissolves from one format of image to another one will not work.
-- Core: Brought and cherry-picked current tlRender to be more in sync with the one in mrv2.
-- Core: Minor improvement of performance on video reading.
-- Core: Improved performance of image reading.
-- Core: Fixed some OpenEXR memory issues and potential crashes. 
-- Core: Faster thumbnail creation.
-- Core: Fixed some Vulkan's VMA misuse.
-- Core: Fixed resource leak in thumbnailSystem.
+- Core/Windows: Fixed a skipping of current and parent directories for FileInfoWin32.cpp.
 - Core: Fixed a crash on the OpenEXR reader when reading a corrupt/truncated file.
+- Core: Fixed and added tlRender's unit tests.
+- Core: Fixed Thumbnail crashes on file requester on Linux.
+- Core: Fixed loading of image sequences command-line from the current directory.
+- Core: Fixed potential hanging of thumbnail generator on Vulkan backend.
+- Core/macOS: Fixed a crash on start-up on OpenGL backend.
+- Core: OpenTimelineIO clips now tonemap each clip found if it is a movie, an HDR movie, a bt709 or an sRGB image, all will get tonemapped correctly.  Of course dissolves from one format of image to another one will not work.
+- Core: Saving OpenTimelineIO timelines with audio now works.
+- Core: Saving clips or .otio timelines in the Vulkan backend turns off tonemapping so that BT709 and similar clips will write their data intact, not in HDR.
 - Core: Fixed and added tlRender's unit tests.
 
 - Build: Documented Vulkan compilation on Linux.
-- Build: Bumped OpenEXR to v3.4.14.
 
 
 v1.7.2

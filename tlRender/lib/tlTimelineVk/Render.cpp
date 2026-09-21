@@ -1009,11 +1009,6 @@ namespace tl
                                               return vlk::Texture::getObjectCount();
                                           });
             }
-
-            p.glyphTextureAtlas = vlk::TextureAtlas::create(
-                ctx, 1, 4096, image::PixelType::L_U8,
-                timeline::ImageFilter::Linear);
-
         }
 
         Render::Render(Fl_Vk_Context& context) :
@@ -1021,22 +1016,6 @@ namespace tl
             _p(new Private)
         {
             TLRENDER_P();
-
-            // ----------------------------------------------------------------
-            //  Pool initialization – create the pool on first use.
-            //
-            //  The pool is a member of Private:
-            //    std::shared_ptr<vlk::VAOPool> vaoPool;
-            //
-            //  Call  p.vaoPool->bind(p.frameIndex)  once per frame, e.g. in
-            //  Render::begin() - NOT here
-            // ----------------------------------------------------------------
-            if (!p.vaoPool)
-            {
-                VkDeviceSize slotSize =
-                    static_cast<VkDeviceSize>(64 * memory::megabyte);
-                p.vaoPool = vlk::VAOPool::create(ctx, slotSize);
-            }
 
             for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
             {
@@ -1110,6 +1089,34 @@ namespace tl
             p.fbo = fbo;
             p.renderPass = fbo->getClearRenderPass();
             p.frameIndex = frameIndex;
+
+
+
+
+
+            // ----------------------------------------------------------------
+            //  Pool initialization – create the pool on first use.
+            //
+            //  The pool is a member of Private:
+            //    std::shared_ptr<vlk::VAOPool> vaoPool;
+            //
+            //  Call  p.vaoPool->bind(p.frameIndex)  once per frame, e.g. in
+            //  Render::begin() - NOT here
+            // ----------------------------------------------------------------
+            if (!p.vaoPool)
+            {
+                VkDeviceSize slotSize =
+                    static_cast<VkDeviceSize>(renderOptions.vaoSize);
+                p.vaoPool = vlk::VAOPool::create(ctx, slotSize);
+            }
+
+            if (renderOptions.glyphTexture && !p.glyphTextureAtlas)
+            {
+                p.glyphTextureAtlas = vlk::TextureAtlas::create(
+                    ctx, 1, 4096, image::PixelType::L_U8,
+                    timeline::ImageFilter::Linear);
+            }
+
             p.vaoPool->bind(frameIndex);
 
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
