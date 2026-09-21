@@ -1248,15 +1248,18 @@ namespace mrv
         if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
             removeTemporaryEDLs(ui);
 
-
-        Fl::hide_all_windows();
-
         // Remove thumbnail system.
 #ifdef VULKAN_BACKEND
+        std::cerr << "remove thumbnail system" << std::endl;
         auto context = App::app->getContext();
         auto system  = context->getSystem<timelineui_vk::ThumbnailSystem>();
         context->removeSystem(system);
+        std::cerr << "removed thumbnail system" << std::endl;
+        system.reset();
+        std::cerr << "reset thumbnail system" << std::endl;
 #endif
+
+        Fl::hide_all_windows();
 
         tcp->unlock();
     }
