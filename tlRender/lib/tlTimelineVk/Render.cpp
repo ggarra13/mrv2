@@ -1074,7 +1074,14 @@ namespace tl
                 {
                     vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
                 }
+                g.pipelines.clear();
+                g.pipelineLayouts.clear();
+                g.bindingSets.clear();
+                g.textures.clear();
+                g.buffers.clear();
             }
+            p.vaoPool.reset();
+            p.glyphTextureAtlas.reset();
         }
 
         std::shared_ptr<Render> Render::create(

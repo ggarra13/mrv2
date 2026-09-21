@@ -191,14 +191,50 @@ namespace tl
                         std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
                         p.thumbnailMutex.stopped = true;
                     }
-                    _thumbnailCancel();
-                    p.thumbnailThread.buffer.reset();
-                    p.thumbnailThread.render.reset();
-                    if (p.thumbnailThread.commandPool != VK_NULL_HANDLE)
+                    VkDevice device = ctx.device;
+                    if (device != VK_NULL_HANDLE &&
+                        p.thumbnailThread.commandPool != VK_NULL_HANDLE)
                     {
-                        vkDestroyCommandPool(ctx.device,
+                        {
+                            std::lock_guard mutex(ctx.queue_mutex());
+                            vkDeviceWaitIdle(device);
+                        }
+
+                        VkCommandPool& commandPool = p.thumbnailThread.commandPool;
+
+                        vkFreeCommandBuffers(device, commandPool, 1, &p.thumbnailThread.cmd);
+                        p.thumbnailThread.cmd = VK_NULL_HANDLE;
+
+                        vkDestroyCommandPool(device,
                                              p.thumbnailThread.commandPool,
                                              nullptr);
+                        p.thumbnailThread.commandPool = VK_NULL_HANDLE;
+
+                    }
+                    _thumbnailCancel();
+                    if (device != VK_NULL_HANDLE &&
+                        p.thumbnailThread.commandPool != VK_NULL_HANDLE)
+                    {
+                        {
+                            std::lock_guard mutex(ctx.queue_mutex());
+                            vkDeviceWaitIdle(device);
+                        }
+                    }
+                    p.thumbnailThread.buffer.reset();
+                    p.thumbnailThread.render.reset();
+                    if (device != VK_NULL_HANDLE &&
+                        p.thumbnailThread.commandPool != VK_NULL_HANDLE)
+                    {
+                        VkCommandPool& commandPool = p.thumbnailThread.commandPool;
+
+                        vkFreeCommandBuffers(device, commandPool, 1, &p.thumbnailThread.cmd);
+                        p.thumbnailThread.cmd = VK_NULL_HANDLE;
+
+                        vkDestroyCommandPool(device,
+                                             p.thumbnailThread.commandPool,
+                                             nullptr);
+                        p.thumbnailThread.commandPool = VK_NULL_HANDLE;
+
                     }
                 });
 
@@ -440,8 +476,6 @@ namespace tl
                                                  arg(request->path.get()),
                                                  log::Type::Warning);
                             }
-#if 1
-#else
                             const auto info = timeline->getIOInfo();
                             auto future = timeline->getVideo(
                                 request->time.value_or(
@@ -540,7 +574,6 @@ namespace tl
                                     p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                 }  // if (p.thumbnailThread.buffer
                             }  // if (size.isValid())
-#endif
                         }  // if timeline
                     }  // try
                     catch (const std::exception&)
