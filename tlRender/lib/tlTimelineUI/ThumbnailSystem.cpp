@@ -1639,7 +1639,6 @@ namespace tl
 
         ThumbnailSystem::~ThumbnailSystem() {}
 
-
 #ifdef OPENGL_BACKEND
         ThumbnailSystem::ThumbnailSystem() :
             _p(new Private)

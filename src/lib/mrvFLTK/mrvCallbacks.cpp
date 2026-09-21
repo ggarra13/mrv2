@@ -1248,15 +1248,15 @@ namespace mrv
         if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
             removeTemporaryEDLs(ui);
 
-
-        Fl::hide_all_windows();
-
         // Remove thumbnail system.
 #ifdef VULKAN_BACKEND
         auto context = App::app->getContext();
         auto system  = context->getSystem<timelineui_vk::ThumbnailSystem>();
         context->removeSystem(system);
+        system.reset();
 #endif
+
+        Fl::hide_all_windows();
 
         tcp->unlock();
     }
