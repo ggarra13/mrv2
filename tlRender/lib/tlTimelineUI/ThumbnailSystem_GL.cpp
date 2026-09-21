@@ -294,7 +294,7 @@ namespace tl
 
                             if (size.isValid())
                             {
-                                const otime::RationalTime time =
+                                const OTIO_NS::RationalTime time =
                                     request->time.value_or(info.videoTime->start_time());
                                 auto videoFuture = timeline->readMedia(request->mediaPath,
                                                                        time, request->options);

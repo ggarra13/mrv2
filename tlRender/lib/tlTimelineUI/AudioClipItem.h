@@ -24,7 +24,7 @@ namespace tl
             void _init(
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<timeline::Timeline>&,
-                const otio::SerializableObject::Retainer<otio::Clip>&,
+                const OTIO_NS::SerializableObject::Retainer<otio::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<ThumbnailSystem>&,
@@ -39,7 +39,7 @@ namespace tl
             static std::shared_ptr<AudioClipItem> create(
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<timeline::Timeline>&,
-                const otio::SerializableObject::Retainer<otio::Clip>&,
+                const OTIO_NS::SerializableObject::Retainer<otio::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<ThumbnailSystem>&,

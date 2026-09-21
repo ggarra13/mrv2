@@ -20,8 +20,8 @@ namespace tl
         struct TimelineItem::Private
         {
             std::shared_ptr<timeline::Player> player;
-            otime::RationalTime currentTime = time::invalidTime;
-            otime::TimeRange inOutRange = time::invalidTimeRange;
+            OTIO_NS::RationalTime currentTime = time::invalidTime;
+            OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
             timeline::PlayerCacheInfo cacheInfo;
             bool editable = false;
             timeline::EditMode editMode = timeline::EditMode::Count;
@@ -39,7 +39,7 @@ namespace tl
             {
                 int index = 0;
                 TrackType type = TrackType::kNone;
-                otime::TimeRange timeRange;
+                OTIO_NS::TimeRange timeRange;
                 std::shared_ptr<ui::Label> label;
                 std::shared_ptr<ui::Label> durationLabel;
 

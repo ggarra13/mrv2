@@ -625,11 +625,11 @@ namespace tl
                             timeline->getMediaInfo(
                                 request->mediaPath, info, request->options))
                         {
-                            const otio::TimeRange timeRange =
+                            const OTIO_NS::TimeRange timeRange =
                                 request->timeRange.value_or(
-                                    otio::TimeRange(
-                                        otio::RationalTime(0.0, 1.0),
-                                        otio::RationalTime(1.0, 1.0)));
+                                    OTIO_NS::TimeRange(
+                                        OTIO_NS::RationalTime(0.0, 1.0),
+                                        OTIO_NS::RationalTime(1.0, 1.0)));
                             auto audioRequest = timeline->readMediaAudio(
                                 request->mediaPath, timeRange, request->options);
                             if (audioRequest.valid())

@@ -111,7 +111,7 @@ namespace tl
 
             //! Get a thumbnail cache key.
             static std::string getThumbnailKey(
-                int height, const file::Path&, const otime::RationalTime&,
+                int height, const file::Path&, const OTIO_NS::RationalTime&,
                 const io::Options&);
 
             //! Add a thumbnail to the cache.
@@ -127,7 +127,7 @@ namespace tl
 
             //! Get a waveform cache key.
             static std::string getWaveformKey(
-                const math::Size2i&, const file::Path&, const otime::TimeRange&,
+                const math::Size2i&, const file::Path&, const OTIO_NS::TimeRange&,
                 const io::Options&);
 
             //! Add a waveform to the cache.

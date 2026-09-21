@@ -45,9 +45,9 @@ namespace tl
         };
 
         void EffectItem::_init(
-            const otio::SerializableObject::Retainer<otio::Effect>&
+            const OTIO_NS::SerializableObject::Retainer<otio::Effect>&
                 effect,
-            const otio::SerializableObject::Retainer<otio::Item>&
+            const OTIO_NS::SerializableObject::Retainer<otio::Item>&
                 item,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
@@ -78,9 +78,9 @@ namespace tl
         EffectItem::~EffectItem() {}
         
         std::shared_ptr<EffectItem> EffectItem::create(
-            const otio::SerializableObject::Retainer<otio::Effect>&
+            const OTIO_NS::SerializableObject::Retainer<otio::Effect>&
                 effect,
-            const otio::SerializableObject::Retainer<otio::Item>&
+            const OTIO_NS::SerializableObject::Retainer<otio::Item>&
                 item,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,

@@ -5,8 +5,7 @@
 include(ExternalProject)
 
 set(pyFLTK_GIT_REPOSITORY "git://git.code.sf.net/p/pyfltk/git-code")
-set(pyFLTK_GIT_TAG e536e892091941d501d514c649515d144842a91e)
-
+set(pyFLTK_GIT_TAG 98a8f0c3a249063bec267b11fe1c7a968b411ff0)
 
 
 #
@@ -84,6 +83,7 @@ set(pyFLTK_PATCH
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/fl_ask.i"
     "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
 
+    # For ignoring forms_end()
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/Fl_Group.i"
