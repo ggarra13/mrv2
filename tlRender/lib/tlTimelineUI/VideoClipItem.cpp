@@ -43,14 +43,14 @@ namespace tl
             io::Options ioOptions;
             TIMELINEUI::InfoRequest infoRequest;
             std::shared_ptr<io::Info> ioInfo;
-            std::map<otime::RationalTime, ThumbnailRequest>
+            std::map<OTIO_NS::RationalTime, ThumbnailRequest>
                 thumbnailRequests;
         };
 
         void VideoClipItem::_init(
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Timeline>& timeline,
-            const otio::SerializableObject::Retainer<otio::Clip>& clip,
+            const OTIO_NS::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
@@ -285,17 +285,30 @@ namespace tl
                         thumbnailWidth, _displayOptions.thumbnailHeight);
                     if (math::intersects(box, clipRect))
                     {
-                        const otime::RationalTime time =
-                            otime::RationalTime(
+                        const OTIO_NS::RationalTime time =
+                            OTIO_NS::RationalTime(
                                 _timeRange.start_time().value() +
                                 (w > 1 ? (x / static_cast<double>(w - 1))
                                  : 0) *
                                 _timeRange.duration().value(),
                                 _timeRange.duration().rate())
                             .floor();
-                        const otime::RationalTime mediaTime =
+                        OTIO_NS::TimeRange trimmedRange = _trimmedRange;
+                        const OTIO_NS::TimeRange availableRange = _availableRange;
+                        if (_data->options.compat &&
+                            availableRange.start_time() > p.ioInfo->videoTime->start_time())
+                        {
+                            //! \bug If the available range is greater than the media time,
+                            //! assume the media time is wrong) and
+                            //! compensate for it.
+                            trimmedRange = OTIO_NS::TimeRange(
+                                trimmedRange.start_time() - availableRange.start_time(),
+                                trimmedRange.duration());
+                        }
+
+                        const OTIO_NS::RationalTime mediaTime =
                             timeline::toVideoMediaTime(
-                                time, _timeRange, _trimmedRange,
+                                time, _timeRange, trimmedRange,
                                 p.ioInfo->videoTime->duration().rate());
 
                         const std::string cacheKey = io::getVideoCacheKey(
@@ -323,11 +336,13 @@ namespace tl
                                     (!_displayOptions.hdr.tonemap ||
                                      _displayOptions.hdr == timeline::HDROptions()))
                                 {
-                                    if (!layer.imageB && layer.image)
+                                    if (!layer.imageB && layer.image &&
+                                        layer.image->getInfo().pixelType == image::PixelType::RGBA_U8)
                                     {
                                         event.render->drawImage(layer.image, box);
                                     }
-                                    else if (!layer.image && layer.imageB)
+                                    else if (!layer.image && layer.imageB &&
+                                             layer.imageB->getInfo().pixelType == image::PixelType::RGBA_U8)
                                     {
                                         event.render->drawImage(layer.imageB, box);
                                     }

@@ -19,7 +19,7 @@ namespace tl
             void _init(
                 const std::string& label, ui::ColorRole,
                 const std::string& objectName,
-                const otio::SerializableObject::Retainer<otio::Item>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Item>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<system::Context>&,
@@ -38,7 +38,7 @@ namespace tl
             void clipEvent(const math::Box2i&, bool) override;
             void drawEvent(const math::Box2i&, const ui::DrawEvent&) override;
 
-            const otio::Item* getOtioItem() const;
+            const OTIO_NS::Item* getOtioItem() const;
 
         protected:
             int _getMargin() const;

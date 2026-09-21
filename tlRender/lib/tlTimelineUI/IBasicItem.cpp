@@ -43,28 +43,29 @@ namespace tl
             };
             DrawData draw;
 
-            const otio::Item* otioItem = nullptr;
+            const OTIO_NS::Item* otioItem = nullptr;
         };
 
         void IBasicItem::_init(
             const std::string& label, ui::ColorRole colorRole,
             const std::string& objectName,
-            const otio::SerializableObject::Retainer<otio::Item>& item,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Item>& item,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
-            otime::TimeRange timeRange = time::invalidTimeRange;
+            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
             const auto timeRangeOpt = item->trimmed_range_in_parent();
             if (timeRangeOpt.has_value())
             {
                 timeRange = timeRangeOpt.value();
             }
-            const otime::TimeRange trimmedRange = item->trimmed_range();
+            const OTIO_NS::TimeRange trimmedRange = item->trimmed_range();
+            const OTIO_NS::TimeRange availableRange = item->available_range();
             IItem::_init(
-                objectName, timeRange, trimmedRange, scale, options,
+                objectName, timeRange, trimmedRange, availableRange, scale, options,
                 displayOptions, itemData, context, parent);
             TLRENDER_P();
 
@@ -88,7 +89,7 @@ namespace tl
             return _p->label;
         }
 
-        const otio::Item* IBasicItem::getOtioItem() const
+        const OTIO_NS::Item* IBasicItem::getOtioItem() const
         {
             return _p->otioItem;
         }
