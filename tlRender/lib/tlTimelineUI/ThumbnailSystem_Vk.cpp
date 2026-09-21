@@ -17,6 +17,8 @@
 
 #include <sstream>
 
+#define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+
 namespace tl
 {
     namespace TIMELINEUI
@@ -191,34 +193,13 @@ namespace tl
                         std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
                         p.thumbnailMutex.stopped = true;
                     }
+                    _thumbnailCancel();
                     VkDevice device = ctx.device;
                     if (device != VK_NULL_HANDLE &&
                         p.thumbnailThread.commandPool != VK_NULL_HANDLE)
                     {
-                        {
-                            std::lock_guard mutex(ctx.queue_mutex());
-                            vkDeviceWaitIdle(device);
-                        }
-
-                        VkCommandPool& commandPool = p.thumbnailThread.commandPool;
-
-                        vkFreeCommandBuffers(device, commandPool, 1, &p.thumbnailThread.cmd);
-                        p.thumbnailThread.cmd = VK_NULL_HANDLE;
-
-                        vkDestroyCommandPool(device,
-                                             p.thumbnailThread.commandPool,
-                                             nullptr);
-                        p.thumbnailThread.commandPool = VK_NULL_HANDLE;
-
-                    }
-                    _thumbnailCancel();
-                    if (device != VK_NULL_HANDLE &&
-                        p.thumbnailThread.commandPool != VK_NULL_HANDLE)
-                    {
-                        {
-                            std::lock_guard mutex(ctx.queue_mutex());
-                            vkDeviceWaitIdle(device);
-                        }
+                        std::lock_guard mutex(ctx.queue_mutex());
+                        vkDeviceWaitIdle(device);
                     }
                     p.thumbnailThread.buffer.reset();
                     p.thumbnailThread.render.reset();
@@ -372,13 +353,13 @@ namespace tl
                             {
                                 const otime::RationalTime time =
                                     request->time.value_or(info.videoTime->start_time());
-                                auto videoRequest = timeline->readMedia(request->mediaPath,
+                                auto videoFuture = timeline->readMedia(request->mediaPath,
                                                                         time, request->options);
-                                if (videoRequest.valid())
+                                if (videoFuture.valid())
                                 {
                                     if (p.thumbnailThread.running)
                                     {
-                                        const auto videoData = videoRequest.get();
+                                        const auto videoFrame = videoFuture.get();
                                         vlk::OffscreenBufferOptions options;
                                         options.colorType = image::PixelType::RGBA_U8;
                                         options.pbo = true;
@@ -389,7 +370,7 @@ namespace tl
                                                                                                     options);
                                         }
                                         if (p.thumbnailThread.render &&
-                                            p.thumbnailThread.buffer && videoData.image &&
+                                            p.thumbnailThread.buffer && videoFrame.image &&
                                             p.thumbnailThread.running)
                                         {
                                             image = image::Image::create(
@@ -420,7 +401,7 @@ namespace tl
                                             p.thumbnailThread.render->setTransform(ortho);
 
                                             p.thumbnailThread.render->drawImage(
-                                                videoData.image,
+                                                videoFrame.image,
                                                 {math::Box2i(0, 0, size.w, size.h)});
 
                                             p.thumbnailThread.render->end();
@@ -455,7 +436,7 @@ namespace tl
                                             p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                         }
                                     }  // thread.running
-                                }  // videoRequest valid
+                                }  // videoFuture valid
                             } // size valid
                         }
                         else if (timeline)
@@ -514,7 +495,8 @@ namespace tl
                                                                      size, options);
                                 }
                                 if (p.thumbnailThread.render &&
-                                    p.thumbnailThread.buffer)
+                                    p.thumbnailThread.buffer &&
+                                    p.thumbnailThread.running)
                                 {
                                     image = image::Image::create(
                                         size.w, size.h,
@@ -556,7 +538,6 @@ namespace tl
 
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
-
                                     VkResult result = VK_NOT_READY;
                                     void* imageData = nullptr;
                                     while (result == VK_NOT_READY &&
@@ -569,7 +550,6 @@ namespace tl
                                         std::memcpy(image->getData(), imageData, image->getDataByteCount());
                                     else
                                         std::memset(image->getData(), 0, image->getDataByteCount());
-
 
                                     p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                 }  // if (p.thumbnailThread.buffer

@@ -4,6 +4,8 @@
 
 #include <tlCore/AudioResample.h>
 
+#define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+
 namespace tl
 {
     namespace TIMELINEUI
@@ -235,7 +237,7 @@ namespace tl
             // same file at once is cheaper than that, and only one of the
             // two ends up in the cache.
             timeline::Options options;
-            // options.threaded = false;  // <--- was false, now true
+            // options.threaded = false;  // \@bug: \@note: was false, now true
             file::Path inOutPath = path;
             out = timeline::Timeline::create(context, inOutPath, options);
             {
@@ -252,30 +254,36 @@ namespace tl
 
         ThumbnailSystem::~ThumbnailSystem()
         {
+            DBG;
             shutdown();
+            DBG;
         }
 
         void ThumbnailSystem::shutdown()
         {
             TLRENDER_P();
+            DBG;
 
             p.infoThread.running = false;
             if (p.infoThread.thread.joinable())
             {
                 p.infoThread.thread.join();
             }
+            DBG;
 
             p.thumbnailThread.running = false;
             if (p.thumbnailThread.thread.joinable())
             {
                 p.thumbnailThread.thread.join();
             }
+            DBG;
 
             p.waveformThread.running = false;
             if (p.waveformThread.thread.joinable())
             {
                 p.waveformThread.thread.join();
             }
+            DBG;
         }
 
         void
