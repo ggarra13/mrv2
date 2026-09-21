@@ -5,6 +5,7 @@ v1.7.8
 - The macOS versions of mrv2 and vmrv2 are now code-signed and notarized.  You should be able to install them much more easily by just dragging the icons to the Applications folder.
 - Improved the start-up of the Vulkan version of mrv2.
 - Improved the performance of loading pictures.
+- Improved the memory footprint and performance of drawing annotations on the Vulkan version of mrv2.
 
 
 

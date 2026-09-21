@@ -352,6 +352,8 @@ namespace mrv
 
             // Start the annotation render.
             timeline::RenderOptions renderOptions;
+            renderOptions.glyphTexture = false;
+            renderOptions.vaoSize = 16 * memory::megabyte;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
 
             render->begin(vk.cmd, annotationBuffer, frameIndex,
