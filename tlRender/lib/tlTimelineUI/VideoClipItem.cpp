@@ -60,14 +60,6 @@ namespace tl
             const auto path = timeline::getPath(
                 timeline->getMediaReference(clip), itemData->directory,
                 itemData->options.pathOptions);
-            static bool test = false;
-            if (!test)
-            {
-                test = true;
-                std::cerr << "path=" << path.get() << " clip=" << clip->name()
-                          << " directory=" << itemData->directory
-                          << std::endl;
-            }
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
                                       : path.getFileName(false),

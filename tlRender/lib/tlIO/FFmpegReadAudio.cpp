@@ -50,17 +50,19 @@ namespace tl
                 nullptr);
             if (r < 0)
             {
-                throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(fileName)
-                                             .arg(getErrorLabel(r)));
+                throw std::runtime_error(
+                    string::Format("avformat_open_input {0}: {1}")
+                    .arg(fileName)
+                    .arg(getErrorLabel(r)));
             }
 
             r = avformat_find_stream_info(_avFormatContext, 0);
             if (r < 0)
             {
-                throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(fileName)
-                                             .arg(getErrorLabel(r)));
+                throw std::runtime_error(
+                    string::Format("avformat_find_stream_info {0}: {1}")
+                    .arg(fileName)
+                    .arg(getErrorLabel(r)));
             }
 
             // Count the tracks and get the metadata for each audio track
@@ -213,9 +215,10 @@ namespace tl
                     _avCodecParameters[_avStream], avAudioCodecParameters);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_parameters_copy {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
                 _avCodecContext[_avStream] =
                     avcodec_alloc_context3(avAudioCodec);
@@ -229,18 +232,20 @@ namespace tl
                     _avCodecContext[_avStream], _avCodecParameters[_avStream]);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_parameters_to_context {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
                 _avCodecContext[_avStream]->thread_count = options.threadCount;
                 _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME;
                 r = avcodec_open2(_avCodecContext[_avStream], avAudioCodec, 0);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_open2 {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
 
                 const size_t fileChannelCount =

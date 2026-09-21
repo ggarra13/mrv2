@@ -67,6 +67,7 @@ namespace tl
                 uint64_t id = 0;
                 file::Path path;
                 file::Path mediaPath;
+                file::Path audioPath;
                 io::Options options;
                 std::promise<io::Info> promise;
             };
@@ -76,6 +77,7 @@ namespace tl
                 uint64_t id = 0;
                 file::Path path;
                 file::Path mediaPath;
+                file::Path audioPath;
                 int height = 0;
                 std::optional<otio::RationalTime> time;
                 std::string mediaReferenceKey;

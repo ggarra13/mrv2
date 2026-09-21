@@ -269,17 +269,19 @@ namespace tl
                 nullptr);
             if (r < 0)
             {
-                throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(formatFileName)
-                                             .arg(getErrorLabel(r)));
+                throw std::runtime_error(
+                    string::Format("avformat_open_input {0}: {1}")
+                    .arg(formatFileName)
+                    .arg(getErrorLabel(r)));
             }
 
             r = avformat_find_stream_info(_avFormatContext, nullptr);
             if (r < 0)
             {
-                throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(fileName)
-                                             .arg(getErrorLabel(r)));
+                throw std::runtime_error(
+                    string::Format("avformat_find_stream_info {0}: {1}")
+                    .arg(fileName)
+                    .arg(getErrorLabel(r)));
             }
 
             for (unsigned int i = 0; i < _avFormatContext->nb_streams; ++i)
@@ -404,31 +406,21 @@ namespace tl
                     _avCodecContext[_avStream], _avCodecParameters[_avStream]);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_parameters_to_context {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
                 _avCodecContext[_avStream]->thread_count = options.threadCount;
                 _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME;
 
-                if (options.threadCount == 0)
-                {
-                    // \@note: libdav1d codec does not decode properly when
-                    //         thread count is 0.
-                    if (avVideoCodecParameters->codec_id == AV_CODEC_ID_AV1)
-                    {
-                        LOG_WARNING("Decoder AV1 may decode black with 0 "
-                                    "FFmpeg I/O threads.  Setting it to 4.");
-                        _avCodecContext[_avStream]->thread_count = 4;
-                    }
-                }
-
                 r = avcodec_open2(_avCodecContext[_avStream], avVideoCodec, 0);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_open2 {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
 
                 _info.size.w = _avCodecParameters[_avStream]->width;
