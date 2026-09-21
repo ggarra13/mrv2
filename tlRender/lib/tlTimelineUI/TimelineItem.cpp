@@ -63,13 +63,7 @@ namespace tl
             p.timeScrub =
                 observer::Value<otime::RationalTime>::create(time::invalidTime);
 
-#ifdef OPENGL_BACKEND
-            p.thumbnailSystem = ThumbnailSystem::create(context, window);
-#endif
-
-#ifdef VULKAN_BACKEND
-            p.thumbnailSystem = ThumbnailSystem::create(context, ctx);
-#endif
+            p.thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
 
             const auto timeline = p.player->getTimeline();
             const auto otioTimeline = timeline->getTimeline();
@@ -213,7 +207,9 @@ namespace tl
                     });
         }
 
-        TimelineItem::~TimelineItem() {}
+        TimelineItem::~TimelineItem()
+        {
+        }
 
 #ifdef OPENGL_BACKEND
         TimelineItem::TimelineItem() :

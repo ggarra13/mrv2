@@ -79,7 +79,6 @@
 #include <FL/Fl.H>
 #include <FL/filename.H> // for fl_open_uri()
 
-
 #ifdef _WIN32
 #include <winsock2.h>
 #endif
@@ -1210,7 +1209,6 @@ namespace mrv
         if (ui->uiSecondary)
             ui->uiSecondary->save();
 
-
         // Save preferences
         Preferences::save();
 
@@ -1221,7 +1219,6 @@ namespace mrv
         ui->uiAbout = nullptr;
         delete ui->uiHotkey;
         ui->uiHotkey = nullptr;
-
 
         // Hide all PanelGroup windows
         PanelGroup::hide_all();
@@ -1250,18 +1247,15 @@ namespace mrv
 
         // Remove thumbnail system.
 #ifdef VULKAN_BACKEND
-        std::cerr << "remove thumbnail system" << std::endl;
         auto context = App::app->getContext();
         auto system  = context->getSystem<timelineui_vk::ThumbnailSystem>();
         context->removeSystem(system);
-        std::cerr << "removed thumbnail system" << std::endl;
-        system.reset();
-        std::cerr << "reset thumbnail system" << std::endl;
 #endif
 
         Fl::hide_all_windows();
 
         tcp->unlock();
+
     }
 
     void previous_channel_cb(Fl_Widget* w, ViewerUI* ui)

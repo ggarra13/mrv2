@@ -17,8 +17,6 @@
 
 #include <sstream>
 
-#define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
 namespace tl
 {
     namespace TIMELINEUI
@@ -447,7 +445,10 @@ namespace tl
                             // another here read the file again for every
                             // request, which on a bundle of 25,000 entries
                             // meant a thumbnail took as long as an open.
-                            if (auto logSystem = context->getLogSystem())
+                            const bool mediaAsked =
+                                request->mediaPath.get() != request->path.get();
+                            auto logSystem = context->getLogSystem();
+                            if (mediaAsked && logSystem)
                             {
                                 logSystem->print("tl::ui::ThumbnailSystem",
                                                  string::Format("Media not found in timeline, "

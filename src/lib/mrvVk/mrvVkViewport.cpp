@@ -620,7 +620,7 @@ namespace mrv
                 // Add the thumbnail system if not present.
                 if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
                 {
-                    context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+                    timelineui_vk::ThumbnailSystem::create(context, ctx);
                 }
 
                 // Set the renderers's max nits

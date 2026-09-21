@@ -1296,7 +1296,6 @@ namespace mrv
         endBMDOutputStream();
 #endif
 
-
         delete p.mainControl;
         p.mainControl = nullptr;
 

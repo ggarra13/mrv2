@@ -4,8 +4,6 @@
 
 #include <tlCore/AudioResample.h>
 
-#define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
 namespace tl
 {
     namespace TIMELINEUI
@@ -254,36 +252,30 @@ namespace tl
 
         ThumbnailSystem::~ThumbnailSystem()
         {
-            DBG;
             shutdown();
-            DBG;
         }
 
         void ThumbnailSystem::shutdown()
         {
             TLRENDER_P();
-            DBG;
 
             p.infoThread.running = false;
             if (p.infoThread.thread.joinable())
             {
                 p.infoThread.thread.join();
             }
-            DBG;
 
             p.thumbnailThread.running = false;
             if (p.thumbnailThread.thread.joinable())
             {
                 p.thumbnailThread.thread.join();
             }
-            DBG;
 
             p.waveformThread.running = false;
             if (p.waveformThread.thread.joinable())
             {
                 p.waveformThread.thread.join();
             }
-            DBG;
         }
 
         void

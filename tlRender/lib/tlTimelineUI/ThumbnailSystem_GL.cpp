@@ -349,11 +349,14 @@ namespace tl
                             // another here read the file again for every
                             // request, which on a bundle of 25,000 entries
                             // meant a thumbnail took as long as an open.
-                            if (auto logSystem = context->getLogSystem())
+                            const bool mediaAsked =
+                                request->mediaPath.get() != request->path.get();
+                            auto logSystem = context->getLogSystem();
+                            if (mediaAsked && logSystem)
                             {
                                 logSystem->print("tl::ui::ThumbnailSystem",
                                                  string::Format("Media not found in timeline, "
-                                                                "using \"{0}\" in timeline "
+                                                                "using the timeline itself \"{0}\" in "
                                                                 "in \"{1}\"").
                                                  arg(request->mediaPath.get()).
                                                  arg(request->path.get()),

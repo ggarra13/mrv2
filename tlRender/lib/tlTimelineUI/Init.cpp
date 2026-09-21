@@ -23,7 +23,7 @@ namespace tl
             // the FLTK context
             if (!context->getSystem<TIMELINEUI::ThumbnailSystem>())
             {
-                context->addSystem(TIMELINEUI::ThumbnailSystem::create(context));
+                TIMELINEUI::ThumbnailSystem::create(context);
             }
 #endif
         }

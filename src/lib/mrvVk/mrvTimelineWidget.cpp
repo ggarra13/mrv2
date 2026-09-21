@@ -267,10 +267,8 @@ namespace mrv
 
             if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
             {
-                context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+                p.thumbnailSystem = timelineui_vk::ThumbnailSystem::create(context, ctx);
             }
-
-            p.thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
 
             setStopOnScrub(false);
 
