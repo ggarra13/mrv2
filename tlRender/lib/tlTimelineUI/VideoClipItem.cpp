@@ -28,7 +28,6 @@ namespace tl
             std::string clipName;
             file::Path timelinePath;
             file::Path path;
-            std::vector<file::MemoryRead> memoryRead;
             std::shared_ptr<ThumbnailSystem> thumbnailSystem;
 
             struct SizeData
@@ -72,7 +71,6 @@ namespace tl
             p.clipName = clip->name();
             p.timelinePath = timeline->getPath();
             p.path = path;
-            p.memoryRead = timeline::getMemoryRead(clip->media_reference());
             p.thumbnailSystem = thumbnailSystem;
 
             p.ioOptions = _data->options.ioOptions;
@@ -259,7 +257,9 @@ namespace tl
                 if (!p.ioInfo && !p.infoRequest.future.valid())
                 {
                     p.infoRequest = p.thumbnailSystem->getInfo(
-                        p.path, p.ioOptions);
+                        p.timelinePath,
+                        p.path,
+                        _data->options.ioOptions);
                 }
             }
 

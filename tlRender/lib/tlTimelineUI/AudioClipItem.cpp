@@ -24,7 +24,6 @@ namespace tl
             file::Path timelinePath;
             file::Path path;
 
-            std::vector<file::MemoryRead> memoryRead;
             std::shared_ptr<ThumbnailSystem> thumbnailSystem;
 
             struct SizeData
@@ -238,7 +237,7 @@ namespace tl
                 if (!p.ioInfo && !p.infoRequest.future.valid())
                 {
                     p.infoRequest = p.thumbnailSystem->getInfo(
-                        p.path, _data->options.ioOptions);
+                        p.timelinePath, p.path, _data->options.ioOptions);
                 }
             }
 
