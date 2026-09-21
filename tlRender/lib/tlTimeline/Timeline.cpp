@@ -4,6 +4,7 @@
 
 #include <tlTimeline/TimelinePrivate.h>
 
+#include <tlTimeline/MemoryReference.h>
 #include <tlTimeline/Util.h>
 #include <tlTimeline/ZipPrivate.h>
 

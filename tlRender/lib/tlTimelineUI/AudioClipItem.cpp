@@ -61,7 +61,6 @@ namespace tl
 
             p.timelinePath = timeline->getPath();
             p.path = path;
-            p.memoryRead = timeline::getMemoryRead(clip->media_reference());
             p.thumbnailSystem = thumbnailSystem;
 
             const std::string infoCacheKey =

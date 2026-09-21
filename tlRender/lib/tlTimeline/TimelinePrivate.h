@@ -20,10 +20,10 @@
 
 namespace tl
 {
-    class ZipReader;
-
     namespace timeline
     {
+        class ZipReader;
+
         struct Timeline::Private
         {
             std::weak_ptr<system::Context> context;
