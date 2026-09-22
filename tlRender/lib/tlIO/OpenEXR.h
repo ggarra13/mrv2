@@ -102,6 +102,8 @@ namespace tl
             Imf::Compression _compression = Imf::ZIP_COMPRESSION;
             float _dwaCompressionLevel = 45.F;
             int _zipCompressionLevel = 4;
+            float _lossyHTJ2KQuality = 110.F;
+            int   _zstdCompressionLevel = 5;
             double _speed = io::sequenceDefaultSpeed;
         };
 
