@@ -620,7 +620,7 @@ namespace mrv
                 // Add the thumbnail system if not present.
                 if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
                 {
-                    timelineui_vk::ThumbnailSystem::create(context, ctx);
+                    context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
                 }
 
                 // Set the renderers's max nits
@@ -715,12 +715,14 @@ namespace mrv
 
         void Viewport::draw()
         {
-
             TLRENDER_P();
             MRV2_VK();
 
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
+
+            // Clamp frameIndex
+            frameIndex = frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
 
             // Clear the frame
             begin_render_pass(cmd);
@@ -990,7 +992,6 @@ namespace mrv
             locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
-            renderOptions.vaoSize = 16 * memory::megabyte;
 
             _updateHDRMetadata();
 
@@ -2094,7 +2095,7 @@ namespace mrv
             std::cerr << "Tonemapping Enabled: " << (p.hdrOptions.tonemap ? "YES" : "NO") << std::endl;
             std::cerr << "HDR Data Max CLL: " << p.hdrOptions.hdrData.maxCLL << std::endl;
             std::cerr << "HDR Data Max FALL: " << p.hdrOptions.hdrData.maxFALL << std::endl;
-            std::cerr << "HDR Data Max Luminance: " << p.hdrOptions.hdrData.displayMasteringLuminance.max() << std::endl;
+            std::cerr << "HDR Data Max Luminance: " << p.hdrOptions.hdrData.displayMasteringLuminance.getMax() << std::endl;
 
             // OCIO state
             const int screen_idx = this->screen_num();

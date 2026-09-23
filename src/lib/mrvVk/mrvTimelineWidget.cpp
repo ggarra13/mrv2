@@ -267,8 +267,10 @@ namespace mrv
 
             if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
             {
-                p.thumbnailSystem = timelineui_vk::ThumbnailSystem::create(context, ctx);
+                context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
             }
+
+            p.thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
 
             setStopOnScrub(false);
 
@@ -833,6 +835,9 @@ namespace mrv
 
             VkCommandBuffer cmd = getCurrentCommandBuffer();
 
+            // Get frameIndex
+            frameIndex = frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
+
             bool changed_screen = false;
             if (p.screen_index != this->screen_num())
             {
@@ -906,7 +911,6 @@ namespace mrv
 
                         timeline::RenderOptions renderOptions;
                         renderOptions.clear = true;
-                        renderOptions.vaoSize = 4 * memory::megabyte;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
 

@@ -17,12 +17,6 @@ namespace tl
             //! Clear the canvas before rendering.
             bool clear = true;
 
-            //! Create glyph texture.
-            bool glyphTexture = true;
-
-            //! Vulkan Mesh pool size.
-            size_t vaoSize = 64 * memory::megabyte;
-
             //! Clear color.
             image::Color4f clearColor;
 
