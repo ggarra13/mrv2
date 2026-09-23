@@ -587,7 +587,6 @@ namespace mrv
             return out;
         }
 
-#if 1
         void toOtioFile(OTIO_NS::Timeline* otioTimeline, ViewerUI* ui)
         {
             auto model = ui->app->filesModel();
@@ -604,8 +603,8 @@ namespace mrv
             if (tracks.size() < 1)
                 return;
 
-            bool create = false;
-            bool refreshCache = hasEmptyTracks(stack);
+            bool reloadMedia = false;
+            bool refreshCache = true; //hasEmptyTracks(stack);
 
             std::string otioFile;
             if (file::isTemporaryEDL(path))
@@ -614,7 +613,6 @@ namespace mrv
             }
             else
             {
-                create = true;
                 otioFile = otioFilename(ui);
                 if (file::isOTIOZ(path))
                 {
@@ -651,110 +649,23 @@ namespace mrv
                     destItem->timeline.reset();
 
                     // needed to update Files Panel and I/O cache.
-                    refreshCache = true;
+                    reloadMedia = true;
                 }
             }
 
             timeline->to_json_file(otioFile);
             destItem->path = file::Path(otioFile);
 
-            if (refreshCache)
+            if (reloadMedia)
             {
                 refresh_media_cb(nullptr, ui);
-                refresh_file_cache_cb(nullptr, ui);
             }
-            else if (create)
-            {
-                panel::refreshThumbnails();
-            }
-        }
-#else
-        void toOtioFile(const OTIO_NS::Timeline* otioTimeline, ViewerUI* ui)
-        {
-            auto model = ui->app->filesModel();
-            int index = model->observeAIndex()->get();
-            if (index < 0)
-                return;
-
-            auto timeline = otioTimeline;
-
-            auto destItem = model->observeA()->get();
-            auto path = destItem->path;
-            auto stack = timeline->tracks();
-            auto tracks = stack->children();
-            if (tracks.size() < 1)
-                return;
-
-            bool create = false;
-            bool refreshCache = hasEmptyTracks(stack);
-
-            std::string otioFile;
-            if (file::isTemporaryEDL(path))
-            {
-                otioFile = path.get();
-            }
-            else
-            {
-                create = true;
-                otioFile = otioFilename(ui);
-                if (file::isOTIOZ(path))
-                {
-                    ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
-                                                                  _("Unzipping"));
-                    progress->show();
-                    Fl::check();
-
-                    std::string dir = mrv::tmppath() + "/media";
-                    destItem->timeline->expandOTIOZ(dir, [&](
-                                                        bool& aborted,
-                                                        const std::string& title,
-                                                        size_t done,
-                                                        size_t total)
-                        {
-                            // Safely update the UI
-                            progress->set_end(total);
-                            progress->set_value(done);
-
-                            if (!progress->window() ||
-                                (progress->window() &&
-                                 !progress->window()->shown()))
-                                aborted = true;
-
-                            Fl::check();
-                        });
-
-                    delete progress;
-
-                    timeline = duplicateTimeline(timeline);
-                    if (!timeline)
-                        return;
-
-                    // Change paths in OTIO timeline to point to /tmp/media
-                    makePathsToTemp(const_cast<OTIO_NS::Timeline*>(timeline),
-                                    ui);
-
-                    // Reset the destItem timeline::Timeline
-                    destItem->timeline.reset();
-
-                    // needed to update Files Panel and I/O cache.
-                    refreshCache = true;
-                }
-            }
-
-            timeline->to_json_file(otioFile);
-            destItem->path = file::Path(otioFile);
 
             if (refreshCache)
             {
-                refresh_media_cb(nullptr, ui);
                 refresh_file_cache_cb(nullptr, ui);
             }
-            else if (create)
-            {
-                panel::refreshThumbnails();
-            }
         }
-#endif
 
         //! Change clips' source range to use the highest video and audio
         //! sample rate.  Also returns the largest time range for the timeline.

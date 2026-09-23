@@ -3499,24 +3499,36 @@ namespace mrv
 
         auto item = std::make_shared<FilesModelItem>();
         item->init = true;
+
+        // Paths
         item->path = media->path;
         item->audioPath = media->audioPath;
 
+        item->audioOffset = media->audioOffset;
+
+        // Layers
+        item->videoLayer = media->videoLayer;
+        item->videoLayers = media->videoLayers;
+
+        // Playback
         item->inOutRange = media->inOutRange;
         item->timeRange = media->timeRange;
         item->ioInfo = media->ioInfo;
         item->speed = media->speed;
-        item->audioOffset = media->audioOffset;
-
-        item->videoLayer = media->videoLayer;
-        item->videoLayers = media->videoLayers;
-
         item->loop = media->loop;
         item->playback = player->playback();
         item->currentTime = time;
+        item->mute = media->mute;
+        item->volume = media->volume;
 
+        // Annotations
+        item->annotations = media->annotations;
+        item->voiceAnnotations = media->voiceAnnotations;
+
+        // OCIO
         item->ocioIcs = media->ocioIcs;
         item->ocioLook = media->ocioLook;
+        item->lutOptions = media->lutOptions;
 
         model->replace(origIndex, item);
 
