@@ -3597,11 +3597,11 @@ namespace mrv
         if (!player)
             return;
 
-        auto app = App::app;
+        auto context = App::app->getContext();
 
-        // Update the I/O cache.
-        auto ioSystem = app->getContext()->getSystem<io::ReadSystem>();
-        // ioSystem->getCache()->clear();
+        // Update the Thumbnail and Playback cache.
+        auto thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
+        thumbnailSystem->clearCache();
 
         player->clearCache();
     }

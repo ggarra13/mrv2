@@ -283,68 +283,54 @@ namespace tl
         {
             TLRENDER_P();
 
-            //
-            // Fill up the promises.
-            //
-            _infoCancel();
-            _thumbnailCancel();
-            _waveformCancel();
+            if (ids.empty())
+                return;
 
             // Looked up as a set: this is called with the requests of a whole
             // timeline's worth of items, and searching the list of ids for each
             // pending request made cancelling cost the product of the two.
             const std::set<uint64_t> idSet(ids.begin(), ids.end());
+
             {
-                std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
-                auto i = p.infoMutex.requests.begin();
-                while (i != p.infoMutex.requests.end())
+                std::list<std::shared_ptr<Private::InfoRequest>> cancelled;
                 {
-                    if (idSet.find((*i)->id) != idSet.end())
+                    std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
+                    for (auto i = p.infoMutex.requests.begin(); i != p.infoMutex.requests.end();)
                     {
-                        i = p.infoMutex.requests.erase(i);
-                    }
-                    else
-                    {
-                        ++i;
+                        if (idSet.count((*i)->id)) { cancelled.push_back(*i); i = p.infoMutex.requests.erase(i); }
+                        else ++i;
                     }
                 }
+                for (auto& r : cancelled) r->promise.set_value(io::Info());
             }
             {
-                std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
-                auto i = p.thumbnailMutex.requests.begin();
-                while (i != p.thumbnailMutex.requests.end())
+                std::list<std::shared_ptr<Private::ThumbnailRequest>> cancelled;
                 {
-                    if (idSet.find((*i)->id) != idSet.end())
+                    std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
+                    for (auto i = p.thumbnailMutex.requests.begin(); i != p.thumbnailMutex.requests.end();)
                     {
-                        i = p.thumbnailMutex.requests.erase(i);
-                    }
-                    else
-                    {
-                        ++i;
+                        if (idSet.count((*i)->id)) { cancelled.push_back(*i); i = p.thumbnailMutex.requests.erase(i); }
+                        else ++i;
                     }
                 }
+                for (auto& r : cancelled) r->promise.set_value(nullptr);
             }
             {
-                std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
-                auto i = p.waveformMutex.requests.begin();
-                while (i != p.waveformMutex.requests.end())
+                std::list<std::shared_ptr<Private::WaveformRequest>> cancelled;
                 {
-                    if (idSet.find((*i)->id) != idSet.end())
+                    std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
+                    for (auto i = p.waveformMutex.requests.begin(); i != p.waveformMutex.requests.end();)
                     {
-                        i = p.waveformMutex.requests.erase(i);
-                    }
-                    else
-                    {
-                        ++i;
+                        if (idSet.count((*i)->id)) { cancelled.push_back(*i); i = p.waveformMutex.requests.erase(i); }
+                        else ++i;
                     }
                 }
+                for (auto& r : cancelled) r->promise.set_value(nullptr);
             }
             {
                 // Acquire the cache lock to safely iterate over the shared
                 // Timeline instances.
                 std::unique_lock<std::mutex> lock(p.ioCacheMutex);
-
-                // p.ioCache.getValues() is a list of timelines.
                 for (const auto& timeline : p.ioCache.getValues())
                 {
                     timeline->cancelRequests(ids);

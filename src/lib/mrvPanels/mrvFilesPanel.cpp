@@ -25,7 +25,6 @@
 #include "mrvIcons/FileCloseAll.h"
 #include "mrvIcons/FileOpen.h"
 #include "mrvIcons/FileOpenSeparateAudio.h"
-#include "mrvIcons/Filter.h"
 #include "mrvIcons/Next.h"
 #include "mrvIcons/Prev.h"
 
@@ -209,10 +208,6 @@ namespace mrv
                     continue;
                 lastPath = path;
 
-                // We skip EDLs created in tmp dir here.
-                if (o.filterEDL && isEDL)
-                    continue;
-
                 const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
@@ -319,21 +314,6 @@ namespace mrv
             b->tooltip(_("Next filename"));
             bW->callback([=](auto w) { App::app->filesModel()->next(); });
 
-            auto btW = new Widget< Fl_Button >(g->x() + 150, Y, 30, 30);
-            b = btW;
-            b->image(MRV2_LOAD_SVG(Filter));
-            b->selection_color(FL_YELLOW);
-            b->value(o.filterEDL);
-            b->tooltip(_("Filter EDLs"));
-            btW->callback(
-                [=](auto w)
-                {
-                    auto model = App::app->filesModel();
-                    FilesPanelOptions o =
-                        model->observeFilesPanelOptions()->get();
-                    o.filterEDL ^= true;
-                    model->setFilesPanelOptions(o);
-                });
             bg->end();
 
             g->end();

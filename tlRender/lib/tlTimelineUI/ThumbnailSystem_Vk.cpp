@@ -93,7 +93,7 @@ namespace tl
             {
                 std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
                 if (p.thumbnailMutex.cache.get(key, thumbnail))
-                    ;
+                    true;
                 else if (!p.thumbnailMutex.stopped)
                 {
                     notify = true;

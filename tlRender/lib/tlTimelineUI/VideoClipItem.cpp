@@ -150,13 +150,19 @@ namespace tl
                 p.infoRequest.future.wait_for(std::chrono::seconds(0)) ==
                     std::future_status::ready)
             {
-                p.ioInfo =
-                    std::make_shared<io::Info>(p.infoRequest.future.get());
-                const std::string infoCacheKey =
-                    io::getInfoCacheKey(p.path, p.ioOptions);
-                _data->info[infoCacheKey] = p.ioInfo;
-                _updates |= ui::Update::Size;
-                _updates |= ui::Update::Draw;
+                // Extract the result and reset the request wrapper
+                const auto info = p.infoRequest.future.get();
+                p.infoRequest = {};
+
+                // Only store if the media actually contains valid video
+                // stream metadata
+                if (!info.video.empty())
+                {
+                    p.ioInfo = std::make_shared<io::Info>(info);
+                    const std::string infoCacheKey = io::getInfoCacheKey(p.path, p.ioOptions);
+                    _data->info[infoCacheKey] = p.ioInfo;
+                    _updates |= ui::Update::Size | ui::Update::Draw;
+                }
             }
 
             // Check if any thumbnails are finished.
@@ -168,11 +174,18 @@ namespace tl
                         std::future_status::ready)
                 {
                     const auto image = i->second.future.get();
-                    const std::string cacheKey =
-                        io::getVideoCacheKey(p.path, i->first, p.ioOptions, {});
-                    _data->thumbnails[cacheKey] = image;
+                    // Only cache valid, non-null rendered thumbnail frames
+                    if (image)
+                    {
+                        const std::string cacheKey =
+                            io::getVideoCacheKey(p.path, i->first, p.ioOptions,
+                                                 {});
+                        _data->thumbnails[cacheKey] = image;
+                        _updates |= ui::Update::Draw;
+                    }
+
+                    // Always erase the completed request from the pending map
                     i = p.thumbnailRequests.erase(i);
-                    _updates |= ui::Update::Draw;
                 }
                 else
                 {

@@ -140,13 +140,21 @@ namespace tl
                 p.infoRequest.future.wait_for(std::chrono::seconds(0)) ==
                     std::future_status::ready)
             {
-                p.ioInfo =
-                    std::make_shared<io::Info>(p.infoRequest.future.get());
-                const std::string infoCacheKey =
-                    io::getInfoCacheKey(p.path, _data->options.ioOptions);
-                _data->info[infoCacheKey] = p.ioInfo;
-                _updates |= ui::Update::Size;
-                _updates |= ui::Update::Draw;
+
+                // Extract the result and reset the request wrapper
+                const auto info = p.infoRequest.future.get();
+                p.infoRequest = {};
+
+                // Only store if the media actually contains valid audio
+                // stream metadata
+                if (info.audio.isValid())
+                {
+                    p.ioInfo = std::make_shared<io::Info>(info);
+                    const std::string infoCacheKey =
+                        io::getInfoCacheKey(p.path, _data->options.ioOptions);
+                    _data->info[infoCacheKey] = p.ioInfo;
+                    _updates |= ui::Update::Size | ui::Update::Draw;
+                }
             }
 
             // Check if any audio waveforms are finished.
