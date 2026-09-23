@@ -32,7 +32,7 @@ namespace tl
 
             //! Write video data.
             virtual void writeVideo(
-                const otio::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const std::shared_ptr<image::Image>&,
                 const io::Options& = io::Options()) = 0;
 
@@ -41,7 +41,7 @@ namespace tl
             //! expected to be written sequentially, starting at the beginning
             //! of the audio time range given in the io::Info.
             virtual void writeAudio(
-                const otio::TimeRange&,
+                const OTIO_NS::TimeRange&,
                 const std::shared_ptr<audio::Audio>&,
                 const io::Options& = io::Options());
 

@@ -294,7 +294,7 @@ namespace tl
                         _avFormatContext->duration, av_get_time_base_q(), r);
                 }
 
-                otime::RationalTime timeReference = time::invalidTime;
+                OTIO_NS::RationalTime timeReference = time::invalidTime;
                 image::Tags tags;
                 AVDictionaryEntry* tag = nullptr;
                 while (
@@ -314,19 +314,19 @@ namespace tl
                                  key, "time_reference",
                                  string::Compare::CaseInsensitive))
                     {
-                        timeReference = otime::RationalTime(
+                        timeReference = OTIO_NS::RationalTime(
                             std::atoi(value.c_str()), sampleRate);
                     }
                 }
 
-                otime::RationalTime startTime(0.0, sampleRate);
+                OTIO_NS::RationalTime startTime(0.0, sampleRate);
                 if (!timecode.empty())
                 {
-                    otime::ErrorStatus errorStatus;
-                    const otime::RationalTime time =
-                        otime::RationalTime::from_timecode(
+                    opentime::ErrorStatus errorStatus;
+                    const OTIO_NS::RationalTime time =
+                        OTIO_NS::RationalTime::from_timecode(
                             timecode, videoRate, &errorStatus);
-                    if (!otime::is_error(errorStatus))
+                    if (!opentime::is_error(errorStatus))
                     {
                         startTime = time.rescaled_to(sampleRate).floor();
                         // std::cout << fileName << " start time: " << startTime
@@ -337,8 +337,8 @@ namespace tl
                 {
                     startTime = timeReference;
                 }
-                _timeRange = otime::TimeRange(
-                    startTime, otime::RationalTime(sampleCount, sampleRate));
+                _timeRange = OTIO_NS::TimeRange(
+                    startTime, OTIO_NS::RationalTime(sampleCount, sampleRate));
 
                 for (const auto& i : tags)
                 {
@@ -427,7 +427,7 @@ namespace tl
             return _info;
         }
 
-        const otime::TimeRange& ReadAudio::getTimeRange() const
+        const OTIO_NS::TimeRange& ReadAudio::getTimeRange() const
         {
             return _timeRange;
         }
@@ -468,7 +468,7 @@ namespace tl
             }
         }
 
-        void ReadAudio::seek(const otime::RationalTime& time)
+        void ReadAudio::seek(const OTIO_NS::RationalTime& time)
         {
             // std::cout << "audio seek: " << time << std::endl;
 
@@ -500,7 +500,7 @@ namespace tl
         }
 
         bool ReadAudio::process(
-            const otime::RationalTime& currentTime, size_t sampleCount)
+            const OTIO_NS::RationalTime& currentTime, size_t sampleCount)
         {
             bool out = false;
             const size_t bufferSampleCount = audio::getSampleCount(_buffer);
@@ -597,7 +597,7 @@ namespace tl
             audio::move(_buffer, out, sampleCount);
         }
 
-        int ReadAudio::_decode(const otime::RationalTime& currentTime)
+        int ReadAudio::_decode(const OTIO_NS::RationalTime& currentTime)
         {
             int out = 0;
             while (0 == out)
@@ -616,7 +616,7 @@ namespace tl
                 AVRational r;
                 r.num = 1;
                 r.den = _info.sampleRate;
-                const auto time = otime::RationalTime(
+                const auto time = OTIO_NS::RationalTime(
                     _timeRange.start_time().value() +
                         av_rescale_q(
                             timestamp,

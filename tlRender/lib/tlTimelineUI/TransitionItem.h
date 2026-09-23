@@ -17,7 +17,7 @@ namespace tl
         {
         protected:
             void _init(
-                const OTIO_NS::SerializableObject::Retainer<otio::Transition>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Transition>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<system::Context>&,
@@ -30,7 +30,7 @@ namespace tl
 
             //! Create a new item.
             static std::shared_ptr<TransitionItem> create(
-                const OTIO_NS::SerializableObject::Retainer<otio::Transition>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Transition>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<system::Context>&,

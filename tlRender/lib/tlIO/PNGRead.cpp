@@ -205,7 +205,7 @@ namespace tl
                 const image::Info& getInfo() const { return _info; }
 
                 io::VideoData read(const std::string& fileName,
-                                   const otio::RationalTime time)
+                                   const OTIO_NS::RationalTime time)
                 {
                     auto image = image::Image::create(_info);
 
@@ -284,7 +284,7 @@ namespace tl
 
         io::VideoData Decode::readVideo(
             const std::string& fileName, const file::MemoryRead* memory,
-            const otime::RationalTime& time, const io::Options&)
+            const OTIO_NS::RationalTime& time, const io::Options&)
         {
             return File(fileName, memory).read(fileName, time);
         }

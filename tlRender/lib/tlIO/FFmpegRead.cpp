@@ -315,7 +315,7 @@ namespace tl
         }
 
         std::future<io::VideoData> VideoRead::readVideo(
-            const otime::RationalTime& time, const io::Options& options)
+            const OTIO_NS::RationalTime& time, const io::Options& options)
         {
             TLRENDER_P();
             auto request = std::make_shared<Private::VideoRequest>();
@@ -484,7 +484,7 @@ namespace tl
                     _addToCache(data, videoRequest->options);
 
                     p.videoThread.currentTime +=
-                        otime::RationalTime(1.0,
+                        OTIO_NS::RationalTime(1.0,
                                             p.info.videoTime->duration().rate());
                 }
 
@@ -625,7 +625,7 @@ namespace tl
         }
 
         std::future<io::AudioData> AudioRead::readAudio(
-            const otio::TimeRange& timeRange,
+            const OTIO_NS::TimeRange& timeRange,
             const io::Options& options)
         {
             TLRENDER_P();

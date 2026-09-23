@@ -59,7 +59,7 @@ namespace tl
 
             //! Read video data.
             virtual std::future<VideoData> readVideo(
-                const otio::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const Options& = Options()) = 0;
 
             //! Give the reader a cache to use for decoded frames, in place of
@@ -78,7 +78,7 @@ namespace tl
 
             //! Read audio data.
             virtual std::future<AudioData> readAudio(
-                const otio::TimeRange&,
+                const OTIO_NS::TimeRange&,
                 const Options& = Options()) = 0;
 
             //! Give the reader a cache to use for decoded frames, in place of

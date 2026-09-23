@@ -29,7 +29,7 @@ namespace tl
                     const math::Box2i& g = item->geometry;
                     auto clip = static_cast<IBasicItem*>(item->p.get());
                     OTIO_NS::TimeRange trimmedRange = clip->getTrimmedRange();
-                    OTIO_NS::Item* otioItem = const_cast<otio::Item*>(clip->getOtioItem());
+                    OTIO_NS::Item* otioItem = const_cast<OTIO_NS::Item*>(clip->getOtioItem());
 
                     // Move the start and duration to clip time from timeline time.
                     OTIO_NS::RationalTime startTime = posToTime(event.prev.x);
@@ -42,7 +42,7 @@ namespace tl
                     // Clamp on available range if present.
                     OTIO_NS::ErrorStatus status;
                     const auto& availableRange = otioItem->available_range(&status);
-                    if (!otio::is_error(status))
+                    if (!OTIO_NS::is_error(status))
                     {
                         if (startTime < availableRange.start_time())
                             startTime = availableRange.start_time();
@@ -64,7 +64,7 @@ namespace tl
                     const OTIO_NS::TimeRange newTimeRange(startTime, duration);
                     clip->setTrimmedRange(newTimeRange);
                     
-                    if (auto otioClip = dynamic_cast<otio::Clip*>(otioItem))
+                    if (auto otioClip = dynamic_cast<OTIO_NS::Clip*>(otioItem))
                     {
                         otioClip->set_source_range(newTimeRange);
                     }

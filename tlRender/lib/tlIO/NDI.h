@@ -57,7 +57,7 @@ namespace tl
 
             std::future<io::Info> getInfo() override;
             std::future<io::VideoData> readVideo(
-                const otime::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const io::Options& = io::Options()) override;
             void setCache(const std::shared_ptr<io::Cache>&) override;
             void cancelRequests() override;
@@ -99,7 +99,7 @@ namespace tl
 
             std::future<io::Info> getInfo() override;
             std::future<io::AudioData> readAudio(
-                const otio::TimeRange&,
+                const OTIO_NS::TimeRange&,
                 const io::Options& = io::Options()) override;
             void setCache(const std::shared_ptr<io::Cache>&) override;
             void cancelRequests() override;
@@ -107,7 +107,7 @@ namespace tl
         private:
             void _run();
             void _addToCache(
-                io::AudioData& data, const otio::TimeRange&,
+                io::AudioData& data, const OTIO_NS::TimeRange&,
                 const io::Options&);
 
             TLRENDER_PRIVATE();

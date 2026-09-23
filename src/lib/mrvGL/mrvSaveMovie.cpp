@@ -52,7 +52,7 @@ namespace
 namespace mrv
 {
     void waitForFrame(
-        const mrv::TimelinePlayer* player, const otime::RationalTime& startTime)
+        const mrv::TimelinePlayer* player, const OTIO_NS::RationalTime& startTime)
     {
         using namespace tl;
 
@@ -245,7 +245,7 @@ namespace mrv
                     info.videoTime->duration() != timeRange.duration())
                 {
                     double videoRate = info.videoTime->duration().rate();
-                    videoTime = otime::TimeRange(
+                    videoTime = OTIO_NS::TimeRange(
                         timeRange.start_time().rescaled_to(videoRate),
                         timeRange.duration().rescaled_to(videoRate));
                 }
@@ -261,7 +261,7 @@ namespace mrv
                     audioTime.start_time() !=
                         timeRange.start_time().rescaled_to(sampleRate))
                 {
-                    audioTime = otime::TimeRange(
+                    audioTime = OTIO_NS::TimeRange(
                         timeRange.start_time().rescaled_to(sampleRate),
                         timeRange.duration().rescaled_to(sampleRate));
                 }
@@ -789,16 +789,16 @@ namespace mrv
                     if (!audioData.layers.empty())
                     {
                         bool skip = false;
-                        otime::TimeRange range;
+                        OTIO_NS::TimeRange range;
 
                         if (hasVideo)
-                            range = otime::TimeRange(
+                            range = OTIO_NS::TimeRange(
                                 currentTime,
-                                otime::RationalTime(1.0, currentTime.rate()));
+                                OTIO_NS::RationalTime(1.0, currentTime.rate()));
                         else
-                            range = otime::TimeRange(
-                                otime::RationalTime(seconds, 1.0),
-                                otime::RationalTime(1.0, 1.0));
+                            range = OTIO_NS::TimeRange(
+                                OTIO_NS::RationalTime(seconds, 1.0),
+                                OTIO_NS::RationalTime(1.0, 1.0));
                         auto audio = audioData.layers[0].audio;
                         if (!audio)
                         {
@@ -1069,9 +1069,9 @@ namespace mrv
                 }
 
                 if (hasVideo)
-                    currentTime += otime::RationalTime(1, currentTime.rate());
+                    currentTime += OTIO_NS::RationalTime(1, currentTime.rate());
                 else
-                    currentTime += otime::RationalTime(
+                    currentTime += OTIO_NS::RationalTime(
                         currentTime.rate(), currentTime.rate());
 
                 if (currentTime > endTime)

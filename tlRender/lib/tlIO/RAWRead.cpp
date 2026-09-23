@@ -184,7 +184,7 @@ namespace tl
 
                 io::VideoData read(
                     const std::string& fileName,
-                    const otime::RationalTime& time)
+                    const OTIO_NS::RationalTime& time)
                 {
                     int ret;
                     io::VideoData out;
@@ -419,7 +419,7 @@ namespace tl
 
         io::VideoData Decode::readVideo(
             const std::string& fileName, const file::MemoryRead* memory,
-            const otime::RationalTime& time, const io::Options& options)
+            const OTIO_NS::RationalTime& time, const io::Options& options)
         {
             return File(fileName, memory).read(fileName, time);
         }

@@ -79,7 +79,7 @@ namespace tl
                 file::Path mediaPath;
                 file::Path audioPath;
                 int height = 0;
-                std::optional<otio::RationalTime> time;
+                std::optional<OTIO_NS::RationalTime> time;
                 std::string mediaReferenceKey;
                 io::Options options;
                 std::promise<std::shared_ptr<image::Image> > promise;
@@ -91,7 +91,7 @@ namespace tl
                 file::Path path;
                 file::Path mediaPath;
                 math::Size2i size;
-                std::optional<otio::TimeRange> timeRange;
+                std::optional<OTIO_NS::TimeRange> timeRange;
                 std::string mediaReferenceKey;
                 io::Options options;
                 std::promise<std::shared_ptr<geom::TriangleMesh2> > promise;

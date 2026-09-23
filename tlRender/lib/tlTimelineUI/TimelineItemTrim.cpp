@@ -62,7 +62,7 @@ namespace tl
                     // Clamp on clips.
                     OTIO_NS::ErrorStatus status;
                     const auto& availableRange = otioItem->available_range(&status);
-                    if (!otio::is_error(status))
+                    if (!OTIO_NS::is_error(status))
                     {
                         if (startTime < availableRange.start_time())
                             continue;
@@ -145,10 +145,10 @@ namespace tl
 
                     OTIO_NS::ErrorStatus status;
                     const auto& child = otioTimeline->tracks()->children()[trackIndex];
-                    if (auto otioTrack = OTIO_NS::dynamic_retainer_cast<otio::Track>(child))
+                    if (auto otioTrack = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(child))
                     {
                         const auto& otioChild = otioTrack->children()[otioItemIndex];
-                        auto otioItem = OTIO_NS::dynamic_retainer_cast<otio::Item>(otioChild);
+                        auto otioItem = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(otioChild);
 
 
                         auto parentRange = otioItem->trimmed_range_in_parent().value();
@@ -167,7 +167,7 @@ namespace tl
                         startOffset += startCorrection;
                         durationOffset += durationCorrection;
 
-                        if (auto otioClip = OTIO_NS::dynamic_retainer_cast<otio::Clip>(otioChild))
+                        if (auto otioClip = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Clip>(otioChild))
                         {
                             origRange = otioClip->source_range().value();
 
@@ -177,7 +177,7 @@ namespace tl
                             timeRange = OTIO_NS::TimeRange(startTime, duration);
 
                             // Clamp to available range if present
-                            if (!otio::is_error(status))
+                            if (!OTIO_NS::is_error(status))
                             {
                                 timeRange = timeRange.clamped(availableRange);
                             }
@@ -192,7 +192,7 @@ namespace tl
 
                             otioClip->set_source_range(timeRange);
                         }
-                        else if (auto otioGap = OTIO_NS::dynamic_retainer_cast<otio::Gap>(otioChild))
+                        else if (auto otioGap = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Gap>(otioChild))
                         {
                             auto startTime = origRange.start_time() + startOffset;
                             auto duration  = origRange.duration() + durationOffset;

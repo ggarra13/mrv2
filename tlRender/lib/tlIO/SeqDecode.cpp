@@ -63,9 +63,9 @@ namespace tl
             // there. A policy that leaves frames out is settled by the timeline
             // that is built over this, which is the only thing that can shorten a
             // sequence or move its frames; here a frame number is a frame number.
-            _info.videoTime = otio::TimeRange::range_from_start_end_time_inclusive(
-                otio::RationalTime(_startFrame, speed),
-                otio::RationalTime(_endFrame, speed));
+            _info.videoTime = OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
+                OTIO_NS::RationalTime(_startFrame, speed),
+                OTIO_NS::RationalTime(_endFrame, speed));
             addVideoTags(_info);
         }
 
@@ -186,7 +186,7 @@ namespace tl
         }
 
         VideoData io::SeqDecode::_missingVideo(
-            const otio::RationalTime& time,
+            const OTIO_NS::RationalTime& time,
             io::MissingFrames missingFrames) const
         {
             std::shared_ptr<image::Image> image;
@@ -201,7 +201,7 @@ namespace tl
         }
 
         VideoData io::SeqDecode::readVideo(
-            const otio::RationalTime& time,
+            const OTIO_NS::RationalTime& time,
             const io::Options& options) const
         {
             const io::Options merged = io::merge(options, _options);

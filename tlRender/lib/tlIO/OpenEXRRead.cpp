@@ -926,7 +926,7 @@ namespace tl
 
                 io::VideoData read(
                     const std::string& fileName,
-                    const otime::RationalTime& time,
+                    const OTIO_NS::RationalTime& time,
                     const io::Options& options)
                 {
                     io::VideoData out;
@@ -1338,7 +1338,7 @@ namespace tl
         io::VideoData Decode::readVideo(
             const std::string& fileName,
             const file::MemoryRead* memory,
-            const otio::RationalTime& time,
+            const OTIO_NS::RationalTime& time,
             const io::Options& options)
         {
             auto i = options.find("OpenEXR/ChannelGrouping");

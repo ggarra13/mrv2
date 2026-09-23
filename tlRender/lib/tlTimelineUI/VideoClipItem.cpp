@@ -49,7 +49,7 @@ namespace tl
         void VideoClipItem::_init(
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Timeline>& timeline,
-            const OTIO_NS::SerializableObject::Retainer<otio::Clip>& clip,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
@@ -98,7 +98,7 @@ namespace tl
         std::shared_ptr<VideoClipItem> VideoClipItem::create(
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Timeline>& timeline,
-            const OTIO_NS::SerializableObject::Retainer<otio::Clip>& clip,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,

@@ -50,7 +50,7 @@ namespace tl
             io::VideoData readVideo(
                 const std::string& fileName,
                 const file::MemoryRead*,
-                const otio::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const io::Options& = io::Options()) override;
             double getSpeed(const io::Info&, double defaultSpeed) const override;
 
@@ -85,7 +85,7 @@ namespace tl
 
         protected:
             void _writeVideo(
-                const std::string& fileName, const otime::RationalTime&,
+                const std::string& fileName, const OTIO_NS::RationalTime&,
                 const std::shared_ptr<image::Image>&,
                 const io::Options&) override;
 

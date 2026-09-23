@@ -17,8 +17,8 @@ namespace tl
         {
         protected:
             void _init(
-                const OTIO_NS::SerializableObject::Retainer<otio::Effect>&,
-                const OTIO_NS::SerializableObject::Retainer<otio::Item>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Effect>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Item>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<system::Context>&,
@@ -31,8 +31,8 @@ namespace tl
 
             //! Create a new item.
             static std::shared_ptr<EffectItem> create(
-                const OTIO_NS::SerializableObject::Retainer<otio::Effect>&,
-                const OTIO_NS::SerializableObject::Retainer<otio::Item>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Effect>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Item>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<system::Context>&,

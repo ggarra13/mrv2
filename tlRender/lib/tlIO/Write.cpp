@@ -26,7 +26,7 @@ namespace tl
         {}
 
         void IWrite::writeAudio(
-            const otio::TimeRange&,
+            const OTIO_NS::TimeRange&,
             const std::shared_ptr<audio::Audio>&,
             const io::Options&)
         {}

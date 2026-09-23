@@ -58,7 +58,7 @@ namespace tl
             //!
             //! Safe to call from several threads at once.
             VideoData readVideo(
-                const otio::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const io::Options& = io::Options()) const;
 
         private:
@@ -73,7 +73,7 @@ namespace tl
             int64_t _holdFrame(int64_t frame) const;
 
             VideoData _missingVideo(
-                const otio::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 MissingFrames) const;
 
             file::Path _path;

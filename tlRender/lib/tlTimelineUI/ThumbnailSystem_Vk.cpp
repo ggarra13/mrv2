@@ -28,7 +28,7 @@ namespace tl
                 const file::Path& mediaPath,
                 const std::string& mediaReferenceKey,
                 int height,
-                const std::optional<otio::RationalTime>& time,
+                const std::optional<OTIO_NS::RationalTime>& time,
                 const io::Options& options)
             {
                 std::stringstream ss;
@@ -67,7 +67,7 @@ namespace tl
             const file::Path& path,
             const file::Path& mediaPath,
             int height,
-            const std::optional<otio::RationalTime>& time,
+            const std::optional<OTIO_NS::RationalTime>& time,
             const std::string& mediaReferenceKey, const io::Options& options)
         {
             TLRENDER_P();

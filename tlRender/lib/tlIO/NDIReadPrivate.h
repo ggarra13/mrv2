@@ -41,18 +41,18 @@ namespace tl
 
             const bool isValid() const;
             const image::Info& getInfo() const;
-            const otime::TimeRange& getTimeRange() const;
+            const OTIO_NS::TimeRange& getTimeRange() const;
 
             void start();
             void stop();
 
-            bool process(const otime::RationalTime& currentTime);
+            bool process(const OTIO_NS::RationalTime& currentTime);
 
             bool isBufferEmpty() const;
             std::shared_ptr<image::Image> popBuffer();
 
         private:
-            int _decode(const otime::RationalTime& currentTime);
+            int _decode(const OTIO_NS::RationalTime& currentTime);
             void _from_ndi(const NDIlib_video_frame_t& video_frame);
             void _copy(std::shared_ptr<image::Image>&);
 
@@ -60,8 +60,8 @@ namespace tl
             std::weak_ptr<log::System> _logSystem;
             Options _options;
             image::Info _info;
-            otime::TimeRange _timeRange = time::invalidTimeRange;
-            otime::RationalTime _currentTime = time::invalidTime;
+            OTIO_NS::TimeRange _timeRange = time::invalidTimeRange;
+            OTIO_NS::RationalTime _currentTime = time::invalidTime;
             std::list<std::shared_ptr<image::Image> > _buffer;
             image::Tags _tags;
 
@@ -100,18 +100,18 @@ namespace tl
             void stop();
 
             const audio::Info& getInfo() const;
-            const otime::TimeRange& getTimeRange() const;
+            const OTIO_NS::TimeRange& getTimeRange() const;
 
-            void seek(const otime::RationalTime&);
+            void seek(const OTIO_NS::RationalTime&);
 
             bool
-            process(const otime::RationalTime& currentTime, size_t sampleCount);
+            process(const OTIO_NS::RationalTime& currentTime, size_t sampleCount);
 
             size_t getBufferSize() const;
             void bufferCopy(uint8_t*, size_t sampleCount);
 
         private:
-            int _decode(const otime::RationalTime& currentTime);
+            int _decode(const OTIO_NS::RationalTime& currentTime);
             void _from_ndi(const NDIlib_audio_frame_t& audio_frame);
 
             NDIlib_recv_instance_t _NDI_recv = nullptr;
@@ -120,7 +120,7 @@ namespace tl
 
             Options _options;
             audio::Info _info;
-            otime::TimeRange _timeRange = time::invalidTimeRange;
+            OTIO_NS::TimeRange _timeRange = time::invalidTimeRange;
             std::list<std::shared_ptr<audio::Audio> > _buffer;
         };
 
@@ -141,7 +141,7 @@ namespace tl
 
             struct VideoRequest
             {
-                otime::RationalTime time = time::invalidTime;
+                OTIO_NS::RationalTime time = time::invalidTime;
                 io::Options options;
                 std::promise<io::VideoData> promise;
             };
@@ -155,7 +155,7 @@ namespace tl
             VideoMutex videoMutex;
             struct VideoThread
             {
-                otime::RationalTime currentTime = time::invalidTime;
+                OTIO_NS::RationalTime currentTime = time::invalidTime;
                 std::chrono::steady_clock::time_point logTimer;
                 std::condition_variable cv;
                 std::thread thread;
@@ -181,7 +181,7 @@ namespace tl
 
             struct AudioRequest
             {
-                otime::TimeRange timeRange = time::invalidTimeRange;
+                OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
                 io::Options options;
                 std::promise<io::AudioData> promise;
             };
@@ -195,7 +195,7 @@ namespace tl
             AudioMutex audioMutex;
             struct AudioThread
             {
-                otime::RationalTime currentTime = time::invalidTime;
+                OTIO_NS::RationalTime currentTime = time::invalidTime;
                 std::chrono::steady_clock::time_point logTimer;
                 std::condition_variable cv;
                 std::thread thread;

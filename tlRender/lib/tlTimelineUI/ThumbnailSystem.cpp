@@ -42,7 +42,7 @@ namespace tl
                 const file::Path& mediaPath,
                 const std::string& mediaReferenceKey,
                 const math::Size2i& size,
-                const std::optional<otio::TimeRange>& timeRange,
+                const std::optional<OTIO_NS::TimeRange>& timeRange,
                 const io::Options& options)
             {
                 std::stringstream ss;
@@ -354,7 +354,7 @@ namespace tl
 
         ThumbnailRequest ThumbnailSystem::getThumbnail(
             const file::Path& path, int height,
-            const std::optional<otio::RationalTime>& time,
+            const std::optional<OTIO_NS::RationalTime>& time,
             const std::string& mediaReferenceKey, const io::Options& options)
         {
             return getThumbnail(path, path, height, time, mediaReferenceKey,

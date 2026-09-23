@@ -46,7 +46,7 @@ namespace tl
             virtual io::VideoData readVideo(
                 const std::string& fileName,
                 const file::MemoryRead*,
-                const otio::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const io::Options& = io::Options()) = 0;
 
             //! Get the speed the file declares, or the given default when the

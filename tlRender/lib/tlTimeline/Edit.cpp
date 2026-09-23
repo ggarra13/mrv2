@@ -23,7 +23,7 @@ namespace tl
             public:
                 virtual ~IMemoryData() = 0;
 
-                virtual void copy(otio::MediaReference*) = 0;
+                virtual void copy(OTIO_NS::MediaReference*) = 0;
             };
 
             IMemoryData::IMemoryData() {}
@@ -51,7 +51,7 @@ namespace tl
                     return out;
                 }
 
-                void copy(otio::MediaReference* value) override
+                void copy(OTIO_NS::MediaReference* value) override
                 {
                     if (auto ref = dynamic_cast<RawMemoryReference*>(value))
                     {
@@ -86,7 +86,7 @@ namespace tl
                     return out;
                 }
 
-                void copy(otio::MediaReference* value) override
+                void copy(OTIO_NS::MediaReference* value) override
                 {
                     if (auto ref = dynamic_cast<SharedMemoryReference*>(value))
                     {
@@ -122,7 +122,7 @@ namespace tl
                     return out;
                 }
 
-                void copy(otio::MediaReference* value) override
+                void copy(OTIO_NS::MediaReference* value) override
                 {
                     if (auto ref =
                             dynamic_cast<RawMemorySequenceReference*>(value))
@@ -159,7 +159,7 @@ namespace tl
                     return out;
                 }
 
-                void copy(otio::MediaReference* value) override
+                void copy(OTIO_NS::MediaReference* value) override
                 {
                     if (auto ref =
                             dynamic_cast<SharedMemorySequenceReference*>(value))
@@ -193,7 +193,7 @@ namespace tl
                     return out;
                 }
 
-                void copy(otio::MediaReference* value) override
+                void copy(OTIO_NS::MediaReference* value) override
                 {
                     RawMemoryData::copy(value);
                     if (auto ref = dynamic_cast<ZipMemoryReference*>(value))
@@ -227,7 +227,7 @@ namespace tl
                     return out;
                 }
 
-                void copy(otio::MediaReference* value) override
+                void copy(OTIO_NS::MediaReference* value) override
                 {
                     RawMemorySequenceData::copy(value);
                     if (auto ref = dynamic_cast<ZipMemoryReference*>(value))

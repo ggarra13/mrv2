@@ -1965,7 +1965,7 @@ namespace tl
 
                 p.videoStartTime = p.info.videoTime.has_value() ?
                                    p.info.videoTime->start_time() :
-                                   otio::RationalTime(0.F, 24.F);
+                                   OTIO_NS::RationalTime(0.F, 24.F);
                 // Set timecode
                 option = p.options.find("timecode");
                 if (option != p.options.end())

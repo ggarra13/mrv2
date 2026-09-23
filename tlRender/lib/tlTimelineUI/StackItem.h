@@ -20,7 +20,7 @@ namespace tl
         {
         protected:
             void _init(
-                const OTIO_NS::SerializableObject::Retainer<otio::Stack>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<ThumbnailGenerator> thumbnailGenerator,
@@ -34,7 +34,7 @@ namespace tl
 
             //! Create a new item.
             static std::shared_ptr<StackItem> create(
-                const OTIO_NS::SerializableObject::Retainer<otio::Stack>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<ThumbnailGenerator> thumbnailGenerator,

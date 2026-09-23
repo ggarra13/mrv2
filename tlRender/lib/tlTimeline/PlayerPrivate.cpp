@@ -671,7 +671,7 @@ namespace tl
                 std::vector<otime::RationalTime> audioCacheFrames;
                 for (const auto& key : audioCacheKeys)
                 {
-                    audioCacheFrames.push_back(otio::RationalTime(key, 1.0));
+                    audioCacheFrames.push_back(OTIO_NS::RationalTime(key, 1.0));
                 }
                 const float audioCachePercentage = audioCacheMax > 0 ?
                                                    (audioCacheKeys.size() / static_cast<float>(audioCacheMax) * 100.F) :

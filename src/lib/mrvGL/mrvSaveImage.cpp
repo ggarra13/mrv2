@@ -92,8 +92,8 @@ namespace mrv
             }
 #endif
 
-            otime::TimeRange oneFrameTimeRange(
-                currentTime, otime::RationalTime(1, currentTime.rate()));
+            OTIO_NS::TimeRange oneFrameTimeRange(
+                currentTime, OTIO_NS::RationalTime(1, currentTime.rate()));
 
             auto context = ui->app->getContext();
             auto timeline = player->timeline();

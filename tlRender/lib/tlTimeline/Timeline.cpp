@@ -262,7 +262,7 @@ namespace tl
                 auto j = mediaReferences.find(clipKey);
                 if (j == mediaReferences.end())
                 {
-                    j = mediaReferences.find(otio::Clip::default_media_key);
+                    j = mediaReferences.find(OTIO_NS::Clip::default_media_key);
                 }
                 return j != mediaReferences.end() ?
                     j->second :
@@ -518,7 +518,7 @@ namespace tl
                                 videoTrack->append_child(new OTIO_NS::Gap(
                                                              OTIO_NS::RationalTime(run.min() - at, rate)));
                             }
-                            videoTrack->append_child(makeClip(otio::TimeRange(
+                            videoTrack->append_child(makeClip(OTIO_NS::TimeRange(
                                                                   OTIO_NS::RationalTime(run.min(), rate),
                                                                   OTIO_NS::RationalTime(
                                                                       run.max() - run.min() + 1, rate))));
@@ -605,7 +605,7 @@ namespace tl
                             string::Format("Cannot read timeline: \"{0}\"").
                             arg(inputPath.get()));
                     }
-                    else if (otio::is_error(otioError))
+                    else if (OTIO_NS::is_error(otioError))
                     {
                         throw std::runtime_error(
                             string::Format("Cannot read timeline: \"{0}\": {1}").
@@ -640,7 +640,7 @@ namespace tl
                             string::Format("Cannot read timeline: \"{0}\"").
                             arg(inputPath.get()));
                     }
-                    else if (otio::is_error(otioError))
+                    else if (OTIO_NS::is_error(otioError))
                     {
                         throw std::runtime_error(
                             string::Format("Cannot read timeline: \"{0}\": {1}").
@@ -836,7 +836,7 @@ namespace tl
             {
                 if (auto otioTrack = dynamic_cast<const OTIO_NS::Track*>(i.value))
                 {
-                    if (otio::Track::Kind::audio == otioTrack->kind())
+                    if (OTIO_NS::Track::Kind::audio == otioTrack->kind())
                     {
                         if (_getAudioInfo(otioTrack))
                         {
@@ -2693,7 +2693,7 @@ namespace tl
                     OTIO_NS::ErrorStatus errorStatus;
                     const auto ranges =
                         otioTrack->range_of_all_children(&errorStatus);
-                    if (otio::is_error(errorStatus))
+                    if (OTIO_NS::is_error(errorStatus))
                     {
                         continue;
                     }
@@ -3104,7 +3104,7 @@ namespace tl
             p.frameCache->setMax(sum * memory::gigabyte);
         }
 
-        file::Path Timeline::getMediaPath(otio::RationalTime& mediaTime)
+        file::Path Timeline::getMediaPath(OTIO_NS::RationalTime& mediaTime)
         {
             file::Path path = getPath();
             file::Path out = path;
@@ -3129,7 +3129,7 @@ namespace tl
                                 continue;
 
                             const auto range = track->range_of_child(clip, &errorStatus);
-                            if (otio::is_error(errorStatus))
+                            if (OTIO_NS::is_error(errorStatus))
                                 continue;
 
                             if (range.start_time() <= time && time < range.end_time_exclusive())

@@ -219,7 +219,7 @@ namespace tl
         }
 
         void Write::_writeVideo(
-            const std::string& fileName, const otime::RationalTime&,
+            const std::string& fileName, const OTIO_NS::RationalTime&,
             const std::shared_ptr<image::Image>& image, const io::Options&)
         {
             const auto f = File(fileName, image, _quality);

@@ -35,7 +35,7 @@ namespace tl
 
             std::future<io::Info> getInfo() override;
             std::future<io::VideoData>
-            readVideo(const otime::RationalTime&, const io::Options&) override;
+            readVideo(const OTIO_NS::RationalTime&, const io::Options&) override;
             void cancelRequests() override;
 
         private:

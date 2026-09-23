@@ -42,7 +42,7 @@ namespace tl
         {
             uint64_t id = 0;
             int height = 0;
-            std::optional<otio::RationalTime> time;
+            std::optional<OTIO_NS::RationalTime> time;
             std::future<std::shared_ptr<image::Image> > future;
         };
 
@@ -51,7 +51,7 @@ namespace tl
         {
             uint64_t id = 0;
             math::Size2i size;
-            std::optional<otio::TimeRange> timeRange;
+            std::optional<OTIO_NS::TimeRange> timeRange;
             std::future<std::shared_ptr<geom::TriangleMesh2> > future;
         };
 
@@ -194,7 +194,7 @@ namespace tl
             //! Get a video thumbnail.
             ThumbnailRequest getThumbnail(
                 const file::Path&, int height,
-                const std::optional<otio::RationalTime>& time,
+                const std::optional<OTIO_NS::RationalTime>& time,
                 const std::string& mediaReferenceKey = "",
                 const io::Options& = io::Options());
 
@@ -203,7 +203,7 @@ namespace tl
                 const file::Path& timelinePath,
                 const file::Path& mediaPath,
                 int height,
-                const std::optional<otio::RationalTime>& time,
+                const std::optional<OTIO_NS::RationalTime>& time,
                 const std::string& mediaReferenceKey = "",
                 const io::Options& = io::Options());
 

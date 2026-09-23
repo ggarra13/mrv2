@@ -34,7 +34,7 @@ namespace tl
             void _init(
                 const std::shared_ptr<system::Context>& context,
                 const std::shared_ptr<timeline::Player>& player,
-                const OTIO_NS::SerializableObject::Retainer<otio::Stack>& stack,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<gl::GLFWWindow>&,
@@ -48,7 +48,7 @@ namespace tl
             void _init(
                 const std::shared_ptr<system::Context>& context,
                 const std::shared_ptr<timeline::Player>& player,
-                const OTIO_NS::SerializableObject::Retainer<otio::Stack>& stack,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<IWidget>& parent);
@@ -64,7 +64,7 @@ namespace tl
             static std::shared_ptr<TimelineItem> create(
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<timeline::Player>&,
-                const OTIO_NS::SerializableObject::Retainer<otio::Stack>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<gl::GLFWWindow>&,
@@ -76,7 +76,7 @@ namespace tl
             static std::shared_ptr<TimelineItem> create(
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<timeline::Player>&,
-                const OTIO_NS::SerializableObject::Retainer<otio::Stack>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 Fl_Vk_Context& ctx,

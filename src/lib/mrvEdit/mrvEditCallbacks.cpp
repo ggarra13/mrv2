@@ -60,8 +60,8 @@ namespace
 
 namespace mrv
 {
-    using otime::RationalTime;
-    using otime::TimeRange;
+    using OTIO_NS::RationalTime;
+    using OTIO_NS::TimeRange;
 
     using OTIO_NS::Clip;
     using OTIO_NS::Composition;
@@ -1344,7 +1344,7 @@ namespace mrv
 
             auto sampleRate = track->trimmed_range().duration().rate();
 
-            auto rangeInTrack = otime::TimeRange(
+            auto rangeInTrack = OTIO_NS::TimeRange(
                 range.start_time().rescaled_to(sampleRate),
                 range.duration().rescaled_to(sampleRate));
 
@@ -1521,7 +1521,7 @@ namespace mrv
 
             auto sampleRate = track->trimmed_range().duration().rate();
 
-            auto rangeInTrack = otime::TimeRange(
+            auto rangeInTrack = OTIO_NS::TimeRange(
                 range.start_time().rescaled_to(sampleRate),
                 range.duration().rescaled_to(sampleRate));
 
@@ -1539,7 +1539,7 @@ namespace mrv
             modified = true;
 
             int audioIndex = track->index_of_child(audioItem);
-            auto audioClipRange = otime::TimeRange(
+            auto audioClipRange = OTIO_NS::TimeRange(
                 itemRange.start_time().rescaled_to(sampleRate),
                 itemRange.duration().rescaled_to(sampleRate));
             OTIO_NS::Gap* gap = new Gap(audioClipRange);
@@ -1886,7 +1886,7 @@ namespace mrv
 
             auto rate = track->trimmed_range().duration().rate();
 
-            auto rangeInTrack = otime::TimeRange(
+            auto rangeInTrack = OTIO_NS::TimeRange(
                 range.start_time().rescaled_to(rate),
                 range.duration().rescaled_to(rate));
 
@@ -1905,7 +1905,7 @@ namespace mrv
             modified = true;
 
             int videoIndex = track->index_of_child(videoItem);
-            auto videoClipRange = otime::TimeRange(
+            auto videoClipRange = OTIO_NS::TimeRange(
                 clipRange.start_time().rescaled_to(rate),
                 clipRange.duration().rescaled_to(rate));
             OTIO_NS::Gap* gap = new Gap(videoClipRange);
@@ -2253,7 +2253,7 @@ namespace mrv
     }
 
     void shiftAnnotations(
-        const otime::TimeRange& range, const otime::RationalTime& insertTime,
+        const OTIO_NS::TimeRange& range, const OTIO_NS::RationalTime& insertTime,
         const bool previous, ViewerUI* ui)
     {
         using namespace draw;
@@ -2962,7 +2962,7 @@ namespace mrv
             //
             videoRate = 0.F;
             double sampleRate = 0.F;
-            otime::TimeRange timeRange;
+            OTIO_NS::TimeRange timeRange;
             sanitizeVideoAndAudioRates(
                 destTimeline, timeRange, videoRate, sampleRate);
 
@@ -3021,7 +3021,7 @@ namespace mrv
             return;
 
         const auto& startTimeOpt = timeline->global_start_time();
-        otime::RationalTime startTime(0.0, timeline->duration().rate());
+        OTIO_NS::RationalTime startTime(0.0, timeline->duration().rate());
         if (startTimeOpt.has_value())
         {
             startTime = startTimeOpt.value();
@@ -3111,7 +3111,7 @@ namespace mrv
 
                 auto oldRange = item->trimmed_range_in_parent().value();
 
-                oldRange = otime::TimeRange(
+                oldRange = OTIO_NS::TimeRange(
                     oldRange.start_time().rescaled_to(rate),
                     oldRange.duration().rescaled_to(rate));
 
@@ -3132,7 +3132,7 @@ namespace mrv
 
                     auto insertRange = item->trimmed_range_in_parent().value();
 
-                    otime::RationalTime insertTime;
+                    OTIO_NS::RationalTime insertTime;
                     bool previous = toIndex > move.fromIndex;
                     if (previous)
                     {

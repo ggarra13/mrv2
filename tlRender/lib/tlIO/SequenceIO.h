@@ -83,13 +83,13 @@ namespace tl
             virtual ~ISequenceWrite();
 
             void writeVideo(
-                const otime::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const std::shared_ptr<image::Image>&,
                 const Options& = Options()) override;
 
         protected:
             virtual void _writeVideo(
-                const std::string& fileName, const otime::RationalTime&,
+                const std::string& fileName, const OTIO_NS::RationalTime&,
                 const std::shared_ptr<image::Image>&, const Options&) = 0;
 
         private:

@@ -53,7 +53,7 @@ namespace mrv
 
     namespace
     {
-        int getIndex(const otio::SerializableObject::Retainer<otio::Composable>&
+        int getIndex(const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Composable>&
                      composable)
         {
             int out = -1;
@@ -184,7 +184,7 @@ namespace mrv
             cacheInfoObserver;
 
             std::vector<otime::RationalTime> annotationTimes;
-            otime::TimeRange timeRange = time::invalidTimeRange;
+            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
         };
 
         TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
@@ -288,12 +288,12 @@ namespace mrv
             Fl::remove_timeout(timerEvent_cb, this);
         }
 
-        std::vector<const otio::Item* > TimelineWidget::getSelectedItems() const
+        std::vector<const OTIO_NS::Item* > TimelineWidget::getSelectedItems() const
         {
             return _p->timelineWidget->getSelectedItems();
         }
 
-        std::vector<const otio::Transition* >
+        std::vector<const OTIO_NS::Transition* >
         TimelineWidget::getSelectedTransitions() const
         {
             return _p->timelineWidget->getSelectedTransitions();
@@ -559,8 +559,8 @@ namespace mrv
                 path = player->getPath();
 
             const image::Size size(kTHUMB_WIDTH, kTHUMB_HEIGHT);
-            const otio::RationalTime& timelineTime = _posToTime(_toUI(Fl::event_x()));
-            otio::RationalTime time = timelineTime;
+            const OTIO_NS::RationalTime& timelineTime = _posToTime(_toUI(Fl::event_x()));
+            OTIO_NS::RationalTime time = timelineTime;
 
             if (auto thumbnailSystem = p.thumbnailSystem.lock())
             {
@@ -1694,11 +1694,11 @@ namespace mrv
 
         void TimelineWidget::_styleUpdate() {}
 
-        otime::RationalTime TimelineWidget::_posToTime(int value) noexcept
+        OTIO_NS::RationalTime TimelineWidget::_posToTime(int value) noexcept
         {
             TLRENDER_P();
 
-            otime::RationalTime out = time::invalidTime;
+            OTIO_NS::RationalTime out = time::invalidTime;
             if (p.player && p.timelineWidget)
             {
                 _setGeometry(); // needed, as Linux could have issues when
@@ -1708,7 +1708,7 @@ namespace mrv
                 const double normalized =
                     (value - geometry.min.x) / static_cast<double>(geometry.w());
                 out = (p.timeRange.start_time() +
-                       otime::RationalTime(
+                       OTIO_NS::RationalTime(
                            p.timeRange.duration().value() * normalized,
                            p.timeRange.duration().rate()))
                       .round();

@@ -38,7 +38,7 @@ namespace tl
             io::VideoData readVideo(
                 const std::string& fileName,
                 const file::MemoryRead*,
-                const otio::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const io::Options& = io::Options()) override;
 
             private:

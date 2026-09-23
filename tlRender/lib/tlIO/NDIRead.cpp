@@ -125,7 +125,7 @@ namespace tl
             NDIlib_video_frame_t v;
             NDIlib_frame_type_e type_e = NDIlib_frame_type_none;
 
-            p.videoThread.currentTime = otime::RationalTime(0.0, fps);
+            p.videoThread.currentTime = OTIO_NS::RationalTime(0.0, fps);
 
             // Preroll to find video and (potentially) video stream
             unsigned audioCounter = 0;
@@ -150,7 +150,7 @@ namespace tl
                         p.videoThread.currentTime =
                             p.info.videoTime.has_value() ?
                             p.info.videoTime->start_time() :
-                            otio::RationalTime(0.F, 24.F);
+                            OTIO_NS::RationalTime(0.F, 24.F);
 
                         p.videoThread.logTimer =
                             std::chrono::steady_clock::now();
@@ -274,7 +274,7 @@ namespace tl
         }
 
         std::future<io::VideoData> VideoRead::readVideo(
-            const otime::RationalTime& time, const io::Options& options)
+            const OTIO_NS::RationalTime& time, const io::Options& options)
         {
             TLRENDER_P();
             auto request = std::make_shared<Private::VideoRequest>();
@@ -374,7 +374,7 @@ namespace tl
                     videoRequest->promise.set_value(data);
                     _addToCache(data, videoRequest->options);
 
-                    p.videoThread.currentTime += otime::RationalTime(
+                    p.videoThread.currentTime += OTIO_NS::RationalTime(
                         1.0, p.info.videoTime->duration().rate());
                 }
 
@@ -542,7 +542,7 @@ namespace tl
             NDIlib_audio_frame_t a;
             NDIlib_frame_type_e type_e = NDIlib_frame_type_none;
 
-            p.audioThread.currentTime = otime::RationalTime(0.0, 48000.0);
+            p.audioThread.currentTime = OTIO_NS::RationalTime(0.0, 48000.0);
 
             // Preroll to find video and (potentially) audio stream
             unsigned videoCounter = 0;
@@ -673,7 +673,7 @@ namespace tl
         }
 
         std::future<io::AudioData> AudioRead::readAudio(
-            const otime::TimeRange& timeRange, const io::Options& options)
+            const OTIO_NS::TimeRange& timeRange, const io::Options& options)
         {
             TLRENDER_P();
             auto request = std::make_shared<Private::AudioRequest>();
@@ -874,7 +874,7 @@ namespace tl
         }
 
         void AudioRead::_addToCache(
-            io::AudioData& data, const otio::TimeRange& timeRange,
+            io::AudioData& data, const OTIO_NS::TimeRange& timeRange,
             const io::Options& options)
         {
             TLRENDER_P();

@@ -148,7 +148,7 @@ namespace tl
                     // Clamp on available range if present.
                     OTIO_NS::ErrorStatus status;
                     const auto& availableRange = otioItem->available_range(&status);
-                    if (!otio::is_error(status))
+                    if (!OTIO_NS::is_error(status))
                     {
                         if (startTime < availableRange.start_time())
                             continue;
@@ -235,10 +235,10 @@ namespace tl
 
                     OTIO_NS::ErrorStatus status;
                     const auto& child = otioTimeline->tracks()->children()[trackIndex];
-                    if (auto otioTrack = OTIO_NS::dynamic_retainer_cast<otio::Track>(child))
+                    if (auto otioTrack = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(child))
                     {
                         const auto& otioChild = otioTrack->children()[otioItemIndex];
-                        if (auto otioItem = OTIO_NS::dynamic_retainer_cast<otio::Clip>(otioChild))
+                        if (auto otioItem = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Clip>(otioChild))
                         {
                             origRange = otioItem->source_range().value();
 
@@ -248,7 +248,7 @@ namespace tl
                             timeRange = OTIO_NS::TimeRange(startTime, duration);
 
                             // Clamp to available range if present
-                            if (!otio::is_error(status))
+                            if (!OTIO_NS::is_error(status))
                             {
                                 timeRange = timeRange.clamped(availableRange);
                             }
