@@ -648,7 +648,8 @@ namespace mrv
                     // Reset the destItem timeline::Timeline
                     destItem->timeline.reset();
 
-                    // needed to update Files Panel and I/O cache.
+                    // Needed to reload the movie and change it from .otioz to
+                    // EDL0x****.otio
                     reloadMedia = true;
                 }
             }

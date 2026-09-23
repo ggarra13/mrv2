@@ -6,6 +6,7 @@ v1.7.8
 - Improved the start-up of the Vulkan version of mrv2.
 - Improved the performance of loading pictures.
 - Improved the memory footprint and performance of drawing annotations on the Vulkan version of mrv2.
+- Fixed thumbnail size on monitors with DPI higher than 100%.
 
 
 
