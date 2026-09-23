@@ -6,6 +6,9 @@ v1.7.8
 - Improved the start-up of the Vulkan version of mrv2.
 - Improved the memory footprint and performance of drawing annotations on the Vulkan version of mrv2.
 - Added missing OpenEXR compressors to Python bindings.
+- Added new Python methods to control the values of the new OpenEXR compressors.
+- Fixed File->Save Image on the Vulkan backend not paying attention to the HDR Export options.
+- Fixed File->Save Image and File->Save Movies changing resolution when HDR Export was changed.
 
 Libraries:
 	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.

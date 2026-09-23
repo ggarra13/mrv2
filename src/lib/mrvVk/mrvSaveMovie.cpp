@@ -387,6 +387,9 @@ namespace mrv
             linearOptions.exportMode = options.exportMode;
             view->setHDROptions(linearOptions);
             restoreHdrOptions = true;
+            msg = string::Format(_("HDR Export mode {0}")).
+                  arg(linearOptions.exportMode);
+            LOG_STATUS(msg);
 
             bool interactive = view->visible_r();
             if (interactive)

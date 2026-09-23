@@ -60,6 +60,11 @@ o->value(0);} {}
     code {auto settings = mrv::App::app->settings();
 const std::string& saved =
         settings->getValue<std::string>("SaveImage/Compression");
+
+DWACompressionGroup->deactivate();
+ZipCompressionGroup->deactivate();
+zstdCompressionGroup->deactivate();
+lj2kCompressionGroup->deactivate();
 for (int i = 0; i < o->size(); ++i)
 {
    const Fl_Menu_Item* const item = &o->menu()[i];
@@ -72,6 +77,10 @@ for (int i = 0; i < o->size(); ++i)
        if (type == "zip" || type == "zips")
        {
            ZipCompressionGroup->activate();
+       }       
+       if (type == "dwaa" || type == "dwab")
+       {
+           DWACompressionGroup->activate();
        }
        else if (type == "zstd")
        {
@@ -91,7 +100,8 @@ o->value(0);} {}
 int v = settings->getValue<int>("SaveImage/Contents");
 o->value(v);} {}
   }
-  Function {fill_compression(Fl_Choice* o)} {} {
+  Function {fill_compression(Fl_Choice* o)} {open
+  } {
     code {std::string name;
 
 o->clear();
@@ -108,8 +118,8 @@ o->menu_end();
   Function {SaveImageOptionsUI(const std::string ext, const bool exr_valid)} {open
   } {
     Fl_Window uiMain {
-      label {Save Image Options} open selected
-      xywh {0 0 523 561} type Double align 5 modal visible
+      label {Save Image Options} open
+      xywh {0 0 523 561} type Double align 5 hide modal
     } {
       Fl_Group {} {
         label {Common Settings} open
@@ -169,10 +179,10 @@ o->value(value);}
           callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveImage/Resolution", value);} open
+settings->setValue("SaveImage/ExportMode", value);} open
           tooltip {HDR (Vulkan) Export mode.} xywh {176 148 240 30} down_box BORDER_BOX
           code3 {auto settings = mrv::App::app->settings();
-int value = settings->getValue<int>("SaveImage/Resolution");
+int value = settings->getValue<int>("SaveImage/ExportMode");
 o->value(value);}
         } {
           MenuItem {} {
@@ -214,23 +224,14 @@ settings->setValue("SaveImage/PixelType", label);}
           label Compression
           user_data this user_data_type {SaveImageOptionsUI*}
           callback {const Fl_Menu_Item* item = o->mvalue();
-DWACompressionGroup->deactivate();
-ZipCompressionGroup->deactivate();
 const std::string& label = item->label();
-if (label == "zip" || label == "zips")
-{
-     ZipCompressionGroup->activate();
-}
-else if (label == "dwaa" || label == "dwab")
-{
-     DWACompressionGroup->activate();
-}
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveImage/Compression", label);} open
+settings->setValue("SaveImage/Compression", label);
+select_compression(o);} open
           tooltip {OpenEXR's Compression Type} xywh {243 276 170 29} down_box BORDER_BOX
           code3 {fill_compression(o);}
         } {}
-        Fl_Group ZipCompressionGroup {
+        Fl_Group ZipCompressionGroup {open
           xywh {86 316 327 20} deactivate
         } {
           Fl_Value_Input ZipCompressionLevel {
@@ -246,7 +247,7 @@ settings->setValue("SaveImage/ZipCompressionLevel", o->value());}
             user_data ZipCompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->do_callback();
-v->redraw();}
+v->redraw();} selected
             xywh {293 316 120 20} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
           }
         }
@@ -290,7 +291,7 @@ v->redraw();}
             xywh {293 364 120 20} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
           }
         }
-        Fl_Group lj2kCompressionGroup {open
+        Fl_Group lj2kCompressionGroup {
           xywh {86 388 327 20} deactivate
         } {
           Fl_Value_Input lj2kCompressionLevel {
@@ -314,7 +315,7 @@ v->redraw();}
           label Contents
           user_data this user_data_type {SaveImageOptionsUI*}
           callback {auto settings = mrv::App::app->settings();
-settings->setValue("SaveImage/Contents", o->value());} open
+settings->setValue("SaveImage/Contents", o->value());}
           tooltip {OpenEXR's Contents to Save} xywh {243 415 170 32} down_box BORDER_BOX
         } {
           MenuItem {} {

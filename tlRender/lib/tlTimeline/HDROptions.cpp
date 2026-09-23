@@ -39,9 +39,9 @@ namespace tl
 
         TLRENDER_ENUM_IMPL(
             HDRExportMode,
-            "Display_Baked_HDR",
-            "Scene-Linear_HDR",
-            "Display_Baked_SDR");
+            "Display Baked HDR",
+            "Scene-Linear HDR (OpenEXR)",
+            "Display Baked SDR (OpenGL)");
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRExportMode);
 
     } // namespace timeline

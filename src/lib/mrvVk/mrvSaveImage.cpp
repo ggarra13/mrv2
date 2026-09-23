@@ -405,8 +405,8 @@ namespace mrv
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
 
-            // Turn off tonemapping so libplacebo does not get used.
-            view->setToneMapping(false);
+            // Do NOT turn off tonemapping so libplacebo gets used.
+            view->setToneMapping(true);
 
             if (options.annotations)
             {
@@ -423,12 +423,16 @@ namespace mrv
             // \@bug:
             //       Note that libplacebo and OpenColorIO have different
             //       concepts of white.  Also, OpenColorIO and OpenEXR cannot
-            //       parse HDR10+ metadata.
+            //       parse HDR10+ or DolbyVision metadata.
             savedHdrOptions = view->getHDROptions();
             timeline::HDROptions linearOptions = savedHdrOptions;
             linearOptions.exportMode = options.exportMode;
             view->setHDROptions(linearOptions);
             restoreHdrOptions = true;
+
+            msg = string::Format(_("HDR Export mode {0}")).
+                  arg(linearOptions.exportMode);
+            LOG_STATUS(msg);
 
             view->redraw();
             view->flush(); // needed
@@ -756,6 +760,9 @@ namespace mrv
         auto settings = ui->app->settings();
         if (file::isReadable(file))
         {
+            msg = string::Format(_("Saved '{0}'.")).arg(file);
+            LOG_STATUS(msg);
+
             settings->addRecentFile(file);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
