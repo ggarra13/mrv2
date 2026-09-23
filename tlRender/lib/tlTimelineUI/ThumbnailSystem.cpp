@@ -1667,6 +1667,10 @@ namespace tl
         {
             auto out = std::shared_ptr<ThumbnailSystem>(new ThumbnailSystem(ctx));
             out->_init(context);
+            if (out)
+            {
+                context->addSystem(out);
+            }
             return out;
         }
 #endif
