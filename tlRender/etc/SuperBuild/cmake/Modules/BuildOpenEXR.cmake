@@ -9,9 +9,9 @@ if (NOT OpenEXR_FOUND)
     include(ExternalProject)
 
     set(OpenEXR_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/openexr.git")
-    set(OpenEXR_GIT_TAG "v3.4.15")  # was v3.4.13
+    set(OpenEXR_GIT_TAG "v3.5.0")  # was v3.4.15
 
-    set(OpenEXR_DEPENDENCIES ${OpenJPH_DEP} ${Imath_DEP} ${ZLIB_DEP})
+    set(OpenEXR_DEPENDENCIES ${OpenJPH_DEP} ${Imath_DEP} ${ZLIB_DEP} ${ZSTD_DEP})
     message(STATUS "OpenEXR DEPENDENCIES=${OpenEXR_DEPENDENCIES}")
 
     set(OpenEXR_ARGS

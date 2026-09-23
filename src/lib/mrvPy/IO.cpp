@@ -35,6 +35,10 @@ void mrv2_io(py::module& m)
                 ,
             Imf::Compression, tl::image::PixelType,
             mrv::SaveContents, int, float
+#  if OPENEXR_VERSION_MAJOR >= 3 && OPENEXR_VERSION_MINOR >= 5
+            ,
+            int, float
+#  endif
 #endif
                 >(),
             py::arg("annotations") = false,
@@ -61,7 +65,11 @@ void mrv2_io(py::module& m)
             py::arg("exrPixelType") = tl::image::PixelType::RGBA_F16,
             py::arg("exrSaveContents") = mrv::SaveContents::kDataWindow,
             py::arg("zipCompressionLevel") = 4,
-            py::arg("dwaCompressionLevel") = 45.0F
+            py::arg("dwaCompressionLevel") = 45.0F,
+#  if OPENEXR_VERSION_MAJOR >= 3 && OPENEXR_VERSION_MINOR >= 5
+            py::arg("zstdCompressionLevel") = 16,
+            py::arg("lj2kCompressionLevel") = 110.0F
+#  endif
 #endif
             )
         .def_readwrite(
@@ -116,6 +124,14 @@ void mrv2_io(py::module& m)
         .def_readwrite(
             "dwaCompressionLevel", &mrv::SaveOptions::dwaCompressionLevel,
             _("OpenEXR's DWA Compression Level."))
+#  if OPENEXR_VERSION_MAJOR >= 3 && OPENEXR_VERSION_MINOR >= 5
+        .def_readwrite(
+            "lj2kCompressionLevel", &mrv::SaveOptions::lj2kCompressionLevel,
+            _("OpenEXR's Lossy HJ2K Compression Level."))
+        .def_readwrite(
+            "zstdCompressionLevel", &mrv::SaveOptions::zstdCompressionLevel,
+            _("OpenEXR's ZSTD Compression Level."))
+#  endif
 #endif
         .def(
             "__repr__",

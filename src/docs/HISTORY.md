@@ -3,6 +3,12 @@ v1.7.8
 
 - Fixed precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
 - The macOS versions of mrv2 and vmrv2 are now code-signed and notarized.  You should be able to install them much more easily by just dragging the icons to the Applications folder.
+- Improved the start-up of the Vulkan version of mrv2.
+- Improved the memory footprint and performance of drawing annotations on the Vulkan version of mrv2.
+- Added missing OpenEXR compressors to Python bindings.
+
+Libraries:
+	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.
 
 
 

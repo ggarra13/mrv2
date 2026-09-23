@@ -55,6 +55,8 @@ namespace mrv
         SaveContents exrSaveContents = SaveContents::kDataWindow;
         int zipCompressionLevel = 4;
         float dwaCompressionLevel = 45.0F;
+        int zstdCompressionLevel = 16;
+        float lj2kCompressionLevel = 110.0F;
 #endif
         bool noRename = false;
     };

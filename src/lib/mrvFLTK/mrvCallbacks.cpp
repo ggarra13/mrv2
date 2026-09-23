@@ -552,6 +552,8 @@ namespace mrv
         options.zipCompressionLevel =
             static_cast<int>(saveOptions.ZipCompressionLevel->value());
         options.dwaCompressionLevel = saveOptions.DWACompressionLevel->value();
+        options.zstdCompressionLevel = saveOptions.zstdCompressionLevel->value();
+        options.lj2kCompressionLevel = saveOptions.lj2kCompressionLevel->value();
 #endif
 
         options.noRename = !rename;
