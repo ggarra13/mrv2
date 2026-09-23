@@ -230,6 +230,11 @@ namespace tl
                         }
                     }
 
+                    {
+                        std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
+                        p.videoMutex.stopped = true;
+                    }
+
                     // The epilogue.
                     cancelRequests();
                 });
@@ -561,6 +566,11 @@ namespace tl
                         {
                             p.errorMutex.error = e.what();
                         }
+                    }
+
+                    {
+                        std::unique_lock<std::mutex> lock(p.audioMutex.mutex);
+                        p.audioMutex.stopped = true;
                     }
 
                     // The epilogue.

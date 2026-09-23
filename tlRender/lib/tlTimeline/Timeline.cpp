@@ -930,7 +930,6 @@ namespace tl
         {
             TLRENDER_P();
 
-            std::cerr << "~Timeline " << this << std::endl;
             if (auto logSystem = p.logSystem.lock())
             {
                 logSystem->print(
@@ -1039,7 +1038,6 @@ namespace tl
         {
             TLRENDER_P();
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             // Only one of these at a time: the sequence below stops and
             // restarts the request thread and read pool, which is not safe
             // to do from two threads at once.
@@ -1061,16 +1059,12 @@ namespace tl
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
                 p.thread.running = false;
             }
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             p.thread.cv.notify_one();
             if (p.thread.thread.joinable())
             {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 p.thread.thread.join();
             }
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             p.stopReadPool();
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 
             // The request thread and read pool are stopped, so it is now
             // safe to swap in the new timeline and rebuild everything
@@ -1079,17 +1073,12 @@ namespace tl
             // once, in _init(), and were left pointing at the composables
             // and media references of whichever timeline was previously set.
             p.otioTimeline = value;
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             p.indexTimeline();
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             if (p.otioTimeline.value)
             {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 _timelineUpdate();
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             }
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             // Start the request thread and read pool back up, mirroring the
             // end of _init(). mutex.stopped has to be cleared explicitly:
             // _finishRequests(), run by the thread just joined above, set it
@@ -1099,12 +1088,10 @@ namespace tl
                 p.mutex.stopped = false;
                 p.mutex.otioTimeline = p.otioTimeline;
             }
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             p.thread.running = true;
             p.thread.logTimer = std::chrono::steady_clock::now();
             if (p.options.threaded)
             {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 p.startReadPool(p.options.readThreadCount);
                 p.thread.thread = std::thread(
                     [this]
@@ -1117,7 +1104,6 @@ namespace tl
                             _finishRequests();
                         });
             }
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         }
 
         const file::Path& Timeline::getPath() const
@@ -2152,20 +2138,16 @@ namespace tl
         bool Timeline::_getVideoInfo(const OTIO_NS::Composable* composable)
         {
             TLRENDER_P();
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             if (auto clip = dynamic_cast<const OTIO_NS::Clip*>(composable))
             {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 if (auto context = p.context.lock())
                 {
                     // The first video clip defines the video information for the timeline.
                     io::Info ioInfo;
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     if (_getVideoIOInfo(
                             p.mediaReference(clip), p.options.ioOptions,
                             ioInfo))
                     {
-                        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                         p.ioInfo.video = ioInfo.video;
                         p.ioInfo.videoTime = ioInfo.videoTime;
                         p.ioInfo.tags.insert(ioInfo.tags.begin(), ioInfo.tags.end());
@@ -2189,11 +2171,9 @@ namespace tl
                         for (const auto& i : clip->media_references())
                         {
                             io::Info mediaReferenceInfo;
-                            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                             if (_getVideoIOInfo(
                                     i.second, p.options.ioOptions, mediaReferenceInfo))
                             {
-                                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                                 // Kept so that getIOInfo() can report the media
                                 // that is actually being read; completed with
                                 // the timeline level information once it is
@@ -2222,12 +2202,10 @@ namespace tl
                 {
                     if (_getVideoInfo(child))
                     {
-                        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                         return true;
                     }
                 }
             }
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             return false;
         }
 
@@ -2501,16 +2479,12 @@ namespace tl
         {
             if (auto seq = _getSeqDecode(mediaReference, ioOptions))
             {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 out = seq->getInfo();
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 return true;
             }
             if (auto videoRead = _getVideoRead(mediaReference, ioOptions))
             {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 out = videoRead->getInfo().get();
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 return true;
             }
             return false;
@@ -2781,9 +2755,7 @@ namespace tl
         {
             TLRENDER_P();
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             p.timeRange = timeline::getTimeRange(p.otioTimeline.value);
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             // The old videoInfoClip/videoInfoByReference pointers belonged
             // to the tree we just released above and are now dangling --
             // they must be rebuilt against the new tree, not reused.
@@ -2793,12 +2765,10 @@ namespace tl
                 // Guarded because readMedia()/readMediaAudio() can be
                 // reading these caches from another thread regardless of
                 // whether the request thread is running; see readCacheMutex.
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 std::unique_lock<std::mutex> lock(p.readCacheMutex);
                 p.videoReadCache.clear();
                 p.audioReadCache.clear();
                 p.seqCache.clear();
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             }
             p.maxVideoSize = math::Size2i();
             p.canvasSize = math::Size2i();
@@ -2809,22 +2779,17 @@ namespace tl
             bool videoFound = false;
             bool audioFound = false;
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             for (const auto& i : p.otioTimeline.value->tracks()->children())
             {
                 if (auto otioTrack = dynamic_cast<const OTIO_NS::Track*>(i.value))
                 {
                     if (!videoFound && OTIO_NS::Track::Kind::video == otioTrack->kind())
                     {
-                        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                         videoFound = _getVideoInfo(otioTrack);
-                        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     }
                     else if (!audioFound && OTIO_NS::Track::Kind::audio == otioTrack->kind())
                     {
-                        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                         audioFound = _getAudioInfo(otioTrack);
-                        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     }
 
                     // Break early if we've successfully found both
@@ -2834,12 +2799,9 @@ namespace tl
                     }
                 }
             }
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             _getMaxVideoSize();
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             _getCanvas();
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             for (auto& i : p.videoInfoByReference)
             {
                 io::Info ioInfo = p.ioInfo;
@@ -2851,7 +2813,6 @@ namespace tl
                 }
                 i.second = ioInfo;
             }
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         }
 
         size_t Timeline::getVideoRequestMax() const
