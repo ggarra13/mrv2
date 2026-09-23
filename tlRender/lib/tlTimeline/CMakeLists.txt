@@ -60,7 +60,6 @@ set(SOURCE
     TimeUnits.cpp
     Timeline.cpp
     TimelineOptions.cpp
-    TimelinePrivate.cpp
     Transition.cpp
     Util.cpp
     Zip.cpp
