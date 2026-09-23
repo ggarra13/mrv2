@@ -3501,14 +3501,23 @@ namespace mrv
         item->init = true;
         item->path = media->path;
         item->audioPath = media->audioPath;
+
         item->inOutRange = media->inOutRange;
+        item->timeRange = media->timeRange;
         item->ioInfo = media->ioInfo;
         item->speed = media->speed;
         item->audioOffset = media->audioOffset;
+
         item->videoLayer = media->videoLayer;
+        item->videoLayers = media->videoLayers;
+
         item->loop = media->loop;
         item->playback = player->playback();
         item->currentTime = time;
+
+        item->ocioIcs = media->ocioIcs;
+        item->ocioLook = media->ocioLook;
+
         model->replace(origIndex, item);
 
         auto newIndex = model->observeAIndex()->get();
