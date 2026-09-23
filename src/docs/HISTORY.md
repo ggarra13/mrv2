@@ -12,6 +12,7 @@ v1.7.8
 
 Libraries:
 	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.
+	- OpenJPH v0.32.0
 
 
 
