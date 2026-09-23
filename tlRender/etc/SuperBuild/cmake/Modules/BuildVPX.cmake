@@ -11,7 +11,7 @@ if (NOT VPX_FOUND AND NOT FFmpeg_FOUND)
 
     # set(LIBVPX_TAG main) # live on the cutting-edge!
 
-    set(VPX_TAG v1.16.0)  # was v1.15.2
+    set(VPX_TAG v1.17.0)  # was v1.15.2
 
     include(ProcessorCount)
     ProcessorCount(NPROCS)

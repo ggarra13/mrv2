@@ -15,6 +15,7 @@ Libraries:
 	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.
 	- OpenJPH v0.32.0
 	- ZSTD v0.17.0
+	- libvpx v1.17.0
 
 
 
