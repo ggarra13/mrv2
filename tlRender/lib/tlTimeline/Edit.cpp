@@ -246,8 +246,8 @@ namespace tl
             "Slice", "Slip", "Slide", "Trim");
         TLRENDER_ENUM_SERIALIZE_IMPL(EditMode);
         
-        otio::SerializableObject::Retainer<otio::Timeline>
-        copy(const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
+        OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>
+        copy(const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& timeline)
         {
             //! \todo Since we are copying the timeline by serializing it to
             //! JSON, we need to keep track of in-memory media references and
@@ -306,9 +306,9 @@ namespace tl
             }
 
             const std::string s = timeline->to_json_string();
-            otio::SerializableObject::Retainer<otio::Timeline> out(
-                dynamic_cast<otio::Timeline*>(
-                    otio::Timeline::from_json_string(s)));
+            OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> out(
+                dynamic_cast<OTIO_NS::Timeline*>(
+                    OTIO_NS::Timeline::from_json_string(s)));
 
             for (const auto& clip : out->find_clips())
             {
@@ -342,8 +342,8 @@ namespace tl
             return out;
         }
 
-        otio::SerializableObject::Retainer<otio::Timeline> move(
-            const otio::SerializableObject::Retainer<otio::Timeline>& timeline,
+        OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> move(
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& timeline,
             const std::vector<MoveData>& moves)
         {
             auto out = copy(timeline);
@@ -360,14 +360,14 @@ namespace tl
                     {
                         --toIndex;
                     }
-                    if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                    if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
                             out->tracks()->children()[move.fromTrack]))
                     {
                         auto child = track->children()[move.fromIndex];
                         track->remove_child(move.fromIndex);
 
                         if (auto track =
-                                otio::dynamic_retainer_cast<otio::Track>(
+                                OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
                                     out->tracks()->children()[move.toTrack]))
                         {
                             track->insert_child(toIndex, child);

@@ -33,24 +33,24 @@ namespace tl
             ISystem::_init(context, "tl::timeline::System");
             const std::vector<std::pair<std::string, bool> > registerTypes{
                 {"RawMemoryReference",
-                 otio::TypeRegistry::instance()
+                 OTIO_NS::TypeRegistry::instance()
                      .register_type<tl::timeline::RawMemoryReference>()},
                 {"SharedMemoryReference",
-                 otio::TypeRegistry::instance()
+                 OTIO_NS::TypeRegistry::instance()
                      .register_type<tl::timeline::SharedMemoryReference>()},
                 {"RawMemorySequenceReference",
-                 otio::TypeRegistry::instance()
+                 OTIO_NS::TypeRegistry::instance()
                      .register_type<
                          tl::timeline::RawMemorySequenceReference>()},
                 {"SharedMemorySequenceReference",
-                 otio::TypeRegistry::instance()
+                 OTIO_NS::TypeRegistry::instance()
                      .register_type<
                          tl::timeline::SharedMemorySequenceReference>()},
                 {"ZipMemoryReference",
-                 otio::TypeRegistry::instance()
+                 OTIO_NS::TypeRegistry::instance()
                      .register_type<tl::timeline::ZipMemoryReference>()},
                 {"ZipMemorySequenceReference",
-                 otio::TypeRegistry::instance()
+                 OTIO_NS::TypeRegistry::instance()
                      .register_type<
                          tl::timeline::ZipMemorySequenceReference>()}};
             for (const auto& t : registerTypes)

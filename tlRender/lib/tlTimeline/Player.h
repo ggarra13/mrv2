@@ -97,7 +97,7 @@ namespace tl
 
             //! Set the OpenTimelineIO timeline, resetting in/out points.
             void setTimeline(
-                const otio::SerializableObject::Retainer<otio::Timeline>&);
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&);
 
             //! Get the path.
             const file::Path& getPath() const;
@@ -115,7 +115,7 @@ namespace tl
             ///@{
 
             //! Get the time range.
-            const otime::TimeRange& getTimeRange() const;
+            const OTIO_NS::TimeRange& getTimeRange() const;
 
             //! Get the I/O information. This information is retrieved from
             //! the first clip in the timeline.
@@ -163,14 +163,14 @@ namespace tl
             ///@{
 
             //! Get the current time.
-            otime::RationalTime getCurrentTime() const;
+            OTIO_NS::RationalTime getCurrentTime() const;
 
             //! Observe the current time.
             std::shared_ptr<observer::IValue<otime::RationalTime> >
             observeCurrentTime() const;
 
             //! Seek to the given time.
-            void seek(const otime::RationalTime&);
+            void seek(const OTIO_NS::RationalTime&);
 
             //! Time action.
             void timeAction(TimeAction);
@@ -193,14 +193,14 @@ namespace tl
             ///@{
 
             //! Get the in/out points range.
-            otime::TimeRange getInOutRange() const;
+            OTIO_NS::TimeRange getInOutRange() const;
 
             //! Observe the in/out points range.
             std::shared_ptr<observer::IValue<otime::TimeRange> >
             observeInOutRange() const;
 
             //! Set the in/out points range.
-            void setInOutRange(const otime::TimeRange&);
+            void setInOutRange(const OTIO_NS::TimeRange&);
 
             //! Set the in point to the current time.
             void setInPoint();
@@ -354,7 +354,7 @@ namespace tl
             observeCacheInfo() const;
 
             //! Update Video Cache Time.
-            void updateVideoCache(const otime::RationalTime& time);
+            void updateVideoCache(const OTIO_NS::RationalTime& time);
 
             //! Clear the cache.
             void clearCache();

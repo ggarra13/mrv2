@@ -107,10 +107,10 @@ namespace tl
             const std::vector<VideoFrame>&);
 
         //! Get a compare time.
-        opentime::RationalTime getCompareTime(
-            const opentime::RationalTime& sourceTime,
-            const opentime::TimeRange& sourceTimeRange,
-            const opentime::TimeRange& compareTimeRange, CompareTimeMode);
+        OTIO_NS::RationalTime getCompareTime(
+            const OTIO_NS::RationalTime& sourceTime,
+            const OTIO_NS::TimeRange& sourceTimeRange,
+            const OTIO_NS::TimeRange& compareTimeRange, CompareTimeMode);
     } // namespace timeline
 } // namespace tl
 

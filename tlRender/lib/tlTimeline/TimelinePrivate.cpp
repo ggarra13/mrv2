@@ -164,27 +164,27 @@ namespace tl
         //     return frame;
         // }
 
-        // std::optional<otio::TimeRange>
+        // std::optional<OTIO_NS::TimeRange>
         // Timeline::Private::getTrimmedRangeInParent(
-        //     const otio::Composable* otioComposable) const
+        //     const OTIO_NS::Composable* otioComposable) const
         // {
         //     if (const auto i = trimmedRangeInParent.find(otioComposable);
         //         i != trimmedRangeInParent.end())
         //     {
         //         return i->second;
         //     }
-        //     if (auto otioItem = dynamic_cast<const otio::Item*>(otioComposable))
+        //     if (auto otioItem = dynamic_cast<const OTIO_NS::Item*>(otioComposable))
         //     {
         //         return otioItem->trimmed_range_in_parent();
         //     }
         //     return std::nullopt;
         // }
 
-        // std::vector<otio::Composable*> Timeline::Private::getTrackChildrenAt(
-        //     const otio::Track* otioTrack,
-        //     const otio::RationalTime& time) const
+        // std::vector<OTIO_NS::Composable*> Timeline::Private::getTrackChildrenAt(
+        //     const OTIO_NS::Track* otioTrack,
+        //     const OTIO_NS::RationalTime& time) const
         // {
-        //     std::vector<otio::Composable*> out;
+        //     std::vector<OTIO_NS::Composable*> out;
         //     const auto i = trackItems.find(otioTrack);
         //     if (i == trackItems.end())
         //     {
@@ -199,7 +199,7 @@ namespace tl
         //         items.begin(),
         //         items.end(),
         //         time,
-        //         [](const otio::RationalTime& value, const TrackItem& item)
+        //         [](const OTIO_NS::RationalTime& value, const TrackItem& item)
         //             {
         //                 return value < item.range.start_time();
         //             });
@@ -217,16 +217,16 @@ namespace tl
 
         // std::shared_ptr<audio::Audio> Timeline::Private::padAudioToOneSecond(
         //     const std::shared_ptr<audio::Audio>& audio, double seconds,
-        //     const otime::TimeRange& range)
+        //     const OTIO_NS::TimeRange& range)
         // {
         //     std::list<std::shared_ptr<audio::Audio> > list;
         //     const double s =
         //         seconds - this->timeRange.start_time().rescaled_to(1.0).value();
         //     if (range.start_time().value() > s)
         //     {
-        //         const otime::RationalTime t =
-        //             range.start_time() - otime::RationalTime(s, 1.0);
-        //         const otime::RationalTime t2 =
+        //         const OTIO_NS::RationalTime t =
+        //             range.start_time() - OTIO_NS::RationalTime(s, 1.0);
+        //         const OTIO_NS::RationalTime t2 =
         //             t.rescaled_to(audio->getInfo().sampleRate);
         //         auto silence = audio::Audio::create(audio->getInfo(), t2.value());
         //         silence->zero();
@@ -235,9 +235,9 @@ namespace tl
         //     list.push_back(audio);
         //     if (range.end_time_exclusive().value() < s + 1.0)
         //     {
-        //         const otime::RationalTime t =
-        //             otime::RationalTime(s + 1.0, 1.0) - range.end_time_exclusive();
-        //         const otime::RationalTime t2 =
+        //         const OTIO_NS::RationalTime t =
+        //             OTIO_NS::RationalTime(s + 1.0, 1.0) - range.end_time_exclusive();
+        //         const OTIO_NS::RationalTime t2 =
         //             t.rescaled_to(audio->getInfo().sampleRate);
         //         auto silence =
         //             audio::Audio::create(audio->getInfo(), t2.value());

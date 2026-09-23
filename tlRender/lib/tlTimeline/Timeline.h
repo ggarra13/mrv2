@@ -227,7 +227,7 @@ namespace tl
             ///@{
 
             //! Get the time range.
-            const otime::TimeRange& getTimeRange() const;
+            const OTIO_NS::TimeRange& getTimeRange() const;
 
             //! Get the I/O information. This information is retrieved from
             //! the first clip in the timeline.
@@ -248,7 +248,7 @@ namespace tl
 
             //! Get video data.
             VideoRequest getVideo(
-                const otime::RationalTime&, const io::Options& = io::Options());
+                const OTIO_NS::RationalTime&, const io::Options& = io::Options());
 
             //! Get audio data.
             AudioRequest
@@ -332,10 +332,10 @@ namespace tl
                 const OTIO_NS::MediaReference*,
                 const io::Options&);
             std::future<io::VideoData> _readVideo(
-                const OTIO_NS::Clip*, const otime::RationalTime&,
+                const OTIO_NS::Clip*, const OTIO_NS::RationalTime&,
                 const io::Options&);
             std::future<io::AudioData> _readAudio(
-                const OTIO_NS::Clip*, const otime::TimeRange&,
+                const OTIO_NS::Clip*, const OTIO_NS::TimeRange&,
                 const io::Options&);
             bool _getVideoInfo(const OTIO_NS::Composable*);
             bool _getAudioInfo(const OTIO_NS::Composable*);

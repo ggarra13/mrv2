@@ -25,14 +25,14 @@ namespace tl
     {
         struct Player::Private
         {
-            otime::RationalTime loopPlayback(const otime::RationalTime&);
+            OTIO_NS::RationalTime loopPlayback(const OTIO_NS::RationalTime&);
 
             void reverseRequests(
-                const otime::RationalTime& start,
-                const otime::RationalTime& end, const otime::RationalTime& inc);
+                const OTIO_NS::RationalTime& start,
+                const OTIO_NS::RationalTime& end, const OTIO_NS::RationalTime& inc);
             void forwardRequests(
-                const otime::RationalTime& start,
-                const otime::RationalTime& end, const otime::RationalTime& inc,
+                const OTIO_NS::RationalTime& start,
+                const OTIO_NS::RationalTime& end, const OTIO_NS::RationalTime& inc,
                 const bool clearFrame = false);
             void clearRequests();
             void clearCache();
@@ -97,10 +97,10 @@ namespace tl
             struct Mutex
             {
                 Playback playback = Playback::Stop;
-                otime::RationalTime playbackStartTime = time::invalidTime;
+                OTIO_NS::RationalTime playbackStartTime = time::invalidTime;
                 std::chrono::steady_clock::time_point playbackStartTimer;
-                otime::RationalTime currentTime = time::invalidTime;
-                otime::TimeRange inOutRange = time::invalidTimeRange;
+                OTIO_NS::RationalTime currentTime = time::invalidTime;
+                OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
                 std::vector<std::shared_ptr<Timeline> > compare;
                 CompareTimeMode compareTime = CompareTimeMode::Relative;
                 io::Options ioOptions;
@@ -134,8 +134,8 @@ namespace tl
             struct Thread
             {
                 Playback playback = Playback::Stop;
-                otime::RationalTime currentTime = time::invalidTime;
-                otime::TimeRange inOutRange = time::invalidTimeRange;
+                OTIO_NS::RationalTime currentTime = time::invalidTime;
+                OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
                 std::vector<std::shared_ptr<Timeline> > compare;
                 CompareTimeMode compareTime = CompareTimeMode::Relative;
                 io::Options ioOptions;

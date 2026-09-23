@@ -29,13 +29,13 @@ namespace tl
             std::weak_ptr<system::Context> context;
             std::weak_ptr<log::System> logSystem;
             std::shared_ptr<file::FileIO> fileIO;
-            otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+            OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
 
             void tick();
 
             std::shared_ptr<audio::Audio> padAudioToOneSecond(
                 const std::shared_ptr<audio::Audio>&, double seconds,
-                const otime::TimeRange&);
+                const OTIO_NS::TimeRange&);
 
             // OTIO works out an item's range in its track by summing the
             // duration of every preceding sibling, and _requests() asks each
@@ -45,17 +45,17 @@ namespace tl
             // the first frame and 100,000 never got there. Built by
             // indexTimeline() in a single pass per track; the OTIO timeline
             // is never written, so this can be read without locking.
-            std::map<const otio::Composable*, otio::TimeRange> trimmedRangeInParent;
+            std::map<const OTIO_NS::Composable*, OTIO_NS::TimeRange> trimmedRangeInParent;
             // The items of each track in time order. Only one item can cover a
             // given time, but _requests() used to walk and cast every child of
             // every track to find it, which kept a hundred thousand clips from
             // reaching the first frame even once the ranges above were cached.
             struct TrackItem
             {
-                otio::Item* item = nullptr;
-                otio::TimeRange range;
+                OTIO_NS::Item* item = nullptr;
+                OTIO_NS::TimeRange range;
             };
-            std::map<const otio::Track*, std::vector<TrackItem> > trackItems;
+            std::map<const OTIO_NS::Track*, std::vector<TrackItem> > trackItems;
             // Rebuilds trimmedRangeInParent, trackItems, mediaByPath and
             // mediaByNormalPath from otioTimeline. Called once from _init(),
             // and again from setTimeline() every time otioTimeline is
@@ -72,13 +72,13 @@ namespace tl
             // parsing it as a path for all 25,000 frames of a bundle before
             // anything could be shown.
             std::shared_ptr<ZipReader> zipReader;
-            std::set<const otio::MediaReference*> bundleMediaReferences;
+            std::set<const OTIO_NS::MediaReference*> bundleMediaReferences;
             // Always the inner of the two locks: creating a reader holds
             // readCacheMutex and then asks getMemoryRead()/mediaUnavailable()
             // where the media lives. Nothing guarded here may reach back for
             // readCacheMutex.
             std::mutex memFilesMutex;
-            std::map<const otio::MediaReference*,
+            std::map<const OTIO_NS::MediaReference*,
                      std::shared_ptr<std::vector<file::MemoryRead> > > memFiles;
             std::shared_ptr<observer::Value<bool> > timelineChanges;
             // Media references named by a bundle but not found inside it. They
@@ -86,19 +86,19 @@ namespace tl
             // contained and quietly reading a file from somewhere else would be
             // misleading; reading one of these fails instead. Filled in while
             // the timeline is read and only read afterwards.
-            std::set<const otio::MediaReference*> unavailableMediaReferences
+            std::set<const OTIO_NS::MediaReference*> unavailableMediaReferences
             ;
             // Guarded by memFilesMutex once the timeline is running, since a
             // reference can also turn out to be unavailable when its byte
             // ranges are worked out on first read.
-            bool mediaUnavailable(const otio::MediaReference*);
+            bool mediaUnavailable(const OTIO_NS::MediaReference*);
 
             // Where a media reference's files live inside the bundle, worked
             // out on first use. Shared rather than copied: inside a bundle a
             // sequence reference carries a byte range per frame, and a long one
             // is not a vector to hand out by value.
             std::shared_ptr<std::vector<file::MemoryRead> > getMem(
-                const otio::MediaReference*);
+                const OTIO_NS::MediaReference*);
 
             // Look up the reader or decoder for a media reference, creating one
             // on a miss. The three caches differ only in what they hold and how
@@ -108,7 +108,7 @@ namespace tl
             template<typename T>
             std::shared_ptr<T> getCached(
                 memory::LRUCache<std::string, std::shared_ptr<T> >&,
-                const otio::MediaReference*,
+                const OTIO_NS::MediaReference*,
                 const io::Options&,
                 const std::function<std::shared_ptr<T>(
                 const std::shared_ptr<system::Context>&,
@@ -160,13 +160,13 @@ namespace tl
             // readMediaAudio() -- not just the request thread -- so
             // indexTimeline() rebuilds it under readCacheMutex and
             // _findMedia()/getMediaPaths() take the same lock to read it.
-            std::map<std::string, otio::MediaReference*> mediaByPath;
+            std::map<std::string, OTIO_NS::MediaReference*> mediaByPath;
             //! The same references keyed by an absolute, normalized path, so
             //! that a caller which opened the timeline with a relative path
             //! still finds them. mediaByPath keeps the paths as written,
             //! which is what getMediaPaths() reports.
-            std::map<std::string, otio::MediaReference*> mediaByNormalPath;
-            otime::TimeRange timeRange = time::invalidTimeRange;
+            std::map<std::string, OTIO_NS::MediaReference*> mediaByNormalPath;
+            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
             io::Info ioInfo;
             // The clip whose media references provide the video information,
             // and the information for each of those references. Both are
@@ -174,9 +174,9 @@ namespace tl
             // so that getIOInfo() can follow the media reference key without
             // any I/O, and without touching the read cache from the main
             // thread.
-            const otio::Clip* videoInfoClip = nullptr;
+            const OTIO_NS::Clip* videoInfoClip = nullptr;
 
-            std::map<const otio::MediaReference*, io::Info>
+            std::map<const OTIO_NS::MediaReference*, io::Info>
             videoInfoByReference;
 
             // The pixels per unit for OTIO spatial coordinates, taken from the
@@ -222,7 +222,7 @@ namespace tl
                 PendingVideoRequest(PendingVideoRequest&&) = default;
 
                 uint64_t id = 0;
-                otime::RationalTime time = time::invalidTime;
+                OTIO_NS::RationalTime time = time::invalidTime;
                 io::Options options;
                 std::promise<VideoFrame> promise;
 
@@ -235,11 +235,11 @@ namespace tl
                 AudioLayerData(AudioLayerData&&) = default;
 
                 double seconds = -1.0;
-                otime::TimeRange timeRange;
-                otime::TimeRange clipTimeRange;
+                OTIO_NS::TimeRange timeRange;
+                OTIO_NS::TimeRange clipTimeRange;
                 std::future<io::AudioData> audio;
-                otio::Transition* inTransition = nullptr;
-                otio::Transition* outTransition = nullptr;
+                OTIO_NS::Transition* inTransition = nullptr;
+                OTIO_NS::Transition* outTransition = nullptr;
             };
             struct PendingAudioRequest
             {
@@ -270,7 +270,7 @@ namespace tl
             // requests.
             struct Mutex
             {
-                otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+                OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
                 bool otioTimelineChanged = false;
                 std::list<std::shared_ptr<PendingVideoRequest> > videoRequests;
                 std::list<std::shared_ptr<PendingAudioRequest> > audioRequests;
@@ -284,7 +284,7 @@ namespace tl
                 // The OTIO timeline itself is never written, so that it can be
                 // read without locking; see Timeline::setMediaReferenceKey().
                 std::string mediaReferenceKey;
-                std::map<const otio::Clip*, std::string> clipMediaReferenceKeys;
+                std::map<const OTIO_NS::Clip*, std::string> clipMediaReferenceKeys;
                 bool mediaReferenceKeysChanged = false;
                 std::mutex mutex;
             };
@@ -298,7 +298,7 @@ namespace tl
             // atomic for that handoff.
             struct Thread
             {
-                otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+                OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
                 std::list<std::shared_ptr<PendingVideoRequest> >
                     videoRequestsInProgress;
                 std::list<std::shared_ptr<PendingAudioRequest> >
@@ -310,7 +310,7 @@ namespace tl
                 // Copies of the media reference keys, refreshed under the mutex
                 // when the main thread changes them.
                 std::string mediaReferenceKey;
-                std::map<const otio::Clip*, std::string> clipMediaReferenceKeys;
+                std::map<const OTIO_NS::Clip*, std::string> clipMediaReferenceKeys;
             };
             Thread thread;
 
@@ -372,21 +372,21 @@ namespace tl
             // the thread-owned key state. Request thread only; the main thread
             // goes through Timeline::getMediaReference(), which takes the
             // mutex.
-            otio::MediaReference* mediaReference(const otio::Clip*) const;
+            OTIO_NS::MediaReference* mediaReference(const OTIO_NS::Clip*) const;
 
             //! Get a track child's trimmed range in its parent, from
             //! trimmedRangeInParent. Anything not covered by the cache, such
             //! as an item nested below a track, falls back to asking OTIO.
-            std::optional<otio::TimeRange> getTrimmedRangeInParent(
-                const otio::Composable*) const;
+            std::optional<OTIO_NS::TimeRange> getTrimmedRangeInParent(
+                const OTIO_NS::Composable*) const;
 
             //! Get the children of a track that can cover the given time,
             //! found by bisecting trackItems. A track that was not indexed
             //! gives back all of its children, so the caller still sees
             //! everything it used to.
-            std::vector<otio::Composable*> getTrackChildrenAt(
-                const otio::Track*,
-                const otime::RationalTime&) const;
+            std::vector<OTIO_NS::Composable*> getTrackChildrenAt(
+                const OTIO_NS::Track*,
+                const OTIO_NS::RationalTime&) const;
         };
     } // namespace timeline
 } // namespace tl

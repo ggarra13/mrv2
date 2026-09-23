@@ -11,9 +11,9 @@ namespace tl
         RawMemoryReference::RawMemoryReference(
             const std::string& target_url, const uint8_t* memory,
             size_t memory_size,
-            const std::optional<otio::TimeRange>& available_range,
-            const otio::AnyDictionary& metadata) :
-            otio::MediaReference(std::string(), available_range, metadata),
+            const std::optional<OTIO_NS::TimeRange>& available_range,
+            const OTIO_NS::AnyDictionary& metadata) :
+            OTIO_NS::MediaReference(std::string(), available_range, metadata),
             _target_url(target_url),
             _memory(memory),
             _memory_size(memory_size)
@@ -52,9 +52,9 @@ namespace tl
         SharedMemoryReference::SharedMemoryReference(
             const std::string& target_url,
             const std::shared_ptr<MemoryReferenceData>& memory,
-            const std::optional<otio::TimeRange>& available_range,
-            const otio::AnyDictionary& metadata) :
-            otio::MediaReference(std::string(), available_range, metadata),
+            const std::optional<OTIO_NS::TimeRange>& available_range,
+            const OTIO_NS::AnyDictionary& metadata) :
+            OTIO_NS::MediaReference(std::string(), available_range, metadata),
             _target_url(target_url),
             _memory(memory)
         {
@@ -88,9 +88,9 @@ namespace tl
             const std::string& target_url,
             const std::vector<const uint8_t*>& memory,
             const std::vector<size_t> memory_sizes,
-            const std::optional<otio::TimeRange>& available_range,
-            const otio::AnyDictionary& metadata) :
-            otio::MediaReference(std::string(), available_range, metadata),
+            const std::optional<OTIO_NS::TimeRange>& available_range,
+            const OTIO_NS::AnyDictionary& metadata) :
+            OTIO_NS::MediaReference(std::string(), available_range, metadata),
             _target_url(target_url),
             _memory(memory),
             _memory_sizes(memory_sizes)
@@ -134,9 +134,9 @@ namespace tl
         SharedMemorySequenceReference::SharedMemorySequenceReference(
             const std::string& target_url,
             const std::vector<std::shared_ptr<MemoryReferenceData> >& memory,
-            const std::optional<otio::TimeRange>& available_range,
-            const otio::AnyDictionary& metadata) :
-            otio::MediaReference(std::string(), available_range, metadata),
+            const std::optional<OTIO_NS::TimeRange>& available_range,
+            const OTIO_NS::AnyDictionary& metadata) :
+            OTIO_NS::MediaReference(std::string(), available_range, metadata),
             _target_url(target_url),
             _memory(memory)
         {
@@ -172,8 +172,8 @@ namespace tl
             const std::shared_ptr<file::FileIO>& file_io,
             const std::string& target_url, const uint8_t* memory,
             size_t memory_size,
-            const std::optional<otio::TimeRange>& available_range,
-            const otio::AnyDictionary& metadata) :
+            const std::optional<OTIO_NS::TimeRange>& available_range,
+            const OTIO_NS::AnyDictionary& metadata) :
             RawMemoryReference(
                 target_url, memory, memory_size, available_range, metadata),
             _file_io(file_io)
@@ -199,8 +199,8 @@ namespace tl
             const std::string& target_url,
             const std::vector<const uint8_t*>& memory,
             const std::vector<size_t> memory_sizes,
-            const std::optional<otio::TimeRange>& available_range,
-            const otio::AnyDictionary& metadata) :
+            const std::optional<OTIO_NS::TimeRange>& available_range,
+            const OTIO_NS::AnyDictionary& metadata) :
             RawMemorySequenceReference(
                 target_url, memory, memory_sizes, available_range, metadata),
             _file_io(file_io)
