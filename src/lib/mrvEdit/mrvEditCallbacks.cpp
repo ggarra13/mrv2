@@ -1057,11 +1057,8 @@ namespace mrv
 
         // Return new player if any.
         player = ui->uiView->getTimelinePlayer();
-        if (player != oldPlayer)
-        {
-            // Update player's timeline and timeline viewport (uiTimeline).
-            updateTimeline(timeline, time, ui);
-        }
+        // Update player's timeline and timeline viewport (uiTimeline).
+        updateTimeline(timeline, time, ui);
     }
 
     void edit_clear_redo(ViewerUI* ui)
