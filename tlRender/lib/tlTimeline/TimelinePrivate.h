@@ -42,9 +42,9 @@ namespace tl
             // track child for its range on every request to find the one
             // covering the requested time. Left to OTIO that is quadratic in
             // the number of clips: 20,000 clips took nine seconds to reach
-            // the first frame and 100,000 never got there. Filled in once by
-            // _init(), which can be done in a single pass per track; the OTIO
-            // timeline is never written, so this can be read without locking.
+            // the first frame and 100,000 never got there. Built by
+            // indexTimeline() in a single pass per track; the OTIO timeline
+            // is never written, so this can be read without locking.
             std::map<const otio::Composable*, otio::TimeRange> trimmedRangeInParent;
             // The items of each track in time order. Only one item can cover a
             // given time, but _requests() used to walk and cast every child of
@@ -56,6 +56,16 @@ namespace tl
                 otio::TimeRange range;
             };
             std::map<const otio::Track*, std::vector<TrackItem> > trackItems;
+            // Rebuilds trimmedRangeInParent, trackItems, mediaByPath and
+            // mediaByNormalPath from otioTimeline. Called once from _init(),
+            // and again from setTimeline() every time otioTimeline is
+            // replaced -- otherwise these would go on pointing at the
+            // composables and media references of the timeline that was
+            // just released. Only safe to call with the request thread and
+            // read pool stopped, since trimmedRangeInParent/trackItems are
+            // read without locking elsewhere on the assumption that they
+            // never change out from under a reader.
+            void indexTimeline();
             // The bundle stays open so that a media reference's byte ranges can
             // be worked out when it is first read. Doing it for every reference
             // at open meant generating a file name, decoding it as a URL and
@@ -115,9 +125,10 @@ namespace tl
             // caller is in getVideo()/getAudio(), and the thumbnail system
             // has three.
             std::mutex driverMutex;
-            // Guards the three caches below. They were owned by the request
-            // thread, but a timeline opened without one is read by whichever
-            // thread drives it, and the thumbnail system drives one from three.
+            // Guards the three caches below, and mediaByPath/mediaByNormalPath
+            // further down. They were owned by the request thread, but a
+            // timeline opened without one is read by whichever thread drives
+            // it, and the thumbnail system drives one from three.
             //
             // Always the outer of the two locks; see memFilesMutex.
             std::mutex readCacheMutex;
@@ -141,9 +152,14 @@ namespace tl
             // monotonic when readers are evicted from the cache. Owned by
             // the request thread.
             size_t readErrorMax = 0;
-            // Media by resolved path, built once while the timeline is read.
-            // Resolving a path means decoding a URL and parsing it, so doing it
-            // per lookup made every thumbnail request walk the whole timeline.
+            // Media by resolved path, built by indexTimeline(). Resolving a
+            // path means decoding a URL and parsing it, so doing it per
+            // lookup made every thumbnail request walk the whole timeline.
+            // Unlike trimmedRangeInParent/trackItems above, this is read
+            // from _findMedia() by whichever thread calls readMedia()/
+            // readMediaAudio() -- not just the request thread -- so
+            // indexTimeline() rebuilds it under readCacheMutex and
+            // _findMedia()/getMediaPaths() take the same lock to read it.
             std::map<std::string, otio::MediaReference*> mediaByPath;
             //! The same references keyed by an absolute, normalized path, so
             //! that a caller which opened the timeline with a relative path
@@ -238,11 +254,19 @@ namespace tl
                 std::vector<AudioLayerData> layerData;
             };
 
+            // Held for the whole of setTimeline(), which stops the request
+            // thread and read pool, swaps in the new timeline, rebuilds the
+            // state derived from it, and starts them back up. That sequence
+            // assumes it is the only one running; getVideo(), getAudio() and
+            // the rest of the state guarded by mutex below are unaffected
+            // and do not need this lock.
+            std::mutex setTimelineMutex;
             // Shared between the main thread and the request thread; every
             // field is guarded by mutex. The request queues are filled by the
             // main thread (getVideo/getAudio, cancelRequests) and drained by
             // the request thread (_requests). stopped is set by the request
-            // thread at shutdown and read by the main thread to reject late
+            // thread at shutdown -- including the temporary shutdown inside
+            // setTimeline() -- and read by the main thread to reject late
             // requests.
             struct Mutex
             {
@@ -268,8 +292,10 @@ namespace tl
             // Owned by the request thread; no locking. The in-progress lists
             // hold requests whose IO futures are outstanding. thread and
             // running are the exceptions: the main thread starts the thread
-            // (in _init) and clears running (in ~Timeline) to ask it to stop;
-            // running is atomic for that handoff.
+            // (in _init, and again in setTimeline() once it has a new
+            // timeline to hand it) and clears running (in ~Timeline, and in
+            // setTimeline() before that) to ask it to stop; running is
+            // atomic for that handoff.
             struct Thread
             {
                 otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;

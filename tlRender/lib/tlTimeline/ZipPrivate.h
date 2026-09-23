@@ -5,6 +5,7 @@
 
 #include <tlCore/LogSystem.h>
 
+#include <functional>
 #include <map>
 #include <optional>
 
@@ -48,12 +49,20 @@ namespace tl
 
         std::string readText(const std::string& name);
 
-            //! Extract every entry under "media/" to a directory on disk,
-            //! using the entry's file name (without its path inside the
-            //! archive) as the file name on disk.
-            void saveMedia(const std::string& outputDir = "/tmp/media") const;
+        //! Extract every entry under "media/" to a directory on disk,
+        //! using the entry's file name (without its path inside the
+        //! archive) as the file name on disk.
+        void saveMedia(const std::string& outputDir,
+                       std::function<void(bool& aborted,
+                                          const std::string& title,
+                                          size_t done, size_t total) > progressCb);
 
     private:
+        // Function callbacks
+        std::function<void(bool&,
+                           const std::string&,
+                           size_t, size_t)> progressCb_;
+
         std::shared_ptr<log::System> _logSystem;
         std::string _fileName;
         size_t _fileSize = 0;

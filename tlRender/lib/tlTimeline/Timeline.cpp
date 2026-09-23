@@ -831,51 +831,7 @@ namespace tl
             // Get information about the timeline. A timeline whose tracks have
             // no duration is zero length rather than unset, so that everything
             // downstream has a range to work in.
-            for (const auto& otioTrack :
-                     p.otioTimeline.value->find_children<otio::Track>())
-            {
-                otio::ErrorStatus errorStatus;
-                const auto ranges = otioTrack->range_of_all_children(&errorStatus);
-                if (otio::is_error(errorStatus))
-                {
-                    continue;
-                }
-                auto& trackItems = p.trackItems[otioTrack];
-                for (const auto& i : ranges)
-                {
-                    if (const auto trimmed = otioTrack->trim_child_range(i.second))
-                    {
-                        p.trimmedRangeInParent[i.first] = trimmed.value();
-                        if (auto otioItem = dynamic_cast<otio::Item*>(i.first))
-                        {
-                            trackItems.push_back({ otioItem, trimmed.value() });
-                        }
-                    }
-                }
-                std::sort(
-                    trackItems.begin(),
-                    trackItems.end(),
-                    [](const Private::TrackItem& a, const Private::TrackItem& b)
-                        {
-                            return a.range.start_time() < b.range.start_time();
-                        });
-            }
-            for (const auto& otioClip :
-                     p.otioTimeline.value->find_children<otio::Clip>())
-            {
-                for (const auto& i : otioClip->media_references())
-                {
-                    if (i.second)
-                    {
-                        const file::Path mediaPath = timeline::getPath(
-                            i.second,
-                            p.path.getDirectory(),
-                            p.options.pathOptions);
-                        p.mediaByPath[mediaPath.get()] = i.second;
-                        p.mediaByNormalPath[normalMediaPath(mediaPath)] = i.second;
-                    }
-                }
-            }
+            p.indexTimeline();
             for (const auto& i : p.otioTimeline.value->tracks()->children())
             {
                 if (auto otioTrack = dynamic_cast<const otio::Track*>(i.value))
@@ -1080,16 +1036,72 @@ namespace tl
             const otio::SerializableObject::Retainer<otio::Timeline>& value)
         {
             TLRENDER_P();
+
+            // Only one of these at a time: the sequence below stops and
+            // restarts the request thread and read pool, which is not safe
+            // to do from two threads at once.
+            std::unique_lock<std::mutex> setTimelineLock(p.setTimelineMutex);
+
+            // Stop the request thread and read pool before touching
+            // anything they read without a lock -- otioTimeline itself, the
+            // indexes indexTimeline() rebuilds below, and the time range,
+            // caches and canvas/video info _timelineUpdate() recomputes.
+            // Previously this function swapped otioTimeline and called
+            // _timelineUpdate() while _requests() and the read pool were
+            // still running against the old timeline, racing with them.
+            // This mirrors the stop sequence in ~Timeline(), except the
+            // thread and pool are started back up afterwards instead of
+            // staying down; any getVideo()/getAudio() request that arrives
+            // in the meantime comes back with an empty frame immediately,
+            // the same as it would after the timeline is destroyed.
+            {
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.thread.running = false;
+            }
+            p.thread.cv.notify_one();
+            if (p.thread.thread.joinable())
+            {
+                p.thread.thread.join();
+            }
+            p.stopReadPool();
+
+            // The request thread and read pool are stopped, so it is now
+            // safe to swap in the new timeline and rebuild everything
+            // derived from it -- including trimmedRangeInParent, trackItems,
+            // mediaByPath and mediaByNormalPath, which used to be built only
+            // once, in _init(), and were left pointing at the composables
+            // and media references of whichever timeline was previously set.
             p.otioTimeline = value;
+            p.indexTimeline();
             if (p.otioTimeline.value)
             {
                 _timelineUpdate();
             }
 
-            std::unique_lock<std::mutex> lock(p.mutex.mutex);
-            if (!p.mutex.stopped)
+            // Start the request thread and read pool back up, mirroring the
+            // end of _init(). mutex.stopped has to be cleared explicitly:
+            // _finishRequests(), run by the thread just joined above, set it
+            // when that thread exited.
             {
-                p.mutex.otioTimeline = value;
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.mutex.stopped = false;
+                p.mutex.otioTimeline = p.otioTimeline;
+            }
+            p.thread.running = true;
+            p.thread.logTimer = std::chrono::steady_clock::now();
+            if (p.options.threaded)
+            {
+                p.startReadPool(p.options.readThreadCount);
+                p.thread.thread = std::thread(
+                    [this]
+                        {
+                            TLRENDER_P();
+                            while (p.thread.running)
+                            {
+                                _tick();
+                            }
+                            _finishRequests();
+                        });
             }
         }
 
@@ -2656,6 +2668,88 @@ namespace tl
             }
         }
 
+        void Timeline::Private::indexTimeline()
+        {
+            // Built into fresh maps and swapped in at the end, rather than
+            // cleared and refilled in place: these key on raw pointers into
+            // otioTimeline, and setTimeline() can replace it with an
+            // unrelated tree, which would otherwise leave entries pointing
+            // at composables and media references that have already been
+            // freed. Building into fresh maps first also means a
+            // readMedia()/readMediaAudio() call on another thread never
+            // finds mediaByPath/mediaByNormalPath briefly empty mid-rebuild;
+            // it sees either the old timeline's entries or the new one's.
+            std::map<const otio::Composable*, otio::TimeRange>
+                newTrimmedRangeInParent;
+            std::map<const otio::Track*, std::vector<TrackItem> >
+                newTrackItems;
+            std::map<std::string, otio::MediaReference*> newMediaByPath;
+            std::map<std::string, otio::MediaReference*> newMediaByNormalPath;
+            if (otioTimeline.value)
+            {
+                for (const auto& otioTrack :
+                         otioTimeline.value->find_children<otio::Track>())
+                {
+                    otio::ErrorStatus errorStatus;
+                    const auto ranges =
+                        otioTrack->range_of_all_children(&errorStatus);
+                    if (otio::is_error(errorStatus))
+                    {
+                        continue;
+                    }
+                    auto& items = newTrackItems[otioTrack];
+                    for (const auto& i : ranges)
+                    {
+                        if (const auto trimmed =
+                                otioTrack->trim_child_range(i.second))
+                        {
+                            newTrimmedRangeInParent[i.first] = trimmed.value();
+                            if (auto otioItem =
+                                    dynamic_cast<otio::Item*>(i.first))
+                            {
+                                items.push_back({ otioItem, trimmed.value() });
+                            }
+                        }
+                    }
+                    std::sort(
+                        items.begin(),
+                        items.end(),
+                        [](const TrackItem& a, const TrackItem& b)
+                            {
+                                return a.range.start_time() <
+                                       b.range.start_time();
+                            });
+                }
+                for (const auto& otioClip :
+                         otioTimeline.value->find_children<otio::Clip>())
+                {
+                    for (const auto& i : otioClip->media_references())
+                    {
+                        if (i.second)
+                        {
+                            const file::Path mediaPath = timeline::getPath(
+                                i.second,
+                                path.getDirectory(),
+                                options.pathOptions);
+                            newMediaByPath[mediaPath.get()] = i.second;
+                            newMediaByNormalPath[normalMediaPath(mediaPath)] =
+                                i.second;
+                        }
+                    }
+                }
+            }
+            // trimmedRangeInParent/trackItems are only read without locking
+            // by the request thread, which indexTimeline()'s caller has
+            // already stopped, so no lock is needed here to replace them.
+            trimmedRangeInParent = std::move(newTrimmedRangeInParent);
+            trackItems = std::move(newTrackItems);
+            {
+                std::unique_lock<std::mutex> lock(readCacheMutex);
+                mediaByPath = std::move(newMediaByPath);
+                mediaByNormalPath = std::move(newMediaByNormalPath);
+            }
+        }
+
         void Timeline::_timelineUpdate()
         {
             TLRENDER_P();
@@ -2666,9 +2760,15 @@ namespace tl
             // they must be rebuilt against the new tree, not reused.
             p.videoInfoClip = nullptr;
             p.videoInfoByReference.clear();
-            p.videoReadCache.clear();
-            p.audioReadCache.clear();
-            p.seqCache.clear();
+            {
+                // Guarded because readMedia()/readMediaAudio() can be
+                // reading these caches from another thread regardless of
+                // whether the request thread is running; see readCacheMutex.
+                std::unique_lock<std::mutex> lock(p.readCacheMutex);
+                p.videoReadCache.clear();
+                p.audioReadCache.clear();
+                p.seqCache.clear();
+            }
             p.maxVideoSize = math::Size2i();
             p.canvasSize = math::Size2i();
             p.canvasOffset = math::Vector2f();
@@ -2771,6 +2871,7 @@ namespace tl
         {
             TLRENDER_P();
             std::vector<file::Path> out;
+            std::unique_lock<std::mutex> lock(p.readCacheMutex);
             for (const auto& i : p.mediaByPath)
             {
                 out.push_back(file::Path(i.first));
@@ -2781,6 +2882,7 @@ namespace tl
         otio::MediaReference* Timeline::_findMedia(const file::Path& path)
         {
             TLRENDER_P();
+            std::unique_lock<std::mutex> lock(p.readCacheMutex);
             const auto i = p.mediaByPath.find(path.get());
             if (i != p.mediaByPath.end())
             {
@@ -3233,6 +3335,19 @@ namespace tl
             auto out = audio::Audio::create(audio->getInfo(), sampleCount);
             audio::move(list, out->getData(), sampleCount);
             return out;
+        }
+
+        void Timeline::expandOTIOZ(const std::string& mediaPath,
+                                   std::function<void(bool& aborted,
+                                                      const std::string& title,
+                                                      size_t done, size_t total) > progressCb)
+        {
+            TLRENDER_P();
+
+            if (!p.zipReader)
+                return;
+
+            p.zipReader->saveMedia("/tmp/media", progressCb);
         }
     } // namespace timeline
 } // namespace tl
