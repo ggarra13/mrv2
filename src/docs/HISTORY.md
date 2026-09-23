@@ -9,10 +9,12 @@ v1.7.8
 - Added new Python methods to control the values of the new OpenEXR compressors.
 - Fixed File->Save Image on the Vulkan backend not paying attention to the HDR Export options.
 - Fixed File->Save Image and File->Save Movies changing resolution when HDR Export was changed.
+- Fixed a potential crash on the Vulkan backend on cleaning up thumbnail resources on program exit.
 
 Libraries:
 	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.
 	- OpenJPH v0.32.0
+	- ZSTD v0.17.0
 
 
 
