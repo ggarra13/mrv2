@@ -14,7 +14,7 @@ cd releases/beta
 rm -rf $OUTPUT_FILE
 
 #
-# Add opengl last
+# Add opengl first
 #
 files=""
 for i in opengl/*$1*; do
@@ -22,10 +22,10 @@ for i in opengl/*$1*; do
 done
 
 #
-# Add Vulkan first
+# Add Vulkan last
 #
 for i in vulkan/*$1*; do
-    files="$i $files"
+    files="$files $i"
 done
 
 for file in $files; do
@@ -48,6 +48,7 @@ count=${#items[@]}
 
 if [[ $count != 23 ]]; then
     echo "Not all files in beta release are there!"
+    echo "COUNT=${count}"
     exit 1
 fi
 
