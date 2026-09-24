@@ -95,6 +95,61 @@ namespace
 
 namespace mrv
 {
+    namespace
+    {
+        /**
+         * Save session implementation.
+         *
+         * @param file fileName to save the session as
+         * @param ui   ViewerUI* handle
+         *
+         * @return 0 for false, 1 for success.
+         */
+        int save_session_impl(const std::string& file, ViewerUI* ui)
+        {
+            auto model = ui->app->filesModel();
+            auto files = model->observeFiles()->get();
+
+            bool hasEDLs = false;
+            for (const auto& file : files)
+            {
+                if (file::isTemporaryEDL(file->path))
+                {
+                    hasEDLs = true;
+                    break;
+                }
+            }
+
+            if (hasEDLs)
+            {
+                int ok = fl_choice(
+                    _("You have EDLs in the current session.  These "
+                      "will not be saved in the session file.  "
+                      "Do you want to continue?"),
+                    _("No"), _("Yes"), NULL, NULL);
+                if (!ok)
+                    return 0;
+            }
+
+            if (session::save(file))
+            {
+                auto settings = ui->app->settings();
+                settings->addRecentFile(file);
+            }
+
+            ui->uiMain->update_title_bar();
+            return 1;
+        }
+    }
+
+    /**
+     * Check for unsaved edits or unsaved annotations and ask the user
+     * if he wants to save the session.
+     *
+     * @param ui ViewerUI* handle
+     *
+     * @return 0 for Cancel, 1 for Save, 2 for Don't Save.
+     */
     int check_for_changes(ViewerUI* ui)
     {
         if (mrv::App::unsaved_edits || mrv::App::unsaved_annotations)
@@ -106,8 +161,18 @@ namespace mrv
                 _("Cancel"), _("Save"), _("Don't Save"), nullptr);
             if (choice == 1)
             {
-                save_session_cb(nullptr, ui);
-                return 1;
+                const std::string& file = save_session_file();
+                if (file.empty())
+                    return 0;
+
+                if (save_session_impl(file, ui))
+                {
+                    session::setCurrent(file);
+                }
+                else
+                {
+                    return 0;
+                }
             }
             return choice;
         }
@@ -3234,41 +3299,6 @@ namespace mrv
         }
     }
 
-    static void save_session_impl(const std::string& file, ViewerUI* ui)
-    {
-        auto model = ui->app->filesModel();
-        auto files = model->observeFiles()->get();
-
-        bool hasEDLs = false;
-        for (const auto& file : files)
-        {
-            const file::Path path = file->path;
-            if (file::isTemporaryEDL(path))
-            {
-                hasEDLs = true;
-                break;
-            }
-        }
-
-        if (hasEDLs)
-        {
-            int ok = fl_choice(
-                _("You have EDLs in the current session.  These "
-                  "will not be saved in the session file.  "
-                  "Do you want to continue?"),
-                _("No"), _("Yes"), NULL, NULL);
-            if (!ok)
-                return;
-        }
-
-        if (session::save(file))
-        {
-            auto settings = ui->app->settings();
-            settings->addRecentFile(file);
-        }
-
-        ui->uiMain->update_title_bar();
-    }
 
     void save_session_as_cb(Fl_Menu_* m, ViewerUI* ui)
     {
@@ -3276,9 +3306,8 @@ namespace mrv
         if (file.empty())
             return;
 
-        save_session_impl(file, ui);
-
-        session::setCurrent(file);
+        if (save_session_impl(file, ui))
+            session::setCurrent(file);
     }
 
     void save_session_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -3286,8 +3315,8 @@ namespace mrv
         const std::string file = session::current();
         if (file.empty())
             return save_session_as_cb(m, ui);
-
-        save_session_impl(file, ui);
+        else
+            save_session_impl(file, ui);
     }
 
     void load_session_impl(const std::string& fileName, ViewerUI* ui)

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-16 12:45-0300\n"
+"POT-Creation-Date: 2026-09-24 14:38-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: it\n"
@@ -967,6 +967,12 @@ msgstr "Livello di compressione zip di OpenEXR."
 msgid "OpenEXR's DWA Compression Level."
 msgstr "Il livello di compressione DWA di OpenEXR."
 
+msgid "OpenEXR's Lossy HJ2K Compression Level."
+msgstr "Livello di compressione HJ2K con perdita di OpenEXR."
+
+msgid "OpenEXR's ZSTD Compression Level."
+msgstr "Livello di compressione ZSTD di OpenEXR."
+
 msgid ""
 "\n"
 "Command module.\n"
@@ -1569,6 +1575,18 @@ msgstr "Streaming {0} {1}..."
 
 msgid "Stop streaming"
 msgstr "Smettila di trasmettere in streaming"
+
+msgid "Complexity"
+msgstr "Complexità"
+
+msgid "Draw Mode"
+msgstr "Modalità di disegno"
+
+msgid "Stage Cache"
+msgstr "Cache per stadio"
+
+msgid "Disk Cache in GB"
+msgstr "Cache disco in GB"
 
 msgid "Type"
 msgstr "Tipo"
@@ -3278,6 +3296,9 @@ msgstr "Indice non valido per aggiungere clip alla timeline."
 msgid "Could not get current path."
 msgstr "Impossibile ottenere il percorso attuale."
 
+msgid "Unzipping"
+msgstr "Decompressione"
+
 #, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr ""
@@ -3433,6 +3454,13 @@ msgid "Default"
 msgstr "Predefinito"
 
 msgid ""
+"You have EDLs in the current session.  These will not be saved in the "
+"session file.  Do you want to continue?"
+msgstr ""
+"Hai degli EDL nella sessione in corso. Questi non saranno salvati nel file "
+"della sessione. Vuoi continuare?"
+
+msgid ""
 "You have unsaved changes. Do you want to save the session before closing?"
 msgstr ""
 "Ci sono modifiche non salvate. Vuoi salvare la sessione prima di chiudere?"
@@ -3560,13 +3588,6 @@ msgstr "Panoramica e zoom"
 
 msgid "Timeline"
 msgstr "Scadenza"
-
-msgid ""
-"You have EDLs in the current session.  These will not be saved in the "
-"session file.  Do you want to continue?"
-msgstr ""
-"Hai degli EDL nella sessione in corso. Questi non saranno salvati nel file "
-"della sessione. Vuoi continuare?"
 
 msgid "Could not restart mrv2 instance with a session file."
 msgstr "Impossibile riavviare l’istanza di mrv2 con il file di sessione."
@@ -3766,12 +3787,25 @@ msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "Esistono già nuovi file {0}! Impossibile sovrascriverlo."
 
 #, c++-format
-msgid "{0}: Cannot open writer plugin."
-msgstr "{0}: Impossibile aprire il plugin scrittore."
+msgid "Rotated image info: {0}"
+msgstr "Informazioni sull'immagine rotante: {0}"
 
 #, c++-format
 msgid "Scaled image info: {0}"
 msgstr "Informazioni sull'immagine scalata: {0}"
+
+#, c++-format
+msgid "{0}: Cannot open writer plugin."
+msgstr "{0}: Impossibile aprire il plugin scrittore."
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr "Informazioni sull'immagine: {0} {1}"
+
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Immagine troppo grande per salvare le annotazioni. Sarà scalato alla "
+"dimensione della vista."
 
 #, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
@@ -3780,24 +3814,16 @@ msgstr ""
 " {0}"
 
 #, c++-format
+msgid "Output info: {0} {1}"
+msgstr "Informazioni sull'uscita: {0} {1}"
+
+#, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Utilizzando profilo {0}, formato pixel {1}."
 
 #, c++-format
 msgid "Using preset {0}."
 msgstr "Usando preimpostazione {0}."
-
-#, c++-format
-msgid "Offscreen Buffer info: {0}"
-msgstr "Informazioni buffer offscreen: {0}"
-
-#, c++-format
-msgid "Image info: {0} {1}"
-msgstr "Informazioni sull'immagine: {0} {1}"
-
-#, c++-format
-msgid "Output info: {0} {1}"
-msgstr "Informazioni sull'uscita: {0} {1}"
 
 #, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -3819,12 +3845,38 @@ msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio solo nella timeline, ma non cercando di salvare l'audio."
 
 #, c++-format
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Formato e tipo OpenGL non valido"
+
+#, c++-format
+msgid "OpenGL info: {0}"
+msgstr "Informazioni OpenGL: {0}"
+
+#, c++-format
 msgid "Saving... {0}"
 msgstr "Salvataggio... {0}"
+
+msgid "Unsupported output format"
+msgstr "Formato di output non supportato"
+
+#, c++-format
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Dati video vuoti al momento {0}. Ripetizione della cornice."
 
 #, c++-format
 msgid "Render size: {0}"
 msgstr "रेंडर आकार: {0}"
+
+#, c++-format
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr "Informazioni buffer offscreen: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Formato di output non supportato: "
 
 msgid "2.35"
 msgstr "2.35"
@@ -3842,46 +3894,15 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "Cache: "
 
-#, c++-format
-msgid "HDR monitor min. nits = {0}"
-msgstr "Luminosità minima del monitor HDR (nit) = {0}"
-
-#, c++-format
-msgid "HDR monitor max. nits = {0}"
-msgstr "Luminosità massima del monitor HDR (nit) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR non trovato o non configurato."
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr "Monitor HDR non rilevato da Vulkan o dal gestore delle finestre."
-
-#, c++-format
-msgid "Vulkan color space is {0}"
-msgstr "Lo spazio colore Vulkan è {0}"
-
-#, c++-format
-msgid "Vulkan format is {0}"
-msgstr "Il formato Vulkan è {0}"
-
-#, c++-format
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "Passato al monitor HDR attivo all'indice {0}"
-
-#, c++-format
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr "Passato al monitor con supporto HDR ma inattivo all'indice {0}"
-
-#, c++-format
-msgid "Changed to SDR monitor at index {0}"
-msgstr "Passato al monitor SDR all'indice {0}"
-
 msgid "Edit Text"
 msgstr "Modifica testo"
 
 #, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' non è un file, una directory o un URL."
+
+msgid "Invalid font for text drawing"
+msgstr "Tipo di carattere non valido per il disegno di testo"
 
 msgid "Could not convert message to shape: "
 msgstr "Impossibile convertire il messaggio in forma:"
@@ -6169,8 +6190,14 @@ msgstr "Tipo di compressione di OpenEXR"
 msgid "ZIP Compression"
 msgstr "Compressione ZIP"
 
+msgid "zstd Compression"
+msgstr "Compressione zstd"
+
 msgid "DWA Compression"
 msgstr "Compressione DWA"
+
+msgid "Lossy HTJ2K"
+msgstr "HTJ2K con perdita"
 
 msgid "Contents"
 msgstr "सामग्री"
@@ -8391,9 +8418,6 @@ msgstr "Modalità spruzzo"
 msgid "Area Selection Mode"
 msgstr "Modalità di selezione dell'area"
 
-msgid "Draw Mode"
-msgstr "Modalità di disegno"
-
 msgid "Erase Mode"
 msgstr "Modalità di cancellazione"
 
@@ -8502,48 +8526,39 @@ msgstr "host_statistics64 non riuscito"
 msgid "task info failed"
 msgstr "Informazione dell'attività non riuscita"
 
-#~ msgid "Complexity"
-#~ msgstr "Complexità"
-
-#~ msgid "Stage Cache"
-#~ msgstr "Cache per stadio"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache disco in GB"
+#, c++-format
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "Luminosità minima del monitor HDR (nit) = {0}"
 
 #, c++-format
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Informazioni sull'immagine rotante: {0}"
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "Luminosità massima del monitor HDR (nit) = {0}"
 
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr ""
-#~ "Immagine troppo grande per salvare le annotazioni. Sarà scalato alla "
-#~ "dimensione della vista."
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "Monitor HDR non trovato o non configurato."
 
-#, c++-format
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Formato e tipo OpenGL non valido"
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
+#~ msgstr "Monitor HDR non rilevato da Vulkan o dal gestore delle finestre."
 
 #, c++-format
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Informazioni OpenGL: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "Formato di output non supportato"
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Lo spazio colore Vulkan è {0}"
 
 #, c++-format
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "Dati video vuoti al momento {0}. Ripetizione della cornice."
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Il formato Vulkan è {0}"
 
 #, c++-format
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "Passato al monitor HDR attivo all'indice {0}"
 
-#~ msgid "Unsupported output format: "
-#~ msgstr "Formato di output non supportato: "
+#, c++-format
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
+#~ msgstr "Passato al monitor con supporto HDR ma inattivo all'indice {0}"
 
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Tipo di carattere non valido per il disegno di testo"
+#, c++-format
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "Passato al monitor SDR all'indice {0}"
 
 #~ msgid "Linearize EXR"
 #~ msgstr "Linearizza EXR"
