@@ -92,7 +92,7 @@ namespace mrv
         {
             std::string json;
             std::string fileName;
-            std::vector<std::shared_ptr<draw::Annotation>> annotations;
+            std::vector<std::shared_ptr<draw::Annotation> > annotations;
         };
 
         static std::vector<UndoRedo> undoBuffer;
@@ -490,8 +490,8 @@ namespace mrv
             }
         }
 
-        //! This routine makes paths absolute to /tmp directory if possible.
-        //! It uses the information from the current media item.
+        //! This routine makes paths absolute to /tmp directory if the archive
+        //! file is an .otioz one.
         void makePathsToTemp(OTIO_NS::Timeline* timeline, ViewerUI* ui)
         {
             auto stack = timeline->tracks();
@@ -915,12 +915,16 @@ namespace mrv
 
     void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
     {
+        UndoRedo buffer;
+        buffer.annotations = player->getAllAnnotations();
+
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
         auto view = ui->uiView;
 
         makePathsAbsolute(timeline, ui);
+        toOtioFile(timeline, ui);
 
         const std::string state = timeline->to_json_string();
         if (!undoBuffer.empty())
@@ -932,13 +936,8 @@ namespace mrv
             }
         }
 
-        toOtioFile(timeline, ui);
-        UndoRedo buffer;
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
-
-        player = ui->uiView->getTimelinePlayer();
-        buffer.annotations = player->getAllAnnotations();
         undoBuffer.push_back(buffer);
 
         ui->uiUndoEdit->activate();
@@ -948,6 +947,9 @@ namespace mrv
     {
         redoBuffer.clear();
         ui->uiRedoEdit->deactivate();
+
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
     }
 
     bool edit_has_undo()
@@ -997,6 +999,7 @@ namespace mrv
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
+
         makePathsAbsolute(timeline, ui);
 
         const auto time = getTime(player);
@@ -1033,11 +1036,11 @@ namespace mrv
             return;
         auto tracks = timeline->tracks()->children();
 
-        const auto startTime = player->timeRange().start_time();
-        const auto time = player->currentTime() - startTime;
+        const auto time = getTime(player);
+
         const auto one_frame = RationalTime(1.0, time.rate());
         const auto half_frame = RationalTime(0.4, time.rate());
-        const RationalTime out_time = time + one_frame;
+        const auto out_time = time + one_frame;
 
         edit_store_undo(player, ui);
 
@@ -1089,10 +1092,6 @@ namespace mrv
 
         updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
-
-
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Frame/Cut", time);
     }
@@ -1185,13 +1184,9 @@ namespace mrv
         edit_clear_redo(ui);
 
         updateTimeline(timeline, scaledTime, ui);
-
         toOtioFile(timeline, ui);
 
         panel::redrawThumbnails();
-
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Frame/Paste", time);
     }
@@ -1262,9 +1257,6 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
         tcp->pushMessage("Edit/Frame/Insert", time);
     }
 
@@ -1313,11 +1305,8 @@ namespace mrv
 
         edit_clear_redo(ui);
 
-        player->setTimeline(timeline);
+        updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
-
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Slice", time);
     }
@@ -1365,9 +1354,6 @@ namespace mrv
         edit_clear_redo(ui);
 
         panel::redrawThumbnails();
-
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Remove", time);
     }
@@ -1542,9 +1528,6 @@ namespace mrv
                 refresh_media_cb(nullptr, ui);
         }
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
         tcp->pushMessage("Edit/Audio Clip/Insert", audioFile);
     }
 
@@ -1700,9 +1683,6 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
         tcp->pushMessage("Edit/Audio Gap/Insert", time);
     }
 
@@ -1773,9 +1753,6 @@ namespace mrv
             edit_clear_redo(ui);
 
         panel::redrawThumbnails();
-
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Audio Clip/Remove", time);
     }
@@ -1876,9 +1853,6 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
         tcp->pushMessage("Edit/Remove Selected", time);
     }
 
@@ -1948,9 +1922,6 @@ namespace mrv
             edit_clear_redo(ui);
 
         panel::redrawThumbnails();
-
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Audio Gap/Remove", time);
     }
@@ -2066,9 +2037,6 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
         tcp->pushMessage("Edit/Video Gap/Insert", time);
     }
 
@@ -2139,9 +2107,6 @@ namespace mrv
             edit_clear_redo(ui);
 
         panel::redrawThumbnails();
-
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Video Gap/Remove", time);
     }
