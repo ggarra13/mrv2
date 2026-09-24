@@ -16,7 +16,7 @@ if (NOT yaml-cpp_FOUND)
 
     list(APPEND yaml-cpp_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/patches/yaml-cpp-patch/src/emitterutils.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/yaml-cpp/src/yaml-cpp/src/emitterutils.cpp)
+	${CMAKE_CURRENT_BINARY_DIR}/../../../deps/yaml-cpp/src/yaml-cpp/src/emitterutils.cpp)
     
     set(yaml-cpp_ARGS
 	-DYAML_CPP_BUILD_CONTRIB=OFF
@@ -27,7 +27,7 @@ if (NOT yaml-cpp_FOUND)
 
     ExternalProject_Add(
 	yaml-cpp
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/yaml-cpp
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/yaml-cpp
 	GIT_REPOSITORY ${yaml-cpp_GIT_REPOSITORY}
 	GIT_TAG ${yaml-cpp_GIT_TAG}
 	PATCH_COMMAND ${yaml-cpp_PATCH}

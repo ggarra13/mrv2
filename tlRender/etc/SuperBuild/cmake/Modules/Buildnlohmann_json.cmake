@@ -16,7 +16,7 @@ if (NOT nlohmann-json_FOUND)
 
     ExternalProject_Add(
 	nlohmann-json
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/nlohmann-json
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/nlohmann-json
 	GIT_REPOSITORY ${nlohmann-json_GIT_REPOSITORY}
 	GIT_TAG ${nlohmann-json_GIT_TAG}
 

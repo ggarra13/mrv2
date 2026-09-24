@@ -20,12 +20,12 @@ if (NOT pystring_FOUND)
     set(pystring_PATCH
 	${CMAKE_COMMAND} -E copy_if_different
 	${CMAKE_CURRENT_SOURCE_DIR}/patches/pystring-patch/CMakeLists.txt
-	${CMAKE_CURRENT_BINARY_DIR}/pystring/src/pystring/CMakeLists.txt
+	${CMAKE_CURRENT_BINARY_DIR}/../../../deps/pystring/src/pystring/CMakeLists.txt
     )
     
     ExternalProject_Add(
 	pystring
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/pystring
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/pystring
 	GIT_REPOSITORY ${pystring_GIT_REPOSITORY}
 	GIT_TAG ${pystring_GIT_TAG}
 

@@ -23,7 +23,7 @@ if (NOT harfbuzz_FOUND)
 
     ExternalProject_Add(
 	harfbuzz
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/harfbuzz
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/harfbuzz
 	GIT_REPOSITORY ${harfbuzz_GIT_REPOSITORY}
 	GIT_TAG ${harfbuzz_GIT_TAG}
 	DEPENDS ${harfbuzz_DEPENDENCIES}

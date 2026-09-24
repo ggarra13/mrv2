@@ -9,15 +9,11 @@ if (NOT OpenEXR_FOUND)
     include(ExternalProject)
 
     set(OpenEXR_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/openexr.git")
-    set(OpenEXR_GIT_TAG "v3.4.13")  # was v3.4.12
+    set(OpenEXR_GIT_TAG "v3.5.0")  # was v3.4.15
 
-    set(OpenEXR_DEPENDENCIES ${OpenJPH_DEP} ${Imath_DEP} ${ZLIB_DEP})
+    set(OpenEXR_DEPENDENCIES ${OpenJPH_DEP} ${Imath_DEP} ${ZLIB_DEP} ${ZSTD_DEP})
     message(STATUS "OpenEXR DEPENDENCIES=${OpenEXR_DEPENDENCIES}")
 
-    # \bug Disable OpenEXR threading to work around a crash at shutdown in the
-    #      OpenEXR thread pool. Note that we already set the OpenEXR global thread
-    #      count to zero wiht Imf::setGlobalThreadCount(0), since we load frames in
-    #      parallel.
     set(OpenEXR_ARGS
 	${TLRENDER_EXTERNAL_ARGS}
 	-DOPENEXR_BUILD_TOOLS=OFF
@@ -33,11 +29,12 @@ if (NOT OpenEXR_FOUND)
 
 	-DOPENEXR_ENABLE_THREADING=ON
 	-DOPENEXR_FORCE_INTERNAL_OPENJPH=OFF
-	-DOPENEXR_FORCE_INTERNAL_DEFLATE=ON)
+	-DOPENEXR_FORCE_INTERNAL_DEFLATE=ON
+	-DOPENEXR_FORCE_INTERNAL_ZSTD=ON)
 
     ExternalProject_Add(
 	OpenEXR
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenEXR
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/OpenEXR
 	DEPENDS ${OpenEXR_DEPENDENCIES}
 	GIT_REPOSITORY ${OpenEXR_GIT_REPOSITORY}
 	GIT_TAG ${OpenEXR_GIT_TAG}

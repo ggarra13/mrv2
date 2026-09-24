@@ -33,7 +33,7 @@ set(libdisplay_info_INSTALL cd build && ninja install)
 
 ExternalProject_Add(
     libdisplay-info
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libdisplay_info
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/libdisplay_info
     DEPENDS ${libdisplay_info_DEPENDENCIES}
     GIT_REPOSITORY ${libdisplay_info_GIT_REPO}
     GIT_TAG ${libdisplay_info_GIT_TAG}

@@ -36,7 +36,7 @@ set(tlRender_ARGS
 
 ExternalProject_Add(
     tlRender
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/tlRender
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/tlRender
     DEPENDS ${TLRENDER_EXTERNAL_DEPS}
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..
     LIST_SEPARATOR |

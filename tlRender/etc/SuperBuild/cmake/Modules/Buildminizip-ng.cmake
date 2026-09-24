@@ -29,7 +29,7 @@ if (NOT minizip_FOUND)
 
     ExternalProject_Add(
 	minizip-ng
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/minizip-ng
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/minizip-ng
 	DEPENDS ${minizip-ng_DEPENDENCIES}
 	GIT_REPOSITORY ${minizip-ng_GIT_REPOSITORY}
 	GIT_TAG ${minizip-ng_GIT_TAG}

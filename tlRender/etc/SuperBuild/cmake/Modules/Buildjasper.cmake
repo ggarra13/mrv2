@@ -22,7 +22,7 @@ message(STATUS "jasper DEPENDENCIES=${jasper_DEPENDENCIES}")
     
 ExternalProject_Add(
      jasper
-     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/jasper
+     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/jasper
      GIT_REPOSITORY ${jasper_GIT_REPOSITORY}
      GIT_TAG ${jasper_GIT_TAG}
      

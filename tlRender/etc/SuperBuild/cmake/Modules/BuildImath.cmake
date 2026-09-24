@@ -18,7 +18,7 @@ if(NOT Imath_FOUND)
 
     ExternalProject_Add(
 	Imath
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/Imath
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/Imath
 	GIT_REPOSITORY ${Imath_GIT_REPOSITORY}
 	GIT_TAG ${Imath_GIT_TAG}
 

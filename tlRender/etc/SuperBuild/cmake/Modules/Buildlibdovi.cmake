@@ -33,7 +33,7 @@ if (NOT dovi_FOUND)
 
     ExternalProject_Add(
 	libdovi
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libdovi
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/libdovi
 	GIT_REPOSITORY ${libdovi_GIT_REPO}
 	GIT_TAG ${libdovi_GIT_TAG}
 

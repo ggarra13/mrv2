@@ -27,7 +27,7 @@ if (NOT Freetype_FOUND)
 
     ExternalProject_Add(
 	Freetype
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/Freetype
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/Freetype
 	DEPENDS ${Freetype_DEPENDENCIES}
 	GIT_REPOSITORY ${Freetype_GIT_REPOSITORY}
 	GIT_TAG ${Freetype_GIT_TAG}

@@ -59,7 +59,7 @@ if (NOT Snappy_FOUND AND NOT FFmpeg_FOUND)
 
     ExternalProject_Add(
 	libsnappy
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libsnappy
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/libsnappy
 	GIT_REPOSITORY ${libsnappy_REPO}
 	GIT_TAG ${libsnappy_TAG}
 

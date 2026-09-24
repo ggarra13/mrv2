@@ -20,7 +20,7 @@ if (NOT expat_FOUND)
 
     ExternalProject_Add(
 	expat
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/expat
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/expat
 	GIT_REPOSITORY ${expat_GIT_REPOSITORY}
 	GIT_TAG ${expat_GIT_TAG}
 

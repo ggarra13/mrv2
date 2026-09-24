@@ -8,14 +8,59 @@ if (USE_SYSTEM_LIBS)
     set(FFmpeg_DEP )
 endif()
 
+
+#
+# While mrv2/vmrv2 adheres to FFmpeg license, there may be issues with patents
+# that you should be aware.
+#
+#
+# Patent information according to ClaudeAI
+#
+# --enable-decoder=h264
+# --enable-encoder=libx264
+# --enable-libx264
+# --enable-gpl	            Patent pool via Access Advance (formerly MPEG LA).
+#
+# --enable-decoder=hevc, --enable-muxer=hevc, --enable-parser=hevc, hardware hevc_videotoolbox	Multiple competing patent pools (Access Advance, MPEG LA, Velos Media) — notoriously fragmented and litigated. Encoding is not enabled here (no libx265), only decode/mux, but decoders can still be in scope of some pools.
+#
+# --enable-decoder=aac
+# --enable-encoder=aac	Patent pool (via Fraunhofer/VoiceAge/Via Licensing). FFmpeg's native AAC encoder is generally considered low-risk/free to distribute compared to libfdk-aac (which you are not using here — good, no --enable-libfdk-aac).
+#
+# --enable-decoder/encoder=ac3, eac3	Dolby patents and trademarks (can't call it "Dolby Digital" without a trademark license even if you implement AC-3 independently).
+#
+# TrueHD	decoder/encoder/demuxer/muxer=truehd	Dolby patents.
+# DTS	        decoder=dca (DTS Coherent Acoustics), demuxer/muxer=dts	DTS Inc. patents.
+#
+
 if (NOT FFmpeg_FOUND)
     
-    set(FFmpeg_VERSION 8.1.2)
+    set(FFmpeg_VERSION 9.0.1)
 
     set(FFmpeg_DEPENDENCIES ZLIB ${OpenSSL_DEP})
+    if(nv-codec-headers_DEP)
+	list(APPEND FFmpeg_DEPENDENCIES ${nv-codec-headers_DEP})
+    endif()
     if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
 	if(UNIX)
 	    list(APPEND FFmpeg_DEPENDENCIES ${NASM_DEP})
+	endif()
+    endif()
+
+    # Direct3DVA hardware encoding
+    set(FFmpeg_HW_ACCEL_D3D12VA ON)
+    
+    # NVidia hwaccel for decoding and encoding
+    set(FFmpeg_HW_ACCEL_NVIDIA ON)
+    
+    # Intel/AMD hwaccel for decoding and encoding
+    set(FFmpeg_HW_ACCEL_VAAPI ON)
+
+    # Vulkan    hwaccel for decoding and encoding
+    set(FFmpeg_HW_ACCEL_VULKAN OFF)
+
+    if (NOT APPLE)
+	if (DEFINED ENV{VULKAN_SDK} AND NOT "$ENV{VULKAN_SDK}" STREQUAL "")
+	    set(FFmpeg_HW_ACCEL_VULKAN ON)
 	endif()
     endif()
 
@@ -31,11 +76,11 @@ if (NOT FFmpeg_FOUND)
     set(FFmpeg_PATCH )
     if(WIN32)
 	set(FFmpeg_PATCH ${CMAKE_COMMAND} -E copy_if_different
-            ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure
-            ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure.bak
+            ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/configure
+            ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/configure.bak
 	    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	    ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure
-	    ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure)
+	    ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure_v9.0.1
+	    ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/configure)
     endif()
     
     set(FFmpeg_SHARED_LIBS ON)
@@ -79,7 +124,7 @@ if (NOT FFmpeg_FOUND)
 	--disable-programs
 	--disable-doc
 	--disable-avfilter
-	--disable-hwaccels
+	--enable-hwaccels
 	--disable-devices
 	--disable-filters
 	--disable-alsa
@@ -87,9 +132,6 @@ if (NOT FFmpeg_FOUND)
 	--disable-avfoundation
 	--disable-bzlib
 	--disable-coreimage
-	--disable-d3d11va
-	--disable-d3d12va
-	--disable-dxva2
 	--disable-iconv
 	--disable-libxcb
 	--disable-libxcb-shm
@@ -101,39 +143,15 @@ if (NOT FFmpeg_FOUND)
 	--disable-schannel
 	--disable-sdl2
 	--disable-securetransport
-	--disable-vulkan
 	--disable-xlib
 	--enable-zlib
-	--disable-amf
-	--disable-cuda-llvm
-	--disable-cuvid
-	--disable-d3d11va
-	--disable-dxva2
-	--disable-ffnvcodec
-	--disable-nvdec
-	--disable-nvenc
 	--disable-v4l2-m2m
-	--disable-vaapi
-	--disable-vdpau
 	--disable-large-tests
 	--pkg-config-flags=--static
 	${FFmpeg_CFLAGS}
 	${FFmpeg_CXXFLAGS}
 	${FFmpeg_OBJCFLAGS}
 	${FFmpeg_LDFLAGS})
-    if(NOT APPLE)
-	list(APPEND FFmpeg_CONFIGURE_ARGS
-	    --disable-videotoolbox
-	    --disable-audiotoolbox)
-    else()
-	list(APPEND FFmpeg_CONFIGURE_ARGS
-	    --enable-videotoolbox
-	    --enable-hwaccel=h264_videotoolbox
-	    --enable-hwaccel=hevc_videotoolbox
-	    --enable-hwaccel=prores_videotoolbox
-	    --enable-hwaccel=vp9_videotoolbox
-	    --enable-audiotoolbox)
-    endif()
 
     if(TLRENDER_FFMPEG_MINIMAL)
 	list(APPEND FFmpeg_CONFIGURE_ARGS
@@ -148,7 +166,7 @@ if (NOT FFmpeg_FOUND)
             --enable-decoder=eac3
             --enable-decoder=flac
             --enable-decoder=gif
-            --enable-decoder=h264
+            --enable-decoder=h264   # patent pool via Access Advance and GPL
             --enable-decoder=hevc
             --enable-decoder=mjpeg
             --enable-decoder=mp3
@@ -196,9 +214,6 @@ if (NOT FFmpeg_FOUND)
 	    --enable-decoder=truehd
             --enable-decoder=v210
             --enable-decoder=v210x
-            --enable-decoder=v308
-            --enable-decoder=v408
-            --enable-decoder=v410
             --enable-decoder=vorbis
             --enable-decoder=vp8
             --enable-decoder=vp9
@@ -261,9 +276,6 @@ if (NOT FFmpeg_FOUND)
             --enable-encoder=rawvideo
 	    --enable-encoder=truehd
             --enable-encoder=v210
-            --enable-encoder=v308
-            --enable-encoder=v408
-            --enable-encoder=v410
             --enable-encoder=yuv4
             --enable-encoder=vorbis
             --enable-encoder=wmav1
@@ -284,7 +296,7 @@ if (NOT FFmpeg_FOUND)
             --enable-demuxer=eac3
             --enable-demuxer=flac
             --enable-demuxer=gif
-            --enable-demuxer=h264
+            --enable-demuxer=h264   # patent pool via Access Advance and GPL
             --enable-demuxer=hevc
             --enable-demuxer=m4v
             --enable-demuxer=matroska
@@ -376,7 +388,7 @@ if (NOT FFmpeg_FOUND)
             --enable-muxer=yuv4mpegpipe
 
             --disable-parsers
-            --enable-parser=aac
+            --enable-parser=aac 
             --enable-parser=ac3
             --enable-parser=av1
 	    --enable-parser=dca
@@ -458,11 +470,6 @@ if (NOT FFmpeg_FOUND)
 	if(UNIX)
 	    list(APPEND FFmpeg_CONFIGURE_ARGS
 		--extra-ldflags="${INSTALL_PREFIX}/lib/libaom.a")
-	    if (NOT APPLE)
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --extra-libs=-lm
-		    --extra-libs=-lpthread)
-	    endif()
 	endif()
     endif()
 
@@ -474,11 +481,6 @@ if (NOT FFmpeg_FOUND)
 	if(UNIX)
 	    list(APPEND FFmpeg_CONFIGURE_ARGS
 		--extra-ldflags="${INSTALL_PREFIX}/lib/libdav1d.a")
-	    if (NOT APPLE)
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --extra-libs=-lm
-		    --extra-libs=-lpthread)
-	    endif()
 	endif()
     endif()
 
@@ -516,13 +518,69 @@ if (NOT FFmpeg_FOUND)
 	    list(APPEND FFmpeg_CONFIGURE_ARGS
 		--extra-ldflags="${INSTALL_PREFIX}/lib/libSvtAv1Enc.a")
 	    if (NOT APPLE)
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --extra-libs=-lm
-		    --extra-libs=-lpthread)
 	    endif()
 	endif()
     endif()
 
+    # Finally HW decoders and encoders.
+    if(NOT APPLE)
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+	    --disable-videotoolbox
+	    --disable-audiotoolbox)
+
+	if (FFmpeg_HW_ACCEL_VULKAN)
+	    set(VULKAN_SDK "$ENV{VULKAN_SDK}")
+	    if (WIN32)
+		convert_path_for_msys2(${VULKAN_SDK} VULKAN_SDK)
+		message(STATUS "FFmpeg MSys2 converted path=${VULKAN_SDK}")
+	    endif()
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--enable-vulkan
+		--extra-cflags=-I${VULKAN_SDK}/include
+		--extra-cxxflags=-I${VULKAN_SDK}/include
+	    )
+	endif()
+
+	if (FFmpeg_HW_ACCEL_NVIDIA)
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--enable-ffnvcodec
+		--enable-nvdec
+		--enable-nvenc
+		--enable-encoder=av1_nvenc
+		--enable-encoder=h264_nvenc
+		--enable-encoder=hevc_nvenc)
+	endif()
+
+	if (UNIX)
+	    if (FFmpeg_HW_ACCEL_VAAPI)
+		list(APPEND FFmpeg_CONFIGURE_ARGS
+		    --enable-vaapi
+		    --enable-encoder=av1_vaapi
+		    --enable-encoder=hevc_vaapi
+		    --enable-encoder=h264_vaapi
+		    --enable-encoder=vp8_vaapi
+		    --enable-encoder=vp9_vaapi
+		    --enable-encoder=mjpeg_vaapi
+		    --enable-encoder=mpeg2_vaapi)
+	    endif()
+	elseif(WIN32)
+	    if (FFmpeg_HW_ACCEL_D3D12VA)
+		list(APPEND FFmpeg_CONFIGURE_ARGS
+		    --enable-encoder=av1_d3d12va
+		    --enable-encoder=hevc_d3d12va
+		    --enable-encoder=h264_d3d12va
+		)
+	    endif()
+	endif()
+    else()
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+	    --enable-videotoolbox
+	    --enable-hwaccel=h264_videotoolbox
+	    --enable-hwaccel=hevc_videotoolbox
+	    --enable-hwaccel=prores_videotoolbox
+	    --enable-hwaccel=vp9_videotoolbox  # does not exist
+	    --enable-audiotoolbox)
+    endif()
     if(NOT WIN32)
 	if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
 	    list(APPEND FFmpeg_CONFIGURE_ARGS
@@ -539,6 +597,14 @@ if (NOT FFmpeg_FOUND)
 	# endif()
     endif()
 
+    if(TLRENDER_SVTAV1 OR TLRENDER_AV1 OR TLRENDER_AOM)
+	if(UNIX AND NOT APPLE)
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--extra-libs=-lm
+		--extra-libs=-lpthread)
+	endif()
+    endif()
+    
     if(FFmpeg_SHARED_LIBS)
 	list(APPEND FFmpeg_CONFIGURE_ARGS
             --disable-static
@@ -578,7 +644,7 @@ if (NOT FFmpeg_FOUND)
 
 	convert_path_for_msys2("${CMAKE_CURRENT_BINARY_DIR}" BINARY_DIR)
 	set(FFmpeg_OPENSSL_COPY
-            "cp ${BINARY_DIR}/ffmpeg_configure.sh ${BINARY_DIR}/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
+            "cp ${BINARY_DIR}/ffmpeg_configure.sh ${BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
 
 	list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
 
@@ -599,7 +665,7 @@ if (NOT FFmpeg_FOUND)
             COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swscale.lib ${INSTALL_PREFIX}/lib")
     else()
 	set(FFmpeg_CONFIGURE_COPY
-            "cp ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
+            "cp ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
 
 	# PKG_CONFIG_PATH is exported inside ffmpeg_configure.sh itself, so it
 	# no longer needs to be set as a separate command here.
@@ -620,7 +686,7 @@ if (NOT FFmpeg_FOUND)
     #
     message(STATUS "Creating ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/")
 
-    set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\nexport PKG_CONFIG_PATH=${INSTALL_PREFIX}/lib/pkgconfig:\$PKG_CONFIG_PATH\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
+    set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\nexport PKG_CONFIG_PATH=${INSTALL_PREFIX}/lib/pkgconfig:/usr/local/lib/pkgconfig:\$PKG_CONFIG_PATH\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh
 	${FFmpeg_CONFIGURE_CONTENTS}
     )
@@ -632,7 +698,7 @@ if (NOT FFmpeg_FOUND)
 
     ExternalProject_Add(
 	FFmpeg
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg
 	DEPENDS ${FFmpeg_DEPENDENCIES}
 	GIT_REPOSITORY "https://github.com/FFmpeg/FFmpeg.git"
 	GIT_TAG "n${FFmpeg_VERSION}"

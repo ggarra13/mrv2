@@ -11,7 +11,9 @@ if (NOT VPX_FOUND AND NOT FFmpeg_FOUND)
 
     # set(LIBVPX_TAG main) # live on the cutting-edge!
 
-    set(VPX_TAG v1.15.2)  # was v1.15.0
+    set(VPX_TAG v1.17.0)  # was v1.15.2,
+                          # v1.16.0 which compiled on Win64 is now broken on
+                          # GitHub.
 
     include(ProcessorCount)
     ProcessorCount(NPROCS)
@@ -32,8 +34,21 @@ if (NOT VPX_FOUND AND NOT FFmpeg_FOUND)
 	# path.
 	set(VPX_ENV PATH="${CMAKE_INSTALL_PREFIX}/bin:$ENV{PATH}")
 	set(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+
+	if (APPLE)
+	    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
+		set(VPX_TARGET --target=arm64-darwin24-gcc)
+	    else()
+		set(VPX_TARGET --target=x86_64-darwin24-gcc)
+	    endif()
+	else()
+	    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
+		set(VPX_TARGET --target=arm64-linux-gcc)
+	    else()
+		set(VPX_TARGET --target=x86_64-linux-gcc)
+	    endif()
+	endif()
     else()
-	
 	# Convert path for MSYS2 properly
 	convert_path_for_msys2("${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX)
 	if(WIN32 AND SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
@@ -65,6 +80,7 @@ if (NOT VPX_FOUND AND NOT FFmpeg_FOUND)
 	--disable-tools
 	--disable-docs
 	--disable-unit-tests
+	--enable-runtime-cpu-detect
 	--enable-vp9-highbitdepth
 	--extra-cflags=${VPX_C_FLAGS}
 	--extra-cxxflags=${VPX_CXX_FLAGS}
@@ -108,7 +124,7 @@ if (NOT VPX_FOUND AND NOT FFmpeg_FOUND)
 
     ExternalProject_Add(
 	VPX
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/VPX
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/VPX
 	DEPENDS ${VPX_DEPENDENCIES}
 	GIT_REPOSITORY "https://github.com/webmproject/libvpx.git"
 	GIT_TAG ${VPX_TAG}

@@ -54,7 +54,7 @@ if (NOT libjpeg-turbo_FOUND)
 
     ExternalProject_Add(
 	libjpeg-turbo
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libjpeg-turbo
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/libjpeg-turbo
 	DEPENDS ${libjpeg-turbo_DEPENDENCIES}
 	GIT_REPOSITORY ${libjpeg-turbo_GIT_REPOSITORY}
 	GIT_TAG ${libjpeg-turbo_GIT_TAG}
