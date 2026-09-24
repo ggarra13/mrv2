@@ -55,10 +55,16 @@ for (int i = 0; i < o->size(); ++i)
 }
 o->value(0);} {}
   }
-  Function {select_compression(Fl_Choice* o)} {} {
+  Function {select_compression(Fl_Choice* o)} {open
+  } {
     code {auto settings = mrv::App::app->settings();
 const std::string& saved =
         settings->getValue<std::string>("SaveImage/Compression");
+
+DWACompressionGroup->deactivate();
+ZipCompressionGroup->deactivate();
+zstdCompressionGroup->deactivate();
+lj2kCompressionGroup->deactivate();
 for (int i = 0; i < o->size(); ++i)
 {
    const Fl_Menu_Item* const item = &o->menu()[i];
@@ -71,10 +77,18 @@ for (int i = 0; i < o->size(); ++i)
        if (type == "zip" || type == "zips")
        {
            ZipCompressionGroup->activate();
-       }
-       else if (type == "dwaa" || type == "dwab")
+       }       
+       if (type == "dwaa" || type == "dwab")
        {
            DWACompressionGroup->activate();
+       }
+       else if (type == "zstd")
+       {
+           zstdCompressionGroup->activate();
+       }
+       else if (type == "lj2k")
+       {
+           lj2kCompressionGroup->activate();
        }
        return;
     }
@@ -86,7 +100,8 @@ o->value(0);} {}
 int v = settings->getValue<int>("SaveImage/Contents");
 o->value(v);} {}
   }
-  Function {fill_compression(Fl_Choice* o)} {} {
+  Function {fill_compression(Fl_Choice* o)} {open
+  } {
     code {std::string name;
 
 o->clear();
@@ -104,7 +119,7 @@ o->menu_end();
   } {
     Fl_Window uiMain {
       label {Save Image Options} open
-      xywh {0 0 523 562} type Double align 5 modal visible
+      xywh {0 0 523 561} type Double align 5 hide modal
     } {
       Fl_Group {} {
         label {Common Settings} open
@@ -164,10 +179,10 @@ o->value(value);}
           callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveImage/Resolution", value);} open selected
+settings->setValue("SaveImage/ExportMode", value);} open
           tooltip {HDR (Vulkan) Export mode.} xywh {176 148 240 30} down_box BORDER_BOX
           code3 {auto settings = mrv::App::app->settings();
-int value = settings->getValue<int>("SaveImage/Resolution");
+int value = settings->getValue<int>("SaveImage/ExportMode");
 o->value(value);}
         } {
           MenuItem {} {
@@ -194,7 +209,7 @@ o->value(value);}
 const std::string& label = item->label();
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/PixelType", label);}
-          tooltip {OpenEXR's Pixel Type} xywh {243 253 170 29} down_box BORDER_BOX
+          tooltip {OpenEXR's Pixel Type} xywh {243 233 170 29} down_box BORDER_BOX
         } {
           MenuItem {} {
             label Half
@@ -209,24 +224,15 @@ settings->setValue("SaveImage/PixelType", label);}
           label Compression
           user_data this user_data_type {SaveImageOptionsUI*}
           callback {const Fl_Menu_Item* item = o->mvalue();
-DWACompressionGroup->deactivate();
-ZipCompressionGroup->deactivate();
 const std::string& label = item->label();
-if (label == "zip" || label == "zips")
-{
-     ZipCompressionGroup->activate();
-}
-else if (label == "dwaa" || label == "dwab")
-{
-     DWACompressionGroup->activate();
-}
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveImage/Compression", label);} open
-          tooltip {OpenEXR's Compression Type} xywh {243 296 170 29} down_box BORDER_BOX
+settings->setValue("SaveImage/Compression", label);
+select_compression(o);} open
+          tooltip {OpenEXR's Compression Type} xywh {243 276 170 29} down_box BORDER_BOX
           code3 {fill_compression(o);}
         } {}
         Fl_Group ZipCompressionGroup {open
-          xywh {86 340 327 30} deactivate
+          xywh {86 316 327 20} deactivate
         } {
           Fl_Value_Input ZipCompressionLevel {
             label {ZIP Compression}
@@ -235,18 +241,38 @@ settings->setValue("SaveImage/Compression", label);} open
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/ZipCompressionLevel", o->value());}
-            xywh {245 340 46 30} color 2561189888 minimum 1 maximum 9 step 1 value 4 textcolor 56
+            xywh {241 316 50 20} color 2561189888 labelsize 12 minimum 1 maximum 9 step 1 value 4 textsize 12 textcolor 56
           }
           Fl_Slider ZipCompressionSlider {
             user_data ZipCompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->do_callback();
-v->redraw();}
-            xywh {293 340 120 30} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
+v->redraw();} selected
+            xywh {293 316 120 20} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
           }
         }
-        Fl_Group DWACompressionGroup {open
-          xywh {86 378 327 28} deactivate
+        Fl_Group zstdCompressionGroup {
+          xywh {86 340 327 20} deactivate
+        } {
+          Fl_Value_Input zstdCompressionLevel {
+            label {zstd Compression}
+            user_data this user_data_type {SaveImageOptionsUI*}
+            callback {v->zstdCompressionSlider->value(o->value());
+
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveImage/zstdCompressionLevel", o->value());}
+            xywh {241 340 50 20} color 2561189888 labelsize 12 minimum 1 maximum 9 step 1 value 4 textsize 12 textcolor 56
+          }
+          Fl_Slider zstdCompressionSlider {
+            user_data zstdCompressionLevel user_data_type {Fl_Value_Input*}
+            callback {v->value(o->value());
+v->do_callback();
+v->redraw();}
+            xywh {293 340 120 20} type {Horz Knob} minimum 1 maximum 9 step 1 value 4 slider_size 0.1
+          }
+        }
+        Fl_Group DWACompressionGroup {
+          xywh {86 364 327 20} deactivate
         } {
           Fl_Value_Input DWACompressionLevel {
             label {DWA Compression}
@@ -255,21 +281,41 @@ v->redraw();}
 
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveImage/DWACompressionLevel", o->value());}
-            xywh {242 378 50 27} color 2561189888 maximum 1e+06 step 0.1 value 45 textcolor 56
+            xywh {241 364 50 20} color 2561189888 labelsize 12 maximum 1e+06 step 0.1 value 45 textsize 12 textcolor 56
           }
           Fl_Slider DWACompressionSlider {
             user_data DWACompressionLevel user_data_type {Fl_Value_Input*}
             callback {v->value(o->value());
 v->do_callback();
 v->redraw();}
-            xywh {293 378 120 28} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
+            xywh {293 364 120 20} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
+          }
+        }
+        Fl_Group lj2kCompressionGroup {
+          xywh {86 388 327 20} deactivate
+        } {
+          Fl_Value_Input lj2kCompressionLevel {
+            label {Lossy HTJ2K}
+            user_data this user_data_type {SaveImageOptionsUI*}
+            callback {v->lj2kCompressionSlider->value(o->value());
+
+auto settings = mrv::App::app->settings();
+settings->setValue("SaveImage/lj2kCompressionLevel", o->value());}
+            xywh {241 388 50 20} color 2561189888 labelsize 12 maximum 1e+06 step 0.1 value 45 textsize 12 textcolor 56
+          }
+          Fl_Slider lj2kCompressionSlider {
+            user_data lj2kCompressionLevel user_data_type {Fl_Value_Input*}
+            callback {v->value(o->value());
+v->do_callback();
+v->redraw();}
+            xywh {293 388 120 20} type {Horz Knob} maximum 1e+06 step 2 value 45 slider_size 0.1
           }
         }
         Fl_Choice Contents {
           label Contents
           user_data this user_data_type {SaveImageOptionsUI*}
           callback {auto settings = mrv::App::app->settings();
-settings->setValue("SaveImage/Contents", o->value());} open
+settings->setValue("SaveImage/Contents", o->value());}
           tooltip {OpenEXR's Contents to Save} xywh {243 415 170 32} down_box BORDER_BOX
         } {
           MenuItem {} {
