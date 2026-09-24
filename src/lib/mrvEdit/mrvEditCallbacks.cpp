@@ -14,11 +14,14 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#include "mrvWidgets/mrvProgressReport.h"
+
 #include "mrvNetwork/mrvTCP.h"
 
-#include "mrvOS/mrvI8N.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
+
+#include "mrvOS/mrvI8N.h"
 
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/Util.h>
@@ -600,8 +603,32 @@ namespace mrv
                 otioFile = otioFilename(ui);
                 if (file::isOTIOZ(path))
                 {
+                    ProgressReport* progress = new ProgressReport(
+                        App::ui->uiMain, 0, 100, _("Unzipping"));
+                    progress->show();
+                    Fl::check();
+
                     std::string dir = mrv::tmppath() + "/media";
-                    destItem->timeline->expandOTIOZ(dir);
+                    destItem->timeline->expandOTIOZ(dir, [&](
+                                                        bool& aborted,
+                                                        const std::string& title,
+                                                        size_t done,
+                                                        size_t total)
+                        {
+                            // Safely update the UI
+                            progress->set_end(total);
+                            progress->set_value(done);
+
+                            if (!progress->window() ||
+                                (progress->window() &&
+                                 !progress->window()->shown()))
+                                aborted = true;
+
+                            Fl::check();
+                        });
+
+                    delete progress;
+
                     destItem->timeline.reset();
                     makePathsToTemp(timeline, ui);
 

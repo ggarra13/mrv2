@@ -273,7 +273,13 @@ namespace tl
 
             ///@}
 
-            void expandOTIOZ(const std::string& mediaPath);
+            //! Expand an .otioz file into a directory, with all its elements.
+            //! the progressCb function allows using a progress indicator and aborting the
+            //! operation by setting aborted to true.
+            void expandOTIOZ(const std::string& mediaPath,
+                             std::function<void(bool& aborted,
+                                                const std::string& title,
+                                                size_t done, size_t total) > progressCb);
 
             //! \name Video and Audio Data
             ///@{

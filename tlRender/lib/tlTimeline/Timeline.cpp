@@ -2533,14 +2533,17 @@ namespace tl
             }
         }
 
-        void Timeline::expandOTIOZ(const std::string& mediaPath)
+        void Timeline::expandOTIOZ(const std::string& mediaPath,
+                                   std::function<void(bool& aborted,
+                                                      const std::string& title,
+                                                      size_t done, size_t total) > progressCb)
         {
             TLRENDER_P();
 
             if (!p.zipReader)
                 return;
 
-            p.zipReader->saveMedia();
+            p.zipReader->saveMedia("/tmp/media", progressCb);
         }
 
     } // namespace timeline

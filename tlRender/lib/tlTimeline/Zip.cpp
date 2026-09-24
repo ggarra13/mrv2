@@ -419,9 +419,15 @@ namespace tl
             return out;
         }
 
-        void ZipReader::saveMedia(const std::string& outputDir) const
+        void ZipReader::saveMedia(const std::string& outputDir,
+                                  std::function<void(bool& aborted,
+                                                     const std::string& title,
+                                                     size_t done, size_t total) > progressCb)
         {
+
             namespace fs = std::filesystem;
+
+            progressCb_ = std::move(progressCb);
 
             std::error_code ec;
             fs::create_directories(outputDir, ec);
@@ -443,6 +449,7 @@ namespace tl
             static const std::string mediaPrefix = "media/";
             std::vector<uint8_t> buffer;
             size_t savedCount = 0;
+            size_t totalCount = _entries.size();
             for (const auto& i : _entries)
             {
                 const std::string& name = i.first;
@@ -466,6 +473,14 @@ namespace tl
                 }
 
                 const fs::path outPath = fs::path(outputDir) / outName;
+
+                if (progressCb_)
+                {
+                    bool aborted = false;
+                    progressCb_(aborted, outName, savedCount, totalCount);
+                    if (aborted)
+                        return;
+                }
 
                 buffer.resize(static_cast<size_t>(entry.size));
                 if (entry.size > 0)
