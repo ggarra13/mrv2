@@ -168,7 +168,6 @@ namespace mrv
             player->setInOutRange(player->timeRange()); // needed
             ui->uiTimeline->setTimelinePlayer(player);
             ui->uiTimeline->redraw();
-            Fl::check();
 
             // Set the start and end frame
             const auto one_frame = RationalTime(1.0, rate);
@@ -178,11 +177,7 @@ namespace mrv
             TimelineClass* c = ui->uiTimeWindow;
             c->uiStartFrame->setTime(startTime);
             c->uiEndFrame->setTime(endTime);
-            while (!time.almost_equal(player->currentTime()))
-            {
-                player->seek(time);
-                Fl::wait(0.1);
-            }
+            player->seek(time);
         }
 
         //! Return whether a timeline has all empty tracks.
