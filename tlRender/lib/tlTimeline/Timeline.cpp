@@ -2543,7 +2543,7 @@ namespace tl
             if (!p.zipReader)
                 return;
 
-            p.zipReader->saveMedia("/tmp/media", progressCb);
+            p.zipReader->saveMedia(mediaPath, progressCb);
         }
 
     } // namespace timeline
