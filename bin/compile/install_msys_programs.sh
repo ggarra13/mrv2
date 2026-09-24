@@ -20,13 +20,28 @@ pacman -Syu --noconfirm
 # Install 
 #
 if [[ "$MSYS2_INSTALL" == "ON" ]]; then
-    programs="swig diffutils"
-
-    if [[ $ARCH == *amd64* ]]; then
-	echo "Installing nasm and perl thru Msys2 x86_64..."
-	programs="$programs nasm perl"
+    programs="diffutils"
+    if command -v swig >/dev/null 2>&1; then
+	echo "swig already installed"
+    else
+	programs="$programs swig"
     fi
 
+    if [[ $ARCH == *amd64* ]]; then
+	if command -v nasm >/dev/null 2>&1; then
+	    echo "nasm already installed"
+	else
+	    programs="$programs nasm"
+	fi
+	
+	if command -v perl >/dev/null 2>&1; then
+	    echo "perl already installed"
+	else
+	    programs="$programs perl"
+	fi
+    fi
+
+    echo "Installing $programs"
     pacman -S --needed --noconfirm $programs
 fi
 
