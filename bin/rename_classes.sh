@@ -6,11 +6,6 @@ if [[ "$1" == "" ]]; then
 fi
 
 #
-# OTIO macros
-#
-sed -i 's#OTIO_NS::#otio::#g' "$@"
-
-#
 # FTK macros
 #
 sed -i 's#namespace ftk#namespace tl#g' "$@"
@@ -90,6 +85,7 @@ sed -i 's|<tlRender/|<tl|' "$@"
 #
 # tlRender classes
 #
+sed -i 's#memory::endian(#memory::swapEndian(#' "$@"
 sed -i 's#\bFileType::Seq\b#io::FileType::Sequence#' "$@"
 sed -i 's# IDecode# io::IDecode#' "$@"
 sed -i 's#<IDecode#<io::IDecode#' "$@"
