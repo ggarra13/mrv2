@@ -498,6 +498,18 @@ namespace mrv
         }
 
 
+        bool isOTIOZ()
+        {
+            auto model = App::app->filesModel();
+            auto item = model->observeA()->get();
+            if (!item)
+                return false;
+
+            auto path = item->path;
+
+            return file::isOTIOZ(path);
+        }
+
         //! This routine makes paths absolute to /tmp directory if possible.
         //! It uses the information from the current media item.
         void makePathsToTemp(OTIO_NS::Timeline* timeline, ViewerUI* ui)
@@ -591,8 +603,8 @@ namespace mrv
 
             auto timeline = otioTimeline;
 
-            auto destItem = model->observeA()->get();
-            auto path = destItem->path;
+            auto item = model->observeA()->get();
+            auto path = item->path;
             auto stack = timeline->tracks();
             auto tracks = stack->children();
             if (tracks.size() < 1)
@@ -617,7 +629,7 @@ namespace mrv
                     Fl::check();
 
                     std::string dir = mrv::tmppath() + "/media";
-                    destItem->timeline->expandOTIOZ(dir, [&](
+                    item->timeline->expandOTIOZ(dir, [&](
                                                         bool& aborted,
                                                         const std::string& title,
                                                         size_t done,
@@ -640,8 +652,8 @@ namespace mrv
                     // Change paths in OTIO timeline to point to /tmp/media
                     makePathsToTemp(timeline, ui);
 
-                    // Reset the destItem timeline::Timeline
-                    destItem->timeline.reset();
+                    // Reset the item timeline::Timeline
+                    item->timeline.reset();
 
                     // Needed to reload the movie and change it from .otioz to
                     // EDL0x****.otio
@@ -650,7 +662,7 @@ namespace mrv
             }
 
             timeline->to_json_file(otioFile);
-            destItem->path = file::Path(otioFile);
+            item->path = file::Path(otioFile);
 
             if (reloadMedia)
             {
@@ -942,7 +954,14 @@ namespace mrv
             return;
 
         timeline = duplicateTimeline(timeline);
-        makePathsAbsolute(timeline, ui);
+        if (isOTIOZ())
+        {
+            makePathsToTemp(timeline, ui);
+        }
+        else
+        {
+            makePathsAbsolute(timeline, ui);
+        }
         toOtioFile(timeline, ui);
 
         const std::string state = timeline->to_json_string();
@@ -1013,6 +1032,7 @@ namespace mrv
         ui->uiRedoEdit->activate();
     }
 
+    // Works with .otioz
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1022,7 +1042,15 @@ namespace mrv
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
-        makePathsAbsolute(timeline, ui);
+
+        if (isOTIOZ())
+        {
+            makePathsToTemp(timeline, ui);
+        }
+        else
+        {
+            makePathsAbsolute(timeline, ui);
+        }
 
         const auto time = getTime(player);
 
@@ -1051,6 +1079,8 @@ namespace mrv
         if (!player)
             return;
 
+        auto time = getTime(player);
+
         edit_copy_frame_cb(m, ui);
 
         edit_store_undo(player, ui);
@@ -1058,10 +1088,9 @@ namespace mrv
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
+
         auto tracks = timeline->tracks()->children();
 
-        const auto startTime = player->timeRange().start_time();
-        const auto time = player->currentTime() - startTime;
         const auto one_frame = RationalTime(1.0, time.rate());
         const auto half_frame = RationalTime(0.4, time.rate());
         const RationalTime out_time = time + one_frame;
@@ -1118,6 +1147,7 @@ namespace mrv
         tcp->pushMessage("Edit/Frame/Cut", time);
     }
 
+    // Works with .otioz
     void edit_paste_frame_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1281,6 +1311,7 @@ namespace mrv
     }
 
 
+    // Works with .otioz
     void edit_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
