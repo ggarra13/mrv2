@@ -1,17 +1,21 @@
 v1.7.8
 ======
 
-- Fixed precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
 - The macOS versions of mrv2 and vmrv2 are now code-signed and notarized.  You should be able to install them much more easily by just dragging the icons to the Applications folder.
 - Improved the start-up of the Vulkan version of mrv2.
 - Improved the performance of loading pictures.
 - Improved the memory footprint and performance of drawing annotations on the Vulkan version of mrv2.
-- Fixed thumbnail size on monitors with DPI higher than 100%.
 - Added missing OpenEXR compressors to Python bindings.
 - Added new Python methods to control the values of the new OpenEXR compressors.
-- Fixed File->Save Image on the Vulkan backend not paying attention to the HDR Export options.
-- Fixed File->Save Image and File->Save Movies changing resolution when HDR Export was changed.
-- Fixed a potential crash on the Vulkan backend on cleaning up thumbnail resources on program exit.
+- Added a progress indicator when unzipping .otioz files for editing.
+
+Fixes:
+
+- Precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
+- File->Save Image on the Vulkan backend not paying attention to the HDR Export options.
+- File->Save Image and File->Save Movies changing resolution when HDR Export was changed.
+- Thumbnail size selection on monitors with DPI higher than 100%.
+- A potential crash on the Vulkan backend on cleaning up thumbnail resources on program exit.
 
 Libraries:
 	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.
