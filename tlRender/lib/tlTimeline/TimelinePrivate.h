@@ -30,8 +30,6 @@ namespace tl
             std::shared_ptr<file::FileIO> fileIO;
             OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
 
-            void tick();
-
             std::shared_ptr<audio::Audio> padAudioToOneSecond(
                 const std::shared_ptr<audio::Audio>&, double seconds,
                 const opentime::TimeRange&);

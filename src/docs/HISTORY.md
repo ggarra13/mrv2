@@ -9,6 +9,7 @@ v1.7.8
 - Added new Python methods to control the values of the new OpenEXR compressors.
 - Added a progress indicator when unzipping .otioz files for editing.
 - Cancelling saving of a session upon exit now also avoids exiting the application.
+- Core: Cleaned up Timeline code.
 
 Fixes:
 

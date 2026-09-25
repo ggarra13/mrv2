@@ -723,18 +723,7 @@ namespace tl
 
             // Create a new thread.
             p.mutex.otioTimeline = p.otioTimeline;
-            p.thread.running = true;
-            p.thread.thread = std::thread(
-                [this]
-                    {
-                        TLRENDER_P();
-                        p.thread.logTimer = std::chrono::steady_clock::now();
-                        while (p.thread.running)
-                        {
-                            _tick();
-                        }
-                        _finishRequests();
-                    });
+            _startThreads();
         }
 
         Timeline::Timeline() :
@@ -840,25 +829,44 @@ namespace tl
             TLRENDER_P();
 
 
+            // Stop the request thread.
             {
-                std::unique_lock<std::mutex> lock(memFilesMutex);
-                memFiles.clear();
-                bundleMediaReferences.clear();
-                unavailableMediaReferences.clear();
-
-                p.otioTimeline = value;
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.thread.running = false;
+            }
+            p.thread.cv.notify_one();
+            if (p.thread.thread.joinable())
+            {
+                p.thread.thread.join();
             }
 
-            if (p.otioTimeline)
+            {
+                std::unique_lock<std::mutex> lock(p.memFilesMutex);
+                p.memFiles.clear();
+                p.bundleMediaReferences.clear();
+                p.unavailableMediaReferences.clear();
+            }
+            p.zipReader.reset();
+            p.fileIO.reset();
+
+            p.otioTimeline = value;
+
+            if (p.otioTimeline.value)
             {
                 _timelineUpdate();
             }
 
-            std::unique_lock<std::mutex> lock(p.mutex.mutex);
-            if (!p.mutex.stopped)
+
+            // Start the request thread and read pool back up, mirroring the
+            // end of _init(). mutex.stopped has to be cleared explicitly:
+            // _finishRequests(), run by the thread just joined above, set it
+            // when that thread exited.
             {
-                p.mutex.otioTimeline = value;
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.mutex.stopped = false;
+                p.mutex.otioTimeline = p.otioTimeline;
             }
+            _startThreads();
         }
 
         const file::Path& Timeline::getPath() const
@@ -1354,6 +1362,8 @@ namespace tl
                 p.timelineChanges->setAlways(true);
             }
         }
+
+
         void Timeline::_requests()
         {
             TLRENDER_P();
@@ -2512,6 +2522,25 @@ namespace tl
                 return;
 
             p.zipReader->saveMedia(mediaPath, progressCb);
+        }
+
+        void Timeline::_startThreads()
+        {
+            TLRENDER_P();
+
+            p.thread.running = true;
+            p.thread.logTimer = std::chrono::steady_clock::now();
+            p.thread.thread = std::thread(
+                [this]
+                    {
+                        TLRENDER_P();
+
+                        while (p.thread.running)
+                        {
+                            _tick();
+                        }
+                        _finishRequests();
+                    });
         }
 
     } // namespace timeline

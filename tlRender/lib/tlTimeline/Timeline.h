@@ -332,6 +332,7 @@ namespace tl
             void _timelineUpdate();
             OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>
             _readOTIO(const file::Path& path, OTIO_NS::ErrorStatus* errorStatus);
+            void _startThreads();
 
             TLRENDER_PRIVATE();
         };
