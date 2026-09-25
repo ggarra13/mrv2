@@ -4,6 +4,7 @@
 
 #include "mrViewer.h"
 
+#include "mrvEdit/mrvEditAlgorithm.h"
 #include "mrvEdit/mrvEditCallbacks.h"
 #include "mrvEdit/mrvEditUtil.h"
 
@@ -1294,7 +1295,7 @@ namespace mrv
             if (track->kind() != frame.kind)
                 continue;
 
-            OTIO_NS::algo::insert(item, track, scaledTime);
+            mrv::algo::insert(item, track, scaledTime);
             frame.item = item;
         }
 
@@ -2239,12 +2240,12 @@ namespace mrv
         if (!player)
             return;
 
+        // This invalidates the selection below.
+        // edit_store_undo(player, ui);
+
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
-
-        makePathsAbsolute(timeline, ui);
-
 
         auto selection = ui->uiTimeline->getSelectedItems();
         if (selection.size() != 2 && selection.size() != 4)
@@ -3169,6 +3170,19 @@ namespace mrv
         // If an undo only operation, return immediately.
         if (moves.size() == 1 && moves[0].type == tl::timeline::MoveType::UndoOnly)
             return;
+
+        if (moves.empty())
+            return;
+
+        // Perform the actual move in the new player (if it was an .otioz file)
+        auto innerPlayer = player->player();
+        if (moves[0].type == tl::timeline::MoveType::Clip)
+        {
+            auto timeline = innerPlayer->getTimeline();
+            auto otioTimeline = timeline::move(timeline->getTimeline().value,
+                                               moves);
+            innerPlayer->getTimeline()->setTimeline(otioTimeline);
+        }
 
         const auto& startTimeOpt = timeline->global_start_time();
         OTIO_NS::RationalTime startTime(0.0, timeline->duration().rate());
