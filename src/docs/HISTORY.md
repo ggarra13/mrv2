@@ -17,6 +17,7 @@ Fixes:
 - File->Save Image and File->Save Movies changing resolution when HDR Export was changed.
 - Thumbnail size selection on monitors with DPI higher than 100%.
 - A potential crash on the Vulkan backend on cleaning up thumbnail resources on program exit.
+- YUV_444P_U12 movies are no longer attempted to decode in hardware, like SolLevante Netflix demo clip.
 
 Libraries:
 	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.

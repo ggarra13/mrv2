@@ -1189,6 +1189,7 @@ namespace tl
                 0 == inputDesc->log2_chroma_w && 0 == inputDesc->log2_chroma_h;
             const bool hasAlpha = inputDesc &&
                 (inputDesc->flags & AV_PIX_FMT_FLAG_ALPHA);
+            const int depth = inputDesc ? inputDesc->comp[0].depth : 0;
 
             if (AVCOL_RANGE_JPEG == _avCodecParameters[_avStream]->color_range)
             {
@@ -1214,6 +1215,15 @@ namespace tl
                 // silently dropping the alpha channel.
                 std::string msg =
                     string::Format("Hardware decoding skipped for a source with an alpha channel; using software decoding: \"{0}\"").arg(_fileName);
+                LOG_WARNING(msg);
+                return;
+            }
+            if (depth != 8 && depth != 10)
+            {
+                std::string msg = string::Format(
+                    "Hardware decoding skipped for a {0}-bit source (only 8/10-bit "
+                    "supported); using software decoding: \"{1}\"")
+                                  .arg(depth).arg(_fileName);
                 LOG_WARNING(msg);
                 return;
             }
@@ -1530,8 +1540,8 @@ namespace tl
                         std::string msg =
                             string::Format("Cannot download a hardware frame; skipping: \"{0}\"").
                                           arg(_fileName);
-                        LOG_WARNING(msg);
-                        continue;
+                        LOG_ERROR(msg);
+                        return AVERROR_EXTERNAL;
                     }
                     av_frame_copy_props(_swFrame, _avFrame);
                     frame = _swFrame;
