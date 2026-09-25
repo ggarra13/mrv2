@@ -734,11 +734,8 @@ namespace tl
         Timeline::~Timeline()
         {
             TLRENDER_P();
-            p.thread.running = false;
-            if (p.thread.thread.joinable())
-            {
-                p.thread.thread.join();
-            }
+
+            _stopThreads();
         }
 
         std::shared_ptr<Timeline> Timeline::create(
@@ -828,17 +825,7 @@ namespace tl
         {
             TLRENDER_P();
 
-
-            // Stop the request thread.
-            {
-                std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                p.thread.running = false;
-            }
-            p.thread.cv.notify_one();
-            if (p.thread.thread.joinable())
-            {
-                p.thread.thread.join();
-            }
+            _stopThreads();
 
             {
                 std::unique_lock<std::mutex> lock(p.memFilesMutex);
@@ -856,16 +843,12 @@ namespace tl
                 _timelineUpdate();
             }
 
-
-            // Start the request thread and read pool back up, mirroring the
-            // end of _init(). mutex.stopped has to be cleared explicitly:
-            // _finishRequests(), run by the thread just joined above, set it
-            // when that thread exited.
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
                 p.mutex.stopped = false;
                 p.mutex.otioTimeline = p.otioTimeline;
             }
+
             _startThreads();
         }
 
@@ -2541,6 +2524,17 @@ namespace tl
                         }
                         _finishRequests();
                     });
+        }
+
+        void Timeline::_stopThreads()
+        {
+            TLRENDER_P();
+
+            p.thread.running = false;
+            if (p.thread.thread.joinable())
+            {
+                p.thread.thread.join();
+            }
         }
 
     } // namespace timeline

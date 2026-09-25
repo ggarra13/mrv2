@@ -4,6 +4,7 @@
 
 #include "mrViewer.h"
 
+#include "mrvEdit/mrvEditAlgorithm.h"
 #include "mrvEdit/mrvEditCallbacks.h"
 #include "mrvEdit/mrvEditUtil.h"
 
@@ -60,6 +61,28 @@ namespace
     const char* kModule = "edit";
 }
 
+namespace
+{
+
+// We are not testing values outside of one million seconds.
+// At one million second, and double precision, the smallest
+// resolvable number that can be added to one million and return
+// a new value one million + epsilon is 5.82077e-11.
+//
+// This was calculated by searching iteratively for epsilon
+// around 1,000,000, with epsilon starting from 1 and halved
+// at every iteration, until epsilon when added to 1,000,000
+// resulted in 1,000,000.
+constexpr double double_epsilon = 5.82077e-11;
+
+inline bool
+isEqual(double a, double b)
+{
+    return (std::abs(a - b) <= double_epsilon);
+}
+
+} // namespace
+
 namespace mrv
 {
     using OTIO_NS::RationalTime;
@@ -72,6 +95,7 @@ namespace mrv
     using OTIO_NS::Timeline;
     using OTIO_NS::Track;
     using OTIO_NS::Transition;
+    using OTIO_NS::ErrorStatus;
 
     namespace
     {
@@ -121,6 +145,7 @@ namespace mrv
 
         RationalTime getTime(TimelinePlayer* player)
         {
+            player->stop();
             const auto& timeline_range = player->timeRange();
             const auto& startTime = timeline_range.start_time();
             const auto time = player->currentTime() - startTime;
@@ -488,6 +513,15 @@ namespace mrv
                     }
                 }
             }
+        }
+
+        bool isOTIOZ()
+        {
+            auto model = App::app->filesModel();
+            auto item = model->observeA()->get();
+            if (!item)
+                return false;
+            return file::isOTIOZ(item->path);
         }
 
         //! This routine makes paths absolute to /tmp directory if the archive
@@ -1000,7 +1034,14 @@ namespace mrv
         if (!timeline)
             return;
 
-        makePathsAbsolute(timeline, ui);
+        if (isOTIOZ())
+        {
+            makePathsToTemp(timeline, ui);
+        }
+        else
+        {
+            makePathsAbsolute(timeline, ui);
+        }
 
         const auto time = getTime(player);
 
@@ -1102,20 +1143,19 @@ namespace mrv
         if (!player || copiedFrames.empty())
             return;
 
-        player->stop();
-
         const auto time = getTime(player);
+
+        edit_store_undo(player, ui);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
+
         auto stack = timeline->tracks();
         if (!stack)
             return;
 
         auto tracks = stack->children();
-
-        edit_store_undo(player, ui);
 
         double videoRate = 0.F, sampleRate = 0.F;
 
@@ -1197,15 +1237,15 @@ namespace mrv
         if (!player || copiedFrames.empty())
             return;
 
-        player->stop();
+        const auto time = getTime(player);
+
+        edit_store_undo(player, ui);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
-        const auto time = getTime(player);
-        auto tracks = timeline->tracks()->children();
 
-        edit_store_undo(player, ui);
+        auto tracks = timeline->tracks()->children();
 
         double videoRate = 0.F, sampleRate = 0.F;
         for (const auto& frame : copiedFrames)
@@ -1231,17 +1271,27 @@ namespace mrv
         {
             auto item = dynamic_cast<Item*>(frame.item->clone());
             if (!item)
+            {
+                LOG_DEBUG("skipping item due to null");
                 continue;
+            }
+
             const int trackIndex = frame.trackIndex;
             if (trackIndex < 0 ||
                 static_cast<size_t>(trackIndex) >= tracks.size())
+            {
+                LOG_DEBUG("Skipping item due to bad trackIndex");
                 continue;
+            }
 
             auto track = OTIO_NS::dynamic_retainer_cast<Track>(tracks[trackIndex]);
             if (track->kind() != frame.kind)
+            {
+                LOG_DEBUG("Skipping item due to bad different track kind");
                 continue;
+            }
 
-            OTIO_NS::algo::insert(item, track, scaledTime);
+            mrv::algo::insert(item, track, scaledTime);
             frame.item = item;
         }
 
@@ -1266,8 +1316,6 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
-
-        player->stop();
 
         edit_store_undo(player, ui);
 

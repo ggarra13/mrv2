@@ -10,6 +10,7 @@ v1.7.8
 - Added a progress indicator when unzipping .otioz files for editing.
 - Cancelling saving of a session upon exit now also avoids exiting the application.
 - Core: Cleaned up Timeline code.
+- Edit: Editing clips is now faster (particularly from .otioz bundles).
 
 Fixes:
 
@@ -19,6 +20,7 @@ Fixes:
 - Thumbnail size selection on monitors with DPI higher than 100%.
 - A potential crash on the Vulkan backend on cleaning up thumbnail resources on program exit.
 - YUV_444P_U12 movies are no longer attempted to decode in hardware, like SolLevante Netflix demo clip.
+- Fixed Edit->Frame->Insert incorrectly leaving a wrong tail clip's range.
 
 Libraries:
 	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.
@@ -26,9 +28,6 @@ Libraries:
 	- ZSTD v0.17.0
 	- libvpx v1.17.0
   	
-
-
-
 v1.7.7	
 ======
 
