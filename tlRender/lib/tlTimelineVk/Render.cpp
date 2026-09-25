@@ -1017,22 +1017,6 @@ namespace tl
         {
             TLRENDER_P();
 
-            // ----------------------------------------------------------------
-            //  Pool initialization – create the pool on first use.
-            //
-            //  The pool is a member of Private:
-            //    std::shared_ptr<vlk::VAOPool> vaoPool;
-            //
-            //  Call  p.vaoPool->bind(p.frameIndex)  once per frame, e.g. in
-            //  Render::begin() - NOT here
-            // ----------------------------------------------------------------
-            if (!p.vaoPool)
-            {
-                VkDeviceSize slotSize =
-                    static_cast<VkDeviceSize>(64 * memory::megabyte);
-                p.vaoPool = vlk::VAOPool::create(ctx, slotSize);
-            }
-
             for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
             {
                 p.garbage[i].pipelines.reserve(20);
@@ -1105,7 +1089,6 @@ namespace tl
             p.fbo = fbo;
             p.renderPass = fbo->getClearRenderPass();
             p.frameIndex = frameIndex;
-            p.vaoPool->bind(frameIndex);
 
 
 

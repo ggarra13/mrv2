@@ -260,12 +260,6 @@ void mrv2_enums(py::module& m)
         .value("BakedSDR", timeline::HDRExportMode::BakedSDR)
         .export_values();
 
-    py::enum_<timeline::HDRExportMode>(image, "HDRExportMode")
-        .value("BakedHDR", timeline::HDRExportMode::BakedHDR)
-        .value("LinearHDR", timeline::HDRExportMode::LinearHDR)
-        .value("BakedSDR", timeline::HDRExportMode::BakedSDR)
-        .export_values();
-
 #ifdef TLRENDER_USD
     py::module usd = m.def_submodule("usd");
 

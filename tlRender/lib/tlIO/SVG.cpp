@@ -11,29 +11,37 @@ namespace tl
     namespace svg
     {
 
-        Plugin::Plugin() {}
-
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        void ReadPlugin::_init(const std::shared_ptr<log::System>& logSystem)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(
-                "SVG", {{".svg", io::FileType::Sequence}}, cache, logSystem);
+            IReadPlugin::_init(
+                "SVG",
+                { { ".svg", io::FileType::Sequence } },
+                logSystem);
+
+            logSystem->print(
+                "tl::svg::ReadPlugin",
+                string::Format(
+                    "\n"
+                    "    * Formats: {0}").arg(".svg"));
+        }
+
+        std::shared_ptr<ReadPlugin>
+        ReadPlugin::create(const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::shared_ptr<io::IDecode>
+        ReadPlugin::decode(const io::Options& options)
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return Decode::create();
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options)
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
         {
-            return Read::create(path, memory, options, _cache, _logSystem);
+            return "0.5";
         }
 
     } // namespace svg

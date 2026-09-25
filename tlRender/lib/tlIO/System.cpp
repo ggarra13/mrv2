@@ -8,6 +8,7 @@
 #include <tlIO/DPX.h>
 #include <tlIO/PPM.h>
 #include <tlIO/SGI.h>
+#include <tlIO/SVG.h>
 #if defined(TLRENDER_STB)
 #    include <tlIO/STB.h>
 #endif
@@ -68,6 +69,7 @@ namespace tl
                 _plugins.push_back(dpx::ReadPlugin::create(logSystem));
                 _plugins.push_back(ppm::ReadPlugin::create(logSystem));
                 _plugins.push_back(sgi::ReadPlugin::create(logSystem));
+                _plugins.push_back(svg::ReadPlugin::create(logSystem));
 #if defined(TLRENDER_EXR)
                 _plugins.push_back(exr::ReadPlugin::create(logSystem));
 #endif // TLRENDER_EXR

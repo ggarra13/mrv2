@@ -13,7 +13,7 @@ namespace tl
     namespace svg
     {
 
-        //! SVG reader.
+        //! SVG decoder.
         //!
         //! An SVG has no resolution of its own beyond the size the document
         //! asks for, so the size to rasterize at is settled when the decoder
@@ -26,73 +26,49 @@ namespace tl
         //!
         //! Giving one keeps the document's aspect ratio; giving neither uses
         //! the size the document asks for.
-        class Read : public io::ISequenceRead
+        class Decode : public io::IDecode
         {
         protected:
-            void _init(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
-
-            Read();
+            Decode();
 
         public:
-            virtual ~Read();
+            virtual ~Decode();
 
-            //! Create a new reader.
-            static std::shared_ptr<Read> create(
-                const file::Path&, const io::Options&,
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            //! Create a new decoder.
+            static std::shared_ptr<Decode> create();
 
-            //! Create a new reader.
-            static std::shared_ptr<Read> create(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            io::Info getInfo(
+                const std::string& fileName,
+                const file::MemoryRead* = nullptr) override;
 
-        protected:
-            io::Info _getInfo(
-                const std::string& fileName, const file::MemoryRead*) override;
-            io::VideoData _readVideo(
-                const std::string& fileName, const file::MemoryRead*,
-                const OTIO_NS::RationalTime&, const io::Options&) override;
+            io::VideoData readVideo(
+                const std::string& fileName,
+                const file::MemoryRead*,
+                const OTIO_NS::RationalTime&,
+                const io::Options& = io::Options()) override;
 
         private:
             math::Size2i _requestedSize;
         };
 
-        //! SVG plugin.
-        class Plugin : public io::IPlugin
+        //! SVG read plugin.
+        class ReadPlugin : public io::IReadPlugin
         {
         protected:
-            Plugin();
+            void _init(const std::shared_ptr<log::System>&);
+
+            ReadPlugin() = default;
 
         public:
             //! Create a new plugin.
-            static std::shared_ptr<Plugin> create(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            static std::shared_ptr<ReadPlugin> create(
+                const std::shared_ptr<log::System>&);
 
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const io::Options& = io::Options()) override;
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const std::vector<file::MemoryRead>&,
+            std::shared_ptr<io::IDecode> decode(
                 const io::Options& = io::Options()) override;
-            image::Info getWriteInfo(
-                const image::Info&,
-                const io::Options& = io::Options()) const override
-            {
-                image::Info out;
-                return out;
-            }
-            std::shared_ptr<io::IWrite> write(
-                const file::Path&, const io::Info&,
-                const io::Options& = io::Options()) override
-            {
-                std::shared_ptr<io::IWrite> out;
-                return out;
-            }
+
+            std::string getPluginInfo(
+                const io::Options& = io::Options()) const override;
         };
     } // namespace svg
 } // namespace tl

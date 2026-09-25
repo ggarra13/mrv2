@@ -22,6 +22,10 @@
 #include <libdovi/rpu_parser.h>
 #endif
 
+#ifdef TLRENDER_DOVI
+#include <libdovi/rpu_parser.h>
+#endif
+
 extern "C"
 {
 

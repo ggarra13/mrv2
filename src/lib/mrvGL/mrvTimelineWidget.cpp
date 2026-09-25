@@ -288,12 +288,13 @@ namespace mrv
             Fl::remove_timeout(timerEvent_cb, this);
         }
 
-        std::vector<const OTIO_NS::Item* > TimelineWidget::getSelectedItems() const
+        std::vector<timeline::MoveData>
+        TimelineWidget::getSelectedItems() const
         {
             return _p->timelineWidget->getSelectedItems();
         }
 
-        std::vector<const OTIO_NS::Transition* >
+        std::vector<timeline::MoveData>
         TimelineWidget::getSelectedTransitions() const
         {
             return _p->timelineWidget->getSelectedTransitions();

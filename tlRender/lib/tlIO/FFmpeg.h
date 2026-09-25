@@ -219,7 +219,6 @@ namespace tl
 
         private:
             void _run();
->>>>>>> otioZ
 
             TLRENDER_PRIVATE();
         };
@@ -241,10 +240,6 @@ namespace tl
             static std::shared_ptr<Write> create(
                 const file::Path&, const io::Info&, const io::Options&,
                 const std::shared_ptr<log::System>&);
-
-            void setHDR(const image::HDRData&) override;
-
-            void writeHeader() override;
 
             void setHDR(const image::HDRData&) override;
 

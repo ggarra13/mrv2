@@ -1067,8 +1067,7 @@ namespace mrv
                         }
                     }
 
-                    if (videoTime.has_value() &&
-                        videoTime->contains(currentTime))
+                    if (videoTime.contains(currentTime))
                     {
                         const auto videoFrame = view->getVideoFrame();
                         if (!videoFrame.empty() &&

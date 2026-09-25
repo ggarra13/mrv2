@@ -97,43 +97,18 @@ namespace tl
             }
         }
 
-        Read::Read()
+        Decode::Decode()
         {}
 
-        Read::~Read()
+        Decode::~Decode()
+        {}
+
+        std::shared_ptr<Decode> Decode::create()
         {
-            _finish();
+            return std::shared_ptr<Decode>(new Decode);
         }
 
-        void Read::_init(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            ISequenceRead::_init(path, memory, options, cache, logSystem);
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const io::Options& options,
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, {}, options, cache, logSystem);
-            return out;
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, memory, options, cache, logSystem);
-            return out;
-        }
-
-        io::Info Read::_getInfo(
+        io::Info Decode::getInfo(
             const std::string& fileName,
             const file::MemoryRead* memory)
         {
@@ -141,15 +116,11 @@ namespace tl
             io::Info out;
             const image::Size size = renderSize(*svg, _requestedSize, fileName);
             out.video.push_back(imageInfo(*svg, size));
-            out.videoTime =
-                OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
-                    OTIO_NS::RationalTime(_startFrame, _defaultSpeed),
-                    OTIO_NS::RationalTime(_endFrame, _defaultSpeed));
             return out;
         }
 
 
-        io::VideoData Read::_readVideo(
+        io::VideoData Decode::readVideo(
             const std::string& fileName,
             const file::MemoryRead* memory,
             const OTIO_NS::RationalTime& time,

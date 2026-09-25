@@ -110,9 +110,9 @@ if(BUILD_PYTHON)
 
     if (EXISTS "${CMAKE_INSTALL_PREFIX}/python/opentimelineio")
 	if (UNIX)
-	    install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
-		DESTINATION lib/python${MRV2_PYTHON_VERSION}/site-packages/
-		COMPONENT applications)
+            install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
+	        DESTINATION lib/python${MRV2_PYTHON_VERSION}/site-packages/
+	        COMPONENT applications)
 	else()
             install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
 		DESTINATION bin/Lib/site-packages/
