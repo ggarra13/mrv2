@@ -1072,6 +1072,32 @@ namespace tl
             // mediaByPath and mediaByNormalPath, which used to be built only
             // once, in _init(), and were left pointing at the composables
             // and media references of whichever timeline was previously set.
+            // ABA hazard: a media reference in the *new* timeline could be
+            // allocated at the same address as a freed one from the old
+            // timeline and be wrongly treated as already resolved, already
+            // known-unavailable, or already read into memFiles.
+            //
+            // The zip reader and its memory mapped file are only good for
+            // resolving byte ranges for those same, now-cleared, bundle
+            // media references -- nothing maps the new timeline's media
+            // references into the bundle the way _init() does when it first
+            // opens an .otioz -- so they are dropped here too rather than
+            // left open for no reason.
+            {
+                std::unique_lock<std::mutex> lock(p.memFilesMutex);
+                p.memFiles.clear();
+                p.bundleMediaReferences.clear();
+                p.unavailableMediaReferences.clear();
+            }
+            p.zipReader.reset();
+            p.fileIO.reset();
+
+            // The request thread and read pool are stopped, so it is now
+            // safe to swap in the new timeline and rebuild everything
+            // derived from it -- including trimmedRangeInParent, trackItems,
+            // mediaByPath and mediaByNormalPath, which used to be built only
+            // once, in _init(), and were left pointing at the composables
+            // and media references of whichever timeline was previously set.
             p.otioTimeline = value;
             p.indexTimeline();
             if (p.otioTimeline.value)
@@ -1347,6 +1373,10 @@ namespace tl
         {
             TLRENDER_P();
 
+            std::vector<std::string> out;
+            if (!p.otioTimeline.value)
+                return out;
+
             std::set<std::string> keys;
             for (const auto& otioClip :
                      p.otioTimeline.value->find_children<OTIO_NS::Clip>())
@@ -1356,7 +1386,8 @@ namespace tl
                     keys.insert(i.first);
                 }
             }
-            return std::vector<std::string>(keys.begin(), keys.end());
+            out = std::vector<std::string>(keys.begin(), keys.end());
+            return out;
         }
 
         std::string Timeline::getMediaReferenceKey() const
