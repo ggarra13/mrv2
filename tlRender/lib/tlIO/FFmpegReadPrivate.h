@@ -45,6 +45,7 @@ namespace tl
             OTIO_NS::RationalTime startTime = time::invalidTime;
             bool yuvToRGBConversion = false;
             bool hwAccel = false;
+            std::string hwDriver = "";
             bool fastYUV420PConversion = true;
             audio::Info audioConvertInfo;
             int audioTrack = -1;
@@ -86,6 +87,7 @@ namespace tl
             std::shared_ptr<image::Image> popBuffer();
 
         private:
+            void _close();
             int _decode(
                 const bool backwards, const OTIO_NS::RationalTime& targetTime,
                 OTIO_NS::RationalTime& currentTime);
@@ -93,6 +95,7 @@ namespace tl
                        std::shared_ptr<AVFrame>);
             float _getRotation(const AVStream*);
             void _initHwAccel(const AVCodec*);
+            void _initSws(AVPixelFormat srcFormat);
             static AVPixelFormat _getHwFormat(AVCodecContext*,
                                               const AVPixelFormat*);
 
@@ -125,10 +128,15 @@ namespace tl
             AVPixelFormat _avInputPixelFormat = AV_PIX_FMT_NONE;
             AVPixelFormat _avOutputPixelFormat = AV_PIX_FMT_NONE;
             SwsContext* _swsContext = nullptr;
-            AVBufferRef* _hwDeviceContext = nullptr;
-            AVPixelFormat _hwPixelFormat = AV_PIX_FMT_NONE;
             std::list<std::shared_ptr<image::Image> > _buffer;
             bool _eof = false;
+
+            // Hardware accelerated information.
+            bool _hwAccel = false;
+            bool _hwLogged = false;
+            AVBufferRef* _hwDeviceContext = nullptr;
+            AVPixelFormat _hwPixelFormat = AV_PIX_FMT_NONE;
+            AVFrame* _swFrame = nullptr;
         };
 
         class ReadAudio
@@ -245,7 +253,7 @@ namespace tl
             };
             struct AudioRequest
             {
-                OTIO_NS::TimeRange timeRange;
+                OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
                 io::Options options;
                 std::promise<io::AudioData> promise;
             };
