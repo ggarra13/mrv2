@@ -248,12 +248,6 @@ namespace tl
                 const OTIO_NS::Clip*,
                 const std::string&);
 
-            //! Get the memory offset in bytes for a media reference bundled in an
-            //! .otioz file.
-            //! Returns std::nullopt if the reference is not part of a bundle or cannot
-            //! be found.
-            std::optional<size_t> getBundleMemoryOffset(const OTIO_NS::MediaReference*) const;
-
             //! Get the media reference a clip is read from, honoring the keys
             //! set above.
             OTIO_NS::MediaReference* getMediaReference(

@@ -839,7 +839,15 @@ namespace tl
         {
             TLRENDER_P();
 
-            p.otioTimeline = value;
+
+            {
+                std::unique_lock<std::mutex> lock(memFilesMutex);
+                memFiles.clear();
+                bundleMediaReferences.clear();
+                unavailableMediaReferences.clear();
+
+                p.otioTimeline = value;
+            }
 
             if (p.otioTimeline)
             {
@@ -866,46 +874,6 @@ namespace tl
         const Options& Timeline::getOptions() const
         {
             return _p->options;
-        }
-
-        std::optional<size_t>
-        Timeline::getBundleMemoryOffset(const OTIO_NS::MediaReference* otioRef) const
-        {
-            TLRENDER_P();
-
-            // Verify via existing bookkeeping that this reference is part of the bundle
-            if (p.bundleMediaReferences.find(otioRef) == p.bundleMediaReferences.end())
-            {
-                return std::nullopt;
-            }
-
-            // Determine the internal file path for the media reference
-            std::string mediaFileName;
-            if (auto externalReference = dynamic_cast<const OTIO_NS::ExternalReference*>(otioRef))
-            {
-                mediaFileName = file::Path(url::decode(externalReference->target_url())).get();
-            }
-            else if (auto imageSeqReference = dynamic_cast<const OTIO_NS::ImageSequenceReference*>(otioRef))
-            {
-                // For sequences, grab the offset using the first frame
-                if (imageSeqReference->number_of_images_in_sequence() > 0)
-                {
-                    mediaFileName = file::Path(
-                        url::decode(imageSeqReference->target_url_for_image_number(0))).get();
-                }
-            }
-
-            // If a valid path is derived, query the ZipReader for its offset inside the memory block
-            if (!mediaFileName.empty() && p.zipReader)
-            {
-                const auto entry = p.zipReader->find(mediaFileName);
-                if (entry.has_value())
-                {
-                    return entry->offset;
-                }
-            }
-
-            return std::nullopt;
         }
 
         template<typename T>
