@@ -124,8 +124,8 @@ namespace tl
             // void keyPressEvent(ui::KeyEvent&) override;
             // void keyReleaseEvent(ui::KeyEvent&) override;
 
-            std::vector<const OTIO_NS::Item*> getSelectedItems() const;
-            std::vector<const OTIO_NS::Transition*> getSelectedTransitions() const;
+            std::vector<timeline::MoveData> getSelectedItems() const;
+            std::vector<timeline::MoveData> getSelectedTransitions() const;
 
 
         protected:

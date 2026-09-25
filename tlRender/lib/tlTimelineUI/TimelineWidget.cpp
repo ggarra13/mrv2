@@ -811,22 +811,23 @@ namespace tl
             }
         }
 
-        std::vector<const OTIO_NS::Item*> TimelineWidget::getSelectedItems() const
+        std::vector<timeline::MoveData>
+        TimelineWidget::getSelectedItems() const
         {
             TLRENDER_P();
 
-            std::vector<const OTIO_NS::Item* > out;
+            std::vector<timeline::MoveData> out;
             if (p.timelineItem)
                 out = p.timelineItem->getSelectedItems();
             return out;
         }
 
-        std::vector<const OTIO_NS::Transition*>
+        std::vector<timeline::MoveData>
         TimelineWidget::getSelectedTransitions() const
         {
             TLRENDER_P();
 
-            std::vector<const OTIO_NS::Transition* > out;
+            std::vector<timeline::MoveData> out;
             if (p.timelineItem)
                 out = p.timelineItem->getSelectedTransitions();
             return out;

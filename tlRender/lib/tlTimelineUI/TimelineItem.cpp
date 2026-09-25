@@ -1330,30 +1330,34 @@ namespace tl
             return out;
         }
 
-        std::vector<const OTIO_NS::Item*>
+        std::vector<timeline::MoveData>
         TimelineItem::getSelectedItems() const
         {
             TLRENDER_P();
 
-            std::vector<const OTIO_NS::Item*> out;
+            std::vector<timeline::MoveData> out;
             for (const auto& item : p.mouse.items)
             {
-                if (auto clip = dynamic_cast<const IBasicItem*>(item->p.get()))
-                    out.push_back(clip->getOtioItem());
+                timeline::MoveData move;
+                move.fromTrack = move.toTrack = item->track;
+                move.fromIndex = move.toIndex = item->index;
+                out.push_back(move);
             }
             return out;
         }
 
-        std::vector<const OTIO_NS::Transition*>
+        std::vector<timeline::MoveData>
         TimelineItem::getSelectedTransitions() const
         {
             TLRENDER_P();
 
-            std::vector<const OTIO_NS::Transition*> out;
+            std::vector<timeline::MoveData> out;
             for (const auto& item : p.mouse.items)
             {
-                if (auto transition = dynamic_cast<const TransitionItem*>(item->p.get()))
-                    out.push_back(transition->getOtioItem());
+                timeline::MoveData move;
+                move.fromTrack = move.toTrack = item->track;
+                move.fromIndex = move.toIndex = item->index;
+                out.push_back(move);
             }
             return out;
         }

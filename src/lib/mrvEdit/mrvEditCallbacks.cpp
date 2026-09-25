@@ -100,6 +100,7 @@ namespace mrv
         static std::vector<UndoRedo> undoBuffer;
         static std::vector<UndoRedo> redoBuffer;
 
+
         std::vector<Composition*> getTracks(OTIO_NS::Timeline* timeline)
         {
             std::vector<Composition*> out;
@@ -119,6 +120,60 @@ namespace mrv
         {
             auto timeline = player->getTimeline();
             return getTracks(timeline);
+        }
+
+        OTIO_NS::Item* toItem(OTIO_NS::Timeline* timeline,
+                              const timeline::MoveData& move)
+        {
+            OTIO_NS::Item* out = nullptr;
+            if (move.fromTrack >= 0 &&
+                move.fromTrack < timeline->tracks()->children().size())
+            {
+                if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
+                        timeline->tracks()->children()[move.fromTrack]))
+                {
+                    out = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(track->children()[move.fromIndex]);
+                }
+            }
+            return out;
+        }
+
+        OTIO_NS::Transition* toTransition(OTIO_NS::Timeline* timeline,
+                                          const timeline::MoveData& move)
+        {
+            OTIO_NS::Transition* out = nullptr;
+            if (move.fromTrack >= 0 &&
+                move.fromTrack < timeline->tracks()->children().size())
+            {
+                if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
+                        timeline->tracks()->children()[move.fromTrack]))
+                {
+                    out = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Transition>(track->children()[move.fromIndex]);
+                }
+            }
+            return out;
+        }
+
+        std::vector<OTIO_NS::Transition*> getSelectedTransitions(OTIO_NS::Timeline* timeline,
+                                                    const std::vector<timeline::MoveData>& moves)
+        {
+            std::vector<OTIO_NS::Transition*> out;
+            for (auto move : moves)
+            {
+                out.push_back(toTransition(timeline, move));
+            }
+            return out;
+        }
+
+        std::vector<OTIO_NS::Item*> getSelectedItems(OTIO_NS::Timeline* timeline,
+                                                     const std::vector<timeline::MoveData>& moves)
+        {
+            std::vector<OTIO_NS::Item*> out;
+            for (auto move : moves)
+            {
+                out.push_back(toItem(timeline, move));
+            }
+            return out;
         }
 
         OTIO_NS::RationalTime getTime(TimelinePlayer* player)
@@ -1751,6 +1806,8 @@ namespace mrv
 
         const OTIO_NS::RationalTime time = getTime(player);
 
+        auto items = ui->uiTimeline->getSelectedItems();
+
         edit_store_undo(player, ui);
 
         auto compositions = getTracks(player);
@@ -1759,8 +1816,7 @@ namespace mrv
         if (!timeline)
             return;
 
-        auto selected = ui->uiTimeline->getSelectedItems();
-
+        auto selected = getSelectedItems(timeline, items);
 
         bool modified = false;
         OTIO_NS::ErrorStatus errorStatus;
@@ -1823,6 +1879,8 @@ namespace mrv
             return;
 
         const OTIO_NS::RationalTime time = getTime(player);
+        auto items = ui->uiTimeline->getSelectedItems();
+        auto transitions = ui->uiTimeline->getSelectedTransitions();
 
         edit_store_undo(player, ui);
 
@@ -1835,7 +1893,7 @@ namespace mrv
         bool modified = false;
 
         OTIO_NS::ErrorStatus errorStatus;
-        auto selectedItems = ui->uiTimeline->getSelectedItems();
+        auto selectedItems = getSelectedItems(timeline, items);
 
         for (auto& item : selectedItems)
         {
@@ -1867,7 +1925,7 @@ namespace mrv
             }
         }
 
-        auto selectedTransitions = ui->uiTimeline->getSelectedTransitions();
+        auto selectedTransitions = getSelectedTransitions(timeline, transitions);
 
         for (auto& item : selectedTransitions)
         {
@@ -1923,6 +1981,7 @@ namespace mrv
             return;
 
         const OTIO_NS::RationalTime time = getTime(player);
+        auto items = ui->uiTimeline->getSelectedItems();
 
         edit_store_undo(player, ui);
 
@@ -1932,8 +1991,7 @@ namespace mrv
         if (!timeline)
             return;
 
-
-        auto selected = ui->uiTimeline->getSelectedItems();
+        auto selected = getSelectedItems(timeline, items);
 
         bool modified = false;
         OTIO_NS::ErrorStatus errorStatus;
@@ -2110,13 +2168,15 @@ namespace mrv
         const auto& time = getTime(player);
         auto compositions = getTracks(player);
 
+        auto items = ui->uiTimeline->getSelectedItems();
+
+        edit_store_undo(player, ui);
+
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
 
-        edit_store_undo(player, ui);
-
-        auto selected = ui->uiTimeline->getSelectedItems();
+        auto selected = getSelectedItems(timeline, items);
 
         bool modified = false;
         OTIO_NS::ErrorStatus errorStatus;
@@ -2240,14 +2300,15 @@ namespace mrv
         if (!player)
             return;
 
-        // This invalidates the selection below.
-        // edit_store_undo(player, ui);
+        auto items = ui->uiTimeline->getSelectedItems();
+        edit_store_undo(player, ui);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
 
-        auto selection = ui->uiTimeline->getSelectedItems();
+        auto selection = getSelectedItems(timeline, items);
+
         if (selection.size() != 2 && selection.size() != 4)
         {
             std::string err =
