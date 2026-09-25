@@ -240,7 +240,7 @@ namespace tl
         void prefetch(const void*, size_t);
 
         //! Read the contents from a file.
-        std::string readContents(const std::shared_ptr<FileIO>&);
+        std::string read(const std::shared_ptr<FileIO>&);
 
         //! Read a word from a file.
         void readWord(
