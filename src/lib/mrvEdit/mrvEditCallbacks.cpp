@@ -652,12 +652,15 @@ namespace mrv
                     // Change paths in OTIO timeline to point to /tmp/media
                     makePathsToTemp(timeline, ui);
 
-                    // Reset the item timeline::Timeline
+                    // Reset the item's timeline::Timeline
                     item->timeline.reset();
 
                     // Needed to reload the movie and change it from .otioz to
                     // EDL0x****.otio
                     reloadMedia = true;
+
+                    // Needed to refresh the file caches.
+                    refreshCache = true;
                 }
             }
 
