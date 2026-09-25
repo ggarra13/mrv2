@@ -1,1348 +1,66 @@
-// SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2024 Darby Johnston
-// Copyright (c) 2025-Present Gonzalo Garramuño
-// All rights reserved.
 
 #include "ThumbnailSystem.h"
-
-#include <tlTimeline/Timeline.h>
-
-#include <tlIO/System.h>
-
-#ifdef OPENGL_BACKEND
-#    include <tlTimelineGL/Render.h>
-#    include <tlGL/GL.h>
-#    include <tlGL/GLFWWindow.h>
-#    include <tlGL/OffscreenBuffer.h>
-#endif
-
-#ifdef VULKAN_BACKEND
-#    include <tlTimelineVk/Render.h>
-#    include <tlVk/Vk.h>
-#    include <tlVk/OffscreenBuffer.h>
-#    include <FL/Fl_Vk_Utils.H>
-#    include <FL/Fl.H>
-#endif
+#include "ThumbnailSystemPrivate.h"
 
 #include <tlCore/AudioResample.h>
-#include <tlCore/LRUCache.h>
-#include <tlCore/StringFormat.h>
-
-
-#include <sstream>
 
 namespace tl
 {
     namespace TIMELINEUI
     {
+        bool ThumbnailCacheOptions::operator == (const ThumbnailCacheOptions& other) const
+        {
+            return
+                thumbnailMB == other.thumbnailMB &&
+                waveformMB == other.waveformMB;
+        }
+
+        bool ThumbnailCacheOptions::operator != (const ThumbnailCacheOptions& other) const
+        {
+            return !(*this == other);
+        }
+
         namespace
         {
-            const size_t ioCacheMax = 16;
-        }
-
-        struct ThumbnailCache::Private
-        {
-            size_t max = 1000;
-            memory::LRUCache<std::string, io::Info> info;
-            memory::LRUCache<std::string, std::shared_ptr<image::Image> >
-                thumbnails;
-            memory::LRUCache<std::string, std::shared_ptr<geom::TriangleMesh2> >
-                waveforms;
-            std::mutex mutex;
-        };
-
-        void
-        ThumbnailCache::_init(const std::shared_ptr<system::Context>& context)
-        {
-            _maxUpdate();
-        }
-
-        ThumbnailCache::ThumbnailCache() :
-            _p(new Private)
-        {
-        }
-
-        ThumbnailCache::~ThumbnailCache() {}
-
-        std::shared_ptr<ThumbnailCache>
-        ThumbnailCache::create(const std::shared_ptr<system::Context>& context)
-        {
-            auto out = std::shared_ptr<ThumbnailCache>(new ThumbnailCache);
-            out->_init(context);
-            return out;
-        }
-
-        size_t ThumbnailCache::getMax() const
-        {
-            return _p->max;
-        }
-
-        void ThumbnailCache::setMax(size_t value)
-        {
-            TLRENDER_P();
-            if (value == p.max)
-                return;
-            p.max = value;
-            _maxUpdate();
-        }
-
-        size_t ThumbnailCache::getSize() const
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            return p.info.getSize() + p.thumbnails.getSize() +
-                   p.waveforms.getSize();
-        }
-
-        float ThumbnailCache::getPercentage() const
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            return (p.info.getSize() + p.thumbnails.getSize() +
-                    p.waveforms.getSize()) /
-                   static_cast<float>(
-                       p.info.getMax() + p.thumbnails.getMax() +
-                       p.waveforms.getMax()) *
-                   100.F;
-        }
-
-        std::string ThumbnailCache::getInfoKey(
-            const file::Path& path, const io::Options& options)
-        {
-            std::vector<std::string> s;
-            s.push_back(path.get());
-            for (const auto& i : options)
+            std::string getInfoKey(
+                const file::Path& path,
+                const file::Path& mediaPath,
+                const io::Options& options)
             {
-                s.push_back(
-                    string::Format("{0}:{1}").arg(i.first).arg(i.second));
-            }
-            return string::join(s, ';');
-        }
-
-        void
-        ThumbnailCache::addInfo(const std::string& key, const io::Info& info)
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            p.info.add(key, info);
-        }
-
-        bool ThumbnailCache::containsInfo(const std::string& key)
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            return p.info.contains(key);
-        }
-
-        bool
-        ThumbnailCache::getInfo(const std::string& key, io::Info& info) const
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            return p.info.get(key, info);
-        }
-
-        std::string ThumbnailCache::getThumbnailKey(
-            int height, const file::Path& path, const OTIO_NS::RationalTime& time,
-            const io::Options& options)
-        {
-            std::vector<std::string> s;
-            s.push_back(string::Format("{0}").arg(height));
-            s.push_back(path.get());
-            s.push_back(string::Format("{0}").arg(time));
-            for (const auto& i : options)
-            {
-                s.push_back(
-                    string::Format("{0}:{1}").arg(i.first).arg(i.second));
-            }
-            return string::join(s, ';');
-        }
-
-        void ThumbnailCache::addThumbnail(
-            const std::string& key,
-            const std::shared_ptr<image::Image>& thumbnail)
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            p.thumbnails.add(key, thumbnail);
-        }
-
-        bool ThumbnailCache::containsThumbnail(const std::string& key)
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            return p.thumbnails.contains(key);
-        }
-
-        bool ThumbnailCache::getThumbnail(
-            const std::string& key,
-            std::shared_ptr<image::Image>& thumbnail) const
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            return p.thumbnails.get(key, thumbnail);
-        }
-
-        std::string ThumbnailCache::getWaveformKey(
-            const math::Size2i& size, const file::Path& path,
-            const OTIO_NS::TimeRange& timeRange, const io::Options& options)
-        {
-            std::vector<std::string> s;
-            s.push_back(string::Format("{0}").arg(size));
-            s.push_back(path.get());
-            s.push_back(string::Format("{0}").arg(timeRange));
-            for (const auto& i : options)
-            {
-                s.push_back(
-                    string::Format("{0}:{1}").arg(i.first).arg(i.second));
-            }
-            return string::join(s, ';');
-        }
-
-        void ThumbnailCache::addWaveform(
-            const std::string& key,
-            const std::shared_ptr<geom::TriangleMesh2>& waveform)
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            p.waveforms.add(key, waveform);
-        }
-
-        bool ThumbnailCache::containsWaveform(const std::string& key)
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            return p.waveforms.contains(key);
-        }
-
-        bool ThumbnailCache::getWaveform(
-            const std::string& key,
-            std::shared_ptr<geom::TriangleMesh2>& waveform) const
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            return p.waveforms.get(key, waveform);
-        }
-
-        void ThumbnailCache::_maxUpdate()
-        {
-            TLRENDER_P();
-            std::unique_lock<std::mutex> lock(p.mutex);
-            p.info.setMax(p.max);
-            p.thumbnails.setMax(p.max);
-            p.waveforms.setMax(p.max);
-        }
-
-        struct ThumbnailGenerator::Private
-        {
-            std::weak_ptr<system::Context> context;
-            std::shared_ptr<ThumbnailCache> cache;
-#ifdef OPENGL_BACKEND
-            std::shared_ptr<gl::GLFWWindow> window;
-#endif
-            uint64_t requestId = 0;
-
-            struct InfoRequest
-            {
-                uint64_t id = 0;
-                file::Path path;
-                std::vector<file::MemoryRead> memoryRead;
-                io::Options options;
-                std::promise<io::Info> promise;
-            };
-
-            struct ThumbnailRequest
-            {
-                uint64_t id = 0;
-                file::Path path;
-                std::vector<file::MemoryRead> memoryRead;
-                int height = 0;
-                OTIO_NS::RationalTime time = time::invalidTime;
-                std::string mediaReferenceKey;
-                io::Options options;
-                std::promise<std::shared_ptr<image::Image> > promise;
-            };
-
-            struct WaveformRequest
-            {
-                uint64_t id = 0;
-                file::Path path;
-                std::vector<file::MemoryRead> memoryRead;
-                math::Size2i size;
-                OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
-                std::string mediaReferenceKey;
-                io::Options options;
-                std::promise<std::shared_ptr<geom::TriangleMesh2> > promise;
-            };
-
-            struct InfoMutex
-            {
-                std::list<std::shared_ptr<InfoRequest> > requests;
-                bool stopped = false;
-                std::mutex mutex;
-            };
-            InfoMutex infoMutex;
-
-            struct ThumbnailMutex
-            {
-                std::list<std::shared_ptr<ThumbnailRequest> > requests;
-                bool stopped = false;
-                std::mutex mutex;
-            };
-            ThumbnailMutex thumbnailMutex;
-
-            struct WaveformMutex
-            {
-                std::list<std::shared_ptr<WaveformRequest> > requests;
-                bool stopped = false;
-                std::mutex mutex;
-            };
-            WaveformMutex waveformMutex;
-
-            struct InfoThread
-            {
-                std::condition_variable cv;
-                std::thread thread;
-                std::atomic<bool> running;
-            };
-            InfoThread infoThread;
-
-            struct ThumbnailThread
-            {
-#ifdef OPENGL_BACKEND
-                std::shared_ptr<timeline_gl::Render> render;
-                std::shared_ptr<gl::OffscreenBuffer> buffer;
-#endif
-#ifdef VULKAN_BACKEND
-                std::shared_ptr<timeline_vlk::Render> render;
-                std::shared_ptr<vlk::OffscreenBuffer> buffer;
-                VkCommandBuffer cmd = VK_NULL_HANDLE;
-                VkCommandPool commandPool = VK_NULL_HANDLE;
-                uint32_t frameIndex = 0;
-#endif
-                memory::LRUCache<std::string, std::shared_ptr<io::IRead> >
-                    ioCache;
-                std::condition_variable cv;
-                std::thread thread;
-                std::atomic<bool> running;
-            };
-            ThumbnailThread thumbnailThread;
-
-            struct WaveformThread
-            {
-                memory::LRUCache<std::string, std::shared_ptr<io::IRead> >
-                    ioCache;
-                std::condition_variable cv;
-                std::thread thread;
-                std::atomic<bool> running;
-            };
-            WaveformThread waveformThread;
-        };
-
-#ifdef OPENGL_BACKEND
-        void ThumbnailGenerator::_init(
-            const std::shared_ptr<ThumbnailCache>& cache,
-            const std::shared_ptr<system::Context>& context,
-            const std::shared_ptr<gl::GLFWWindow>& window)
-        {
-            TLRENDER_P();
-
-            p.context = context;
-
-            p.cache = cache;
-
-            p.window = window;
-            if (!p.window)
-            {
-                p.window = gl::GLFWWindow::create(
-                    "tl::TIMELINEUI::ThumbnailGenerator", math::Size2i(1, 1), context,
-                    static_cast<int>(gl::GLFWWindowOptions::kNone));
-            }
-
-            _startThreads();
-        }
-
-        ThumbnailGenerator::ThumbnailGenerator() :
-            _p(new Private)
-        {
-        }
-
-        void ThumbnailGenerator::_startThreads()
-        {
-            TLRENDER_P();
-
-            p.infoThread.running = true;
-            p.infoThread.thread = std::thread(
-                [this]
+                std::stringstream ss;
+                ss << path.get() << ";" << mediaPath.get() << ";";
+                for (const auto& i : options)
                 {
-                    TLRENDER_P();
-                    while (p.infoThread.running)
-                    {
-                        _infoRun();
-                    }
-                    {
-                        std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
-                        p.infoMutex.stopped = true;
-                    }
-                    _infoCancel();
-                });
-
-            p.thumbnailThread.ioCache.setMax(ioCacheMax);
-            p.thumbnailThread.running = true;
-            p.thumbnailThread.thread = std::thread(
-                [this]
-                {
-                    TLRENDER_P();
-                    p.window->makeCurrent();
-                    if (auto context = p.context.lock())
-                    {
-                        p.thumbnailThread.render =
-                            timeline_gl::Render::create(context);
-                    }
-                    while (p.thumbnailThread.running)
-                    {
-                        _thumbnailRun();
-                    }
-                    {
-                        std::unique_lock<std::mutex> lock(
-                            p.thumbnailMutex.mutex);
-                        p.thumbnailMutex.stopped = true;
-                    }
-                    p.thumbnailThread.buffer.reset();
-                    p.thumbnailThread.render.reset();
-                    p.window->doneCurrent();
-                    _thumbnailCancel();
-                });
-
-            p.waveformThread.ioCache.setMax(ioCacheMax);
-            p.waveformThread.running = true;
-            p.waveformThread.thread = std::thread(
-                [this]
-                {
-                    TLRENDER_P();
-                    while (p.waveformThread.running)
-                    {
-                        _waveformRun();
-                    }
-                    {
-                        std::unique_lock<std::mutex> lock(
-                            p.waveformMutex.mutex);
-                        p.waveformMutex.stopped = true;
-                    }
-                    _waveformCancel();
-                });
-        }
-#endif
-
-#ifdef VULKAN_BACKEND
-
-        void ThumbnailGenerator::_init(
-            const std::shared_ptr<ThumbnailCache>& cache,
-            const std::shared_ptr<system::Context>& context)
-        {
-            TLRENDER_P();
-
-            p.context = context;
-
-            p.cache = cache;
-
-            _startThreads();
-
-        }
-
-        void ThumbnailGenerator::_startThreads()
-        {
-            TLRENDER_P();
-
-            p.infoThread.running = true;
-            p.infoThread.thread = std::thread(
-                [this]
-                    {
-                        TLRENDER_P();
-                        while (p.infoThread.running)
-                        {
-                            _infoRun();
-                        }
-                        {
-                            std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
-                            p.infoMutex.stopped = true;
-                        }
-                        _infoCancel();
-                    });
-
-            p.thumbnailThread.ioCache.setMax(ioCacheMax);
-            p.thumbnailThread.running = true;
-            p.thumbnailThread.thread = std::thread(
-                [this]
-                    {
-                        TLRENDER_P();
-
-                        while (p.thumbnailThread.running)
-                        {
-                            _thumbnailRun();
-                        }
-
-                        {
-                            std::unique_lock<std::mutex> lock(
-                                p.thumbnailMutex.mutex);
-                            p.thumbnailMutex.stopped = true;
-                        }
-                        VkDevice device = ctx.device;
-                        if (device != VK_NULL_HANDLE &&
-                            p.thumbnailThread.commandPool != VK_NULL_HANDLE)
-                        {
-                            {
-                                std::lock_guard mutex(ctx.queue_mutex());
-                                vkDeviceWaitIdle(device);
-                            }
-
-                            VkCommandPool& commandPool = p.thumbnailThread.commandPool;
-
-                            vkFreeCommandBuffers(device, commandPool, 1, &p.thumbnailThread.cmd);
-                            p.thumbnailThread.cmd = VK_NULL_HANDLE;
-
-                            vkDestroyCommandPool(device,
-                                                 p.thumbnailThread.commandPool,
-                                                 nullptr);
-                            p.thumbnailThread.commandPool = VK_NULL_HANDLE;
-
-                        }
-                        p.thumbnailThread.buffer.reset();
-                        p.thumbnailThread.render.reset();
-                        _thumbnailCancel();
-                    });
-
-            p.waveformThread.ioCache.setMax(ioCacheMax);
-            p.waveformThread.running = true;
-            p.waveformThread.thread = std::thread(
-                [this]
-                    {
-                        TLRENDER_P();
-
-                        while (p.waveformThread.running)
-                        {
-                            _waveformRun();
-                        }
-                        {
-                            std::unique_lock<std::mutex> lock(
-                                p.waveformMutex.mutex);
-                            p.waveformMutex.stopped = true;
-                        }
-                        _waveformCancel();
-                    });
-        }
-
-        ThumbnailGenerator::ThumbnailGenerator(Fl_Vk_Context& ctx) :
-            ctx(ctx),
-            _p(new Private)
-        {
-        }
-
-#endif
-        ThumbnailGenerator::~ThumbnailGenerator()
-        {
-            _exitThreads();
-        }
-
-        void ThumbnailGenerator::_exitThreads()
-        {
-            TLRENDER_P();
-
-            // Stop info thread
-            {
-                std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
-                p.infoThread.running = false;
-            }
-            p.infoThread.cv.notify_one();
-            if (p.infoThread.thread.joinable())
-            {
-                p.infoThread.thread.join();
-            }
-
-            // Stop thumbnail thread
-            {
-                std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
-                p.thumbnailThread.running = false;
-            }
-            p.thumbnailThread.cv.notify_one();
-            if (p.thumbnailThread.thread.joinable())
-            {
-                p.thumbnailThread.thread.join();
-            }
-
-            // Stop waveform thread
-            {
-                std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
-                p.waveformThread.running = false;
-            }
-            p.waveformThread.cv.notify_one();
-            if (p.waveformThread.thread.joinable())
-            {
-                p.waveformThread.thread.join();
-            }
-        }
-
-#ifdef OPENGL_BACKEND
-        std::shared_ptr<ThumbnailGenerator> ThumbnailGenerator::create(
-            const std::shared_ptr<ThumbnailCache>& cache,
-            const std::shared_ptr<system::Context>& context,
-            const std::shared_ptr<gl::GLFWWindow>& window)
-        {
-            auto out =
-                std::shared_ptr<ThumbnailGenerator>(new ThumbnailGenerator);
-            out->_init(cache, context, window);
-            return out;
-        }
-#endif
-
-#ifdef VULKAN_BACKEND
-        std::shared_ptr<ThumbnailGenerator> ThumbnailGenerator::create(
-            const std::shared_ptr<ThumbnailCache>& cache,
-            const std::shared_ptr<system::Context>& context,
-            Fl_Vk_Context& ctx)
-        {
-            auto out =
-                std::shared_ptr<ThumbnailGenerator>(new ThumbnailGenerator(ctx));
-            out->_init(cache, context);
-            return out;
-        }
-#endif
-
-        InfoRequest ThumbnailGenerator::getInfo(
-            const file::Path& path, const io::Options& options)
-        {
-            return getInfo(path, {}, options);
-        }
-
-        InfoRequest ThumbnailGenerator::getInfo(
-            const file::Path& path,
-            const std::vector<file::MemoryRead>& memoryRead,
-            const io::Options& options)
-        {
-            TLRENDER_P();
-            (p.requestId)++;
-            auto request = std::make_shared<Private::InfoRequest>();
-            request->id = p.requestId;
-            request->path = path;
-            request->memoryRead = memoryRead;
-            request->options = options;
-            InfoRequest out;
-            out.id = p.requestId;
-            out.future = request->promise.get_future();
-            bool valid = false;
-            {
-                std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
-                if (!p.infoMutex.stopped)
-                {
-                    valid = true;
-                    p.infoMutex.requests.push_back(request);
+                    ss << i.first << ":" << i.second << ";";
                 }
+                return ss.str();
             }
-            if (valid)
-            {
-                p.infoThread.cv.notify_one();
-            }
-            else
-            {
-                request->promise.set_value(io::Info());
-            }
-            return out;
-        }
 
-        ThumbnailRequest ThumbnailGenerator::getThumbnail(
-            const file::Path& path, int height, const OTIO_NS::RationalTime& time,
-            const std::string& mediaReferenceKey, const io::Options& options)
-        {
-            return getThumbnail(path, {}, height, time, mediaReferenceKey,
-                                options);
-        }
 
-        ThumbnailRequest ThumbnailGenerator::getThumbnail(
-            const file::Path& path,
-            const std::vector<file::MemoryRead>& memoryRead, int height,
-            const OTIO_NS::RationalTime& time,
-            const std::string& mediaReferenceKey, const io::Options& options)
-        {
-            TLRENDER_P();
-            (p.requestId)++;
-            auto request = std::make_shared<Private::ThumbnailRequest>();
-            request->id = p.requestId;
-            request->path = path;
-            request->memoryRead = memoryRead;
-            request->height = height;
-            request->time = time;
-            request->mediaReferenceKey = mediaReferenceKey;
-            request->options = options;
-            ThumbnailRequest out;
-            out.id = p.requestId;
-            out.height = height;
-            out.time = time;
-            out.future = request->promise.get_future();
-            bool valid = false;
+            std::string getWaveformKey(
+                const file::Path& path,
+                const file::Path& mediaPath,
+                const std::string& mediaReferenceKey,
+                const math::Size2i& size,
+                const std::optional<OTIO_NS::TimeRange>& timeRange,
+                const io::Options& options)
             {
-                std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
-                if (!p.thumbnailMutex.stopped)
+                std::stringstream ss;
+                ss << path.get() << ";" << mediaPath.get()  << ";"
+                   << mediaReferenceKey << ";" <<
+                    size << ";";
+                if (timeRange.has_value())
                 {
-                    valid = true;
-                    p.thumbnailMutex.requests.push_back(request);
+                    ss << timeRange.value();
                 }
-            }
-            if (valid)
-            {
-                p.thumbnailThread.cv.notify_one();
-            }
-            else
-            {
-                request->promise.set_value(nullptr);
-            }
-            return out;
-        }
-
-        WaveformRequest ThumbnailGenerator::getWaveform(
-            const file::Path& path, const math::Size2i& size,
-            const OTIO_NS::TimeRange& range,
-            const std::string& mediaReferenceKey, const io::Options& options)
-        {
-            return getWaveform(path, {}, size, range, mediaReferenceKey,
-                               options);
-        }
-
-        WaveformRequest ThumbnailGenerator::getWaveform(
-            const file::Path& path,
-            const std::vector<file::MemoryRead>& memoryRead,
-            const math::Size2i& size, const OTIO_NS::TimeRange& timeRange,
-            const std::string& mediaReferenceKey,
-            const io::Options& options)
-        {
-            TLRENDER_P();
-            (p.requestId)++;
-            auto request = std::make_shared<Private::WaveformRequest>();
-            request->id = p.requestId;
-            request->path = path;
-            request->memoryRead = memoryRead;
-            request->size = size;
-            request->timeRange = timeRange;
-            request->mediaReferenceKey = mediaReferenceKey;
-            request->options = options;
-            WaveformRequest out;
-            out.id = p.requestId;
-            out.size = size;
-            out.timeRange = timeRange;
-            out.future = request->promise.get_future();
-            bool valid = false;
-            {
-                std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
-                if (!p.waveformMutex.stopped)
+                ss << ";";
+                for (const auto& i : options)
                 {
-                    valid = true;
-                    p.waveformMutex.requests.push_back(request);
+                    ss << i.first << ":" << i.second << ";";
                 }
+                return ss.str();
             }
-            if (valid)
-            {
-                p.waveformThread.cv.notify_one();
-            }
-            else
-            {
-                request->promise.set_value(nullptr);
-            }
-            return out;
-        }
-
-        void
-        ThumbnailGenerator::cancelRequests(const std::vector<uint64_t>& ids)
-        {
-            TLRENDER_P();
-            {
-                std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
-                auto i = p.infoMutex.requests.begin();
-                while (i != p.infoMutex.requests.end())
-                {
-                    const auto j = std::find(ids.begin(), ids.end(), (*i)->id);
-                    if (j != ids.end())
-                    {
-                        i = p.infoMutex.requests.erase(i);
-                    }
-                    else
-                    {
-                        ++i;
-                    }
-                }
-            }
-            {
-                std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
-                auto i = p.thumbnailMutex.requests.begin();
-                while (i != p.thumbnailMutex.requests.end())
-                {
-                    const auto j = std::find(ids.begin(), ids.end(), (*i)->id);
-                    if (j != ids.end())
-                    {
-                        i = p.thumbnailMutex.requests.erase(i);
-                    }
-                    else
-                    {
-                        ++i;
-                    }
-                }
-            }
-            {
-                std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
-                auto i = p.waveformMutex.requests.begin();
-                while (i != p.waveformMutex.requests.end())
-                {
-                    const auto j = std::find(ids.begin(), ids.end(), (*i)->id);
-                    if (j != ids.end())
-                    {
-                        i = p.waveformMutex.requests.erase(i);
-                    }
-                    else
-                    {
-                        ++i;
-                    }
-                }
-            }
-        }
-
-        void ThumbnailGenerator::_infoRun()
-        {
-            TLRENDER_P();
-            std::shared_ptr<Private::InfoRequest> request;
-            {
-                std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
-
-                // Wait until there is a request OR the thread is stopped
-                p.infoThread.cv.wait(lock, [this] {
-                    return !_p->infoMutex.requests.empty() || !_p->infoThread.running;
-                });
-
-                // Check if we woke up to stop
-                if (!p.infoThread.running)
-                {
-                    return;
-                }
-
-                // Check for spurious wakeup
-                if (p.infoMutex.requests.empty())
-                {
-                    return;
-                }
-
-                request = p.infoMutex.requests.front();
-                p.infoMutex.requests.pop_front();
-            }
-
-            // The request will be null if we woke up for any other reason
-            if (request)
-            {
-                io::Info info;
-                const std::string key =
-                    ThumbnailCache::getInfoKey(request->path, request->options);
-                if (!p.cache->getInfo(key, info))
-                {
-                    if (auto context = p.context.lock())
-                    {
-                        auto ioSystem = context->getSystem<io::System>();
-                        try
-                        {
-                            const std::string& fileName = request->path.get();
-                            // std::cout << "info request: " <<
-                            // request->path.get() << std::endl;
-                            std::shared_ptr<io::IRead> read = ioSystem->read(
-                                request->path, request->memoryRead,
-                                request->options);
-                            if (read)
-                            {
-                                info = read->getInfo().get();
-                            }
-                        }
-                        catch (const std::exception&)
-                        {
-                        }
-                    }
-                }
-                request->promise.set_value(info);
-                p.cache->addInfo(key, info);
-            }
-        }
-
-        void ThumbnailGenerator::_thumbnailRun()
-        {
-            TLRENDER_P();
-            std::shared_ptr<Private::ThumbnailRequest> request;
-            {
-                std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
-                // Wait until there is a request OR the thread is stopped
-                p.thumbnailThread.cv.wait(lock, [this] {
-                    return !_p->thumbnailMutex.requests.empty() || !_p->thumbnailThread.running;
-                });
-
-                // Check if we woke up to stop
-                if (!p.thumbnailThread.running)
-                {
-                    return;
-                }
-
-                // Check for spurious wakeup
-                if (p.thumbnailMutex.requests.empty())
-                {
-                    return;
-                }
-
-                request = p.thumbnailMutex.requests.front();
-                p.thumbnailMutex.requests.pop_front();
-            }
-
-            // If we didn't get a valid request, just return and wait again
-            if (!request)
-            {
-                return;
-            }
-
-#ifdef OPENGL_BACKEND
-            std::shared_ptr<image::Image> image;
-            const std::string key = ThumbnailCache::getThumbnailKey(
-                request->height, request->path, request->time,
-                request->options);
-            if (!p.cache->getThumbnail(key, image))
-            {
-                if (auto context = p.context.lock())
-                {
-                    auto ioSystem = context->getSystem<io::System>();
-                    try
-                    {
-                        const std::string& fileName = request->path.get();
-                        // std::cout << "thumbnail request: " << fileName <<
-                        // " " <<
-                        //     request->time << std::endl;
-                        std::shared_ptr<io::IRead> read;
-                        if (!p.thumbnailThread.ioCache.get(fileName, read))
-                        {
-                            auto ioSystem =
-                                context->getSystem<io::System>();
-                            read = ioSystem->read(
-                                request->path, request->memoryRead,
-                                request->options);
-                            p.thumbnailThread.ioCache.add(fileName, read);
-                        }
-                        if (read)
-                        {
-                            const io::Info info = read->getInfo().get();
-                            math::Size2i size;
-                            if (!info.video.empty())
-                            {
-                                size.w = request->height *
-                                         info.video[0].size.getAspect();
-                                size.h = request->height;
-                            }
-                            gl::OffscreenBufferOptions options;
-                            options.colorType = image::PixelType::RGBA_U8;
-                            if (gl::doCreate(
-                                    p.thumbnailThread.buffer, size,
-                                    options))
-                            {
-                                p.thumbnailThread.buffer =
-                                    gl::OffscreenBuffer::create(
-                                        size, options);
-                            }
-                            const OTIO_NS::RationalTime time =
-                                request->time != time::invalidTime
-                                ? request->time
-                                : info.videoTime->start_time();
-                            const auto videoData =
-                                read->readVideo(time, request->options)
-                                .get();
-                            if (p.thumbnailThread.render &&
-                                p.thumbnailThread.buffer && videoData.image)
-                            {
-                                gl::OffscreenBufferBinding binding(
-                                    p.thumbnailThread.buffer);
-                                p.thumbnailThread.render->begin(size);
-                                const math::Matrix4x4f ortho = math::ortho(
-                                    0.F, static_cast<float>(size.w),
-                                    static_cast<float>(size.h), 0.F,
-                                    -1.F, 1.F);
-                                p.thumbnailThread.render->setTransform(ortho);
-                                p.thumbnailThread.render->drawImage(
-                                    videoData.image,
-                                    {math::Box2i(0, 0, size.w, size.h)});
-                                p.thumbnailThread.render->end();
-                                image = image::Image::create(
-                                    size.w, size.h,
-                                    image::PixelType::RGBA_U8);
-                                glPixelStorei(GL_PACK_ALIGNMENT, 1);
-                                glReadPixels(
-                                    0, 0, size.w, size.h, GL_RGBA,
-                                    GL_UNSIGNED_BYTE, image->getData());
-                            }
-                        }
-                        else if (
-                            string::compare(
-                                ".otio", request->path.getExtension(),
-                                string::Compare::CaseInsensitive) ||
-                            string::compare(
-                                ".otioz", request->path.getExtension(),
-                                string::Compare::CaseInsensitive))
-                        {
-                            timeline::Options timelineOptions;
-                            timelineOptions.ioOptions = request->options;
-                            auto timeline = timeline::Timeline::create(
-                                context, request->path, timelineOptions);
-                            timeline->setMediaReferenceKey(request->mediaReferenceKey);
-                            const auto info = timeline->getIOInfo();
-                            // const auto videoData = timeline->getVideo(
-                            //     timeline->getTimeRange().start_time()).future.get();
-                            const auto videoData =
-                                timeline->getVideo(request->time)
-                                .future.get();
-                            math::Size2i size;
-                            if (!info.video.empty())
-                            {
-                                size.w =
-                                    request->height *
-                                    info.video.front().size.getAspect();
-                                size.h = request->height;
-                            }
-                            if (size.isValid())
-                            {
-                                gl::OffscreenBufferOptions options;
-                                options.colorType =
-                                    image::PixelType::RGBA_U8;
-                                if (gl::doCreate(
-                                        p.thumbnailThread.buffer, size,
-                                        options))
-                                {
-                                    p.thumbnailThread.buffer =
-                                        gl::OffscreenBuffer::create(
-                                            size, options);
-                                }
-                                if (p.thumbnailThread.render &&
-                                    p.thumbnailThread.buffer)
-                                {
-                                    gl::OffscreenBufferBinding binding(
-                                        p.thumbnailThread.buffer);
-                                    p.thumbnailThread.render->begin(size);
-                                    const math::Matrix4x4f ortho = math::ortho(
-                                        0.F, static_cast<float>(size.w),
-                                        static_cast<float>(size.h), 0.F,
-                                        -1.F, 1.F);
-                                    p.thumbnailThread.render->setTransform(ortho);
-                                    p.thumbnailThread.render->drawVideo(
-                                        {videoData},
-                                        {math::Box2i(
-                                                0, 0, size.w, size.h)});
-                                    p.thumbnailThread.render->end();
-                                    image = image::Image::create(
-                                        size.w, size.h,
-                                        image::PixelType::RGBA_U8);
-                                    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-                                    glReadPixels(
-                                        0, 0, size.w, size.h, GL_RGBA,
-                                        GL_UNSIGNED_BYTE, image->getData());
-                                }
-                            }
-                        }
-                    }
-                    catch (const std::exception&)
-                    {
-                    }
-                }
-            }
-            request->promise.set_value(image);
-            p.cache->addThumbnail(key, image);
-#endif
-
-#ifdef VULKAN_BACKEND
-            // 1. Check Vulkan context
-            if (ctx.queue() == VK_NULL_HANDLE ||
-                ctx.device == VK_NULL_HANDLE ||
-                ctx.instance == VK_NULL_HANDLE)
-            {
-                // Context is not ready, fail the request and return
-                request->promise.set_value(nullptr);
-                return;
-            }
-
-            // 2. Check and initialize renderer
-            if (!p.thumbnailThread.render)
-            {
-                if (auto context = p.context.lock())
-                {
-                    VkDevice device = ctx.device;
-                    VkResult result = VK_SUCCESS;
-
-                    // Create command pool
-                    if (p.thumbnailThread.commandPool == VK_NULL_HANDLE)
-                    {
-                        VkCommandPoolCreateInfo cmd_pool_info = {};
-                        cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-                        cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
-                        cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-                        result = vkCreateCommandPool(device, &cmd_pool_info,
-                                                     nullptr,
-                                                     &p.thumbnailThread.commandPool);
-                    }
-
-                    if (p.thumbnailThread.cmd == VK_NULL_HANDLE &&
-                        result == VK_SUCCESS)
-                    {
-                        VkCommandBufferAllocateInfo allocInfo = {};
-                        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-                        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-                        allocInfo.commandPool = p.thumbnailThread.commandPool;
-                        allocInfo.commandBufferCount = 1;
-
-                        result = vkAllocateCommandBuffers(device, &allocInfo, &p.thumbnailThread.cmd);
-                    }
-
-                    if (result == VK_SUCCESS)
-                    {
-                        p.thumbnailThread.render =
-                            timeline_vlk::Render::create(ctx, context);
-                    }
-                }
-                else
-                {
-                    // System context is gone, fail the request
-                    request->promise.set_value(nullptr);
-                    return;
-                }
-            }
-
-
-            // --- Process the Request ---
-            std::shared_ptr<image::Image> image;
-            const std::string key = ThumbnailCache::getThumbnailKey(
-                request->height, request->path, request->time,
-                request->options);
-            if (!p.cache->getThumbnail(key, image))
-            {
-                if (auto context = p.context.lock())
-                {
-                    auto ioSystem = context->getSystem<io::System>();
-                    try
-                    {
-                        const std::string& fileName = request->path.get();
-                        // std::cout << "thumbnail request: " << fileName
-                        //           << " " << request->time << std::endl;
-                        std::shared_ptr<io::IRead> read;
-                        if (!p.thumbnailThread.ioCache.get(fileName, read))
-                        {
-                            auto ioSystem =
-                                context->getSystem<io::System>();
-                            read = ioSystem->read(
-                                request->path, request->memoryRead,
-                                request->options);
-                            p.thumbnailThread.ioCache.add(fileName, read);
-                        }
-                        if (read)
-                        {
-                            const io::Info info = read->getInfo().get();
-                            math::Size2i size;
-                            if (!info.video.empty())
-                            {
-                                size.w = request->height *
-                                         info.video[0].size.getAspect();
-                                size.h = request->height;
-                            }
-                            if (size.isValid())
-                            {
-                                vlk::OffscreenBufferOptions options;
-                                options.colorType = image::PixelType::RGBA_U8;
-                                options.pbo = true;
-                                if (vlk::doCreate(
-                                        p.thumbnailThread.buffer, size,
-                                        options))
-                                {
-                                    p.thumbnailThread.buffer =
-                                        vlk::OffscreenBuffer::create(ctx,
-                                                                     size, options);
-                                }
-                                const OTIO_NS::RationalTime time =
-                                    request->time != time::invalidTime
-                                    ? request->time
-                                    : info.videoTime->start_time();
-                                const auto videoData =
-                                    read->readVideo(time, request->options)
-                                    .get();
-                                if (p.thumbnailThread.render &&
-                                    p.thumbnailThread.buffer && videoData.image)
-                                {
-                                    image = image::Image::create(
-                                        size.w, size.h,
-                                        image::PixelType::RGBA_U8);
-
-                                    VkCommandBuffer& cmd = p.thumbnailThread.cmd;
-                                    vkResetCommandBuffer(cmd, 0);
-
-                                    VkCommandBufferBeginInfo beginInfo = {};
-                                    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-                                    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-                                    vkBeginCommandBuffer(cmd, &beginInfo);
-
-                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
-
-                                    timeline::RenderOptions renderOptions;
-                                    renderOptions.clear = true;
-                                    p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
-                                                                    p.thumbnailThread.frameIndex, size,
-                                                                    renderOptions);
-
-                                    const math::Matrix4x4f ortho = math::ortho(
-                                        0.F, static_cast<float>(size.w),
-                                        0.F, static_cast<float>(size.h),
-                                        -1.F, 1.F);
-                                    p.thumbnailThread.render->setTransform(ortho);
-
-                                    p.thumbnailThread.render->drawImage(
-                                        videoData.image,
-                                        {math::Box2i(0, 0, size.w, size.h)});
-
-                                    p.thumbnailThread.render->end();
-
-
-                                    p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
-                                                                         size.h);
-
-                                    vkEndCommandBuffer(cmd);
-
-                                    p.thumbnailThread.buffer->submitReadback(cmd);
-
-                                    VkResult result = VK_NOT_READY;
-                                    void* imageData = nullptr;
-                                    while (result == VK_NOT_READY &&
-                                           p.thumbnailThread.running)
-                                    {
-                                        result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
-                                    }
-
-                                    if (imageData)
-                                        std::memcpy(image->getData(), imageData, image->getDataByteCount());
-                                    else
-                                        std::memset(image->getData(), 0, image->getDataByteCount());
-
-                                    p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
-                                }
-                            }
-                        }
-                        else if (
-                            string::compare(
-                                ".otio", request->path.getExtension(),
-                                string::Compare::CaseInsensitive) ||
-                            string::compare(
-                                ".otioz", request->path.getExtension(),
-                                string::Compare::CaseInsensitive))
-                        {
-                            timeline::Options timelineOptions;
-                            timelineOptions.ioOptions = request->options;
-                            auto timeline = timeline::Timeline::create(
-                                context, request->path, timelineOptions);
-                            timeline->setMediaReferenceKey(request->mediaReferenceKey);
-                            const auto info = timeline->getIOInfo();
-                            // const auto videoData = timeline->getVideo(
-                            //     timeline->getTimeRange().start_time()).future.get();
-                            const OTIO_NS::RationalTime time =
-                                request->time != time::invalidTime
-                                ? request->time
-                                : timeline->getTimeRange().start_time();
-
-                            const auto videoData = timeline->getVideo(time)
-                                                   .future.get();
-                            math::Size2i size;
-                            if (!info.video.empty())
-                            {
-                                size.w =
-                                    request->height *
-                                    info.video.front().size.getAspect();
-                                size.h = request->height;
-                            }
-                            if (size.isValid())
-                            {
-                                vlk::OffscreenBufferOptions options;
-                                options.colorType =
-                                    image::PixelType::RGBA_U8;
-                                options.pbo = true;
-                                if (vlk::doCreate(
-                                        p.thumbnailThread.buffer, size,
-                                        options))
-                                {
-                                    p.thumbnailThread.buffer =
-                                        vlk::OffscreenBuffer::create(ctx,
-                                                                     size, options);
-                                }
-                                if (p.thumbnailThread.render &&
-                                    p.thumbnailThread.buffer)
-                                {
-                                    image = image::Image::create(
-                                        size.w, size.h,
-                                        image::PixelType::RGBA_U8);
-
-                                    VkCommandBuffer& cmd = p.thumbnailThread.cmd;
-                                    vkResetCommandBuffer(cmd, 0);
-
-                                    VkCommandBufferBeginInfo beginInfo = {};
-                                    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-                                    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-                                    vkBeginCommandBuffer(cmd, &beginInfo);
-
-                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
-
-                                    timeline::RenderOptions renderOptions;
-                                    renderOptions.clear = true;
-                                    p.thumbnailThread.render->begin(cmd,
-                                                                    p.thumbnailThread.buffer,
-                                                                    p.thumbnailThread.frameIndex,
-                                                                    size, renderOptions);
-
-                                    const math::Matrix4x4f ortho = math::ortho(
-                                        0.F, static_cast<float>(size.w),
-                                        0.F, static_cast<float>(size.h),
-                                        -1.F, 1.F);
-                                    p.thumbnailThread.render->setTransform(ortho);
-                                    p.thumbnailThread.render->drawVideo(
-                                        {videoData},
-                                        {math::Box2i(
-                                                0, 0, size.w, size.h)});
-                                    p.thumbnailThread.render->end();
-
-                                    p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
-                                                                         size.h);
-
-                                    vkEndCommandBuffer(cmd);
-
-                                    p.thumbnailThread.buffer->submitReadback(cmd);
-
-
-                                    VkResult result = VK_NOT_READY;
-                                    void* imageData = nullptr;
-                                    while (result == VK_NOT_READY &&
-                                           p.thumbnailThread.running)
-                                    {
-                                        result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
-                                    }
-
-                                    if (imageData)
-                                        std::memcpy(image->getData(), imageData, image->getDataByteCount());
-                                    else
-                                        std::memset(image->getData(), 0, image->getDataByteCount());
-
-
-                                    p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
-                                }
-                            }
-                        }
-                    }
-                    catch (const std::exception&)
-                    {
-                    }
-                }
-            }
-            request->promise.set_value(image);
-            p.cache->addThumbnail(key, image);
-#endif
-
-        }
+        } // namespace
 
         namespace
         {
@@ -1381,8 +99,8 @@ namespace tl
                             audio::F32_T max = 0.F;
                             if (x0 <= x1)
                             {
-                                min = audio::F32Range.getMax();
-                                max = audio::F32Range.getMin();
+                                min = audio::F32Range.max();
+                                max = audio::F32Range.min();
                                 for (int i = x0; i <= x1 && i < sampleCount;
                                      ++i)
                                 {
@@ -1457,8 +175,8 @@ namespace tl
                             audio::F32_T max = 0.F;
                             if (x0 < x1)
                             {
-                                min = audio::F32Range.getMax();
-                                max = audio::F32Range.getMin();
+                                min = audio::F32Range.max();
+                                max = audio::F32Range.min();
                                 for (int i = x0; i < x1; ++i)
                                 {
                                     const audio::F32_T v =
@@ -1487,95 +205,460 @@ namespace tl
             }
         } // namespace
 
-        void ThumbnailGenerator::_waveformRun()
+        // Every thumbnail is a frame of a timeline. A plain file is a
+        // timeline of one clip, so one path covers files, bundles and
+        // timelines alike, and nothing needs a syntax for naming what is
+        // inside a bundle.
+        std::shared_ptr<timeline::Timeline> getTimeline(
+            const std::shared_ptr<system::Context>& context,
+            memory::LRUCache<std::string, std::shared_ptr<timeline::Timeline> >& cache,
+            std::mutex& mutex,
+            const file::Path& path)
+        {
+            // One timeline per file, shared by the three threads rather
+            // than one each. Opening a bundle of 25,000 entries takes
+            // seconds, so opening it three times is three times too
+            // many. The timeline has no thread of its own and guards its
+            // caches, so the threads can read it at once.
+            std::shared_ptr<timeline::Timeline> out;
+            {
+                std::unique_lock<std::mutex> lock(mutex);
+                if (cache.get(path.get(), out))
+                {
+                    return out;
+                }
+            }
+
+            // Opened without the lock: a bundle takes seconds and a movie
+            // needs a probe, and holding the lock across that would stall
+            // every request for every other file. Two threads opening the
+            // same file at once is cheaper than that, and only one of the
+            // two ends up in the cache.
+            timeline::Options options;
+            // options.threaded = false;  // \@bug: \@note: was false, now true
+            file::Path inOutPath = path;
+            out = timeline::Timeline::create(context, inOutPath, options);
+            {
+                std::unique_lock<std::mutex> lock(mutex);
+                std::shared_ptr<timeline::Timeline> other;
+                if (cache.get(path.get(), other))
+                {
+                    return other;
+                }
+                cache.add(path.get(), out);
+            }
+            return out;
+        }
+
+        ThumbnailSystem::~ThumbnailSystem()
+        {
+            shutdown();
+        }
+
+        void ThumbnailSystem::shutdown()
         {
             TLRENDER_P();
-            std::shared_ptr<Private::WaveformRequest> request;
+
+            p.infoThread.running = false;
+            if (p.infoThread.thread.joinable())
             {
-                std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
-
-                // Wait until there is a request OR the thread is stopped
-                p.waveformThread.cv.wait(lock, [this] {
-                    return !_p->waveformMutex.requests.empty() || !_p->waveformThread.running;
-                });
-
-                // Check if we woke up to stop
-                if (!p.waveformThread.running)
-                {
-                    return;
-                }
-
-                // Check for spurious wakeup
-                if (p.waveformMutex.requests.empty())
-                {
-                    return;
-                }
-
-                request = p.waveformMutex.requests.front();
-                p.waveformMutex.requests.pop_front();
+                p.infoThread.thread.join();
             }
-            if (request)
+
+            p.thumbnailThread.running = false;
+            if (p.thumbnailThread.thread.joinable())
             {
-                std::shared_ptr<geom::TriangleMesh2> mesh;
-                const std::string key = ThumbnailCache::getWaveformKey(
-                    request->size, request->path, request->timeRange,
-                    request->options);
-                if (!p.cache->getWaveform(key, mesh))
-                {
-                    if (auto context = p.context.lock())
-                    {
-                        try
-                        {
-                            const std::string& fileName = request->path.get();
-                            std::shared_ptr<io::IRead> read;
-                            if (!p.waveformThread.ioCache.get(fileName, read))
-                            {
-                                auto ioSystem =
-                                    context->getSystem<io::System>();
-                                read = ioSystem->read(
-                                    request->path, request->memoryRead,
-                                    request->options);
-                                p.waveformThread.ioCache.add(fileName, read);
-                            }
-                            if (read)
-                            {
-                                const auto info = read->getInfo().get();
-                                const OTIO_NS::TimeRange timeRange =
-                                    request->timeRange != time::invalidTimeRange
-                                        ? request->timeRange
-                                        : OTIO_NS::TimeRange(
-                                              OTIO_NS::RationalTime(0.0, 1.0),
-                                              OTIO_NS::RationalTime(1.0, 1.0));
-                                const auto audioData =
-                                    read->readAudio(timeRange, request->options)
-                                        .get();
-                                if (audioData.audio)
-                                {
-                                    auto resample =
-                                        audio::AudioResample::create(
-                                            audioData.audio->getInfo(),
-                                            audio::Info(
-                                                1, audio::DataType::F32,
-                                                audioData.audio
-                                                    ->getSampleRate()));
-                                    const auto resampledAudio =
-                                        resample->process(audioData.audio);
-                                    mesh = audioMesh(
-                                        resampledAudio, request->size);
-                                }
-                            }
-                        }
-                        catch (const std::exception&)
-                        {
-                        }
-                    }
-                }
-                request->promise.set_value(mesh);
-                p.cache->addWaveform(key, mesh);
+                p.thumbnailThread.thread.join();
+            }
+
+            p.waveformThread.running = false;
+            if (p.waveformThread.thread.joinable())
+            {
+                p.waveformThread.thread.join();
             }
         }
 
-        void ThumbnailGenerator::_infoCancel()
+        void
+        ThumbnailSystem::cancelRequests(const std::vector<uint64_t>& ids)
+        {
+            TLRENDER_P();
+
+            if (ids.empty())
+                return;
+
+            // Looked up as a set: this is called with the requests of a whole
+            // timeline's worth of items, and searching the list of ids for each
+            // pending request made cancelling cost the product of the two.
+            const std::set<uint64_t> idSet(ids.begin(), ids.end());
+
+            {
+                std::list<std::shared_ptr<Private::InfoRequest>> cancelled;
+                {
+                    std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
+                    for (auto i = p.infoMutex.requests.begin(); i != p.infoMutex.requests.end();)
+                    {
+                        if (idSet.count((*i)->id)) { cancelled.push_back(*i); i = p.infoMutex.requests.erase(i); }
+                        else ++i;
+                    }
+                }
+                for (auto& r : cancelled) r->promise.set_value(io::Info());
+            }
+            {
+                std::list<std::shared_ptr<Private::ThumbnailRequest>> cancelled;
+                {
+                    std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
+                    for (auto i = p.thumbnailMutex.requests.begin(); i != p.thumbnailMutex.requests.end();)
+                    {
+                        if (idSet.count((*i)->id)) { cancelled.push_back(*i); i = p.thumbnailMutex.requests.erase(i); }
+                        else ++i;
+                    }
+                }
+                for (auto& r : cancelled) r->promise.set_value(nullptr);
+            }
+            {
+                std::list<std::shared_ptr<Private::WaveformRequest>> cancelled;
+                {
+                    std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
+                    for (auto i = p.waveformMutex.requests.begin(); i != p.waveformMutex.requests.end();)
+                    {
+                        if (idSet.count((*i)->id)) { cancelled.push_back(*i); i = p.waveformMutex.requests.erase(i); }
+                        else ++i;
+                    }
+                }
+                for (auto& r : cancelled) r->promise.set_value(nullptr);
+            }
+            {
+                // Acquire the cache lock to safely iterate over the shared
+                // Timeline instances.
+                std::unique_lock<std::mutex> lock(p.ioCacheMutex);
+                for (const auto& timeline : p.ioCache.getValues())
+                {
+                    timeline->cancelRequests(ids);
+                }
+            }
+        }
+
+        ThumbnailRequest ThumbnailSystem::getThumbnail(
+            const file::Path& path, int height,
+            const std::optional<OTIO_NS::RationalTime>& time,
+            const std::string& mediaReferenceKey, const io::Options& options)
+        {
+            return getThumbnail(path, path, height, time, mediaReferenceKey,
+                                options);
+        }
+
+
+        InfoRequest ThumbnailSystem::getInfo(
+            const file::Path& path, const io::Options& options)
+        {
+            return getInfo(path, path, options);
+        }
+
+        InfoRequest ThumbnailSystem::getInfo(
+            const file::Path& timelinePath,
+            const file::Path& mediaPath,
+            const io::Options& options)
+        {
+            TLRENDER_P();
+            (p.requestId)++;
+            auto request = std::make_shared<Private::InfoRequest>();
+            request->id = p.requestId;
+            request->path = timelinePath;
+            request->mediaPath = mediaPath;
+            request->options = options;
+
+            const std::string key = getInfoKey(timelinePath, mediaPath, options);
+            io::Info info;
+            bool notify = false;
+            {
+                std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
+                if (p.infoMutex.cache.get(key, info))
+                    ;
+                else if (!p.infoMutex.stopped)
+                {
+                    notify = true;
+                    p.infoMutex.requests.push_back(request);
+                }
+            }
+            if (notify)
+            {
+                p.infoThread.cv.notify_one();
+            }
+            else
+            {
+                request->promise.set_value(info);
+            }
+
+            InfoRequest out;
+            out.id = request->id;
+            out.future = request->promise.get_future();
+            return out;
+        }
+
+        WaveformRequest ThumbnailSystem::getWaveform(
+            const file::Path& path, const math::Size2i& size,
+            const std::optional<otime::TimeRange >& timeRange,
+            const std::string& mediaReferenceKey, const io::Options& options)
+        {
+            return getWaveform(path, {}, size, timeRange, mediaReferenceKey,
+                               options);
+        }
+
+        WaveformRequest ThumbnailSystem::getWaveform(
+            const file::Path& path,
+            const file::Path& mediaPath,
+            const math::Size2i& size,
+            const std::optional<otime::TimeRange >& timeRange,
+            const std::string& mediaReferenceKey,
+            const io::Options& options)
+        {
+            TLRENDER_P();
+            (p.requestId)++;
+
+            auto request = std::make_shared<Private::WaveformRequest>();
+            request->id = p.requestId;
+            request->path = path;
+            request->mediaPath = mediaPath;
+            request->size = size;
+            request->timeRange = timeRange;
+            request->mediaReferenceKey = mediaReferenceKey;
+            request->options = options;
+
+            const std::string key = getWaveformKey(
+                path,
+                mediaPath,
+                mediaReferenceKey,
+                size,
+                timeRange,
+                options);
+
+            std::shared_ptr<geom::TriangleMesh2> mesh;
+            bool notify = false;
+            {
+                std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
+                if (p.waveformMutex.cache.get(key, mesh))
+                    ;
+                else if (!p.waveformMutex.stopped)
+                {
+                    notify = true;
+                    p.waveformMutex.requests.push_back(request);
+                }
+            }
+            if (notify)
+            {
+                p.waveformThread.cv.notify_one();
+            }
+            else
+            {
+                request->promise.set_value(mesh);
+            }
+
+            WaveformRequest out;
+            out.id = request->id;
+            out.size = size;
+            out.timeRange = timeRange;
+            out.future = request->promise.get_future();
+            return out;
+        }
+
+        std::shared_ptr<observer::IValue<ThumbnailCacheOptions> > ThumbnailSystem::observeCacheOptions() const
+        {
+             return _p->cacheOptions;
+        }
+
+        const ThumbnailCacheOptions& ThumbnailSystem::getCacheOptions() const
+        {
+            return _p->cacheOptions->get();
+        }
+
+        void ThumbnailSystem::setCacheOptions(const ThumbnailCacheOptions& value)
+        {
+            TLRENDER_P();
+            if (p.cacheOptions->setIfChanged(value))
+            {
+                {
+                    std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
+                    p.thumbnailMutex.cache.setMax(value.thumbnailMB * memory::megabyte);
+                }
+                {
+                    std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
+                    p.waveformMutex.cache.setMax(value.waveformMB * memory::megabyte);
+                }
+            }
+        }
+
+
+        void ThumbnailSystem::clearCache()
+        {
+            TLRENDER_P();
+            {
+                std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
+                p.infoMutex.cache.clear();
+            }
+            {
+                std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
+                p.thumbnailMutex.cache.clear();
+            }
+            {
+                std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
+                p.waveformMutex.cache.clear();
+            }
+
+            // Signal the worker threads to drop their cached open readers so a
+            // reloaded file is re-opened rather than served from a reader that
+            // points at the previous file contents. The ioCache is owned by its
+            // worker thread, so it is cleared there rather than under a lock.
+            p.infoThread.ioCacheClear = true;
+            p.infoThread.cv.notify_one();
+            p.thumbnailThread.ioCacheClear = true;
+            p.thumbnailThread.cv.notify_one();
+            p.waveformThread.ioCacheClear = true;
+            p.waveformThread.cv.notify_one();
+        }
+
+        void ThumbnailSystem::_infoRun()
+        {
+            TLRENDER_P();
+            while (p.infoThread.running)
+            {
+                if (p.infoThread.ioCacheClear.exchange(false))
+                {
+                    p.clearIOCache();
+                }
+                std::shared_ptr<Private::InfoRequest> request;
+                {
+                    std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
+                    if (p.infoThread.cv.wait_for(
+                        lock,
+                        std::chrono::milliseconds(5),
+                        [this]
+                        {
+                            return !_p->infoMutex.requests.empty();
+                        }))
+                    {
+                        request = p.infoMutex.requests.front();
+                        p.infoMutex.requests.pop_front();
+                    }
+                }
+                if (request)
+                {
+                    p.ioCacheTouch();
+                    io::Info info;
+                    try
+                    {
+                        //std::cout << "info request: " << request->path.get() << std::endl;
+                        auto context = p.context.lock();
+                        if (auto timeline = getTimeline(
+                            context, p.ioCache, p.ioCacheMutex, request->path))
+                        {
+                            timeline->getMediaInfo(request->mediaPath, info);
+                        }
+                    }
+                    catch (const std::exception&)
+                    {}
+                    request->promise.set_value(info);
+
+                    const std::string key = getInfoKey(
+                        request->path, request->mediaPath, request->options);
+                    std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
+                    p.infoMutex.cache.add(key, info);
+                }
+            }
+        }
+
+        void ThumbnailSystem::_waveformRun()
+        {
+            TLRENDER_P();
+            io::Options ioOptions;
+            while (p.waveformThread.running)
+            {
+                if (p.waveformThread.ioCacheClear.exchange(false))
+                {
+                    p.clearIOCache();
+                }
+
+                std::shared_ptr<Private::WaveformRequest> request;
+                {
+                    std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
+                    if (p.waveformThread.cv.wait_for(
+                        lock,
+                        std::chrono::milliseconds(5),
+                        [this]
+                        {
+                            return !_p->waveformMutex.requests.empty();
+                        }))
+                    {
+                        request = p.waveformMutex.requests.front();
+                        p.waveformMutex.requests.pop_front();
+                    }
+                }
+                if (request)
+                {
+                    // The options belong to the read, not to the timeline
+                    // that is read from: a per clip option such as a camera
+                    // name changes with every request, and dropping the
+                    // timeline for it meant reopening the file each time.
+                    p.ioCacheTouch();
+
+                    std::shared_ptr<geom::TriangleMesh2> mesh;
+                    try
+                    {
+                        auto context = p.context.lock();
+                        auto timeline = getTimeline(
+                            context, p.ioCache, p.ioCacheMutex, request->path);
+                        io::Info info;
+                        if (timeline &&
+                            timeline->getMediaInfo(
+                                request->mediaPath, info, request->options))
+                        {
+                            const OTIO_NS::TimeRange timeRange =
+                                request->timeRange.value_or(
+                                    OTIO_NS::TimeRange(
+                                        OTIO_NS::RationalTime(0.0, 1.0),
+                                        OTIO_NS::RationalTime(1.0, 1.0)));
+                            auto audioRequest = timeline->readMediaAudio(
+                                request->mediaPath, timeRange, request->options);
+                            if (audioRequest.valid())
+                            {
+                                const auto audioData = audioRequest.get();
+                                if (audioData.audio && p.waveformThread.running)
+                                {
+                                    auto resample = audio::AudioResample::create(
+                                        audioData.audio->getInfo(),
+                                        audio::Info(1, audio::DataType::F32, audioData.audio->getSampleRate()));
+                                    if (auto resampledAudio = resample->process(audioData.audio))
+                                    {
+                                        mesh = audioMesh(resampledAudio, request->size);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (const std::exception&)
+                    {}
+                    request->promise.set_value(mesh);
+
+                    const std::string key = getWaveformKey(
+                        request->path,
+                        request->mediaPath,
+                        request->mediaReferenceKey,
+                        request->size,
+                        request->timeRange,
+                        request->options);
+                    std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
+                    p.waveformMutex.cache.add(key, mesh, mesh ? mesh->getByteCount() : 0);
+                }
+                else if (p.ioCacheCount() > 0 && p.ioCacheIdle(ioCacheTimeout))
+                {
+                    // Release cached readers (and the decode subprocesses they
+                    // keep alive) once this thread has gone idle; see the note in
+                    // _thumbnailRun().
+                    p.clearIOCache();
+                }
+            }
+        }
+
+        void ThumbnailSystem::_infoCancel()
         {
             TLRENDER_P();
             std::list<std::shared_ptr<Private::InfoRequest> > requests;
@@ -1589,7 +672,7 @@ namespace tl
             }
         }
 
-        void ThumbnailGenerator::_thumbnailCancel()
+        void ThumbnailSystem::_thumbnailCancel()
         {
             TLRENDER_P();
             std::list<std::shared_ptr<Private::ThumbnailRequest> > requests;
@@ -1603,7 +686,7 @@ namespace tl
             }
         }
 
-        void ThumbnailGenerator::_waveformCancel()
+        void ThumbnailSystem::_waveformCancel()
         {
             TLRENDER_P();
             std::list<std::shared_ptr<Private::WaveformRequest> > requests;
@@ -1617,95 +700,5 @@ namespace tl
             }
         }
 
-        struct ThumbnailSystem::Private
-        {
-            std::shared_ptr<ThumbnailCache> cache;
-            std::shared_ptr<ThumbnailGenerator> generator;
-        };
-
-        void
-        ThumbnailSystem::_init(const std::shared_ptr<system::Context>& context)
-        {
-            ISystem::_init(context, "tl::timelineui::ThumbnailSystem");
-            TLRENDER_P();
-            p.cache = ThumbnailCache::create(context);
-#ifdef OPENGL_BACKEND
-            p.generator = ThumbnailGenerator::create(p.cache, context);
-#endif
-#ifdef VULKAN_BACKEND
-            p.generator = ThumbnailGenerator::create(p.cache, context, ctx);
-#endif
-        }
-
-        ThumbnailSystem::~ThumbnailSystem() {}
-
-#ifdef OPENGL_BACKEND
-        ThumbnailSystem::ThumbnailSystem() :
-            _p(new Private)
-        {
-        }
-
-        std::shared_ptr<ThumbnailSystem>
-        ThumbnailSystem::create(const std::shared_ptr<system::Context>& context)
-        {
-            auto out = std::shared_ptr<ThumbnailSystem>(new ThumbnailSystem);
-            out->_init(context);
-            return out;
-        }
-#endif
-
-#ifdef VULKAN_BACKEND
-        ThumbnailSystem::ThumbnailSystem(Fl_Vk_Context& ctx) :
-            ctx(ctx),
-            _p(new Private)
-        {
-        }
-
-        std::shared_ptr<ThumbnailSystem>
-        ThumbnailSystem::create(const std::shared_ptr<system::Context>& context,
-                                Fl_Vk_Context& ctx)
-        {
-            auto out = std::shared_ptr<ThumbnailSystem>(new ThumbnailSystem(ctx));
-            out->_init(context);
-            if (out)
-            {
-                context->addSystem(out);
-            }
-            return out;
-        }
-#endif
-
-        InfoRequest ThumbnailSystem::getInfo(
-            const file::Path& path, const io::Options& ioOptions)
-        {
-            return _p->generator->getInfo(path, ioOptions);
-        }
-
-        ThumbnailRequest ThumbnailSystem::getThumbnail(
-            const file::Path& path, int height, const OTIO_NS::RationalTime& time,
-            const std::string& mediaReferenceKey, const io::Options& ioOptions)
-        {
-            return _p->generator->getThumbnail(path, height, time,
-                                               mediaReferenceKey, ioOptions);
-        }
-
-        WaveformRequest ThumbnailSystem::getWaveform(
-            const file::Path& path, const math::Size2i& size,
-            const OTIO_NS::TimeRange& timeRange,
-            const std::string& mediaReferenceKey, const io::Options& ioOptions)
-        {
-            return _p->generator->getWaveform(path, size, timeRange,
-                                              mediaReferenceKey, ioOptions);
-        }
-
-        void ThumbnailSystem::cancelRequests(const std::vector<uint64_t>& ids)
-        {
-            _p->generator->cancelRequests(ids);
-        }
-
-        const std::shared_ptr<ThumbnailCache>& ThumbnailSystem::getCache() const
-        {
-            return _p->cache;
-        }
-    } // namespace TIMELINEUI
-} // namespace tl
+    }
+}

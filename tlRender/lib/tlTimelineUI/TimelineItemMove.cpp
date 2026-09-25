@@ -42,9 +42,6 @@ namespace tl
                 }
                 if (p.moveCallback)
                     p.moveCallback(moveData);
-                auto otioTimeline = timeline::move(
-                    p.player->getTimeline()->getTimeline().value, moveData);
-                p.player->getTimeline()->setTimeline(otioTimeline);
             }
             else if (!p.mouse.items.empty() &&
                      p.mouse.mode == Private::MouseMode::Transition)
@@ -56,7 +53,7 @@ namespace tl
                     const int transitionIndex = item->index;
                     int x = transition->getGeometry().x();
                     const OTIO_NS::RationalTime startTime = posToTime(x) - _timeRange.start_time();
-                    OTIO_NS::TimeRange timeRange = transition->getTimeRange();   
+                    OTIO_NS::TimeRange timeRange = transition->getTimeRange();
                     const OTIO_NS::RationalTime& duration = timeRange.duration();
                     timeRange = OTIO_NS::TimeRange(startTime, duration);
                     const math::Size2i& sizeHint = transition->getSizeHint();
@@ -92,9 +89,6 @@ namespace tl
                 }
                 if (p.moveCallback)
                     p.moveCallback(moveData);
-                auto otioTimeline = timeline::move(
-                    p.player->getTimeline()->getTimeline().value, moveData);
-                p.player->getTimeline()->setTimeline(otioTimeline);
             }
             if (!p.mouse.dropTargets.empty())
             {
@@ -103,11 +97,11 @@ namespace tl
             }
             p.mouse.currentDropTarget = -1;
         }
-        
+
         void TimelineItem::_mouseMoveEventMove(ui::MouseMoveEvent& event)
         {
             TLRENDER_P();
-            
+
             switch (p.mouse.mode)
             {
             case Private::MouseMode::kNone:
@@ -126,7 +120,7 @@ namespace tl
                     _mouse.pos.y = _mouse.pressPos.y;
                     const int offset = _mouse.pos.x - _mouse.pressPos.x;
                     math::Box2i move;
-                        
+
                     for (const auto& item : p.mouse.items)
                     {
                         const math::Box2i& g = item->geometry;
@@ -135,19 +129,19 @@ namespace tl
 
                         // Get item time ranges for transitions.
                         const int transitionTrack = item->track;
-                        std::vector<OTIO_NS::TimeRange> itemRanges;
+                        std::vector<otime::TimeRange> itemRanges;
                         _getTransitionTimeRanges(itemRanges, transitionTrack,
                                                  timeRange);
-                        
+
                         move = math::Box2i(
                             g.min + _mouse.pos - _mouse.pressPos,
                             g.getSize() );
-                            
+
                         const OTIO_NS::RationalTime& startTime = posToTime(move.x());
                         const OTIO_NS::RationalTime& duration  = timeRange.duration();
-                        
+
                         timeRange = OTIO_NS::TimeRange(startTime, duration);
-                        
+
                         // Clamp on clips.
                         if (timeRange.start_time() - _timeRange.start_time() >=
                             itemRanges[0].end_time_exclusive())
@@ -166,7 +160,7 @@ namespace tl
                         {
                             continue;
                         }
-                        
+
                         item->p->setGeometry(move);
                     }
                 }

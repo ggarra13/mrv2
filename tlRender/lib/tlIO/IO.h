@@ -33,13 +33,13 @@ namespace tl
             std::vector<image::Info> video;
 
             //! Video time range.
-            std::optional<OTIO_NS::TimeRange> videoTime = time::invalidTimeRange;
+            std::optional<OTIO_NS::TimeRange> videoTime;
 
             //! Audio information.
             audio::Info audio;
 
             //! Audio time range.
-            std::optional<OTIO_NS::TimeRange> audioTime = time::invalidTimeRange;
+            std::optional<OTIO_NS::TimeRange> audioTime;
 
             //! Metadata tags.
             image::Tags tags;

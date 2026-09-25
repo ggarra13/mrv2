@@ -352,6 +352,8 @@ namespace mrv
 
             // Start the annotation render.
             timeline::RenderOptions renderOptions;
+            renderOptions.glyphTexture = false;
+            renderOptions.vaoSize = 16 * memory::megabyte;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
 
             render->begin(vk.cmd, annotationBuffer, frameIndex,
@@ -1196,9 +1198,9 @@ namespace mrv
                 };
                 // Max display capability
                 m_hdr_metadata.maxLuminance =
-                    data.displayMasteringLuminance.getMax();
+                    data.displayMasteringLuminance.max();
                 m_hdr_metadata.minLuminance =
-                    data.displayMasteringLuminance.getMin();
+                    data.displayMasteringLuminance.min();
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
             }

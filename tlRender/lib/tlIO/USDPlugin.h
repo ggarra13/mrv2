@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include <tlIO/Read.h>
 #include <tlIO/USD.h>
-#include <tlIO/Plugin.h>
 
 namespace tl
 {
@@ -15,14 +15,13 @@ namespace tl
         class Render;
 
         //! USD reader.
-        class Read : public io::IRead
+        class Read : public io::IVideoRead
         {
         protected:
             void _init(
                 int64_t id, const std::shared_ptr<Render>&, const file::Path&,
                 const std::vector<file::MemoryRead>&, const io::Options&,
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+                const std::shared_ptr<log::System>&);
 
             Read();
 
@@ -32,8 +31,7 @@ namespace tl
             //! Create a new reader.
             static std::shared_ptr<Read> create(
                 int64_t id, const std::shared_ptr<Render>&, const file::Path&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+                const io::Options&, const std::shared_ptr<log::System>&);
 
             std::future<io::Info> getInfo() override;
             std::future<io::VideoData>
@@ -44,36 +42,26 @@ namespace tl
             TLRENDER_PRIVATE();
         };
 
-        //! USD plugin.
-        class Plugin : public io::IPlugin
+        //! USD read plugin.
+        class ReadPlugin : public io::IReadPlugin
         {
         protected:
-            void _init(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            void _init(const std::shared_ptr<log::System>&);
 
-            Plugin();
+            ReadPlugin();
 
         public:
-            virtual ~Plugin();
+            virtual ~ReadPlugin();
 
             //! Create a new plugin.
-            static std::shared_ptr<Plugin> create(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            static std::shared_ptr<ReadPlugin>
+            create(const std::shared_ptr<log::System>&);
 
-            std::shared_ptr<io::IRead> read(
+            std::shared_ptr<io::IVideoRead> videoRead(
                 const file::Path&, const io::Options& = io::Options()) override;
-            std::shared_ptr<io::IRead> read(
+            std::shared_ptr<io::IVideoRead> videoRead(
                 const file::Path&, const std::vector<file::MemoryRead>&,
                 const io::Options& = io::Options()) override;
-            image::Info getWriteInfo(
-                const image::Info&,
-                const io::Options& = io::Options()) const override;
-            std::shared_ptr<io::IWrite> write(
-                const file::Path&, const io::Info&,
-                const io::Options& = io::Options()) override;
-
         private:
             TLRENDER_PRIVATE();
         };

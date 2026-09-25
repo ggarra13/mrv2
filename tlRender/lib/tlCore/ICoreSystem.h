@@ -36,6 +36,20 @@ namespace tl
             //! Get the system name.
             const std::string& getName() const;
 
+            //! Stop the system's threads.
+            //!
+            //! Called by the context before it lets go of its systems, so that a
+            //! system with threads is stopped while the context is still alive
+            //! and on the thread that owns it. A thread that has locked the
+            //! context weakly and is still running when the last reference goes
+            //! would otherwise destroy the context itself, and take its own
+            //! system down with it -- leaving the system's destructor joining the
+            //! thread it is running on.
+            //!
+            //! Must be safe to call more than once, and safe to call on a system
+            //! that has no threads. The default does nothing.
+            virtual void shutdown();
+
             //! Tick the system.
             virtual void tick();
 

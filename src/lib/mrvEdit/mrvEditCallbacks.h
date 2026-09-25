@@ -27,7 +27,7 @@ namespace mrv
     //@{
     //! Store timeline in undo queue.
 
-    void edit_store_undo(TimelinePlayer*, ViewerUI* ui);
+    void edit_store_undo(TimelinePlayer*&, ViewerUI* ui);
     void edit_clear_redo(ViewerUI* ui);
     //@}
 
@@ -104,7 +104,7 @@ namespace mrv
 
     //! Edit function to shift annotations in a timeRange to a start time
     void shiftAnnotations(
-        const opentime::TimeRange& range, const opentime::RationalTime& startTime,
+        const OTIO_NS::TimeRange& range, const OTIO_NS::RationalTime& startTime,
         ViewerUI* ui);
 
     //! Refresh file cache

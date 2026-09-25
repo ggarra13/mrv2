@@ -11,6 +11,7 @@
 
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
+#include <tlCore/StringFormat.h>
 
 #include <FL/vk_enum_string_helper.h>
 #include <FL/Fl_Vk_Utils.H>
@@ -659,6 +660,12 @@ namespace tl
                                    &p.depthImages[i], &p.depthAllocations[i],
                                    nullptr) != VK_SUCCESS)
                     throw std::runtime_error("Failed to create depth image");
+
+#ifndef NDEBUG
+                std::string name = string::Format("OffscreenBuffer: depth image {0}").arg(i);
+                vmaSetAllocationName(ctx.allocator, p.depthAllocations[i],
+                                     name.c_str());
+#endif
             }
         }
 
@@ -729,6 +736,10 @@ namespace tl
                                    &p.resolveImage, &p.resolveAllocation,
                                    nullptr) != VK_SUCCESS)
                     throw std::runtime_error("Failed to create resolve image");
+#ifndef NDEBUG
+                vmaSetAllocationName(ctx.allocator, p.resolveAllocation,
+                                     "OffscreenBuffer: resolve color image" );
+#endif
             }
 
             // --------------------------------------------------
@@ -758,6 +769,11 @@ namespace tl
                                    &p.msColorImage, &p.msColorAllocation,
                                    nullptr) != VK_SUCCESS)
                     throw std::runtime_error("Failed to create multisampled color image");
+
+#ifndef NDEBUG
+                vmaSetAllocationName(ctx.allocator, p.msColorAllocation,
+                                     "OffscreenBuffer: resolve multisampled color image" );
+#endif
             }
         }
 

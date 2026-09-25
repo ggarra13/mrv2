@@ -2013,8 +2013,8 @@ namespace mrv
                         const math::FloatRange& luminance =
                             hdr.displayMasteringLuminance;
                         snprintf(
-                            buf, 256, "min: %g max: %g", luminance.getMin(),
-                            luminance.getMax());
+                            buf, 256, "min: %g max: %g", luminance.min(),
+                            luminance.max());
                         add_text(
                             _("HDR Display Mastering Luminance"),
                             _("HDR Display Mastering Luminance"), buf);

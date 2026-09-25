@@ -16,7 +16,7 @@
 #include <tlCore/LogSystem.h>
 
 #include <tlIO/FFmpeg.h>
-#include <tlIO/FFmpegMacros.h>
+#include <tlIO/IOMacros.h>
 
 #ifdef TLRENDER_DOVI
 #include <libdovi/rpu_parser.h>
@@ -777,7 +777,7 @@ namespace tl
         void Write::_init(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             IWrite::_init(path, options, info, logSystem);
 
@@ -1963,7 +1963,9 @@ namespace tl
                         i.second.c_str(), 0);
                 }
 
-                p.videoStartTime = p.info.videoTime->start_time();
+                p.videoStartTime = p.info.videoTime.has_value() ?
+                                   p.info.videoTime->start_time() :
+                                   OTIO_NS::RationalTime(0.F, 24.F);
                 // Set timecode
                 option = p.options.find("timecode");
                 if (option != p.options.end())
@@ -2264,7 +2266,7 @@ namespace tl
         std::shared_ptr<Write> Write::create(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             auto out = std::shared_ptr<Write>(new Write);
             out->_init(path, info, options, logSystem);
@@ -2309,7 +2311,7 @@ namespace tl
             case image::PixelType::YUV_422P_U16:
             case image::PixelType::YUV_444P_U16:
             {
-                // Flip each plane by its own height. Chroma is vertically
+                //! \bug How do we flip YUV data?
                 // subsampled (half height) only for 4:2:0; full height
                 // otherwise.
                 const bool halfChromaH =
@@ -2589,6 +2591,7 @@ namespace tl
 
             }
         }
+
         void Write::_attach_stream_hdr_metadata(AVStream* stream)
         {
             TLRENDER_P();
@@ -2624,10 +2627,10 @@ namespace tl
                 mdm->white_point[1] = av_d2q(wy, 100000);
                 mdm->has_primaries = 1;
 
-                float min_lum = p.hdr.displayMasteringLuminance.getMin();
+                float min_lum = p.hdr.displayMasteringLuminance.min();
                 if (min_lum <= 0.F)
                     min_lum = 1.F;
-                float max_lum = p.hdr.displayMasteringLuminance.getMax();
+                float max_lum = p.hdr.displayMasteringLuminance.max();
 
                 mdm->max_luminance = av_d2q(max_lum, 10000);
                 mdm->min_luminance = av_d2q(min_lum, 10000);
@@ -2707,10 +2710,10 @@ namespace tl
 
                 mdm->has_primaries = 1;
 
-                float min_lum = p.hdr.displayMasteringLuminance.getMin();
+                float min_lum = p.hdr.displayMasteringLuminance.min();
                 if (min_lum <= 0.F)
                     min_lum = 1.F;
-                float max_lum = p.hdr.displayMasteringLuminance.getMax();
+                float max_lum = p.hdr.displayMasteringLuminance.max();
 
                 mdm->max_luminance = av_d2q(max_lum, 10000);
                 mdm->min_luminance = av_d2q(min_lum, 10000);

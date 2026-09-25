@@ -33,7 +33,7 @@ namespace tl
             float mouseWheelScale = 1.1F;
             std::shared_ptr<observer::Value<bool> > stopOnScrub;
             std::shared_ptr<observer::Value<bool> > scrub;
-            std::shared_ptr<observer::Value<OTIO_NS::RationalTime> > timeScrub;
+            std::shared_ptr<observer::Value<otime::RationalTime> > timeScrub;
             std::vector<int> frameMarkers;
             std::shared_ptr<observer::Value<ItemOptions> > itemOptions;
             std::shared_ptr<observer::Value<DisplayOptions> > displayOptions;
@@ -46,7 +46,7 @@ namespace tl
 #ifdef OPENGL_BACKEND
             std::shared_ptr<gl::GLFWWindow> window;
 #endif
-            
+
             std::shared_ptr<ui::ScrollWidget> scrollWidget;
             std::shared_ptr<TimelineItem> timelineItem;
 
@@ -65,10 +65,10 @@ namespace tl
             std::shared_ptr<observer::ValueObserver<bool> > timelineObserver;
             std::shared_ptr<observer::ValueObserver<timeline::Playback> >
                 playbackObserver;
-            std::shared_ptr<observer::ValueObserver<OTIO_NS::RationalTime> >
+            std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
                 currentTimeObserver;
             std::shared_ptr<observer::ValueObserver<bool> > scrubObserver;
-            std::shared_ptr<observer::ValueObserver<OTIO_NS::RationalTime> >
+            std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
                 timeScrubObserver;
         };
 
@@ -93,7 +93,7 @@ namespace tl
             p.stopOnScrub = observer::Value<bool>::create(true);
             p.scrub = observer::Value<bool>::create(false);
             p.timeScrub =
-                observer::Value<OTIO_NS::RationalTime>::create(time::invalidTime);
+                observer::Value<otime::RationalTime>::create(time::invalidTime);
             p.itemOptions = observer::Value<ItemOptions>::create();
             p.displayOptions = observer::Value<DisplayOptions>::create();
 
@@ -102,7 +102,7 @@ namespace tl
                 "tl::TIMELINEUI::TimelineWidget", math::Size2i(1, 1), context,
                 static_cast<int>(gl::GLFWWindowOptions::kNone));
 #endif
-            
+
             p.scrollWidget = ui::ScrollWidget::create(
                 context, ui::ScrollType::Both, shared_from_this());
             p.scrollWidget->setScrollEventsEnabled(false);
@@ -128,7 +128,7 @@ namespace tl
         }
 #endif
 
-#ifdef VULKAN_BACKEND        
+#ifdef VULKAN_BACKEND
         TimelineWidget::TimelineWidget(Fl_Vk_Context& ctx) :
             ctx(ctx),
             _p(new Private)
@@ -146,7 +146,7 @@ namespace tl
             return out;
         }
 #endif
-        
+
         double TimelineWidget::getScale() const
         {
             TLRENDER_P();
@@ -195,7 +195,7 @@ namespace tl
                         { _p->playback = value; });
 
                 p.currentTimeObserver =
-                    observer::ValueObserver<OTIO_NS::RationalTime>::create(
+                    observer::ValueObserver<otime::RationalTime>::create(
                         p.player->observeCurrentTime(),
                         [this](const OTIO_NS::RationalTime& value)
                         {
@@ -243,7 +243,7 @@ namespace tl
                 p.timelineItem->setEditMode(value);
             }
         }
-        
+
         void TimelineWidget::setViewZoom(double value)
         {
             setViewZoom(
@@ -376,7 +376,7 @@ namespace tl
             return _p->scrub;
         }
 
-        std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
+        std::shared_ptr<observer::IValue<otime::RationalTime> >
         TimelineWidget::observeTimeScrub() const
         {
             return _p->timeScrub;
@@ -772,17 +772,19 @@ namespace tl
                     p.itemData->options = p.player->getOptions();
 #ifdef OPENGL_BACKEND
                     p.timelineItem = TimelineItem::create(
+                        context,
                         p.player,
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
-                        p.itemData, p.window, context);
+                        p.itemData, p.window);
 #endif
 #ifdef VULKAN_BACKEND
                     p.timelineItem = TimelineItem::create(
+                        context,
                         p.player,
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
-                        p.itemData, ctx, context);
+                        p.itemData, ctx);
 #endif
                     p.timelineItem->setEditable(p.editable->get());
                     p.timelineItem->setEditMode(p.editMode->get());
@@ -801,30 +803,31 @@ namespace tl
                         });
 
                     p.timeScrubObserver =
-                        observer::ValueObserver<OTIO_NS::RationalTime>::create(
+                        observer::ValueObserver<otime::RationalTime>::create(
                             p.timelineItem->observeTimeScrub(),
                             [this](const OTIO_NS::RationalTime& value)
                             { _p->timeScrub->setIfChanged(value); });
                 }
             }
         }
-        
-        std::vector<const OTIO_NS::Item*> TimelineWidget::getSelectedItems() const
+
+        std::vector<timeline::MoveData>
+        TimelineWidget::getSelectedItems() const
         {
             TLRENDER_P();
-            
-            std::vector<const OTIO_NS::Item* > out;
+
+            std::vector<timeline::MoveData> out;
             if (p.timelineItem)
                 out = p.timelineItem->getSelectedItems();
             return out;
         }
-        
-        std::vector<const OTIO_NS::Transition*>
+
+        std::vector<timeline::MoveData>
         TimelineWidget::getSelectedTransitions() const
         {
             TLRENDER_P();
-            
-            std::vector<const OTIO_NS::Transition* > out;
+
+            std::vector<timeline::MoveData> out;
             if (p.timelineItem)
                 out = p.timelineItem->getSelectedTransitions();
             return out;

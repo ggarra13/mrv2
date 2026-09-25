@@ -26,9 +26,9 @@ namespace tl
         struct VideoClipItem::Private
         {
             std::string clipName;
+            file::Path timelinePath;
             file::Path path;
-            std::vector<file::MemoryRead> memoryRead;
-            std::shared_ptr<ThumbnailGenerator> thumbnailGenerator;
+            std::shared_ptr<ThumbnailSystem> thumbnailSystem;
 
             struct SizeData
             {
@@ -47,13 +47,13 @@ namespace tl
         };
 
         void VideoClipItem::_init(
-            const std::shared_ptr<timeline::Timeline> timeline,
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Timeline>& timeline,
             const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<ThumbnailGenerator> thumbnailGenerator,
-            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<ThumbnailSystem>& thumbnailSystem,
             const std::shared_ptr<IWidget>& parent)
         {
             const auto path = timeline::getPath(
@@ -69,9 +69,9 @@ namespace tl
             TLRENDER_P();
 
             p.clipName = clip->name();
+            p.timelinePath = timeline->getPath();
             p.path = path;
-            p.memoryRead = timeline->getMem(clip->media_reference());
-            p.thumbnailGenerator = thumbnailGenerator;
+            p.thumbnailSystem = thumbnailSystem;
 
             p.ioOptions = _data->options.ioOptions;
             p.ioOptions["USD/cameraName"] = p.clipName;
@@ -96,19 +96,19 @@ namespace tl
         }
 
         std::shared_ptr<VideoClipItem> VideoClipItem::create(
-            const std::shared_ptr<timeline::Timeline> timeline,
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Timeline>& timeline,
             const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<TIMELINEUI::ThumbnailGenerator> thumbnailGenerator,
-            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<ThumbnailSystem>& thumbnailSystem,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<VideoClipItem>(new VideoClipItem);
             out->_init(
-                timeline, clip, scale, options, displayOptions, itemData,
-                thumbnailGenerator, context, parent);
+                context, timeline, clip, scale, options, displayOptions,
+                itemData, thumbnailSystem, parent);
             return out;
         }
 
@@ -150,13 +150,19 @@ namespace tl
                 p.infoRequest.future.wait_for(std::chrono::seconds(0)) ==
                     std::future_status::ready)
             {
-                p.ioInfo =
-                    std::make_shared<io::Info>(p.infoRequest.future.get());
-                const std::string infoCacheKey =
-                    io::getInfoCacheKey(p.path, p.ioOptions);
-                _data->info[infoCacheKey] = p.ioInfo;
-                _updates |= ui::Update::Size;
-                _updates |= ui::Update::Draw;
+                // Extract the result and reset the request wrapper
+                const auto info = p.infoRequest.future.get();
+                p.infoRequest = {};
+
+                // Only store if the media actually contains valid video
+                // stream metadata
+                if (!info.video.empty())
+                {
+                    p.ioInfo = std::make_shared<io::Info>(info);
+                    const std::string infoCacheKey = io::getInfoCacheKey(p.path, p.ioOptions);
+                    _data->info[infoCacheKey] = p.ioInfo;
+                    _updates |= ui::Update::Size | ui::Update::Draw;
+                }
             }
 
             // Check if any thumbnails are finished.
@@ -168,11 +174,18 @@ namespace tl
                         std::future_status::ready)
                 {
                     const auto image = i->second.future.get();
-                    const std::string cacheKey =
-                        io::getVideoCacheKey(p.path, i->first, p.ioOptions, {});
-                    _data->thumbnails[cacheKey] = image;
+                    // Only cache valid, non-null rendered thumbnail frames
+                    if (image)
+                    {
+                        const std::string cacheKey =
+                            io::getVideoCacheKey(p.path, i->first, p.ioOptions,
+                                                 {});
+                        _data->thumbnails[cacheKey] = image;
+                        _updates |= ui::Update::Draw;
+                    }
+
+                    // Always erase the completed request from the pending map
                     i = p.thumbnailRequests.erase(i);
-                    _updates |= ui::Update::Draw;
                 }
                 else
                 {
@@ -256,18 +269,20 @@ namespace tl
             {
                 if (!p.ioInfo && !p.infoRequest.future.valid())
                 {
-                    p.infoRequest = p.thumbnailGenerator->getInfo(
-                        p.path, p.memoryRead, p.ioOptions);
+                    p.infoRequest = p.thumbnailSystem->getInfo(
+                        p.timelinePath,
+                        p.path,
+                        _data->options.ioOptions);
                 }
             }
 
             const int thumbnailWidth =
                 (_displayOptions.thumbnails && p.ioInfo &&
                  !p.ioInfo->video.empty())
-                    ? static_cast<int>(
-                          _displayOptions.thumbnailHeight *
-                          p.ioInfo->video[0].size.getAspect())
-                    : 0;
+                ? static_cast<int>(
+                    _displayOptions.thumbnailHeight *
+                    p.ioInfo->video[0].size.getAspect())
+                : 0;
             if (thumbnailWidth > 0)
             {
                 timeline::BackgroundOptions background;
@@ -278,19 +293,19 @@ namespace tl
                     const math::Box2i box(
                         g.min.x + x,
                         g.min.y + (_displayOptions.clipInfo
-                                       ? (lineHeight + m * 2)
-                                       : 0),
+                                   ? (lineHeight + m * 2)
+                                   : 0),
                         thumbnailWidth, _displayOptions.thumbnailHeight);
                     if (math::intersects(box, clipRect))
                     {
                         const OTIO_NS::RationalTime time =
                             OTIO_NS::RationalTime(
                                 _timeRange.start_time().value() +
-                                    (w > 1 ? (x / static_cast<double>(w - 1))
-                                           : 0) *
-                                        _timeRange.duration().value(),
+                                (w > 1 ? (x / static_cast<double>(w - 1))
+                                 : 0) *
+                                _timeRange.duration().value(),
                                 _timeRange.duration().rate())
-                                .floor();
+                            .floor();
                         OTIO_NS::TimeRange trimmedRange = _trimmedRange;
                         const OTIO_NS::TimeRange availableRange = _availableRange;
                         if (_data->options.compat &&
@@ -368,9 +383,9 @@ namespace tl
                             if (k == p.thumbnailRequests.end())
                             {
                                 p.thumbnailRequests[mediaTime] =
-                                    p.thumbnailGenerator->getThumbnail(
-                                        p.path, p.memoryRead,
-                                        _displayOptions.thumbnailHeight,
+                                    p.thumbnailSystem->getThumbnail(
+                                        p.timelinePath,
+                                        p.path, _displayOptions.thumbnailHeight,
                                         mediaTime, "", p.ioOptions);
                             }
                         }
@@ -393,7 +408,7 @@ namespace tl
                 ids.push_back(i.second.id);
             }
             p.thumbnailRequests.clear();
-            p.thumbnailGenerator->cancelRequests(ids);
+            p.thumbnailSystem->cancelRequests(ids);
         }
     } // namespace TIMELINEUI
 } // namespace tl

@@ -2,7 +2,7 @@
 // Copyright (c) 2024 Gonzalo Garramuño
 // All rights reserved.
 
-#include <tlIO/FFmpegMacros.h>
+#include <tlIO/IOMacros.h>
 #include <tlIO/NDIReadPrivate.h>
 #include <tlIO/NDIUtil.h>
 
@@ -41,16 +41,13 @@ namespace tl
         } // namespace
 
         ReadVideo::ReadVideo(
-            const std::string& fileName, const NDIlib_source_t& NDIsource,
             const NDIlib_recv_create_t& recv_desc,
             const NDIlib_video_frame_t& v,
             const std::weak_ptr<log::System>& logSystem,
             const Options& options) :
-            _fileName(fileName),
             _logSystem(logSystem),
             _options(options)
         {
-            _tags["otioClipName"] = _fileName;
             double fps = v.frame_rate_N / static_cast<double>(v.frame_rate_D);
             double startTime = 0.0;
             double lastTime = kNDI_MOVIE_DURATION * fps;
@@ -100,7 +97,6 @@ namespace tl
 
         void ReadVideo::_from_ndi(const NDIlib_video_frame_t& video_frame)
         {
-
             bool init = false;
 
             float pixelAspectRatio = 1.F;
@@ -325,16 +321,15 @@ namespace tl
             NDIlib_video_frame_t video_frame;
             NDIlib_frame_type_e type;
 
-            {
-                std::stringstream ss;
-                ss << time;
-                _tags["otioClipTime"] = ss.str();
-            }
+            io::addOtioTags(_tags, _fileName, time);
 
             while (out == 0 && NDI_recv)
             {
-                type = NDIlib_recv_capture(
-                    NDI_recv, &video_frame, nullptr, nullptr, 50);
+                {
+                    std::unique_lock<std::mutex> lock(NDI_recv_mutex);
+                    type = NDIlib_recv_capture(
+                        NDI_recv, &video_frame, nullptr, nullptr, 50);
+                }
                 if (type == NDIlib_frame_type_error)
                 {
                     out = -1;
@@ -342,7 +337,10 @@ namespace tl
                 else if (type == NDIlib_frame_type_video)
                 {
                     _from_ndi(video_frame);
-                    NDIlib_recv_free_video(NDI_recv, &video_frame);
+                    {
+                        std::unique_lock<std::mutex> lock(NDI_recv_mutex);
+                        NDIlib_recv_free_video(NDI_recv, &video_frame);
+                    }
                     out = 1;
                 }
                 else if (type == NDIlib_frame_type_status_change)

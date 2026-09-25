@@ -88,7 +88,9 @@ namespace tl
             p.glfwInit = true;
         }
 
-        GLFWSystem::GLFWSystem() :
+        GLFWSystem::GLFWSystem(
+            const std::shared_ptr<system::Context>& context) :
+            ISystem(context, "tl::glfw::System"),
             _p(new Private)
         {
         }
@@ -105,7 +107,7 @@ namespace tl
         std::shared_ptr<GLFWSystem>
         GLFWSystem::create(const std::shared_ptr<system::Context>& context)
         {
-            auto out = std::shared_ptr<GLFWSystem>(new GLFWSystem);
+            auto out = std::shared_ptr<GLFWSystem>(new GLFWSystem(context));
             out->_init(context);
             return out;
         }

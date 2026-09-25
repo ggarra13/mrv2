@@ -1296,7 +1296,6 @@ namespace mrv
         endBMDOutputStream();
 #endif
 
-
         delete p.mainControl;
         p.mainControl = nullptr;
 
@@ -2180,21 +2179,19 @@ namespace mrv
         timeline::Options options;
 
         // Handle FileSequence options
-        options.fileSequenceAudio = static_cast<timeline::FileSequenceAudio>(
+        options.imageSeqAudio = static_cast<timeline::ImageSeqAudio>(
             p.settings->getValue<int>("FileSequence/Audio"));
-        options.fileSequenceAudioFileName =
+        options.imageSeqAudioFileName =
             p.settings->getValue<std::string>("FileSequence/AudioFileName");
-        options.fileSequenceAudioDirectory =
-            p.settings->getValue<std::string>("FileSequence/AudioDirectory");
 
         // Handle OTIO options
         options.spatial = static_cast<timeline::Spatial>(p.settings->getValue<int>("OTIO/Spatial"));
         options.compat = p.settings->getValue<bool>("OTIO/Compatibility");
 
         // Handle Performance options
-        options.videoRequestCount =
+        options.videoRequestMax =
             p.settings->getValue<int>("Performance/VideoRequestCount");
-        options.audioRequestCount =
+        options.audioRequestMax =
             p.settings->getValue<int>("Performance/AudioRequestCount");
 
         // Handle I/O options
@@ -2364,7 +2361,7 @@ namespace mrv
                                 {
                                     const math::Int64Range& range = frames.value();
                                     const bool listdir = true;
-                                    file = item->path.getFrame(range.getMin(), listdir);
+                                    file = item->path.getFrame(range.min(), listdir);
                                 }
                                 p.settings->addRecentFile(file);
                             }
@@ -2591,8 +2588,8 @@ namespace mrv
             uint64_t bytes = Gbytes * memory::gigabyte;
 
             // Update the I/O cache.
-            auto ioSystem = _context->getSystem<io::System>();
-            ioSystem->getCache()->setMax(bytes);
+            auto ioSystem = _context->getSystem<io::ReadSystem>();
+            // ioSystem->getCache()->setMax(bytes);
 
             // old readAhead/readBehind code used when playing sequences.
             const auto timeline = p.player->timeline();

@@ -24,24 +24,24 @@ namespace tl
     {
 #ifdef OPENGL_BACKEND
         void TimelineItem::_init(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
             const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             const std::shared_ptr<gl::GLFWWindow>& window,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
 #endif
 
 #ifdef VULKAN_BACKEND
         void TimelineItem::_init(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
             const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
 #endif
         {
@@ -62,24 +62,9 @@ namespace tl
 
             p.scrub = observer::Value<bool>::create(false);
             p.timeScrub =
-                observer::Value<OTIO_NS::RationalTime>::create(time::invalidTime);
+                observer::Value<otime::RationalTime>::create(time::invalidTime);
 
-#ifdef OPENGL_BACKEND
-            p.thumbnailGenerator = TIMELINEUI::ThumbnailGenerator::create(
-                context->getSystem<TIMELINEUI::ThumbnailSystem>()->getCache(), context,
-                window);
-#endif
-
-#ifdef VULKAN_BACKEND
-            if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
-            {
-                context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
-            }
-
-            p.thumbnailGenerator = timelineui_vk::ThumbnailGenerator::create(
-                context->getSystem<timelineui_vk::ThumbnailSystem>()->getCache(), context,
-                ctx);
-#endif
+            p.thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
 
             const auto timeline = p.player->getTimeline();
             const auto otioTimeline = timeline->getTimeline();
@@ -128,16 +113,16 @@ namespace tl
                             {
                             case TrackType::Video:
                                 track.items.push_back(VideoClipItem::create(
-                                    timeline, clip, scale, options,
+                                    context, timeline, clip, scale, options,
                                     displayOptions,
-                                    itemData, p.thumbnailGenerator, context,
+                                    itemData, p.thumbnailSystem,
                                     shared_from_this()));
                                 break;
                             case TrackType::Audio:
                                 track.items.push_back(AudioClipItem::create(
-                                    timeline, clip, scale, options,
+                                    context, timeline, clip, scale, options,
                                     displayOptions,
-                                    itemData, p.thumbnailGenerator, context,
+                                    itemData, p.thumbnailSystem,
                                     shared_from_this()));
                                 break;
                             default:
@@ -223,7 +208,9 @@ namespace tl
                     });
         }
 
-        TimelineItem::~TimelineItem() {}
+        TimelineItem::~TimelineItem()
+        {
+        }
 
 #ifdef OPENGL_BACKEND
         TimelineItem::TimelineItem() :
@@ -232,19 +219,19 @@ namespace tl
         }
 
         std::shared_ptr<TimelineItem> TimelineItem::create(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
             const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             const std::shared_ptr<gl::GLFWWindow>& window,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<TimelineItem>(new TimelineItem);
             out->_init(
-                player, stack, scale, options, displayOptions, itemData, window,
-                context, parent);
+                context, player, stack, scale, options, displayOptions,
+                itemData, window, parent);
             return out;
         }
 #endif
@@ -257,19 +244,19 @@ namespace tl
         }
 
         std::shared_ptr<TimelineItem> TimelineItem::create(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
             const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             Fl_Vk_Context& ctx,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<TimelineItem>(new TimelineItem(ctx));
             out->_init(
-                player, stack, scale, options, displayOptions, itemData,
-                context, parent);
+                context, player, stack, scale, options, displayOptions,
+                itemData, parent);
             return out;
         }
 #endif
@@ -1343,30 +1330,34 @@ namespace tl
             return out;
         }
 
-        std::vector<const OTIO_NS::Item*>
+        std::vector<timeline::MoveData>
         TimelineItem::getSelectedItems() const
         {
             TLRENDER_P();
 
-            std::vector<const OTIO_NS::Item*> out;
+            std::vector<timeline::MoveData> out;
             for (const auto& item : p.mouse.items)
             {
-                if (auto clip = dynamic_cast<const IBasicItem*>(item->p.get()))
-                    out.push_back(clip->getOtioItem());
+                timeline::MoveData move;
+                move.fromTrack = move.toTrack = item->track;
+                move.fromIndex = move.toIndex = item->index;
+                out.push_back(move);
             }
             return out;
         }
 
-        std::vector<const OTIO_NS::Transition*>
+        std::vector<timeline::MoveData>
         TimelineItem::getSelectedTransitions() const
         {
             TLRENDER_P();
 
-            std::vector<const OTIO_NS::Transition*> out;
+            std::vector<timeline::MoveData> out;
             for (const auto& item : p.mouse.items)
             {
-                if (auto transition = dynamic_cast<const TransitionItem*>(item->p.get()))
-                    out.push_back(transition->getOtioItem());
+                timeline::MoveData move;
+                move.fromTrack = move.toTrack = item->track;
+                move.fromIndex = move.toIndex = item->index;
+                out.push_back(move);
             }
             return out;
         }

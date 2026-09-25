@@ -27,26 +27,26 @@ namespace tl
             Move,
             Overwrite,
             Ripple,
-            Roll,   
+            Roll,
             Select,
             Slice,
             Slip,
             Slide,
-            Trim,  
-            
+            Trim,
+
             Count,
             First = Move
         };
         TLRENDER_ENUM(EditMode);
         TLRENDER_ENUM_SERIALIZE(EditMode);
-        
+
         enum class MoveType
         {
             UndoOnly,
             Clip,
             Transition
         };
-        
+
         //! Move items data.
         struct MoveData
         {
@@ -61,8 +61,8 @@ namespace tl
             int toOtioIndex = 0;
 
             // Transition move variables.
-            opentime::RationalTime in_offset = time::invalidTime;
-            opentime::RationalTime out_offset = time::invalidTime;
+            OTIO_NS::RationalTime in_offset = time::invalidTime;
+            OTIO_NS::RationalTime out_offset = time::invalidTime;
         };
 
         //! Move items in the timeline.

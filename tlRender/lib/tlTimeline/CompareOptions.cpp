@@ -284,19 +284,19 @@ namespace tl
                                  videoFrame);
         }
 
-        opentime::RationalTime getCompareTime(
-            const opentime::RationalTime& sourceTime,
-            const opentime::TimeRange& sourceTimeRange,
-            const opentime::TimeRange& compareTimeRange, CompareTimeMode mode)
+        OTIO_NS::RationalTime getCompareTime(
+            const OTIO_NS::RationalTime& sourceTime,
+            const OTIO_NS::TimeRange& sourceTimeRange,
+            const OTIO_NS::TimeRange& compareTimeRange, CompareTimeMode mode)
         {
-            opentime::RationalTime out;
+            OTIO_NS::RationalTime out;
             switch (mode)
             {
             case CompareTimeMode::Relative:
             {
-                const opentime::RationalTime relativeTime =
+                const OTIO_NS::RationalTime relativeTime =
                     sourceTime - sourceTimeRange.start_time();
-                const opentime::RationalTime relativeTimeRescaled =
+                const OTIO_NS::RationalTime relativeTimeRescaled =
                     relativeTime.rescaled_to(compareTimeRange.duration().rate())
                         .floor();
                 out = compareTimeRange.start_time() + relativeTimeRescaled;

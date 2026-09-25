@@ -8,6 +8,7 @@
 
 #include <tlCore/FileIO.h>
 
+#include <opentimelineio/imageSequenceReference.h>
 #include <opentimelineio/mediaReference.h>
 #include <opentimelineio/timeline.h>
 
@@ -17,15 +18,15 @@ namespace tl
     {
         //! Get the timeline file extensions.
         std::vector<std::string>
-        getExtensions(int types, const std::shared_ptr<system::Context>&);
+        getExtensions(const std::shared_ptr<system::Context>&, int type);
 
         //! Convert frames to ranges.
-        std::vector<opentime::TimeRange>
-            toRanges(std::vector<opentime::RationalTime>);
+        std::vector<otime::TimeRange>
+            toRanges(std::vector<otime::RationalTime>);
 
         //! Loop a time.
-        opentime::RationalTime loop(
-            const opentime::RationalTime&, const opentime::TimeRange&,
+        OTIO_NS::RationalTime loop(
+            const OTIO_NS::RationalTime&, const OTIO_NS::TimeRange&,
             bool* looped = nullptr);
 
         //! Cache direction.
@@ -40,8 +41,8 @@ namespace tl
         TLRENDER_ENUM_SERIALIZE(CacheDirection);
 
         //! Loop the cache time range.
-        std::vector<opentime::TimeRange> loopCache(
-            const opentime::TimeRange&, const opentime::TimeRange&, CacheDirection);
+        std::vector<otime::TimeRange> loopCache(
+            const OTIO_NS::TimeRange&, const OTIO_NS::TimeRange&, CacheDirection);
 
         //! Get the root (highest parent).
         const OTIO_NS::Composable* getRoot(const OTIO_NS::Composable*);
@@ -50,11 +51,11 @@ namespace tl
         template <typename T> const T* getParent(const OTIO_NS::Item*);
 
         //! Get the duration of all tracks of the same kind.
-        std::optional<opentime::RationalTime>
+        std::optional<otime::RationalTime>
         getDuration(const OTIO_NS::Timeline*, const std::string& kind);
 
         //! Get the time range of a timeline.
-        opentime::TimeRange getTimeRange(const OTIO_NS::Timeline*);
+        OTIO_NS::TimeRange getTimeRange(const OTIO_NS::Timeline*);
 
         //! Get a list of paths to open from the given path.
         std::vector<file::Path> getPaths(
@@ -70,6 +71,14 @@ namespace tl
         file::Path getPath(
             const OTIO_NS::MediaReference*, const std::string& directory,
             file::PathOptions);
+
+        //! Convert from an OTIO missing frame policy.
+        io::MissingFrames fromOTIO(
+            OTIO_NS::ImageSequenceReference::MissingFramePolicy);
+
+        //! Convert to an OTIO missing frame policy.
+        OTIO_NS::ImageSequenceReference::MissingFramePolicy toOTIO(
+            io::MissingFrames);
 
         //! Get a memory read for a media reference.
         std::vector<file::MemoryRead>
@@ -92,16 +101,16 @@ namespace tl
             const file::PathOptions& = file::PathOptions());
 
         //! Transform track time to video media time.
-        opentime::RationalTime toVideoMediaTime(
-            const opentime::RationalTime&,
-            const opentime::TimeRange& trimmedRangeInParent,
-            const opentime::TimeRange& trimmedRange, double rate);
+        OTIO_NS::RationalTime toVideoMediaTime(
+            const OTIO_NS::RationalTime&,
+            const OTIO_NS::TimeRange& trimmedRangeInParent,
+            const OTIO_NS::TimeRange& trimmedRange, double rate);
 
         //! Transform track time to audio media time.
-        opentime::TimeRange toAudioMediaTime(
-            const opentime::TimeRange&,
-            const opentime::TimeRange& trimmedRangeInParent,
-            const opentime::TimeRange& trimmedRange, double sampleRate);
+        OTIO_NS::TimeRange toAudioMediaTime(
+            const OTIO_NS::TimeRange&,
+            const OTIO_NS::TimeRange& trimmedRangeInParent,
+            const OTIO_NS::TimeRange& trimmedRange, double sampleRate);
 
         //! Write a timeline to an .otioz file.
         bool writeOTIOZ(

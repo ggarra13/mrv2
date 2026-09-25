@@ -248,11 +248,16 @@ void mrv2_enums(py::module& m)
         .value("Audio", timeline::TimerMode::Audio)
         .export_values();
 
-    py::enum_<timeline::FileSequenceAudio>(timeline, "FileSequenceAudio")
-        .value("kNone", timeline::FileSequenceAudio::kNone)
-        .value("BaseName", timeline::FileSequenceAudio::BaseName)
-        .value("FileName", timeline::FileSequenceAudio::FileName)
-        .value("Directory", timeline::FileSequenceAudio::Directory)
+    py::enum_<timeline::ImageSeqAudio>(timeline, "ImageSeqAudio")
+        .value("kNone", timeline::ImageSeqAudio::kNone)
+        .value("Ext", timeline::ImageSeqAudio::Ext)
+        .value("FileName", timeline::ImageSeqAudio::FileName)
+        .export_values();
+
+    py::enum_<timeline::HDRExportMode>(image, "HDRExportMode")
+        .value("BakedHDR", timeline::HDRExportMode::BakedHDR)
+        .value("LinearHDR", timeline::HDRExportMode::LinearHDR)
+        .value("BakedSDR", timeline::HDRExportMode::BakedSDR)
         .export_values();
 
     py::enum_<timeline::HDRExportMode>(image, "HDRExportMode")

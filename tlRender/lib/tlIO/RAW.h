@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2024 Gonzalo Garramuño
+// Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
 #pragma once
 
+#include <zlib.h>
+
 #include <tlIO/SequenceIO.h>
 
 #include <tlCore/FileIO.h>
+#include <tlCore/Matrix.h>
 
 namespace tl
 {
@@ -14,73 +17,53 @@ namespace tl
     //!
     //! References:
     //! https://www.libraw.org/
+    //!
     namespace raw
     {
-        //! RAW reader.
-        class Read : public io::ISequenceRead
+        //! RAW decoder.
+        class Decode : public io::IDecode
         {
         protected:
-            void _init(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
-
-            Read();
+            Decode();
 
         public:
-            virtual ~Read();
+            virtual ~Decode();
 
-            //! Create a new reader.
-            static std::shared_ptr<Read> create(
-                const file::Path&, const io::Options&,
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            //! Create a new decoder.
+            static std::shared_ptr<Decode> create();
 
-            //! Create a new reader.
-            static std::shared_ptr<Read> create(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            io::Info getInfo(
+                const std::string& fileName,
+                const file::MemoryRead* = nullptr) override;
+            io::VideoData readVideo(
+                const std::string& fileName,
+                const file::MemoryRead*,
+                const OTIO_NS::RationalTime&,
+                const io::Options& = io::Options()) override;
 
-        protected:
-            io::Info _getInfo(
-                const std::string& fileName, const file::MemoryRead*) override;
-            io::VideoData _readVideo(
-                const std::string& fileName, const file::MemoryRead*,
-                const OTIO_NS::RationalTime&, const io::Options&) override;
+            private:
+                image::Info _info;
         };
 
-        //! RAW plugin.
-        class Plugin : public io::IPlugin
+        //! RAW read plugin.
+        class ReadPlugin : public io::IReadPlugin
         {
         protected:
-            Plugin();
+            void _init(const std::shared_ptr<log::System>&);
+
+            ReadPlugin() = default;
 
         public:
             //! Create a new plugin.
-            static std::shared_ptr<Plugin> create(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            static std::shared_ptr<ReadPlugin> create(
+                const std::shared_ptr<log::System>&);
 
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const io::Options& = io::Options()) override;
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const std::vector<file::MemoryRead>&,
+            std::shared_ptr<io::IDecode> decode(
                 const io::Options& = io::Options()) override;
-            image::Info getWriteInfo(
-                const image::Info&,
-                const io::Options& = io::Options()) const override
-            {
-                image::Info out;
-                return out;
-            }
-            std::shared_ptr<io::IWrite> write(
-                const file::Path&, const io::Info&,
-                const io::Options& = io::Options()) override
-            {
-                std::shared_ptr<io::IWrite> out;
-                return out;
-            }
+
+            std::string getPluginInfo(
+                const io::Options& = io::Options()) const override;
         };
-    } // namespace raw
+
+    } // namespace zfile
 } // namespace tl

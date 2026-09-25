@@ -2,6 +2,7 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
+#include <tlIO/Cache.h>
 #include <tlIO/USDPrivate.h>
 
 #include <tlCore/File.h>
@@ -98,13 +99,11 @@ namespace tl
             Thread thread;
         };
 
-        void Render::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        void Render::_init(const std::shared_ptr<log::System>& logSystem)
         {
             TLRENDER_P();
 
-            p.cache = cache;
+            // p.cache = cache;
             p.logSystem = logSystem;
 
 #if defined(__APPLE__)
@@ -118,8 +117,12 @@ namespace tl
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glVersionMinor);
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
             glfwWindowHint(GLFW_OPENGL_PROFILE, glProfile);
+#if defined(__APPLE__) 
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+#endif
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
             gl::windowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
+            
             p.glfwWindow =
                 glfwCreateWindow(1, 1, "tl::usd::Render", NULL, NULL);
             if (!p.glfwWindow)
@@ -180,11 +183,10 @@ namespace tl
         }
 
         std::shared_ptr<Render> Render::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             auto out = std::shared_ptr<Render>(new Render);
-            out->_init(cache, logSystem);
+            out->_init(logSystem);
             return out;
         }
 
@@ -585,17 +587,15 @@ namespace tl
 
                 // Check the I/O cache.
                 io::VideoData videoData;
+                image::Tags tags;
                 if (request && p.cache)
                 {
                     const std::string cacheKey = io::getVideoCacheKey(
                         request->path, request->time, ioOptions, {});
                     if (p.cache->getVideo(cacheKey, videoData))
                     {
-                        image::Tags tags;
-                        io::addOtioTags(tags, request->path.get(),
-                                        request->time);
+                        io::addOtioTags(tags, request->path.get(), request->time);
                         videoData.image->setTags(tags);
-
                         request->promise.set_value(videoData);
                         request.reset();
                     }
@@ -643,8 +643,6 @@ namespace tl
                         }
 
                         videoData.time = request->time;
-
-                        image::Tags tags;
                         io::addOtioTags(tags, request->path.get(), request->time);
                         image->setTags(tags);
 

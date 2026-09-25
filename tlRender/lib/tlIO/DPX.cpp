@@ -5,6 +5,7 @@
 #include <tlIO/DPX.h>
 
 #include <tlIO/Cineon.h>
+#include <tlIO/Normalize.h>
 
 #include <tlCore/Error.h>
 #include <tlCore/Locale.h>
@@ -326,7 +327,7 @@ namespace tl
             // Tags.
             if (cineon::isValid(out.file.time, 24))
             {
-                info.tags["Time"] = cineon::toString(out.file.time, 24);
+                info.tags["Time"] = ""; // cineon::toString(out.file.time, 24);
             }
             if (cineon::isValid(out.file.creator, 100))
             {
@@ -338,8 +339,7 @@ namespace tl
             }
             if (cineon::isValid(out.file.copyright, 200))
             {
-                info.tags["Copyright"] =
-                    cineon::toString(out.file.copyright, 200);
+                info.tags["Copyright"] = cineon::toString(out.file.copyright, 200);
             }
 
             if (isValid(&out.source.offset[0]) &&
@@ -410,11 +410,12 @@ namespace tl
                 info.tags["Source Scan Size"] = ss.str();
             }
 
-            if (cineon::isValid(out.film.id, 2) &&
-                cineon::isValid(out.film.type, 2) &&
-                cineon::isValid(out.film.offset, 2) &&
-                cineon::isValid(out.film.prefix, 6) &&
-                cineon::isValid(out.film.count, 4))
+            if (// cineon::isValid(out.film.id, 2) &&
+                // cineon::isValid(out.film.type, 2) &&
+                // cineon::isValid(out.film.offset, 2) &&
+                // cineon::isValid(out.film.prefix, 6) &&
+                // cineon::isValid(out.film.count, 4)
+                0)
             {
                 info.tags["Keycode"] = time::keycodeToString(
                     std::stoi(std::string(out.film.id, 2)),
@@ -690,7 +691,7 @@ namespace tl
             auto i = info.tags.find("Time");
             if (i != info.tags.end())
             {
-                cineon::fromString(i->second, header.file.time, 24, false);
+                // cineon::fromString(i->second, header.file.time, 24, false);
             }
             i = info.tags.find("Creator");
             if (i != info.tags.end())
@@ -796,7 +797,7 @@ namespace tl
             i = info.tags.find("Film Format");
             if (i != info.tags.end())
             {
-                cineon::fromString(i->second, header.film.format, 32, false);
+                // cineon::fromString(i->second, header.film.format, 32, false);
             }
             i = info.tags.find("Film Frame");
             if (i != info.tags.end())
@@ -826,12 +827,12 @@ namespace tl
             i = info.tags.find("Film Frame ID");
             if (i != info.tags.end())
             {
-                cineon::fromString(i->second, header.film.frameId, 32, false);
+                // cineon::fromString(i->second, header.film.frameId, 32, false);
             }
             i = info.tags.find("Film Slate");
             if (i != info.tags.end())
             {
-                cineon::fromString(i->second, header.film.slate, 100, false);
+                // cineon::fromString(i->second, header.film.slate, 100, false);
             }
 
             i = info.tags.find("Timecode");
@@ -936,39 +937,46 @@ namespace tl
             io->writeU32(size);
         }
 
-        void Plugin::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        void ReadPlugin::_init(const std::shared_ptr<log::System>& logSystem)
         {
-            IPlugin::_init(
-                "DPX", {{".dpx", io::FileType::Sequence}}, cache, logSystem);
+            std::map<std::string, io::FileType> exts;
+            exts[".dpx"] = io::FileType::Sequence;
+            IReadPlugin::_init("DPX", exts, logSystem);
         }
 
-        Plugin::Plugin() {}
-
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(cache, logSystem);
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::shared_ptr<io::IDecode> ReadPlugin::decode(const io::Options&)
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return Decode::create();
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options)
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
         {
-            return Read::create(path, memory, options, _cache, _logSystem);
+            return "DPX";
         }
 
-        image::Info Plugin::getWriteInfo(
+        void WritePlugin::_init(const std::shared_ptr<log::System>& logSystem)
+        {
+            std::map<std::string, io::FileType> exts;
+            exts[".dpx"] = io::FileType::Sequence;
+            IWritePlugin::_init("DPX", exts, logSystem);
+        }
+        std::shared_ptr<WritePlugin> WritePlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<WritePlugin>(new WritePlugin);
+            out->_init(logSystem);
+            return out;
+        }
+
+        image::Info WritePlugin::getInfo(
             const image::Info& info, const io::Options& options) const
         {
             image::Info out;
@@ -986,17 +994,22 @@ namespace tl
             return out;
         }
 
-        std::shared_ptr<io::IWrite> Plugin::write(
+        std::shared_ptr<io::IWrite> WritePlugin::write(
             const file::Path& path, const io::Info& info,
             const io::Options& options)
         {
             if (info.video.empty() ||
                 (!info.video.empty() &&
-                 !_isWriteCompatible(info.video[0], options)))
+                 !_isCompatible(info.video[0], options)))
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(path.get())
-                                             .arg("Unsupported video"));
-            return Write::create(path, info, options, _logSystem);
+                                         .arg(path.get())
+                                         .arg("Unsupported video depth"));
+            return Write::create(path, info, options, _logSystem.lock());
+        }
+
+        std::string WritePlugin::getPluginInfo(const io::Options&) const
+        {
+            return "DPX";
         }
     } // namespace dpx
 } // namespace tl

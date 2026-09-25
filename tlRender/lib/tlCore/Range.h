@@ -27,12 +27,6 @@ namespace tl
             //! Get the maximum value.
             constexpr T max() const;
 
-            //! Get the minimum value (legacy). \@todo: remove
-            constexpr T getMin() const;
-
-            //! Get the maximum value (legacy). \@todo: remove
-            constexpr T getMax() const;
-
             //! Set the range minimum and maximum to zero.
             void zero();
 

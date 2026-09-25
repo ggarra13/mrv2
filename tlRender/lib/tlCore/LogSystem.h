@@ -14,6 +14,9 @@ namespace tl
     //! Logging
     namespace log
     {
+        //! String conversion options.
+        enum class StringConvert { kNone = 0, Time = 1, Prefix = 2 };
+
         //! Log types.
         enum class Type { Message, Warning, Error, kStatus };
 
@@ -30,11 +33,8 @@ namespace tl
             bool operator!=(const Item&) const;
         };
 
-        //! String conversion options.
-        enum class StringConvert { kNone = 0, Time = 1, Prefix = 2 };
-
-        //! Convert a log item to a string.
-        std::string toString(const Item&, size_t options = 0);
+        //! Get a log item label.
+        std::string getLabel(const Item&, int options = 0);
 
         //! Log system.
         class System : public system::ICoreSystem

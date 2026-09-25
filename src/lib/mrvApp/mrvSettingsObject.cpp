@@ -122,11 +122,11 @@
              timeline::PlayerCacheOptions().readAhead.value();
          p.defaultValues["Cache/ReadBehind"] =
              timeline::PlayerCacheOptions().readBehind.value();
-         p.defaultValues["FileSequence/Audio"] =
-             static_cast<int>(timeline::FileSequenceAudio::BaseName);
-         p.defaultValues["FileSequence/AudioFileName"] = std::string();
-         p.defaultValues["FileSequence/AudioDirectory"] = std::string();
 
+         p.defaultValues["ImageSequence/Audio"] =
+             static_cast<int>(timeline::ImageSeqAudio::Ext);
+         p.defaultValues["ImageSequence/AudioFileName"] = std::string();
+         p.defaultValues["ImageSequence/AudioDirectory"] = std::string();
          p.defaultValues["OTIO/Spatial"] =
              static_cast<int>(timeline::Spatial::Coordinates);
          p.defaultValues["OTIO/Compatibility"] = true;

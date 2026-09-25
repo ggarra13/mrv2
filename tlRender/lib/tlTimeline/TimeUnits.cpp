@@ -18,7 +18,7 @@ namespace tl
         TLRENDER_ENUM_SERIALIZE_IMPL(TimeUnits);
 
         std::string
-        timeToText(const opentime::RationalTime& time, timeline::TimeUnits units)
+        timeToText(const OTIO_NS::RationalTime& time, timeline::TimeUnits units)
         {
             std::string out;
             switch (units)
@@ -49,29 +49,29 @@ namespace tl
             return out;
         }
 
-        opentime::RationalTime textToTime(
+        OTIO_NS::RationalTime textToTime(
             const std::string& text, double rate, timeline::TimeUnits units,
             opentime::ErrorStatus* errorStatus)
         {
-            opentime::RationalTime out = time::invalidTime;
+            OTIO_NS::RationalTime out = time::invalidTime;
             switch (units)
             {
             case timeline::TimeUnits::Frames:
             {
                 const int value = std::atoi(text.c_str());
-                out = opentime::RationalTime::from_frames(value, rate);
+                out = OTIO_NS::RationalTime::from_frames(value, rate);
                 break;
             }
             case timeline::TimeUnits::Seconds:
             {
                 const double value = std::atof(text.c_str());
                 out =
-                    opentime::RationalTime::from_seconds(value).rescaled_to(rate);
+                    OTIO_NS::RationalTime::from_seconds(value).rescaled_to(rate);
                 break;
             }
             case timeline::TimeUnits::Timecode:
                 out =
-                    opentime::RationalTime::from_timecode(text, rate, errorStatus);
+                    OTIO_NS::RationalTime::from_timecode(text, rate, errorStatus);
                 break;
             default:
                 break;
@@ -184,7 +184,7 @@ namespace tl
         }
 
         std::string
-        TimeUnitsModel::getLabel(const opentime::RationalTime& value) const
+        TimeUnitsModel::getLabel(const OTIO_NS::RationalTime& value) const
         {
             return timeToText(value, _p->timeUnits->get());
         }

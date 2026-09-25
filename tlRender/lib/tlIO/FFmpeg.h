@@ -5,7 +5,8 @@
 
 #pragma once
 
-#include <tlIO/Plugin.h>
+#include <tlIO/Read.h>
+#include <tlIO/Write.h>
 
 #include <tlCore/LogSystem.h>
 #include <tlCore/HDR.h>
@@ -80,6 +81,9 @@ namespace tl
             bool operator != (const Options&) const;
         };
 
+        //! Number of threads.
+        const size_t threadCount = 0;
+
         //! Software scaler flags.
         const int swsScaleFlags = SWS_SPLINE | SWS_ACCURATE_RND |
                                   SWS_FULL_CHR_H_INT | SWS_FULL_CHR_H_INP;
@@ -139,48 +143,83 @@ namespace tl
         std::string getErrorLabel(int);
 
         //! FFmpeg reader
-        class Read : public io::IRead
+        class VideoRead : public io::IVideoRead
         {
         protected:
             void _init(
                 const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+                const io::Options&, const std::shared_ptr<log::System>&);
 
-            Read();
+            VideoRead();
 
         public:
-            virtual ~Read();
+            virtual ~VideoRead();
 
             //! Create a new reader.
-            static std::shared_ptr<Read> create(
+            static std::shared_ptr<VideoRead> create(
                 const file::Path&, const io::Options&,
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+                const std::shared_ptr<log::System>&);
 
             //! Create a new reader.
-            static std::shared_ptr<Read> create(
+            static std::shared_ptr<VideoRead> create(
                 const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+                const io::Options&, const std::shared_ptr<log::System>&);
 
             std::future<io::Info> getInfo() override;
             std::future<io::VideoData> readVideo(
                 const OTIO_NS::RationalTime&,
                 const io::Options& = io::Options()) override;
+            void setCache(const std::shared_ptr<io::Cache>&) override;
+            void cancelRequests() override;
+
+        private:
+            void _run();
+            void _addToCache(io::VideoData& data, const io::Options&);
+
+            TLRENDER_PRIVATE();
+        };
+
+        //! FFmpeg audio reader.
+        class AudioRead : public io::IAudioRead
+        {
+        protected:
+            void _init(
+                const file::Path&,
+                const std::vector<file::MemoryRead>&,
+                const io::Options&,
+                const std::shared_ptr<log::System>&);
+
+            AudioRead();
+
+        public:
+            virtual ~AudioRead();
+
+            //! Create a new reader.
+            static std::shared_ptr<AudioRead> create(
+                const file::Path&,
+                const io::Options&,
+                const std::shared_ptr<log::System>&);
+
+            //! Create a new reader.
+            static std::shared_ptr<AudioRead> create(
+                const file::Path&,
+                const std::vector<file::MemoryRead>&,
+                const io::Options&,
+                const std::shared_ptr<log::System>&);
+
+            void setCache(const std::shared_ptr<io::Cache>&) override;
+            std::future<io::Info> getInfo() override;
             std::future<io::AudioData> readAudio(
                 const OTIO_NS::TimeRange&,
                 const io::Options& = io::Options()) override;
             void cancelRequests() override;
 
+            std::string getError() const override;
+            size_t getErrorCount() const override;
+
         private:
-            void _addToCache(
-                io::VideoData& data, const OTIO_NS::RationalTime&,
-                const io::Options&);
-            void _videoThread();
-            void _audioThread();
-            void _cancelVideoRequests();
-            void _cancelAudioRequests();
+            void _run();
+>>>>>>> otioZ
 
             TLRENDER_PRIVATE();
         };
@@ -191,7 +230,7 @@ namespace tl
         protected:
             void _init(
                 const file::Path&, const io::Info&, const io::Options&,
-                const std::weak_ptr<log::System>&);
+                const std::shared_ptr<log::System>&);
 
             Write();
 
@@ -201,7 +240,11 @@ namespace tl
             //! Create a new writer.
             static std::shared_ptr<Write> create(
                 const file::Path&, const io::Info&, const io::Options&,
-                const std::weak_ptr<log::System>&);
+                const std::shared_ptr<log::System>&);
+
+            void setHDR(const image::HDRData&) override;
+
+            void writeHeader() override;
 
             void setHDR(const image::HDRData&) override;
 
@@ -226,40 +269,96 @@ namespace tl
             TLRENDER_PRIVATE();
         };
 
-        //! FFmpeg Plugin
-        class Plugin : public io::IPlugin
+        //! FFmpeg read plugin.
+        class ReadPlugin : public io::IReadPlugin
         {
         protected:
-            void _init(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            void _init(const std::shared_ptr<log::System>&);
 
-            Plugin();
+            ReadPlugin();
 
         public:
             //! Create a new plugin.
-            static std::shared_ptr<Plugin> create(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            static std::shared_ptr<ReadPlugin> create(
+                const std::shared_ptr<log::System>&);
 
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const io::Options& = io::Options()) override;
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const std::vector<file::MemoryRead>&,
+            std::shared_ptr<io::IVideoRead> videoRead(
+                const file::Path&,
                 const io::Options& = io::Options()) override;
-            image::Info getWriteInfo(
-                const image::Info&,
+            std::shared_ptr<io::IVideoRead> videoRead(
+                const file::Path&,
+                const std::vector<file::MemoryRead>&,
+                const io::Options & = io::Options()) override;
+
+            std::shared_ptr<io::IAudioRead> audioRead(
+                const file::Path&,
+                const io::Options& = io::Options()) override;
+            std::shared_ptr<io::IAudioRead> audioRead(
+                const file::Path&,
+                const std::vector<file::MemoryRead>&,
+                const io::Options & = io::Options()) override;
+
+            std::string getPluginInfo(
                 const io::Options& = io::Options()) const override;
-            std::shared_ptr<io::IWrite> write(
-                const file::Path&, const io::Info&,
-                const io::Options& = io::Options()) override;
 
         private:
             static void _logCallback(void*, int, const char*, va_list);
 
-            //! \todo What is a better way to access the log system from the
-            //! FFmpeg callback?
+            // av_log_set_callback() installs a process-global C callback with
+            // no user-data parameter, so it can't be handed an instance
+            // pointer; a file-scope weak_ptr is the available way to reach the
+            // log system.
             static std::weak_ptr<log::System> _logSystemWeak;
+
+            TLRENDER_PRIVATE();
         };
+
+        //! FFmpeg write plugin.
+        class WritePlugin : public io::IWritePlugin
+        {
+        protected:
+            void _init(const std::shared_ptr<log::System>&);
+
+            WritePlugin();
+
+        public:
+            //! Create a new plugin.
+            static std::shared_ptr<WritePlugin> create(
+                const std::shared_ptr<log::System>&);
+
+            //! Get the list of video codecs.
+            const std::vector<std::string>& getCodecs() const;
+
+            //! Get the list of audio codecs.
+            const std::vector<std::string>& getAudioCodecs() const;
+
+            image::Info getInfo(
+                const image::Info&,
+                const io::Options& = io::Options()) const override;
+            std::shared_ptr<io::IWrite> write(
+                const file::Path&,
+                const io::Info&,
+                const io::Options& = io::Options()) override;
+
+            std::string getPluginInfo(
+                const io::Options& = io::Options()) const override;
+
+        private:
+            static void _logCallback(void*, int, const char*, va_list);
+
+            // See comment in ReadPlugin.
+            static std::weak_ptr<log::System> _logSystemWeak;
+
+            TLRENDER_PRIVATE();
+        };
+
+        //! \name Serialize
+        ///@{
+
+        void to_json(nlohmann::json&, const Options&);
+
+        void from_json(const nlohmann::json&, Options&);
+
+        ///@}
     } // namespace ffmpeg
 } // namespace tl

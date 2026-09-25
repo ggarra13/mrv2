@@ -71,7 +71,7 @@ namespace tl
 
             //! Set action mode.
             void setEditMode(const timeline::EditMode);
-            
+
             ///@}
 
             //! \name View
@@ -141,7 +141,7 @@ namespace tl
             std::shared_ptr<observer::IValue<bool> > observeScrub() const;
 
             //! Observe time scrubbing.
-            std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
+            std::shared_ptr<observer::IValue<otime::RationalTime> >
             observeTimeScrub() const;
 
             ///@}
@@ -205,10 +205,10 @@ namespace tl
             void keyPressEvent(ui::KeyEvent&) override;
             void keyReleaseEvent(ui::KeyEvent&) override;
 
-            std::vector<const OTIO_NS::Item*> getSelectedItems() const;
-            std::vector<const OTIO_NS::Transition*> getSelectedTransitions() const;
-            
-            
+            std::vector<timeline::MoveData> getSelectedItems() const;
+            std::vector<timeline::MoveData> getSelectedTransitions() const;
+
+
         protected:
             void _releaseMouse() override;
 

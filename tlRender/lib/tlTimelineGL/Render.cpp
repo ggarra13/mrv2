@@ -736,9 +736,6 @@ namespace tl
                                           });
             }
 
-            p.glyphTextureAtlas = gl::TextureAtlas::create(
-                1, 4096, image::PixelType::L_U8, timeline::ImageFilter::Linear);
-
             p.logTimer = std::chrono::steady_clock::now();
         }
 
@@ -774,6 +771,12 @@ namespace tl
             p.renderSize = renderSize;
             p.renderOptions = renderOptions;
             p.textureCache->setMax(renderOptions.textureCacheByteCount);
+
+            if (renderOptions.glyphTexture && !p.glyphTextureAtlas)
+            {
+                p.glyphTextureAtlas = gl::TextureAtlas::create(
+                    1, 4096, image::PixelType::L_U8, timeline::ImageFilter::Linear);
+            }
 
             glEnable(GL_BLEND);
             glBlendEquation(GL_FUNC_ADD);
@@ -1935,8 +1938,8 @@ namespace tl
                         }
 
                         pl_hdr_metadata& hdr = src_colorspace.hdr;
-                        hdr.min_luma = data.displayMasteringLuminance.getMin();
-                        hdr.max_luma = data.displayMasteringLuminance.getMax();
+                        hdr.min_luma = data.displayMasteringLuminance.min();
+                        hdr.max_luma = data.displayMasteringLuminance.max();
                         hdr.prim.red.x = data.primaries[image::HDRPrimaries::Red][0];
                         hdr.prim.red.y = data.primaries[image::HDRPrimaries::Red][1];
                         hdr.prim.green.x = data.primaries[image::HDRPrimaries::Green][0];

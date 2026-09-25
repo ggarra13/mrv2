@@ -267,10 +267,8 @@ namespace mrv
 
             if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
             {
-                timelineui_vk::ThumbnailSystem::create(context, ctx);
+                p.thumbnailSystem = timelineui_vk::ThumbnailSystem::create(context, ctx);
             }
-
-            p.thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
 
             setStopOnScrub(false);
 
@@ -299,12 +297,13 @@ namespace mrv
             Fl::remove_timeout(timerEvent_cb, this);
         }
 
-        std::vector<const OTIO_NS::Item* > TimelineWidget::getSelectedItems() const
+        std::vector<timeline::MoveData>
+        TimelineWidget::getSelectedItems() const
         {
             return _p->timelineWidget->getSelectedItems();
         }
 
-        std::vector<const OTIO_NS::Transition* >
+        std::vector<timeline::MoveData>
         TimelineWidget::getSelectedTransitions() const
         {
             return _p->timelineWidget->getSelectedTransitions();
@@ -911,6 +910,7 @@ namespace mrv
 
                         timeline::RenderOptions renderOptions;
                         renderOptions.clear = true;
+                        renderOptions.vaoSize = 16 * memory::megabyte;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
 

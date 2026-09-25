@@ -3,12 +3,10 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
-// #define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
-#include <tlIO/FFmpegMacros.h>
+#include <tlIO/IOMacros.h>
 
 #include <tlCore/Path.h>
 #include <tlCore/String.h>
@@ -196,167 +194,169 @@ namespace tl
         ReadVideo::ReadVideo(
             const std::string& fileName,
             const std::vector<file::MemoryRead>& memory,
-            const std::weak_ptr<log::System>& logSystem,
-            const ReadOptions& options) :
+            const ReadOptions& options,
+            const std::shared_ptr<log::System>& logSystem) :
             _fileName(fileName),
             _logSystem(logSystem),
             _options(options)
         {
             try
+        {
+            if (!memory.empty())
             {
-                if (!memory.empty())
+                _avFormatContext = avformat_alloc_context();
+                if (!_avFormatContext)
                 {
-                    _avFormatContext = avformat_alloc_context();
-                    if (!_avFormatContext)
-                    {
-                        throw std::runtime_error(
-                            string::Format("{0}: Cannot allocate format context")
+                    throw std::runtime_error(
+                        string::Format("{0}: Cannot allocate format context")
                             .arg(fileName));
-                    }
-
-                    _avIOBufferData = AVIOBufferData(memory[0].p, memory[0].size);
-                    _avIOContextBuffer =
-                        static_cast<uint8_t*>(av_malloc(avIOContextBufferSize));
-                    _avIOContext = avio_alloc_context(
-                        _avIOContextBuffer, avIOContextBufferSize, 0,
-                        &_avIOBufferData, &avIOBufferRead, nullptr,
-                        &avIOBufferSeek);
-                    if (!_avIOContext)
-                    {
-                        throw std::runtime_error(
-                            string::Format("{0}: Cannot allocate I/O context")
-                            .arg(fileName));
-                    }
-
-                    _avFormatContext->pb = _avIOContext;
                 }
 
-                //
-                // If we are potentially reading a .webp sequence, add a format
-                // specifier to it to read a sequence of frames if available.
-                //
-                std::string formatFileName = fileName;
-                file::Path path(fileName);
+                _avIOBufferData = AVIOBufferData(memory[0].p, memory[0].size);
+                _avIOContextBuffer =
+                    static_cast<uint8_t*>(av_malloc(avIOContextBufferSize));
+                _avIOContext = avio_alloc_context(
+                    _avIOContextBuffer, avIOContextBufferSize, 0,
+                    &_avIOBufferData, &avIOBufferRead, nullptr,
+                    &avIOBufferSeek);
+                if (!_avIOContext)
+                {
+                    throw std::runtime_error(
+                        string::Format("{0}: Cannot allocate I/O context")
+                            .arg(fileName));
+                }
+
+                _avFormatContext->pb = _avIOContext;
+            }
+
+            //
+            // If we are potentially reading a .webp sequence, add a format
+            // specifier to it to read a sequence of frames if available.
+            //
+            std::string formatFileName = fileName;
+            file::Path path(fileName);
+            const std::string& extension = path.getExtension();
+            if (string::compare(extension, ".webp",
+                                string::Compare::CaseInsensitive) &&
+                !path.getNumber().empty())
+            {
+                char buf[4096];
+                const std::string& directory = path.getDirectory();
+                const std::string& baseName  = path.getBaseName();
+                const std::string& suffix    = path.getSuffix();
                 const std::string& extension = path.getExtension();
-                if (string::compare(extension, ".webp",
-                                    string::Compare::CaseInsensitive) &&
-                    !path.getNumber().empty())
+                const int padding = path.getPadding();
+                if (padding == 0)
                 {
-                    char buf[4096];
-                    const std::string& directory = path.getDirectory();
-                    const std::string& baseName  = path.getBaseName();
-                    const std::string& suffix    = path.getSuffix();
-                    const std::string& extension = path.getExtension();
-                    const int padding = path.getPadding();
-                    if (padding == 0)
+                    snprintf(buf, 4096, "%s%s%%d%s%s",
+                             directory.c_str(),
+                             baseName.c_str(),
+                             suffix.c_str(),
+                             extension.c_str());
+                }
+                else
+                {
+                    snprintf(buf, 4096, "%s%s%%0%dd%s%s",
+                             directory.c_str(),
+                             baseName.c_str(),
+                             padding,
+                             suffix.c_str(),
+                             extension.c_str());
+                }
+                formatFileName = buf;
+            }
+
+            int r = avformat_open_input(
+                &_avFormatContext,
+                !_avFormatContext ? formatFileName.c_str() : nullptr, nullptr,
+                nullptr);
+            if (r < 0)
+            {
+                throw std::runtime_error(
+                    string::Format("avformat_open_input {0}: {1}")
+                    .arg(formatFileName)
+                    .arg(getErrorLabel(r)));
+            }
+
+            r = avformat_find_stream_info(_avFormatContext, nullptr);
+            if (r < 0)
+            {
+                throw std::runtime_error(
+                    string::Format("avformat_find_stream_info {0}: {1}")
+                    .arg(fileName)
+                    .arg(getErrorLabel(r)));
+            }
+
+            for (unsigned int i = 0; i < _avFormatContext->nb_streams; ++i)
+            {
+                if (AVMEDIA_TYPE_VIDEO ==
+                        _avFormatContext->streams[i]->codecpar->codec_type &&
+                    (AV_DISPOSITION_ATTACHED_PIC &
+                         _avFormatContext->streams[i]->disposition ||
+                     AV_DISPOSITION_STILL_IMAGE &
+                         _avFormatContext->streams[i]->disposition))
+                {
+                    _useAudioOnly = true;
+                }
+                if (AVMEDIA_TYPE_VIDEO ==
+                        _avFormatContext->streams[i]->codecpar->codec_type &&
+                    AV_DISPOSITION_DEFAULT ==
+                        _avFormatContext->streams[i]->disposition)
+                {
+                    _avStream = i;
+                    break;
+                }
+            }
+            if (-1 == _avStream)
+            {
+                if (_useAudioOnly)
+                {
+                    for (unsigned int i = 0; i < _avFormatContext->nb_streams;
+                         ++i)
                     {
-                        snprintf(buf, 4096, "%s%s%%d%s%s",
-                                 directory.c_str(),
-                                 baseName.c_str(),
-                                 suffix.c_str(),
-                                 extension.c_str());
+                        if (AVMEDIA_TYPE_AUDIO ==
+                            _avFormatContext->streams[i]->codecpar->codec_type)
+                        {
+                            _avAudioStream = i;
+                            break;
+                        }
                     }
-                    else
-                    {
-                        snprintf(buf, 4096, "%s%s%%0%dd%s%s",
-                                 directory.c_str(),
-                                 baseName.c_str(),
-                                 padding,
-                                 suffix.c_str(),
-                                 extension.c_str());
-                    }
-                    formatFileName = buf;
                 }
-
-                int r = avformat_open_input(
-                    &_avFormatContext,
-                    !_avFormatContext ? formatFileName.c_str() : nullptr, nullptr,
-                    nullptr);
-                if (r < 0)
-                {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(formatFileName)
-                                             .arg(getErrorLabel(r)));
-                }
-
-                r = avformat_find_stream_info(_avFormatContext, nullptr);
-                if (r < 0)
-                {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(fileName)
-                                             .arg(getErrorLabel(r)));
-                }
-
                 for (unsigned int i = 0; i < _avFormatContext->nb_streams; ++i)
                 {
+
                     if (AVMEDIA_TYPE_VIDEO ==
-                        _avFormatContext->streams[i]->codecpar->codec_type &&
-                        (AV_DISPOSITION_ATTACHED_PIC &
-                         _avFormatContext->streams[i]->disposition ||
-                         AV_DISPOSITION_STILL_IMAGE &
-                         _avFormatContext->streams[i]->disposition))
-                    {
-                        _useAudioOnly = true;
-                    }
-                    if (AVMEDIA_TYPE_VIDEO ==
-                        _avFormatContext->streams[i]->codecpar->codec_type &&
-                        AV_DISPOSITION_DEFAULT ==
-                        _avFormatContext->streams[i]->disposition)
+                        _avFormatContext->streams[i]->codecpar->codec_type)
                     {
                         _avStream = i;
                         break;
                     }
                 }
-                if (-1 == _avStream)
+            }
+
+            std::string timecode = getTimecodeFromDataStream(_avFormatContext);
+            if (_avStream != -1)
+            {
+                // av_dump_format(_avFormatContext, _avStream, fileName.c_str(),
+                // 0);
+
+                auto avVideoStream = _avFormatContext->streams[_avStream];
+                auto avVideoCodecParameters = avVideoStream->codecpar;
+                auto avVideoCodec =
+                    avcodec_find_decoder(avVideoCodecParameters->codec_id);
+
+                AVDictionaryEntry* tag = nullptr;
+                unsigned trackNumber = 1; // we only support one video stream
+                while (
+                    (tag = av_dict_get(
+                         avVideoStream->metadata, "", tag,
+                         AV_DICT_IGNORE_SUFFIX)))
                 {
-                    if (_useAudioOnly)
-                    {
-                        for (unsigned int i = 0; i < _avFormatContext->nb_streams;
-                             ++i)
-                        {
-                            if (AVMEDIA_TYPE_AUDIO ==
-                                _avFormatContext->streams[i]->codecpar->codec_type)
-                            {
-                                _avAudioStream = i;
-                                break;
-                            }
-                        }
-                    }
-                    for (unsigned int i = 0; i < _avFormatContext->nb_streams; ++i)
-                    {
-
-                        if (AVMEDIA_TYPE_VIDEO ==
-                            _avFormatContext->streams[i]->codecpar->codec_type)
-                        {
-                            _avStream = i;
-                            break;
-                        }
-                    }
-                }
-
-                std::string timecode = getTimecodeFromDataStream(_avFormatContext);
-                if (_avStream != -1)
-                {
-                    // av_dump_format(_avFormatContext, _avStream, fileName.c_str(),
-                    // 0);
-
-                    auto avVideoStream = _avFormatContext->streams[_avStream];
-                    auto avVideoCodecParameters = avVideoStream->codecpar;
-                    auto avVideoCodec =
-                        avcodec_find_decoder(avVideoCodecParameters->codec_id);
-
-                    AVDictionaryEntry* tag = nullptr;
-                    unsigned trackNumber = 1; // we only support one video stream
-                    while (
-                        (tag = av_dict_get(
-                            avVideoStream->metadata, "", tag,
-                            AV_DICT_IGNORE_SUFFIX)))
-                    {
-                        std::string key(string::Format("Video Stream #{0}: {1}")
+                    std::string key(string::Format("Video Stream #{0}: {1}")
                                         .arg(trackNumber)
                                         .arg(tag->key));
-                        _tags[key] = tag->value;
-                    }
+                    _tags[key] = tag->value;
+                }
 
                     // If we are reading VPX, use libvpx-vp9 external lib if
                     // available so we can read an alpha channel.
@@ -410,50 +410,51 @@ namespace tl
                         }
                     }
 
-                    if (!avVideoCodec)
-                    {
-                        const AVCodecDescriptor *desc =
-                            avcodec_descriptor_get(avVideoCodecParameters->codec_id);
-                        throw std::runtime_error(
-                            string::Format("{0}: No video codec found - {1} {2}")
-                            .arg(fileName)
-                            .arg(desc->name)
-                            .arg(desc->long_name ? desc->long_name : "N/A"));
-                    }
-                    _avCodecParameters[_avStream] = avcodec_parameters_alloc();
-                    if (!_avCodecParameters[_avStream])
-                    {
-                        throw std::runtime_error(
-                            string::Format("{0}: Cannot allocate parameters")
+                if (!avVideoCodec)
+                {
+                    const AVCodecDescriptor *desc =
+                        avcodec_descriptor_get(avVideoCodecParameters->codec_id);
+                    throw std::runtime_error(
+                        string::Format("{0}: No video codec found - {1} {2}")
+                        .arg(fileName)
+                        .arg(desc->name)
+                        .arg(desc->long_name ? desc->long_name : "N/A"));
+                }
+                _avCodecParameters[_avStream] = avcodec_parameters_alloc();
+                if (!_avCodecParameters[_avStream])
+                {
+                    throw std::runtime_error(
+                        string::Format("{0}: Cannot allocate parameters")
                             .arg(fileName));
-                    }
-                    r = avcodec_parameters_copy(
-                        _avCodecParameters[_avStream], avVideoCodecParameters);
-                    if (r < 0)
-                    {
-                        throw std::runtime_error(string::Format("{0}: {1}")
+                }
+                r = avcodec_parameters_copy(
+                    _avCodecParameters[_avStream], avVideoCodecParameters);
+                if (r < 0)
+                {
+                    throw std::runtime_error(string::Format("{0}: {1}")
                                                  .arg(fileName)
                                                  .arg(getErrorLabel(r)));
-                    }
-                    _avCodecContext[_avStream] =
-                        avcodec_alloc_context3(avVideoCodec);
-                    if (!_avCodecParameters[_avStream])
-                    {
-                        throw std::runtime_error(
-                            string::Format("{0}: Cannot allocate context")
+                }
+                _avCodecContext[_avStream] =
+                    avcodec_alloc_context3(avVideoCodec);
+                if (!_avCodecParameters[_avStream])
+                {
+                    throw std::runtime_error(
+                        string::Format("{0}: Cannot allocate context")
                             .arg(fileName));
-                    }
+                }
 
-                    r = avcodec_parameters_to_context(
-                        _avCodecContext[_avStream], _avCodecParameters[_avStream]);
-                    if (r < 0)
-                    {
-                        throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
-                    }
-                    _avCodecContext[_avStream]->thread_count = options.threadCount;
-                    _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME;
+                r = avcodec_parameters_to_context(
+                    _avCodecContext[_avStream], _avCodecParameters[_avStream]);
+                if (r < 0)
+                {
+                    throw std::runtime_error(
+                        string::Format("avcodec_parameters_to_context {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
+                }
+                _avCodecContext[_avStream]->thread_count = options.threadCount;
+                _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME;
 
                     if (options.hwAccel)
                     {
@@ -462,302 +463,303 @@ namespace tl
                         _initHwAccel(avVideoCodec);
                     }
 
-                    r = avcodec_open2(_avCodecContext[_avStream], avVideoCodec, 0);
-                    if (r < 0)
+                r = avcodec_open2(_avCodecContext[_avStream], avVideoCodec, 0);
+                if (r < 0)
+                {
+                    throw std::runtime_error(
+                        string::Format("avcodec_open2 {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
+                }
+
+                _info.size.w = _avCodecParameters[_avStream]->width;
+                _info.size.h = _avCodecParameters[_avStream]->height;
+
+                if (avVideoStream->sample_aspect_ratio.den > 0 &&
+                    avVideoStream->sample_aspect_ratio.num > 0)
+                {
+                    _info.size.pixelAspectRatio =
+                        av_q2d(avVideoStream->sample_aspect_ratio);
+                }
+
+                _info.layout.mirror.y = true;
+
+                _avInputPixelFormat = static_cast<AVPixelFormat>(
+                    _avCodecParameters[_avStream]->format);
+
+                const char* pixel_format = av_get_pix_fmt_name(_avInputPixelFormat);
+                if (pixel_format)
+                    _tags["FFmpeg Pixel Format"] = pixel_format;
+                else
+                    _tags["FFmpeg Pixel Format"] = "Unknown";
+
+
+                // LibVPX returns AV_PIX_FMT_YUV420P with metadata
+                // "alpha_mode" set to 1.
+                while (
+                    (tag = av_dict_get(
+                         avVideoStream->metadata, "", tag,
+                         AV_DICT_IGNORE_SUFFIX)))
+                {
+                    const std::string key(tag->key);
+                    const std::string value(tag->value);
+                    if (string::compare(
+                            key, "alpha_mode",
+                            string::Compare::CaseInsensitive))
                     {
-                        throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                        if (value == "1" &&
+                            _avInputPixelFormat == AV_PIX_FMT_YUV420P)
+                        {
+                            _avInputPixelFormat = AV_PIX_FMT_YUVA420P;
+                        }
                     }
+                }
 
-                    _info.size.w = _avCodecParameters[_avStream]->width;
-                    _info.size.h = _avCodecParameters[_avStream]->height;
-
-                    if (avVideoStream->sample_aspect_ratio.den > 0 &&
-                        avVideoStream->sample_aspect_ratio.num > 0)
+                switch (_avInputPixelFormat)
+                {
+                case AV_PIX_FMT_BGR24:
+                case AV_PIX_FMT_RGB24:
+                    _avOutputPixelFormat = AV_PIX_FMT_RGB24;
+                    _info.pixelType = image::PixelType::RGB_U8;
+                    break;
+                case AV_PIX_FMT_GRAY8:
+                    _avOutputPixelFormat = _avInputPixelFormat;
+                    _info.pixelType = image::PixelType::L_U8;
+                    break;
+                case AV_PIX_FMT_BGRA:
+                case AV_PIX_FMT_RGBA:
+                    _avOutputPixelFormat = AV_PIX_FMT_RGBA;
+                    _info.pixelType = image::PixelType::RGBA_U8;
+                    break;
+                case AV_PIX_FMT_YUVJ420P: // Deprecated format.
+                    if (options.yuvToRGBConversion)
                     {
-                        _info.size.pixelAspectRatio =
-                            av_q2d(avVideoStream->sample_aspect_ratio);
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB24;
+                        _info.pixelType = image::PixelType::RGB_U8;
                     }
-
-                    _info.layout.mirror.y = true;
-
-                    _avInputPixelFormat = static_cast<AVPixelFormat>(
-                        _avCodecParameters[_avStream]->format);
-
-                    const char* pixel_format = av_get_pix_fmt_name(_avInputPixelFormat);
-                    if (pixel_format)
-                        _tags["FFmpeg Pixel Format"] = pixel_format;
                     else
-                        _tags["FFmpeg Pixel Format"] = "Unknown";
-
-
-                    // LibVPX returns AV_PIX_FMT_YUV420P with metadata
-                    // "alpha_mode" set to 1.
-                    while (
-                        (tag = av_dict_get(
-                            avVideoStream->metadata, "", tag,
-                            AV_DICT_IGNORE_SUFFIX)))
                     {
-                        const std::string key(tag->key);
-                        const std::string value(tag->value);
-                        if (string::compare(
-                                key, "alpha_mode",
-                                string::Compare::CaseInsensitive))
-                        {
-                            if (value == "1" &&
-                                _avInputPixelFormat == AV_PIX_FMT_YUV420P)
-                            {
-                                _avInputPixelFormat = AV_PIX_FMT_YUVA420P;
-                            }
-                        }
-                    }
-
-                    switch (_avInputPixelFormat)
-                    {
-                    case AV_PIX_FMT_BGR24:
-                    case AV_PIX_FMT_RGB24:
-                        _avOutputPixelFormat = AV_PIX_FMT_RGB24;
-                        _info.pixelType = image::PixelType::RGB_U8;
-                        break;
-                    case AV_PIX_FMT_GRAY8:
+                        _fastYUV420PConversion = true;
                         _avOutputPixelFormat = _avInputPixelFormat;
-                        _info.pixelType = image::PixelType::L_U8;
-                        break;
-                    case AV_PIX_FMT_BGRA:
-                    case AV_PIX_FMT_RGBA:
-                        _avOutputPixelFormat = AV_PIX_FMT_RGBA;
-                        _info.pixelType = image::PixelType::RGBA_U8;
-                        break;
-                    case AV_PIX_FMT_YUVJ420P: // Deprecated format.
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB24;
-                            _info.pixelType = image::PixelType::RGB_U8;
-                        }
-                        else
-                        {
-                            _fastYUV420PConversion = true;
-                            _avOutputPixelFormat = _avInputPixelFormat;
-                            _info.pixelType = image::PixelType::YUV_420P_U8;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV420P:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB24;
-                            _info.pixelType = image::PixelType::RGB_U8;
-                        }
-                        else
-                        {
-                            _fastYUV420PConversion = options.fastYUV420PConversion;
-                            _avOutputPixelFormat = _avInputPixelFormat;
-                            _info.pixelType = image::PixelType::YUV_420P_U8;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV422P:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB24;
-                            _info.pixelType = image::PixelType::RGB_U8;
-                        }
-                        else
-                        {
-                            _avOutputPixelFormat = _avInputPixelFormat;
-                            _info.pixelType = image::PixelType::YUV_422P_U8;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV444P:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB24;
-                            _info.pixelType = image::PixelType::RGB_U8;
-                        }
-                        else
-                        {
-                            _avOutputPixelFormat = _avInputPixelFormat;
-                            _info.pixelType = image::PixelType::YUV_444P_U8;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV420P10BE:
-                    case AV_PIX_FMT_YUV420P10LE:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB48;
-                            _info.pixelType = image::PixelType::RGB_U16;
-                        }
-                        else
-                        {
-                            //! \todo Use the _info.layout.endian field instead of
-                            //! converting endianness.
-                            _avOutputPixelFormat = AV_PIX_FMT_YUV420P10LE;
-                            _info.pixelType = image::PixelType::YUV_420P_U10;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV420P12BE:
-                    case AV_PIX_FMT_YUV420P12LE:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB48;
-                            _info.pixelType = image::PixelType::RGB_U16;
-                        }
-                        else
-                        {
-                            //! \todo Use the _info.layout.endian field instead of
-                            //! converting endianness.
-                            _avOutputPixelFormat = AV_PIX_FMT_YUV420P12LE;
-                            _info.pixelType = image::PixelType::YUV_420P_U12;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV420P16BE:
-                    case AV_PIX_FMT_YUV420P16LE:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB48;
-                            _info.pixelType = image::PixelType::RGB_U16;
-                        }
-                        else
-                        {
-                            //! \todo Use the _info.layout.endian field instead of
-                            //! converting endianness.
-                            _avOutputPixelFormat = AV_PIX_FMT_YUV420P16LE;
-                            _info.pixelType = image::PixelType::YUV_420P_U16;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV422P10BE:
-                    case AV_PIX_FMT_YUV422P10LE:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB48;
-                            _info.pixelType = image::PixelType::RGB_U16;
-                        }
-                        else
-                        {
-                            //! \todo Use the _info.layout.endian field instead of
-                            //! converting endianness.
-                            _avOutputPixelFormat = AV_PIX_FMT_YUV422P10LE;
-                            _info.pixelType = image::PixelType::YUV_422P_U10;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV422P12BE:
-                    case AV_PIX_FMT_YUV422P12LE:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB48;
-                            _info.pixelType = image::PixelType::RGB_U16;
-                        }
-                        else
-                        {
-                            //! \todo Use the _info.layout.endian field instead of
-                            //! converting endianness.
-                            _avOutputPixelFormat = AV_PIX_FMT_YUV422P12LE;
-                            _info.pixelType = image::PixelType::YUV_422P_U12;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV422P16BE:
-                    case AV_PIX_FMT_YUV422P16LE:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB48;
-                            _info.pixelType = image::PixelType::RGB_U16;
-                        }
-                        else
-                        {
-                            //! \todo Use the _info.layout.endian field instead of
-                            //! converting endianness.
-                            _avOutputPixelFormat = AV_PIX_FMT_YUV422P16LE;
-                            _info.pixelType = image::PixelType::YUV_422P_U16;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV444P10BE:
-                    case AV_PIX_FMT_YUV444P10LE:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB48;
-                            _info.pixelType = image::PixelType::RGB_U16;
-                        }
-                        else
-                        {
-                            //! \todo Use the _info.layout.endian field instead of
-                            //! converting endianness.
-                            _avOutputPixelFormat = AV_PIX_FMT_YUV444P10LE;
-                            _info.pixelType = image::PixelType::YUV_444P_U10;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV444P12BE:
-                    case AV_PIX_FMT_YUV444P12LE:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB48;
-                            _info.pixelType = image::PixelType::RGB_U16;
-                        }
-                        else
-                        {
-                            //! \todo Use the _info.layout.endian field instead of
-                            //! converting endianness.
-                            _avOutputPixelFormat = AV_PIX_FMT_YUV444P12LE;
-                            _info.pixelType = image::PixelType::YUV_444P_U12;
-                        }
-                        break;
-                    case AV_PIX_FMT_YUV444P16BE:
-                    case AV_PIX_FMT_YUV444P16LE:
-                        if (options.yuvToRGBConversion)
-                        {
-                            _avOutputPixelFormat = AV_PIX_FMT_RGB48;
-                            _info.pixelType = image::PixelType::RGB_U16;
-                        }
-                        else
-                        {
-                            //! \todo Use the _info.layout.endian field instead of
-                            //! converting endianness.
-                            _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
-                            _info.pixelType = image::PixelType::YUV_444P_U16;
-                        }
-                        break;
-                    case AV_PIX_FMT_GBR24P:
+                        _info.pixelType = image::PixelType::YUV_420P_U8;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV420P:
+                    if (options.yuvToRGBConversion)
+                    {
                         _avOutputPixelFormat = AV_PIX_FMT_RGB24;
                         _info.pixelType = image::PixelType::RGB_U8;
-                        break;
-                    case AV_PIX_FMT_GBRP9BE:
-                    case AV_PIX_FMT_GBRP9LE:
-                    case AV_PIX_FMT_GBRP10BE:
-                    case AV_PIX_FMT_GBRP12LE:
-                    case AV_PIX_FMT_GBRP12BE:
-                    case AV_PIX_FMT_GBRP10LE:
-                    case AV_PIX_FMT_GBRP16BE:
-                    case AV_PIX_FMT_GBRP16LE:
+                    }
+                    else
+                    {
+                        _fastYUV420PConversion = options.fastYUV420PConversion;
+                        _avOutputPixelFormat = _avInputPixelFormat;
+                        _info.pixelType = image::PixelType::YUV_420P_U8;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV422P:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB24;
+                        _info.pixelType = image::PixelType::RGB_U8;
+                    }
+                    else
+                    {
+                        _avOutputPixelFormat = _avInputPixelFormat;
+                        _info.pixelType = image::PixelType::YUV_422P_U8;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV444P:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB24;
+                        _info.pixelType = image::PixelType::RGB_U8;
+                    }
+                    else
+                    {
+                        _avOutputPixelFormat = _avInputPixelFormat;
+                        _info.pixelType = image::PixelType::YUV_444P_U8;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV420P10BE:
+                case AV_PIX_FMT_YUV420P10LE:
+                    if (options.yuvToRGBConversion)
+                    {
                         _avOutputPixelFormat = AV_PIX_FMT_RGB48;
                         _info.pixelType = image::PixelType::RGB_U16;
-                        break;
-                    case AV_PIX_FMT_YUVA420P:
-                    case AV_PIX_FMT_YUVA422P:
-                    case AV_PIX_FMT_YUVA444P:
-                        _avOutputPixelFormat = AV_PIX_FMT_RGBA;
-                        _info.pixelType = image::PixelType::RGBA_U8;
-                        break;
-                    case AV_PIX_FMT_GBRAP10BE:
-                    case AV_PIX_FMT_GBRAP12LE:
-                    case AV_PIX_FMT_GBRAP12BE:
-                    case AV_PIX_FMT_GBRAP10LE:
-                    case AV_PIX_FMT_GBRAP16BE:
-                    case AV_PIX_FMT_GBRAP16LE:
-                        _avOutputPixelFormat = AV_PIX_FMT_RGBA64;
-                        _info.pixelType = image::PixelType::RGBA_U16;
-                        break;
-                    case AV_PIX_FMT_YUVA444P10BE:
-                    case AV_PIX_FMT_YUVA444P10LE:
-                    case AV_PIX_FMT_YUVA444P12BE:
-                    case AV_PIX_FMT_YUVA444P12LE:
-                    case AV_PIX_FMT_YUVA444P16BE:
-                    case AV_PIX_FMT_YUVA444P16LE:
-                        _avOutputPixelFormat = AV_PIX_FMT_RGBA64;
-                        _info.pixelType = image::PixelType::RGBA_U16;
-                        break;
-                    default:
-                        _avOutputPixelFormat = AV_PIX_FMT_RGB24;
-                        _info.pixelType = image::PixelType::RGB_U8;
-                        break;
                     }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P10LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U10;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV420P12BE:
+                case AV_PIX_FMT_YUV420P12LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P12LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U12;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV420P16BE:
+                case AV_PIX_FMT_YUV420P16LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV420P16LE;
+                        _info.pixelType = image::PixelType::YUV_420P_U16;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV422P10BE:
+                case AV_PIX_FMT_YUV422P10LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P10LE;
+                        _info.pixelType = image::PixelType::YUV_422P_U10;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV422P12BE:
+                case AV_PIX_FMT_YUV422P12LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P12LE;
+                        _info.pixelType = image::PixelType::YUV_422P_U12;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV422P16BE:
+                case AV_PIX_FMT_YUV422P16LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV422P16LE;
+                        _info.pixelType = image::PixelType::YUV_422P_U16;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV444P10BE:
+                case AV_PIX_FMT_YUV444P10LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P10LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U10;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV444P12BE:
+                case AV_PIX_FMT_YUV444P12LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P12LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U12;
+                    }
+                    break;
+                case AV_PIX_FMT_YUV444P16BE:
+                case AV_PIX_FMT_YUV444P16LE:
+                    if (options.yuvToRGBConversion)
+                    {
+                        _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                        _info.pixelType = image::PixelType::RGB_U16;
+                    }
+                    else
+                    {
+                        //! \todo Use the _info.layout.endian field instead of
+                        //! converting endianness.
+                        _avOutputPixelFormat = AV_PIX_FMT_YUV444P16LE;
+                        _info.pixelType = image::PixelType::YUV_444P_U16;
+                    }
+                    break;
+                case AV_PIX_FMT_GBR24P:
+                    _avOutputPixelFormat = AV_PIX_FMT_RGB24;
+                    _info.pixelType = image::PixelType::RGB_U8;
+                    break;
+                case AV_PIX_FMT_GBRP9BE:
+                case AV_PIX_FMT_GBRP9LE:
+                case AV_PIX_FMT_GBRP10BE:
+                case AV_PIX_FMT_GBRP12LE:
+                case AV_PIX_FMT_GBRP12BE:
+                case AV_PIX_FMT_GBRP10LE:
+                case AV_PIX_FMT_GBRP16BE:
+                case AV_PIX_FMT_GBRP16LE:
+                    _avOutputPixelFormat = AV_PIX_FMT_RGB48;
+                    _info.pixelType = image::PixelType::RGB_U16;
+                    break;
+                case AV_PIX_FMT_YUVA420P:
+                case AV_PIX_FMT_YUVA422P:
+                case AV_PIX_FMT_YUVA444P:
+                    _avOutputPixelFormat = AV_PIX_FMT_RGBA;
+                    _info.pixelType = image::PixelType::RGBA_U8;
+                    break;
+                case AV_PIX_FMT_GBRAP10BE:
+                case AV_PIX_FMT_GBRAP12LE:
+                case AV_PIX_FMT_GBRAP12BE:
+                case AV_PIX_FMT_GBRAP10LE:
+                case AV_PIX_FMT_GBRAP16BE:
+                case AV_PIX_FMT_GBRAP16LE:
+                    _avOutputPixelFormat = AV_PIX_FMT_RGBA64;
+                    _info.pixelType = image::PixelType::RGBA_U16;
+                    break;
+                case AV_PIX_FMT_YUVA444P10BE:
+                case AV_PIX_FMT_YUVA444P10LE:
+                case AV_PIX_FMT_YUVA444P12BE:
+                case AV_PIX_FMT_YUVA444P12LE:
+                case AV_PIX_FMT_YUVA444P16BE:
+                case AV_PIX_FMT_YUVA444P16LE:
+                    _avOutputPixelFormat = AV_PIX_FMT_RGBA64;
+                    _info.pixelType = image::PixelType::RGBA_U16;
+                    break;
+                default:
+                    _avOutputPixelFormat = AV_PIX_FMT_RGB24;
+                    _info.pixelType = image::PixelType::RGB_U8;
+                    break;
+                }
                     if (_hwAccel)
                     {
                         // Hardware frames download as NV12/NV16 (8-bit) or P010/P210 (>8-bit).
@@ -795,261 +797,261 @@ namespace tl
                             _info.pixelType = gt8 ? image::PixelType::YUV_420SP_U16 : image::PixelType::YUV_420SP_U8;
                         }
                     }
-                    const auto params = _avCodecParameters[_avStream];
-                    if (params->color_range != AVCOL_RANGE_JPEG)
-                    {
-                        _info.videoLevels = image::VideoLevels::LegalRange;
-                    }
-                    switch (params->color_space)
-                    {
-                    case AVCOL_SPC_BT2020_NCL:
-                    case AVCOL_SPC_BT2020_CL:
-                        _info.yuvCoefficients = image::YUVCoefficients::BT2020;
-                        break;
-                        // Standard Dynamic Range (SDR)
-                    case AVCOL_SPC_BT709:
-                        _info.yuvCoefficients = image::YUVCoefficients::REC709;
-                        break;
+                const auto params = _avCodecParameters[_avStream];
+                if (params->color_range != AVCOL_RANGE_JPEG)
+                {
+                    _info.videoLevels = image::VideoLevels::LegalRange;
+                }
+                switch (params->color_space)
+                {
+                case AVCOL_SPC_BT2020_NCL:
+                case AVCOL_SPC_BT2020_CL:
+                    _info.yuvCoefficients = image::YUVCoefficients::BT2020;
+                    break;
+                    // Standard Dynamic Range (SDR)
+                case AVCOL_SPC_BT709:
+                    _info.yuvCoefficients = image::YUVCoefficients::REC709;
+                    break;
 
-                        // Standard Definition (Optional, depending on your needs)
-                    case AVCOL_SPC_SMPTE170M:
-                    case AVCOL_SPC_BT470BG:
-                        _info.yuvCoefficients = image::YUVCoefficients::BT601;
-                        break;
+                    // Standard Definition (Optional, depending on your needs)
+                case AVCOL_SPC_SMPTE170M:
+                case AVCOL_SPC_BT470BG:
+                    _info.yuvCoefficients = image::YUVCoefficients::BT601;
+                    break;
 
                     case AVCOL_SPC_UNSPECIFIED:
                     case AVCOL_SPC_RESERVED:
-                    default:
+                default:
                         if (params->color_primaries == AVCOL_PRI_BT2020)
                             _info.yuvCoefficients = image::YUVCoefficients::BT2020;
                         else if (params->color_primaries == AVCOL_PRI_SMPTE170M ||
                                  params->color_primaries == AVCOL_PRI_BT470BG)
                             _info.yuvCoefficients = image::YUVCoefficients::BT601;
                         else
-                            _info.yuvCoefficients = image::YUVCoefficients::REC709;
-                        break;
+                        _info.yuvCoefficients = image::YUVCoefficients::REC709;
+                    break;
+                }
+
+                image::Tags tags;
+                std::size_t sequenceSize = 0;
+                double speed = 24;
+
+                if (_useAudioOnly)
+                {
+                    auto avAudioStream =
+                        _avFormatContext->streams[_avAudioStream];
+                    auto avAudioCodecParameters = avAudioStream->codecpar;
+                    auto avAudioCodec =
+                        avcodec_find_decoder(avAudioCodecParameters->codec_id);
+                    if (!avAudioCodec)
+                    {
+                        throw std::runtime_error(
+                            string::Format("{0}: No audio codec found")
+                                .arg(fileName));
                     }
 
-                    image::Tags tags;
-                    std::size_t sequenceSize = 0;
-                    double speed = 24;
-
-                    if (_useAudioOnly)
+                    const size_t sampleRate =
+                        avAudioCodecParameters->sample_rate;
+                    int64_t sampleCount = 0;
+                    if (avAudioStream->duration != AV_NOPTS_VALUE)
                     {
-                        auto avAudioStream =
-                            _avFormatContext->streams[_avAudioStream];
-                        auto avAudioCodecParameters = avAudioStream->codecpar;
-                        auto avAudioCodec =
-                            avcodec_find_decoder(avAudioCodecParameters->codec_id);
-                        if (!avAudioCodec)
-                        {
-                            throw std::runtime_error(
-                                string::Format("{0}: No audio codec found")
-                                .arg(fileName));
-                        }
+                        AVRational r;
+                        r.num = 1;
+                        r.den = sampleRate;
+                        sampleCount = av_rescale_q(
+                            avAudioStream->duration, avAudioStream->time_base,
+                            r);
+                    }
+                    else if (_avFormatContext->duration != AV_NOPTS_VALUE)
+                    {
+                        AVRational r;
+                        r.num = 1;
+                        r.den = sampleRate;
+                        sampleCount = av_rescale_q(
+                            _avFormatContext->duration, av_get_time_base_q(),
+                            r);
+                    }
 
-                        const size_t sampleRate =
-                            avAudioCodecParameters->sample_rate;
-                        int64_t sampleCount = 0;
-                        if (avAudioStream->duration != AV_NOPTS_VALUE)
+                    OTIO_NS::RationalTime timeReference = time::invalidTime;
+                    AVDictionaryEntry* tag = nullptr;
+                    while (
+                        (tag = av_dict_get(
+                             _avFormatContext->metadata, "", tag,
+                             AV_DICT_IGNORE_SUFFIX)))
+                    {
+                        const std::string key(tag->key);
+                        const std::string value(tag->value);
+                        tags[key] = value;
+                        if (string::compare(
+                                key, "time_reference",
+                                string::Compare::CaseInsensitive))
                         {
-                            AVRational r;
-                            r.num = 1;
-                            r.den = sampleRate;
-                            sampleCount = av_rescale_q(
-                                avAudioStream->duration, avAudioStream->time_base,
-                                r);
+                            timeReference = OTIO_NS::RationalTime(
+                                std::atoi(value.c_str()), sampleRate);
                         }
-                        else if (_avFormatContext->duration != AV_NOPTS_VALUE)
-                        {
-                            AVRational r;
-                            r.num = 1;
-                            r.den = sampleRate;
-                            sampleCount = av_rescale_q(
-                                _avFormatContext->duration, av_get_time_base_q(),
-                                r);
-                        }
+                    }
 
-                        OTIO_NS::RationalTime timeReference = time::invalidTime;
-                        AVDictionaryEntry* tag = nullptr;
-                        while (
-                            (tag = av_dict_get(
-                                _avFormatContext->metadata, "", tag,
-                                AV_DICT_IGNORE_SUFFIX)))
-                        {
-                            const std::string key(tag->key);
-                            const std::string value(tag->value);
-                            tags[key] = value;
-                            if (string::compare(
-                                    key, "time_reference",
-                                    string::Compare::CaseInsensitive))
-                            {
-                                timeReference = OTIO_NS::RationalTime(
-                                    std::atoi(value.c_str()), sampleRate);
-                            }
-                        }
-
-                        OTIO_NS::RationalTime startTime(0.0, sampleRate);
-                        if (!timeReference.is_invalid_time())
-                        {
-                            startTime = timeReference;
-                        }
-                        _timeRange = OTIO_NS::TimeRange(
-                            startTime.rescaled_to(60.0),
-                            OTIO_NS::RationalTime(sampleCount, sampleRate)
+                    OTIO_NS::RationalTime startTime(0.0, sampleRate);
+                    if (!timeReference.is_invalid_time())
+                    {
+                        startTime = timeReference;
+                    }
+                    _timeRange = OTIO_NS::TimeRange(
+                        startTime.rescaled_to(60.0),
+                        OTIO_NS::RationalTime(sampleCount, sampleRate)
                             .rescaled_to(60.0));
+                }
+                else
+                {
+                    _avSpeed = avVideoStream->r_frame_rate;
+                    // Use avg_frame_rate if set
+                    if (avVideoStream->avg_frame_rate.num != 0 &&
+                        avVideoStream->avg_frame_rate.den != 0)
+                        _avSpeed = avVideoStream->avg_frame_rate;
+
+                    if (_avSpeed.num == 1000)
+                    {
+                        LOG_WARNING("Movie has variable frame rate.  "
+                                    "This is not supported.");
+                        _avSpeed.num = 12;
+                    }
+
+                    speed = av_q2d(_avSpeed);
+
+                    // Some movies can return a rounding error in speed
+                    // calculation
+                    if (!is_valid_timecode_rate(speed))
+                    {
+                        speed = round(speed * 1000.F) / 1000.F;
+                    }
+
+                    if (avVideoStream->nb_frames > 0)
+                    {
+                        sequenceSize = avVideoStream->nb_frames;
+                    }
+                    else if (avVideoStream->duration != AV_NOPTS_VALUE)
+                    {
+                        sequenceSize = av_rescale_q(
+                            avVideoStream->duration, avVideoStream->time_base,
+                            swap(_avSpeed));
+                    }
+                    else if (_avFormatContext->duration != AV_NOPTS_VALUE)
+                    {
+                        sequenceSize = av_rescale_q(
+                            _avFormatContext->duration, av_get_time_base_q(),
+                            swap(_avSpeed));
                     }
                     else
                     {
-                        _avSpeed = avVideoStream->r_frame_rate;
-                        // Use avg_frame_rate if set
-                        if (avVideoStream->avg_frame_rate.num != 0 &&
-                            avVideoStream->avg_frame_rate.den != 0)
-                            _avSpeed = avVideoStream->avg_frame_rate;
+                        // If all fails, assume a single frame
+                        sequenceSize = 1;
+                    }
 
-                        if (_avSpeed.num == 1000)
+                    while (
+                        (tag = av_dict_get(
+                             _avFormatContext->metadata, "", tag,
+                             AV_DICT_IGNORE_SUFFIX)))
+                    {
+                        const std::string key(tag->key);
+                        const std::string value(tag->value);
+                        tags[key] = value;
+                        if (string::compare(
+                                key, "timecode",
+                                string::Compare::CaseInsensitive))
                         {
-                            LOG_WARNING("Movie has variable frame rate.  "
-                                        "This is not supported.");
-                            _avSpeed.num = 12;
+                            timecode = value;
                         }
+                    }
 
-                        speed = av_q2d(_avSpeed);
-
-                        // Some movies can return a rounding error in speed
-                        // calculation
-                        if (!is_valid_timecode_rate(speed))
+                    OTIO_NS::RationalTime startTime(0.0, speed);
+                    if (!timecode.empty())
+                    {
+                        opentime::ErrorStatus errorStatus;
+                        const OTIO_NS::RationalTime time =
+                            OTIO_NS::RationalTime::from_timecode(
+                                timecode, speed, &errorStatus);
+                        if (!opentime::is_error(errorStatus))
                         {
-                            speed = round(speed * 1000.F) / 1000.F;
+                            startTime = time.floor();
                         }
+                    }
+                    _timeRange = OTIO_NS::TimeRange(
+                        startTime, OTIO_NS::RationalTime(sequenceSize, speed));
+                }
 
-                        if (avVideoStream->nb_frames > 0)
-                        {
-                            sequenceSize = avVideoStream->nb_frames;
-                        }
-                        else if (avVideoStream->duration != AV_NOPTS_VALUE)
-                        {
-                            sequenceSize = av_rescale_q(
-                                avVideoStream->duration, avVideoStream->time_base,
-                                swap(_avSpeed));
-                        }
-                        else if (_avFormatContext->duration != AV_NOPTS_VALUE)
-                        {
-                            sequenceSize = av_rescale_q(
-                                _avFormatContext->duration, av_get_time_base_q(),
-                                swap(_avSpeed));
-                        }
-                        else
-                        {
-                            // If all fails, assume a single frame
-                            sequenceSize = 1;
-                        }
+                for (const auto& i : tags)
+                {
+                    _tags[i.first] = i.second;
+                }
+                _rotation = _getRotation(avVideoStream);
+                {
+                    std::stringstream ss;
+                    ss << std::fixed;
+                    ss << _rotation;
+                    _tags["Video Rotation"] = ss.str();
+                }
+                {
+                    std::stringstream ss;
+                    ss << _info.size.w << " " << _info.size.h;
+                    _tags["Video Resolution"] = ss.str();
+                }
+                {
+                    std::stringstream ss;
+                    ss.precision(2);
+                    ss << std::fixed;
+                    ss << _info.size.pixelAspectRatio;
+                    _tags["Video Pixel Aspect Ratio"] = ss.str();
+                }
+                {
+                    std::stringstream ss;
+                    ss << _info.pixelType;
+                    _tags["Video Pixel Type"] = ss.str();
+                }
+                {
+                    _tags["Video Codec"] =
+                        avcodec_get_name(_avCodecContext[_avStream]->codec_id);
+                }
+                {
+                    _tags["Video Color Primaries"] =
+                        av_color_primaries_name(params->color_primaries);
 
-                        while (
-                            (tag = av_dict_get(
-                                _avFormatContext->metadata, "", tag,
-                                AV_DICT_IGNORE_SUFFIX)))
-                        {
-                            const std::string key(tag->key);
-                            const std::string value(tag->value);
-                            tags[key] = value;
-                            if (string::compare(
-                                    key, "timecode",
-                                    string::Compare::CaseInsensitive))
-                            {
-                                timecode = value;
-                            }
-                        }
+                }
+                {
+                    _avColorTRC = params->color_trc;
+                    _tags["Video Color TRC"] =
+                        av_color_transfer_name(params->color_trc);
+                }
+                {
+                    _tags["Video Color Space"] =
+                        av_color_space_name(params->color_space);
+                }
+                {
+                    std::stringstream ss;
+                    ss << _info.videoLevels;
+                    _tags["Video Levels"] = ss.str();
+                }
+                {
+                    std::stringstream ss;
+                    ss << _timeRange.start_time().to_timecode();
+                    _tags["Video Start Time"] = ss.str();
+                }
+                {
+                    std::stringstream ss;
+                    ss << _timeRange.duration().to_timecode();
+                    _tags["Video Duration"] = ss.str();
+                }
+                {
+                    std::stringstream ss;
+                    ss.precision(2);
+                    ss << std::fixed;
+                    ss << _timeRange.start_time().rate() << " FPS";
+                    _tags["Video Speed"] = ss.str();
+                }
 
-                        OTIO_NS::RationalTime startTime(0.0, speed);
-                        if (!timecode.empty())
-                        {
-                            opentime::ErrorStatus errorStatus;
-                            const OTIO_NS::RationalTime time =
-                                OTIO_NS::RationalTime::from_timecode(
-                                    timecode, speed, &errorStatus);
-                            if (!opentime::is_error(errorStatus))
-                            {
-                                startTime = time.floor();
-                            }
-                        }
-                        _timeRange = OTIO_NS::TimeRange(
-                            startTime, OTIO_NS::RationalTime(sequenceSize, speed));
-                    }
-
-                    for (const auto& i : tags)
-                    {
-                        _tags[i.first] = i.second;
-                    }
-                    _rotation = _getRotation(avVideoStream);
-                    {
-                        std::stringstream ss;
-                        ss << std::fixed;
-                        ss << _rotation;
-                        _tags["Video Rotation"] = ss.str();
-                    }
-                    {
-                        std::stringstream ss;
-                        ss << _info.size.w << " " << _info.size.h;
-                        _tags["Video Resolution"] = ss.str();
-                    }
-                    {
-                        std::stringstream ss;
-                        ss.precision(2);
-                        ss << std::fixed;
-                        ss << _info.size.pixelAspectRatio;
-                        _tags["Video Pixel Aspect Ratio"] = ss.str();
-                    }
-                    {
-                        std::stringstream ss;
-                        ss << _info.pixelType;
-                        _tags["Video Pixel Type"] = ss.str();
-                    }
-                    {
-                        _tags["Video Codec"] =
-                            avcodec_get_name(_avCodecContext[_avStream]->codec_id);
-                    }
-                    {
-                        _tags["Video Color Primaries"] =
-                            av_color_primaries_name(params->color_primaries);
-
-                    }
-                    {
-                        _avColorTRC = params->color_trc;
-                        _tags["Video Color TRC"] =
-                            av_color_transfer_name(params->color_trc);
-                    }
-                    {
-                        _tags["Video Color Space"] =
-                            av_color_space_name(params->color_space);
-                    }
-                    {
-                        std::stringstream ss;
-                        ss << _info.videoLevels;
-                        _tags["Video Levels"] = ss.str();
-                    }
-                    {
-                        std::stringstream ss;
-                        ss << _timeRange.start_time().to_timecode();
-                        _tags["Video Start Time"] = ss.str();
-                    }
-                    {
-                        std::stringstream ss;
-                        ss << _timeRange.duration().to_timecode();
-                        _tags["Video Duration"] = ss.str();
-                    }
-                    {
-                        std::stringstream ss;
-                        ss.precision(2);
-                        ss << std::fixed;
-                        ss << _timeRange.start_time().rate() << " FPS";
-                        _tags["Video Speed"] = ss.str();
-                    }
-
-                    toHDRData(avVideoStream, _hdr);
-                    _hdr.eotf = toEOTF(_avColorTRC);
-                    setPrimariesFromAVColorPrimaries(params->color_primaries,
-                                                     _hdr);
+                toHDRData(avVideoStream, _hdr);
+                _hdr.eotf = toEOTF(_avColorTRC);
+                setPrimariesFromAVColorPrimaries(params->color_primaries,
+                                                 _hdr);
                 }
             }
             catch (...)
@@ -1369,11 +1371,11 @@ namespace tl
                     {
                         _swFrame = av_frame_alloc();
                         if (!_swFrame)
-                        {
-                            throw std::runtime_error(
+                    {
+                        throw std::runtime_error(
                                 string::Format("Cannot allocate frame: \"{0}\"").
                                 arg(_fileName));
-                        }
+                    }
                         // The scaler is created lazily in _copy(), once the
                         // real source format is known (the hardware download
                         // format, or the decoder's software-fallback format).
@@ -1655,8 +1657,10 @@ namespace tl
                 avFrame->height > 0)
                 _info.size.h = avFrame->height;
 
+
             const std::size_t w = _info.size.w;
             const std::size_t h = _info.size.h;
+
             uint8_t* data;
 
             if (_hwAccel &&

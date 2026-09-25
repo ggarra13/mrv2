@@ -197,7 +197,7 @@ namespace mrv
             Fl_Choice* m = mW;
             m->labelsize(12);
             m->align(FL_ALIGN_LEFT);
-            for (const auto& i : timeline::getFileSequenceAudioLabels())
+            for (const auto& i : timeline::getImageSeqAudioLabels())
             {
                 m->add(_(i.c_str()));
             }
@@ -225,22 +225,6 @@ namespace mrv
                 {
                     std::string file = o->value();
                     settings->setValue("FileSequence/AudioFileName", file);
-                });
-
-            iW = new Widget<Fl_Input>(
-                g->x() + 130, 170, g->w() - 130, 20, "Audio directory");
-            i = iW;
-            i->labelsize(12);
-            i->textcolor(FL_BLACK);
-            i->cursor_color(FL_RED);
-            i->value(
-                settings->getValue<std::string>("FileSequence/AudioDirectory")
-                    .c_str());
-            iW->callback(
-                [=](auto o)
-                {
-                    std::string dir = o->value();
-                    settings->setValue("FileSequence/AudioDirectory", dir);
                 });
 
             auto inW = new Widget<Fl_Int_Input>(

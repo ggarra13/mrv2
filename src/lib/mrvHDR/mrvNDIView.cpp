@@ -1239,15 +1239,10 @@ namespace mrv
                 data.primaries[image::HDRPrimaries::White][1],
             };
             // Max display capability
-            m_hdr_metadata.maxLuminance =
-                data.displayMasteringLuminance.getMax();
-            m_hdr_metadata.minLuminance =
-                data.displayMasteringLuminance.getMin();
+            m_hdr_metadata.maxLuminance = data.displayMasteringLuminance.max();
+            m_hdr_metadata.minLuminance = data.displayMasteringLuminance.min();
             m_hdr_metadata.maxContentLightLevel = data.maxCLL;
             m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
-
-            if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
-                m_hdr_metadata_changed = true; // Mark as changed
         }
         else
         {
@@ -1265,6 +1260,9 @@ namespace mrv
             m_hdr_metadata.maxContentLightLevel = 100.F;
             m_hdr_metadata.maxFrameAverageLightLevel = 100.F;
         }
+
+        if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
+            m_hdr_metadata_changed = true; // Mark as changed
 
         if (!p.image)
             return;
@@ -1910,8 +1908,8 @@ namespace mrv
             // Set HDR metadata
             cmap.metadata = PL_HDR_METADATA_ANY;
             pl_hdr_metadata& hdr = src_colorspace.hdr;
-            hdr.min_luma = data.displayMasteringLuminance.getMin();
-            hdr.max_luma = data.displayMasteringLuminance.getMax();
+            hdr.min_luma = data.displayMasteringLuminance.min();
+            hdr.max_luma = data.displayMasteringLuminance.max();
             hdr.prim.red.x = data.primaries[image::HDRPrimaries::Red][0];
             hdr.prim.red.y = data.primaries[image::HDRPrimaries::Red][1];
             hdr.prim.green.x = data.primaries[image::HDRPrimaries::Green][0];

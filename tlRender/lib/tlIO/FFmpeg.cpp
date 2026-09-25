@@ -319,7 +319,7 @@ namespace tl
                 }
             }
 
-#ifdef TLRENDER_DOBI
+#ifdef TLRENDER_DOVI
             raw = get_side_data_raw(frame, AV_FRAME_DATA_DOVI_METADATA);
             if (raw)
             {
@@ -477,51 +477,96 @@ namespace tl
             return std::string(buf);
         }
 
-        std::weak_ptr<log::System> Plugin::_logSystemWeak;
+        std::weak_ptr<log::System> ReadPlugin::_logSystemWeak;
 
-        void Plugin::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        struct ReadPlugin::Private
         {
-            IPlugin::_init(
-                "FFmpeg",
-                {// Video Formats
-                 {".avi", io::FileType::Movie},
-                 {".avif", io::FileType::Movie},
-                 {".divx", io::FileType::Movie},
-                 {".dv", io::FileType::Movie},
-                 {".flv", io::FileType::Movie},
-                 {".gif", io::FileType::Movie},
-                 {".heic", io::FileType::Movie},
-                 {".heif", io::FileType::Movie},
-                 {".m4v", io::FileType::Movie},
-                 {".mkv", io::FileType::Movie},
-                 {".mk3d", io::FileType::Movie},
-                 {".mov", io::FileType::Movie},
-                 {".mp4", io::FileType::Movie},
-                 {".mpg", io::FileType::Movie},
-                 {".mpeg", io::FileType::Movie},
-                 {".mpeg2", io::FileType::Movie},
-                 {".mpeg3", io::FileType::Movie},
-                 {".mpeg4", io::FileType::Movie},
-                 {".mxf", io::FileType::Movie},
-                 {".ts", io::FileType::Movie},
-                 {".vp9", io::FileType::Movie},
-                 {".y4m", io::FileType::Movie},
-                 {".webm", io::FileType::Movie},
-                 {".webp", io::FileType::Movie},
-                 {".wmv", io::FileType::Movie},
+            std::vector<AVCodecID> codecIds;
+            std::vector<std::string> codecNames;
+        };
 
-                 // Audio Formats
-                 {".aiff", io::FileType::Audio},
-                 {".mka", io::FileType::Audio},
-                 {".m4a", io::FileType::Audio},
-                 {".mp3", io::FileType::Audio},
-                 {".ogg", io::FileType::Audio},
-                 {".opus", io::FileType::Audio},
-                 {".vorbis", io::FileType::Audio},
-                 {".wav", io::FileType::Audio}},
-                cache, logSystem);
+        void ReadPlugin::_init(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            TLRENDER_P();
+
+            // Get codecs.
+            const AVCodec* avCodec = nullptr;
+            void* avCodecIterate = nullptr;
+            while ((avCodec = av_codec_iterate(&avCodecIterate)))
+            {
+                if ((AVMEDIA_TYPE_VIDEO == avCodec->type ||
+                     AVMEDIA_TYPE_AUDIO == avCodec->type) &&
+                    av_codec_is_decoder(avCodec))
+                {
+                    p.codecIds.push_back(avCodec->id);
+                    p.codecNames.push_back(avCodec->name);
+                }
+            }
+
+            // Get formats.
+            std::map<std::string, io::FileType> extensions;
+
+            const AVInputFormat* avInputFormat = nullptr;
+            void* avInputFormatIterate = nullptr;
+            std::vector<std::string> formatLog;
+            while ((avInputFormat = av_demuxer_iterate(&avInputFormatIterate)))
+            {
+                if (avInputFormat->extensions)
+                {
+                    for (auto extension : string::split(avInputFormat->extensions, ','))
+                    {
+                        if (!extension.empty() && extension[0] != '.')
+                        {
+                            extension.insert(0, ".");
+                        }
+                        //extensions[extension] = FileType::Media;
+                    }
+                    formatLog.push_back(string::Format("{0} ({1})").
+                                        arg(avInputFormat->name).
+                                        arg(avInputFormat->extensions));
+                }
+            }
+
+            // Video Formats (done manually to avoid things like .png getting
+            // added here).
+            extensions[".avi"] = io::FileType::Movie;
+            extensions[".avif"] = io::FileType::Movie;
+            extensions[".divx"] = io::FileType::Movie;
+            extensions[".dv"] = io::FileType::Movie;
+            extensions[".flv"] = io::FileType::Movie;
+            extensions[".gif"] = io::FileType::Movie;
+            extensions[".heic"] = io::FileType::Movie;
+            extensions[".heif"] = io::FileType::Movie;
+            extensions[".m4v"] = io::FileType::Movie;
+            extensions[".mkv"] = io::FileType::Movie;
+            extensions[".mk3d"] = io::FileType::Movie;
+            extensions[".mov"] = io::FileType::Movie;
+            extensions[".mp4"] = io::FileType::Movie;
+            extensions[".mpg"] = io::FileType::Movie;
+            extensions[".mpeg"] = io::FileType::Movie;
+            extensions[".mpeg2"] = io::FileType::Movie;
+            extensions[".mpeg3"] = io::FileType::Movie;
+            extensions[".mpeg4"] = io::FileType::Movie;
+            extensions[".mxf"] = io::FileType::Movie;
+            extensions[".ts"] = io::FileType::Movie;
+            extensions[".vp9"] = io::FileType::Movie;
+            extensions[".y4m"] = io::FileType::Movie;
+            extensions[".webm"] = io::FileType::Movie;
+            extensions[".webp"] = io::FileType::Movie;
+            extensions[".wmv"] = io::FileType::Movie;
+
+            // Audio Formats
+            extensions[".aiff"] = io::FileType::Audio;
+            extensions[".mka"] = io::FileType::Audio;
+            extensions[".m4a"] = io::FileType::Audio;
+            extensions[".mp3"] = io::FileType::Audio;
+            extensions[".ogg"] = io::FileType::Audio;
+            extensions[".opus"] = io::FileType::Audio;
+            extensions[".vorbis"] = io::FileType::Audio;
+            extensions[".wav"] = io::FileType::Audio;
+
+            IReadPlugin::_init("FFmpeg", extensions, logSystem);
 
             _logSystemWeak = logSystem;
             // av_log_set_level(AV_LOG_QUIET);
@@ -529,47 +574,215 @@ namespace tl
             av_log_set_level(AV_LOG_DEBUG);
             av_log_set_callback(_logCallback);
 
-            const AVCodec* avCodec = nullptr;
-            void* avCodecIterate = nullptr;
-            std::vector<std::string> codecNames;
-            while ((avCodec = av_codec_iterate(&avCodecIterate)))
-            {
-                codecNames.push_back(avCodec->name);
-            }
-            // std::cout << string::join(codecNames, ", ") << std::endl;
-            if (auto logSystem = _logSystemWeak.lock())
-            {
-                logSystem->print(
-                    "tl::io::ffmpeg::Plugin",
-                    "Codecs: " + string::join(codecNames, ", "));
-            }
+            logSystem->print(
+                "tl::ffmpeg::ReadPlugin",
+                string::Format(
+                    "\n"
+                    "    * Codecs: {0}\n"
+                    "    * Formats: {1}").
+                arg(string::join(p.codecNames, ", ")).
+                arg(string::join(formatLog, ", ")));
         }
 
-        Plugin::Plugin() {}
-
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        ReadPlugin::ReadPlugin() :
+            _p(new Private)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(cache, logSystem);
+        }
+
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::shared_ptr<io::IVideoRead>
+        ReadPlugin::videoRead(const file::Path& path, const io::Options& options)
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return VideoRead::create(path, options, _logSystem.lock());
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
+        std::shared_ptr<io::IVideoRead> ReadPlugin::videoRead(
             const file::Path& path, const std::vector<file::MemoryRead>& memory,
             const io::Options& options)
         {
-            return Read::create(path, memory, options, _cache, _logSystem);
+            return VideoRead::create(path, memory, options, _logSystem.lock());
         }
 
-        image::Info Plugin::getWriteInfo(
+        std::shared_ptr<io::IAudioRead> ReadPlugin::audioRead(
+            const file::Path& path,
+            const io::Options& options)
+        {
+            return AudioRead::create(path, options, _logSystem.lock());
+        }
+
+        std::shared_ptr<io::IAudioRead> ReadPlugin::audioRead(
+            const file::Path& path,
+            const std::vector<file::MemoryRead>& memory,
+            const io::Options& options)
+        {
+            return AudioRead::create(path, memory, options, _logSystem.lock());
+        }
+
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
+        {
+            return FFMPEG_VERSION;
+        }
+
+        void
+        ReadPlugin::_logCallback(void* avcl, int level, const char* fmt, va_list vl)
+        {
+            // Filter out verbose messages early
+            if (level == AV_LOG_VERBOSE || !fmt)
+                return;
+
+            if (auto logSystem = _logSystemWeak.lock())
+            {
+                // 1. Safely format the FFmpeg message itself (without the
+                //    prefix
+                char messageBuf[string::cBufferSize];
+                messageBuf[string::cBufferSize - 1] = 0;
+                vsnprintf(messageBuf, string::cBufferSize, fmt, vl);
+
+                std::string finalMessage = string::removeTrailingNewlines(messageBuf);
+
+                // 2. Safely extract the context name
+                std::string prefix = "";
+                if (avcl)
+                {
+                    AVClass* avc = *(AVClass**)avcl;
+                    // Safely check the function pointer BEFORE invoking it
+                    if (avc && avc->item_name)
+                    {
+                        const char* itemName = avc->item_name(avcl);
+                        prefix = std::string("(") + (itemName ? itemName : "Unknown") + ") ";
+                    }
+                    else
+                    {
+                        prefix = "(Unknown) ";
+                    }
+                }
+
+                finalMessage = prefix + finalMessage;
+
+                // 3. Thread-safe deduplication
+                if (level < AV_LOG_INFO)
+                {
+                    static std::string lastMessage;
+                    static std::mutex logMutex;
+
+                    std::lock_guard<std::mutex> lock(logMutex);
+                    if (finalMessage == lastMessage)
+                        return;
+                    lastMessage = finalMessage;
+                }
+
+                // 4. Dispatch to the logging system
+                switch (level)
+                {
+                case AV_LOG_PANIC:
+                case AV_LOG_FATAL:
+                case AV_LOG_ERROR:
+                    logSystem->print("tl::io::ffmpeg::Plugin", finalMessage, log::Type::Error, "ffmpeg");
+                    break;
+                case AV_LOG_WARNING:
+                    logSystem->print("tl::io::ffmpeg::Plugin", finalMessage, log::Type::Warning, "ffmpeg");
+                    break;
+                case AV_LOG_INFO:
+                    logSystem->print("tl::io::ffmpeg::Plugin", finalMessage, log::Type::Message, "ffmpeg");
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+
+        std::weak_ptr<log::System> WritePlugin::_logSystemWeak;
+
+        struct WritePlugin::Private
+        {
+            std::vector<AVCodecID>   codecIds;
+            std::vector<std::string> codecNames;
+            std::vector<AVCodecID>   audioCodecIds;
+            std::vector<std::string> audioCodecNames;
+        };
+
+        WritePlugin::WritePlugin() :
+            _p(new Private)
+        {}
+
+        void WritePlugin::_init(const std::shared_ptr<log::System>& logSystem)
+        {
+            TLRENDER_P();
+
+            // Get codecs.
+            const AVCodec* avCodec = nullptr;
+            void* avCodecIterate = nullptr;
+            while ((avCodec = av_codec_iterate(&avCodecIterate)))
+            {
+                if (!avCodec->name)
+                    continue;
+                if (AVMEDIA_TYPE_VIDEO == avCodec->type && av_codec_is_encoder(avCodec))
+                {
+                    p.codecIds.push_back(avCodec->id);
+                    p.codecNames.push_back(avCodec->name);
+                }
+                else if (AVMEDIA_TYPE_AUDIO == avCodec->type && av_codec_is_encoder(avCodec))
+                {
+                    p.audioCodecIds.push_back(avCodec->id);
+                    p.audioCodecNames.push_back(avCodec->name);
+                }
+            }
+
+            // Get formats.
+            std::map<std::string, io::FileType> extensions;
+            const AVOutputFormat* avOutputFormat = nullptr;
+            void* avOutputFormatIterate = nullptr;
+            std::vector<std::string> formatLog;
+            while ((avOutputFormat = av_muxer_iterate(&avOutputFormatIterate)))
+            {
+                if (avOutputFormat->extensions)
+                {
+                    for (auto extension : string::split(avOutputFormat->extensions, ','))
+                    {
+                        if (!extension.empty() && extension[0] != '.')
+                        {
+                            extension.insert(0, ".");
+                        }
+                        extensions[extension] = io::FileType::Movie;
+                    }
+                    formatLog.push_back(string::Format("{0} ({1})").arg(avOutputFormat->name).arg(avOutputFormat->extensions));
+                }
+            }
+            IWritePlugin::_init("FFmpeg", extensions, logSystem);
+
+            logSystem->print(
+                "tl::ffmpeg::WritePlugin",
+                string::Format(
+                    "\n"
+                    "    * Codecs: {0}\n"
+                    "    * Audio codecs: {1}\n"
+                    "    * Formats: {2}").
+                arg(string::join(p.codecNames, ", ")).
+                arg(string::join(p.audioCodecNames, ", ")).
+                arg(string::join(formatLog, ", ")));
+        }
+
+        std::shared_ptr<WritePlugin> WritePlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<WritePlugin>(new WritePlugin);
+            out->_init(logSystem);
+            return out;
+        }
+
+        std::string WritePlugin::getPluginInfo(const io::Options&) const
+        {
+            return FFMPEG_VERSION;
+        }
+
+        image::Info WritePlugin::getInfo(
             const image::Info& info, const io::Options& options) const
         {
             image::Info out;
@@ -598,16 +811,16 @@ namespace tl
             return out;
         }
 
-        std::shared_ptr<io::IWrite> Plugin::write(
+        std::shared_ptr<io::IWrite> WritePlugin::write(
             const file::Path& path, const io::Info& info,
             const io::Options& options)
         {
             if (!info.video.empty() &&
-                !_isWriteCompatible(info.video[0], options))
+                !_isCompatible(info.video[0], options))
                 throw std::runtime_error(string::Format("{0}: {1}")
                                              .arg(path.get())
-                                             .arg("Unsupported video"));
-            return Write::create(path, info, options, _logSystem);
+                                             .arg("Unsupported video depth"));
+            return Write::create(path, info, options, _logSystem.lock());
         }
 
         void

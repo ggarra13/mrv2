@@ -243,20 +243,20 @@ namespace tl
                         mesh.v.push_back(math::Vector2f(min.x, max.y + 1));
                             mesh.t.push_back(
                                 math::Vector2f(
-                                    item.textureU.getMin(),
-                                    item.textureV.getMin()));
+                                    item.textureU.min(),
+                                    item.textureV.min()));
                             mesh.t.push_back(
                                 math::Vector2f(
-                                    item.textureU.getMax(),
-                                    item.textureV.getMin()));
+                                    item.textureU.max(),
+                                    item.textureV.min()));
                             mesh.t.push_back(
                                 math::Vector2f(
-                                    item.textureU.getMax(),
-                                    item.textureV.getMax()));
+                                    item.textureU.max(),
+                                    item.textureV.max()));
                             mesh.t.push_back(
                                 math::Vector2f(
-                                    item.textureU.getMin(),
-                                    item.textureV.getMax()));
+                                    item.textureU.min(),
+                                    item.textureV.max()));
 
                         geom::Triangle2 triangle;
                         triangle.v[0].v = meshIndex + 1;

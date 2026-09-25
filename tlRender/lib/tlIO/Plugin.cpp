@@ -1,115 +1,87 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2024 Darby Johnston
-// All rights reserved.
+// Copyright Contributors to the tlRender project.
 
 #include <tlIO/Plugin.h>
 
-#include <tlCore/Error.h>
-#include <tlCore/String.h>
+#include <tlCore/LogSystem.h>
 
 namespace tl
 {
     namespace io
     {
         void IIO::_init(
-            const file::Path& path, const Options& options,
-            const std::shared_ptr<Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+            const file::Path& path,
+            const io::Options& options,
+            const std::shared_ptr<log::System>& logSystem)
         {
             _path = path;
             _options = options;
-            _cache = cache;
             _logSystem = logSystem;
         }
 
-        IIO::IIO() {}
-
-        IIO::~IIO() {}
-
-        void IRead::_init(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const Options& options, const std::shared_ptr<Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        namespace
         {
-            IIO::_init(path, options, cache, logSystem);
-            _memory = memory;
+            std::atomic<size_t> objectCount = 0;
         }
 
-        IRead::IRead() {}
+        IIO::IIO()
+        {
+            ++objectCount;
+        }
 
-        IRead::~IRead() {}
+        IIO::~IIO()
+        {
+            --objectCount;
+        }
 
+        const file::Path& IIO::getPath() const
+        {
+            return _path;
+        }
 
-        std::string IRead::getError() const
+        size_t IIO::getObjectCount()
+        {
+            return objectCount;
+        }
+
+        struct IIOPlugin::Private
+        {
+            std::string pluginName;
+            std::map<std::string, FileType> exts;
+        };
+
+        void IIOPlugin::_init(
+            const std::string& name,
+            const std::map<std::string, FileType>& exts,
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            TLRENDER_P();
+            _logSystem = logSystem;
+            p.pluginName = name;
+            p.exts = exts;
+        }
+
+        IIOPlugin::IIOPlugin() :
+            _p(new Private)
+        {}
+
+        IIOPlugin::~IIOPlugin()
+        {}
+
+        const std::string& IIOPlugin::getPluginName() const
+        {
+            return _p->pluginName;
+        }
+
+        std::string IIOPlugin::getPluginInfo(const io::Options&) const
         {
             return std::string();
         }
 
-        size_t IRead::getErrorCount() const
-        {
-            return 0;
-        }
-
-        std::future<VideoData>
-        IRead::readVideo(const OTIO_NS::RationalTime&, const Options&)
-        {
-            return std::future<VideoData>();
-        }
-
-        std::future<AudioData>
-        IRead::readAudio(const OTIO_NS::TimeRange&, const Options&)
-        {
-            return std::future<AudioData>();
-        }
-
-        void IWrite::_init(
-            const file::Path& path, const Options& options, const Info& info,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            IIO::_init(path, options, nullptr, logSystem);
-            _info = info;
-        }
-
-        IWrite::IWrite() {}
-
-        IWrite::~IWrite() {}
-
-        struct IPlugin::Private
-        {
-            std::string name;
-            std::map<std::string, FileType> extensions;
-            std::shared_ptr<Cache> cache;
-        };
-
-        void IPlugin::_init(
-            const std::string& name,
-            const std::map<std::string, FileType>& extensions,
-            const std::shared_ptr<Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            TLRENDER_P();
-            _cache = cache;
-            _logSystem = logSystem;
-            p.name = name;
-            p.extensions = extensions;
-        }
-
-        IPlugin::IPlugin() :
-            _p(new Private)
-        {
-        }
-
-        IPlugin::~IPlugin() {}
-
-        const std::string& IPlugin::getName() const
-        {
-            return _p->name;
-        }
-
-        std::set<std::string> IPlugin::getExtensions(int types) const
+        std::set<std::string> IIOPlugin::getExts(int types) const
         {
             std::set<std::string> out;
-            for (const auto& i : _p->extensions)
+            for (const auto& i : _p->exts)
             {
                 if (static_cast<int>(i.second) & types)
                 {
@@ -118,12 +90,5 @@ namespace tl
             }
             return out;
         }
-
-        bool IPlugin::_isWriteCompatible(
-            const image::Info& info, const Options& options) const
-        {
-            return info.pixelType != image::PixelType::kNone &&
-                   info == getWriteInfo(info, options);
-        }
-    } // namespace io
-} // namespace tl
+    }
+}

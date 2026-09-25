@@ -12,7 +12,7 @@ namespace tl
     {
         ReadAudio::ReadAudio(
             const std::string& fileName,
-            const std::vector<file::MemoryRead>& memory, double videoRate,
+            const std::vector<file::MemoryRead>& memory,
             const ReadOptions& options) :
             _fileName(fileName),
             _options(options)
@@ -50,17 +50,19 @@ namespace tl
                 nullptr);
             if (r < 0)
             {
-                throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(fileName)
-                                             .arg(getErrorLabel(r)));
+                throw std::runtime_error(
+                    string::Format("avformat_open_input {0}: {1}")
+                    .arg(fileName)
+                    .arg(getErrorLabel(r)));
             }
 
             r = avformat_find_stream_info(_avFormatContext, 0);
             if (r < 0)
             {
-                throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(fileName)
-                                             .arg(getErrorLabel(r)));
+                throw std::runtime_error(
+                    string::Format("avformat_find_stream_info {0}: {1}")
+                    .arg(fileName)
+                    .arg(getErrorLabel(r)));
             }
 
             // Count the tracks and get the metadata for each audio track
@@ -114,6 +116,26 @@ namespace tl
                     _info.audioInfo.push_back(info);
                 }
             }
+
+            // The video rate is needed only to parse the timecode tag
+            // into a start time below, and is read from this reader's own
+            // format context: the audio does not depend on a video reader
+            // existing. A file with no video has no rate to parse the
+            // timecode against.
+            // Negative, so that from_timecode() below rejects it and
+            // leaves the start time alone.
+            double videoRate = -1.0;
+            const int avVideoStream = findStream(
+                _avFormatContext,
+                AVMEDIA_TYPE_VIDEO);
+            if (avVideoStream != -1)
+            {
+                videoRate = av_q2d(av_guess_frame_rate(
+                                       _avFormatContext,
+                                       _avFormatContext->streams[avVideoStream],
+                                       nullptr));
+            }
+
 
             // If user selected specific track, use it.
             if (options.audioTrack >= 0)
@@ -193,9 +215,10 @@ namespace tl
                     _avCodecParameters[_avStream], avAudioCodecParameters);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_parameters_copy {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
                 _avCodecContext[_avStream] =
                     avcodec_alloc_context3(avAudioCodec);
@@ -209,18 +232,20 @@ namespace tl
                     _avCodecContext[_avStream], _avCodecParameters[_avStream]);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_parameters_to_context {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
                 _avCodecContext[_avStream]->thread_count = options.threadCount;
                 _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME;
                 r = avcodec_open2(_avCodecContext[_avStream], avAudioCodec, 0);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_open2 {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
 
                 const size_t fileChannelCount =
@@ -357,6 +382,7 @@ namespace tl
                         avcodec_get_name(_avCodecContext[_avStream]->codec_id);
                 }
             }
+
         }
 
         ReadAudio::~ReadAudio()
