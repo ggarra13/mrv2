@@ -1045,6 +1045,159 @@ namespace tl
             }
         } // namespace
 
+        AVPixelFormat ReadVideo::_getHwFormat(
+            AVCodecContext* context,
+            const AVPixelFormat* formats)
+        {
+            auto self = static_cast<ReadVideo*>(context->opaque);
+            for (const AVPixelFormat* p = formats; *p != AV_PIX_FMT_NONE; ++p)
+            {
+                if (*p == self->_hwPixelFormat)
+                {
+                    return *p;
+                }
+            }
+            // The hardware format was not offered for this stream; let the decoder
+            // fall back to a software format. _decode() detects this per frame (the
+            // frame format will not match _hwPixelFormat, so no download happens)
+            // and _copy() builds the scaler from whatever format actually arrives.
+            return formats[0];
+        }
+
+        void ReadVideo::_initHwAccel(const AVCodec* codec)
+        {
+            // The hardware path outputs 4:2:0/4:2:2/4:4:4 NV12/NV16/NV24/P010/
+            // P210/P410 with limited-range YUV colour handling. For sources it
+            // would not reproduce faithfully -- full-range, chroma subsampling
+            // other than 4:2:0/4:2:2/4:4:4, or an alpha channel (none of the
+            // semi-planar download formats carry an alpha plane) -- stay on
+            // the software decoder so hardware decoding is always a faithful
+            // match (it silently falls back rather than altering the image).
+            const AVPixelFormat inputFormat =
+                static_cast<AVPixelFormat>(_avCodecParameters[_avStream]->format);
+            const AVPixFmtDescriptor* inputDesc = av_pix_fmt_desc_get(inputFormat);
+            const bool is420 = inputDesc &&
+                1 == inputDesc->log2_chroma_w && 1 == inputDesc->log2_chroma_h;
+            const bool is422 = inputDesc &&
+                1 == inputDesc->log2_chroma_w && 0 == inputDesc->log2_chroma_h;
+            const bool is444 = inputDesc &&
+                0 == inputDesc->log2_chroma_w && 0 == inputDesc->log2_chroma_h;
+            const bool hasAlpha = inputDesc &&
+                (inputDesc->flags & AV_PIX_FMT_FLAG_ALPHA);
+            const int depth = inputDesc ? inputDesc->comp[0].depth : 0;
+
+            if (AVCOL_RANGE_JPEG == _avCodecParameters[_avStream]->color_range)
+            {
+                std::string msg =
+                    string::Format("Hardware decoding skipped for a full-range source; using software decoding: \"{0}\"").arg(_fileName);
+                LOG_WARNING(msg);
+                return;
+            }
+            if (!is420 && !is422 && !is444)
+            {
+                std::string msg =
+                    string::Format("Hardware decoding skipped for a non-4:2:0/non-4:2:2/non-4:4:4 source; using software decoding: \"{0}\"").arg(_fileName);
+                LOG_WARNING(msg);
+                return;
+            }
+            if (hasAlpha)
+            {
+                // e.g. ProRes 4444/4444 XQ (YUVA444P*). Vulkan hwaccel decode
+                // may well produce an alpha-bearing frame, but there is no
+                // semi-planar (NV/P-series) download format that carries an
+                // alpha plane, and this pipeline has no alpha-aware hardware
+                // path, so fall back to software decoding rather than
+                // silently dropping the alpha channel.
+                std::string msg =
+                    string::Format("Hardware decoding skipped for a source with an alpha channel; using software decoding: \"{0}\"").arg(_fileName);
+                LOG_WARNING(msg);
+                return;
+            }
+            if (depth != 8 && depth != 10)
+            {
+                std::string msg = string::Format(
+                    "Hardware decoding skipped for a {0}-bit source (only 8/10-bit "
+                    "supported); using software decoding: \"{1}\"")
+                                  .arg(depth).arg(_fileName);
+                LOG_WARNING(msg);
+                return;
+            }
+
+            // Try each candidate device type in order, using the first one
+            // that both offers a hardware configuration for this codec and
+            // successfully creates a device. If all candidates fail, stay
+            // on the software decoding path.
+            enum AVHWDeviceType type = AV_HWDEVICE_TYPE_NONE;
+            while ((type = av_hwdevice_iterate_types(type)) !=
+                    AV_HWDEVICE_TYPE_NONE)
+            {
+                std::string name = av_hwdevice_get_type_name(type);
+                if (!_options.hwDriver.empty())
+                {
+                    if (name != _options.hwDriver)
+                        continue;
+                }
+
+                // Find a hardware configuration for this codec and device type.
+                AVPixelFormat hwFormat = AV_PIX_FMT_NONE;
+                for (int i = 0; ; ++i)
+                {
+                    const AVCodecHWConfig* config = avcodec_get_hw_config(codec, i);
+                    if (!config)
+                    {
+                        break;
+                    }
+                    if ((config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX) &&
+                        config->device_type == type)
+                    {
+                        hwFormat = config->pix_fmt;
+                        break;
+                    }
+                }
+                if (AV_PIX_FMT_NONE == hwFormat)
+                {
+                    // This codec has no hardware support for this device
+                    // type; try the next candidate.
+                    std::string msg = string::Format(
+                        "Hardware decoding ({0}) is not available for the codec \"{1}\"; trying next backend").
+                        arg(av_hwdevice_get_type_name(type)).
+                        arg(codec->name ? codec->name : "?");
+                    LOG_INFO(msg);
+                    continue;
+                }
+                // Create the hardware device. On failure, try the next candidate.
+                AVBufferRef* device = nullptr;
+                if (av_hwdevice_ctx_create(&device, type, nullptr, nullptr, 0) < 0)
+                {
+                    std::string msg = string::Format(
+                        "Cannot create a hardware decoding device ({0}); trying next backend").
+                        arg(av_hwdevice_get_type_name(type));
+                    LOG_WARNING(msg);
+                    continue;
+                }
+                _hwDeviceContext = device;
+                _hwPixelFormat = hwFormat;
+                _hwAccel = true;
+                _avCodecContext[_avStream]->hw_device_ctx = av_buffer_ref(_hwDeviceContext);
+                _avCodecContext[_avStream]->opaque = this;
+                _avCodecContext[_avStream]->get_format = _getHwFormat;
+
+
+                std::string msg = string::Format("Hardware decoding enabled ({0}) for the codec \"{1}\"").
+                                  arg(av_hwdevice_get_type_name(type)).
+                                  arg(codec->name ? codec->name : "?");
+                LOG_STATUS(msg);
+                return;
+            }
+
+            // None of the candidate device types worked; stay on the
+            // software decoding path.
+            std::string msg = string::Format(
+                "Hardware decoding is not available for the codec \"{0}\"; using software decoding").
+                arg(codec->name ? codec->name : "?");
+            LOG_WARNING(msg);
+        }
+
         void ReadVideo::start()
         {
             if (_avStream != -1)
