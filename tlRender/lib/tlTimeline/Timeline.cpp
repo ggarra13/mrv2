@@ -891,22 +891,7 @@ namespace tl
 
             // Create a new thread.
             p.mutex.otioTimeline = p.otioTimeline;
-            p.thread.running = true;
-            p.thread.logTimer = std::chrono::steady_clock::now();
-            if (p.options.threaded)
-            {
-                p.startReadPool(p.options.readThreadCount);
-                p.thread.thread = std::thread(
-                    [this]
-                        {
-                            TLRENDER_P();
-                            while (p.thread.running)
-                            {
-                                _tick();
-                            }
-                            _finishRequests();
-                        });
-            }
+            _startThreads();
         }
 
 
@@ -937,16 +922,7 @@ namespace tl
                     p.path.get());
             }
 
-            {
-                std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                p.thread.running = false;
-            }
-            p.thread.cv.notify_one();
-            if (p.thread.thread.joinable())
-            {
-                p.thread.thread.join();
-            }
-            p.stopReadPool();
+            _stopThreads();
 
             --objectCount;
         }
@@ -1055,16 +1031,7 @@ namespace tl
             // staying down; any getVideo()/getAudio() request that arrives
             // in the meantime comes back with an empty frame immediately,
             // the same as it would after the timeline is destroyed.
-            {
-                std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                p.thread.running = false;
-            }
-            p.thread.cv.notify_one();
-            if (p.thread.thread.joinable())
-            {
-                p.thread.thread.join();
-            }
-            p.stopReadPool();
+            _stopThreads();
 
             // The request thread and read pool are stopped, so it is now
             // safe to swap in the new timeline and rebuild everything
@@ -1114,22 +1081,7 @@ namespace tl
                 p.mutex.stopped = false;
                 p.mutex.otioTimeline = p.otioTimeline;
             }
-            p.thread.running = true;
-            p.thread.logTimer = std::chrono::steady_clock::now();
-            if (p.options.threaded)
-            {
-                p.startReadPool(p.options.readThreadCount);
-                p.thread.thread = std::thread(
-                    [this]
-                        {
-                            TLRENDER_P();
-                            while (p.thread.running)
-                            {
-                                _tick();
-                            }
-                            _finishRequests();
-                        });
-            }
+            _startThreads();
         }
 
         const file::Path& Timeline::getPath() const
@@ -3381,5 +3333,44 @@ namespace tl
 
             p.zipReader->saveMedia(mediaPath, progressCb);
         }
+
+        void Timeline::_startThreads()
+        {
+            TLRENDER_P();
+
+            p.thread.running = true;
+            p.thread.logTimer = std::chrono::steady_clock::now();
+            if (p.options.threaded)
+            {
+                p.startReadPool(p.options.readThreadCount);
+                p.thread.thread = std::thread(
+                    [this]
+                        {
+                            TLRENDER_P();
+                            while (p.thread.running)
+                            {
+                                _tick();
+                            }
+                            _finishRequests();
+                        });
+            }
+        }
+
+        void Timeline::_stopThreads()
+        {
+            TLRENDER_P();
+
+            {
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.thread.running = false;
+            }
+            p.thread.cv.notify_one();
+            if (p.thread.thread.joinable())
+            {
+                p.thread.thread.join();
+            }
+            p.stopReadPool();
+        }
+
     } // namespace timeline
 } // namespace tl

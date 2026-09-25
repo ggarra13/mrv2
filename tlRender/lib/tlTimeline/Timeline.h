@@ -343,6 +343,8 @@ namespace tl
             void _timelineUpdate();
             float _transitionValue(double frame, double in, double out) const;
 
+            void _startThreads();
+            void _stopThreads();
 
             TLRENDER_PRIVATE();
         };
