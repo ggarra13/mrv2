@@ -61,6 +61,7 @@ set(HEADERS
     String.h
     StringFormat.h
     StringFormatInline.h
+    Thread.h
     Time.h
     TimeInline.h
     Timer.h
