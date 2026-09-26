@@ -959,35 +959,16 @@ void Flu_Entry::startRequest()
     }
 
     image::Size size(128, 64);
-    OTIO_NS::RationalTime time = time::invalidTime;
+    std::optional<OTIO_NS::RationalTime> time;
 
     // Needed to change icon when user saved over the same image name.
-
     if (auto thumbnailSystem = p.thumbnailSystem.lock())
     {
-        const auto& timeline =
-            timeline::Timeline::create(mrv::App::app->getContext(), path);
-        if (extension == ".otio" || extension == ".otioz")
-        {
-            const auto& timeRange = timeline->getTimeRange();
-            if (time::isValid(timeRange))
-            {
-                time = timeRange.start_time();
-            }
-        }
-
         io::Options options;
-
-        std::random_device rd;
-        options["ClearCache"] = string::Format("{0}").arg(rd());
-        auto mediaPath = timeline->getMediaPath(time);
-        if (!mrv::file::isOTIO(path) || path != mediaPath)
-        {
-            p.thumbnail.request =
-                thumbnailSystem->getThumbnail(path, mediaPath,
-                                              size.h, time,
-                                              "", options);
-        }
+        p.thumbnail.request =
+            thumbnailSystem->getThumbnail(path, path,
+                                          size.h, time,
+                                          "", options);
         p.thumbnail.init = false;
         isPicture = true;
 
