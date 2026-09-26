@@ -7,6 +7,7 @@
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl_SVG_Image.H>
+#include <FL/Fl.H>
 
 #include <cmath>
 #include <cstring>
@@ -16,8 +17,6 @@ namespace tl
 {
     namespace svg
     {
-        static std::mutex svgMutex;
-
         namespace
         {
             image::Size requestedSize(const io::Options& options)
@@ -136,8 +135,9 @@ namespace tl
             const image::Size size = renderSize(*svg, _requestedSize, fileName);
 
             {
-                std::lock_guard<std::mutex> lock(svgMutex);
+                Fl::lock();
                 svg->resize(size.w, size.h);
+                Fl::unlock();
             }
 
             io::VideoData out;
@@ -148,6 +148,10 @@ namespace tl
             {
                 const size_t dataSize = svg->data_w() * svg->data_h() * svg->d();
                 std::memcpy(out.image->getData(), svg->data()[0], dataSize);
+            }
+            else
+            {
+                throw std::runtime_error(string::Format("Cannot rasterize file: \"{0}\"").arg(fileName));
             }
             image::Tags tags;
             io::addOtioTags(tags, fileName, time);
