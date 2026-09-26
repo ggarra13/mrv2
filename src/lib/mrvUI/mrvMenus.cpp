@@ -1354,9 +1354,10 @@ namespace mrv
         else
             thumbnails_small = kToggleTimelineThumbnails.hotkey();
 
-        const int kSmall = 50 * ui->uiView->pixels_per_unit();
-        const int kMedium = 75 * ui->uiView->pixels_per_unit();
-        const int kLarge = 100 * ui->uiView->pixels_per_unit();
+        const float kPixels_per_unit = ui->uiView->pixels_per_unit();
+        const int kSmall = 50 * kPixels_per_unit;
+        const int kMedium = 75 * kPixels_per_unit;
+        const int kLarge = 100 * kPixels_per_unit;
 
         idx = menu->add(
             _("Timeline/Thumbnails/None"), thumbnails_none,
