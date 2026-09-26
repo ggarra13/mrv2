@@ -448,6 +448,7 @@ namespace tl
                                         new OTIO_NS::ImageSequenceReference(
                                             "",
                                             inputPath.getBaseName(),
+                                            inputPath.getSuffix() +
                                             inputPath.getExtension(),
                                             info.videoTime->start_time().value(),
                                             1,
