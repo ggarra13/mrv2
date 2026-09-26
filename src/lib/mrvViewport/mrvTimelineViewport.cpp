@@ -4003,7 +4003,8 @@ namespace mrv
                 if (file::isOTIO(path))
                 {
                     // We have an otio timeline.  Get the clip name from the
-                    // tag and recreate the path for checking.
+                    // tag and recreate the path for checking if it is a movie
+                    // or sequence of OpenEXR's for example.
                     auto tags = p.videoData[0].layers[0].image->getTags();
                     if (tags.find("otioClipName") != tags.end())
                     {

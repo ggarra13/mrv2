@@ -15,10 +15,14 @@ v1.7.8
 - Python: Added missing OpenEXR compressors to Python bindings.
 - Python: Added new Python methods to control the values of the new OpenEXR compressors.
 
+- Core: .otio files now support URI paths properly.
+- Core/UI: Thumbnail cache is now independant from the main caches.
 - Core: Improved the performance of loading pictures.
 - Core: Cleaned up Timeline code.
+- Core: Moved to decoding pictures in a pool, like latest tlRender.
 
-Fixes:
+Fixes
+-----
 
 - Precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
 - File->Save Image on the Vulkan backend not paying attention to the HDR Export options.
@@ -29,7 +33,8 @@ Fixes:
 - Edit->Frame->Insert incorrectly leaving a wrong tail clip's range.
 - Thumbnail pictures when pixelAspectRatio was different than 1.0.
 
-Libraries:
+Libraries
+---------
 	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.
 	- OpenJPH v0.32.0
 	- ZSTD v0.17.0
