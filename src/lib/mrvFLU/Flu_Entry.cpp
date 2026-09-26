@@ -376,8 +376,6 @@ std::string Flu_Entry::toTLRender() const
         // Note: fullname is a valid C format sequence, like picture.%04d.exr
         snprintf(tmp, 1024, fullname.c_str(), frame);
         fullname = tmp;
-        std::cerr << "fullname=" << fullname << " frame=" << frame
-                  << std::endl;
     }
 
     return fullname;
