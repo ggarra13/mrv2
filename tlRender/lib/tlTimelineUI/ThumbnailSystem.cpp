@@ -4,6 +4,8 @@
 
 #include <tlCore/AudioResample.h>
 
+#include <sstream>
+
 namespace tl
 {
     namespace TIMELINEUI
