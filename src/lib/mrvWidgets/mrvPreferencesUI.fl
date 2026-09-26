@@ -96,10 +96,10 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double hide resizable
-      code3 {main = m;} non_modal size_range {847 449 0 0}
+      xywh {1389 684 847 449} type Double resizable
+      code3 {main = m;} non_modal size_range {847 449 0 0} visible
     } {
-      Fl_Group {} {open
+      Fl_Group {} {open selected
         xywh {0 0 847 449} box FLAT_BOX
       } {
         Fl_Group {} {open
@@ -832,8 +832,8 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
               }
             }
             Fl_Group {} {
-              label Thumbnails
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Thumbnails open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label Thumbnails open
@@ -859,7 +859,7 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                 }
                 Fl_Choice uiPrefsComparePanelThumbnails {
                   label {Compare Panel} open
-                  tooltip {How to display timeline thumbnails in Compare Panel.} xywh {398 125 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  tooltip {How to display timeline thumbnails in Compare Panel.} xywh {398 142 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code3 {o->value(1);}
                 } {
                   MenuItem {} {
@@ -875,27 +875,9 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                     xywh {55 55 100 20}
                   }
                 }
-                Fl_Choice uiPrefsPlaylistPanelThumbnails {
-                  label {Playlist Panel} open
-                  tooltip {How to display timeline thumbnails in Playlist Panel.} xywh {398 164 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
-                  code3 {o->value(2);}
-                } {
-                  MenuItem {} {
-                    label None
-                    xywh {65 65 100 20}
-                  }
-                  MenuItem {} {
-                    label Small
-                    xywh {65 65 100 20}
-                  }
-                  MenuItem {} {
-                    label Normal
-                    xywh {65 65 100 20}
-                  }
-                }
                 Fl_Choice uiPrefsStereo3DPanelThumbnails {
                   label {Stereo Panel} open
-                  tooltip {How to display timeline thumbnails in Stereo Panel.} xywh {398 202 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  tooltip {How to display timeline thumbnails in Stereo Panel.} xywh {398 200 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code3 {o->value(1);}
                 } {
                   MenuItem {} {
@@ -1389,8 +1371,8 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label OCIO open
-              xywh {288 37 555 361} box EMBOSSED_BOX align 5
+              label OCIO
+              xywh {288 37 555 361} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label OCIO open
@@ -1451,7 +1433,7 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
                   tooltip {Pick a config.ocio file from disk.} xywh {751 162 55 31}
                 }
                 Fl_Light_Button uiOCIOUseAutoICS {
-                  label {Set Auto ICS as default} selected
+                  label {Set Auto ICS as default}
                   tooltip {Set Auto ICS as a default so that Input Color Space is selected from file name or OpenEXR metadata..} xywh {404 203 350 30} value 1
                 }
                 Fl_Light_Button uiOCIOUseDefaultDisplayView {

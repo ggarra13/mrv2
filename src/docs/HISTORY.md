@@ -5,6 +5,7 @@ v1.7.8
 
 - UI: Added a progress indicator when unzipping .otioz files for editing.
 - UI: Cancelling saving of a session upon exit now also avoids exiting the application.
+- UI: Removed old Preferences->Thumbnails->Playlist Panel options.
 
 - Edit: Editing clips is now faster (particularly from .otioz bundles).
 - Edit: Fixed precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
