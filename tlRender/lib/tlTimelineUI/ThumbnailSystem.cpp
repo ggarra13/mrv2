@@ -276,6 +276,8 @@ namespace tl
             {
                 p.waveformThread.thread.join();
             }
+
+            p.clearIOCache();
         }
 
         void
