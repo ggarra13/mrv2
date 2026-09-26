@@ -1,17 +1,22 @@
 v1.7.8
 ======
 
-- Fixed precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
-- The macOS versions of mrv2 and vmrv2 are now code-signed and notarized.  You should be able to install them much more easily by just dragging the icons to the Applications folder.
-- Improved the start-up of the Vulkan version of mrv2.
-- Improved the performance of loading pictures.
-- Improved the memory footprint and performance of drawing annotations on the Vulkan version of mrv2.
-- Added missing OpenEXR compressors to Python bindings.
-- Added new Python methods to control the values of the new OpenEXR compressors.
-- Added a progress indicator when unzipping .otioz files for editing.
-- Cancelling saving of a session upon exit now also avoids exiting the application.
-- Core: Cleaned up Timeline code.
+- Install: The macOS versions of mrv2 and vmrv2 are now code-signed and notarized.  You should be able to install them much more easily by just dragging the icons to the Applications folder.
+
+- UI: Added a progress indicator when unzipping .otioz files for editing.
+- UI: Cancelling saving of a session upon exit now also avoids exiting the application.
+
 - Edit: Editing clips is now faster (particularly from .otioz bundles).
+- Edit: Fixed precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
+
+- Vulkan: Improved the start-up of the Vulkan version of mrv2.
+- Vulkan: Improved the memory footprint and performance of drawing annotations on the Vulkan version of mrv2.
+
+- Python: Added missing OpenEXR compressors to Python bindings.
+- Python: Added new Python methods to control the values of the new OpenEXR compressors.
+
+- Core: Improved the performance of loading pictures.
+- Core: Cleaned up Timeline code.
 
 Fixes:
 
@@ -22,6 +27,7 @@ Fixes:
 - A potential crash on the Vulkan backend on cleaning up thumbnail resources on program exit.
 - YUV_444P_U12 movies are no longer attempted to decode in hardware, like SolLevante Netflix demo clip.
 - Edit->Frame->Insert incorrectly leaving a wrong tail clip's range.
+- Thumbnail pictures when pixelAspectRatio was different than 1.0.
 
 Libraries:
 	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.

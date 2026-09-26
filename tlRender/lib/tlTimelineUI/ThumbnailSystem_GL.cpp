@@ -286,8 +286,10 @@ namespace tl
                             math::Size2i size;
                             if (!info.video.empty())
                             {
-                                math::Size2i tmp(info.video[0].size.w,
-                                                 info.video[0].size.h);
+                                const math::Size2i
+                                    tmp(info.video[0].size.w *
+                                        info.video[0].size.pixelAspectRatio,
+                                        info.video[0].size.h);
                                 size.w = request->height * math::aspectRatio(tmp);
                                 size.h = request->height;
                             }
@@ -383,8 +385,10 @@ namespace tl
                             math::Size2i size;
                             if (!info.video.empty())
                             {
-                                math::Size2i tmp(info.video.front().size.w,
-                                                 info.video.front().size.h);
+                                const math::Size2i
+                                    tmp(info.video[0].size.w *
+                                        info.video[0].size.pixelAspectRatio,
+                                        info.video[0].size.h);
                                 size.w = request->height * math::aspectRatio(tmp);
                                 size.h = request->height;
                             }
