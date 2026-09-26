@@ -263,6 +263,9 @@ namespace tl
         {
             TLRENDER_P();
 
+            if (p.readVideo)
+                p.readVideo->cancel(); // sets _cancelled = true
+
             // Stop the video thread
             {
                 std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
@@ -591,6 +594,9 @@ namespace tl
         AudioRead::~AudioRead()
         {
             TLRENDER_P();
+
+            if (p.readAudio)
+                p.readAudio->cancel(); // sets _cancelled = true
 
             // Stop the audio thread
             {

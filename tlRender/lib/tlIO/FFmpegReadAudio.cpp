@@ -17,16 +17,16 @@ namespace tl
             _fileName(fileName),
             _options(options)
         {
+            _avFormatContext = avformat_alloc_context();
+            if (!_avFormatContext)
+            {
+                throw std::runtime_error(
+                    string::Format("{0}: Cannot allocate format context")
+                    .arg(fileName));
+            }
+
             if (!memory.empty())
             {
-                _avFormatContext = avformat_alloc_context();
-                if (!_avFormatContext)
-                {
-                    throw std::runtime_error(
-                        string::Format("{0}: Cannot allocate format context")
-                            .arg(fileName));
-                }
-
                 _avIOBufferData = AVIOBufferData(memory[0].p, memory[0].size);
                 _avIOContextBuffer =
                     static_cast<uint8_t*>(av_malloc(avIOContextBufferSize));
@@ -44,9 +44,12 @@ namespace tl
                 _avFormatContext->pb = _avIOContext;
             }
 
+            _avFormatContext->interrupt_callback.callback = interruptCb;
+            _avFormatContext->interrupt_callback.opaque   = this;
+
             int r = avformat_open_input(
                 &_avFormatContext,
-                !_avFormatContext ? fileName.c_str() : nullptr, nullptr,
+                memory.empty() ? fileName.c_str() : nullptr, nullptr,
                 nullptr);
             if (r < 0)
             {

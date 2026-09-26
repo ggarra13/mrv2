@@ -86,6 +86,9 @@ namespace tl
             bool isBufferEmpty() const;
             std::shared_ptr<image::Image> popBuffer();
 
+            std::atomic<bool> _cancelled{ false };
+            void cancel() { _cancelled = true; }
+
         private:
             void _close();
             int _decode(
@@ -111,7 +114,12 @@ namespace tl
             bool _useAudioOnly = false;
             std::shared_ptr<image::Image> _singleImage;
 
-            //! FFmpeg variables
+            static int interruptCb(void* opaque)
+                {
+                    auto* self = static_cast<ReadVideo*>(opaque);
+                    return self->_cancelled.load() ? 1 : 0; // non-zero = abort
+                }
+
             AVFormatContext* _avFormatContext = nullptr;
             AVIOBufferData _avIOBufferData;
             uint8_t* _avIOContextBuffer = nullptr;
@@ -165,6 +173,8 @@ namespace tl
             std::string getErrorString() { return ""; }
             size_t getErrorCount() { return 0; }
 
+            std::atomic<bool> _cancelled{ false };
+            void cancel() { _cancelled = true; }
 
         private:
             int _decode(const OTIO_NS::RationalTime& currentTime);
@@ -175,6 +185,11 @@ namespace tl
             OTIO_NS::TimeRange _timeRange = time::invalidTimeRange;
             image::Tags _tags;
 
+            static int interruptCb(void* opaque)
+                {
+                    auto* self = static_cast<ReadAudio*>(opaque);
+                    return self->_cancelled.load() ? 1 : 0; // non-zero = abort
+                }
             AVFormatContext* _avFormatContext = nullptr;
             AVIOBufferData _avIOBufferData;
             uint8_t* _avIOContextBuffer = nullptr;
@@ -204,6 +219,7 @@ namespace tl
             std::shared_ptr<ReadVideo> readVideo;
 
             io::Info info;
+
             struct InfoRequest
             {
                 std::promise<io::Info> promise;
