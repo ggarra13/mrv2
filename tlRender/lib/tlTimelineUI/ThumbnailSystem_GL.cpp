@@ -8,6 +8,8 @@
 
 #include <tlCore/StringFormat.h>
 
+#include <sstream>
+
 namespace tl
 {
     namespace TIMELINEUI
