@@ -354,87 +354,94 @@ namespace tl
                                 const OTIO_NS::RationalTime time =
                                     request->time.value_or(info.videoTime->start_time());
                                 auto videoFuture = timeline->readMedia(request->mediaPath,
-                                                                        time, request->options);
+                                                                       time, request->options);
                                 if (videoFuture.valid())
                                 {
-                                    if (p.thumbnailThread.running)
+                                    io::VideoData videoData;
+                                    while (p.thumbnailThread.running)
                                     {
-                                        const auto videoFrame = videoFuture.get();
-                                        vlk::OffscreenBufferOptions options;
-                                        options.colorType = image::PixelType::RGBA_U8;
-                                        options.pbo = true;
-                                        if (vlk::doCreate(p.thumbnailThread.buffer, size, options))
+                                        std::future_status status = videoFuture.wait_for(std::chrono::milliseconds(5));
+                                        if (status == std::future_status::ready)
                                         {
-                                            p.thumbnailThread.buffer = vlk::OffscreenBuffer::create(ctx,
-                                                                                                    size,
-                                                                                                    options);
+                                            videoData = videoFuture.get();
+                                            break;
                                         }
-                                        if (p.thumbnailThread.render &&
-                                            p.thumbnailThread.buffer && videoFrame.image &&
-                                            p.thumbnailThread.running)
+                                    }
+                                    if (!p.thumbnailThread.running)
+                                    {
+                                        request->promise.set_value(nullptr);
+                                        break; // or otherwise unwind without touching the buffer/render objects
+                                    }
+
+                                    vlk::OffscreenBufferOptions options;
+                                    options.colorType = image::PixelType::RGBA_U8;
+                                    options.pbo = true;
+                                    if (vlk::doCreate(p.thumbnailThread.buffer, size, options))
+                                    {
+                                        p.thumbnailThread.buffer = vlk::OffscreenBuffer::create(ctx,
+                                                                                                size,
+                                                                                                options);
+                                    }
+                                    if (p.thumbnailThread.render &&
+                                        p.thumbnailThread.buffer && videoData.image &&
+                                        p.thumbnailThread.running)
+                                    {
+                                        image = image::Image::create(size.w, size.h, image::PixelType::RGBA_U8);
+
+                                        VkCommandBuffer& cmd = p.thumbnailThread.cmd;
+                                        vkResetCommandBuffer(cmd, 0);
+
+                                        VkCommandBufferBeginInfo beginInfo = {};
+                                        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+                                        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+                                        vkBeginCommandBuffer(cmd, &beginInfo);
+
+                                        p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+
+                                        timeline::RenderOptions renderOptions;
+                                        renderOptions.clear = true;
+                                        p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
+                                                                        p.thumbnailThread.frameIndex, size,
+                                                                        renderOptions);
+
+                                        const math::Matrix4x4f ortho = math::ortho(
+                                            0.F, static_cast<float>(size.w),
+                                            0.F, static_cast<float>(size.h),
+                                            -1.F, 1.F);
+                                        p.thumbnailThread.render->setTransform(ortho);
+
+                                        p.thumbnailThread.render->drawImage(
+                                            videoData.image,
+                                            {math::Box2i(0, 0, size.w, size.h)});
+
+                                        p.thumbnailThread.render->end();
+
+                                        p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w, size.h);
+
+                                        vkEndCommandBuffer(cmd);
+
+                                        p.thumbnailThread.buffer->submitReadback(cmd);
+
+                                        VkResult result = VK_NOT_READY;
+                                        void* imageData = nullptr;
+                                        while (result == VK_NOT_READY && p.thumbnailThread.running)
                                         {
-                                            image = image::Image::create(
-                                                size.w, size.h,
-                                                image::PixelType::RGBA_U8);
-
-                                            VkCommandBuffer& cmd = p.thumbnailThread.cmd;
-                                            vkResetCommandBuffer(cmd, 0);
-
-                                            VkCommandBufferBeginInfo beginInfo = {};
-                                            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-                                            beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-                                            vkBeginCommandBuffer(cmd, &beginInfo);
-
-                                            p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
-
-                                            timeline::RenderOptions renderOptions;
-                                            renderOptions.clear = true;
-                                            p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
-                                                                            p.thumbnailThread.frameIndex, size,
-                                                                            renderOptions);
-
-                                            const math::Matrix4x4f ortho = math::ortho(
-                                                0.F, static_cast<float>(size.w),
-                                                0.F, static_cast<float>(size.h),
-                                                -1.F, 1.F);
-                                            p.thumbnailThread.render->setTransform(ortho);
-
-                                            p.thumbnailThread.render->drawImage(
-                                                videoFrame.image,
-                                                {math::Box2i(0, 0, size.w, size.h)});
-
-                                            p.thumbnailThread.render->end();
-
-
-                                            p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
-                                                                                 size.h);
-
-                                            vkEndCommandBuffer(cmd);
-
-                                            p.thumbnailThread.buffer->submitReadback(cmd);
-
-                                            VkResult result = VK_NOT_READY;
-                                            void* imageData = nullptr;
-                                            while (result == VK_NOT_READY &&
-                                                   p.thumbnailThread.running)
-                                            {
-                                                result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
-                                            }
-
-                                            // Safely bail without writing to the image if thread is dying
-                                            if (!p.thumbnailThread.running)
-                                            {
-                                                request->promise.set_value(nullptr);
-                                                break;
-                                            }
-                                            if (imageData)
-                                                std::memcpy(image->getData(), imageData, image->getDataByteCount());
-                                            else
-                                                std::memset(image->getData(), 0, image->getDataByteCount());
-
-                                            p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+                                            result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
                                         }
+
+                                        // Safely bail without writing to the image if thread is dying
+                                        if (!p.thumbnailThread.running)
+                                        {
+                                            request->promise.set_value(nullptr);
+                                            break;
+                                        }
+                                        if (imageData)
+                                            std::memcpy(image->getData(), imageData, image->getDataByteCount());
+                                        else
+                                            std::memset(image->getData(), 0, image->getDataByteCount());
+
+                                        p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                     }  // thread.running
                                 }  // videoFuture valid
                             } // size valid
@@ -461,17 +468,17 @@ namespace tl
                                                  log::Type::Warning);
                             }
                             const auto info = timeline->getIOInfo();
-                            auto future = timeline->getVideo(
+                            auto videoFuture = timeline->getVideo(
                                 request->time.value_or(
                                     timeline->getTimeRange().start_time())).future;
                             timeline::VideoFrame videoFrame;
                             while (p.thumbnailThread.running)
                             {
-                                std::future_status status = future.wait_for(std::chrono::milliseconds(5));
+                                std::future_status status = videoFuture.wait_for(std::chrono::milliseconds(5));
 
                                 if (status == std::future_status::ready)
                                 {
-                                    videoFrame = future.get();
+                                    videoFrame = videoFuture.get();
                                     break;
                                 }
                             }

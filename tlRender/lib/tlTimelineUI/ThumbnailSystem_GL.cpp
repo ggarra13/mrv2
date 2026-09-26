@@ -302,9 +302,22 @@ namespace tl
                                                                        time, request->options);
                                 if (videoFuture.valid())
                                 {
+                                    io::VideoData videoData;
                                     if (p.thumbnailThread.running)
                                     {
-                                        const auto videoFrame = videoFuture.get();
+                                        while (p.thumbnailThread.running)
+                                        {
+                                            if (videoFuture.wait_for(std::chrono::milliseconds(5)) == std::future_status::ready)
+                                            {
+                                                videoData = videoFuture.get();
+                                                break;
+                                            }
+                                        }
+                                        if (!p.thumbnailThread.running)
+                                        {
+                                            request->promise.set_value(nullptr);
+                                            break; // or otherwise unwind without touching the buffer/render objects
+                                        }
                                         gl::OffscreenBufferOptions options;
                                         options.colorType = image::PixelType::RGBA_U8;
                                         if (gl::doCreate(
@@ -316,7 +329,7 @@ namespace tl
                                                     size, options);
                                         }
                                         if (p.thumbnailThread.render &&
-                                            p.thumbnailThread.buffer && videoFrame.image &&
+                                            p.thumbnailThread.buffer && videoData.image &&
                                             p.thumbnailThread.running)
                                         {
                                             gl::OffscreenBufferBinding binding(
@@ -328,7 +341,7 @@ namespace tl
                                                 -1.F, 1.F);
                                             p.thumbnailThread.render->setTransform(ortho);
                                             p.thumbnailThread.render->drawImage(
-                                                videoFrame.image,
+                                                videoData.image,
                                                 {math::Box2i(0, 0, size.w, size.h)});
                                             p.thumbnailThread.render->end();
                                             image = image::Image::create(
