@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
+# Copyright (C) YEAR Contributors to the mrv2 Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-27 16:26-0300\n"
+"POT-Creation-Date: 2026-09-27 16:41-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6013,22 +6013,13 @@ msgstr ""
 msgid "Studio"
 msgstr ""
 
-msgid "Error Frame"
+msgid "Black Frame"
 msgstr ""
 
-msgid "Hold Frame"
+msgid "Repeat  Frame"
 msgstr ""
 
-msgid "Scratched Frame"
-msgstr ""
-
-msgid "Black  Frame"
-msgstr ""
-
-msgid "Skip Frame"
-msgstr ""
-
-msgid "Gap Frame"
+msgid "Scratched  Frame"
 msgstr ""
 
 msgid "Always"
@@ -6760,8 +6751,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6773,21 +6764,6 @@ msgid ""
 msgstr ""
 
 msgid "Missing Frame"
-msgstr ""
-
-msgid "Black Frame"
-msgstr ""
-
-msgid ""
-"When loading images, this setting controls what to do with missing frames "
-"(you may need to reload or clone the sequence):\n"
-"\t* Error Frame\t   - Reports an error.\n"
-"\t* Hold Frame\t   - Holds the last frame read.\n"
-"\t* Scratched Frame  - Holds the last frame read\n"
-"                             but draws a red cross.\n"
-"\t* Black Frame\t   - Replaces current frame with black.\n"
-"\t* Skip Frame\t   - Skips the current frame.\n"
-"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
 msgstr ""
 
 msgid "Path Mappings"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-27 16:26-0300\n"
+"POT-Creation-Date: 2026-09-27 16:41-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Insecty <insecty_l@163.com>\n"
 "Language: zh-CN\n"
@@ -6301,23 +6301,14 @@ msgstr "CG"
 msgid "Studio"
 msgstr "Studio"
 
-msgid "Error Frame"
-msgstr "错误帧"
+msgid "Black Frame"
+msgstr "Black Frame"
 
-msgid "Hold Frame"
-msgstr "保持帧"
+msgid "Repeat  Frame"
+msgstr "Repeat  Frame"
 
-msgid "Scratched Frame"
+msgid "Scratched  Frame"
 msgstr "划痕帧"
-
-msgid "Black  Frame"
-msgstr "黑帧"
-
-msgid "Skip Frame"
-msgstr "跳过帧"
-
-msgid "Gap Frame"
-msgstr "间隔帧"
 
 msgid "Always"
 msgstr "总是"
@@ -7068,28 +7059,6 @@ msgstr "搜索版本时, 此值是搜索第一个版本或最后一个版本时�
 
 msgid "Missing Frame"
 msgstr "缺失帧"
-
-msgid "Black Frame"
-msgstr "Black Frame"
-
-msgid ""
-"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
-"\t* Error Frame\t   - Reports an error.\n"
-"\t* Hold Frame\t   - Holds the last frame read.\n"
-"\t* Scratched Frame  - Holds the last frame read\n"
-"                             but draws a red cross.\n"
-"\t* Black Frame\t   - Replaces current frame with black.\n"
-"\t* Skip Frame\t   - Skips the current frame.\n"
-"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
-msgstr ""
-"加载图像时，此设置用于控制如何处理缺失的帧（您可能需要重新加载或克隆序列）：\n"
-"\t* 错误帧\t   - 报告错误。\n"
-"\t* 保持帧\t   - 保留最后读取的帧。\n"
-"\t* 划痕帧  - 保留最后读取的帧，\n"
-"                             但在其上绘制红色叉号。\n"
-"\t* 黑帧\t   - 将当前帧替换为黑色。\n"
-"\t* 跳过帧\t   - 跳过当前帧。\n"
-"\t* 间隔帧\t   - 为缺失的帧添加一个 .otio Gap。"
 
 msgid "Path Mappings"
 msgstr "路径映射"
@@ -8277,6 +8246,40 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "任务信息失败"
 
+#~ msgid "Error Frame"
+#~ msgstr "错误帧"
+
+#~ msgid "Hold Frame"
+#~ msgstr "保持帧"
+
+#~ msgid "Black  Frame"
+#~ msgstr "黑帧"
+
+#~ msgid "Skip Frame"
+#~ msgstr "跳过帧"
+
+#~ msgid "Gap Frame"
+#~ msgstr "间隔帧"
+
+#~ msgid ""
+#~ "When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+#~ "\t* Error Frame\t   - Reports an error.\n"
+#~ "\t* Hold Frame\t   - Holds the last frame read.\n"
+#~ "\t* Scratched Frame  - Holds the last frame read\n"
+#~ "                             but draws a red cross.\n"
+#~ "\t* Black Frame\t   - Replaces current frame with black.\n"
+#~ "\t* Skip Frame\t   - Skips the current frame.\n"
+#~ "\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+#~ msgstr ""
+#~ "加载图像时，此设置用于控制如何处理缺失的帧（您可能需要重新加载或克隆序列）：\n"
+#~ "\t* 错误帧\t   - 报告错误。\n"
+#~ "\t* 保持帧\t   - 保留最后读取的帧。\n"
+#~ "\t* 划痕帧  - 保留最后读取的帧，\n"
+#~ "                             但在其上绘制红色叉号。\n"
+#~ "\t* 黑帧\t   - 将当前帧替换为黑色。\n"
+#~ "\t* 跳过帧\t   - 跳过当前帧。\n"
+#~ "\t* 间隔帧\t   - 为缺失的帧添加一个 .otio Gap。"
+
 #~ msgid "Set file sequence audio directory."
 #~ msgstr "设置文件序列音频目录"
 
@@ -8285,9 +8288,6 @@ msgstr "任务信息失败"
 
 #~ msgid "Filter EDLs"
 #~ msgstr "过滤器 EDLs"
-
-#~ msgid "Repeat  Frame"
-#~ msgstr "Repeat  Frame"
 
 #~ msgid "Playlist Panel"
 #~ msgstr "播放列表面板"
