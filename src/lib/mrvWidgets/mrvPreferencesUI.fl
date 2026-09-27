@@ -1607,8 +1607,8 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Loading
-              xywh {288 38 555 360} align 5 hide
+              label Loading open
+              xywh {288 38 555 360} align 5
             } {
               Fl_Group {} {open
                 xywh {324 141 488 180}
@@ -1631,22 +1631,42 @@ v->uiOCIO_Display_View->do_callback();}
                   xywh {380 73 158 34}
                 }
                 Fl_Menu_Button uiMissingFrameType {
-                  label {Black Frame}
+                  label {Black Frame} open
                   xywh {545 73 247 34}
                   code3 {o->enable_glyph();}
                   class {mrv::PopupMenu}
+		  tooltip {When loading images, this setting controls what to do with missing frames (you may need to reload the sequence): 
+  	* Error Frame	   - Reports an error.
+	* Hold Frame	   - Holds the last frame read.
+	* Scratched Frame  - Holds the last frame read
+                             but draws a red cross.
+	* Black Frame	   - Replaces current frame with black.
+	* Skip Frame	   - Skips the current frame.
+	* Gap Frame	   - Adds an .otio Gap for the missing frames.}
                 } {
                   MenuItem {} {
-                    label {Black Frame}
+                    label {Error Frame} selected
                     xywh {0 0 100 20}
                   }
                   MenuItem {} {
-                    label {Repeat  Frame}
+                    label {Hold Frame}
                     xywh {10 10 100 20}
                   }
                   MenuItem {} {
-                    label {Scratched  Frame}
+                    label {Scratched Frame}
+                    xywh {10 10 100 20}
+                  }
+                  MenuItem {} {
+                    label {Black  Frame}
                     xywh {20 20 100 20}
+                  }
+                  MenuItem {} {
+                    label {Skip Frame}
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
+                    label {Gap Frame}
+                    xywh {40 40 100 20}
                   }
                 }
               }

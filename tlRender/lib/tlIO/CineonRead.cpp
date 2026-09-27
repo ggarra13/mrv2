@@ -67,7 +67,6 @@ namespace tl
                     }
 
                     io::addOtioTags(info.tags, fileName, time);
-
                     out.image->setTags(info.tags);
                     return out;
                 }

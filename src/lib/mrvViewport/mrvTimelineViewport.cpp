@@ -1512,60 +1512,11 @@ namespace mrv
             _getTags();
 
             p.missingFrame = false;
-            if (p.missingFrameType != MissingFrameType::kBlackFrame &&
-                !values[0].layers.empty())
+            if (!values.empty() && !values[0].layers.empty())
             {
-                const auto image = values[0].layers[0].image;
-                const auto imageB = values[0].layers[0].imageB;
-                if ((!image || !image->isValid()) &&
-                    (!imageB || !imageB->isValid()))
-                {
-                    p.missingFrame = true;
-                    if (p.player->playback() != timeline::Playback::Forward)
-                    {
-                        int layerId = 0;
-                        if (p.player)
-                            layerId =
-                                p.player->player()->observeVideoLayer()->get();
-
-                        io::Options ioOptions;
-                        {
-                            std::stringstream s;
-                            s << layerId;
-                            ioOptions["Layer"] = s.str();
-                        }
-                        const auto& timeline = p.player->timeline();
-                        const auto& inOutRange = p.player->inOutRange();
-                        auto currentTime = values[0].time;
-                        // Seek until we find a previous frame or reach
-                        // the beginning of the inOutRange.
-                        while (1)
-                        {
-                            currentTime -=
-                                OTIO_NS::RationalTime(1, currentTime.rate());
-                            const auto& videoData =
-                                timeline->getVideo(currentTime, ioOptions)
-                                .future.get();
-                            if (videoData.layers.empty())
-                                continue;
-                            const auto image = videoData.layers[0].image;
-                            if (image && image->isValid())
-                            {
-                                p.lastVideoFrame = videoData;
-                                break;
-                            }
-                            if (currentTime <= inOutRange.start_time())
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    if (p.player->playback() != timeline::Playback::Reverse)
-                    {
-                        p.lastVideoFrame = values[0];
-                    }
-                }
+                const auto& layer = values[0].layers[0];
+                p.missingFrame = layer.missing;
+                p.lastVideoFrame = values[0];
             }
 
             if (panel::imageInfoPanel)

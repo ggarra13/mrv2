@@ -2041,6 +2041,9 @@ namespace mrv
             p.settings->getValue<int>("SequenceIO/ThreadCount"));
         out["SequenceIO/DefaultSpeed"] =
             string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
+        io::MissingFrames missing;
+        missing = static_cast<io::MissingFrames>(ui->uiPrefs->uiMissingFrameType->value());
+        out["SequenceIO/MissingFrames"] = to_string(missing);
 
 #if defined(TLRENDER_EXR)
         out["OpenEXR/IgnoreDisplayWindow"] =

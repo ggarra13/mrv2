@@ -228,7 +228,9 @@ namespace tl
                 // it is missing whatever is on disk.
                 int64_t readFrame = frame;
                 const file::MemoryRead* mem = _memFile(frame);
-                if (!mem && seq && io::MissingFrames::Hold == missingFrames)
+                if (!mem && seq &&
+                    io::MissingFrames::Hold == missingFrames ||
+                    io::MissingFrames::Scratch == missingFrames)
                 {
                     readFrame = _holdFrame(frame);
                     mem = _memFile(readFrame);
@@ -283,6 +285,7 @@ namespace tl
                 // missing too, which is the case while it is being rendered.
                 switch (missingFrames)
                 {
+                case io::MissingFrames::Scratch:
                 case io::MissingFrames::Hold:
                 {
                     // Walk back a frame at a time rather than holding whichever

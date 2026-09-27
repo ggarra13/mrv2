@@ -15,6 +15,7 @@ namespace tl
             MissingFrames,
             "Error",
             "Hold",
+            "Scratch",
             "Black",
             "Skip",
             "Gaps");

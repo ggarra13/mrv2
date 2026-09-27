@@ -995,8 +995,6 @@ namespace tl
                         _info.tags["Data Window"] = serialize(dataWindow);
                     }
 
-                    io::addOtioTags(_info.tags, fileName, time);
-
                     int minY =
                         std::min(_dataWindow.min.y, _displayWindow.min.y);
                     int minX =

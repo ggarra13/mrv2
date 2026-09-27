@@ -146,6 +146,7 @@ namespace tl
                         _info.tags["worldToCamera"] = o.str();
                     }
 
+                    io::addOtioTags(_info.tags, fileName, time);
                     out.image->setTags(_info.tags);
 
                     return out;

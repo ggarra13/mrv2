@@ -16,6 +16,14 @@ v1.7.8
 - Python: Added missing OpenEXR compressors to Python bindings.
 - Python: Added new Python methods to control the values of the new OpenEXR compressors.
 
+- Core/UI: Added more Missing Frame types.  Currently supported:
+  	* Error Frame	   - Reports an error.
+	* Hold Frame	   - Holds the last frame read.
+	* Scratched Frame  - Holds the last frame read but draws a red cross.
+	* Black Frame	   - Replaces current frame with black.
+	* Skip Frame	   - Skips the current frame.
+	* Gap Frame	   - Adds an .otio Gap for the missing frames.
+	
 - Core: .otio files now support URI paths properly.
 - Core/UI: Thumbnail cache is now independant from the main caches.
 - Core: Improved the performance of loading pictures.
@@ -26,6 +34,7 @@ v1.7.8
 Fixes
 -----
 
+- Adde OpentimelinIO tags to all formats, as some were missing them.
 - Precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
 - File->Save Image on the Vulkan backend not paying attention to the HDR Export options.
 - File->Save Image and File->Save Movies changing resolution when HDR Export was changed.
@@ -41,8 +50,6 @@ Libraries
 	- OpenJPH v0.32.0
 	- ZSTD v0.17.0
 	- libvpx v1.17.0
-  	
-
 
 v1.7.7	
 ======

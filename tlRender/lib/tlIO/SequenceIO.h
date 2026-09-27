@@ -29,20 +29,17 @@ namespace tl
         //! already says what its clips are, and those are not ours to rewrite.
         enum class MissingFrames
         {
-            Error,  //!< The frame does not read.
-            Hold,   //!< Repeat the nearest frame before it.
-            Black,  //!< A blank frame.
-            Skip,   //!< Leave it out; only the frames that are there play.
-            Gaps,   //!< Leave a hole, so the frames keep the times they had.
+            Error,   //!< The frame does not read.
+            Hold,    //!< Repeat the nearest frame before it.
+            Scratch, //!< Like Hold, but with a scratch mark (a red X).
+            Black,   //!< A blank frame.
+            Skip,    //!< Leave it out; only the frames that are there play.
+            Gaps,    //!< Leave a hole, so the frames keep the times they had.
 
             Count,
             First = Error
         };
         TLRENDER_ENUM(MissingFrames);
-
-        //! Get whether a policy is settled when the sequence is opened, by
-        //! deciding the clips, rather than per read.
-        bool isStructural(MissingFrames);
 
         //! Timeout for requests.
         const std::chrono::milliseconds sequenceRequestTimeout(5);

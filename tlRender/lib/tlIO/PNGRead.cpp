@@ -286,7 +286,12 @@ namespace tl
             const std::string& fileName, const file::MemoryRead* memory,
             const OTIO_NS::RationalTime& time, const io::Options&)
         {
-            return File(fileName, memory).read(fileName, time);
+            io::VideoData out;
+            out = File(fileName, memory).read(fileName, time);
+            io::Info info;
+            io::addOtioTags(info.tags, fileName, time);
+            out.image->setTags(info.tags);
+            return out;
         }
     } // namespace png
 } // namespace tl
