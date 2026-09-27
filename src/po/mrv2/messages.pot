@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-27 16:41-0300\n"
+"POT-Creation-Date: 2026-09-27 16:50-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6013,13 +6013,22 @@ msgstr ""
 msgid "Studio"
 msgstr ""
 
-msgid "Black Frame"
+msgid "Error Frame"
 msgstr ""
 
-msgid "Repeat  Frame"
+msgid "Hold Frame"
 msgstr ""
 
-msgid "Scratched  Frame"
+msgid "Scratched Frame"
+msgstr ""
+
+msgid "Black  Frame"
+msgstr ""
+
+msgid "Skip Frame"
+msgstr ""
+
+msgid "Gap Frame"
 msgstr ""
 
 msgid "Always"
@@ -6764,6 +6773,21 @@ msgid ""
 msgstr ""
 
 msgid "Missing Frame"
+msgstr ""
+
+msgid "Black Frame"
+msgstr ""
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames "
+"(you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
 msgstr ""
 
 msgid "Path Mappings"
