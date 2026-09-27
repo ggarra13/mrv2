@@ -39,8 +39,8 @@ namespace mrv
 {
     using namespace tl;
 
-    using opentime::RationalTime;
-    using opentime::TimeRange;
+    using OTIO_NS::RationalTime;
+    using OTIO_NS::TimeRange;
 
     using OTIO_NS::Clip;
     using OTIO_NS::Composition;
@@ -66,7 +66,7 @@ namespace mrv
 
 
         auto context = App::app->getContext();
-        auto ioSystem = context->getSystem<io::System>();
+        auto ioSystem = context->getSystem<io::ReadSystem>();
 
         for (const auto& file : files)
         {
@@ -128,15 +128,15 @@ namespace mrv
             }
 
             // Is the input a video or audio file?
-            if (auto read = ioSystem->read(path, options.ioOptions))
+            if (auto read = ioSystem->videoRead(path, options.ioOptions))
             {
                 const auto info = read->getInfo().get();
 
-                opentime::RationalTime startTime = time::invalidTime;
+                OTIO_NS::RationalTime startTime = time::invalidTime;
                 OTIO_NS::ErrorStatus errorStatus;
 
                 // Read the video.
-                if (!info.video.empty())
+                if (!info.video.empty() && info.videoTime.has_value())
                 {
                     startTime = info.videoTime->start_time();
                     auto videoClip = new OTIO_NS::Clip;

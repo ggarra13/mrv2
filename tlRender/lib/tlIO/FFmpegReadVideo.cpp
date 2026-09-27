@@ -3,12 +3,10 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
-// #define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
-#include <tlIO/FFmpegMacros.h>
+#include <tlIO/IOMacros.h>
 
 #include <tlCore/Path.h>
 #include <tlCore/String.h>
@@ -196,24 +194,24 @@ namespace tl
         ReadVideo::ReadVideo(
             const std::string& fileName,
             const std::vector<file::MemoryRead>& memory,
-            const std::weak_ptr<log::System>& logSystem,
-            const ReadOptions& options) :
+            const ReadOptions& options,
+            const std::shared_ptr<log::System>& logSystem) :
             _fileName(fileName),
             _logSystem(logSystem),
             _options(options)
         {
             try
             {
+                _avFormatContext = avformat_alloc_context();
+                if (!_avFormatContext)
+                {
+                    throw std::runtime_error(
+                        string::Format("{0}: Cannot allocate format context")
+                        .arg(fileName));
+                }
+
                 if (!memory.empty())
                 {
-                    _avFormatContext = avformat_alloc_context();
-                    if (!_avFormatContext)
-                    {
-                        throw std::runtime_error(
-                            string::Format("{0}: Cannot allocate format context")
-                            .arg(fileName));
-                    }
-
                     _avIOBufferData = AVIOBufferData(memory[0].p, memory[0].size);
                     _avIOContextBuffer =
                         static_cast<uint8_t*>(av_malloc(avIOContextBufferSize));
@@ -231,6 +229,9 @@ namespace tl
                     _avFormatContext->pb = _avIOContext;
                 }
 
+                _avFormatContext->interrupt_callback.callback = interruptCb;
+                _avFormatContext->interrupt_callback.opaque   = this;
+
                 //
                 // If we are potentially reading a .webp sequence, add a format
                 // specifier to it to read a sequence of frames if available.
@@ -243,6 +244,7 @@ namespace tl
                     !path.getNumber().empty())
                 {
                     char buf[4096];
+                    const std::string& protocol = path.getProtocol();
                     const std::string& directory = path.getDirectory();
                     const std::string& baseName  = path.getBaseName();
                     const std::string& suffix    = path.getSuffix();
@@ -250,7 +252,8 @@ namespace tl
                     const int padding = path.getPadding();
                     if (padding == 0)
                     {
-                        snprintf(buf, 4096, "%s%s%%d%s%s",
+                        snprintf(buf, 4096, "%s%s%s%%d%s%s",
+                                 protocol.c_str(),
                                  directory.c_str(),
                                  baseName.c_str(),
                                  suffix.c_str(),
@@ -258,7 +261,8 @@ namespace tl
                     }
                     else
                     {
-                        snprintf(buf, 4096, "%s%s%%0%dd%s%s",
+                        snprintf(buf, 4096, "%s%s%s%%0%dd%s%s",
+                                 protocol.c_str(),
                                  directory.c_str(),
                                  baseName.c_str(),
                                  padding,
@@ -270,21 +274,23 @@ namespace tl
 
                 int r = avformat_open_input(
                     &_avFormatContext,
-                    !_avFormatContext ? formatFileName.c_str() : nullptr, nullptr,
+                    memory.empty() ? formatFileName.c_str() : nullptr, nullptr,
                     nullptr);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(formatFileName)
-                                             .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avformat_open_input {0}: {1}")
+                        .arg(formatFileName)
+                        .arg(getErrorLabel(r)));
                 }
 
                 r = avformat_find_stream_info(_avFormatContext, nullptr);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(fileName)
-                                             .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avformat_find_stream_info {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
 
                 for (unsigned int i = 0; i < _avFormatContext->nb_streams; ++i)
@@ -324,7 +330,6 @@ namespace tl
                     }
                     for (unsigned int i = 0; i < _avFormatContext->nb_streams; ++i)
                     {
-
                         if (AVMEDIA_TYPE_VIDEO ==
                             _avFormatContext->streams[i]->codecpar->codec_type)
                         {
@@ -400,9 +405,9 @@ namespace tl
                             const std::string msg = string::Format(
                                 "Switching from decoder \"{0}\" to \"{1}\" "
                                 "to allow hardware decoding.")
-                                              .arg(avVideoCodec->name ? avVideoCodec->name
-                                                   : "?")
-                                              .arg(p->name ? p->name : "?");
+                                                    .arg(avVideoCodec->name ? avVideoCodec->name
+                                                         : "?")
+                                                    .arg(p->name ? p->name : "?");
                             LOG_STATUS(msg);
                             avVideoCodec = p;
                             avVideoCodecParameters->codec_id = avVideoCodec->id;
@@ -448,9 +453,10 @@ namespace tl
                         _avCodecContext[_avStream], _avCodecParameters[_avStream]);
                     if (r < 0)
                     {
-                        throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                        throw std::runtime_error(
+                            string::Format("avcodec_parameters_to_context {0}: {1}")
+                            .arg(fileName)
+                            .arg(getErrorLabel(r)));
                     }
                     _avCodecContext[_avStream]->thread_count = options.threadCount;
                     _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME;
@@ -465,9 +471,10 @@ namespace tl
                     r = avcodec_open2(_avCodecContext[_avStream], avVideoCodec, 0);
                     if (r < 0)
                     {
-                        throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                        throw std::runtime_error(
+                            string::Format("avcodec_open2 {0}: {1}")
+                            .arg(fileName)
+                            .arg(getErrorLabel(r)));
                     }
 
                     _info.size.w = _avCodecParameters[_avStream]->width;
@@ -1131,22 +1138,22 @@ namespace tl
                 AVPixelFormat in, AVPixelFormat out, bool fastYUV420PConversion)
             {
                 return in == out &&
-                       (AV_PIX_FMT_RGB24 == in || AV_PIX_FMT_GRAY8 == in ||
-                        AV_PIX_FMT_RGBA == in ||
-                        ((AV_PIX_FMT_YUV420P == in ||
-                          AV_PIX_FMT_YUVJ420P == in) &&
-                          fastYUV420PConversion) ||
-                        AV_PIX_FMT_YUV422P == in ||
-                        AV_PIX_FMT_YUV444P == in ||
-                        AV_PIX_FMT_YUV420P10LE == in ||
-                        AV_PIX_FMT_YUV422P10LE == in ||
-                        AV_PIX_FMT_YUV444P10LE == in ||
-                        AV_PIX_FMT_YUV420P12LE == in ||
-                        AV_PIX_FMT_YUV422P12LE == in ||
-                        AV_PIX_FMT_YUV444P12LE == in ||
-                        AV_PIX_FMT_YUV420P16LE == in ||
-                        AV_PIX_FMT_YUV422P16LE == in ||
-                        AV_PIX_FMT_YUV444P16LE == in );
+                    (AV_PIX_FMT_RGB24 == in || AV_PIX_FMT_GRAY8 == in ||
+                     AV_PIX_FMT_RGBA == in ||
+                     ((AV_PIX_FMT_YUV420P == in ||
+                       AV_PIX_FMT_YUVJ420P == in) &&
+                      fastYUV420PConversion) ||
+                     AV_PIX_FMT_YUV422P == in ||
+                     AV_PIX_FMT_YUV444P == in ||
+                     AV_PIX_FMT_YUV420P10LE == in ||
+                     AV_PIX_FMT_YUV422P10LE == in ||
+                     AV_PIX_FMT_YUV444P10LE == in ||
+                     AV_PIX_FMT_YUV420P12LE == in ||
+                     AV_PIX_FMT_YUV422P12LE == in ||
+                     AV_PIX_FMT_YUV444P12LE == in ||
+                     AV_PIX_FMT_YUV420P16LE == in ||
+                     AV_PIX_FMT_YUV422P16LE == in ||
+                     AV_PIX_FMT_YUV444P16LE == in );
             }
         } // namespace
 
@@ -1182,13 +1189,13 @@ namespace tl
                 static_cast<AVPixelFormat>(_avCodecParameters[_avStream]->format);
             const AVPixFmtDescriptor* inputDesc = av_pix_fmt_desc_get(inputFormat);
             const bool is420 = inputDesc &&
-                1 == inputDesc->log2_chroma_w && 1 == inputDesc->log2_chroma_h;
+                               1 == inputDesc->log2_chroma_w && 1 == inputDesc->log2_chroma_h;
             const bool is422 = inputDesc &&
-                1 == inputDesc->log2_chroma_w && 0 == inputDesc->log2_chroma_h;
+                               1 == inputDesc->log2_chroma_w && 0 == inputDesc->log2_chroma_h;
             const bool is444 = inputDesc &&
-                0 == inputDesc->log2_chroma_w && 0 == inputDesc->log2_chroma_h;
+                               0 == inputDesc->log2_chroma_w && 0 == inputDesc->log2_chroma_h;
             const bool hasAlpha = inputDesc &&
-                (inputDesc->flags & AV_PIX_FMT_FLAG_ALPHA);
+                                  (inputDesc->flags & AV_PIX_FMT_FLAG_ALPHA);
             const int depth = inputDesc ? inputDesc->comp[0].depth : 0;
 
             if (AVCOL_RANGE_JPEG == _avCodecParameters[_avStream]->color_range)
@@ -1234,7 +1241,7 @@ namespace tl
             // on the software decoding path.
             enum AVHWDeviceType type = AV_HWDEVICE_TYPE_NONE;
             while ((type = av_hwdevice_iterate_types(type)) !=
-                    AV_HWDEVICE_TYPE_NONE)
+                   AV_HWDEVICE_TYPE_NONE)
             {
                 std::string name = av_hwdevice_get_type_name(type);
                 if (!_options.hwDriver.empty())
@@ -1265,8 +1272,8 @@ namespace tl
                     // type; try the next candidate.
                     std::string msg = string::Format(
                         "Hardware decoding ({0}) is not available for the codec \"{1}\"; trying next backend").
-                        arg(av_hwdevice_get_type_name(type)).
-                        arg(codec->name ? codec->name : "?");
+                                      arg(av_hwdevice_get_type_name(type)).
+                                      arg(codec->name ? codec->name : "?");
                     LOG_INFO(msg);
                     continue;
                 }
@@ -1276,7 +1283,7 @@ namespace tl
                 {
                     std::string msg = string::Format(
                         "Cannot create a hardware decoding device ({0}); trying next backend").
-                        arg(av_hwdevice_get_type_name(type));
+                                      arg(av_hwdevice_get_type_name(type));
                     LOG_WARNING(msg);
                     continue;
                 }
@@ -1299,7 +1306,7 @@ namespace tl
             // software decoding path.
             std::string msg = string::Format(
                 "Hardware decoding is not available for the codec \"{0}\"; using software decoding").
-                arg(codec->name ? codec->name : "?");
+                              arg(codec->name ? codec->name : "?");
             LOG_WARNING(msg);
         }
 
@@ -1341,7 +1348,7 @@ namespace tl
                     {
                         throw std::runtime_error(
                             string::Format("{0}: Cannot allocate frame")
-                                .arg(_fileName));
+                            .arg(_fileName));
                     }
                     _avFrame2->format = _avOutputPixelFormat;
                     _avFrame2->width = _info.size.w;
@@ -1354,7 +1361,7 @@ namespace tl
                     {
                         throw std::runtime_error(
                             string::Format("{0}: Unsuported pixel input format")
-                                .arg(_fileName));
+                            .arg(_fileName));
                     }
                     r = sws_isSupportedOutput(_avOutputPixelFormat);
                     if (r == 0)
@@ -1362,7 +1369,7 @@ namespace tl
                         throw std::runtime_error(
                             string::Format(
                                 "{0}: Unsuported pixel output format")
-                                .arg(_fileName));
+                            .arg(_fileName));
                     }
 
                     if (_hwAccel)
@@ -1539,7 +1546,7 @@ namespace tl
                     {
                         std::string msg =
                             string::Format("Cannot download a hardware frame; skipping: \"{0}\"").
-                                          arg(_fileName);
+                            arg(_fileName);
                         LOG_ERROR(msg);
                         return AVERROR_EXTERNAL;
                     }
@@ -1556,17 +1563,17 @@ namespace tl
                     }
                 }
                 const int64_t timestamp = _avFrame->pts != AV_NOPTS_VALUE
-                                              ? _avFrame->pts
-                                              : _avFrame->pkt_dts;
+                                          ? _avFrame->pts
+                                          : _avFrame->pkt_dts;
                 // std::cout << "video timestamp: " << timestamp << std::endl;
                 const auto& avVideoStream =
                     _avFormatContext->streams[_avStream];
 
                 const OTIO_NS::RationalTime time(
                     _timeRange.start_time().value() +
-                        av_rescale_q(
-                            timestamp, avVideoStream->time_base,
-                            swap(avVideoStream->r_frame_rate)),
+                    av_rescale_q(
+                        timestamp, avVideoStream->time_base,
+                        swap(avVideoStream->r_frame_rate)),
                     _timeRange.duration().rate());
 
                 if (time >= targetTime || backwards ||
@@ -1599,12 +1606,12 @@ namespace tl
                     AVDictionaryEntry* tag = nullptr;
                     while (
                         (tag = av_dict_get(
-                             avVideoStream->metadata, "", tag,
-                             AV_DICT_IGNORE_SUFFIX)))
+                            avVideoStream->metadata, "", tag,
+                            AV_DICT_IGNORE_SUFFIX)))
                     {
                         std::string key(string::Format("Video Stream #{0}: {1}")
-                                            .arg(_avStream)
-                                            .arg(tag->key));
+                                        .arg(_avStream)
+                                        .arg(tag->key));
                         tags[key] = tag->value;
                     }
                     while (
@@ -1655,8 +1662,10 @@ namespace tl
                 avFrame->height > 0)
                 _info.size.h = avFrame->height;
 
+
             const std::size_t w = _info.size.w;
             const std::size_t h = _info.size.h;
+
             uint8_t* data;
 
             if (_hwAccel &&
@@ -1867,7 +1876,7 @@ namespace tl
             float out = 0.F;
 
             const AVPacketSideData* psd = (const AVPacketSideData*)
-                get_stream_side_data(st, AV_PKT_DATA_DISPLAYMATRIX);
+                                          get_stream_side_data(st, AV_PKT_DATA_DISPLAYMATRIX);
 
             if (psd)
             {

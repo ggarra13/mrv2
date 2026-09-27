@@ -24,10 +24,10 @@ namespace tl
             float audioPercentage = 0.F;
 
             //! Cached video frames.
-            std::vector<opentime::TimeRange> videoFrames;
+            std::vector<otime::TimeRange> videoFrames;
 
             //! Cached audio frames.
-            std::vector<opentime::TimeRange> audioFrames;
+            std::vector<otime::TimeRange> audioFrames;
 
             bool operator==(const PlayerCacheInfo&) const;
             bool operator!=(const PlayerCacheInfo&) const;
@@ -115,7 +115,7 @@ namespace tl
             ///@{
 
             //! Get the time range.
-            const opentime::TimeRange& getTimeRange() const;
+            const OTIO_NS::TimeRange& getTimeRange() const;
 
             //! Get the I/O information. This information is retrieved from
             //! the first clip in the timeline.
@@ -163,14 +163,14 @@ namespace tl
             ///@{
 
             //! Get the current time.
-            opentime::RationalTime getCurrentTime() const;
+            OTIO_NS::RationalTime getCurrentTime() const;
 
             //! Observe the current time.
-            std::shared_ptr<observer::IValue<opentime::RationalTime> >
+            std::shared_ptr<observer::IValue<otime::RationalTime> >
             observeCurrentTime() const;
 
             //! Seek to the given time.
-            void seek(const opentime::RationalTime&);
+            void seek(const OTIO_NS::RationalTime&);
 
             //! Time action.
             void timeAction(TimeAction);
@@ -193,14 +193,14 @@ namespace tl
             ///@{
 
             //! Get the in/out points range.
-            opentime::TimeRange getInOutRange() const;
+            OTIO_NS::TimeRange getInOutRange() const;
 
             //! Observe the in/out points range.
-            std::shared_ptr<observer::IValue<opentime::TimeRange> >
+            std::shared_ptr<observer::IValue<otime::TimeRange> >
             observeInOutRange() const;
 
             //! Set the in/out points range.
-            void setInOutRange(const opentime::TimeRange&);
+            void setInOutRange(const OTIO_NS::TimeRange&);
 
             //! Set the in point to the current time.
             void setInPoint();
@@ -354,7 +354,7 @@ namespace tl
             observeCacheInfo() const;
 
             //! Update Video Cache Time.
-            void updateVideoCache(const opentime::RationalTime& time);
+            void updateVideoCache(const OTIO_NS::RationalTime& time);
 
             //! Clear the cache.
             void clearCache();

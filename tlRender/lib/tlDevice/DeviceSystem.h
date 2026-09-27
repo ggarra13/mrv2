@@ -20,8 +20,7 @@ namespace tl
 
         protected:
             void _init(const std::shared_ptr<system::Context>&);
-
-            DeviceSystem();
+            DeviceSystem(const std::shared_ptr<system::Context>&);
 
         public:
             ~DeviceSystem() override;

@@ -38,7 +38,7 @@ namespace mrv
                 extension = '.' + extension;
 
             auto context = App::app->getContext();
-            auto ioSystem = context->getSystem<tl::io::System>();
+            auto ioSystem = context->getSystem<tl::io::ReadSystem>();
 
             bool validFile = false;
             switch (ioSystem->getFileType(extension))
@@ -72,7 +72,7 @@ namespace mrv
                 extension = '.' + extension;
 
             auto context = App::app->getContext();
-            auto ioSystem = context->getSystem<tl::io::System>();
+            auto ioSystem = context->getSystem<tl::io::ReadSystem>();
             return (
                 ioSystem->getFileType(extension) == tl::io::FileType::Movie);
         }
@@ -103,7 +103,7 @@ namespace mrv
                 extension = '.' + extension;
 
             auto context = App::app->getContext();
-            auto ioSystem = context->getSystem<tl::io::System>();
+            auto ioSystem = context->getSystem<tl::io::ReadSystem>();
             return (
                 ioSystem->getFileType(extension) == tl::io::FileType::Audio);
 
@@ -130,7 +130,7 @@ namespace mrv
         bool isSequence(const std::string& filename)
         {
             auto context = App::app->getContext();
-            auto ioSystem = context->getSystem<tl::io::System>();
+            auto ioSystem = context->getSystem<tl::io::ReadSystem>();
 
             const file::Path path(filename);
             const std::string& extension = path.getExtension();

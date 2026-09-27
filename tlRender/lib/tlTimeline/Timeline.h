@@ -4,110 +4,35 @@
 
 #pragma once
 
+#include <tlTimeline/TimelineOptions.h>
+
 #include <tlTimeline/Audio.h>
+#include <tlTimeline/PlayerOptions.h>
 #include <tlTimeline/Video.h>
+
+#include <tlIO/Read.h>
+#include <tlIO/SeqDecode.h>
 
 #include <tlCore/Context.h>
 #include <tlCore/Path.h>
 #include <tlCore/ValueObserver.h>
 
-#include <tlIO/Plugin.h>
-
 #include <opentimelineio/timeline.h>
 #include <opentimelineio/mediaReference.h>
 
+#include <functional>
 #include <future>
 
 namespace tl
 {
+    namespace io
+    {
+        class SeqDecode;
+    }
+
     //! Timelines.
     namespace timeline
     {
-        //! File sequence.
-        enum class FileSequenceAudio {
-            kNone,      //!< No audio
-            BaseName,  //!< Search for an audio file with the same base name as
-                       //!< the file sequence
-            FileName,  //!< Use the given audio file name
-            Directory, //!< Use the first audio file in the given directory
-
-            Count,
-            First = kNone
-        };
-        TLRENDER_ENUM(FileSequenceAudio);
-        TLRENDER_ENUM_SERIALIZE(FileSequenceAudio);
-
-        //! Spatial coordinate options.
-        enum class Spatial
-        {
-            //! Ignore the OTIO spatial coordinates, laying out clips from their
-            //! image sizes
-            kNone,
-
-            //! Use the OTIO spatial coordinates where clips provide them
-            Coordinates,
-
-            //! Use the OTIO spatial coordinates, and give clips without them
-            //! the size of the first video clip, so that clips of differing
-            //! resolutions are all displayed at the same size
-            Normalize,
-
-            Count,
-            First = kNone
-        };
-        TLRENDER_ENUM(Spatial);
-        TLRENDER_ENUM_SERIALIZE(Spatial);
-
-        //! Timeline options.
-        struct Options
-        {
-            FileSequenceAudio fileSequenceAudio = FileSequenceAudio::BaseName;
-
-            //! Spatial coordinates.
-            Spatial spatial = Spatial::Coordinates;
-
-            std::string fileSequenceAudioFileName;
-            std::string fileSequenceAudioDirectory;
-
-            //! Enable workarounds for timelines that may not conform exactly
-            //! to specification.
-            bool compat = true;
-
-            //! Maximum number of video requests.
-            size_t videoRequestCount = 16;
-
-            //! Maximum number of audio requests.
-            size_t audioRequestCount = 16;
-
-            //! Request timeout.
-            std::chrono::milliseconds requestTimeout =
-                std::chrono::milliseconds(5);
-
-            //! I/O options.
-            io::Options ioOptions;
-
-            //! Path options.
-            file::PathOptions pathOptions;
-
-            bool operator==(const Options&) const;
-            bool operator!=(const Options&) const;
-        };
-
-        //! Create a new timeline from a path. The path can point to an .otio
-        //! file, .otioz file, movie file, or image sequence.
-        OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> create(
-            file::Path&, const std::shared_ptr<system::Context>&,
-            const opentime::RationalTime& = time::invalidTime,
-            const Options& = Options());
-
-        //! Create a new timeline from a path and audio path. The file name
-        //! can point to an .otio file, .otioz file, movie file, or image
-        //! sequence.
-        OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> create(
-            file::Path& path, const file::Path& audioPath,
-            const std::shared_ptr<system::Context>&,
-            const opentime::RationalTime& = time::invalidTime,
-            const Options& = Options());
 
         //! Video request.
         struct VideoRequest
@@ -130,9 +55,10 @@ namespace tl
 
         protected:
             void _init(
-                const std::shared_ptr<system::Context>& context,
-                file::Path& inputPath, const file::Path& inputAudioPath,
-                const Options& options);
+                const std::shared_ptr<system::Context>&,
+                file::Path& inOutPath,
+                file::Path& inOutAudioPath,
+                const Options&);
             void _init(
                 const std::shared_ptr<system::Context>&,
                 const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&,
@@ -208,6 +134,47 @@ namespace tl
             std::vector<file::MemoryRead> getMem(
                 const OTIO_NS::MediaReference*);
 
+            //! Get how many video requests the timeline keeps in flight.
+            //!
+            //! Twice the decoding threads: enough that a thread finishing a frame
+            //! always has another waiting, without queueing work that a seek
+            //! would only throw away.
+            size_t getVideoRequestMax() const;
+
+            //! Get how many sequence frames the timeline decodes at once.
+            size_t getReadThreadCount() const;
+
+            //! Get the paths of the media in the timeline.
+            //!
+            //! A bundle's media are byte ranges rather than files on disk, so a
+            //! caller that wants one of them read cannot open its path. These
+            //! name the media to getMediaInfo() and readMedia() instead, which
+            //! keeps the reading on the side that knows where the bytes are.
+            std::vector<file::Path> getMediaPaths() const;
+
+            //! Get the media path (if any) at the current mediaTime.
+            file::Path getMediaPath(OTIO_NS::RationalTime& mediaTime);
+
+            //! Get the information for one of the media in the timeline.
+            bool getMediaInfo(
+                const file::Path&,
+                io::Info&,
+                const io::Options& = io::Options());
+
+            //! Read one frame of one of the media in the timeline.
+            //!
+            //! On a timeline with no thread the future comes back resolved.
+            std::future<io::VideoData> readMedia(
+                const file::Path&,
+                const OTIO_NS::RationalTime&,
+                const io::Options& = io::Options());
+
+            //! Read audio from one of the media in the timeline.
+            std::future<io::AudioData> readMediaAudio(
+                const file::Path&,
+                const OTIO_NS::TimeRange&,
+                const io::Options& = io::Options());
+
             //! \name Media References
             ///
             //! Clips may carry several media references, for example a proxy
@@ -259,7 +226,7 @@ namespace tl
             ///@{
 
             //! Get the time range.
-            const opentime::TimeRange& getTimeRange() const;
+            const OTIO_NS::TimeRange& getTimeRange() const;
 
             //! Get the I/O information. This information is retrieved from
             //! the first clip in the timeline.
@@ -267,7 +234,7 @@ namespace tl
 
             ///@}
 
-            //! Expand an .otioz file into a directory, with all its elements.
+            //! Exampand an .otioz file into a directory, with all its elements.
             //! the progressCb function allows using a progress indicator and aborting the
             //! operation by setting aborted to true.
             void expandOTIOZ(const std::string& mediaPath,
@@ -278,20 +245,9 @@ namespace tl
             //! \name Video and Audio Data
             ///@{
 
-            std::future<io::VideoData> readMedia(
-                const file::Path& path,
-                const OTIO_NS::RationalTime& time,
-                const io::Options& options);
-
-            std::future<io::AudioData>
-            readMediaAudio(
-                const file::Path& path,
-                const OTIO_NS::TimeRange& timeRange,
-                const io::Options& options);
-
             //! Get video data.
             VideoRequest getVideo(
-                const opentime::RationalTime&, const io::Options& = io::Options());
+                const OTIO_NS::RationalTime&, const io::Options& = io::Options());
 
             //! Get audio data.
             AudioRequest
@@ -302,36 +258,91 @@ namespace tl
 
             ///@}
 
+            //! Stats
+            size_t getObjectCount();
+
             //! Tick the timeline.
             void tick();
+
+            //! Set the cache options.
+            void setCacheOptions(const PlayerCacheOptions&);
 
         private:
             void _tick();
             void _requests();
             void _finishRequests();
-            std::future<io::VideoData> _readVideo(
-                const OTIO_NS::Clip*, const opentime::RationalTime&,
-                const io::Options&);
-            std::future<io::AudioData> _readAudio(
-                const OTIO_NS::Clip*, const opentime::TimeRange&,
-                const io::Options&);
-            std::shared_ptr<io::IRead> _getRead(
+
+            //! What is needed to convert between timeline time and media time for
+            //! the clip at a time.
+            struct MediaAt
+            {
+                std::shared_ptr<io::SeqDecode> seq;
+                OTIO_NS::TimeRange rangeInParent;
+                OTIO_NS::TimeRange trimmedRange;
+                double rate = 0.0;
+            };
+            std::optional<MediaAt> _mediaAt(const OTIO_NS::RationalTime&);
+            std::optional<MediaAt> _mediaFrom(
                 const OTIO_NS::Clip*,
-                const io::Options&);
-            std::shared_ptr<io::IRead> _getRead(
-                const OTIO_NS::MediaReference*,
-                const io::Options&);
+                const OTIO_NS::TimeRange& rangeInParent);
+            std::vector<MediaAt> _mediaAll();
+            OTIO_NS::RationalTime _toMediaTime(
+                const MediaAt&,
+                const OTIO_NS::RationalTime&) const;
+            OTIO_NS::RationalTime _fromMediaTime(const MediaAt&, int64_t frame) const;
 
             // Find a media reference by its resolved path.
             OTIO_NS::MediaReference* _findMedia(const file::Path&);
-
+            // Get the sequence for a media reference, or null when the format is
+            // not read as a sequence of stateless files: a movie carries a
+            // demuxer position and keeps its own reader.
+            std::shared_ptr<io::SeqDecode> _getSeqDecode(
+                const OTIO_NS::MediaReference*,
+                const io::Options&);
+            // Get one half of the information for a media reference, from
+            // whichever of the decoder or the reader provides it.
+            bool _getVideoIOInfo(
+                const OTIO_NS::MediaReference*,
+                const io::Options&,
+                io::Info&);
+            bool _getAudioIOInfo(
+                const OTIO_NS::MediaReference*,
+                const io::Options&,
+                io::Info&);
+            // Get both halves, merged. Callers that want only one half should
+            // ask for it: asking for both opens both readers.
+            bool _getIOInfo(
+                const OTIO_NS::MediaReference*,
+                const io::Options&,
+                io::Info&);
+            // Get the reader for one half of a media reference. Video and audio
+            // are separate readers and separately cached, so a reference that
+            // is read for only one of them costs only that one.
+            std::shared_ptr<io::IVideoRead> _getVideoRead(
+                const OTIO_NS::Clip*,
+                const io::Options&);
+            std::shared_ptr<io::IVideoRead> _getVideoRead(
+                const OTIO_NS::MediaReference*,
+                const io::Options&);
+            std::shared_ptr<io::IAudioRead> _getAudioRead(
+            const OTIO_NS::Clip*,
+            const io::Options&);
+            std::shared_ptr<io::IAudioRead> _getAudioRead(
+                const OTIO_NS::MediaReference*,
+                const io::Options&);
+            std::future<io::VideoData> _readVideo(
+                const OTIO_NS::Clip*, const OTIO_NS::RationalTime&,
+                const io::Options&);
+            std::future<io::AudioData> _readAudio(
+                const OTIO_NS::Clip*, const OTIO_NS::TimeRange&,
+                const io::Options&);
             bool _getVideoInfo(const OTIO_NS::Composable*);
             bool _getAudioInfo(const OTIO_NS::Composable*);
             void _getCanvas();
             void _getMaxVideoSize();
             void _timelineUpdate();
-            OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>
-            _readOTIO(const file::Path& path, OTIO_NS::ErrorStatus* errorStatus);
+            float _transitionValue(double frame, double in, double out) const;
+
             void _startThreads();
             void _stopThreads();
 

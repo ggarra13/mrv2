@@ -136,7 +136,7 @@ namespace mrv
 
     namespace opengl
     {
-        
+
         struct TimelineWidget::Private
         {
             std::weak_ptr<system::Context> context;
@@ -273,7 +273,7 @@ namespace mrv
             _p->style = style;
             _styleUpdate();
         }
-        
+
         void TimelineWidget::hideThumbnail()
         {
             TLRENDER_P();
@@ -288,17 +288,18 @@ namespace mrv
             Fl::remove_timeout(timerEvent_cb, this);
         }
 
-        std::vector<const OTIO_NS::Item* > TimelineWidget::getSelectedItems() const
+        std::vector<timeline::MoveData>
+        TimelineWidget::getSelectedItems() const
         {
             return _p->timelineWidget->getSelectedItems();
         }
-        
-        std::vector<const OTIO_NS::Transition* >
+
+        std::vector<timeline::MoveData>
         TimelineWidget::getSelectedTransitions() const
         {
             return _p->timelineWidget->getSelectedTransitions();
         }
-        
+
         bool TimelineWidget::isEditable() const
         {
             return _p->timelineWidget->isEditable();
@@ -559,15 +560,18 @@ namespace mrv
                 path = player->getPath();
 
             const image::Size size(kTHUMB_WIDTH, kTHUMB_HEIGHT);
-            const auto& time = _posToTime(_toUI(Fl::event_x()));
+            const OTIO_NS::RationalTime& timelineTime = _posToTime(_toUI(Fl::event_x()));
+            OTIO_NS::RationalTime time = timelineTime;
 
             if (auto thumbnailSystem = p.thumbnailSystem.lock())
             {
+                const auto timeline = timeline::Timeline::create(p.context.lock(), path);
+                auto mediaPath = timeline->getMediaPath(time);
                 p.thumbnail.request =
-                    thumbnailSystem->getThumbnail(path, size.h, time);
+                    thumbnailSystem->getThumbnail(path, mediaPath, size.h, time);
             }
 
-            timeToText(buffer, time, _p->units);
+            timeToText(buffer, timelineTime, _p->units);
             p.box->copy_label(buffer);
             return 1;
         }
@@ -676,6 +680,8 @@ namespace mrv
             {
                 try
                 {
+                    make_current();
+
                     p.render = timeline_gl::Render::create(context);
                     CHECK_GL;
                     const std::string vertexSource =
@@ -850,7 +856,7 @@ namespace mrv
                 glClearColor(0.F, 0.F, 0.F, 0.F);
                 glClear(GL_COLOR_BUFFER_BIT);
 
-                if (p.buffer)
+                if (p.buffer && p.shader)
                 {
                     p.shader->bind();
                     const auto pm = math::ortho(

@@ -39,16 +39,6 @@ namespace tl
             return _max;
         }
 
-        template <typename T> constexpr T Range<T>::getMin() const
-        {
-            return _min;
-        }
-
-        template <typename T> constexpr T Range<T>::getMax() const
-        {
-            return _max;
-        }
-
         template <> inline void Range<int>::zero()
         {
             _min = _max = 0;

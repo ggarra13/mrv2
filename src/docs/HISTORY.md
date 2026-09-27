@@ -1,18 +1,30 @@
 v1.7.8
 ======
 
-- The macOS versions of mrv2 and vmrv2 are now code-signed and notarized.  You should be able to install them much more easily by just dragging the icons to the Applications folder.
-- Improved the start-up of the Vulkan version of mrv2.
-- Improved the performance of loading pictures.
-- Improved the memory footprint and performance of drawing annotations on the Vulkan version of mrv2.
-- Added missing OpenEXR compressors to Python bindings.
-- Added new Python methods to control the values of the new OpenEXR compressors.
-- Added a progress indicator when unzipping .otioz files for editing.
-- Cancelling saving of a session upon exit now also avoids exiting the application.
-- Core: Cleaned up Timeline code.
-- Edit: Editing clips is now faster (particularly from .otioz bundles).
+- Install: The macOS versions of mrv2 and vmrv2 are now code-signed and notarized.  You should be able to install them much more easily by just dragging the icons to the Applications folder.
 
-Fixes:
+- UI: Added a progress indicator when unzipping .otioz files for editing.
+- UI: Cancelling saving of a session upon exit now also avoids exiting the application.
+- UI: Removed old Preferences->Thumbnails->Playlist Panel options.
+
+- Edit: Editing clips is now faster (particularly from .otioz bundles).
+- Edit: Fixed precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
+
+- Vulkan: Improved the start-up of the Vulkan version of mrv2.
+- Vulkan: Improved the memory footprint and performance of drawing annotations on the Vulkan version of mrv2.
+
+- Python: Added missing OpenEXR compressors to Python bindings.
+- Python: Added new Python methods to control the values of the new OpenEXR compressors.
+
+- Core: .otio files now support URI paths properly.
+- Core/UI: Thumbnail cache is now independant from the main caches.
+- Core: Improved the performance of loading pictures.
+- Core: Cleaned up Timeline code.
+- Core: Moved to decoding pictures in a pool, like latest tlRender.
+- Core: Fixed opening of https:// movies due to incorrect handling of cacert.pem and https:// protocol.  Now File->Open->URL Movie should work again.
+
+Fixes
+-----
 
 - Precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
 - File->Save Image on the Vulkan backend not paying attention to the HDR Export options.
@@ -20,14 +32,18 @@ Fixes:
 - Thumbnail size selection on monitors with DPI higher than 100%.
 - A potential crash on the Vulkan backend on cleaning up thumbnail resources on program exit.
 - YUV_444P_U12 movies are no longer attempted to decode in hardware, like SolLevante Netflix demo clip.
-- Fixed Edit->Frame->Insert incorrectly leaving a wrong tail clip's range.
+- Edit->Frame->Insert incorrectly leaving a wrong tail clip's range.
+- Thumbnail pictures when pixelAspectRatio was different than 1.0.
 
-Libraries:
+Libraries
+---------
 	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.
 	- OpenJPH v0.32.0
 	- ZSTD v0.17.0
 	- libvpx v1.17.0
   	
+
+
 v1.7.7	
 ======
 

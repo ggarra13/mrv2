@@ -89,7 +89,7 @@ namespace tl
 
             _textUpdate();
         }
-
+    
         MarkerItem::~MarkerItem()
         {}
 

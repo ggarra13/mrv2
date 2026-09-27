@@ -19,9 +19,7 @@ namespace tl
         class ISystem : public ICoreSystem
         {
         protected:
-            void
-            _init(const std::shared_ptr<Context>&, const std::string& name);
-            ISystem();
+            ISystem(const std::shared_ptr<Context>&, const std::string& name);
 
         public:
             virtual ~ISystem();

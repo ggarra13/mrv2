@@ -175,7 +175,7 @@ namespace mrv
 
             // Create the writer.
             auto writerPlugin =
-                context->getSystem<io::System>()->getPlugin(path);
+                context->getSystem<io::WriteSystem>()->getPlugin(path);
 
             if (!writerPlugin)
             {
@@ -215,7 +215,7 @@ namespace mrv
             }
 
             outputInfo.size = renderSize;
-            outputInfo = writerPlugin->getWriteInfo(outputInfo);
+            outputInfo = writerPlugin->getInfo(outputInfo);
 
             if (image::PixelType::kNone == outputInfo.pixelType)
             {

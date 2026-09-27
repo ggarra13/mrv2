@@ -15,39 +15,36 @@ namespace tl
 {
     namespace stb
     {
-        Plugin::Plugin() {}
 
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        std::shared_ptr<io::IDecode> ReadPlugin::decode(const io::Options&)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(
-                "STB",
-                {
-                    {".tga", io::FileType::Sequence},
-                    {".bmp", io::FileType::Sequence},
-                    {".hdr", io::FileType::Sequence},
-                    {".psd", io::FileType::Sequence},
-                },
-                cache, logSystem);
+            return Decode::create();
+        }
+
+        void ReadPlugin::_init(const std::shared_ptr<log::System>& logSystem)
+        {
+            std::map<std::string, io::FileType> exts;
+            exts[".bmp"] = io::FileType::Sequence;
+            exts[".hdr"] = io::FileType::Sequence;
+            exts[".psd"] = io::FileType::Sequence;
+            exts[".tga"] = io::FileType::Sequence;
+            IReadPlugin::_init("STB", exts, logSystem);
+        }
+
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return "STB";
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options)
-        {
-            return Read::create(path, memory, options, _cache, _logSystem);
-        }
-
-        image::Info Plugin::getWriteInfo(
+        image::Info WritePlugin::getInfo(
             const image::Info& info, const io::Options& options) const
         {
             image::Info out;
@@ -68,17 +65,40 @@ namespace tl
             return out;
         }
 
-        std::shared_ptr<io::IWrite> Plugin::write(
+        void WritePlugin::_init(const std::shared_ptr<log::System>& logSystem)
+        {
+            std::map<std::string, io::FileType> exts;
+            exts[".bmp"] = io::FileType::Sequence;
+            exts[".hdr"] = io::FileType::Sequence;
+            exts[".psd"] = io::FileType::Sequence;
+            exts[".tga"] = io::FileType::Sequence;
+            IWritePlugin::_init("STB", exts, logSystem);
+        }
+
+        std::shared_ptr<WritePlugin> WritePlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<WritePlugin>(new WritePlugin);
+            out->_init(logSystem);
+            return out;
+        }
+
+        std::shared_ptr<io::IWrite> WritePlugin::write(
             const file::Path& path, const io::Info& info,
             const io::Options& options)
         {
             if (info.video.empty() ||
                 (!info.video.empty() &&
-                 !_isWriteCompatible(info.video[0], options)))
+                 !_isCompatible(info.video[0], options)))
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(path.get())
-                                             .arg("Unsupported video"));
-            return Write::create(path, info, options, _logSystem);
+                                         .arg(path.get())
+                                         .arg("Unsupported video depth"));
+            return Write::create(path, info, options, _logSystem.lock());
+        }
+
+        std::string WritePlugin::getPluginInfo(const io::Options&) const
+        {
+            return "STB";
         }
     } // namespace stb
 } // namespace tl

@@ -16,9 +16,9 @@ namespace tl
 {
     namespace time
     {
-        std::vector<OTIO_NS::RationalTime> frames(const OTIO_NS::TimeRange& value)
+        std::vector<otime::RationalTime> frames(const OTIO_NS::TimeRange& value)
         {
-            std::vector<OTIO_NS::RationalTime> out;
+            std::vector<otime::RationalTime> out;
             if (isValid(value))
             {
                 const auto start = value.start_time();
@@ -33,9 +33,9 @@ namespace tl
             return out;
         }
 
-        std::vector<OTIO_NS::TimeRange> seconds(const OTIO_NS::TimeRange& value)
+        std::vector<otime::TimeRange> seconds(const OTIO_NS::TimeRange& value)
         {
-            std::vector<OTIO_NS::TimeRange> out;
+            std::vector<otime::TimeRange> out;
             if (value != invalidTimeRange)
             {
                 const OTIO_NS::TimeRange seconds(

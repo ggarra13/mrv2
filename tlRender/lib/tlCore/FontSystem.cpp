@@ -285,7 +285,6 @@ namespace tl
 
         void FontSystem::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init(context, "tl::image::FontSystem");
             TLRENDER_P();
 
             try
@@ -324,7 +323,9 @@ namespace tl
             }
         }
 
-        FontSystem::FontSystem() :
+        FontSystem::FontSystem(
+            const std::shared_ptr<system::Context>& context) :
+            ISystem(context, "tl::core::FontSystem"),
             _p(new Private)
         {
         }
@@ -345,7 +346,7 @@ namespace tl
         std::shared_ptr<FontSystem>
         FontSystem::create(const std::shared_ptr<system::Context>& context)
         {
-            auto out = std::shared_ptr<FontSystem>(new FontSystem);
+            auto out = std::shared_ptr<FontSystem>(new FontSystem(context));
             out->_init(context);
             return out;
         }

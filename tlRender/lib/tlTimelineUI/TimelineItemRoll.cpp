@@ -37,7 +37,7 @@ namespace tl
                     // Get transition items (ie. the clips associated to the
                     // transition) time ranges.
                     const int transitionTrack = item->track;
-                    std::vector<OTIO_NS::TimeRange> itemRanges;
+                    std::vector<otime::TimeRange> itemRanges;
                     _getTransitionTimeRanges(itemRanges, transitionTrack,
                                              timeRange);
                         
@@ -254,7 +254,7 @@ namespace tl
                             }
                             else
                             {
-                                timeRange = timeRange.clamped(OTIO_NS::TimeRange(
+                                timeRange = timeRange.clamped(otime::TimeRange(
                                                                   OTIO_NS::RationalTime(0.F, startTime.rate()),
                                                                   OTIO_NS::RationalTime(1.F, duration.rate())));
                             }
@@ -306,7 +306,7 @@ namespace tl
                     // transition) time ranges.
                     const int transitionTrack = item->track;
                     const int transitionIndex = item->index;
-                    std::vector<OTIO_NS::TimeRange> itemRanges;
+                    std::vector<otime::TimeRange> itemRanges;
                     _getTransitionTimeRanges(itemRanges, transitionTrack,
                                              timeRange);
                     

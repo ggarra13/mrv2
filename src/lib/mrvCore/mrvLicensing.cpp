@@ -53,6 +53,7 @@
 #include <FL/Fl.H>
 #include <FL/fl_ask.H>
 
+#include <cstdlib>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -507,6 +508,15 @@ namespace mrv
                 caLocation = "";
 #endif
                 useDefault = true;
+            }
+            else
+            {
+                // We need to set this variable for FFmpeg's SSL
+#if defined(_WIN32)
+                _putenv_s("SSL_CERT_FILE", caLocation.c_str());
+#else
+                setenv("SSL_CERT_FILE", caLocation.c_str(), 1);
+#endif
             }
 
 

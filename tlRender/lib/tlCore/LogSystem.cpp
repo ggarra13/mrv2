@@ -25,15 +25,16 @@ namespace tl
             return !(*this == other);
         }
 
-        std::string toString(const Item& item, size_t options)
+
+        std::string getLabel(const Item& item, int options)
         {
             std::stringstream ss;
-            if (options & static_cast<size_t>(StringConvert::Time))
+            if (options & static_cast<int>(StringConvert::Time))
             {
                 ss.precision(2);
                 ss << std::fixed << item.time << " ";
             }
-            if (options & static_cast<size_t>(StringConvert::Prefix))
+            if (options & static_cast<int>(StringConvert::Prefix))
             {
                 ss << item.prefix << ": ";
             }

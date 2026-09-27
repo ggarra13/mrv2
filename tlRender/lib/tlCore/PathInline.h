@@ -113,14 +113,14 @@ namespace tl
         inline std::string Path::getFileName(bool dir) const
         {
             return dir ?
-                getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() :
+                getProtocol() + getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() :
                 getBaseName() + getNumber() + getSuffix() + getExtension();
         }
 
         inline std::string Path::getFileNameWithRange(bool dir) const
         {
             return dir ?
-                getDirectory() + getBaseName() + getFrameRange() + getSuffix() + getExtension() :
+                getProtocol() + getDirectory() + getBaseName() + getFrameRange() + getSuffix() + getExtension() :
                 getBaseName() + getFrameRange() + getSuffix() + getExtension();
         }
 
@@ -159,8 +159,8 @@ namespace tl
         {
             return _frames.has_value() ?
                 !_frames.value().equal() ?
-                toString(_frames.value().getMin(), _pad) + "-" + toString(_frames.value().getMax(), _pad) :
-                toString(_frames.value().getMin(), _pad) :
+                toString(_frames.value().min(), _pad) + "-" + toString(_frames.value().max(), _pad) :
+                toString(_frames.value().min(), _pad) :
                 std::string();
         }
 

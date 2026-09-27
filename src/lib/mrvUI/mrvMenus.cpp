@@ -1354,6 +1354,11 @@ namespace mrv
         else
             thumbnails_small = kToggleTimelineThumbnails.hotkey();
 
+        const float kPixels_per_unit = ui->uiView->pixels_per_unit();
+        const int kSmall = 50 * kPixels_per_unit;
+        const int kMedium = 75 * kPixels_per_unit;
+        const int kLarge = 100 * kPixels_per_unit;
+
         idx = menu->add(
             _("Timeline/Thumbnails/None"), thumbnails_none,
             (Fl_Callback*)timeline_thumbnails_none_cb, ui, mode);
@@ -1364,19 +1369,19 @@ namespace mrv
             _("Timeline/Thumbnails/Small"), thumbnails_small,
             (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 50)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kSmall)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails/Medium"), 0,
             (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 100)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kMedium)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails/Large"), 0,
             (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 150)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kLarge)
             item->set();
 
         mode = FL_MENU_TOGGLE;

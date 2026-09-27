@@ -29,7 +29,7 @@ namespace tl
             }
             return n;
         }
-        
+
         template<class T>
         inline void
         swap_endian(T* vals, int len = 1)
@@ -40,12 +40,12 @@ namespace tl
 
     }
 
-    
+
     namespace zfile
     {
         namespace
         {
-        
+
             static const int kMagic       = 0x2f0867ab;
             static const int kMagicEndian = 0xab67082f;
 
@@ -74,23 +74,23 @@ namespace tl
                                                  .arg(fileName)
                                                  .arg("Coult not open fileName"));
                     }
-                        
+
                     Header header;
                     gzread(_gz, &header, sizeof(header));
-                        
+
                     if (header.magic != kMagic && header.magic != kMagicEndian)
                     {
                         throw std::runtime_error(string::Format("{0}: {1}")
                                                  .arg(fileName)
                                                  .arg("Not a valid Pixar's Zfile"));
                     }
-                        
+
                      _swapEndian = (header.magic == kMagicEndian);
-    
+
                     info.size.w = header.width;
                     info.size.h = header.height;
                     info.pixelType = image::PixelType::L_F32;
-                    
+
                     if (_swapEndian)
                     {
                         swap_endian(&info.size.w);
@@ -101,7 +101,7 @@ namespace tl
 
                     _worldToScreen = header.worldToScreen;
                     _worldToCamera = header.worldToCamera;
-                    
+
                     _info.video.push_back(info);
                 }
 
@@ -113,7 +113,7 @@ namespace tl
                             _gz = 0;
                         }
                     }
-                
+
                 const io::Info& getInfo() const { return _info; }
 
                 io::VideoData read(
@@ -139,13 +139,13 @@ namespace tl
                         o << _worldToScreen;
                         _info.tags["worldToScreen"] = o.str();
                     }
-                    
+
                     {
                         std::stringstream o;
                         o << _worldToCamera;
                         _info.tags["worldToCamera"] = o.str();
                     }
-                    
+
                     out.image->setTags(_info.tags);
 
                     return out;
@@ -160,53 +160,25 @@ namespace tl
             };
         } // namespace
 
-        void Read::_init(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+
+        Decode::Decode()
+        {}
+
+        Decode::~Decode()
+        {}
+
+        std::shared_ptr<Decode> Decode::create()
         {
-            ISequenceRead::_init(path, memory, options, cache, logSystem);
+            return std::shared_ptr<Decode>(new Decode);
         }
 
-        Read::Read() {}
-
-        Read::~Read()
-        {
-            _finish();
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const io::Options& options,
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, {}, options, cache, logSystem);
-            return out;
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, memory, options, cache, logSystem);
-            return out;
-        }
-
-        io::Info Read::_getInfo(
+        io::Info Decode::getInfo(
             const std::string& fileName, const file::MemoryRead* memory)
         {
-            io::Info out = File(fileName).getInfo();
-            out.videoTime =
-                OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
-                    OTIO_NS::RationalTime(_startFrame, _defaultSpeed),
-                    OTIO_NS::RationalTime(_endFrame, _defaultSpeed));
-            return out;
+            return File(fileName).getInfo();
         }
 
-        io::VideoData Read::_readVideo(
+        io::VideoData Decode::readVideo(
             const std::string& fileName, const file::MemoryRead* memory,
             const OTIO_NS::RationalTime& time, const io::Options&)
         {

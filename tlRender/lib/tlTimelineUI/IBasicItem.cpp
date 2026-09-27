@@ -93,7 +93,7 @@ namespace tl
         {
             return _p->otioItem;
         }
-
+        
         void IBasicItem::setDisplayOptions(const DisplayOptions& value)
         {
             const bool changed = value != _displayOptions;
@@ -196,7 +196,7 @@ namespace tl
             const timeline::ClipRectState clipRectState(event.render);
             event.render->setClipRectEnabled(true);
             event.render->setClipRect(math::intersect(g2, drawRect));
-
+            
             std::vector<timeline::TextInfo> textInfos;
 
             if (_displayOptions.clipInfo)
@@ -212,7 +212,7 @@ namespace tl
                             p.label, p.size.fontInfo);
                     }
 
-
+                    
                     event.render->appendText(
                         textInfos,
                         p.draw.labelGlyphs,
@@ -312,13 +312,13 @@ namespace tl
                     y += p.size.fontMetrics.lineHeight + p.size.margin * 2;
                 }
             }
-
+            
             for (const auto& textInfo : textInfos)
             {
                 event.render->drawText(textInfo, math::Vector2i(),
                                        event.style->getColorRole(ui::ColorRole::Text));
             }
-
+            
         }
 
         int IBasicItem::_getMargin() const

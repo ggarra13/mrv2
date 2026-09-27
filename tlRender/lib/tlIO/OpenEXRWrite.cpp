@@ -45,7 +45,7 @@ namespace tl
         void Write::_init(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             TLRENDER_P();
 
@@ -55,9 +55,9 @@ namespace tl
             if (i != options.end())
             {
                 std::stringstream ss(i->second);
-                int i;
-                ss >> i;
-                _compression = static_cast<Imf::Compression>(i);
+                int j;
+                ss >> j;
+                _compression = static_cast<Imf::Compression>(j);
             }
             i = options.find("OpenEXR/PixelType");
             if (i != options.end())
@@ -117,7 +117,7 @@ namespace tl
         std::shared_ptr<Write> Write::create(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             auto out = std::shared_ptr<Write>(new Write);
             out->_init(path, info, options, logSystem);

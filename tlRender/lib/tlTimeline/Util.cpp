@@ -33,7 +33,7 @@ namespace tl
     namespace timeline
     {
         std::vector<std::string> getExtensions(
-            int types, const std::shared_ptr<system::Context>& context)
+            const std::shared_ptr<system::Context>& context, int types)
         {
             std::vector<std::string> out;
             //! \todo Get extensions for the Python adapters?
@@ -42,21 +42,21 @@ namespace tl
                 out.push_back(".otio");
                 out.push_back(".otioz");
             }
-            if (auto ioSystem = context->getSystem<io::System>())
+            if (auto ioSystem = context->getSystem<io::ReadSystem>())
             {
                 for (const auto& plugin : ioSystem->getPlugins())
                 {
-                    const auto& extensions = plugin->getExtensions(types);
+                    const auto& extensions = plugin->getExts(types);
                     out.insert(out.end(), extensions.begin(), extensions.end());
                 }
             }
             return out;
         }
 
-        std::vector<opentime::TimeRange>
-        toRanges(std::vector<opentime::RationalTime> frames)
+        std::vector<otime::TimeRange>
+        toRanges(std::vector<otime::RationalTime> frames)
         {
-            std::vector<opentime::TimeRange> out;
+            std::vector<otime::TimeRange> out;
             if (!frames.empty())
             {
                 std::sort(frames.begin(), frames.end());
@@ -68,7 +68,7 @@ namespace tl
                     if (k != frames.end() && (*k - *j).value() > 1)
                     {
                         out.push_back(
-                            opentime::TimeRange::
+                            OTIO_NS::TimeRange::
                                 range_from_start_end_time_inclusive(*i, *j));
                         i = k;
                         j = k;
@@ -76,7 +76,7 @@ namespace tl
                     else if (k == frames.end())
                     {
                         out.push_back(
-                            opentime::TimeRange::
+                            OTIO_NS::TimeRange::
                                 range_from_start_end_time_inclusive(*i, *j));
                         i = k;
                         j = k;
@@ -90,8 +90,8 @@ namespace tl
             return out;
         }
 
-        opentime::RationalTime loop(
-            const opentime::RationalTime& value, const opentime::TimeRange& range,
+        OTIO_NS::RationalTime loop(
+            const OTIO_NS::RationalTime& value, const OTIO_NS::TimeRange& range,
             bool* looped)
         {
             auto out = value;
@@ -117,25 +117,25 @@ namespace tl
         TLRENDER_ENUM_IMPL(CacheDirection, "Forward", "Reverse");
         TLRENDER_ENUM_SERIALIZE_IMPL(CacheDirection);
 
-        std::vector<opentime::TimeRange> loopCache(
-            const opentime::TimeRange& value, const opentime::TimeRange& range,
+        std::vector<otime::TimeRange> loopCache(
+            const OTIO_NS::TimeRange& value, const OTIO_NS::TimeRange& range,
             CacheDirection direction)
         {
-            std::vector<opentime::TimeRange> out;
-            const opentime::RationalTime min =
+            std::vector<otime::TimeRange> out;
+            const OTIO_NS::RationalTime min =
                 std::min(value.duration(), range.duration());
             switch (direction)
             {
             case CacheDirection::Forward:
                 if (value.start_time() < range.start_time())
                 {
-                    const opentime::TimeRange a(range.start_time(), min);
+                    const OTIO_NS::TimeRange a(range.start_time(), min);
                     TLRENDER_ASSERT(a.duration() == min);
                     out.push_back(a);
                 }
                 else if (value.start_time() > range.end_time_inclusive())
                 {
-                    const opentime::TimeRange a(
+                    const OTIO_NS::TimeRange a(
                         range.end_time_exclusive() - min, min);
                     TLRENDER_ASSERT(a.duration() == min);
                     out.push_back(a);
@@ -143,11 +143,11 @@ namespace tl
                 else if (
                     value.end_time_inclusive() > range.end_time_exclusive())
                 {
-                    const opentime::TimeRange clamped(value.start_time(), min);
-                    const opentime::TimeRange a =
-                        opentime::TimeRange::range_from_start_end_time_inclusive(
+                    const OTIO_NS::TimeRange clamped(value.start_time(), min);
+                    const OTIO_NS::TimeRange a =
+                        OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                             clamped.start_time(), range.end_time_inclusive());
-                    const opentime::TimeRange b = opentime::TimeRange(
+                    const OTIO_NS::TimeRange b = OTIO_NS::TimeRange(
                         range.start_time(), clamped.duration() - a.duration());
                     TLRENDER_ASSERT(a.duration() + b.duration() == min);
                     if (a.duration().value() > 0.0)
@@ -167,30 +167,30 @@ namespace tl
             case CacheDirection::Reverse:
                 if (value.end_time_inclusive() > range.end_time_inclusive())
                 {
-                    const opentime::TimeRange a(
+                    const OTIO_NS::TimeRange a(
                         range.end_time_exclusive() - min, min);
                     out.push_back(a);
                     TLRENDER_ASSERT(a.duration() == min);
                 }
                 else if (value.end_time_inclusive() < range.start_time())
                 {
-                    const opentime::TimeRange a(range.start_time(), min);
+                    const OTIO_NS::TimeRange a(range.start_time(), min);
                     out.push_back(a);
                     TLRENDER_ASSERT(a.duration() == min);
                 }
                 else if (value.start_time() <= range.start_time())
                 {
-                    const opentime::TimeRange clamped =
-                        opentime::TimeRange::range_from_start_end_time_inclusive(
+                    const OTIO_NS::TimeRange clamped =
+                        OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                             value.end_time_exclusive() - min,
                             value.end_time_inclusive());
-                    const opentime::TimeRange a =
-                        opentime::TimeRange::range_from_start_end_time_inclusive(
+                    const OTIO_NS::TimeRange a =
+                        OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                             range.start_time(), clamped.end_time_inclusive());
-                    const opentime::RationalTime behind_duration =
+                    const OTIO_NS::RationalTime behind_duration =
                         clamped.duration() - a.duration();
-                    const opentime::TimeRange b =
-                        opentime::TimeRange::range_from_start_end_time_inclusive(
+                    const OTIO_NS::TimeRange b =
+                        OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                             range.end_time_exclusive() - behind_duration,
                             range.end_time_inclusive());
                     TLRENDER_ASSERT(a.duration() + b.duration() == min);
@@ -222,17 +222,17 @@ namespace tl
             return out;
         }
 
-        std::optional<opentime::RationalTime>
+        std::optional<otime::RationalTime>
         getDuration(const OTIO_NS::Timeline* otioTimeline, const std::string& kind)
         {
-            std::optional<opentime::RationalTime> out;
+            std::optional<otime::RationalTime> out;
             OTIO_NS::ErrorStatus errorStatus;
             for (auto track :
                  otioTimeline->find_children<OTIO_NS::Track>(&errorStatus))
             {
                 if (kind == track->kind())
                 {
-                    const opentime::RationalTime duration =
+                    const OTIO_NS::RationalTime duration =
                         track->duration(&errorStatus);
                     if (out.has_value())
                     {
@@ -247,9 +247,9 @@ namespace tl
             return out;
         }
 
-        opentime::TimeRange getTimeRange(const OTIO_NS::Timeline* otioTimeline)
+        OTIO_NS::TimeRange getTimeRange(const OTIO_NS::Timeline* otioTimeline)
         {
-            opentime::TimeRange out = time::invalidTimeRange;
+            OTIO_NS::TimeRange out = time::invalidTimeRange;
             auto duration =
                 timeline::getDuration(otioTimeline, OTIO_NS::Track::Kind::video);
             if (!duration.has_value())
@@ -259,12 +259,12 @@ namespace tl
             }
             if (duration.has_value())
             {
-                const opentime::RationalTime startTime =
+                const OTIO_NS::RationalTime startTime =
                     otioTimeline->global_start_time().has_value()
                         ? otioTimeline->global_start_time().value().rescaled_to(
                               duration->rate())
-                        : opentime::RationalTime(0, duration->rate());
-                out = opentime::TimeRange(startTime, duration.value());
+                        : OTIO_NS::RationalTime(0, duration->rate());
+                out = OTIO_NS::TimeRange(startTime, duration.value());
             }
             return out;
         }
@@ -279,7 +279,7 @@ namespace tl
             {
             case file::Type::Directory:
             {
-                auto ioSystem = context->getSystem<io::System>();
+                auto ioSystem = context->getSystem<io::ReadSystem>();
                 file::ListOptions listOptions;
                 listOptions.maxNumberDigits = pathOptions.seqMaxDigits;
                 std::vector<file::FileInfo> list;
@@ -412,8 +412,8 @@ namespace tl
                 if (const auto& memory = sharedMemoryReference->memory())
                 {
                     out.push_back(
-                        file::MemoryRead(
-                            nullptr, memory->data(), memory->size()));
+                        file::MemoryRead(nullptr, memory->data(),
+                                         memory->size()));
                 }
             }
             else if (
@@ -428,8 +428,8 @@ namespace tl
                 for (size_t i = 0; i < memory_size && i < memory_sizes_size;
                      ++i)
                 {
-                    out.push_back(file::MemoryRead(
-                            nullptr, memory[i], memory_sizes[i]));
+                    out.push_back(file::MemoryRead(nullptr,
+                                                   memory[i], memory_sizes[i]));
                 }
             }
             else if (
@@ -442,8 +442,8 @@ namespace tl
                     if (memory)
                     {
                         out.push_back(
-                            file::MemoryRead(
-                                nullptr, memory->data(), memory->size()));
+                            file::MemoryRead(nullptr,
+                                             memory->data(), memory->size()));
                     }
                 }
             }
@@ -572,27 +572,71 @@ namespace tl
             }
         }
 
-        opentime::RationalTime toVideoMediaTime(
-            const opentime::RationalTime& time,
-            const opentime::TimeRange& trimmedRangeInParent,
-            const opentime::TimeRange& trimmedRange, double rate)
+
+        io::MissingFrames fromOTIO(
+            OTIO_NS::ImageSequenceReference::MissingFramePolicy value)
         {
-            opentime::RationalTime out = time - trimmedRangeInParent.start_time() +
+            io::MissingFrames out = io::MissingFrames::Error;
+            switch (value)
+            {
+            case OTIO_NS::ImageSequenceReference::MissingFramePolicy::hold:
+                out = io::MissingFrames::Hold;
+                break;
+            case OTIO_NS::ImageSequenceReference::MissingFramePolicy::black:
+                out = io::MissingFrames::Black;
+                break;
+            default: break;
+            }
+            return out;
+        }
+
+        OTIO_NS::ImageSequenceReference::MissingFramePolicy toOTIO(
+            io::MissingFrames value)
+        {
+            auto out = OTIO_NS::ImageSequenceReference::MissingFramePolicy::error;
+            switch (value)
+            {
+            case io::MissingFrames::Hold:
+                out = OTIO_NS::ImageSequenceReference::MissingFramePolicy::hold;
+                break;
+            case io::MissingFrames::Black:
+                out = OTIO_NS::ImageSequenceReference::MissingFramePolicy::black;
+                break;
+            case io::MissingFrames::Skip:
+            case io::MissingFrames::Gaps:
+                // Nothing to say: the clips over this reference already cover
+                // only the frames that are there, so no read reaches a missing
+                // one and the policy never comes up. Written as hold so that
+                // another application opening the same reference behaves
+                // sanely.
+                out = OTIO_NS::ImageSequenceReference::MissingFramePolicy::hold;
+                break;
+            default: break;
+            }
+            return out;
+        }
+
+        OTIO_NS::RationalTime toVideoMediaTime(
+            const OTIO_NS::RationalTime& time,
+            const OTIO_NS::TimeRange& trimmedRangeInParent,
+            const OTIO_NS::TimeRange& trimmedRange, double rate)
+        {
+            OTIO_NS::RationalTime out = time - trimmedRangeInParent.start_time() +
                                       trimmedRange.start_time();
             out = out.rescaled_to(rate).round();
             return out;
         }
 
-        opentime::TimeRange toAudioMediaTime(
-            const opentime::TimeRange& timeRange,
-            const opentime::TimeRange& trimmedRangeInParent,
-            const opentime::TimeRange& trimmedRange, double sampleRate)
+        OTIO_NS::TimeRange toAudioMediaTime(
+            const OTIO_NS::TimeRange& timeRange,
+            const OTIO_NS::TimeRange& trimmedRangeInParent,
+            const OTIO_NS::TimeRange& trimmedRange, double sampleRate)
         {
-            opentime::TimeRange out = opentime::TimeRange(
+            OTIO_NS::TimeRange out = OTIO_NS::TimeRange(
                 timeRange.start_time() - trimmedRangeInParent.start_time() +
                     trimmedRange.start_time(),
                 timeRange.duration());
-            out = opentime::TimeRange(
+            out = OTIO_NS::TimeRange(
                 out.start_time().rescaled_to(sampleRate).round(),
                 out.duration().rescaled_to(sampleRate).round());
             return out;

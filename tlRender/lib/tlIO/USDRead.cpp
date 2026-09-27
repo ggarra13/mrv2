@@ -17,10 +17,10 @@ namespace tl
         void Read::_init(
             int64_t id, const std::shared_ptr<Render>& render,
             const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+            const io::Options& options,
+            const std::shared_ptr<log::System>& logSystem)
         {
-            IRead::_init(path, memory, options, cache, logSystem);
+            IVideoRead::_init(path, memory, options, logSystem);
             TLRENDER_P();
             p.id = id;
             p.render = render;
@@ -36,11 +36,10 @@ namespace tl
         std::shared_ptr<Read> Read::create(
             int64_t id, const std::shared_ptr<Render>& render,
             const file::Path& path, const io::Options& options,
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             auto out = std::shared_ptr<Read>(new Read);
-            out->_init(id, render, path, {}, options, cache, logSystem);
+            out->_init(id, render, path, {}, options, logSystem);
             return out;
         }
 

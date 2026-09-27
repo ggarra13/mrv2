@@ -134,7 +134,7 @@ namespace tl
 
         namespace
         {
-            std::string getLabel(Imf::PixelType value)
+            [[maybe_unused]] std::string getLabel(Imf::PixelType value)
             {
                 const std::array<std::string, 3> data = {
                     "UInt", "Half", "Float"};
@@ -206,7 +206,7 @@ namespace tl
                         _chromaticities.white.y != 0.3290f);
                 }
 
-                void parseHeader(const Imf::Header& header, int partNumber = 0)
+                void parseHeader(const Imf::Header& header, int part = 0)
                 {
                     if (hasChromaticities(header))
                         _chromaticities = chromaticities(header);
@@ -280,7 +280,14 @@ namespace tl
                     // Get the layers.
                     std::string view;
                     if (header.hasView())
-                        view = header.view() + " ";
+                    {
+                        view = header.view();
+                        if (!view.empty() && view[0] != '.')
+                        {
+                            view.insert(view.begin(), '.');
+                        }
+                    }
+                    // We will modify layers in place.
                     std::vector<Layer> layers =
                         getLayers(header.channels(), _channelGrouping);
                     // NOTE: The video info vector is indexed by layer, not
@@ -295,9 +302,16 @@ namespace tl
                     // entry for this part is updated instead.
                     size_t offset = _info.video.size();
                     _info.video.resize(offset + layers.size());
+                    _info.video[part].compression = compressionName;
+                    _info.video[part].compressionNumScanlines =
+                        compressionNumScanlines;
+                    _info.video[part].isLossyCompression =
+                        isLossyCompression;
+                    _info.video[part].isValidDeepCompression =
+                        isValidDeepCompression;
                     for (size_t i = 0; i < layers.size(); ++i)
                     {
-                        layers[i].partNumber = partNumber;
+                        layers[i].partNumber = part;
                         const auto& layer = layers[i];
                         _layers.push_back(layer);
                         const math::Vector2i sampling(
@@ -378,66 +392,41 @@ namespace tl
                     const bool ignoreChromaticities, const bool autoNormalize,
                     const bool useRGBOnly,
                     const int xLevel, const int yLevel,
-                    const std::weak_ptr<log::System>& logSystem) :
-                    _fileName(fileName),
+                    const std::shared_ptr<log::System>& logSystem) :
                     _channelGrouping(channelGrouping),
                     _ignoreDisplayWindow(ignoreDisplayWindow),
                     _ignoreChromaticities(ignoreChromaticities),
                     _autoNormalize(autoNormalize),
                     _useRGBOnly(useRGBOnly),
                     _xLevel(xLevel),
-                    _yLevel(yLevel),
-                    logSystemWeak(logSystem)
+                    _yLevel(yLevel)
                 {
                     // Open the file.
                     if (memory)
                     {
                         _s.reset(new IStream(
-                            fileName.c_str(), memory->p, memory->size));
+                                     fileName.c_str(), memory->p, memory->size));
                     }
                     else
                     {
                         _s.reset(new IStream(fileName.c_str()));
                     }
 
-                    // 2. ALWAYS open as MultiPartInputFile.
-                    try
-                    {
-                        _f.reset(new Imf::MultiPartInputFile(*_s));
-                    }
-                    catch (const std::exception& e)
-                    {
-                        if (auto log = logSystemWeak.lock())
-                        {
-                            std::string msg = "Failed to open EXR file: " + std::string(e.what());
-                            log->print(_fileName, msg, log::Type::Error);
-                        }
-                        return; // Failed to open, exit constructor
-                    }
+                    _f.reset(new Imf::MultiPartInputFile(*_s));
 
-                    int numberOfParts = _f->parts();
-                    if (numberOfParts == 0)
+                    int partsCount = _f->parts();
+                    if (!_f || partsCount == 0)
                     {
-                        if (auto log = logSystemWeak.lock())
-                        {
-                            log->print(_fileName, "EXR file has no parts.",
-                                       log::Type::Error);
-                        }
                         return;
                     }
 
-                    // 3. Now check logic based on mipmap request
                     if (_xLevel > 0 || _yLevel > 0)
                     {
                         // Mipmaps requested. The part MUST be tiled.
                         const Imf::Header& header = _f->header(0);
                         if (!header.hasTileDescription())
                         {
-                            if (auto log = logSystemWeak.lock())
-                            {
-                                log->print(_fileName,
-                                           "Cannot read mipmaps: File is not tiled.", log::Type::Error);
-                            }
+                            return;
                         }
                         else
                         {
@@ -464,21 +453,20 @@ namespace tl
                     else
                     {
                         // Base level requested. Just parse headers.
-                        for (int partNumber = 0; partNumber < numberOfParts; ++partNumber)
+                        for (int part = 0; part < partsCount; ++part)
                         {
-                            const Imf::Header& header = _f->header(partNumber);
-                            parseHeader(header, partNumber);
+                            const Imf::Header& header = _f->header(part);
+                            parseHeader(header, part);
 
                             // Check for tiling and get counts for base level reads ---
                             if (header.hasTileDescription())
                             {
                                 // Temporarily create TiledInputPart just for querying metadata
-                                Imf::TiledInputPart tempPart(*_f, partNumber);
+                                Imf::TiledInputPart tempPart(*_f, part);
                                 int numXLevels = tempPart.numXLevels();
                                 int numYLevels = tempPart.numYLevels();
 
-                                // Assuming single-part/part 0 for simplicity if tags are file-wide
-                                if (partNumber == 0)
+                                if (part == 0)
                                 {
                                     {
                                         std::stringstream ss;
@@ -496,7 +484,10 @@ namespace tl
                     }
                 }
 
-                const io::Info& getInfo() const { return _info; }
+                const io::Info& getInfo() const
+                    {
+                        return _info;
+                    }
 
                 // Function to upscale RY and BY channels in an interleaved Y,
                 // RY, BY image
@@ -701,7 +692,7 @@ namespace tl
                     if (needTemp)
                     {
                         tempDataWindow = _dataWindow;
-                        tempInfo = imageInfo;
+                        tempInfo = vulkanInfo;
                         tempInfo.size.w = _dataWindow.w();
                         tempInfo.size.h = _dataWindow.h();
                         tempImage = image::Image::create(tempInfo);
@@ -956,7 +947,8 @@ namespace tl
 
                 io::VideoData read(
                     const std::string& fileName,
-                    const OTIO_NS::RationalTime& time, const io::Options& options)
+                    const OTIO_NS::RationalTime& time,
+                    const io::Options& options)
                 {
                     io::VideoData out;
 
@@ -980,8 +972,11 @@ namespace tl
                     }
 
                     // 1. Get header for the current part.
-                    const Imf::Header& header =
-                        _f->header(_layers[layer].partNumber);
+                    Imf::Header header;
+                    if (_layers.empty())
+                        header = _f->header(0);
+                    else
+                        header = _f->header(_layers[layer].partNumber);
 
                     // 2. Update window info if not a mipmap read (it was set for mipmap in constructor).
                     if (!_t_part)
@@ -1000,7 +995,6 @@ namespace tl
                         _info.tags["Data Window"] = serialize(dataWindow);
                     }
 
-
                     io::addOtioTags(_info.tags, fileName, time);
 
                     int minY =
@@ -1011,6 +1005,7 @@ namespace tl
                         std::max(_dataWindow.max.y, _displayWindow.max.y);
                     int maxX =
                         std::max(_dataWindow.max.x, _displayWindow.max.x);
+
                     image::Info imageInfo = _info.video[layer];
 
                     // 3. Determine Tiled status and prepare TiledInputPart if necessary
@@ -1322,6 +1317,7 @@ namespace tl
                             io::serialize(maximum);
                     }
 
+                    io::addOtioTags(_info.tags, fileName, time);
                     out.image->setTags(_info.tags);
                     return out;
                 }
@@ -1349,132 +1345,112 @@ namespace tl
             };
         } // namespace
 
-        void Read::_init(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+
+        Decode::Decode()
+        {}
+
+        Decode::~Decode()
+        {}
+
+        std::shared_ptr<Decode> Decode::create()
         {
-            ISequenceRead::_init(path, memory, options, cache, logSystem);
-
-            auto option = options.find("OpenEXR/ChannelGrouping");
-            if (option != options.end())
-            {
-                std::stringstream ss(option->second);
-                ss >> _channelGrouping;
-            }
-
-            option = options.find("OpenEXR/IgnoreDisplayWindow");
-            if (option != options.end())
-            {
-                _ignoreDisplayWindow =
-                    static_cast<bool>(std::atoi(option->second.c_str()));
-            }
-
-            option = options.find("OpenEXR/UseRGBOnly");
-            if (option != options.end())
-            {
-                _useRGBOnly =
-                    static_cast<bool>(std::atoi(option->second.c_str()));
-            }
-
-            option = options.find("AutoNormalize");
-            if (option != options.end())
-            {
-                _autoNormalize =
-                    static_cast<bool>(std::atoi(option->second.c_str()));
-            }
-
-            option = options.find("IgnoreChromaticities");
-            if (option != options.end())
-            {
-                _ignoreChromaticities =
-                    static_cast<bool>(std::atoi(option->second.c_str()));
-            }
-
-            _xLevel = 0;
-            option = options.find("X Level");
-            if (option != options.end())
-            {
-                std::stringstream ss(option->second);
-                ss >> _xLevel;
-            }
-
-            _yLevel = 0;
-            option = options.find("Y Level");
-            if (option != options.end())
-            {
-                std::stringstream ss(option->second);
-                ss >> _yLevel;
-            }
+            return std::shared_ptr<Decode>(new Decode);
         }
 
-        Read::Read() {}
-
-        Read::~Read()
-        {
-            _finish();
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const io::Options& options,
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, {}, options, cache, logSystem);
-            return out;
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, memory, options, cache, logSystem);
-            return out;
-        }
-
-        io::Info Read::_getInfo(
-            const std::string& fileName, const file::MemoryRead* memory)
-        {
-            io::Info out =
-                File(
-                    fileName, memory, _channelGrouping, _ignoreDisplayWindow,
-                    false, false, false, 0, 0, _logSystem.lock())
-                    .getInfo();
-            float speed = _defaultSpeed;
-            auto i = out.tags.find("Frame Per Second");
-            if (i != out.tags.end())
-            {
-                locale::SetAndRestore saved;
-                speed = std::stof(i->second);
-            }
-            i = out.tags.find("FramesPerSecond");
-            if (i != out.tags.end())
-            {
-                int num = 1;
-                int den = 24;
-                std::stringstream s(i->second);
-                s >> num >> den;
-                speed = static_cast<double>(num) / static_cast<double>(den);
-            }
-            out.videoTime =
-                OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
-                    OTIO_NS::RationalTime(_startFrame, speed),
-                    OTIO_NS::RationalTime(_endFrame, speed));
-            return out;
-        }
-
-        io::VideoData Read::_readVideo(
-            const std::string& fileName, const file::MemoryRead* memory,
-            const OTIO_NS::RationalTime& time, const io::Options& options)
+        io::Info Decode::getInfo(
+            const std::string& fileName,
+            const file::MemoryRead* memory)
         {
             return File(
                        fileName, memory, _channelGrouping, _ignoreDisplayWindow,
                        _ignoreChromaticities, _autoNormalize, _useRGBOnly,
-                       _xLevel, _yLevel, _logSystem)
+                       _xLevel, _yLevel, _logSystem.lock())
+                .getInfo();
+        }
+
+        io::VideoData Decode::readVideo(
+            const std::string& fileName,
+            const file::MemoryRead* memory,
+            const OTIO_NS::RationalTime& time,
+            const io::Options& options)
+        {
+            auto i = options.find("OpenEXR/ChannelGrouping");
+            if (i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> _channelGrouping;
+            }
+
+            i = options.find("OpenEXR/IgnoreDisplayWindow");
+            if (i != options.end())
+            {
+                _ignoreDisplayWindow =
+                    static_cast<bool>(std::atoi(i->second.c_str()));
+            }
+
+            i = options.find("OpenEXR/UseRGBOnly");
+            if (i != options.end())
+            {
+                _useRGBOnly =
+                    static_cast<bool>(std::atoi(i->second.c_str()));
+            }
+
+            i = options.find("AutoNormalize");
+            if (i != options.end())
+            {
+                _autoNormalize =
+                    static_cast<bool>(std::atoi(i->second.c_str()));
+            }
+
+            i = options.find("IgnoreChromaticities");
+            if (i != options.end())
+            {
+                _ignoreChromaticities =
+                    static_cast<bool>(std::atoi(i->second.c_str()));
+            }
+
+            _xLevel = 0;
+            i = options.find("X Level");
+            if (i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> _xLevel;
+            }
+
+            _yLevel = 0;
+            i = options.find("Y Level");
+            if (i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> _yLevel;
+            }
+            return File(
+                       fileName, memory, _channelGrouping, _ignoreDisplayWindow,
+                       _ignoreChromaticities, _autoNormalize, _useRGBOnly,
+                       _xLevel, _yLevel, _logSystem.lock())
                 .read(fileName, time, options);
+        }
+
+
+        double Decode::getSpeed(const io::Info& info, double defaultSpeed) const
+        {
+            double out = defaultSpeed;
+            if (const auto i = info.tags.find("FramesPerSecond");
+                i != info.tags.end())
+            {
+                locale::SetAndRestore saved;
+                // The frames per second attribute is stored as a rational
+                // value: "numerator denominator".
+                std::stringstream ss(i->second);
+                double n = 0.0;
+                double d = 0.0;
+                ss >> n >> d;
+                if (d != 0.0)
+                {
+                    out = n / d;
+                }
+            }
+            return out;
         }
     } // namespace exr
 } // namespace tl

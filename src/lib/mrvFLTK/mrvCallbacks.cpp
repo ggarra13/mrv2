@@ -79,7 +79,6 @@
 #include <FL/Fl.H>
 #include <FL/filename.H> // for fl_open_uri()
 
-
 #ifdef _WIN32
 #include <winsock2.h>
 #endif
@@ -1277,7 +1276,6 @@ namespace mrv
         if (ui->uiSecondary)
             ui->uiSecondary->save();
 
-
         // Save preferences
         Preferences::save();
 
@@ -1288,7 +1286,6 @@ namespace mrv
         ui->uiAbout = nullptr;
         delete ui->uiHotkey;
         ui->uiHotkey = nullptr;
-
 
         // Hide all PanelGroup windows
         PanelGroup::hide_all();
@@ -1326,6 +1323,7 @@ namespace mrv
         Fl::hide_all_windows();
 
         tcp->unlock();
+
     }
 
     void previous_channel_cb(Fl_Widget* w, ViewerUI* ui)
@@ -2978,7 +2976,7 @@ namespace mrv
     {
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = 100 * ui->uiView->pixels_per_unit();;
+        options.thumbnailHeight = 75 * ui->uiView->pixels_per_unit();;
         options.waveformHeight = options.thumbnailHeight / 2;
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
@@ -2995,7 +2993,7 @@ namespace mrv
     {
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = 150 * ui->uiView->pixels_per_unit();;
+        options.thumbnailHeight = 100 * ui->uiView->pixels_per_unit();;
         options.waveformHeight = options.thumbnailHeight / 2;
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
@@ -3533,16 +3531,37 @@ namespace mrv
 
         auto item = std::make_shared<FilesModelItem>();
         item->init = true;
+
+        // Paths
         item->path = media->path;
         item->audioPath = media->audioPath;
+
+        item->audioOffset = media->audioOffset;
+
+        // Layers
+        item->videoLayer = media->videoLayer;
+        item->videoLayers = media->videoLayers;
+
+        // Playback
         item->inOutRange = media->inOutRange;
+        item->timeRange = media->timeRange;
         item->ioInfo = media->ioInfo;
         item->speed = media->speed;
-        item->audioOffset = media->audioOffset;
-        item->videoLayer = media->videoLayer;
         item->loop = media->loop;
         item->playback = player->playback();
         item->currentTime = time;
+        item->mute = media->mute;
+        item->volume = media->volume;
+
+        // Annotations
+        item->annotations = media->annotations;
+        item->voiceAnnotations = media->voiceAnnotations;
+
+        // OCIO
+        item->ocioIcs = media->ocioIcs;
+        item->ocioLook = media->ocioLook;
+        item->lutOptions = media->lutOptions;
+
         model->replace(origIndex, item);
 
         auto newIndex = model->observeAIndex()->get();
@@ -3622,11 +3641,11 @@ namespace mrv
         if (!player)
             return;
 
-        auto app = App::app;
+        auto context = App::app->getContext();
 
-        // Update the I/O cache.
-        auto ioSystem = app->getContext()->getSystem<io::System>();
-        ioSystem->getCache()->clear();
+        // Update the Thumbnail and Playback cache.
+        auto thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
+        thumbnailSystem->clearCache();
 
         player->clearCache();
     }
