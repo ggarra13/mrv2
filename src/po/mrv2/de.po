@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-24 16:22-0300\n"
+"POT-Creation-Date: 2026-09-27 16:26-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -195,12 +195,6 @@ msgstr "Stellen Sie den Namen der Dateisequenz-Audiodatei ein."
 
 msgid "Get file sequence audio file name."
 msgstr "Holen Sie sich den Namen der Dateisequenz Audiodatei."
-
-msgid "Set file sequence audio directory."
-msgstr "Dateisequenz-Audio-Verzeichnis festlegen."
-
-msgid "Get file sequence audio directory."
-msgstr "Datei-Sequenz-Audio-Verzeichnis."
 
 msgid "Set maximum file sequence digits."
 msgstr "Legen Sie die maximalen Dateisequenzziffern fest."
@@ -2331,9 +2325,6 @@ msgstr "Vorheriger Dateiname"
 msgid "Next filename"
 msgstr "Nchster Dateiname"
 
-msgid "Filter EDLs"
-msgstr "EDL-Filter"
-
 msgid "Select one or more B images."
 msgstr "Whlen Sie ein oder mehrere B-Bilder aus."
 
@@ -3288,10 +3279,10 @@ msgid "Items selected must be on the same track."
 msgstr "Ausgewählte Elemente müssen sich auf derselben Spur befinden."
 
 #, c++-format
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr ""
-"Ausgewählte Elemente müssen auf der Spur nebeneinander liegen. Links {0}. "
-"Rechts {1}."
+"Die ausgewählten Elemente müssen auf der Spur zusammenhängend sein. Links "
+"{0}. Rechts {1}."
 
 #, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
@@ -6428,14 +6419,23 @@ msgstr "CG"
 msgid "Studio"
 msgstr "Studio"
 
-msgid "Black Frame"
-msgstr "Schwarzer Rahmen"
+msgid "Error Frame"
+msgstr "Fehler-Frame"
 
-msgid "Repeat  Frame"
-msgstr "Rahmen wiederholen"
+msgid "Hold Frame"
+msgstr "Letzten Frame halten"
 
-msgid "Scratched  Frame"
-msgstr "Gekratzter Rahmen"
+msgid "Scratched Frame"
+msgstr "Zerkratzter Frame"
+
+msgid "Black  Frame"
+msgstr "Schwarzer Frame"
+
+msgid "Skip Frame"
+msgstr "Frame überspringen"
+
+msgid "Gap Frame"
+msgstr "Lücken-Frame"
 
 msgid "Always"
 msgstr "Immer"
@@ -6917,14 +6917,6 @@ msgstr ""
 "Cómo mostrar las miniaturas de la línea de tiempo en el panel de "
 "comparación."
 
-msgid "Playlist Panel"
-msgstr "Panel de listas de reproducción"
-
-msgid "How to display timeline thumbnails in Playlist Panel."
-msgstr ""
-"Cómo mostrar las miniaturas de la línea de tiempo en el panel de listas de "
-"reproducción."
-
 msgid "Stereo Panel"
 msgstr "Panel estéreo"
 
@@ -7292,6 +7284,28 @@ msgstr ""
 
 msgid "Missing Frame"
 msgstr "Fehlender Rahmen"
+
+msgid "Black Frame"
+msgstr "Schwarzer Rahmen"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"Beim Laden von Bildern legt diese Einstellung fest, was mit fehlenden Frames geschehen soll (möglicherweise müssen Sie die Sequenz neu laden oder klonen):\n"
+"\t* Fehler-Frame\t   - Meldet einen Fehler.\n"
+"\t* Letzten Frame halten\t   - Hält den zuletzt gelesenen Frame.\n"
+"\t* Zerkratzter Frame  - Hält den zuletzt gelesenen Frame\n"
+"                             und zeichnet ein rotes Kreuz darüber.\n"
+"\t* Schwarzer Frame\t   - Ersetzt den aktuellen Frame durch Schwarz.\n"
+"\t* Frame überspringen\t   - Überspringt den aktuellen Frame.\n"
+"\t* Lücken-Frame\t   - Fügt für die fehlenden Frames eine .otio-Lücke hinzu."
 
 msgid "Path Mappings"
 msgstr "Pfad-Mappings"
@@ -8509,6 +8523,26 @@ msgstr "host_statistik64 fehlgeschlagen"
 
 msgid "task info failed"
 msgstr "Task-Info fehlgeschlagen"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Dateisequenz-Audio-Verzeichnis festlegen."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Datei-Sequenz-Audio-Verzeichnis."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "EDL-Filter"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Rahmen wiederholen"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Panel de listas de reproducción"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr ""
+#~ "Cómo mostrar las miniaturas de la línea de tiempo en el panel de listas de "
+#~ "reproducción."
 
 #~ msgid "Complexity"
 #~ msgstr "Komplexität"

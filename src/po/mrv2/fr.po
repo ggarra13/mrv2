@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-24 16:22-0300\n"
+"POT-Creation-Date: 2026-09-27 16:26-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: fr\n"
@@ -193,12 +193,6 @@ msgstr "Définir le nom du fichier audio de la séquence du fichier."
 
 msgid "Get file sequence audio file name."
 msgstr "Obtenir le nom de fichier audio de séquence de fichier."
-
-msgid "Set file sequence audio directory."
-msgstr "Définir le répertoire audio de la séquence de fichiers."
-
-msgid "Get file sequence audio directory."
-msgstr "Obtenir le répertoire audio de séquence de fichiers."
 
 msgid "Set maximum file sequence digits."
 msgstr "Définir des chiffres de séquence de fichier maximum."
@@ -2332,9 +2326,6 @@ msgstr "Nom du fichier précédent"
 msgid "Next filename"
 msgstr "Nom du fichier suivant"
 
-msgid "Filter EDLs"
-msgstr "Filtre EDLs"
-
 msgid "Select one or more B images."
 msgstr "Sélectionnez une ou plusieurs images B."
 
@@ -3294,7 +3285,7 @@ msgid "Items selected must be on the same track."
 msgstr "Les éléments sélectionnés doivent être sur la même piste."
 
 #, c++-format
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr ""
 "Les éléments sélectionnés doivent être contigus sur la piste. Gauche {0}. "
 "Droite {1}."
@@ -6433,14 +6424,23 @@ msgstr "CG"
 msgid "Studio"
 msgstr "Studio"
 
-msgid "Black Frame"
-msgstr "Cadre noir"
+msgid "Error Frame"
+msgstr "Image d'erreur"
 
-msgid "Repeat  Frame"
-msgstr "Répéter le cadre"
+msgid "Hold Frame"
+msgstr "Maintenir l'image"
 
-msgid "Scratched  Frame"
-msgstr "Cadre écrasé"
+msgid "Scratched Frame"
+msgstr "Image rayée"
+
+msgid "Black  Frame"
+msgstr "Image noire"
+
+msgid "Skip Frame"
+msgstr "Ignorer l'image"
+
+msgid "Gap Frame"
+msgstr "Image vide"
 
 msgid "Always"
 msgstr "Toujours"
@@ -6931,14 +6931,6 @@ msgstr ""
 "Comment afficher les vignettes de la timeline dans le panneau de "
 "comparaison."
 
-msgid "Playlist Panel"
-msgstr "Panneau des listes de lecture"
-
-msgid "How to display timeline thumbnails in Playlist Panel."
-msgstr ""
-"Comment afficher les vignettes de la timeline dans le panneau des listes de "
-"lecture."
-
 msgid "Stereo Panel"
 msgstr "Panneau stéréo"
 
@@ -7311,6 +7303,28 @@ msgstr ""
 
 msgid "Missing Frame"
 msgstr "Cadre manquant"
+
+msgid "Black Frame"
+msgstr "Cadre noir"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"Lors du chargement des images, ce paramètre détermine quoi faire avec les images manquantes (il peut être nécessaire de recharger ou de cloner la séquence) :\n"
+"\t* Image d'erreur\t   - Signale une erreur.\n"
+"\t* Maintenir l'image\t   - Conserve la dernière image lue.\n"
+"\t* Image rayée  - Conserve la dernière image lue\n"
+"                             mais dessine une croix rouge.\n"
+"\t* Image noire\t   - Remplace l'image actuelle par du noir.\n"
+"\t* Ignorer l'image\t   - Ignore l'image actuelle.\n"
+"\t* Image vide\t   - Ajoute un espace .otio pour les images manquantes."
 
 msgid "Path Mappings"
 msgstr "Cartographie des chemins"
@@ -8540,6 +8554,26 @@ msgstr "host_statistics64 a échoué"
 
 msgid "task info failed"
 msgstr "l'information de la tâche a échoué"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Définir le répertoire audio de la séquence de fichiers."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Obtenir le répertoire audio de séquence de fichiers."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "Filtre EDLs"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Répéter le cadre"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Panneau des listes de lecture"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr ""
+#~ "Comment afficher les vignettes de la timeline dans le panneau des listes de "
+#~ "lecture."
 
 #~ msgid "Complexity"
 #~ msgstr "Complexité"

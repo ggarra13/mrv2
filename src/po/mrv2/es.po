@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-24 16:22-0300\n"
+"POT-Creation-Date: 2026-09-27 16:26-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -214,12 +214,6 @@ msgstr "Setear nombre del archivo de audio para la secuencia."
 
 msgid "Get file sequence audio file name."
 msgstr "Obtener nombre del archivo de audio para la secuencia."
-
-msgid "Set file sequence audio directory."
-msgstr "Setear el directorio de audio para la secuencia."
-
-msgid "Get file sequence audio directory."
-msgstr "Obtener el directorio de audio para la secuencia."
 
 msgid "Set maximum file sequence digits."
 msgstr "Setear los máximos digitos de la secuencia."
@@ -2364,9 +2358,6 @@ msgstr "Archivo previo"
 msgid "Next filename"
 msgstr "Pròximo archivo"
 
-msgid "Filter EDLs"
-msgstr "Filtrar EDLs"
-
 msgid "Select one or more B images."
 msgstr "Seleccione una o más imágenes B."
 
@@ -3334,10 +3325,10 @@ msgid "Items selected must be on the same track."
 msgstr "Los elementos seleccionados deben estar en la misma pista."
 
 #, c++-format
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr ""
 "Los elementos seleccionados deben ser contiguos en la pista. Izquierda {0}. "
-"Derecha {2}."
+"Derecha {1}."
 
 #, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
@@ -6468,14 +6459,23 @@ msgstr "CG"
 msgid "Studio"
 msgstr "Studio"
 
-msgid "Black Frame"
-msgstr "Cuadro Negro"
+msgid "Error Frame"
+msgstr "Cuadro de error"
 
-msgid "Repeat  Frame"
-msgstr "Repetir Cuadro"
+msgid "Hold Frame"
+msgstr "Mantener cuadro"
 
-msgid "Scratched  Frame"
-msgstr "Repetir Cuadro Marcado"
+msgid "Scratched Frame"
+msgstr "Cuadro rayado"
+
+msgid "Black  Frame"
+msgstr "Cuadro negro"
+
+msgid "Skip Frame"
+msgstr "Omitir cuadro"
+
+msgid "Gap Frame"
+msgstr "Cuadro de espacio"
 
 msgid "Always"
 msgstr "Siempre"
@@ -6951,12 +6951,6 @@ msgstr "Comparar Nada"
 msgid "How to display timeline thumbnails in Compare Panel."
 msgstr "Cómo mostrar miniaturas de la línea de tiempo en paneles."
 
-msgid "Playlist Panel"
-msgstr "Alternar Panel de Lista de Reproducción"
-
-msgid "How to display timeline thumbnails in Playlist Panel."
-msgstr "Cómo mostrar miniaturas de la línea de tiempo en paneles."
-
 msgid "Stereo Panel"
 msgstr "Stereo 3D"
 
@@ -7324,6 +7318,28 @@ msgstr ""
 
 msgid "Missing Frame"
 msgstr "Cuadro Faltante"
+
+msgid "Black Frame"
+msgstr "Cuadro Negro"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"Al cargar imágenes, esta configuración determina qué hacer con los cuadros que faltan (puede que sea necesario volver a cargar o clonar la secuencia):\n"
+"\t* Cuadro de error\t   - Informa de un error.\n"
+"\t* Mantener cuadro\t   - Mantiene el último cuadro leído.\n"
+"\t* Cuadro rayado  - Mantiene el último cuadro leído\n"
+"                             pero dibuja una cruz roja.\n"
+"\t* Cuadro negro\t   - Reemplaza el cuadro actual por negro.\n"
+"\t* Omitir cuadro\t   - Omite el cuadro actual.\n"
+"\t* Cuadro de espacio\t   - Añade un espacio .otio para los cuadros que faltan."
 
 msgid "Path Mappings"
 msgstr "Mapeo de Carpetas"
@@ -8538,6 +8554,24 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "task info falló"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Setear el directorio de audio para la secuencia."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Obtener el directorio de audio para la secuencia."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "Filtrar EDLs"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Repetir Cuadro"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Alternar Panel de Lista de Reproducción"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr "Cómo mostrar miniaturas de la línea de tiempo en paneles."
 
 #~ msgid "Complexity"
 #~ msgstr "Complejidad"

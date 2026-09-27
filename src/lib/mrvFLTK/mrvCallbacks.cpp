@@ -3504,6 +3504,7 @@ namespace mrv
         newItem->playback = playback;
         newItem->currentTime = currentTime;
         newItem->annotations = item->annotations;
+        newItem->voiceAnnotations = item->voiceAnnotations;
 
         ui->uiColorChannel->value(layer);
         ui->uiColorChannel->do_callback();
@@ -3552,6 +3553,7 @@ namespace mrv
         item->currentTime = time;
         item->mute = media->mute;
         item->volume = media->volume;
+        item->timeline.reset();
 
         // Annotations
         item->annotations = media->annotations;

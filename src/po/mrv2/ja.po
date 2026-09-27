@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-24 16:22-0300\n"
+"POT-Creation-Date: 2026-09-27 16:26-0300\n"
 "PO-Revision-Date: 2026-07-27 22:27+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -199,12 +199,6 @@ msgstr "ファイルシーケンスのオーディオファイル名を設定し
 
 msgid "Get file sequence audio file name."
 msgstr "ファイルシーケンスのオーディオファイル名を取得します。"
-
-msgid "Set file sequence audio directory."
-msgstr "ファイルシーケンスのオーディオディレクトリを設定します。"
-
-msgid "Get file sequence audio directory."
-msgstr "ファイルシーケンスのオーディオディレクトリを取得します。"
 
 msgid "Set maximum file sequence digits."
 msgstr "ファイルシーケンスの最大桁数を設定します。"
@@ -2312,9 +2306,6 @@ msgstr "前のファイル名"
 msgid "Next filename"
 msgstr "次のファイル名"
 
-msgid "Filter EDLs"
-msgstr "EDL をフィルタ"
-
 msgid "Select one or more B images."
 msgstr "1つ以上の B画像を選択します。"
 
@@ -3235,8 +3226,8 @@ msgid "Items selected must be on the same track."
 msgstr "選択されたアイテムは同じトラック上にある必要があります。"
 
 #, c++-format
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
-msgstr "選択されたアイテムはトラック上で連続している必要があります。左 {0}、右 {1}。"
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr "選択したアイテムはトラック上で連続している必要があります。左 {0}。右 {1}。"
 
 #, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
@@ -6339,14 +6330,23 @@ msgstr "CG"
 msgid "Studio"
 msgstr "スタジオ"
 
-msgid "Black Frame"
+msgid "Error Frame"
+msgstr "エラーフレーム"
+
+msgid "Hold Frame"
+msgstr "フレームを保持"
+
+msgid "Scratched Frame"
+msgstr "傷付きフレーム"
+
+msgid "Black  Frame"
 msgstr "黒フレーム"
 
-msgid "Repeat  Frame"
-msgstr "フレームの繰り返し"
+msgid "Skip Frame"
+msgstr "フレームをスキップ"
 
-msgid "Scratched  Frame"
-msgstr "傷のあるフレーム"
+msgid "Gap Frame"
+msgstr "ギャップフレーム"
 
 msgid "Always"
 msgstr "常に"
@@ -6785,12 +6785,6 @@ msgstr "比較パネル"
 msgid "How to display timeline thumbnails in Compare Panel."
 msgstr "比較パネルでタイムラインのサムネイルを表示する方法。"
 
-msgid "Playlist Panel"
-msgstr "プレイリストパネル"
-
-msgid "How to display timeline thumbnails in Playlist Panel."
-msgstr "プレイリストパネルでタイムラインのサムネイルを表示する方法。"
-
 msgid "Stereo Panel"
 msgstr "ステレオパネル"
 
@@ -7118,6 +7112,28 @@ msgstr "バージョンを検索する際に、最初または最後のバージ
 
 msgid "Missing Frame"
 msgstr "欠落フレーム"
+
+msgid "Black Frame"
+msgstr "黒フレーム"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"画像を読み込む際、この設定で欠落したフレームの処理方法を指定します（シーケンスの再読み込みまたはクローンが必要になる場合があります）：\n"
+"\t* エラーフレーム\t   - エラーを報告します。\n"
+"\t* フレームを保持\t   - 最後に読み込んだフレームを保持します。\n"
+"\t* 傷付きフレーム  - 最後に読み込んだフレームを保持しますが、\n"
+"                             赤い十字を描画します。\n"
+"\t* 黒フレーム\t   - 現在のフレームを黒で置き換えます。\n"
+"\t* フレームをスキップ\t   - 現在のフレームをスキップします。\n"
+"\t* ギャップフレーム\t   - 欠落したフレームに対して .otio Gap を追加します。"
 
 msgid "Path Mappings"
 msgstr "パスマッピング"
@@ -8310,6 +8326,24 @@ msgstr "host_statistics64 に失敗しました"
 
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "ファイルシーケンスのオーディオディレクトリを設定します。"
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "ファイルシーケンスのオーディオディレクトリを取得します。"
+
+#~ msgid "Filter EDLs"
+#~ msgstr "EDL をフィルタ"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "フレームの繰り返し"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "プレイリストパネル"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr "プレイリストパネルでタイムラインのサムネイルを表示する方法。"
 
 #~ msgid "Complexity"
 #~ msgstr "複雑さ"

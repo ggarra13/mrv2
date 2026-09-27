@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-24 16:22-0300\n"
+"POT-Creation-Date: 2026-09-27 16:26-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: ru\n"
@@ -199,12 +199,6 @@ msgstr "Установить звуковое имя файла."
 
 msgid "Get file sequence audio file name."
 msgstr "Найдите последовательность звукового файла."
-
-msgid "Set file sequence audio directory."
-msgstr "Установите аудиоканал файловой последовательности."
-
-msgid "Get file sequence audio directory."
-msgstr "Возьмите аудиоканал файловой последовательности."
 
 msgid "Set maximum file sequence digits."
 msgstr "Установите максимальные цифры последовательности файлов."
@@ -2347,9 +2341,6 @@ msgstr "Предыдущее имя файла"
 msgid "Next filename"
 msgstr "Следующее имя файла"
 
-msgid "Filter EDLs"
-msgstr "Фильтры EDL"
-
 msgid "Select one or more B images."
 msgstr "Выберите один или несколько изображений B."
 
@@ -3302,9 +3293,10 @@ msgid "Items selected must be on the same track."
 msgstr "Выбранные элементы должны находиться на одной дорожке."
 
 #, c++-format
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr ""
-"Выбранные элементы на дорожке должны быть смежными. Слева {0}. Справа {1}."
+"Выбранные элементы должны быть расположены на дорожке непрерывно. Слева {0}."
+" Справа {1}."
 
 #, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
@@ -6434,14 +6426,23 @@ msgstr "CG"
 msgid "Studio"
 msgstr "Studio"
 
-msgid "Black Frame"
-msgstr "Черная основа"
+msgid "Error Frame"
+msgstr "Кадр с ошибкой"
 
-msgid "Repeat  Frame"
-msgstr "Повторить"
+msgid "Hold Frame"
+msgstr "Удерживать кадр"
 
-msgid "Scratched  Frame"
-msgstr "Сломанная основа"
+msgid "Scratched Frame"
+msgstr "Поцарапанный кадр"
+
+msgid "Black  Frame"
+msgstr "Чёрный кадр"
+
+msgid "Skip Frame"
+msgstr "Пропустить кадр"
+
+msgid "Gap Frame"
+msgstr "Кадр с пропуском"
 
 msgid "Always"
 msgstr "Всегда"
@@ -6909,12 +6910,6 @@ msgstr "Панель сравнения"
 msgid "How to display timeline thumbnails in Compare Panel."
 msgstr "Как отображать миниатюры таймлайна на панели сравнения."
 
-msgid "Playlist Panel"
-msgstr "Панель плейлиста"
-
-msgid "How to display timeline thumbnails in Playlist Panel."
-msgstr "Как отображать миниатюры таймлайна на панели плейлиста."
-
 msgid "Stereo Panel"
 msgstr "Стереопанель"
 
@@ -7280,6 +7275,28 @@ msgstr ""
 
 msgid "Missing Frame"
 msgstr "Недостающие рамки"
+
+msgid "Black Frame"
+msgstr "Черная основа"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"При загрузке изображений этот параметр определяет, что делать с отсутствующими кадрами (может потребоваться перезагрузить или клонировать последовательность):\n"
+"\t* Кадр с ошибкой\t   - Сообщает об ошибке.\n"
+"\t* Удерживать кадр\t   - Удерживает последний прочитанный кадр.\n"
+"\t* Поцарапанный кадр  - Удерживает последний прочитанный кадр,\n"
+"                             но рисует поверх него красный крест.\n"
+"\t* Чёрный кадр\t   - Заменяет текущий кадр чёрным.\n"
+"\t* Пропустить кадр\t   - Пропускает текущий кадр.\n"
+"\t* Кадр с пропуском\t   - Добавляет .otio Gap для отсутствующих кадров."
 
 msgid "Path Mappings"
 msgstr "Пути картирования"
@@ -8496,6 +8513,24 @@ msgstr "shop_statistics64 не сработал"
 
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Установите аудиоканал файловой последовательности."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Возьмите аудиоканал файловой последовательности."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "Фильтры EDL"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Повторить"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Панель плейлиста"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr "Как отображать миниатюры таймлайна на панели плейлиста."
 
 #~ msgid "Complexity"
 #~ msgstr "Сложность"

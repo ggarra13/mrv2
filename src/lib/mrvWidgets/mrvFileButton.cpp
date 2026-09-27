@@ -201,9 +201,6 @@ namespace mrv
                 menu.add(
                     _("&File/&Refresh Cache"), 0,
                     (Fl_Callback*)refresh_file_cache_cb, 0, 0);
-                menu.add(
-                    _("&File/Re&load Media"), 0,
-                    (Fl_Callback*)refresh_media_cb, 0, 0);
 
                 menu.add("&Order/Loaded", 0,
                          (Fl_Callback*)file_sort_loaded_cb, 0, 0);

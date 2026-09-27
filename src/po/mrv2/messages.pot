@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.7.7\n"
+"Project-Id-Version: mrv2 v1.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-24 16:22-0300\n"
+"POT-Creation-Date: 2026-09-27 16:26-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,12 +185,6 @@ msgid "Set file sequence audio file name."
 msgstr ""
 
 msgid "Get file sequence audio file name."
-msgstr ""
-
-msgid "Set file sequence audio directory."
-msgstr ""
-
-msgid "Get file sequence audio directory."
 msgstr ""
 
 msgid "Set maximum file sequence digits."
@@ -2200,9 +2194,6 @@ msgstr ""
 msgid "Next filename"
 msgstr ""
 
-msgid "Filter EDLs"
-msgstr ""
-
 msgid "Select one or more B images."
 msgstr ""
 
@@ -3076,7 +3067,7 @@ msgid "Items selected must be on the same track."
 msgstr ""
 
 #, c++-format
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr ""
 
 #, c++-format
@@ -6022,13 +6013,22 @@ msgstr ""
 msgid "Studio"
 msgstr ""
 
-msgid "Black Frame"
+msgid "Error Frame"
 msgstr ""
 
-msgid "Repeat  Frame"
+msgid "Hold Frame"
 msgstr ""
 
-msgid "Scratched  Frame"
+msgid "Scratched Frame"
+msgstr ""
+
+msgid "Black  Frame"
+msgstr ""
+
+msgid "Skip Frame"
+msgstr ""
+
+msgid "Gap Frame"
 msgstr ""
 
 msgid "Always"
@@ -6458,12 +6458,6 @@ msgstr ""
 msgid "How to display timeline thumbnails in Compare Panel."
 msgstr ""
 
-msgid "Playlist Panel"
-msgstr ""
-
-msgid "How to display timeline thumbnails in Playlist Panel."
-msgstr ""
-
 msgid "Stereo Panel"
 msgstr ""
 
@@ -6779,6 +6773,21 @@ msgid ""
 msgstr ""
 
 msgid "Missing Frame"
+msgstr ""
+
+msgid "Black Frame"
+msgstr ""
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames "
+"(you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
 msgstr ""
 
 msgid "Path Mappings"
