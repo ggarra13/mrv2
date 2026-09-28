@@ -28,6 +28,7 @@ v1.7.8
 - Core/UI: Thumbnail cache is now independant from the main caches.
 - Core: Cleaned up Timeline code.
 - Core: Fixed opening of https:// movies due to incorrect handling of cacert.pem and https:// protocol.  Now File->Open->URL Movie should work again.
+- Core: Synced to tlRender v0.23.0, with several modifications.
 
 Fixes
 -----

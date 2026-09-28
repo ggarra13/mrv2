@@ -313,7 +313,7 @@ endif()
 add_definitions(
     -DNOMINMAX
     -DMRV2_VERSION="${mrv2_VERSION}"
-    -DTLRENDER_VERSION="${tlRender_VERSION}"
+    -DTLRENDER_VERSION="${TLRENDER_VERSION}"
     -DFLTK_GIT_TAG="${FLTK_GIT_TAG}"
 )
 

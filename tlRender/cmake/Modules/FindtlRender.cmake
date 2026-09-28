@@ -27,7 +27,7 @@
 #
 # * tlRender
 
-set(tlRender_VERSION 0.0.1)
+set(TLRENDER_VERSION 0.23.0)
 
 #
 # Use this variable to debug where libraries are found
