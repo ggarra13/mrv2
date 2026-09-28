@@ -73,6 +73,19 @@ namespace mrv
         bool saveHDR = string::compare(
             extension, ".hdr", string::Compare::CaseInsensitive);
 
+        timeline::OCIOOptions savedOCIOOptions;
+        bool restoreOCIOOptions = false;
+
+        if (saveEXR)
+        {
+            savedOCIOOptions = view->getOCIOOptions();
+            timeline::OCIOOptions ocioOptions = savedOCIOOptions;
+            restoreOCIOOptions = true;
+
+            ocioOptions.enabled = false;
+            view->setOCIOOptions(ocioOptions);
+        }
+
         try
         {
 
@@ -548,7 +561,7 @@ namespace mrv
             {
                 const std::string id = ocio::getInteropID(false);
                 if (!id.empty())
-                    tags["colorInteropID"] = id;
+                    tags["ColorInteropID"] = id;
             }
 
             outputImage->setTags(tags);
@@ -559,6 +572,12 @@ namespace mrv
             LOG_ERROR(e.what());
             ret = -1;
         }
+
+        if (restoreOCIOOptions)
+        {
+            view->setOCIOOptions(savedOCIOOptions);
+        }
+
         return ret;
     }
 

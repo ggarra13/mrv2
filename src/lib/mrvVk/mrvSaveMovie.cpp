@@ -132,8 +132,10 @@ namespace mrv
         std::string newFile = directory + baseName + number + suffix + extension;
 
 
+        timeline::OCIOOptions savedOCIOOptions;
         timeline::HDROptions savedHdrOptions;
         bool restoreHdrOptions = false;
+        bool restoreOCIOOptions = false;
 
         try
         {
@@ -383,12 +385,24 @@ namespace mrv
             //       concepts of white.  Also, OpenColorIO and OpenEXR cannot
             //       parse HDR10+ metadata.
             savedHdrOptions = view->getHDROptions();
-            timeline::HDROptions linearOptions = savedHdrOptions;
-            linearOptions.exportMode = options.exportMode;
-            view->setHDROptions(linearOptions);
+            savedOCIOOptions = view->getOCIOOptions();
+            timeline::OCIOOptions ocioOptions = savedOCIOOptions;
+
+            timeline::HDROptions hdrOptions = savedHdrOptions;
+            hdrOptions.exportMode = options.exportMode;
+            view->setHDROptions(hdrOptions);
             restoreHdrOptions = true;
+
+            if (saveEXR &&
+                hdrOptions.exportMode != timeline::HDRExportMode::BakedHDR)
+            {
+                ocioOptions.enabled = false;
+                view->setOCIOOptions(ocioOptions);
+                restoreOCIOOptions = true;
+            }
+
             msg = string::Format(_("HDR Export mode {0}")).
-                  arg(linearOptions.exportMode);
+                  arg(hdrOptions.exportMode);
             LOG_STATUS(msg);
 
             bool interactive = view->visible_r();
@@ -1029,7 +1043,7 @@ namespace mrv
                         {
                             const std::string id = ocio::getInteropID(false);
                             if (!id.empty())
-                                tags["colorInteropID"] = id;
+                                tags["ColorInteropID"] = id;
                         }
                         outputImage->setTags(tags);
 
@@ -1075,6 +1089,10 @@ namespace mrv
         if (restoreHdrOptions)
         {
             view->setHDROptions(savedHdrOptions);
+        }
+        if (restoreOCIOOptions)
+        {
+            view->setOCIOOptions(savedOCIOOptions);
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());

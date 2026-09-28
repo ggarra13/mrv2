@@ -85,13 +85,13 @@ namespace mrv
                     };
 
             /*
-             * 1. OpenEXR colorInteropID
+             * 1. OpenEXR ColorInteropID (must be uppercase)
              *
              * This is the strongest declaration because it is explicitly an
              * interoperable color-space identifier rather than something we
              * have inferred from primaries.
              */
-            if (const auto i = tags.find("colorInteropID");
+            if (const auto i = tags.find("ColorInteropID");
                 i != tags.end() && !i->second.empty())
             {
                 declared = true;

@@ -124,7 +124,25 @@ namespace mrv
         const std::string& suffix = path.getSuffix();
         const std::string extension = string::toLower(path.getExtension());
 
+        bool saveEXR = (extension == ".exr" ||
+                        extension == ".sxr");
+        bool saveHDR = (extension == ".hdr");
+        bool saveJPEG = (extension == ".jpg" || extension == ".jpeg");
+
         std::string newFile = directory + baseName + number + suffix + extension;
+
+        timeline::OCIOOptions savedOCIOOptions;
+        bool restoreOCIOOptions = false;
+
+        if (saveEXR)
+        {
+            savedOCIOOptions = view->getOCIOOptions();
+            timeline::OCIOOptions ocioOptions = savedOCIOOptions;
+            restoreOCIOOptions = true;
+
+            ocioOptions.enabled = false;
+            view->setOCIOOptions(ocioOptions);
+        }
 
         try
         {
@@ -341,11 +359,6 @@ namespace mrv
 #endif
 
             path = file::Path(newFile);
-
-            bool saveEXR = (extension == ".exr" ||
-                            extension == ".sxr");
-            bool saveHDR = (extension == ".hdr");
-            bool saveJPEG = (extension == ".jpg" || extension == ".jpeg");
 
             if (time::compareExact(videoTime, time::invalidTimeRange))
                 videoTime = audioTime;
@@ -1086,7 +1099,7 @@ namespace mrv
                         {
                             const std::string id = ocio::getInteropID(false);
                             if (!id.empty())
-                                tags["colorInteropID"] = id;
+                                tags["ColorInteropID"] = id;
                         }
                         outputImage->setTags(tags);
 
@@ -1125,6 +1138,10 @@ namespace mrv
             LOG_ERROR(e.what());
         }
 
+        if (restoreOCIOOptions)
+        {
+            view->setOCIOOptions(savedOCIOOptions);
+        }
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
         view->setPresentationMode(presentation);

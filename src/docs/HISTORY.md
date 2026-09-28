@@ -29,6 +29,7 @@ v1.7.8
 - Core: Cleaned up Timeline code.
 - Core: Fixed opening of https:// movies due to incorrect handling of cacert.pem and https:// protocol.  Now File->Open->URL Movie should work again.
 - Core: Synced to tlRender v0.23.0, with several modifications.
+- Core: Made ColorInteropID work both saving and loading.
 
 Fixes
 -----

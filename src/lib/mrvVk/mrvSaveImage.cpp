@@ -417,21 +417,34 @@ namespace mrv
                 view->setSaveOverlay(false);
             }
 
+            timeline::OCIOOptions savedOCIOOptions;
             timeline::HDROptions savedHdrOptions;
             bool restoreHdrOptions = false;
+            bool restoreOCIOOptions = false;
 
             // \@bug:
             //       Note that libplacebo and OpenColorIO have different
             //       concepts of white.  Also, OpenColorIO and OpenEXR cannot
             //       parse HDR10+ or DolbyVision metadata.
             savedHdrOptions = view->getHDROptions();
-            timeline::HDROptions linearOptions = savedHdrOptions;
-            linearOptions.exportMode = options.exportMode;
-            view->setHDROptions(linearOptions);
+            timeline::HDROptions hdrOptions = savedHdrOptions;
+
+            savedOCIOOptions = view->getOCIOOptions();
+            timeline::OCIOOptions ocioOptions = savedOCIOOptions;
+
+            hdrOptions.exportMode = options.exportMode;
+            view->setHDROptions(hdrOptions);
             restoreHdrOptions = true;
 
+            if (hdrOptions.exportMode != timeline::HDRExportMode::BakedHDR)
+            {
+                ocioOptions.enabled = false;
+                view->setOCIOOptions(ocioOptions);
+                restoreOCIOOptions = true;
+            }
+
             msg = string::Format(_("HDR Export mode {0}")).
-                  arg(linearOptions.exportMode);
+                  arg(hdrOptions.exportMode);
             LOG_STATUS(msg);
 
             view->redraw();
@@ -573,16 +586,19 @@ namespace mrv
             {
                 const std::string id = ocio::getInteropID(false);
                 if (!id.empty())
-                    tags["colorInteropID"] = id;
+                    tags["ColorInteropID"] = id;
             }
 
             outputImage->setTags(tags);
             writer->writeVideo(currentTime, outputImage);
 
+            if (restoreOCIOOptions)
+            {
+                view->setOCIOOptions(savedOCIOOptions);
+            }
             if (restoreHdrOptions)
             {
                 view->setHDROptions(savedHdrOptions);
-                view->redraw();
             }
         }
         catch (const std::exception& e)
@@ -593,6 +609,7 @@ namespace mrv
 
         // Turn on tonemapping so libplacebo gets used.
         view->setToneMapping(true);
+        view->redraw();
 
         return ret;
     }
