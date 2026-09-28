@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-27 16:50-0300\n"
+"POT-Creation-Date: 2026-09-28 06:12-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -8554,26 +8554,6 @@ msgstr "host_statistik64 fehlgeschlagen"
 msgid "task info failed"
 msgstr "Task-Info fehlgeschlagen"
 
-#~ msgid "Repeat  Frame"
-#~ msgstr "Rahmen wiederholen"
-
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "Dateisequenz-Audio-Verzeichnis festlegen."
-
-#~ msgid "Get file sequence audio directory."
-#~ msgstr "Datei-Sequenz-Audio-Verzeichnis."
-
-#~ msgid "Filter EDLs"
-#~ msgstr "EDL-Filter"
-
-#~ msgid "Playlist Panel"
-#~ msgstr "Panel de listas de reproducción"
-
-#~ msgid "How to display timeline thumbnails in Playlist Panel."
-#~ msgstr ""
-#~ "Cómo mostrar las miniaturas de la línea de tiempo en el panel de listas "
-#~ "de reproducción."
-
 #~ msgid "Complexity"
 #~ msgstr "Komplexität"
 
@@ -8617,6 +8597,26 @@ msgstr "Task-Info fehlgeschlagen"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Ungültige Schriftart für die Texterstellung"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Rahmen wiederholen"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Dateisequenz-Audio-Verzeichnis festlegen."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Datei-Sequenz-Audio-Verzeichnis."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "EDL-Filter"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Panel de listas de reproducción"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr ""
+#~ "Cómo mostrar las miniaturas de la línea de tiempo en el panel de listas "
+#~ "de reproducción."
 
 #~ msgid "Linearize EXR"
 #~ msgstr "EXR linearisieren"

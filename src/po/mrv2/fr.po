@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-27 16:50-0300\n"
+"POT-Creation-Date: 2026-09-28 06:12-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: fr\n"
@@ -6466,7 +6466,6 @@ msgstr "Image d'erreur"
 msgid "Hold Frame"
 msgstr "Maintenir l'image"
 
-#, fuzzy
 msgid "Scratched Frame"
 msgstr "Image rayée"
 
@@ -8587,26 +8586,6 @@ msgstr "host_statistics64 a échoué"
 msgid "task info failed"
 msgstr "l'information de la tâche a échoué"
 
-#~ msgid "Repeat  Frame"
-#~ msgstr "Répéter le cadre"
-
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "Définir le répertoire audio de la séquence de fichiers."
-
-#~ msgid "Get file sequence audio directory."
-#~ msgstr "Obtenir le répertoire audio de séquence de fichiers."
-
-#~ msgid "Filter EDLs"
-#~ msgstr "Filtre EDLs"
-
-#~ msgid "Playlist Panel"
-#~ msgstr "Panneau des listes de lecture"
-
-#~ msgid "How to display timeline thumbnails in Playlist Panel."
-#~ msgstr ""
-#~ "Comment afficher les vignettes de la timeline dans le panneau des listes "
-#~ "de lecture."
-
 #~ msgid "Complexity"
 #~ msgstr "Complexité"
 
@@ -8650,6 +8629,26 @@ msgstr "l'information de la tâche a échoué"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Police invalide pour le dessin de texte"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Répéter le cadre"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Définir le répertoire audio de la séquence de fichiers."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Obtenir le répertoire audio de séquence de fichiers."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "Filtre EDLs"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Panneau des listes de lecture"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr ""
+#~ "Comment afficher les vignettes de la timeline dans le panneau des listes "
+#~ "de lecture."
 
 #~ msgid "Linearize EXR"
 #~ msgstr "Linéariser l’EXR"

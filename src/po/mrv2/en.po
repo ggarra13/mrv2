@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-27 16:50-0300\n"
+"POT-Creation-Date: 2026-09-28 06:12-0300\n"
 "PO-Revision-Date: 2024-05-09 12:13-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -8482,24 +8482,6 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "task info failed"
 
-#~ msgid "Repeat  Frame"
-#~ msgstr "Repeat  Frame"
-
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "Set file sequence audio directory."
-
-#~ msgid "Get file sequence audio directory."
-#~ msgstr "Get file sequence audio directory."
-
-#~ msgid "Filter EDLs"
-#~ msgstr "Filter EDLs"
-
-#~ msgid "Playlist Panel"
-#~ msgstr "Playlist Panel"
-
-#~ msgid "How to display timeline thumbnails in Playlist Panel."
-#~ msgstr "How to display timeline thumbnails in Playlist Panel."
-
 #~ msgid "Complexity"
 #~ msgstr "Complexity"
 
@@ -8542,6 +8524,24 @@ msgstr "task info failed"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Invalid font for text drawing"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Repeat  Frame"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Set file sequence audio directory."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Get file sequence audio directory."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "Filter EDLs"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Playlist Panel"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr "How to display timeline thumbnails in Playlist Panel."
 
 #~ msgid "Linearize EXR"
 #~ msgstr "Linearize EXR"

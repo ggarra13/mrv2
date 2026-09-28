@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-27 16:50-0300\n"
+"POT-Creation-Date: 2026-09-28 06:12-0300\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -8399,24 +8399,6 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
 
-#~ msgid "Repeat  Frame"
-#~ msgstr "फ्रेम को दोहराएँ"
-
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री सेट करें."
-
-#~ msgid "Get file sequence audio directory."
-#~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री प्राप्त करें."
-
-#~ msgid "Filter EDLs"
-#~ msgstr "फ़िल्टर ईएलएलएल्स"
-
-#~ msgid "Playlist Panel"
-#~ msgstr "प्लेलिस्ट पैनल"
-
-#~ msgid "How to display timeline thumbnails in Playlist Panel."
-#~ msgstr "प्लेलिस्ट पैनल में टाइमलाइन थंबनेल कैसे प्रदर्शित करें।"
-
 #~ msgid "Complexity"
 #~ msgstr "जटिलता"
 
@@ -8458,6 +8440,24 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "फ्रेम को दोहराएँ"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री सेट करें."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री प्राप्त करें."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "फ़िल्टर ईएलएलएल्स"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "प्लेलिस्ट पैनल"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr "प्लेलिस्ट पैनल में टाइमलाइन थंबनेल कैसे प्रदर्शित करें।"
 
 #~ msgid "Linearize EXR"
 #~ msgstr "EXR को रैखिक करें"

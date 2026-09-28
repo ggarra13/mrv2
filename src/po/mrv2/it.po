@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-27 16:50-0300\n"
+"POT-Creation-Date: 2026-09-28 06:12-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: it\n"
@@ -8564,25 +8564,6 @@ msgstr "host_statistics64 non riuscito"
 msgid "task info failed"
 msgstr "Informazione dell'attività non riuscita"
 
-#~ msgid "Repeat  Frame"
-#~ msgstr "Ripeti il telaio"
-
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "Imposta la directory audio sequenza file."
-
-#~ msgid "Get file sequence audio directory."
-#~ msgstr "Ottieni la directory audio della sequenza di file."
-
-#~ msgid "Filter EDLs"
-#~ msgstr "Filtri EDL"
-
-#~ msgid "Playlist Panel"
-#~ msgstr "Pannello delle playlist"
-
-#~ msgid "How to display timeline thumbnails in Playlist Panel."
-#~ msgstr ""
-#~ "Come visualizzare le miniature della timeline nel pannello delle playlist."
-
 #~ msgid "Complexity"
 #~ msgstr "Complexità"
 
@@ -8626,6 +8607,25 @@ msgstr "Informazione dell'attività non riuscita"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Tipo di carattere non valido per il disegno di testo"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Ripeti il telaio"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Imposta la directory audio sequenza file."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Ottieni la directory audio della sequenza di file."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "Filtri EDL"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Pannello delle playlist"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr ""
+#~ "Come visualizzare le miniature della timeline nel pannello delle playlist."
 
 #~ msgid "Linearize EXR"
 #~ msgstr "Linearizza EXR"

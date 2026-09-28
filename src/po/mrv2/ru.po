@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-27 16:50-0300\n"
+"POT-Creation-Date: 2026-09-28 06:12-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: ru\n"
@@ -8538,24 +8538,6 @@ msgstr "shop_statistics64 не сработал"
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
 
-#~ msgid "Repeat  Frame"
-#~ msgstr "Повторить"
-
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "Установите аудиоканал файловой последовательности."
-
-#~ msgid "Get file sequence audio directory."
-#~ msgstr "Возьмите аудиоканал файловой последовательности."
-
-#~ msgid "Filter EDLs"
-#~ msgstr "Фильтры EDL"
-
-#~ msgid "Playlist Panel"
-#~ msgstr "Панель плейлиста"
-
-#~ msgid "How to display timeline thumbnails in Playlist Panel."
-#~ msgstr "Как отображать миниатюры таймлайна на панели плейлиста."
-
 #~ msgid "Complexity"
 #~ msgstr "Сложность"
 
@@ -8599,6 +8581,24 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Неверный шрифт для текстового рисунка"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Повторить"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Установите аудиоканал файловой последовательности."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Возьмите аудиоканал файловой последовательности."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "Фильтры EDL"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Панель плейлиста"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr "Как отображать миниатюры таймлайна на панели плейлиста."
 
 #~ msgid "Linearize EXR"
 #~ msgstr "Линеаризовать EXR"

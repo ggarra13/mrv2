@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-27 16:50-0300\n"
+"POT-Creation-Date: 2026-09-28 06:12-0300\n"
 "PO-Revision-Date: 2026-07-27 22:27+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -8501,24 +8501,6 @@ msgstr "host_statistics64 に失敗しました"
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました"
 
-#~ msgid "Repeat  Frame"
-#~ msgstr "フレームの繰り返し"
-
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "ファイルシーケンスのオーディオディレクトリを設定します。"
-
-#~ msgid "Get file sequence audio directory."
-#~ msgstr "ファイルシーケンスのオーディオディレクトリを取得します。"
-
-#~ msgid "Filter EDLs"
-#~ msgstr "EDL をフィルタ"
-
-#~ msgid "Playlist Panel"
-#~ msgstr "プレイリストパネル"
-
-#~ msgid "How to display timeline thumbnails in Playlist Panel."
-#~ msgstr "プレイリストパネルでタイムラインのサムネイルを表示する方法。"
-
 #~ msgid "Complexity"
 #~ msgstr "複雑さ"
 
@@ -8561,6 +8543,24 @@ msgstr "タスク情報の取得に失敗しました"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "テキスト描画用の無効なフォント"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "フレームの繰り返し"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "ファイルシーケンスのオーディオディレクトリを設定します。"
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "ファイルシーケンスのオーディオディレクトリを取得します。"
+
+#~ msgid "Filter EDLs"
+#~ msgstr "EDL をフィルタ"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "プレイリストパネル"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr "プレイリストパネルでタイムラインのサムネイルを表示する方法。"
 
 #~ msgid "Linearize EXR"
 #~ msgstr "EXRを線形化"
