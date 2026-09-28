@@ -546,9 +546,9 @@ namespace mrv
 
             if (saveEXR)
             {
-                std::string ics = ocio::ics();
-                if (!ics.empty() && ics != _("None"))
-                    tags["colorInteropID"] = ics;
+                const std::string id = ocio::getInteropID(false);
+                if (!id.empty())
+                    tags["colorInteropID"] = id;
             }
 
             outputImage->setTags(tags);

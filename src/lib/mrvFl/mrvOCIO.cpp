@@ -37,6 +37,7 @@ namespace mrv
 
         OCIO::ConstConfigRcPtr OCIOconfig = nullptr;
 
+
         std::string autoICS(bool& autoUnmatched,
                             std::string& autoName,
                             std::string& autoSource)
@@ -1629,5 +1630,84 @@ namespace mrv
             }
             return true;
         }
+
+        /**
+         * Resolves the Interop ID for a given color space in an OCIO config according to
+         * official OCIO file-saving guidelines.
+         *
+         * @param fallbackToUnknown  If true, returns "unknown" when resolution fails.
+         *                           If false, returns an empty string "".
+         * @return                   The interop ID string, "unknown", or "".
+         */
+        std::string getInteropID(bool fallbackToUnknown)
+        {
+            std::string ics = ocio::ics();
+            if (!OCIOconfig || ics.empty())
+            {
+                return fallbackToUnknown ? "unknown" : "";
+            }
+
+            // ------------------------------------------------------------------------
+            // Step 1: Check if the config author provided an explicit interop ID
+            // ------------------------------------------------------------------------
+            OCIO::ConstColorSpaceRcPtr cs = OCIOconfig->getColorSpace(ics.c_str());
+            if (cs)
+            {
+                const char* interopID = cs->getInteropID();
+                if (interopID && *interopID != '\0')
+                {
+                    return interopID;
+                }
+            }
+
+            // ------------------------------------------------------------------------
+            // Step 2: Search for an equivalent match in the built-in Studio config
+            // ------------------------------------------------------------------------
+            try
+            {
+                OCIO::ConstConfigRcPtr builtinConfig =
+                    OCIO::Config::CreateFromBuiltinConfig("studio-config-latest");
+
+                if (builtinConfig)
+                {
+                    const char* builtinCSName =
+                        OCIO::Config::IdentifyBuiltinColorSpace(OCIOconfig,
+                                                                builtinConfig,
+                                                                ics.c_str());
+
+                    if (builtinCSName && *builtinCSName != '\0')
+                    {
+                        OCIO::ConstColorSpaceRcPtr builtinCS = builtinConfig->getColorSpace(builtinCSName);
+                        if (builtinCS)
+                        {
+                            const char* builtinInteropID = builtinCS->getInteropID();
+                            if (builtinInteropID && *builtinInteropID != '\0')
+                            {
+                                return builtinInteropID;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (...)
+            {
+                // Ignore potential resolution or creation exceptions and continue to Step 3
+            }
+
+            // ------------------------------------------------------------------------
+            // Step 3: Attempt to generate a local ID (requires a named config)
+            // ------------------------------------------------------------------------
+            const char* configName = OCIOconfig->getName();
+            if (configName && *configName != '\0')
+            {
+                return std::string(configName) + ":" + ics;
+            }
+
+            // ------------------------------------------------------------------------
+            // Fallback: Return "unknown" or empty string to prevent writing invalid IDs
+            // ------------------------------------------------------------------------
+            return fallbackToUnknown ? "unknown" : "";
+        }
+
     } // namespace ocio
 } // namespace mrv
