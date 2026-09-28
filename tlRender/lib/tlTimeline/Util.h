@@ -21,8 +21,8 @@ namespace tl
         getExtensions(const std::shared_ptr<system::Context>&, int type);
 
         //! Convert frames to ranges.
-        std::vector<otime::TimeRange>
-            toRanges(std::vector<otime::RationalTime>);
+        std::vector<OTIO_NS::TimeRange>
+            toRanges(std::vector<OTIO_NS::RationalTime>);
 
         //! Loop a time.
         OTIO_NS::RationalTime loop(
@@ -41,7 +41,7 @@ namespace tl
         TLRENDER_ENUM_SERIALIZE(CacheDirection);
 
         //! Loop the cache time range.
-        std::vector<otime::TimeRange> loopCache(
+        std::vector<OTIO_NS::TimeRange> loopCache(
             const OTIO_NS::TimeRange&, const OTIO_NS::TimeRange&, CacheDirection);
 
         //! Get the root (highest parent).
@@ -51,7 +51,7 @@ namespace tl
         template <typename T> const T* getParent(const OTIO_NS::Item*);
 
         //! Get the duration of all tracks of the same kind.
-        std::optional<otime::RationalTime>
+        std::optional<OTIO_NS::RationalTime>
         getDuration(const OTIO_NS::Timeline*, const std::string& kind);
 
         //! Get the time range of a timeline.

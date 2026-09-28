@@ -24,10 +24,10 @@ namespace tl
             float audioPercentage = 0.F;
 
             //! Cached video frames.
-            std::vector<otime::TimeRange> videoFrames;
+            std::vector<OTIO_NS::TimeRange> videoFrames;
 
             //! Cached audio frames.
-            std::vector<otime::TimeRange> audioFrames;
+            std::vector<OTIO_NS::TimeRange> audioFrames;
 
             bool operator==(const PlayerCacheInfo&) const;
             bool operator!=(const PlayerCacheInfo&) const;
@@ -166,7 +166,7 @@ namespace tl
             OTIO_NS::RationalTime getCurrentTime() const;
 
             //! Observe the current time.
-            std::shared_ptr<observer::IValue<otime::RationalTime> >
+            std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
             observeCurrentTime() const;
 
             //! Seek to the given time.
@@ -196,7 +196,7 @@ namespace tl
             OTIO_NS::TimeRange getInOutRange() const;
 
             //! Observe the in/out points range.
-            std::shared_ptr<observer::IValue<otime::TimeRange> >
+            std::shared_ptr<observer::IValue<OTIO_NS::TimeRange> >
             observeInOutRange() const;
 
             //! Set the in/out points range.

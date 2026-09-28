@@ -243,7 +243,7 @@ namespace tl
             const OTIO_NS::RationalTime& inc, const bool clearFrame)
         {
             const OTIO_NS::TimeRange& timeRange = timeline->getTimeRange();
-            for (otime::RationalTime time = start; time <= end; time += inc)
+            for (OTIO_NS::RationalTime time = start; time <= end; time += inc)
             {
                 const auto i = thread.videoCache.find(time);
                 if (i == thread.videoCache.end())
@@ -645,7 +645,7 @@ namespace tl
                 const size_t videoCacheMax = getVideoCacheMax();
                 const size_t audioCacheMax = getAudioCacheMax();
 
-                std::vector<otime::RationalTime> videoCacheFrames;
+                std::vector<OTIO_NS::RationalTime> videoCacheFrames;
                 for (const auto& i : thread.videoCache)
                 {
                     videoCacheFrames.push_back(i.first);
@@ -668,7 +668,7 @@ namespace tl
                         audioCacheKeys.push_back(i.first);
                     }
                 }
-                std::vector<otime::RationalTime> audioCacheFrames;
+                std::vector<OTIO_NS::RationalTime> audioCacheFrames;
                 for (const auto& key : audioCacheKeys)
                 {
                     audioCacheFrames.push_back(OTIO_NS::RationalTime(key, 1.0));

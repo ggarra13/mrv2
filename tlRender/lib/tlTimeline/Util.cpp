@@ -53,10 +53,10 @@ namespace tl
             return out;
         }
 
-        std::vector<otime::TimeRange>
-        toRanges(std::vector<otime::RationalTime> frames)
+        std::vector<OTIO_NS::TimeRange>
+        toRanges(std::vector<OTIO_NS::RationalTime> frames)
         {
-            std::vector<otime::TimeRange> out;
+            std::vector<OTIO_NS::TimeRange> out;
             if (!frames.empty())
             {
                 std::sort(frames.begin(), frames.end());
@@ -117,11 +117,11 @@ namespace tl
         TLRENDER_ENUM_IMPL(CacheDirection, "Forward", "Reverse");
         TLRENDER_ENUM_SERIALIZE_IMPL(CacheDirection);
 
-        std::vector<otime::TimeRange> loopCache(
+        std::vector<OTIO_NS::TimeRange> loopCache(
             const OTIO_NS::TimeRange& value, const OTIO_NS::TimeRange& range,
             CacheDirection direction)
         {
-            std::vector<otime::TimeRange> out;
+            std::vector<OTIO_NS::TimeRange> out;
             const OTIO_NS::RationalTime min =
                 std::min(value.duration(), range.duration());
             switch (direction)
@@ -222,10 +222,10 @@ namespace tl
             return out;
         }
 
-        std::optional<otime::RationalTime>
+        std::optional<OTIO_NS::RationalTime>
         getDuration(const OTIO_NS::Timeline* otioTimeline, const std::string& kind)
         {
-            std::optional<otime::RationalTime> out;
+            std::optional<OTIO_NS::RationalTime> out;
             OTIO_NS::ErrorStatus errorStatus;
             for (auto track :
                  otioTimeline->find_children<OTIO_NS::Track>(&errorStatus))

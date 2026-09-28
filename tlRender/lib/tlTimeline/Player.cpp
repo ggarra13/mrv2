@@ -125,11 +125,11 @@ namespace tl
                 p.timeline->getTimeRange().duration().rate());
             p.playback = observer::Value<Playback>::create(Playback::Stop);
             p.loop = observer::Value<Loop>::create(Loop::Loop);
-            p.currentTime = observer::Value<otime::RationalTime>::create(
+            p.currentTime = observer::Value<OTIO_NS::RationalTime>::create(
                 playerOptions.currentTime != time::invalidTime
                     ? playerOptions.currentTime
                     : p.timeline->getTimeRange().start_time());
-            p.inOutRange = observer::Value<otime::TimeRange>::create(
+            p.inOutRange = observer::Value<OTIO_NS::TimeRange>::create(
                 p.timeline->getTimeRange());
             p.compare = observer::List<std::shared_ptr<Timeline> >::create();
             p.compareTime = observer::Value<CompareTimeMode>::create(
@@ -632,7 +632,7 @@ namespace tl
             return _p->currentTime->get();
         }
 
-        std::shared_ptr<observer::IValue<otime::RationalTime> >
+        std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
         Player::observeCurrentTime() const
         {
             return _p->currentTime;
@@ -762,7 +762,7 @@ namespace tl
             return _p->inOutRange->get();
         }
 
-        std::shared_ptr<observer::IValue<otime::TimeRange> >
+        std::shared_ptr<observer::IValue<OTIO_NS::TimeRange> >
         Player::observeInOutRange() const
         {
             return _p->inOutRange;
@@ -782,7 +782,7 @@ namespace tl
         void Player::setInPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time(
+            setInOutRange(OTIO_NS::TimeRange::range_from_start_end_time(
                 p.currentTime->get(),
                 p.inOutRange->get().end_time_exclusive()));
         }
@@ -790,7 +790,7 @@ namespace tl
         void Player::resetInPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time(
+            setInOutRange(OTIO_NS::TimeRange::range_from_start_end_time(
                 p.timeline->getTimeRange().start_time(),
                 p.inOutRange->get().end_time_exclusive()));
         }
@@ -798,14 +798,14 @@ namespace tl
         void Player::setOutPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time_inclusive(
+            setInOutRange(OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                 p.inOutRange->get().start_time(), p.currentTime->get()));
         }
 
         void Player::resetOutPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time_inclusive(
+            setInOutRange(OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                 p.inOutRange->get().start_time(),
                 p.timeline->getTimeRange().end_time_inclusive()));
         }
