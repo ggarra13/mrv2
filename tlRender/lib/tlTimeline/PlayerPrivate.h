@@ -76,8 +76,8 @@ namespace tl
             std::shared_ptr<observer::Value<double> > speed;
             std::shared_ptr<observer::Value<Playback> > playback;
             std::shared_ptr<observer::Value<Loop> > loop;
-            std::shared_ptr<observer::Value<otime::RationalTime> > currentTime;
-            std::shared_ptr<observer::Value<otime::TimeRange> > inOutRange;
+            std::shared_ptr<observer::Value<OTIO_NS::RationalTime> > currentTime;
+            std::shared_ptr<observer::Value<OTIO_NS::TimeRange> > inOutRange;
             std::shared_ptr<observer::List<std::shared_ptr<Timeline> > >
                 compare;
             std::shared_ptr<observer::Value<CompareTimeMode> > compareTime;
@@ -145,9 +145,9 @@ namespace tl
                 CacheDirection cacheDirection = CacheDirection::Forward;
                 PlayerCacheOptions cacheOptions;
 
-                std::map<otime::RationalTime, std::vector<VideoRequest> >
+                std::map<OTIO_NS::RationalTime, std::vector<VideoRequest> >
                     videoRequests;
-                std::map<otime::RationalTime, std::vector<VideoFrame> >
+                std::map<OTIO_NS::RationalTime, std::vector<VideoFrame> >
                     videoCache;
 #if defined(TLRENDER_AUDIO)
                 std::unique_ptr<RtAudio> rtAudio;

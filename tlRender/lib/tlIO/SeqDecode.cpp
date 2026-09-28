@@ -49,7 +49,7 @@ namespace tl
             }
 
             double defaultSpeed = SeqOptions().defaultSpeed;
-            if (const auto i = options.find("SeqIO/DefaultSpeed");
+            if (const auto i = options.find("SequenceIO/DefaultSpeed");
                 i != options.end())
             {
                 std::stringstream ss(i->second);

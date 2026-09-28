@@ -26,9 +26,7 @@ v1.7.8
 	
 - Core: .otio files now support URI paths properly.
 - Core/UI: Thumbnail cache is now independant from the main caches.
-- Core: Improved the performance of loading pictures.
 - Core: Cleaned up Timeline code.
-- Core: Moved to decoding pictures in a pool, like latest tlRender.
 - Core: Fixed opening of https:// movies due to incorrect handling of cacert.pem and https:// protocol.  Now File->Open->URL Movie should work again.
 
 Fixes
