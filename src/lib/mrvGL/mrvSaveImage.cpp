@@ -76,7 +76,8 @@ namespace mrv
         timeline::OCIOOptions savedOCIOOptions;
         bool restoreOCIOOptions = false;
 
-        if (saveEXR)
+        if (saveEXR &&
+            options.exportMode == timeline::HDRExportMode::LinearHDR)
         {
             savedOCIOOptions = view->getOCIOOptions();
             timeline::OCIOOptions ocioOptions = savedOCIOOptions;

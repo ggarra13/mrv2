@@ -394,7 +394,7 @@ namespace mrv
             restoreHdrOptions = true;
 
             if (saveEXR &&
-                hdrOptions.exportMode != timeline::HDRExportMode::BakedHDR)
+                options.exportMode != timeline::HDRExportMode::BakedHDR)
             {
                 ocioOptions.enabled = false;
                 view->setOCIOOptions(ocioOptions);
