@@ -42,6 +42,8 @@ Fixes
 - YUV_444P_U12 movies are no longer attempted to decode in hardware, like SolLevante Netflix demo clip.
 - Edit->Frame->Insert incorrectly leaving a wrong tail clip's range.
 - Thumbnail pictures when pixelAspectRatio was different than 1.0.
+- Fixed Secondary Viewport on Vulkan backend which would stutter (mainly on Windows).
+
 
 Libraries
 ---------
