@@ -218,6 +218,11 @@ namespace mrv
             format() = VK_FORMAT_B8G8R8A8_UNORM;
         }
 
+        int TimelineWidget::get_max_frames_in_flight()
+        {
+            return vlk::MAX_FRAMES_IN_FLIGHT;
+        }
+        
         void TimelineWidget::setContext(
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel,

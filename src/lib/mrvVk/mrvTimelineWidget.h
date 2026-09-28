@@ -137,6 +137,7 @@ namespace mrv
             void continuePlaying();
 
             void init_colorspace() FL_OVERRIDE;
+            int  get_max_frames_in_flight() FL_OVERRIDE;
 
             std::vector<timeline::MoveData> getSelectedItems() const;
             std::vector<timeline::MoveData> getSelectedTransitions() const;
