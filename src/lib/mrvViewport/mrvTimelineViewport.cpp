@@ -2504,6 +2504,7 @@ namespace mrv
                 w = p.ui->uiMain;
                 view = p.ui->uiView;
             }
+            view->take_focus();
 
             if (!active)
             {
@@ -2533,7 +2534,6 @@ namespace mrv
                 }
             }
 
-            view->take_focus();
             w->fill_menu(p.ui->uiMenuBar);
         }
 
@@ -2565,13 +2565,13 @@ namespace mrv
                     swap_interval(1);
                     p.ui->uiTimeline->swap_interval(1);
                 }
+                p.presentation = false;
                 if (!p.fullScreen)
                     _setFullScreen(false);
                 if (p.ui->uiView == reinterpret_cast<MyViewport*>(this))
                     Fl::add_timeout(
                         kFullScreenTimeout,
                         (Fl_Timeout_Handler)restore_ui_state, p.ui);
-                p.presentation = false;
                 _updateCursor();
             }
             else
@@ -2593,8 +2593,8 @@ namespace mrv
                 {
                     hide_ui_state(p.ui);
                 }
-                _setFullScreen(active);
                 p.presentation = true;
+                _setFullScreen(active);
                 p.presentationTime = std::chrono::high_resolution_clock::now();
             }
         }

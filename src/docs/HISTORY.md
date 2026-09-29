@@ -1,3 +1,14 @@
+v1.7.9
+======
+
+Fixes
+-----
+
+- Audio is no longer turned off if the main window is hidden, but the secondary window is still visible.
+- Going to Presentation mode with the secondary window open makes *that* window go to presentation mode.  This temporarly fixes a bug on Linux Wayland where the playback would stutter.
+- Fixed a mis-used EGL (ie.OpenGL) function.
+
+
 v1.7.8
 ======
 
@@ -34,7 +45,7 @@ v1.7.8
 Fixes
 -----
 
-- Adde OpentimelinIO tags to all formats, as some were missing them.
+- Added OpentimelinIO tags to all formats, as some were missing them.
 - Precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
 - File->Save Image on the Vulkan backend not paying attention to the HDR Export options.
 - File->Save Image and File->Save Movies changing resolution when HDR Export was changed.

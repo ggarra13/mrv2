@@ -961,7 +961,10 @@ namespace mrv
         }
         else if (event == FL_HIDE)
         {
-            if (this == App::ui->uiMain)
+            /// If all windows are invisible (ie.minimized) turn off sound.
+            ViewerUI* ui = App::ui;
+            if (this == ui->uiMain && (!ui->uiSecondary ||
+                                       !ui->uiSecondary->window()->visible()))
             {
                 TimelineClass* t = App::ui->uiTimeWindow;
                 p.hidden = true;

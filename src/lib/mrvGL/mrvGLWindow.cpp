@@ -15,20 +15,6 @@
 
 #    include <wayland-client.h>
 
-// Since we cannot include glx.h and egl together, we define some constants
-// and extern EGL functions here.
-extern "C"
-{
-    typedef unsigned int EGLBoolean;
-    typedef void* EGLDisplay;
-    typedef void* EGLSurface;
-    typedef void* EGLContext;
-
-    extern EGLContext eglGetCurrentContext();
-    extern EGLBoolean eglMakeCurrent(
-        EGLDisplay display, EGLSurface draw, EGLSurface read,
-        EGLContext context);
-}
 #  endif // FLTK_USE_WAYLAND
 #endif // __linux__
 
@@ -74,19 +60,6 @@ namespace mrv
 
 #  ifdef __linux__
 #    ifdef FLTK_USE_WAYLAND
-            auto wldpy = fl_wl_display();
-            if (wldpy)
-            {
-                auto eglctx = fl_wl_glcontext(ctx);
-                EGLContext currentContext = eglGetCurrentContext();
-                if (currentContext == eglctx)
-                    return;
-
-                auto win = fl_wl_xid(this);
-
-                auto surface = fl_wl_surface(win);
-                eglMakeCurrent(wldpy, surface, surface, eglctx);
-            }
 #    endif // FLTK_USE_WAYLAND
 #    ifdef FLTK_USE_X11
             auto dpy = fl_x11_display();
