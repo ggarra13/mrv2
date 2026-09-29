@@ -77,7 +77,8 @@ namespace tl
             if (!videoData.empty() && !boxes.empty())
             {
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
-                ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, redMask);
+                if (ctx.vkCmdSetColorWriteMaskEXT)
+                    ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, redMask);
 #endif
 
                 p.buffers["stereo_image"]->transitionToColorAttachment(p.cmd);
@@ -164,7 +165,8 @@ namespace tl
                 setTransform(mvp);
 
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
-                ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, cyanMask);
+                if (ctx.vkCmdSetColorWriteMaskEXT)
+                    ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, cyanMask);
 #endif
                 p.buffers["stereo_image"]->transitionToColorAttachment(p.cmd);
 
@@ -231,7 +233,8 @@ namespace tl
 #endif
 
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
-            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
+            if (ctx.vkCmdSetColorWriteMaskEXT)
+                ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
 #endif
 
             p.fbo->transitionToShaderRead(p.cmd);

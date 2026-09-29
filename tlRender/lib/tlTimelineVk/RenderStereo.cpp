@@ -148,18 +148,24 @@ namespace tl
                 //
                 // These are for dynamic stencils
                 //
-                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
-                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_REPLACE,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_COMPARE_OP_ALWAYS);
-                vkCmdSetStencilCompareMask(p.cmd,
-                                           VK_STENCIL_FACE_FRONT_AND_BACK,
-                                           0xFF);
-                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         0xFF);
-                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                if (ctx.vkCmdSetStencilTestEnableEXT)
+                {
+                    ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                    ctx.vkCmdSetStencilOpEXT(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_REPLACE,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_COMPARE_OP_ALWAYS);
+                    vkCmdSetStencilCompareMask(p.cmd,
+                                               VK_STENCIL_FACE_FRONT_AND_BACK,
+                                               0xFF);
+                    vkCmdSetStencilWriteMask(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             0xFF);
+                    vkCmdSetStencilReference(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                }
 
                 // Draw stencil mask
                 createPipeline("stereo1_stencil", pipelineLayoutName,
@@ -181,7 +187,11 @@ namespace tl
             _bindDescriptorSets(pipelineLayoutName, wipeShader);
 
 
-            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
+#if USE_DYNAMIC_RGBA_WRITE_MASKS
+            if (ctx.vkCmdSetColorWriteMaskEXT)
+                ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
+#endif
+
             _vkDraw("stereo");
 
             // Draw video
@@ -205,18 +215,24 @@ namespace tl
                 //
                 // These are for dynamic stencils
                 //
-                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
-                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_COMPARE_OP_EQUAL);
-                vkCmdSetStencilCompareMask(p.cmd,
-                                           VK_STENCIL_FACE_FRONT_AND_BACK,
-                                           0xFF);
-                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         0x00);
-                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                if (ctx.vkCmdSetStencilTestEnableEXT)
+                {
+                    ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                    ctx.vkCmdSetStencilOpEXT(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_COMPARE_OP_EQUAL);
+                    vkCmdSetStencilCompareMask(p.cmd,
+                                               VK_STENCIL_FACE_FRONT_AND_BACK,
+                                               0xFF);
+                    vkCmdSetStencilWriteMask(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             0x00);
+                    vkCmdSetStencilReference(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                }
 #else
                 ds.stencilTestEnable = VK_TRUE;
 
@@ -261,7 +277,8 @@ namespace tl
             //
             // Draw with RGBA the video
             //
-            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
+            if (ctx.vkCmdSetColorWriteMaskEXT)
+                ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
             _vkDraw("video");
 
 
@@ -333,18 +350,24 @@ namespace tl
                 ds.depthTestEnable = VK_FALSE;
 
 #if USE_DYNAMIC_STENCILS
-                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
-                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_REPLACE,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_COMPARE_OP_ALWAYS);
-                vkCmdSetStencilCompareMask(p.cmd,
-                                           VK_STENCIL_FACE_FRONT_AND_BACK,
-                                           0xFF);
-                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         0xFF);
-                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                if (ctx.vkCmdSetStencilTestEnableEXT)
+                {
+                    ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                    ctx.vkCmdSetStencilOpEXT(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_REPLACE,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_COMPARE_OP_ALWAYS);
+                    vkCmdSetStencilCompareMask(p.cmd,
+                                               VK_STENCIL_FACE_FRONT_AND_BACK,
+                                               0xFF);
+                    vkCmdSetStencilWriteMask(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             0xFF);
+                    vkCmdSetStencilReference(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                }
 #else
                 ds.stencilTestEnable = VK_TRUE;
 
@@ -378,7 +401,11 @@ namespace tl
             _bindDescriptorSets(pipelineLayoutName, wipeShader);
 
 
-            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
+            if (ctx.vkCmdSetColorWriteMaskEXT)
+            {
+                ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
+            }
+
             _vkDraw("stereo");
 
             // Draw video
@@ -399,19 +426,25 @@ namespace tl
                 ds.depthTestEnable = VK_FALSE;
 
 #if USE_DYNAMIC_STENCILS
-                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
-                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_COMPARE_OP_EQUAL);
-                vkCmdSetStencilCompareMask(p.cmd,
-                                           VK_STENCIL_FACE_FRONT_AND_BACK,
-                                           0xFF);
-                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         0x00);
-                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         1);
+                if (ctx.vkCmdSetStencilTestEnableEXT)
+                {
+                    ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                    ctx.vkCmdSetStencilOpEXT(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_COMPARE_OP_EQUAL);
+                    vkCmdSetStencilCompareMask(p.cmd,
+                                               VK_STENCIL_FACE_FRONT_AND_BACK,
+                                               0xFF);
+                    vkCmdSetStencilWriteMask(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             0x00);
+                    vkCmdSetStencilReference(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             1);
+                }
 #else
                 ds.stencilTestEnable = VK_TRUE;
 
@@ -448,7 +481,8 @@ namespace tl
             _bindDescriptorSets(pipelineLayoutName, textureShader);
 
             // If I draw with colors, the pattern is being drawn.
-            ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
+            if (ctx.vkCmdSetColorWriteMaskEXT)
+                ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
             _vkDraw("video");
 
             p.fbo->endRenderPass(p.cmd);
