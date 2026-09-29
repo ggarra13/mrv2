@@ -48,6 +48,9 @@ namespace mrv
             //! Virtual hide method.  Destroys ALL resources.
             void hide() FL_OVERRIDE;
 
+            //! Virtual function to return Vulkan's max frames in flight.
+            int get_max_frames_in_flight() FL_OVERRIDE;
+
             //! Set the internal system context for the widget.
             void setContext(const std::weak_ptr<system::Context>& context);
 

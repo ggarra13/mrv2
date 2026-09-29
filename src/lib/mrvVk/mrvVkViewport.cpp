@@ -377,6 +377,11 @@ namespace mrv
             }
         }
 
+        int Viewport::get_max_frames_in_flight()
+        {
+            return vlk::MAX_FRAMES_IN_FLIGHT;
+        }
+
         std::vector<const char*> Viewport::get_device_extensions()
         {
             std::vector<const char*> out;
@@ -721,9 +726,6 @@ namespace mrv
 
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
-
-            // Clamp frameIndex
-            frameIndex = frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
 
             // Clear the frame
             begin_render_pass(cmd);
