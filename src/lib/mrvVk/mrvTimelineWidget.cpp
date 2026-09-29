@@ -1004,11 +1004,13 @@ namespace mrv
 
                 if (p.vao && p.vbo)
                 {
-
-                    const VkColorComponentFlags allMask[] =
-                        { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-                          VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
-                    ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+                    if (ctx.vkCmdSetColorWriteMaskEXT)
+                    {
+                        const VkColorComponentFlags allMask[] =
+                            { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                              VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+                        ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+                    }
 
                     p.vao->bind(frameIndex);
                     p.vao->draw(cmd, p.vbo);
