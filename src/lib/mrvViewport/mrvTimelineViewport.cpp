@@ -2551,19 +2551,24 @@ namespace mrv
             if (p.presentation == active)
                 return;
 
+            const bool secondary = _hasSecondaryViewport();
+            auto* target = secondary ? p.ui->uiSecondary->viewport()
+                           : reinterpret_cast<MyViewport*>(this);
+
             if (!active)
             {
                 int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncNone)
                 {
-                    swap_interval(0);
+                    target->swap_interval(0);
                     p.ui->uiTimeline->swap_interval(0);
                 }
                 else if (vsync == MonitorVSync::kVSyncAlways)
                 {
-                    swap_interval(1);
-                    p.ui->uiTimeline->swap_interval(1);
+                    target->swap_interval(1);
+                    if (!secondary)
+                        p.ui->uiTimeline->swap_interval(1);
                 }
                 p.presentation = false;
                 if (!p.fullScreen)
@@ -2580,12 +2585,13 @@ namespace mrv
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncAlways)
                 {
-                    swap_interval(1);
-                    p.ui->uiTimeline->swap_interval(1);
+                    target->swap_interval(1);
+                    if (!secondary)
+                        p.ui->uiTimeline->swap_interval(1);
                 }
                 else if (vsync == MonitorVSync::kVSyncNone)
                 {
-                    swap_interval(0);
+                    target->swap_interval(0);
                     p.ui->uiTimeline->swap_interval(0);
                 }
                 save_ui_state(p.ui);
