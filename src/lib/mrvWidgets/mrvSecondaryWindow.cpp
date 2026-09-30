@@ -27,7 +27,7 @@ namespace mrv
 
         p.ui = ui;
 
-        int X = 30, Y = 30, W = 1280, H = 720;
+        int X = 30, Y = 30, W = 1280, H = 720, screen = 0;
 
         SettingsObject* settings = ui->app->settings();
         std::string key;
@@ -49,8 +49,13 @@ namespace mrv
         value = settings->getValue<std::any>(key);
         H = std_any_empty(value) ? H : std_any_cast<int>(value);
 
+        key = "gui/Secondary/Screen";
+        value = settings->getValue<std::any>(key);
+        screen = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+
         Fl_Group::current(0);
         p.mainWindow = new MainWindow(X, Y, W, H, "SecondaryWindow");
+        p.mainWindow->screen_num(screen);
         p.mainWindow->labeltype(FL_NO_LABEL);
         p.mainWindow->begin();
 
@@ -123,6 +128,9 @@ namespace mrv
 
             key = "gui/Secondary/WindowH";
             settings->setValue(key, w->h());
+
+            key = "gui/Secondary/Screen";
+            settings->setValue(key, w->screen_num());
         }
     }
 

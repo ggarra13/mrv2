@@ -1,6 +1,9 @@
 v1.7.9
 ======
 
+- UI: Secondary Window now remembers the screen number and positioning except on Linux Wayland (which does not allow it).
+
+
 Fixes
 -----
 

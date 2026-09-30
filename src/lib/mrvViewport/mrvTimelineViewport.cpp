@@ -2504,7 +2504,6 @@ namespace mrv
                 w = p.ui->uiMain;
                 view = p.ui->uiView;
             }
-            view->take_focus();
 
             if (!active)
             {
@@ -2534,6 +2533,7 @@ namespace mrv
                 }
             }
 
+            view->take_focus();
             w->fill_menu(p.ui->uiMenuBar);
         }
 
