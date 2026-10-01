@@ -25,7 +25,7 @@ if (NOT OpenAPV_FOUND)
             -DGIT_EXECUTABLE=${GIT_EXECUTABLE}
             -DPATCH_SOURCE_DIR=${CMAKE_CURRENT_BINARY_DIR}/../../../deps/OpenAPV/src/OpenAPV
             -DPATCH_FILE=${CMAKE_CURRENT_SOURCE_DIR}/patches/OpenAPV-patch/msvc.patch
-            -P ${CMAKE_CURRENT_LIST_DIR}/ApplyPatch.cmake
+            -P ${CMAKE_CURRENT_LIST_DIR}/apply_patch.cmake
 	    )
     endif()
 

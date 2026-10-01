@@ -506,7 +506,7 @@ if (NOT FFmpeg_FOUND)
         -DGIT_EXECUTABLE=${GIT_EXECUTABLE}
         -DPATCH_SOURCE_DIR=${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg
         -DPATCH_FILE=${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/subfile.patch
-        -P ${CMAKE_CURRENT_LIST_DIR}/ApplyPatch.cmake)
+        -P ${CMAKE_CURRENT_LIST_DIR}/apply_patch.cmake)
 
     if (TLRENDER_OAPV)
 	
@@ -523,7 +523,7 @@ if (NOT FFmpeg_FOUND)
             -DGIT_EXECUTABLE=${GIT_EXECUTABLE}
             -DPATCH_SOURCE_DIR=${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg
             -DPATCH_FILE=${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/liboapv.patch
-            -P ${CMAKE_CURRENT_LIST_DIR}/ApplyPatch.cmake
+            -P ${CMAKE_CURRENT_LIST_DIR}/apply_patch.cmake
     )
     endif()
 
