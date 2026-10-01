@@ -2,25 +2,27 @@ v1.7.9
 ======
 
 - UI: Secondary Window now remembers the screen number and positioning except on Linux Wayland (which does not allow it).
+- UI: Secondary and Main Window now draw black borders when any of them is in Presentation Mode.  If not in presentation mode, they will use the color set in Preferences->Language and Colors->BG Color.
 
-- UI/Core: Movies can be exported with the OpenAPV codec.
+- UI/Core: Movies can be exported with the OpenAPV codec with or without alpha.  UI has been updated to reflect the valic Pixel Formats.
+- UI/Core: OpenAPV codec has three presets (.pst) files.
 
-- Core: Updated code to use new OpenColorIO's colorInterOp functions.
+- Core: Updated code to use the new OpenColorIO's colorInterOp functions.
 
 
 Fixes
 -----
 
 - UI/Linux: Audio is no longer turned off if the main window is hidden, but the secondary window is still visible.
-- UI/Linux: There's no longer stuttering of Secondary display.
+- UI/Linux: There's no longer stuttering of Secondary display under either Linux or Windows on any of the backends.
 - Core/Linux: Fixed a mis-used EGL (ie.OpenGL) function.
 
 Libraries
 ---------
 
-- OpenAPV v1.1.1.2 - with version and license information.
-- OpenColorIO v2.6.0 - with new color interop ID functions.
-- OpenEXR v3.5.1 - fixed possible ZSTD overruns
+	- OpenAPV v1.1.1.2 - with version and license information.
+	- OpenColorIO v2.6.0 - with new color interop ID functions.
+	- OpenEXR v3.5.1 - fixed possible ZSTD overruns.
 
 
 v1.7.8

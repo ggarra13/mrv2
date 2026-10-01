@@ -99,9 +99,6 @@ namespace mrv
             TimelineViewport(X, Y, W, H, L),
             _vk(new VKPrivate)
         {
-            TLRENDER_P();
-
-            // m_debugSync = true;
         }
 
         Viewport::~Viewport() {}

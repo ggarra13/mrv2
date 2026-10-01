@@ -157,26 +157,29 @@ namespace mrv
             //! Skipped frames
             static uint64_t droppedFrames;
 
-            //! The pointer to the raw area we retrieve in from Vulkan in area selections.
+            //! Whether any view is in presentation mode (full screen with no
+            //! menus, bars or dock tools).
+            static bool presentation;
+
+            //! The pointer to the raw area we retrieve in from Vulkan in area
+            //! selections.
             void* image = nullptr;
 
             //! Mark the buffer as raw, so we will delete with free().
             bool rawImage = true;
 
-            //! Store the size of previous buffer so we avoid allocating it again.
+            //! Store the size of previous buffer so we avoid allocating it
+            //! again.
             size_t rawImageSize = 0;
 
             //! Whether the view is in full screen mode
             bool fullScreen = false;
 
-            //! Whether the view is in presentation mode (full screen with no menus,
-            //! bars or dock tools).
-            bool presentation = false;
-
             //! Sets whether the window starts in maximized mode.
             bool maximized = false;
 
-            //! Whether the current frame represengs a missing frame in a sequence.
+            //! Whether the current frame represengs a missing frame in a
+            //! sequence.
             bool missingFrame = false;
 
             //! Default missing frame type.  Should be static.

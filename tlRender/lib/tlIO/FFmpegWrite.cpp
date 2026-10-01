@@ -1947,7 +1947,6 @@ namespace tl
                     rational.first, rational.second};
                 if (profile == Profile::VP9)
                 {
-
                     if (pix_fmt == AV_PIX_FMT_YUVA420P)
                     {
                         av_dict_set(
@@ -1965,6 +1964,15 @@ namespace tl
                                 "channel you need a .mkv "
                                 "or .mk3d movie extension");
                         }
+                    }
+                }
+                else if (profile == Profile::OAPV)
+                {
+                    if (pix_fmt == AV_PIX_FMT_YUVA444P10LE ||
+                        pix_fmt == AV_PIX_FMT_YUVA444P12LE)
+                    {
+                        av_dict_set(
+                            &p.avVideoStream->metadata, "alpha_mode", "1", 0);
                     }
                 }
 

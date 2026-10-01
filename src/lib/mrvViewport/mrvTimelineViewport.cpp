@@ -129,6 +129,7 @@ namespace mrv
         float TimelineViewport::Private::masking = 0.F;
         int64_t TimelineViewport::Private::lastFrame;
         uint64_t TimelineViewport::Private::droppedFrames = 0;
+        bool TimelineViewport::Private::presentation = false;
         float TimelineViewport::Private::rotation = 0.F;
         bool TimelineViewport::Private::resizeWindow = true;
         bool TimelineViewport::Private::safeAreas = false;
@@ -2537,7 +2538,6 @@ namespace mrv
             w->fill_menu(p.ui->uiMenuBar);
         }
 
-        //! Get presentation mode.
         bool TimelineViewport::getPresentationMode() const noexcept
         {
             return _p->presentation;
@@ -2570,7 +2570,6 @@ namespace mrv
                     if (!secondary)
                         p.ui->uiTimeline->swap_interval(1);
                 }
-                p.presentation = false;
                 if (!p.fullScreen)
                     _setFullScreen(false);
                 if (p.ui->uiView == reinterpret_cast<MyViewport*>(this))
@@ -2599,16 +2598,10 @@ namespace mrv
                 {
                     hide_ui_state(p.ui);
                 }
-                p.presentation = true;
                 _setFullScreen(active);
                 p.presentationTime = std::chrono::high_resolution_clock::now();
             }
-
-            std::cerr << this << " swap_interval()=" << swap_interval()
-                      << std::endl;
-            std::cerr << target <<" target->swap_interval()="
-                      << target->swap_interval()
-                      << std::endl;
+            p.presentation = active;
         }
 
         bool TimelineViewport::getFullScreenMode() const noexcept

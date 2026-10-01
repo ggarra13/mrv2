@@ -11,12 +11,15 @@
 #include "mrvWidgets/mrvSecondaryWindow.h"
 #include "mrvWidgets/mrvMainWindow.h"
 
+#include <FL/Fl_Group.H>
+
 namespace mrv
 {
     struct SecondaryWindow::Private
     {
         ViewerUI* ui = nullptr;
         MainWindow* mainWindow = nullptr;
+        Fl_Group* group = nullptr;
         MyViewport* viewport = nullptr;
     };
 
@@ -59,14 +62,20 @@ namespace mrv
         p.mainWindow->labeltype(FL_NO_LABEL);
         p.mainWindow->begin();
 
+        p.group = new Fl_Group(0, 0, W, H);
+        p.group->box(FL_FLAT_BOX);
+        p.group->begin();
+
         p.viewport = new MyViewport(0, 0, W, H);
         p.viewport->main(ui); // needed
         p.viewport->end();
 
+        p.group->end();
+
         p.viewport->setContext(ui->app->getContext());
         p.viewport->setFrameView(true);
 
-        p.mainWindow->resizable(p.viewport);
+        p.mainWindow->resizable(p.group);
 
         p.mainWindow->end();
 
@@ -137,6 +146,11 @@ namespace mrv
     MainWindow* SecondaryWindow::window() const
     {
         return _p->mainWindow;
+    }
+
+    Fl_Group* SecondaryWindow::group() const
+    {
+        return _p->group;
     }
 
     MyViewport* SecondaryWindow::viewport() const

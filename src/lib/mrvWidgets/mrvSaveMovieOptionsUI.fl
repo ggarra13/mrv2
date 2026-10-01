@@ -911,6 +911,10 @@ else if (codec == "OAPV")
 {
    v->add("YUV_422P_10LE");
    v->add("YUV_444P_10LE");
+   v->add("YUV_422P_12LE");
+   v->add("YUV_444P_12LE");
+   v->add("YUVA_444P_10LE");
+   v->add("YUVA_444P_12LE");
 }
 
 if (v->size() > 0)
@@ -931,7 +935,8 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {}
+}} {selected
+    }
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
   } {
@@ -1028,8 +1033,7 @@ if (o->size() > 0)
         }
     }
 }
-o->value(0);} {selected
-    }
+o->value(0);} {}
   }
   Function {add_resolution(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();
