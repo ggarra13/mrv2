@@ -1196,6 +1196,8 @@ namespace mrv
 
                     tmp += buf;
 
+                    std::cerr << this << " draw swap_interval="
+                              << swap_interval() << std::endl;
                     if (swap_interval())
                         tmp += " FIFO";
                     else

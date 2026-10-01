@@ -707,7 +707,7 @@ leave it all at bt709.
 )"));
 uiHelpWindow->show();} {}
   }
-  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {user_data_type {SaveMovieOptionsUI*} open
+  Function {add_hardware(Fl_Choice* o, Fl_Check_Button* v)} {user_data_type {SaveMovieOptionsUI*}
   } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
@@ -767,8 +767,7 @@ else
 
 auto settings = mrv::App::app->settings();
 const bool value = settings->getValue<int>("SaveMovie/HardwareEncode");
-v->value(value);} {selected
-    }
+v->value(value);} {}
   }
   Function {add_h264_sw_formats(Fl_Choice* v)} {} {
     code {v->add("YUV_420P");
@@ -778,7 +777,8 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
+  } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -907,6 +907,11 @@ else if (codec == "HEVC")
    v->add("YUV_444P");
    v->add("YUV_444P_10LE");
 }
+else if (codec == "OAPV")
+{
+   v->add("YUV_422P_10LE");
+   v->add("YUV_444P_10LE");
+}
 
 if (v->size() > 0)
 {
@@ -928,7 +933,8 @@ if (v->size() > 0)
     v->value(0);
 }} {}
   }
-  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
+  Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
+  } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -986,12 +992,18 @@ else
     code {auto entries = tl::ffmpeg::getProfileLabels();
 for (auto entry : entries)
 {
+// @bug: These are the codecs not yet
+//       available on aarch64.
 \#ifndef TLRENDER_SVTAV1
    if (entry == "AV1")
       continue;
 \#endif
 \#ifndef TLRENDER_AOM
    if (entry == "AV1_AOM")
+      continue;
+\#endif
+\#ifndef TLRENDER_OAPV
+   if (entry == "OAPV")
       continue;
 \#endif
     o->add(gettext(entry.c_str()));
@@ -1016,7 +1028,8 @@ if (o->size() > 0)
         }
     }
 }
-o->value(0);} {}
+o->value(0);} {selected
+    }
   }
   Function {add_resolution(Fl_Choice* o)} {} {
     code {const auto& settings = mrv::App::app->settings();

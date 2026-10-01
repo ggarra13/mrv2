@@ -80,7 +80,8 @@ if (NOT FFmpeg_FOUND)
             ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/configure.bak
 	    COMMAND ${CMAKE_COMMAND} -E copy_if_different
 	    ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure_v9.0.1
-	    ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/configure)
+	    ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg/configure
+	)
     endif()
     
     set(FFmpeg_SHARED_LIBS ON)
@@ -159,6 +160,7 @@ if (NOT FFmpeg_FOUND)
 	    
             --enable-decoder=aac
             --enable-decoder=ac3
+	    --enable-decoder=apv
             --enable-decoder=av1
             --enable-decoder=cfhd
             --enable-decoder=dca
@@ -287,6 +289,7 @@ if (NOT FFmpeg_FOUND)
             --enable-demuxer=aac
             --enable-demuxer=ac3
             --enable-demuxer=aiff
+            --enable-demuxer=apv
             --enable-demuxer=asf
             --enable-demuxer=av1
 	    --enable-demuxer=avi
@@ -341,6 +344,7 @@ if (NOT FFmpeg_FOUND)
             --disable-muxers
             --enable-muxer=ac3
             --enable-muxer=aiff
+	    --enable-muxer=apv
             --enable-muxer=asf
 	    --enable-muxer=avi
             --enable-muxer=dnxhd
@@ -492,21 +496,35 @@ if (NOT FFmpeg_FOUND)
 	list(APPEND FFmpeg_DEPENDENCIES ${libsnappy_DEP})
     endif()
 
-    if(TLRENDER_X264)
+    find_package(Git REQUIRED)
+    
+    # The subfile protocol clips a seek to thirty-two bits, so a bundled
+    # movie with its moov atom past 2 GB does not open through it
+    # (FFmpeg-patch/subfile.patch).
+    list(APPEND FFmpeg_PATCH
+	COMMAND ${CMAKE_COMMAND}
+        -DGIT_EXECUTABLE=${GIT_EXECUTABLE}
+        -DPATCH_SOURCE_DIR=${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg
+        -DPATCH_FILE=${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/subfile.patch
+        -P ${CMAKE_CURRENT_LIST_DIR}/ApplyPatch.cmake)
+
+    if (TLRENDER_OAPV)
+	
+	#
+	# The APV encoder calls oapvm_create() with the arguments it took before
+	# OpenAPV 1.0, so it does not compile against a current OpenAPV
+	# (FFmpeg-patch/liboapv.patch).
+	list(APPEND FFmpeg_DEPENDENCIES ${OpenAPV_DEP})
 	list(APPEND FFmpeg_CONFIGURE_ARGS
-            --enable-encoder=libx264
-            --enable-decoder=libx264
-	    --enable-libx264
-	    --enable-gpl)
-	if(TLRENDER_NET)
-	    list(APPEND FFmpeg_CONFIGURE_ARGS
-		--enable-version3)
-	endif()
-	# if(UNIX)
-	# 	list(APPEND FFmpeg_CONFIGURE_ARGS
-	# 	    --extra-ldflags="${INSTALL_PREFIX}/lib/libx264.a")
-	# 	list(APPEND FFmpeg_DEPENDENCIES ${X264_DEP})
-	# endif()
+	    --enable-liboapv
+	    --enable-encoder=liboapv)
+	list(APPEND FFmpeg_PATCH
+	    COMMAND ${CMAKE_COMMAND}
+            -DGIT_EXECUTABLE=${GIT_EXECUTABLE}
+            -DPATCH_SOURCE_DIR=${CMAKE_CURRENT_BINARY_DIR}/../../../deps/FFmpeg/src/FFmpeg
+            -DPATCH_FILE=${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/liboapv.patch
+            -P ${CMAKE_CURRENT_LIST_DIR}/ApplyPatch.cmake
+    )
     endif()
 
     if(TLRENDER_SVTAV1)
@@ -520,6 +538,23 @@ if (NOT FFmpeg_FOUND)
 	    if (NOT APPLE)
 	    endif()
 	endif()
+    endif()
+
+    if(TLRENDER_X264)
+	list(APPEND FFmpeg_DEPENDENCIES ${X264_DEP})
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+            --enable-encoder=libx264
+            --enable-decoder=libx264
+	    --enable-libx264
+	    --enable-gpl)
+	if(TLRENDER_NET)
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--enable-version3)
+	endif()
+	# if(UNIX)
+	# 	list(APPEND FFmpeg_CONFIGURE_ARGS
+	# 	    --extra-ldflags="${INSTALL_PREFIX}/lib/libx264.a")
+	# endif()
     endif()
 
     # Finally HW decoders and encoders.
