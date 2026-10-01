@@ -20,6 +20,7 @@ Libraries
 
 - OpenAPV v1.1.1.2 - with version and license information.
 - OpenColorIO v2.6.0 - with new color interop ID functions.
+- OpenEXR v3.5.1 - fixed possible ZSTD overruns
 
 
 v1.7.8

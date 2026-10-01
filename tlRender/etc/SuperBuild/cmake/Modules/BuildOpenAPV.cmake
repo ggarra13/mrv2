@@ -29,6 +29,16 @@ if (NOT OpenAPV_FOUND)
 	    )
     endif()
 
+    #
+    # CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP set to TRUE is needed, so that
+    #
+    # CMake will still detect/populate:
+    #
+    #  CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS
+    #
+    #  but it will not automatically generate the install(PROGRAMS ...) rule
+    #  for those libraries.
+    #
     set(OpenAPV_ARGS
 	${TLRENDER_EXTERNAL_ARGS}
 	-DOAPV_BUILD_APPS=OFF
