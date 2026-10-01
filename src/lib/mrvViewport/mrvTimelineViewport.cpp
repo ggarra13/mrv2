@@ -2603,6 +2603,12 @@ namespace mrv
                 _setFullScreen(active);
                 p.presentationTime = std::chrono::high_resolution_clock::now();
             }
+
+            std::cerr << this << " swap_interval()=" << swap_interval()
+                      << std::endl;
+            std::cerr << target <<" target->swap_interval()="
+                      << target->swap_interval()
+                      << std::endl;
         }
 
         bool TimelineViewport::getFullScreenMode() const noexcept

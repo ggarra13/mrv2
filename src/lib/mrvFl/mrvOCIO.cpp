@@ -16,6 +16,8 @@
 
 #include "mrViewer.h"
 
+#include <algorithm>
+#include <cctype>
 #include <regex>
 
 namespace
@@ -37,6 +39,136 @@ namespace mrv
 
         OCIO::ConstConfigRcPtr OCIOconfig = nullptr;
 
+#ifdef TLRENDER_OCIO
+        namespace
+        {
+            /**
+             * The latest built-in Studio config.  Every color space in it has a
+             * Color Interop ID.  It is created once (thread-safe) since
+             * creating it is relatively expensive.
+             */
+            OCIO::ConstConfigRcPtr builtinStudioConfig()
+            {
+                static const OCIO::ConstConfigRcPtr config =
+                    []() -> OCIO::ConstConfigRcPtr
+                {
+                    try
+                    {
+                        return OCIO::Config::CreateFromBuiltinConfig(
+                            "studio-config-latest");
+                    }
+                    catch (const std::exception&)
+                    {
+                        return nullptr;
+                    }
+                }();
+                return config;
+            }
+
+            /**
+             * Case-insensitive tag lookup.  The OpenEXR attribute is
+             * "colorInteropID", but files written by older versions of mrv2
+             * used "ColorInteropID".
+             */
+            std::string lowerCase(std::string s)
+            {
+                std::transform(
+                    s.begin(), s.end(), s.begin(),
+                    [](unsigned char c) { return std::tolower(c); });
+                return s;
+            }
+
+            std::string findTag(const image::Tags& tags, const std::string& name)
+            {
+                const std::string lower = lowerCase(name);
+                for (const auto& tag : tags)
+                {
+                    if (lowerCase(tag.first) == lower)
+                        return tag.second;
+                }
+                return {};
+            }
+
+            /**
+             * Find the data color space (role or name "data", or any color
+             * space with isData() set) in a config.
+             */
+            std::string findDataColorSpace(const OCIO::ConstConfigRcPtr& config)
+            {
+                try
+                {
+                    if (const auto cs = config->getColorSpace("data"))
+                        return cs->getName();
+
+                    const int num = config->getNumColorSpaces(
+                        OCIO::SEARCH_REFERENCE_SPACE_ALL,
+                        OCIO::COLORSPACE_ALL);
+                    for (int i = 0; i < num; ++i)
+                    {
+                        const char* name = config->getColorSpaceNameByIndex(
+                            OCIO::SEARCH_REFERENCE_SPACE_ALL,
+                            OCIO::COLORSPACE_ALL, i);
+                        const auto cs = config->getColorSpace(name);
+                        if (cs && cs->isData())
+                            return cs->getName();
+                    }
+                }
+                catch (const std::exception&)
+                {
+                }
+                return {};
+            }
+
+            /**
+             * Map a color interop ID (or a legacy color space name/alias) to
+             * the name of a color space in the given config.
+             *
+             * 1. Config::findColorSpaceForID(), which searches names and
+             *    aliases, strips the leftmost namespace and handles
+             *    "<config>:local:<base>" IDs.
+             * 2. Config::getColorSpace() for plain names/aliases.
+             * 3. Look the ID up in the built-in Studio config and use
+             *    Config::IdentifyBuiltinColorSpace() to find the equivalent
+             *    color space in the user's config (it may have a different
+             *    name).
+             */
+            std::string resolveColorSpace(const OCIO::ConstConfigRcPtr& config,
+                                          const std::string& id)
+            {
+                if (!config || id.empty())
+                    return {};
+
+                try
+                {
+                    if (const auto cs = config->findColorSpaceForID(id.c_str()))
+                        return cs->getName();
+
+                    if (const auto cs = config->getColorSpace(id.c_str()))
+                        return cs->getName();
+
+                    if (const auto builtin = builtinStudioConfig())
+                    {
+                        if (const auto builtinCS =
+                                builtin->findColorSpaceForID(id.c_str()))
+                        {
+                            const char* name =
+                                OCIO::Config::IdentifyBuiltinColorSpace(
+                                    config, builtin, builtinCS->getName());
+                            if (name && *name != '\0')
+                            {
+                                if (const auto cs = config->getColorSpace(name))
+                                    return cs->getName();
+                            }
+                        }
+                    }
+                }
+                catch (const std::exception&)
+                {
+                }
+                return {};
+            }
+        } // namespace
+#endif
 
         std::string autoICS(bool& autoUnmatched,
                             std::string& autoName,
@@ -85,18 +217,46 @@ namespace mrv
                     };
 
             /*
-             * 1. OpenEXR ColorInteropID (must be uppercase)
+             * 1. OpenEXR ColorInteropID, following the ASWF Color Interop
+             *    Forum "Identifying the Color Space of OpenEXR Files"
+             *    recommendation.
              *
-             * This is the strongest declaration because it is explicitly an
-             * interoperable color-space identifier rather than something we
-             * have inferred from primaries.
+             *    a) acesImageContainer takes precedence and is treated like
+             *       a colorInteropID of "lin_ap0_scene".
+             *    b) "data" means: do not color manage.
+             *    c) "unknown" is not an error; fall through to the other
+             *       mechanisms (chromaticities, file rules, ...).
+             *    d) Anything else is resolved with OCIO's
+             *       Config::findColorSpaceForID().
+             *
+             * The attribute is called "colorInteropID".  "ColorInteropID" is
+             * accepted too, as written by older versions of mrv2.
              */
-            if (const auto i = tags.find("ColorInteropID");
-                i != tags.end() && !i->second.empty())
+            std::string interopID = findTag(tags, "colorInteropID");
+
+            const std::string aces = findTag(tags, "acesImageContainer");
+            if (!aces.empty() && aces != "0")
+                interopID = "lin_ap0_scene";
+
+            if (interopID == "data")
+            {
+                autoName = "data";
+                autoSource = "colorInteropID";
+                const std::string name = findDataColorSpace(OCIOconfig);
+                if (!name.empty())
+                    return name;
+
+                // No data color space in this config.
+                autoUnmatched = true;
+                return {};
+            }
+
+            if (!interopID.empty() && interopID != "unknown")
             {
                 declared = true;
-                autoName = i->second;
-                setCandidates({ i->second.c_str() });
+                autoName = interopID;
+                autoSource = "colorInteropID";
+                setCandidates({ interopID.c_str() });
             }
 
             /*
@@ -150,11 +310,11 @@ namespace mrv
                         };
 
                         /*
-                         * 0.02 is deliberately large enough to tolerate
-                         * rounded metadata, but still substantially smaller
-                         * than the separation between these standard sets.
+                         * Annex A of the OpenEXR recommendation specifies a
+                         * tolerance of approximately +/- 0.001 in x and y.
+                         * A hair more is used to absorb float rounding.
                          */
-                        constexpr float tolerance = 0.02F;
+                        constexpr float tolerance = 0.0011F;
 
                         const KnownPrimaries known[] =
                             {
@@ -165,6 +325,7 @@ namespace mrv
                                       0.3127F, 0.3290F },
                                     "Rec.709 / sRGB primaries",
                                     {
+                                        "lin_rec709_scene",
                                         "lin_rec709",
                                         "lin_srgb",
                                         "Linear Rec.709 (sRGB)",
@@ -178,6 +339,7 @@ namespace mrv
                                       0.3127F, 0.3290F },
                                     "P3-D65 primaries",
                                     {
+                                        "lin_p3d65_scene",
                                         "lin_p3d65",
                                         "Linear P3-D65"
                                     }
@@ -189,6 +351,7 @@ namespace mrv
                                       0.3127F, 0.3290F },
                                     "Rec.2020 primaries",
                                     {
+                                        "lin_rec2020_scene",
                                         "lin_rec2020",
                                         "Linear Rec.2020"
                                     }
@@ -200,6 +363,7 @@ namespace mrv
                                       0.32168F, 0.33767F },
                                     "ACES2065-1 primaries",
                                     {
+                                        "lin_ap0_scene",
                                         "aces2065_1",
                                         "ACES2065-1"
                                     }
@@ -211,8 +375,19 @@ namespace mrv
                                       0.32168F, 0.33767F },
                                     "ACEScg primaries",
                                     {
+                                        "lin_ap1_scene",
                                         "acescg",
                                         "ACEScg"
+                                    }
+                                },
+                                {
+                                    { 0.640F, 0.330F,
+                                      0.210F, 0.710F,
+                                      0.150F, 0.060F,
+                                      0.3127F, 0.3290F },
+                                    "Adobe RGB primaries",
+                                    {
+                                        "lin_adobergb_scene"
                                     }
                                 }
                             };
@@ -347,6 +522,7 @@ namespace mrv
                 autoSource = "EXR default";
 
                 setCandidates({
+                        "lin_rec709_scene",
                         "lin_rec709",
                         "lin_srgb",
                         "Linear Rec.709 (sRGB)",
@@ -355,25 +531,16 @@ namespace mrv
             }
 
             /*
-             * Resolve the declaration against the current OCIO configuration.
-             *
-             * getColorSpace() also accepts aliases in OCIO configurations, so
-             * there is no need to enumerate all color spaces ourselves.
+             * Resolve the declaration against the current OCIO configuration
+             * (interop ID search first, then plain names/aliases, then the
+             * built-in Studio config).
              */
             for (const auto& candidate : candidates)
             {
-                try
-                {
-                    if (const auto colorSpace =
-                        OCIOconfig->getColorSpace(candidate.c_str()))
-                    {
-                        return colorSpace->getName();
-                    }
-                }
-                catch (const std::exception&)
-                {
-                    // Try the next spelling/alias.
-                }
+                const std::string name =
+                    resolveColorSpace(OCIOconfig, candidate);
+                if (!name.empty())
+                    return name;
             }
 
             /*
@@ -1632,81 +1799,88 @@ namespace mrv
         }
 
         /**
-         * Resolves the Interop ID for a given color space in an OCIO config according to
-         * official OCIO file-saving guidelines.
+         * Resolves the Color Interop ID of the current input color space for
+         * writing it to a file (OpenEXR "colorInteropID" attribute), following
+         * the ASWF Color Interop Forum "An ID for Color Interop" and
+         * "Identifying the Color Space of OpenEXR Files" recommendations
+         * (OpenColorIO 2.6+).
          *
-         * @param fallbackToUnknown  If true, returns "unknown" when resolution fails.
-         *                           If false, returns an empty string "".
-         * @return                   The interop ID string, "unknown", or "".
+         * @param fallbackToUnknown  If true, returns "unknown" when resolution
+         *                           fails.  If false, returns an empty string
+         *                           (the attribute should then be omitted).
+         * @return                   The interop ID, "data", "unknown" or "".
          */
         std::string getInteropID(bool fallbackToUnknown)
         {
-            std::string ics = ocio::ics();
-            if (!OCIOconfig || ics.empty())
-            {
-                return fallbackToUnknown ? "unknown" : "";
-            }
+            const std::string failure = fallbackToUnknown ? "unknown" : "";
 
-            // ------------------------------------------------------------------------
-            // Step 1: Check if the config author provided an explicit interop ID
-            // ------------------------------------------------------------------------
-            OCIO::ConstColorSpaceRcPtr cs = OCIOconfig->getColorSpace(ics.c_str());
-            if (cs)
-            {
-                const char* interopID = cs->getInteropID();
-                if (interopID && *interopID != '\0')
-                {
-                    return interopID;
-                }
-            }
+#ifdef TLRENDER_OCIO
+            const std::string ics = ocio::ics();
+            if (!OCIOconfig || ics.empty() || ics == kInactive)
+                return failure;
 
-            // ------------------------------------------------------------------------
-            // Step 2: Search for an equivalent match in the built-in Studio config
-            // ------------------------------------------------------------------------
             try
             {
-                OCIO::ConstConfigRcPtr builtinConfig =
-                    OCIO::Config::CreateFromBuiltinConfig("studio-config-latest");
+                const OCIO::ConstColorSpaceRcPtr cs =
+                    OCIOconfig->getColorSpace(ics.c_str());
+                if (!cs)
+                    return failure;
 
-                if (builtinConfig)
+                // Step 1: the config author provided an explicit interop ID.
+                if (const char* id = cs->getInteropID(); id && *id != '\0')
+                    return id;
+
+                // Data color spaces are not color managed.
+                if (cs->isData())
+                    return "data";
+
+                // Step 2: find the equivalent color space in the built-in
+                // Studio config, whose color spaces all have an interop ID.
+                if (const auto builtin = builtinStudioConfig())
                 {
-                    const char* builtinCSName =
-                        OCIO::Config::IdentifyBuiltinColorSpace(OCIOconfig,
-                                                                builtinConfig,
-                                                                ics.c_str());
-
-                    if (builtinCSName && *builtinCSName != '\0')
+                    try
                     {
-                        OCIO::ConstColorSpaceRcPtr builtinCS = builtinConfig->getColorSpace(builtinCSName);
-                        if (builtinCS)
+                        const char* name =
+                            OCIO::Config::LocateBuiltinColorSpace(
+                                OCIOconfig, cs->getName(), builtin);
+                        if (name && *name != '\0')
                         {
-                            const char* builtinInteropID = builtinCS->getInteropID();
-                            if (builtinInteropID && *builtinInteropID != '\0')
+                            if (const auto builtinCS =
+                                    builtin->getColorSpace(name))
                             {
-                                return builtinInteropID;
+                                const char* id = builtinCS->getInteropID();
+                                if (id && *id != '\0')
+                                    return id;
                             }
                         }
                     }
+                    catch (const std::exception&)
+                    {
+                        // Heuristics may fail on some configs (e.g. no
+                        // interchange space); continue to step 3.
+                    }
+                }
+
+                // Step 3: generate a "<config-name>:local:<base>" ID.  This
+                // throws if the config has no (usable) name.
+                try
+                {
+                    const std::string id =
+                        OCIOconfig->generateLocalIDForColorSpace(cs->getName());
+                    if (!id.empty())
+                        return id;
+                }
+                catch (const std::exception&)
+                {
                 }
             }
-            catch (...)
+            catch (const std::exception&)
             {
-                // Ignore potential resolution or creation exceptions and continue to Step 3
             }
+#endif
 
-            // ------------------------------------------------------------------------
-            // Step 3: Attempt to generate a local ID (requires a named config)
-            // ------------------------------------------------------------------------
-            const char* configName = OCIOconfig->getName();
-            if (configName && *configName != '\0')
-            {
-                return std::string(configName) + ":" + ics;
-            }
-
-            // ------------------------------------------------------------------------
-            // Fallback: Return "unknown" or empty string to prevent writing invalid IDs
-            // ------------------------------------------------------------------------
-            return fallbackToUnknown ? "unknown" : "";
+            // Never write a guessed default color space.
+            return failure;
         }
 
     } // namespace ocio

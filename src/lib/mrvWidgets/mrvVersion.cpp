@@ -78,6 +78,11 @@
 #    include <aom/aom_encoder.h>
 #endif
 
+#ifdef TLRENDER_OAPV
+#    define OAPV_STATIC_DEFINE
+#    include <oapv/oapv.h>
+#endif
+
 #ifdef TLRENDER_OCIO
 #    include <expat.h>
 #endif
@@ -1008,6 +1013,15 @@ namespace mrv
           << endl
           << "Copyright (c) 2013-Present Niels Lohmann" << endl
           << endl;
+#ifdef TLRENDER_OAPV
+        unsigned int oapv_ver = OAPV_VER_NUM;
+        o << "OpenAPV v" << oapv_version(&oapv_ver)
+          << endl
+          << "Copyright (c) 2022 Samsung Electronics Co., Ltd." << endl
+          << "All Rights Reserved."
+          << endl
+          << endl;
+#endif
         o << "OFL (Open Font License)" << endl
           << "Copyright (c) 26 February 2007" << endl
           << endl;

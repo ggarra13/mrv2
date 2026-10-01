@@ -1,0 +1,31 @@
+avformat/subfile: clip seek positions as 64-bit
+
+subfile_seek clamps the position with av_clip(), which takes and returns
+int, so a seek past 2 GB inside the subfile is truncated and lands in
+the wrong place. A movie whose moov atom follows a mdat larger than 2 GB
+fails to open with "moov atom not found" through
+subfile,,start,0,,:file.mp4 while the file itself opens fine.
+
+Use av_clip64().
+
+Made against n8.1.2; master has the same code.
+---
+--- a/libavformat/subfile.c
++++ b/libavformat/subfile.c
+@@ -126,13 +126,13 @@
+     case AVSEEK_SIZE:
+         return end - c->start;
+     case SEEK_SET:
+-        new_pos = c->start + av_clip(pos, 0, end - c->start);
++        new_pos = c->start + av_clip64(pos, 0, end - c->start);
+         break;
+     case SEEK_CUR:
+-        new_pos = c->pos + av_clip(pos, -(c->pos - c->start), end - c->pos);
++        new_pos = c->pos + av_clip64(pos, -(c->pos - c->start), end - c->pos);
+         break;
+     case SEEK_END:
+-        new_pos = end + av_clip(pos, -(end - c->start), 0);
++        new_pos = end + av_clip64(pos, -(end - c->start), 0);
+         break;
+     default:
+         av_assert0(0);

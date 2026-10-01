@@ -213,6 +213,10 @@ if(TLRENDER_NET)
     add_definitions(-DTLRENDER_NET)
 endif()
 
+if(TLRENDER_OAPV)
+    add_definitions(-DTLRENDER_OAPV)
+endif()
+
 if(TLRENDER_OCIO)
     add_definitions(-DTLRENDER_OCIO)
 endif()

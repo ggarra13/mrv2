@@ -3,13 +3,23 @@ v1.7.9
 
 - UI: Secondary Window now remembers the screen number and positioning except on Linux Wayland (which does not allow it).
 
+- UI/Core: Movies can be exported with the OpenAPV codec.
+
+- Core: Updated code to use new OpenColorIO's colorInterOp functions.
+
 
 Fixes
 -----
 
-- Audio is no longer turned off if the main window is hidden, but the secondary window is still visible.
-- Going to Presentation mode with the secondary window open makes *that* window go to presentation mode.  This temporarly fixes a bug on Linux Wayland where the playback would stutter.
-- Fixed a mis-used EGL (ie.OpenGL) function.
+- UI/Linux: Audio is no longer turned off if the main window is hidden, but the secondary window is still visible.
+- UI/Linux: There's no longer stuttering of Secondary display.
+- Core/Linux: Fixed a mis-used EGL (ie.OpenGL) function.
+
+Libraries
+---------
+
+- OpenAPV v1.1.1.2 - with version and license information.
+- OpenColorIO v2.6.0 - with new color interop ID functions.
 
 
 v1.7.8

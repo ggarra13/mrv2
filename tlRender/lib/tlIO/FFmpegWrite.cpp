@@ -1354,6 +1354,10 @@ namespace tl
                     // the existing H.264 bit-depth switch.
                     avProfile = AV_PROFILE_HEVC_MAIN;
                     break;
+                case Profile::OAPV:
+                    avCodecID = AV_CODEC_ID_APV;
+                    avProfile = AV_PROFILE_UNKNOWN;
+                    break;
                 default:
                     break;
                 }
@@ -1429,6 +1433,10 @@ namespace tl
                 else if (!avCodec && avCodecID == AV_CODEC_ID_PRORES)
                 {
                     avCodec = avcodec_find_encoder_by_name("prores_ks");
+                }
+                else if (!avCodec && avCodecID == AV_CODEC_ID_APV)
+                {
+                    avCodec = avcodec_find_encoder_by_name("libaopv");
                 }
 
                 if (!avCodec)
