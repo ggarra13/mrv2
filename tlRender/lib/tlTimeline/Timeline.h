@@ -161,6 +161,54 @@ namespace tl
                 io::Info&,
                 const io::Options& = io::Options());
 
+            //! \name Media Frame Numbers
+            //!
+            //! A timeline time is not a frame number. A clip can be trimmed, so
+            //! that its first frame is not the media's first frame, and a sequence
+            //! read with frames skipped is only as long as the frames it has.
+            //! These convert between the two using the clip at the given time,
+            //! which is the clip the caller is looking at.
+            ///@{
+
+            //! The media time that names the frame shown at a timeline time.
+            //!
+            //! This is the time to show someone watching, whatever units they
+            //! read it in: it matches the file on disk, where the timeline's own
+            //! time only counts off the frames that are being played.
+            std::optional<OTIO_NS::RationalTime> getMediaTime(
+                const OTIO_NS::RationalTime&);
+
+            //! The timeline time that shows the given media time, taking the clip
+            //! from the given time.
+            std::optional<OTIO_NS::RationalTime> getTimelineTime(
+                const OTIO_NS::RationalTime&,
+                const OTIO_NS::RationalTime& mediaTime);
+
+            //! The frame number the media gives to a timeline time.
+            std::optional<int64_t> getMediaFrame(
+                const OTIO_NS::RationalTime&);
+
+            //! The timeline time that reads the given media frame number, taking
+            //! the clip from the given time.
+            //!
+            //! A frame the media does not have snaps as the media requires, so
+            //! there is always an answer for a clip that was found.
+            std::optional<OTIO_NS::RationalTime> getMediaFrameTime(
+                const OTIO_NS::RationalTime&,
+                int64_t frame);
+
+            //! Whether media times increase over the whole timeline, which is
+            //! what makes them worth showing in place of it.
+            //!
+            //! They do when every video clip reads the same media and takes a
+            //! later part of it than the one before: one file played through, in
+            //! one piece or in the runs a sparse sequence is cut into. Cutting
+            //! between media, or playing the same media twice, restarts the
+            //! numbering.
+            bool isMediaTimeContinuous() const;
+
+            ///@}
+
             //! Read one frame of one of the media in the timeline.
             //!
             //! On a timeline with no thread the future comes back resolved.
@@ -228,6 +276,9 @@ namespace tl
             //! Get the time range.
             const OTIO_NS::TimeRange& getTimeRange() const;
 
+            //! Get the duration.
+            OTIO_NS::RationalTime getDuration() const;
+
             //! Get the I/O information. This information is retrieved from
             //! the first clip in the timeline.
             const io::Info& getIOInfo() const;
@@ -256,10 +307,23 @@ namespace tl
             //! Cancel requests.
             void cancelRequests(const std::vector<uint64_t>&);
 
+            //! Set the time requests are served nearest to. Video requests at
+            //! and ahead of it, in the direction given, are served first, nearest
+            //! first; those behind it after, in order of time. Without it they
+            //! are served in the order they were made.
+            void setRequestPriority(
+                const OTIO_NS::RationalTime&,
+                bool reverse = false);
+
+            //! Close the readers, which hold the decoders and what they have
+            //! decoded. The next read opens them again, while the timeline
+            //! itself stays open.
+            void closeReaders();
+
             ///@}
 
-            //! Stats
-            size_t getObjectCount();
+            //! Get the number of objects currenty instantiated.
+            static size_t getObjectCount();
 
             //! Tick the timeline.
             void tick();

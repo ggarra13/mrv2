@@ -2990,6 +2990,217 @@ namespace tl
             return out;
         }
 
+        std::vector<Timeline::MediaAt> Timeline::_mediaAll()
+        {
+            TLRENDER_P();
+            std::vector<MediaAt> out;
+            for (const auto& otioTrack : p.otioTimeline->video_tracks())
+            {
+                if (!otioTrack->enabled())
+                {
+                    continue;
+                }
+                // Every clip, not just the one at some time: this is for finding
+                // which clip holds a frame that was asked for by number. The ranges
+                // still come from the index rather than from OTIO.
+                for (const auto& otioChild : otioTrack->children())
+                {
+                    auto otioClip = dynamic_cast<const OTIO_NS::Clip*>(otioChild.value);
+                    if (!otioClip)
+                    {
+                        continue;
+                    }
+                    const auto rangeInParent = p.getTrimmedRangeInParent(otioClip);
+                    if (!rangeInParent.has_value())
+                    {
+                        continue;
+                    }
+                    if (const auto mediaAt =
+                        _mediaFrom(otioClip, rangeInParent.value()))
+                    {
+                        out.push_back(*mediaAt);
+                    }
+                }
+            }
+            return out;
+        }
+
+        OTIO_NS::RationalTime Timeline::_toMediaTime(
+            const MediaAt& mediaAt,
+            const OTIO_NS::RationalTime& time) const
+        {
+            TLRENDER_P();
+            return toVideoMediaTime(
+                time - p.timeRange.start_time(),
+                mediaAt.rangeInParent,
+                mediaAt.trimmedRange,
+                mediaAt.rate);
+        }
+
+        OTIO_NS::RationalTime Timeline::_fromMediaTime(
+            const MediaAt& mediaAt,
+            int64_t frame) const
+        {
+            TLRENDER_P();
+
+            // The inverse of toVideoMediaTime(), with the timeline's own start put
+            // back on. Which frames a clip covers is the caller's business: this
+            // just moves a frame number into the clip that holds it.
+            const OTIO_NS::RationalTime mediaTime(
+                static_cast<double>(frame), mediaAt.rate);
+            return (mediaTime
+                    - mediaAt.trimmedRange.start_time()
+                    + mediaAt.rangeInParent.start_time()
+                    + p.timeRange.start_time()).
+                rescaled_to(mediaAt.rangeInParent.duration().rate()).
+                round();
+        }
+
+        std::optional<OTIO_NS::RationalTime> Timeline::getMediaTime(
+            const OTIO_NS::RationalTime& time)
+        {
+            std::optional<OTIO_NS::RationalTime> out;
+            if (const auto mediaAt = _mediaAt(time))
+            {
+                out = _toMediaTime(*mediaAt, time);
+            }
+            return out;
+        }
+
+        std::optional<int64_t> Timeline::getMediaFrame(
+            const OTIO_NS::RationalTime& time)
+        {
+            std::optional<int64_t> out;
+            if (const auto mediaTime = getMediaTime(time))
+            {
+                // Already whole, at the media's rate.
+                out = static_cast<int64_t>(mediaTime->value());
+            }
+            return out;
+        }
+
+        std::optional<OTIO_NS::RationalTime> Timeline::getMediaFrameTime(
+            const OTIO_NS::RationalTime& time,
+            int64_t frame)
+        {
+            std::optional<OTIO_NS::RationalTime> out;
+            if (const auto mediaAt = _mediaAt(time))
+            {
+                out = _fromMediaTime(*mediaAt, frame);
+            }
+            return out;
+        }
+
+        bool Timeline::isMediaTimeContinuous() const
+        {
+            TLRENDER_P();
+            std::optional<std::string> path;
+            std::optional<OTIO_NS::RationalTime> end;
+            size_t count = 0;
+            for (const auto& otioTrack : p.otioTimeline->video_tracks())
+            {
+                if (!otioTrack->enabled())
+                {
+                    continue;
+                }
+                for (const auto& otioChild : otioTrack->children())
+                {
+                    auto otioClip = dynamic_cast<const OTIO_NS::Clip*>(otioChild.value);
+                    if (!otioClip)
+                    {
+                        continue;
+                    }
+                    const std::string clipPath = timeline::getPath(
+                        p.mediaReference(otioClip),
+                        p.path.getProtocol() + p.path.getDirectory(),
+                        p.options.pathOptions).get();
+                    if (path.has_value() && clipPath != path.value())
+                    {
+                        return false;
+                    }
+                    path = clipPath;
+                    const OTIO_NS::TimeRange range = otioClip->trimmed_range();
+                    if (end.has_value() && range.start_time() < end.value())
+                    {
+                        return false;
+                    }
+                    end = range.end_time_exclusive();
+                    ++count;
+                }
+            }
+            return count > 0;
+        }
+
+        std::optional<OTIO_NS::RationalTime> Timeline::getTimelineTime(
+            const OTIO_NS::RationalTime& time,
+            const OTIO_NS::RationalTime& mediaTime)
+        {
+            std::optional<OTIO_NS::RationalTime> out;
+            const auto at = _mediaAt(time);
+            if (!at)
+            {
+                return out;
+            }
+            const OTIO_NS::RationalTime frame =
+                mediaTime.rescaled_to(at->rate).round();
+
+            // The clip being looked at, when it is the one holding the frame asked
+            // for. This is the whole answer for a timeline whose clips cover their
+            // media without a break.
+            if (at->trimmedRange.contains(frame))
+            {
+                out = _fromMediaTime(
+                    *at, static_cast<int64_t>(frame.value()));
+                return out;
+            }
+
+            // Otherwise the frame belongs to one of the other clips over the same
+            // media, which is what a sequence with frames left out looks like. Only
+            // clips over that same media are considered, so a frame number means
+            // the same thing it does in the clip it was typed against rather than
+            // being matched against some other file that happens to number its
+            // frames the same way.
+            std::optional<MediaAt> snap;
+            for (const auto& i : _mediaAll())
+            {
+                if (i.seq != at->seq)
+                {
+                    continue;
+                }
+                if (i.trimmedRange.contains(frame))
+                {
+                    out = _fromMediaTime(i, static_cast<int64_t>(frame.value()));
+                    return out;
+                }
+                const bool before = i.trimmedRange.end_time_inclusive() < frame;
+                if (before &&
+                    (!snap ||
+                     snap->trimmedRange.end_time_inclusive() <
+                     i.trimmedRange.end_time_inclusive()))
+                {
+                    snap = i;
+                }
+            }
+
+            // A frame that is not there at all snaps to the last one before it, or
+            // to the first frame when it is before them all, so that typing a
+            // number always lands somewhere.
+            if (snap)
+            {
+                out = _fromMediaTime(
+                    *snap,
+                    static_cast<int64_t>(
+                        snap->trimmedRange.end_time_inclusive().value()));
+            }
+            else
+            {
+                out = _fromMediaTime(
+                    *at,
+                    static_cast<int64_t>(at->trimmedRange.start_time().value()));
+            }
+            return out;
+        }
+
         size_t Timeline::getObjectCount()
         {
             return objectCount;
