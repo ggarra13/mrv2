@@ -2195,20 +2195,28 @@ namespace tl
 
             if (p.opened)
             {
-                if (p.avAudioCodecContext)
+                // We need to enclose this in a try block as _encode can throw
+                try
                 {
-                    _flushAudio();
+                    if (p.avAudioCodecContext)
+                    {
+                        _flushAudio();
 
-                    _encode(
-                        p.avAudioCodecContext, p.avAudioStream, nullptr,
-                        p.avAudioPacket);
+                        _encode(
+                            p.avAudioCodecContext, p.avAudioStream, nullptr,
+                            p.avAudioPacket);
+                    }
+
+                    if (p.avCodecContext)
+                    {
+                        _encode(
+                            p.avCodecContext, p.avVideoStream, nullptr,
+                            p.avPacket);
+                    }
                 }
-
-                if (p.avCodecContext)
+                catch (const std::exception& e)
                 {
-                    _encode(
-                        p.avCodecContext, p.avVideoStream, nullptr,
-                        p.avPacket);
+                    LOG_ERROR(e.what());
                 }
 
                 int r = av_write_trailer(p.avFormatContext);
