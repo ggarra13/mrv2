@@ -2,16 +2,17 @@ v1.7.9
 ======
 
 - UI: Secondary Window now remembers the screen number and positioning except on Linux Wayland (which does not allow it).
-- UI: Secondary and Main Window now draw black borders when any of them is in Presentation Mode.  If not in presentation mode, they will use the color set in Preferences->Language and Colors->BG Color.
+- UI: Secondary and Main Window now draw black borders when any of them is in Presentation Mode.  If not in presentation mode, they will use the color set in **Preferences->Language and Colors->BG Color**.
+- UI: Added back **Playback->Toggle In/Out OTIO clip** for .otio and .otioz.
 
 - UI/Core: Movies can be exported with the OpenAPV codec with or without alpha.  UI has been updated to reflect the valid Pixel Formats.
 - UI/Core: OpenAPV codec has three presets (.pst) files.
 
+- UI/Edit: .otioz files are now properly detected for OTIO features in the UI.
 - UI/Edit: You can now hide the tracks of .otioz files.
-- UI/Edit: Hiding the audio tracks of .otio or .otioz files also makes them silent.
+- UI/Edit: Hiding the audio tracks of .otio or .otioz files also makes them silent.	
 
 - Core: Updated code to use the new OpenColorIO's colorInterOp functions.
-- Core: Made FFmpeg writer call finish instead of just hiding the exception in the destructor.
 
 
 Fixes

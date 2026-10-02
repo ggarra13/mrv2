@@ -2587,7 +2587,8 @@ namespace mrv
         if (!player)
             return;
 
-        const auto time = player->currentTime();
+        const auto timeRange = player->timeRange();
+        const auto time = player->currentTime() - timeRange.start_time();
         const auto timeline = player->getTimeline();
         const auto tracks = timeline->video_tracks();
         const auto track = tracks[0];
@@ -2595,20 +2596,28 @@ namespace mrv
         const auto item =
             OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(track->child_at_time(time));
         if (!item)
-            return;
-
-        const auto& fullRange = player->timeRange();
-        const auto& inOutRange = player->inOutRange();
-        auto range = item->trimmed_range_in_parent().value();
-        if (range == inOutRange)
         {
-            range = fullRange;
+            return;
         }
 
-        auto rate = track->trimmed_range().end_time_exclusive().rate();
+        const auto& inOutRange = player->inOutRange();
+        auto trimmedRange = item->trimmed_range_in_parent().value();
+
+        if (timeRange != inOutRange)
+        {
+            trimmedRange = timeRange;
+        }
+
+        auto rate = track->duration().rate();
+
+        OTIO_NS::TimeRange range(
+            trimmedRange.start_time().rescaled_to(rate) +
+            timeRange.start_time(),
+            trimmedRange.duration().rescaled_to(rate));
+
         range = OTIO_NS::TimeRange::range_from_start_end_time(
-            range.start_time().rescaled_to(rate).round(),
-            range.end_time_exclusive().rescaled_to(rate).round());
+            range.start_time().round(),
+            range.end_time_exclusive().round());
         player->setInOutRange(range);
 
         TimelineClass* c = ui->uiTimeWindow;
