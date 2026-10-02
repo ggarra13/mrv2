@@ -55,6 +55,9 @@ namespace mrv
         //! Get the timeline options.
         const timeline::Options& getOptions() const;
 
+        //! Get the timeline media Reference Key if any.
+        const std::string getMediaReferenceKey() const;
+
         //! \name Information
         ///@{
 
@@ -263,6 +266,9 @@ namespace mrv
 
         //! Set the audio sync offset (in seconds).
         void setAudioOffset(double);
+
+        //! Sets the media reference key.
+        void setMediaReferenceKey(const std::string&);
 
         ///@}
 

@@ -1530,10 +1530,7 @@ namespace mrv
                 }
                 std::string key = message["value"];
 
-                const auto& timeline = player->timeline();
-                if (!timeline) return;
-
-                timeline->setMediaReferenceKey(key);
+                player->setMediaReferenceKey(key);
                 player->clearCache();
                 ui->uiTimeline->setTimelinePlayer(nullptr);
                 ui->uiTimeline->setTimelinePlayer(player);

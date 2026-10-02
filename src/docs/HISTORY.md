@@ -6,6 +6,9 @@ v1.7.9
 - UI: Added back **Playback->Toggle In/Out OTIO clip** for .otio and .otioz.
 - UI: Changing Preferences->Loading->Missing Frame immediately reloads the suquence being shown for updating.
 
+- Command-Line: -mr or -mediaRefence is now available.
+- Edit: Media Reference Keys are now saved in the session file.
+
 - UI/Core: Movies can be exported with the OpenAPV codec with or without alpha.  UI has been updated to reflect the valid Pixel Formats.
 - UI/Core: OpenAPV codec has three presets (.pst) files.
 
@@ -27,7 +30,7 @@ Fixes
 Libraries
 ---------
 
-	- OpenAPV v1.1.1.2 - with version and license information.
+	- OpenAPV v1.1.1.2 - with version, alpha and license information.
 	- OpenColorIO v2.6.0 - with new color interop ID functions.
 	- OpenEXR v3.5.1 - fixed possible ZSTD overruns.
 

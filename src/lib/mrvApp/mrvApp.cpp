@@ -183,6 +183,8 @@ namespace mrv
         timeline::LUTOptions lutOptions;
 
         bool hud = true;
+
+        std::string mediaReferenceKey;
         bool resetSettings = false;
         bool resetHotkeys = false;
         bool displayVersion = false;
@@ -506,6 +508,13 @@ namespace mrv
                     p.options.webrtcRoom, {"-wr", "-room"},
                     _("Connect to a WebRTC room at <value>.")),
 #endif
+
+                app::CmdLineHeader::create({}, _("Timeline:")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.mediaReferenceKey, {"-mr", "-mediaReference"},
+                    _("Media reference to open OTIO timelines with for clips "
+                      "that have several versions of their media (examples: "
+                      "\"Proxy\" and \"Full\".")),
 
                 app::CmdLineHeader::create({}, _("Miscellaneous:")),
                 app::CmdLineFlagOption::create(
@@ -2307,7 +2316,10 @@ namespace mrv
                         item->ioInfo = player->ioInfo();
                         if (!item->init)
                         {
+                            std::string key = p.options.mediaReferenceKey;
                             item->init = true;
+                            item->mediaReferenceKey = key;
+                            player->setMediaReferenceKey(key);
                             item->speed = player->speed();
                             item->playback = player->playback();
                             item->loop = player->loop();
@@ -2373,6 +2385,7 @@ namespace mrv
                         {
                             if (isRunning())
                             {
+                                player->setMediaReferenceKey(item->mediaReferenceKey);
                                 player->setSpeed(item->speed);
                                 player->setLoop(item->loop);
                                 player->setInOutRange(item->inOutRange);
