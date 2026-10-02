@@ -3593,7 +3593,7 @@ namespace mrv
 
         auto compositions = getTracks(player);
 
-        std::vector<bool> audioTracks;
+        std::vector<int> audioTracks;
         audioTracks.reserve(compositions.size());
 
         int index = 0;
