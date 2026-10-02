@@ -2186,32 +2186,29 @@ namespace tl
 
         Write::~Write()
         {
+            finish();
+        }
+
+        void Write::finish()
+        {
             TLRENDER_P();
 
             if (p.opened)
             {
-                // We need to enclose this in a try block as _encode can throw
-                try
+                if (p.avAudioCodecContext)
                 {
-                    if (p.avAudioCodecContext)
-                    {
-                        _flushAudio();
+                    _flushAudio();
 
-                        _encode(
-                            p.avAudioCodecContext, p.avAudioStream, nullptr,
-                            p.avAudioPacket);
-                    }
-
-                    if (p.avCodecContext)
-                    {
-                        _encode(
-                            p.avCodecContext, p.avVideoStream, nullptr,
-                            p.avPacket);
-                    }
+                    _encode(
+                        p.avAudioCodecContext, p.avAudioStream, nullptr,
+                        p.avAudioPacket);
                 }
-                catch (const std::exception& e)
+
+                if (p.avCodecContext)
                 {
-                    LOG_ERROR(e.what());
+                    _encode(
+                        p.avCodecContext, p.avVideoStream, nullptr,
+                        p.avPacket);
                 }
 
                 int r = av_write_trailer(p.avFormatContext);

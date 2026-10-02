@@ -308,14 +308,14 @@ namespace tl
             //! Set the audio mute.
             void setMute(bool);
 
-            //! Get the audio channels mute.
-            const std::vector<int>& getChannelMute() const;
+            //! Get the audio channels muted.
+            const std::vector<bool>& getChannelMute() const;
 
-            //! Observe the audio channels mute.
-            std::shared_ptr<observer::IList<int> > observeChannelMute() const;
+            //! Observe the audio channels muted.
+            std::shared_ptr<observer::IList<bool> > observeChannelMute() const;
 
-            //! Set the audio channels mute.
-            void setChannelMute(const std::vector<int>&);
+            //! Set the audio channels to mute.
+            void setChannelMute(const std::vector<bool>&);
 
             //! Get the audio sync offset (in seconds).
             double getAudioOffset() const;

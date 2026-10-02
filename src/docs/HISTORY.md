@@ -4,10 +4,14 @@ v1.7.9
 - UI: Secondary Window now remembers the screen number and positioning except on Linux Wayland (which does not allow it).
 - UI: Secondary and Main Window now draw black borders when any of them is in Presentation Mode.  If not in presentation mode, they will use the color set in Preferences->Language and Colors->BG Color.
 
-- UI/Core: Movies can be exported with the OpenAPV codec with or without alpha.  UI has been updated to reflect the valic Pixel Formats.
+- UI/Core: Movies can be exported with the OpenAPV codec with or without alpha.  UI has been updated to reflect the valid Pixel Formats.
 - UI/Core: OpenAPV codec has three presets (.pst) files.
 
+- UI/Edit: You can now hide the tracks of .otioz files.
+- UI/Edit: Hiding the audio tracks of .otio or .otioz files also makes them silent.
+
 - Core: Updated code to use the new OpenColorIO's colorInterOp functions.
+- Core: Made FFmpeg writer call finish instead of just hiding the exception in the destructor.
 
 
 Fixes
@@ -16,6 +20,7 @@ Fixes
 - UI/Linux: Audio is no longer turned off if the main window is hidden, but the secondary window is still visible.
 - UI/Linux: There's no longer stuttering of Secondary display under either Linux or Windows on any of the backends.
 - Core/Linux: Fixed a mis-used EGL (ie.OpenGL) function.
+- Edit: Selecting an item and deleting it no longer crashes the application.  A regression in v1.7.8 from v1.7.7.
 
 Libraries
 ---------

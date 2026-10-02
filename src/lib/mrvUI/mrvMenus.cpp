@@ -84,12 +84,18 @@ namespace mrv
         if (numFiles > 0)
         {
             Aitem = model->observeA()->get();
+            if (Aitem)
+            {
+                const std::string ext = Aitem->path.getExtension();
 
-            if (Aitem && string::compare(
-                             Aitem->path.getExtension(), ".otio",
-                             string::Compare::CaseInsensitive))
-                isOtio = true;
+                if (string::compare(ext, ".otio",
+                                    string::Compare::CaseInsensitive) ||
+                    string::compare(ext, ".otioz",
+                                string::Compare::CaseInsensitive))
+                    isOtio = true;
+            }
         }
+
         menu->clear();
 
         int idx;

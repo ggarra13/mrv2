@@ -255,6 +255,8 @@ namespace tl
                 const OTIO_NS::TimeRange&, const std::shared_ptr<audio::Audio>&,
                 const io::Options& = io::Options()) override;
 
+            void finish() override;
+
         private:
             void _attach_frame_hdr_metadata(AVFrame*);
             void _attach_stream_hdr_metadata(AVStream*);

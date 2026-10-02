@@ -1338,6 +1338,9 @@ namespace tl
             std::vector<timeline::MoveData> out;
             for (const auto& item : p.mouse.items)
             {
+                if (!dynamic_cast<VideoClipItem*>(item->p.get()) &&
+                    !dynamic_cast<AudioClipItem*>(item->p.get()))
+                    continue;
                 timeline::MoveData move;
                 move.fromTrack = move.toTrack = item->track;
                 move.fromIndex = move.toIndex = item->index;
@@ -1354,6 +1357,8 @@ namespace tl
             std::vector<timeline::MoveData> out;
             for (const auto& item : p.mouse.items)
             {
+                if (!dynamic_cast<TransitionItem*>(item->p.get()))
+                    continue;
                 timeline::MoveData move;
                 move.fromTrack = move.toTrack = item->track;
                 move.fromIndex = move.toIndex = item->index;

@@ -1090,6 +1090,8 @@ namespace mrv
                     waitForFrame(player, currentTime);
                 }
             }
+
+            writer->finish();
         }
         catch (const std::exception& e)
         {

@@ -87,7 +87,7 @@ namespace tl
             std::shared_ptr<observer::List<VideoFrame> > currentVideoFrame;
             std::shared_ptr<observer::Value<float> > volume;
             std::shared_ptr<observer::Value<bool> > mute;
-            std::shared_ptr<observer::List<int> > channelMute;
+            std::shared_ptr<observer::List<bool> > channelMute;
             std::shared_ptr<observer::Value<double> > audioOffset;
             std::shared_ptr<observer::List<AudioFrame> > currentAudioFrame;
             std::shared_ptr<observer::Value<PlayerCacheOptions> > cacheOptions;
@@ -123,7 +123,7 @@ namespace tl
                 double speed = 0.0;
                 float volume = 1.F;
                 bool mute = false;
-                std::vector<int> channelMute;
+                std::vector<bool> channelMute;
                 std::chrono::steady_clock::time_point muteTimeout;
                 std::map<int64_t, AudioFrame> cache;
                 bool reset = false;

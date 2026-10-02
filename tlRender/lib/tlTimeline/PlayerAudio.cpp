@@ -22,18 +22,18 @@ namespace tl
 {
     namespace timeline
     {
-        const std::vector<int>& Player::getChannelMute() const
+        const std::vector<bool>& Player::getChannelMute() const
         {
             return _p->channelMute->get();
         }
 
-        std::shared_ptr<observer::IList<int> >
+        std::shared_ptr<observer::IList<bool> >
         Player::observeChannelMute() const
         {
             return _p->channelMute;
         }
 
-        void Player::setChannelMute(const std::vector<int>& value)
+        void Player::setChannelMute(const std::vector<bool>& value)
         {
             TLRENDER_P();
             if (p.channelMute->setIfChanged(value))
@@ -86,7 +86,7 @@ namespace tl
             double speedMultiplier = 1.0F;
             float volume = 1.F;
             bool mute = false;
-            std::vector<int> channelMute;
+            std::vector<bool> channelMute;
             std::chrono::steady_clock::time_point muteTimeout;
             bool reset = false;
             {
@@ -324,7 +324,7 @@ namespace tl
                             }
 
                             if (audioIndex < channelMute.size() &&
-                                channelMute[audioIndex])
+                                !channelMute[audioIndex])
                             {
                                 volumeMultiplier = 0.F;
                             }

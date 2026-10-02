@@ -46,10 +46,10 @@ namespace tl
                 const io::Options& = io::Options());
 
             //! Finish writing, flushing any buffered data and finalizing the
-            //! file. This is called automatically by the destructor, but since
-            //! destructors cannot throw, errors that occur while finalizing
-            //! are only logged. Call finish() explicitly to have those errors
-            //! reported as exceptions.
+            //! file. This is called automatically by the destructor, but
+            //! since destructors cannot throw, errors that occur while
+            //! finalizing are only logged. Call finish() explicitly to have
+            //! those errors reported as exceptions.
             virtual void finish();
 
         protected:
