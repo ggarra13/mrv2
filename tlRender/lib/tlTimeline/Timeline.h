@@ -161,54 +161,6 @@ namespace tl
                 io::Info&,
                 const io::Options& = io::Options());
 
-            //! \name Media Frame Numbers
-            //!
-            //! A timeline time is not a frame number. A clip can be trimmed, so
-            //! that its first frame is not the media's first frame, and a sequence
-            //! read with frames skipped is only as long as the frames it has.
-            //! These convert between the two using the clip at the given time,
-            //! which is the clip the caller is looking at.
-            ///@{
-
-            //! The media time that names the frame shown at a timeline time.
-            //!
-            //! This is the time to show someone watching, whatever units they
-            //! read it in: it matches the file on disk, where the timeline's own
-            //! time only counts off the frames that are being played.
-            std::optional<OTIO_NS::RationalTime> getMediaTime(
-                const OTIO_NS::RationalTime&);
-
-            //! The timeline time that shows the given media time, taking the clip
-            //! from the given time.
-            std::optional<OTIO_NS::RationalTime> getTimelineTime(
-                const OTIO_NS::RationalTime&,
-                const OTIO_NS::RationalTime& mediaTime);
-
-            //! The frame number the media gives to a timeline time.
-            std::optional<int64_t> getMediaFrame(
-                const OTIO_NS::RationalTime&);
-
-            //! The timeline time that reads the given media frame number, taking
-            //! the clip from the given time.
-            //!
-            //! A frame the media does not have snaps as the media requires, so
-            //! there is always an answer for a clip that was found.
-            std::optional<OTIO_NS::RationalTime> getMediaFrameTime(
-                const OTIO_NS::RationalTime&,
-                int64_t frame);
-
-            //! Whether media times increase over the whole timeline, which is
-            //! what makes them worth showing in place of it.
-            //!
-            //! They do when every video clip reads the same media and takes a
-            //! later part of it than the one before: one file played through, in
-            //! one piece or in the runs a sparse sequence is cut into. Cutting
-            //! between media, or playing the same media twice, restarts the
-            //! numbering.
-            bool isMediaTimeContinuous() const;
-
-            ///@}
-
             //! Read one frame of one of the media in the timeline.
             //!
             //! On a timeline with no thread the future comes back resolved.
@@ -335,25 +287,6 @@ namespace tl
             void _tick();
             void _requests();
             void _finishRequests();
-
-            //! What is needed to convert between timeline time and media time for
-            //! the clip at a time.
-            struct MediaAt
-            {
-                std::shared_ptr<io::SeqDecode> seq;
-                OTIO_NS::TimeRange rangeInParent;
-                OTIO_NS::TimeRange trimmedRange;
-                double rate = 0.0;
-            };
-            std::optional<MediaAt> _mediaAt(const OTIO_NS::RationalTime&);
-            std::optional<MediaAt> _mediaFrom(
-                const OTIO_NS::Clip*,
-                const OTIO_NS::TimeRange& rangeInParent);
-            std::vector<MediaAt> _mediaAll();
-            OTIO_NS::RationalTime _toMediaTime(
-                const MediaAt&,
-                const OTIO_NS::RationalTime&) const;
-            OTIO_NS::RationalTime _fromMediaTime(const MediaAt&, int64_t frame) const;
 
             // Find a media reference by its resolved path.
             OTIO_NS::MediaReference* _findMedia(const file::Path&);

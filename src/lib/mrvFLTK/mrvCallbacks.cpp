@@ -3542,6 +3542,11 @@ namespace mrv
         auto item = std::make_shared<FilesModelItem>();
         item->init = true;
 
+        // If a sequence, make sure to reinit it as it
+        // may have changed length due to Loading->Gap Frames
+        if (file::isSequence(media->path))
+            item->init = false;
+
         // Paths
         item->path = media->path;
         item->audioPath = media->audioPath;
@@ -3553,8 +3558,8 @@ namespace mrv
         item->videoLayers = media->videoLayers;
 
         // Playback
-        item->inOutRange = media->inOutRange;
         item->timeRange = media->timeRange;
+        item->inOutRange = media->inOutRange;
         item->ioInfo = media->ioInfo;
         item->speed = media->speed;
         item->loop = media->loop;

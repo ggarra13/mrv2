@@ -2592,7 +2592,6 @@ namespace mrv
 
             // Update the I/O cache.
             auto ioSystem = _context->getSystem<io::ReadSystem>();
-            // ioSystem->getCache()->setMax(bytes);
 
             // old readAhead/readBehind code used when playing sequences.
             const auto timeline = p.player->timeline();

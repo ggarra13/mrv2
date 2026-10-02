@@ -77,6 +77,9 @@ namespace mrv
     int Preferences::selectioncolor;
     int Preferences::selectiontextcolor;
 
+    tl::io::MissingFrames Preferences::missingFrames =
+        tl::io::MissingFrames::Scratch;
+
     Preferences::Preferences(bool resetSettings, bool resetHotkeys)
     {
         load(resetSettings, resetHotkeys);
@@ -829,6 +832,7 @@ namespace mrv
 
         loading.get("missing_frame_type", tmp, 0);
         uiPrefs->uiMissingFrameType->value(tmp);
+        missingFrames = static_cast<tl::io::MissingFrames>(tmp);
 
         loading.get("version_regex", tmpS, "_v", 4096);
         if (strlen(tmpS) == 0)
@@ -2055,8 +2059,13 @@ namespace mrv
             ui->uiView->setGhostPrevious(
                 settings->getValue<int>(kGhostPrevious));
 
-            ui->uiView->setMissingFrameType(static_cast<MissingFrameType>(
-                uiPrefs->uiMissingFrameType->value()));
+            tl::io::MissingFrames value = static_cast<tl::io::MissingFrames>(uiPrefs->uiMissingFrameType->value());
+            ui->uiView->setMissingFrameType(static_cast<MissingFrameType>(value));
+            if (value != missingFrames)
+            {
+                refresh_media_cb(nullptr, ui);
+            }
+            missingFrames = value;
         }
 
         TimelineClass* t = ui->uiTimeWindow;
