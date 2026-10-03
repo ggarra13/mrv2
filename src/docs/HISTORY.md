@@ -4,11 +4,17 @@ v1.8.0
 - UI: Movie files and sequences with associated audio also allow turning off any of the two tracks.
 - UI: Built-in File Requester (used mainly on Linux) no longer shows the patterns in a floating window.
 
+- Command-Line: Now -systemInfo will list all libraries used in the players.
+- Command-Line: Now -systemInfo will now show up the start up message.
+- Command-Line: Now -systemInfo properly displays the graphics card information on the OpenGL backend.
+
 Fixes
 -----
 
 - UI: Built-in File Requester could crash the application when switching extension patterns.
 - UI: Area selection had a regression which prevented it from marking an area bigger than one pixel.
+
+- Command-Line: Displaying -systemInfo does not hang the Vulkan backend.
 
 - Core: Switching back to **Preferences->Loading->Missing Frames->Error** would not trigger a reload of the file.
 

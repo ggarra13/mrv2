@@ -816,13 +816,9 @@ namespace mrv
 #endif
     }
 
-    void about_message(mrv::TextBrowser* b)
+    const std::string about_message()
     {
         using namespace std;
-
-#ifdef TLRENDER_FFMPEG
-        avformat_network_init();
-#endif
 
         std::stringstream o;
 
@@ -845,7 +841,6 @@ namespace mrv
 #endif
           << build_info() << endl
           << running_info() << endl
-          << endl
           << _("mrv2 depends on:") << endl
           << endl;
 #ifdef TLRENDER_OCIO
@@ -946,6 +941,17 @@ namespace mrv
           << "Copyright Niklas Haas et al." << std::endl
           << std::endl;
 #endif
+#ifdef TLRENDER_PNG
+        o << PNG_HEADER_VERSION_STRING
+          << "Copyright (c) 1995-2019 The PNG Reference Library Authors."
+          << endl
+          << "Copyright (c) 2018-2019 Cosmin Truta." << endl
+          << "Copyright (c) 2000-2002, 2004, 2006-2018 Glenn Randers-Pehrson."
+          << endl
+          << "Copyright (c) 1996-1997 Andreas Dilger." << endl
+          << "Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc." << endl
+          << endl;
+#endif
 #ifdef TLRENDER_RAW
         o << "LibRaw " << LIBRAW_VERSION_STR << endl
           << "Copyright (C) 2008-2021 LibRaw LLC (info@libraw.org)" << endl
@@ -959,17 +965,6 @@ namespace mrv
         o << "libsnappy " << SNAPPY_MAJOR << "." << SNAPPY_MINOR << "."
           << SNAPPY_PATCHLEVEL << endl
           << "Copyright (C) 2011 Google Inc.  All Rights Reserved." << endl
-          << endl;
-#endif
-#ifdef TLRENDER_PNG
-        o << PNG_HEADER_VERSION_STRING
-          << "Copyright (c) 1995-2019 The PNG Reference Library Authors."
-          << endl
-          << "Copyright (c) 2018-2019 Cosmin Truta." << endl
-          << "Copyright (c) 2000-2002, 2004, 2006-2018 Glenn Randers-Pehrson."
-          << endl
-          << "Copyright (c) 1996-1997 Andreas Dilger." << endl
-          << "Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc." << endl
           << endl;
 #endif
 #ifdef TLRENDER_TIFF
@@ -1153,8 +1148,15 @@ namespace mrv
           << "(C) 2008-Present Jean-loup Gailly and Mark Adler" << endl
           << endl
           << endl;
-        std::string line;
-        while (std::getline(o, line, '\n'))
+        return o.str();
+    }
+
+    void about_message(mrv::TextBrowser* b)
+    {
+        std::string message = about_message();
+        auto lines = tl::string::split(message, '\n',
+                                       tl::string::SplitOptions::KeepEmpty);
+        for (const auto& line : lines)
         {
             b->add(line.c_str());
         }
@@ -1175,7 +1177,6 @@ namespace mrv
         out += "\n";
         out += tl::string::Format(
             _("Total Physical Memory: {0} Gb")).arg(totalPhysMem / 1024.0);
-        out += "\n";
         out += "\n";
         out += tl::string::Format(
             _("Total Virtual Memory: {0} Gb")).arg(totalVirtualMem / 1024.0);

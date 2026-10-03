@@ -108,6 +108,12 @@ namespace py = pybind11;
 #    include <Poco/Net/SSLManager.h>
 #endif
 
+#ifdef TLRENDER_FFMPEG
+extern "C" {
+    #include <libavformat/avformat.h>
+}
+#endif
+
 #include <FL/platform.H>
 #include <FL/filename.H>
 #include <FL/fl_ask.H>
@@ -188,7 +194,7 @@ namespace mrv
         bool resetSettings = false;
         bool resetHotkeys = false;
         bool displayVersion = false;
-        bool displaySysInfo = false;
+        bool displaySystemInfo = false;
         bool otioEditMode = false;
 
 #if defined(TLRENDER_USD)
@@ -524,7 +530,7 @@ namespace mrv
                     p.options.displayVersion, {"-version", "-v"},
                     _("Return the version and exit.")),
                 app::CmdLineFlagOption::create(
-                    p.options.displaySysInfo, {"-sys", "-systemInfo"},
+                    p.options.displaySystemInfo, {"-sys", "-systemInfo"},
                     _("Return the system information and exit."))});
 
         const int exitCode = getExit();
@@ -536,7 +542,7 @@ namespace mrv
         fl_open_callback(osx_open_cb);
 #endif
 
-        DBG;
+
         file::Path lastPath;
         const auto& unusedArgs = getUnusedArgs();
         for (const auto& unused : unusedArgs)
@@ -566,13 +572,20 @@ namespace mrv
             return;
         }
 
+        //
+        // Turn off messages if we are displaying system info
+        //
+        if (p.options.displaySystemInfo)
+        {
+            mrv::trace::logLevel = -1;
+        }
 
-        DBG;
+
         // Initialize FLTK.
         Fl::scheme("gtk+");
-        DBG;
+
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
-        DBG;
+
 
 #ifdef OPENGL_BACKEND
         Fl::use_high_res_GL(true);
@@ -584,14 +597,14 @@ namespace mrv
 
 
         Fl::set_fonts("-*");
-        DBG;
+
         Fl::lock(); // needed for NDI and multithreaded logging
 
-        DBG;
+
         // Create the Settings
         p.settings = new SettingsObject();
 
-        DBG;
+
 
         // Create the interface.
         ui = new ViewerUI();
@@ -599,7 +612,7 @@ namespace mrv
         {
             throw std::runtime_error(_("Cannot create window"));
         }
-        DBG;
+
 
         //
         // Initialize POCO Net for SSL connections.
@@ -609,16 +622,20 @@ namespace mrv
         Poco::Net::initializeSSL();
 #endif
 
+#ifdef TLRENDER_FFMPEG
+        avformat_network_init();
+#endif
+
         // Classes used to handle network connections
 #ifdef MRV2_NETWORK
         p.commandInterpreter = new CommandInterpreter(ui);
-        DBG;
+
 #endif
         tcp = new DummyClient();
 
         p.lutOptions = p.options.lutOptions;
 
-        DBG;
+
 #ifdef __APPLE__
         Fl_Mac_App_Menu::about = _("About mrv2");
         Fl_Mac_App_Menu::print = "Print Front Window";
@@ -639,7 +656,7 @@ namespace mrv
         ui->uiTimeline->setScrollBarsVisible(false);
 
 
-        DBG;
+
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
 
@@ -649,7 +666,7 @@ namespace mrv
         if (app::license_type == LicenseType::kFloating)
             Fl::add_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, this);
 
-        DBG;
+
         std::string version = "mrv2 v";
         version += mrv::version();
         version += " ";
@@ -659,7 +676,7 @@ namespace mrv
         LOG_STATUS(version);
         LOG_STATUS(msg);
 
-        DBG;
+
 
         {
             const std::string& info = mrv::build_info();
@@ -681,7 +698,7 @@ namespace mrv
 
         LOG_STATUS(_("Install Location: "));
         LOG_STATUS("\t" << mrv::rootpath());
-        DBG;
+
 
         if (!mrv::studiopath().empty())
         {
@@ -760,7 +777,7 @@ namespace mrv
             showUI = false;
             headless = true;
         }
-        if (p.options.displaySysInfo)
+        if (p.options.displaySystemInfo)
         {
             showUI = false;
             headless = true;
@@ -777,11 +794,22 @@ namespace mrv
 
 #endif
 
-        if (p.options.displaySysInfo)
+        if (p.options.displaySystemInfo)
         {
+#ifdef VULKAN_BACKEND
             ui->uiView->render_offscreen();
             ui->uiTimeline->render_offscreen();
-
+#endif
+#ifdef OPENGL_BACKEND
+            // Create a dummy window so there's an OpenGL context
+            Fl_Gl_Window* tmp = new Fl_Gl_Window(0, 0, 1, 1);
+            tmp->mode(FL_RGB | FL_DOUBLE | FL_OPENGL3);
+            tmp->border(0);
+            tmp->show();
+            Fl::check();
+            tmp->make_current();
+#endif
+            std::cout << mrv::about_message();
             std::cout << std::endl
                       << mrv::cpu_info()
                       << std::endl
@@ -793,6 +821,8 @@ namespace mrv
             ui->uiView->destroy();
             ui->uiTimeline->destroy();
 #endif
+            exit_cb(nullptr, ui);
+
             delete ui;
             ui = nullptr;
             return;
@@ -1273,7 +1303,7 @@ namespace mrv
                 return;
             }
 
-            DBG;
+
             // Redirect Python's stdout/stderr to my own class
             p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
         }
@@ -2437,7 +2467,7 @@ namespace mrv
             p.outputDevice->setPlayer(p.player ? p.player->player() : nullptr);
 #endif // TLRENDER_BMD
 
-        DBG;
+
 
         _layersUpdate(p.filesModel->observeLayers()->get());
 
