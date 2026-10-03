@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
+# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.7.8\n"
+"Project-Id-Version: mrv2 v1.7.9\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-09-28 06:12-0300\n"
+"POT-Creation-Date: 2026-10-02 22:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1156,6 +1156,14 @@ msgid "Connect to a WebRTC project at <value>."
 msgstr ""
 
 msgid "Connect to a WebRTC room at <value>."
+msgstr ""
+
+msgid "Timeline:"
+msgstr ""
+
+msgid ""
+"Media reference to open OTIO timelines with for clips that have several "
+"versions of their media (examples: \"Proxy\" and \"Full\")."
 msgstr ""
 
 msgid "Miscellaneous:"
@@ -3518,6 +3526,9 @@ msgstr ""
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr ""
 
+msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
+msgstr ""
+
 #, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
@@ -4764,6 +4775,9 @@ msgstr ""
 msgid "&File/&Refresh Cache"
 msgstr ""
 
+msgid "&File/Reload Media"
+msgstr ""
+
 msgid "&Copy/&Filename"
 msgstr ""
 
@@ -5113,6 +5127,9 @@ msgid ""
 "        balance disk space vs. quality.\n"
 "        Good for high-end delivery for either Web or \n"
 "        online review.\n"
+"        It is currently the only format that supports\n"
+"        dynamic per-frame HDR, perfect companion for\n"
+"        vmrv2.\n"
 "  Cineform - codec developed by GoPro, that rivals \n"
 "             ProRes in features, except for HDR.  \n"
 "             It was discontinued in 2021, but most \n"
@@ -5128,6 +5145,11 @@ msgid ""
 "  HAP - RGB/A codec which is optimized for fast playback with\n"
 "        CPU decoding.  It does not compress that well.\n"
 "        It needs hap-alpha* presets to save alpha channel.\n"
+"  HEVC - Only supported on HW due to license and patent\n"
+"         restrictions.\n"
+"  OAPV - A competitor to VP9 that offers better YUV formats with\n"
+"         support for an alpha channel, but no HDR yet.\n"
+"\n"
 "\n"
 "  Hardware encoding is only supported on newer MacBook\n"
 "  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
@@ -6760,8 +6782,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
