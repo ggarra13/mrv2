@@ -1,9 +1,20 @@
+v1.8.0
+======
+
+- UI: Movie files and sequences with associated audio also allow turning off any of the two tracks.
+- UI: Improved the look of the Notes Panel's AnnotationWidget, as it was functional but ugly.
+
+Translations
+------------
+	- New documentation on codecs.
+	- New AI translations on all supported languages.
+
 v1.7.9
 ======
 
 - UI: Secondary Window now remembers the screen number and positioning except on Linux Wayland (which does not allow it).
 - UI: Secondary and Main Window now draw black borders when any of them is in Presentation Mode.  If not in presentation mode, they will use the color set in **Preferences->Language and Colors->BG Color**.
-- UI: Added back **Playback->Toggle In/Out OTIO clip** for .otio and .otioz.
+- UI: Added back **Playback->Toggle In/Out OTIO clip** for .otio and .otioz to make the in and out points for one video clip in the timeline.
 - UI: Changing Preferences->Loading->Missing Frame immediately reloads the suquence being shown for updating.
 - UI/Core: Added File->Reload Media context menu on the clips of the Files panel.  This allows reloading the media to refresh frames that are currently being rendered.
 - UI/Core: Changing between Preferences->Loading->Missing Frames now automatically refreshes the file being viewed.

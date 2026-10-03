@@ -26,6 +26,7 @@ parser.add_argument('version', type=str,
 
 args = parser.parse_args()
 branch=args.version
+num_downloads = 0
 
 # Base SourceForge directory URL
 
@@ -145,6 +146,7 @@ def download_with_best_mirror(file_url, output_path, filename):
 
             print(f"\n✓ Download complete: {os.path.abspath(output_path)} (Size: {os.path.getsize(output_path)} bytes)")
             downloaded = True
+            num_downloads += 1
             
         except requests.exceptions.RequestException as e:
             print(f"Mirror '{mirror}' failed: {e}, trying next...")
@@ -215,3 +217,5 @@ def download_url(base_url, dest_dir, mrv2_prefix):
 
 download_url(VULKAN_URL, VULKAN_DIR, 'vmrv2')
 download_url(OPENGL_URL, OPENGL_DIR, 'mrv2')
+
+print("Num downloads are:",num_downloads)

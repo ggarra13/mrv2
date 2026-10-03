@@ -28,6 +28,18 @@ for i in vulkan/*$1*; do
     files="$files $i"
 done
 
+#
+# Read and count files
+#
+read -ra items <<< "$files"
+count=${#items[@]}
+
+if [[ $count != 22 ]]; then
+    echo "Not all files in beta release are there!"
+    echo "COUNT=${count}"
+    exit 1
+fi
+
 for file in $files; do
     echo "Adding checksum for $file..."
     sha256sum "$file" >> "$OUTPUT_FILE"
@@ -40,17 +52,7 @@ files="${OUTPUT_FILE} ${files}"
 
 echo $files
 
-#
-# Read and count files
-#
-read -ra items <<< "$files"
-count=${#items[@]}
 
-if [[ $count != 23 ]]; then
-    echo "Not all files in beta release are there!"
-    echo "COUNT=${count}"
-    exit 1
-fi
 
 gh release upload $1 $files --clobber 
 
