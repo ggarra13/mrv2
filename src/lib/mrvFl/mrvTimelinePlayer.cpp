@@ -211,6 +211,17 @@ namespace mrv
         return _p->player->getOptions();
     }
 
+    const std::string TimelinePlayer::getMediaReferenceKey() const
+    {
+        std::string out;
+        auto timeline = this->timeline();
+        if (timeline)
+        {
+            out = timeline->getMediaReferenceKey();
+        }
+        return out;
+    }
+
     const OTIO_NS::TimeRange& TimelinePlayer::timeRange() const
     {
         return _p->player->getTimeRange();
@@ -571,6 +582,19 @@ namespace mrv
         if (send)
             tcp->pushMessage("setAudioOffset", value);
         _p->player->setAudioOffset(value);
+    }
+
+    void TimelinePlayer::setMediaReferenceKey(const std::string& value)
+    {
+        auto timeline = this->timeline();
+        if (!timeline)
+            return;
+
+        bool send = App::ui->uiPrefs->SendUI->value();
+        if (send)
+            tcp->pushMessage("setMediaReferenceKey", value);
+
+        timeline->setMediaReferenceKey(value);
     }
 
     void TimelinePlayer::setTimelineViewport(MyViewport* view)

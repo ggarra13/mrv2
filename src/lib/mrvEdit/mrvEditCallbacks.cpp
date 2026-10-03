@@ -154,8 +154,9 @@ namespace mrv
             return out;
         }
 
-        std::vector<OTIO_NS::Transition*> getSelectedTransitions(OTIO_NS::Timeline* timeline,
-                                                    const std::vector<timeline::MoveData>& moves)
+        std::vector<OTIO_NS::Transition*>
+        getSelectedTransitions(OTIO_NS::Timeline* timeline,
+                               const std::vector<timeline::MoveData>& moves)
         {
             std::vector<OTIO_NS::Transition*> out;
             for (auto move : moves)
@@ -1806,7 +1807,7 @@ namespace mrv
 
         const OTIO_NS::RationalTime time = getTime(player);
 
-        auto items = ui->uiTimeline->getSelectedItems();
+        auto itemIndices = ui->uiTimeline->getSelectedItems();
 
         edit_store_undo(player, ui);
 
@@ -1816,7 +1817,7 @@ namespace mrv
         if (!timeline)
             return;
 
-        auto selected = getSelectedItems(timeline, items);
+        auto selected = getSelectedItems(timeline, itemIndices);
 
         bool modified = false;
         OTIO_NS::ErrorStatus errorStatus;
@@ -1879,8 +1880,8 @@ namespace mrv
             return;
 
         const OTIO_NS::RationalTime time = getTime(player);
-        auto items = ui->uiTimeline->getSelectedItems();
-        auto transitions = ui->uiTimeline->getSelectedTransitions();
+        auto itemIndices = ui->uiTimeline->getSelectedItems();
+        auto transitionIndices = ui->uiTimeline->getSelectedTransitions();
 
         edit_store_undo(player, ui);
 
@@ -1893,9 +1894,9 @@ namespace mrv
         bool modified = false;
 
         OTIO_NS::ErrorStatus errorStatus;
-        auto selectedItems = getSelectedItems(timeline, items);
+        auto selected = getSelectedItems(timeline, itemIndices);
 
-        for (auto& item : selectedItems)
+        for (auto& item : selected)
         {
             for (auto composition : compositions)
             {
@@ -1925,13 +1926,14 @@ namespace mrv
             }
         }
 
-        auto selectedTransitions = getSelectedTransitions(timeline, transitions);
+        auto transitions = getSelectedTransitions(timeline,
+                                                  transitionIndices);
 
-        for (auto& item : selectedTransitions)
+        for (auto& item : transitions)
         {
             for (auto composition : compositions)
             {
-                auto track = dynamic_cast<OTIO_NS::Track*>(composition);
+                auto track = dynamic_cast<Track*>(composition);
                 if (!track)
                     continue;
 
@@ -1981,7 +1983,7 @@ namespace mrv
             return;
 
         const OTIO_NS::RationalTime time = getTime(player);
-        auto items = ui->uiTimeline->getSelectedItems();
+        auto itemIndices = ui->uiTimeline->getSelectedItems();
 
         edit_store_undo(player, ui);
 
@@ -1991,7 +1993,7 @@ namespace mrv
         if (!timeline)
             return;
 
-        auto selected = getSelectedItems(timeline, items);
+        auto selected = getSelectedItems(timeline, itemIndices);
 
         bool modified = false;
         OTIO_NS::ErrorStatus errorStatus;
@@ -2168,7 +2170,7 @@ namespace mrv
         const auto& time = getTime(player);
         auto compositions = getTracks(player);
 
-        auto items = ui->uiTimeline->getSelectedItems();
+        auto itemIndices = ui->uiTimeline->getSelectedItems();
 
         edit_store_undo(player, ui);
 
@@ -2176,7 +2178,7 @@ namespace mrv
         if (!timeline)
             return;
 
-        auto selected = getSelectedItems(timeline, items);
+        auto selected = getSelectedItems(timeline, itemIndices);
 
         bool modified = false;
         OTIO_NS::ErrorStatus errorStatus;
@@ -2300,14 +2302,14 @@ namespace mrv
         if (!player)
             return;
 
-        auto items = ui->uiTimeline->getSelectedItems();
+        auto itemIndices = ui->uiTimeline->getSelectedItems();
         edit_store_undo(player, ui);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
 
-        auto selection = getSelectedItems(timeline, items);
+        auto selection = getSelectedItems(timeline, itemIndices);
 
         if (selection.size() != 2 && selection.size() != 4)
         {
@@ -3578,6 +3580,10 @@ namespace mrv
         if (!player)
             return false;
 
+        const auto& time = getTime(player);
+
+        edit_store_undo(player, ui);
+
         auto timeline = player->getTimeline();
         if (!timeline)
         {
@@ -3585,41 +3591,36 @@ namespace mrv
             return false;
         }
 
-        const auto& time = getTime(player);
         auto compositions = getTracks(player);
 
-        std::vector<int> audioMutedTracks;
-        OTIO_NS::ErrorStatus errorStatus;
-        unsigned index = 0;
+        std::vector<int> audioTracks;
+        audioTracks.reserve(compositions.size());
+
+        int index = 0;
         for (auto composition : compositions)
         {
             auto track = dynamic_cast<OTIO_NS::Track*>(composition);
-            if (!track)
-                continue;
-
-            if (trackIndex != index)
+            if (track)
             {
-                ++index;
-                continue;
-            }
+                bool enabled = track->enabled();
+                if (trackIndex == index)
+                    enabled ^= true;
+                track->set_enabled(enabled);
 
-            bool enabled = track->enabled();
-            enabled ^= true;
-            track->set_enabled(enabled);
-
-            if (track->kind() == OTIO_NS::Track::Kind::audio)
-            {
-                audioMutedTracks.push_back(!enabled);
+                if (track->kind () == OTIO_NS::Track::Kind::audio)
+                {
+                    audioTracks.push_back(enabled);
+                }
             }
-            break;
+            ++index;
         }
-
-        player->player()->setChannelMute(audioMutedTracks);
 
         makePathsAbsolute(timeline, ui);
 
         updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
+
+        player->player()->setChannelMute(audioTracks);
 
         refresh_file_cache_cb(nullptr, ui);
 

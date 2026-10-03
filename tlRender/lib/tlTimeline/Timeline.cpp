@@ -928,6 +928,11 @@ namespace tl
             --objectCount;
         }
 
+        size_t Timeline::getObjectCount()
+        {
+            return objectCount;
+        }
+
         std::shared_ptr<Timeline> Timeline::create(
             const std::shared_ptr<system::Context>& context,
             const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& timeline,
@@ -2893,106 +2898,6 @@ namespace tl
                     mediaReference, io::merge(options, p.options.ioOptions), out);
             }
             return false;
-        }
-
-        std::optional<Timeline::MediaAt> Timeline::_mediaAt(
-            const OTIO_NS::RationalTime& time)
-        {
-            TLRENDER_P();
-            std::optional<MediaAt> out;
-            if (!p.otioTimeline)
-            {
-                return out;
-            }
-            // The same lookup the request thread makes: the timeline's own start is
-            // taken off, and the first enabled video track holding that time wins.
-            // Bisected rather than walked, because this is asked for the playhead
-            // and for every ruler label that is drawn, and a sequence built out of
-            // the runs of frames it has can be in a great many pieces.
-            const OTIO_NS::RationalTime trackTime = time - p.timeRange.start_time();
-            for (const auto& otioTrack : p.otioTimeline->video_tracks())
-            {
-                if (!otioTrack->enabled())
-                {
-                    continue;
-                }
-                for (const auto& otioChild :
-                         p.getTrackChildrenAt(otioTrack, trackTime))
-                {
-                    auto otioClip = dynamic_cast<const OTIO_NS::Clip*>(otioChild);
-                    if (!otioClip)
-                    {
-                        continue;
-                    }
-                    const auto rangeInParent = p.getTrimmedRangeInParent(otioClip);
-                    if (!rangeInParent.has_value() ||
-                        !rangeInParent.value().contains(trackTime))
-                    {
-                        continue;
-                    }
-
-                    out = _mediaFrom(otioClip, rangeInParent.value());
-                    if (out)
-                    {
-                        return out;
-                    }
-                }
-            }
-            return out;
-        }
-
-        std::optional<Timeline::MediaAt> Timeline::_mediaFrom(
-            const OTIO_NS::Clip* otioClip,
-            const OTIO_NS::TimeRange& rangeInParent)
-        {
-            TLRENDER_P();
-            std::optional<MediaAt> out;
-            const io::Options optionsMerged = p.options.ioOptions;
-            auto mediaReference = p.mediaReference(otioClip);
-            io::Info ioInfo;
-            MediaAt mediaAt;
-
-            mediaAt.seq = _getSeqDecode(mediaReference, optionsMerged);
-            if (mediaAt.seq)
-            {
-                ioInfo = mediaAt.seq->getInfo();
-            }
-            else if (auto read = _getVideoRead(mediaReference, optionsMerged))
-            {
-                ioInfo = read->getInfo().get();
-            }
-            else
-            {
-                return out;
-            }
-
-            if (!ioInfo.videoTime.has_value())
-            {
-                // No video in the media, so there is no rate to convert times
-                // with and nothing to say where the clip sits.
-                return out;
-            }
-            OTIO_NS::TimeRange trimmedRange = otioClip->trimmed_range();
-            const OTIO_NS::TimeRange availableRange = otioClip->available_range();
-            if (p.options.compat &&
-                availableRange.start_time() > ioInfo.videoTime->start_time())
-            {
-                // The same compensation _readVideo() makes, so that both agree on
-                // which media time a timeline time means.
-                trimmedRange = OTIO_NS::TimeRange(
-                    trimmedRange.start_time() - availableRange.start_time(),
-                    trimmedRange.duration());
-            }
-            mediaAt.rangeInParent = rangeInParent;
-            mediaAt.trimmedRange = trimmedRange;
-            mediaAt.rate = ioInfo.videoTime->duration().rate();
-            out = mediaAt;
-            return out;
-        }
-
-        size_t Timeline::getObjectCount()
-        {
-            return objectCount;
         }
 
         template<typename T>

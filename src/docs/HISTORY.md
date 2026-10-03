@@ -1,12 +1,45 @@
 v1.7.9
 ======
 
+- UI: Secondary Window now remembers the screen number and positioning except on Linux Wayland (which does not allow it).
+- UI: Secondary and Main Window now draw black borders when any of them is in Presentation Mode.  If not in presentation mode, they will use the color set in **Preferences->Language and Colors->BG Color**.
+- UI: Added back **Playback->Toggle In/Out OTIO clip** for .otio and .otioz.
+- UI: Changing Preferences->Loading->Missing Frame immediately reloads the suquence being shown for updating.
+- UI/Core: Added File->Reload Media context menu on the clips of the Files panel.  This allows reloading the media to refresh frames that are currently being rendered.
+- UI/Core: Changing between Preferences->Loading->Missing Frames now automatically refreshes the file being viewed.
+
+- Command-Line: -mr or -mediaRefence is now available.
+- Edit: Media Reference Keys are now saved in the session file.
+
+- UI/Core: Movies can be exported with the OpenAPV codec with or without alpha.  UI has been updated to reflect the valid Pixel Formats.
+- UI/Core: OpenAPV codec has three presets (.pst) files.
+
+- UI/Edit: .otioz files are now properly detected for OTIO features in the UI.
+- UI/Edit: You can now hide the tracks of .otioz files.
+- UI/Edit: Hiding the audio tracks of .otio or .otioz files also makes them silent.
+
+- Core: Updated code to use the new OpenColorIO's colorInterOp functions.
+
+
 Fixes
 -----
 
-- Audio is no longer turned off if the main window is hidden, but the secondary window is still visible.
-- Going to Presentation mode with the secondary window open makes *that* window go to presentation mode.  This temporarly fixes a bug on Linux Wayland where the playback would stutter.
-- Fixed a mis-used EGL (ie.OpenGL) function.
+- UI/Linux: Audio is no longer turned off if the main window is hidden, but the secondary window is still visible.
+- UI/Linux: There's no longer stuttering of Secondary display under either Linux or Windows on any of the backends.
+- Core/Linux: Fixed a mis-used EGL (ie.OpenGL) function.
+- Edit: Selecting an item and deleting it no longer crashes the application.  A regression in v1.7.8 from v1.7.7.
+
+Libraries
+---------
+
+	- OpenAPV v1.1.1.2 - with version, alpha and license information.
+	- OpenColorIO v2.6.0 - with new color interop ID functions.
+	- OpenEXR v3.5.1 - fixed possible ZSTD overruns.
+
+Translations
+------------
+
+	- Updated Japanese translations by @coolvitto.
 
 
 v1.7.8

@@ -335,6 +335,16 @@ namespace mrv
                     newExtension = ".mov";
                 }
             }
+            else if (profile == "OAPV")
+            {
+                if (extension != ".mov" && extension != ".mp4")
+                {
+                    LOG_WARNING(
+                        _("OAPV profile needs a .mp4 extension.  Changing "
+                          "it to .mp4"));
+                    newExtension = ".mp4";
+                }
+            }
 
             newFile = directory + baseName + number + suffix + newExtension;
 
@@ -1080,6 +1090,8 @@ namespace mrv
                     waitForFrame(player, currentTime);
                 }
             }
+
+            writer->finish();
         }
         catch (const std::exception& e)
         {

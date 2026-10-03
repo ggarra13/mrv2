@@ -324,7 +324,7 @@ namespace tl
                             }
 
                             if (audioIndex < channelMute.size() &&
-                                channelMute[audioIndex])
+                                !channelMute[audioIndex])
                             {
                                 volumeMultiplier = 0.F;
                             }

@@ -129,6 +129,7 @@ namespace mrv
         float TimelineViewport::Private::masking = 0.F;
         int64_t TimelineViewport::Private::lastFrame;
         uint64_t TimelineViewport::Private::droppedFrames = 0;
+        bool TimelineViewport::Private::presentation = false;
         float TimelineViewport::Private::rotation = 0.F;
         bool TimelineViewport::Private::resizeWindow = true;
         bool TimelineViewport::Private::safeAreas = false;
@@ -2504,7 +2505,6 @@ namespace mrv
                 w = p.ui->uiMain;
                 view = p.ui->uiView;
             }
-            view->take_focus();
 
             if (!active)
             {
@@ -2534,10 +2534,10 @@ namespace mrv
                 }
             }
 
+            view->take_focus();
             w->fill_menu(p.ui->uiMenuBar);
         }
 
-        //! Get presentation mode.
         bool TimelineViewport::getPresentationMode() const noexcept
         {
             return _p->presentation;
@@ -2551,21 +2551,25 @@ namespace mrv
             if (p.presentation == active)
                 return;
 
+            const bool secondary = _hasSecondaryViewport();
+            auto* target = secondary ? p.ui->uiSecondary->viewport()
+                           : reinterpret_cast<MyViewport*>(this);
+
             if (!active)
             {
                 int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncNone)
                 {
-                    swap_interval(0);
+                    target->swap_interval(0);
                     p.ui->uiTimeline->swap_interval(0);
                 }
                 else if (vsync == MonitorVSync::kVSyncAlways)
                 {
-                    swap_interval(1);
-                    p.ui->uiTimeline->swap_interval(1);
+                    target->swap_interval(1);
+                    if (!secondary)
+                        p.ui->uiTimeline->swap_interval(1);
                 }
-                p.presentation = false;
                 if (!p.fullScreen)
                     _setFullScreen(false);
                 if (p.ui->uiView == reinterpret_cast<MyViewport*>(this))
@@ -2580,12 +2584,13 @@ namespace mrv
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncAlways)
                 {
-                    swap_interval(1);
-                    p.ui->uiTimeline->swap_interval(1);
+                    target->swap_interval(1);
+                    if (!secondary)
+                        p.ui->uiTimeline->swap_interval(1);
                 }
                 else if (vsync == MonitorVSync::kVSyncNone)
                 {
-                    swap_interval(0);
+                    target->swap_interval(0);
                     p.ui->uiTimeline->swap_interval(0);
                 }
                 save_ui_state(p.ui);
@@ -2593,10 +2598,10 @@ namespace mrv
                 {
                     hide_ui_state(p.ui);
                 }
-                p.presentation = true;
                 _setFullScreen(active);
                 p.presentationTime = std::chrono::high_resolution_clock::now();
             }
+            p.presentation = active;
         }
 
         bool TimelineViewport::getFullScreenMode() const noexcept

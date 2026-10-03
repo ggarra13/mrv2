@@ -232,6 +232,10 @@ if(TLRENDER_NET)
     endif()
 endif()
 
+if(TLRENDER_OAPV)
+    list(APPEND LIBRARIES oapv)
+endif()
+
 if( WIN32 )
     list(APPEND LIBRARIES Crypt32.lib)
 endif()

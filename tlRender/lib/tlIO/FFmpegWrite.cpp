@@ -1354,6 +1354,10 @@ namespace tl
                     // the existing H.264 bit-depth switch.
                     avProfile = AV_PROFILE_HEVC_MAIN;
                     break;
+                case Profile::OAPV:
+                    avCodecID = AV_CODEC_ID_APV;
+                    avProfile = AV_PROFILE_UNKNOWN;
+                    break;
                 default:
                     break;
                 }
@@ -1429,6 +1433,10 @@ namespace tl
                 else if (!avCodec && avCodecID == AV_CODEC_ID_PRORES)
                 {
                     avCodec = avcodec_find_encoder_by_name("prores_ks");
+                }
+                else if (!avCodec && avCodecID == AV_CODEC_ID_APV)
+                {
+                    avCodec = avcodec_find_encoder_by_name("libaopv");
                 }
 
                 if (!avCodec)
@@ -1939,7 +1947,6 @@ namespace tl
                     rational.first, rational.second};
                 if (profile == Profile::VP9)
                 {
-
                     if (pix_fmt == AV_PIX_FMT_YUVA420P)
                     {
                         av_dict_set(
@@ -1957,6 +1964,15 @@ namespace tl
                                 "channel you need a .mkv "
                                 "or .mk3d movie extension");
                         }
+                    }
+                }
+                else if (profile == Profile::OAPV)
+                {
+                    if (pix_fmt == AV_PIX_FMT_YUVA444P10LE ||
+                        pix_fmt == AV_PIX_FMT_YUVA444P12LE)
+                    {
+                        av_dict_set(
+                            &p.avVideoStream->metadata, "alpha_mode", "1", 0);
                     }
                 }
 
@@ -2170,6 +2186,11 @@ namespace tl
 
         Write::~Write()
         {
+            finish();
+        }
+
+        void Write::finish()
+        {
             TLRENDER_P();
 
             if (p.opened)
@@ -2206,43 +2227,54 @@ namespace tl
                             .arg(p.fileName)
                             .arg(getErrorLabel(r)));
                 }
+
+                p.opened = false;
             }
 
             if (p.swsContext)
             {
                 sws_freeContext(p.swsContext);
+                p.swsContext = nullptr;
             }
             if (p.avHwFrame)
             {
                 av_frame_free(&p.avHwFrame);
+                p.avHwFrame = nullptr;
             }
             if (p.avHWFramesCtx)
             {
                 av_buffer_unref(&p.avHWFramesCtx);
+                p.avHWFramesCtx = nullptr;
             }
             if (p.avHWDeviceCtx)
             {
                 av_buffer_unref(&p.avHWDeviceCtx);
+                p.avHWDeviceCtx = nullptr;
             }
             if (p.avFrame2)
             {
                 av_frame_free(&p.avFrame2);
+                p.avFrame2 = nullptr;
             }
             if (p.avFrame)
             {
                 av_frame_free(&p.avFrame);
+                p.avFrame = nullptr;
             }
             if (p.avAudioFrame)
             {
                 av_frame_free(&p.avAudioFrame);
+                p.avAudioFrame = nullptr;
             }
             if (p.avPacket)
             {
                 av_packet_free(&p.avPacket);
+                p.avPacket = nullptr;
             }
             if (p.avAudioPacket)
             {
                 av_packet_free(&p.avAudioPacket);
+                p.avAudioPacket = nullptr;
             }
             if (p.avAudioFifo)
             {
@@ -2252,18 +2284,23 @@ namespace tl
             if (p.avAudioCodecContext)
             {
                 avcodec_free_context(&p.avAudioCodecContext);
+                p.avAudioCodecContext = nullptr;
             }
             if (p.avCodecContext)
             {
                 avcodec_free_context(&p.avCodecContext);
+                p.avCodecContext = nullptr;
             }
             if (p.avFormatContext && p.avFormatContext->pb)
             {
                 avio_closep(&p.avFormatContext->pb);
+                p.avFormatContext->pb = nullptr;
+                p.avFormatContext = nullptr;
             }
             if (p.avFormatContext)
             {
                 avformat_free_context(p.avFormatContext);
+                p.avFormatContext = nullptr;
             }
         }
 
@@ -2370,9 +2407,8 @@ namespace tl
 
                 if (string::toLower(p.path.getExtension()) != ".mkv")
                 {
-                    throw std::runtime_error(
-                            "Saving videos with HDR data per frame "
-                            "requires VP9 and a .mkv container");
+                    LOG_WARNING("Saving videos with HDR data per frame "
+                                "requires VP9 and a .mkv container");
                 }
             }
             else

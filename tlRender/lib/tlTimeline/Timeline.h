@@ -228,6 +228,9 @@ namespace tl
             //! Get the time range.
             const OTIO_NS::TimeRange& getTimeRange() const;
 
+            //! Get the duration.
+            OTIO_NS::RationalTime getDuration() const;
+
             //! Get the I/O information. This information is retrieved from
             //! the first clip in the timeline.
             const io::Info& getIOInfo() const;
@@ -256,10 +259,23 @@ namespace tl
             //! Cancel requests.
             void cancelRequests(const std::vector<uint64_t>&);
 
+            //! Set the time requests are served nearest to. Video requests at
+            //! and ahead of it, in the direction given, are served first, nearest
+            //! first; those behind it after, in order of time. Without it they
+            //! are served in the order they were made.
+            void setRequestPriority(
+                const OTIO_NS::RationalTime&,
+                bool reverse = false);
+
+            //! Close the readers, which hold the decoders and what they have
+            //! decoded. The next read opens them again, while the timeline
+            //! itself stays open.
+            void closeReaders();
+
             ///@}
 
-            //! Stats
-            size_t getObjectCount();
+            //! Get the number of objects currenty instantiated.
+            static size_t getObjectCount();
 
             //! Tick the timeline.
             void tick();
@@ -271,25 +287,6 @@ namespace tl
             void _tick();
             void _requests();
             void _finishRequests();
-
-            //! What is needed to convert between timeline time and media time for
-            //! the clip at a time.
-            struct MediaAt
-            {
-                std::shared_ptr<io::SeqDecode> seq;
-                OTIO_NS::TimeRange rangeInParent;
-                OTIO_NS::TimeRange trimmedRange;
-                double rate = 0.0;
-            };
-            std::optional<MediaAt> _mediaAt(const OTIO_NS::RationalTime&);
-            std::optional<MediaAt> _mediaFrom(
-                const OTIO_NS::Clip*,
-                const OTIO_NS::TimeRange& rangeInParent);
-            std::vector<MediaAt> _mediaAll();
-            OTIO_NS::RationalTime _toMediaTime(
-                const MediaAt&,
-                const OTIO_NS::RationalTime&) const;
-            OTIO_NS::RationalTime _fromMediaTime(const MediaAt&, int64_t frame) const;
 
             // Find a media reference by its resolved path.
             OTIO_NS::MediaReference* _findMedia(const file::Path&);

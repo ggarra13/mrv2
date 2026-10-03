@@ -1,0 +1,126 @@
+build: build with MSVC
+
+The library already compiles and runs correctly with MSVC: the thread pool
+has a Win32 path, oapv_check_cpu_info_x86() reads <intrin.h>, and MSVC
+takes the SSE4.1 and AVX2 intrinsics without an architecture flag. What
+was missing was the build system saying so, and the one artifact a
+consumer needs.
+
+Install the pkg-config file on MSVC. It was the only thing an MSVC build
+did not produce, and without it a dependent cannot find the library --
+FFmpeg's --enable-liboapv is a require_pkg_config on "oapv >= 0.2.0.0".
+It also carries -DOAPV_STATIC_DEFINE for a static-only build, without
+which oapv.h reaches for the generated oapv/oapv_exports.h that such a
+build never wrote, and declares the API dllimport.
+
+Give the AVX sources /arch:AVX2, which is what the UNIX branch gets from
+-mavx2, and only those sources: everything in src/avx is reached through
+the dispatch tables oapv_check_cpu_info_x86() fills in, so the SSE and
+scalar paths a processor without AVX2 runs must stay free of VEX
+encoding. The same files get HAVE_MM256_SETR, MSVC's immintrin.h having
+declared _mm256_setr_m128i.
+
+Emit Libs.private: -lm only where there is a libm to ask for; MSVC's
+linker reads -lm as a file name.
+
+Finally, drop "Not supported yet!" for a line saying what the flags are.
+
+Verified against v1.1.1.0 with Visual Studio 17 2022 (MSVC 19.44): the
+thirteen reference bitstreams in test/bitstream decode with every frame
+hash matching, and the encode tests from CMakeLists.txt -- including the
+all-ones quantization matrix and the 12-bit 422-12 sequence -- round trip
+to matching hashes.
+---
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -112,7 +112,12 @@ include(CheckCCompilerFlag)
+ 
+ # Set compiler flags and options.
+ if(MSVC)
+-  message("Not supported yet!")
++  # The default flags for the chosen configuration are what MSVC wants: it
++  # has no -O3/-g/-fomit-frame-pointer to set, and the intrinsics the SIMD
++  # paths use need no architecture flag beyond the /arch:AVX2 that src/
++  # puts on the AVX sources alone. Warnings are left at the /W3 default;
++  # /Wall on MSVC is noise from the system headers, not -Wall.
++  message(STATUS "MSVC: using the default flags for ${CMAKE_CONFIGURATION_TYPES}${CMAKE_BUILD_TYPE}")
+ elseif(UNIX OR MINGW)
+     if(ENABLE_COVERAGE)
+         set(CMAKE_BUILD_TYPE "Debug")
+--- a/pkgconfig/oapv.pc.in
++++ b/pkgconfig/oapv.pc.in
+@@ -11,7 +11,7 @@ Version: @VERSION_APISET@.@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@
+ 
+ Requires:
+ Libs: -L${libdir} -l@LIB_NAME_BASE@
+-Libs.private: -lm
++Libs.private: @EXTRA_LIBS_PRIVATE@
+ 
+ Cflags: -I${includedir} -I${includedir}/@LIB_NAME_BASE@ @EXTRA_CFLAGS@
+ Cflags.private: @EXTRA_CFLAGS_PRIVATE@
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -105,6 +105,17 @@ if(MSVC)
+   if(OAPV_BUILD_STATIC_LIB)
+     target_compile_definitions(${LIB_NAME_BASE} PUBLIC ANY _CRT_SECURE_NO_WARNINGS)
+   endif()
++  if(X86 OR UNIVERSAL)
++    # MSVC accepts SSE4.1 and AVX2 intrinsics without an architecture flag,
++    # so only the AVX sources need one -- and only they may have it, since
++    # oapv_check_cpu_info_x86() still dispatches to the SSE and scalar paths
++    # on processors without AVX2, and those must stay free of VEX encoding.
++    # Everything in src/avx is reached through the AVX2 dispatch tables.
++    set_property(SOURCE ${AVX} APPEND PROPERTY COMPILE_FLAGS "/arch:AVX2")
++    # MSVC's immintrin.h declares _mm256_setr_m128i, so the fallback
++    # definition of it in src/avx/oapv_tq_avx.c is not needed.
++    set_property(SOURCE ${AVX} APPEND PROPERTY COMPILE_DEFINITIONS HAVE_MM256_SETR)
++  endif()
+   if(OAPV_BUILD_SHARED_LIB)
+     set_target_properties(${LIB_NAME_BASE}_dynamic PROPERTIES FOLDER lib
+                                                               RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+@@ -203,22 +214,27 @@ if(OAPV_BUILD_SHARED_LIB)
+   )
+ endif()
+ 
+-if(NOT MSVC)
+-    if(OAPV_BUILD_SHARED_LIB)
+-        set(EXTRA_CFLAGS "")
+-        set(EXTRA_CFLAGS_PRIVATE "-DOAPV_STATIC_DEFINE")
+-    else()
+-        set(EXTRA_CFLAGS "-DOAPV_STATIC_DEFINE")
+-        set(EXTRA_CFLAGS_PRIVATE "")
+-    endif()
+-    if(NOT WIN32)
+-        set(EXTRA_CFLAGS_PRIVATE "${EXTRA_CFLAGS_PRIVATE} -pthread")
+-    endif()
+-    configure_file(
+-      "${CMAKE_SOURCE_DIR}/pkgconfig/${LIB_NAME_BASE}.pc.in"
+-      "${CMAKE_BINARY_DIR}/${LIB_NAME_BASE}.pc" @ONLY)
+-
+-    install(FILES
+-      "${CMAKE_BINARY_DIR}/${LIB_NAME_BASE}.pc" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+-    )
++if(OAPV_BUILD_SHARED_LIB)
++    set(EXTRA_CFLAGS "")
++    set(EXTRA_CFLAGS_PRIVATE "-DOAPV_STATIC_DEFINE")
++else()
++    set(EXTRA_CFLAGS "-DOAPV_STATIC_DEFINE")
++    set(EXTRA_CFLAGS_PRIVATE "")
++endif()
++if(NOT WIN32)
++    set(EXTRA_CFLAGS_PRIVATE "${EXTRA_CFLAGS_PRIVATE} -pthread")
++endif()
++# The math functions live in the C runtime on Windows; there is no libm to
++# ask for, and MSVC's linker would take -lm for a file name.
++if(MSVC)
++    set(EXTRA_LIBS_PRIVATE "")
++else()
++    set(EXTRA_LIBS_PRIVATE "-lm")
+ endif()
++configure_file(
++  "${CMAKE_SOURCE_DIR}/pkgconfig/${LIB_NAME_BASE}.pc.in"
++  "${CMAKE_BINARY_DIR}/${LIB_NAME_BASE}.pc" @ONLY)
++
++install(FILES
++  "${CMAKE_BINARY_DIR}/${LIB_NAME_BASE}.pc" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
++)
