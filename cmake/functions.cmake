@@ -620,6 +620,13 @@ function( fixup_macos_rpath APP_LIB_DIR )
 	file(READ "${LAUNCHER_SCRIPT}" LAUNCHER_CONTENT LIMIT 256)
 
 	# Check if it starts with #!/bin/bash
+	string(FIND "${LAUNCHER_CONTENT}" "#!/usr/bin/env bash" POS)
+	if (POS EQUAL 0)
+	    message(STATUS "Launcher uses /usr/bin/env bash shebang")
+	    continue()
+	endif()
+	
+	# Check if it starts with #!/bin/bash
 	string(FIND "${LAUNCHER_CONTENT}" "#!/bin/bash" POS)
 	if (POS EQUAL 0)
 	    message(STATUS "Launcher uses bash shebang")
