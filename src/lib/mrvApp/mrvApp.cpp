@@ -514,7 +514,7 @@ namespace mrv
                     p.options.mediaReferenceKey, {"-mr", "-mediaReference"},
                     _("Media reference to open OTIO timelines with for clips "
                       "that have several versions of their media (examples: "
-                      "\"Proxy\" and \"Full\".")),
+                      "\"Proxy\" and \"Full\").")),
 
                 app::CmdLineHeader::create({}, _("Miscellaneous:")),
                 app::CmdLineFlagOption::create(
