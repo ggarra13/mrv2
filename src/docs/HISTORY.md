@@ -2,14 +2,15 @@ v1.8.0
 ======
 
 - UI: Movie files and sequences with associated audio also allow turning off any of the two tracks.
-- UI: Improved the look of the Notes Panel's AnnotationWidget, as it was functional but ugly.
 - UI: Built-in File Requester (used mainly on Linux) no longer shows the patterns in a floating window.
 
 Fixes
 -----
 
 - UI: Built-in File Requester could crash the application when switching extension patterns.
-- Core:  Switching back to Missing Frames->Error would not trigger a reload of the file.
+- UI: Area selection had a regression which prevented it from marking an area bigger than one pixel.
+
+- Core: Switching back to **Preferences->Loading->Missing Frames->Error** would not trigger a reload of the file.
 
 
 Translations
