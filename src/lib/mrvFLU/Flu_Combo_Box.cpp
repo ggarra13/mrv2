@@ -20,6 +20,8 @@
 #include <stdlib.h>
 #include <FL/math.h>
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvFLU/Flu_Combo_Box.h"
 
 Flu_Combo_Box ::Flu_Combo_Box(int X, int Y, int W, int H, const char* l) :
@@ -154,7 +156,15 @@ Flu_Combo_Box::Popup::Popup(Flu_Combo_Box* b, Fl_Widget* c, int H) :
     end();
 
 #ifdef __linux__
-    set_menu_window();
+    if (mrv::desktop::Wayland())
+    {
+        // Map as an xdg_popup, positioned relative to the parent window.
+        // Do NOT also call set_menu_window(): the driver then assumes this
+        // is one of FLTK's internal Menu_Window classes and downcasts it.
+        set_flag(Fl_Window::POPUP);
+    }
+    else
+        set_menu_window();
 #else
     set_modal();
 #endif
