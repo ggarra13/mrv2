@@ -3,7 +3,7 @@ v1.8.0
 
 - UI: Movie files and sequences with associated audio also allow turning off any of the two tracks.
 - UI: Improved the look of the Notes Panel's AnnotationWidget, as it was functional but ugly.
-- UI: Built-in File Requester (used mainly on Linux) now shows the pattern in a floating window but allow selecting them.
+- UI: Built-in File Requester (used mainly on Linux) no longer shows the patterns in a floating window.
 
 Fixes
 -----
