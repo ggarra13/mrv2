@@ -2068,8 +2068,6 @@ namespace mrv
             {
                 refresh_media_cb(nullptr, ui);
             }
-            std::cerr << "OLD=" << to_string(missingFrames) << " NEW="
-                      << to_string(value)  << " reopen=" << reopen << std::endl;
             missingFrames = value;
         }
 
