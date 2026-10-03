@@ -182,8 +182,9 @@ namespace mrv
             //! sequence.
             bool missingFrame = false;
 
-            //! Default missing frame type.  Should be static.
-            MissingFrameType missingFrameType = kBlackFrame;
+            //! Default missing frame type.
+            tl::io::MissingFrames missingFrameType =
+                tl::io::MissingFrames::Black;
 
             //! Auxiliary variable used to hide cursor in presentation mode.
             std::chrono::high_resolution_clock::time_point presentationTime;

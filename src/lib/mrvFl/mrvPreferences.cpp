@@ -2060,7 +2060,7 @@ namespace mrv
                 settings->getValue<int>(kGhostPrevious));
 
             tl::io::MissingFrames value = static_cast<tl::io::MissingFrames>(uiPrefs->uiMissingFrameType->value());
-            ui->uiView->setMissingFrameType(static_cast<MissingFrameType>(value));
+            ui->uiView->setMissingFrameType(value);
             bool reopen = (value != missingFrames &&
                            tl::io::isStructural(value) ||
                            tl::io::isStructural(missingFrames));
@@ -2068,6 +2068,8 @@ namespace mrv
             {
                 refresh_media_cb(nullptr, ui);
             }
+            std::cerr << "OLD=" << to_string(missingFrames) << " NEW="
+                      << to_string(value)  << " reopen=" << reopen << std::endl;
             missingFrames = value;
         }
 

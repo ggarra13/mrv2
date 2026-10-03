@@ -23,6 +23,7 @@ namespace tl
         bool isStructural(MissingFrames value)
         {
             return
+                MissingFrames::Error == value ||
                 MissingFrames::Skip == value ||
                 MissingFrames::Gaps == value;
         }

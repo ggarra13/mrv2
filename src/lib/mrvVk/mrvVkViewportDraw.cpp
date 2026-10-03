@@ -150,10 +150,10 @@ namespace mrv
                 vk.render->begin(renderSize);
                 vk.render->setOCIOOptions(p.ocioOptions);
                 vk.render->setLUTOptions(p.lutOptions);
-                if (p.missingFrame &&
-                    p.missingFrameType != MissingFrameType::kBlackFrame)
+                if (p.missingFrame)
                 {
-                    _drawMissingFrame(renderSize);
+                    if (p.missingFrameType != tl::io::MissingFrames::Black)
+                        _drawMissingFrame(renderSize);
                 }
                 else
                 {
@@ -245,7 +245,7 @@ namespace mrv
                 p.imageOptions, p.displayOptions, p.compareOptions,
                 getBackgroundOptions());
 
-            if (p.missingFrameType == MissingFrameType::kScratchedFrame)
+            if (p.missingFrameType == io::MissingFrames::Scratch)
             {
                 image::Color4f color(1, 0, 0, 0.8);
                 vk.lines->drawLine(vk.render,

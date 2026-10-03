@@ -44,15 +44,6 @@ namespace mrv
         kAttributes = 1 << 10,
     };
 
-    enum MissingFrameType {
-        kErrorFrame,
-        kHoldFrame,
-        kScratchedFrame,
-        kBlackFrame,
-        kSkipFrame,
-        kGapFrame,
-    };
-
     enum ScrubLoopMode {
         kScrubLoopButton,
         kScrubLoopInactive,

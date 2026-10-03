@@ -2069,7 +2069,7 @@ namespace mrv
         }
 
         //! Set the Annotation previous ghost frames.
-        void TimelineViewport::setMissingFrameType(MissingFrameType x)
+        void TimelineViewport::setMissingFrameType(tl::io::MissingFrames x)
         {
             _p->missingFrameType = x;
         }

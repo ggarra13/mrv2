@@ -819,8 +819,9 @@ namespace mrv
                     timeline::VideoFrame& video = emptyVideo;
                     if (!p.videoData.empty())
                         video = p.videoData[0];
+
                     if (p.missingFrame &&
-                        p.missingFrameType != MissingFrameType::kBlackFrame)
+                        p.missingFrameType != tl::io::MissingFrames::Black)
                     {
                         video = p.lastVideoFrame;
                     }
@@ -1036,10 +1037,12 @@ namespace mrv
                     vk.render->setLUTOptions(p.lutOptions);
                     vk.render->setHDROptions(p.hdrOptions);
                     vk.render->setMonitorCapabilities(p.monitor);
-                    if (p.missingFrame &&
-                        p.missingFrameType != MissingFrameType::kBlackFrame)
+                    if (p.missingFrame)
                     {
-                        _drawMissingFrame(renderSize);
+                        if (p.missingFrameType != io::MissingFrames::Black)
+                        {
+                            _drawMissingFrame(renderSize);
+                        }
                     }
                     else
                     {
