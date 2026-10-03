@@ -1094,18 +1094,9 @@ namespace mrv
                 p.options.fileNames.push_back(otioFile);
             }
 
-            bool foundAudio = false;
-            for (const auto& fileName : p.options.fileNames)
+            if (!p.options.fileNames.empty())
             {
-                if (file::isSequence(fileName) && !foundAudio)
-                {
-                    open(fileName, p.options.audioFileName);
-                    foundAudio = true;
-                }
-                else
-                {
-                    open(fileName);
-                }
+                open(p.options.fileNames, p.options.audioFileName);
             }
 
             if (auto player = p.player.get())
@@ -1146,6 +1137,7 @@ namespace mrv
         if (!p.options.compareFileName.empty())
         {
             open(p.options.compareFileName);
+
             p.filesModel->setCompareOptions(p.options.compareOptions);
             size_t numFiles = p.filesModel->observeFiles()->getSize();
             p.filesModel->setB(numFiles - 1, true);
@@ -1930,46 +1922,67 @@ namespace mrv
 #endif
 
     void
-    App::open(const std::string& fileName, const std::string& audioFileName)
+    App::open(const std::vector<std::string >& fileNames,
+              const std::string& audioFileName)
     {
         TLRENDER_P();
 
-        file::Path filePath(string::normalizePath(fileName));
-        file::Path audioFilePath(string::normalizePath(audioFileName));
-
-        if (filePath.getExtension() == ".mrv2s")
+        bool usedAudio = false;
+        std::vector<std::shared_ptr<FilesModelItem>> items;
+        for (auto& fileName : fileNames)
         {
-            p.session = true;
-            session::load(fileName);
-            return;
-        }
+            file::Path filePath(string::normalizePath(fileName));
+            file::Path audioFilePath(string::normalizePath(audioFileName));
+
+            if (filePath.getExtension() == ".mrv2s")
+            {
+                p.session = true;
+                session::load(fileName);
+                continue;
+            }
 
 
-        file::PathOptions pathOptions;
-        pathOptions.seqMaxDigits =
-            p.settings->getValue<int>("Misc/MaxFileSequenceDigits");
+            file::PathOptions pathOptions;
+            pathOptions.seqMaxDigits =
+                p.settings->getValue<int>("Misc/MaxFileSequenceDigits");
 
-        if (!filePath.hasSeqWildcard() &&
-            !file::isDirectory(fileName) && !file::isReadable(fileName))
-        {
-            /* xgettext:c-format */
-            const std::string err =
-                string::Format(_("Filename '{0}' does not exist or does not "
-                                 "have read permissions."))
+            if (!filePath.hasSeqWildcard() &&
+                !file::isDirectory(fileName) && !file::isReadable(fileName))
+            {
+                /* xgettext:c-format */
+                const std::string err =
+                    string::Format(_("Filename '{0}' does not exist or does not "
+                                     "have read permissions."))
                     .arg(fileName);
-            LOG_ERROR(err);
-            return;
+                LOG_ERROR(err);
+                continue;
+            }
+
+            for (const auto& path : timeline::getPaths(filePath, pathOptions,
+                                                       _context))
+            {
+                auto item = std::make_shared<FilesModelItem>();
+                item->path = path;
+                if (!usedAudio)
+                {
+                    item->audioPath = audioFilePath;
+                    usedAudio = true;
+                }
+                items.push_back(item);
+            }
         }
 
-        for (const auto& path :
-                 timeline::getPaths(filePath, pathOptions, _context) )
-        {
-            auto item = std::make_shared<FilesModelItem>();
-            item->path = path;
-            item->audioPath = audioFilePath;
+        if (!items.empty())
+            p.filesModel->add(items);
+    }
 
-            p.filesModel->add(item);
-        }
+    void
+    App::open(const std::string& fileName,
+              const std::string& audioFileName)
+    {
+        std::vector<std::string> fileNames;
+        fileNames.push_back(fileName);
+        open(fileNames, audioFileName);
     }
 
     void App::openSeparateAudioDialog()
@@ -2162,6 +2175,8 @@ namespace mrv
         std::vector<std::shared_ptr<timeline::Timeline> > timelines(
             files.size());
 
+        // Preserve already-instantiated timelines for items that remain in
+        // the list
         for (size_t i = 0; i < files.size(); ++i)
         {
             const auto j = std::find(p.files.begin(), p.files.end(), files[i]);
@@ -2171,31 +2186,10 @@ namespace mrv
             }
         }
 
-        for (size_t i = 0; i < files.size(); ++i)
-        {
-            if (!timelines[i])
-            {
-                const auto& item = files[i];
-                try
-                {
-                    timelines[i] = _createTimeline(item);
-                    const auto info = timelines[i]->getIOInfo();
-                    for (const auto& video : info.video)
-                    {
-                        files[i]->videoLayers.push_back(video.name);
-                    }
-                }
-                catch (const std::exception& e)
-                {
-                    _log(e.what(), log::Type::Error);
-                }
-            }
-        }
-
         p.files = files;
         p.timelines = timelines;
 
-        panel::refreshThumbnails();
+        //panel::refreshThumbnails();
     }
 
     void App::_playerOptions(
@@ -2290,6 +2284,34 @@ namespace mrv
         const std::vector<std::shared_ptr<FilesModelItem> >& activeFiles)
     {
         TLRENDER_P();
+
+        // Deferred timeline creation: Ensure all active files have valid
+        // timelines
+        for (const auto& item : activeFiles)
+        {
+            auto i = std::find(p.files.begin(), p.files.end(), item);
+            if (i != p.files.end())
+            {
+                size_t idx = i - p.files.begin();
+                if (!p.timelines[idx])
+                {
+                    try
+                    {
+                        p.timelines[idx] = _createTimeline(item);
+                        const auto info = p.timelines[idx]->getIOInfo();
+                        item->videoLayers.clear();
+                        for (const auto& video : info.video)
+                        {
+                            item->videoLayers.push_back(video.name);
+                        }
+                    }
+                    catch (const std::exception& e)
+                    {
+                        _log(e.what(), log::Type::Error);
+                    }
+                }
+            }
+        }
 
         std::shared_ptr<TimelinePlayer> player;
         if (!p.activeFiles.empty() && isRunning() && p.player)

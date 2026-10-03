@@ -8,11 +8,13 @@ v1.8.0
 - Command-Line: Now -systemInfo will now show up the start up message.
 - Command-Line: Now -systemInfo properly displays the graphics card information on the OpenGL backend.
 
+- Core/Command-Line: Opening many files at once no longer reads every one of them immediately.
+
 Fixes
 -----
 
 - UI: Built-in File Requester could crash the application when switching extension patterns.
-- UI: Area selection had a regression which prevented it from marking an area bigger than one pixel.
+- UI: Area selection had a bug which prevented it from marking an area bigger than one pixel.
 
 - Command-Line: Displaying -systemInfo does not hang the Vulkan backend.
 

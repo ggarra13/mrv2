@@ -19,6 +19,8 @@
 
 #include <tlDraw/Annotation.h>
 
+#include <vector>
+
 namespace tl
 {
     namespace timeline
@@ -47,7 +49,7 @@ namespace mrv
         size_t videoLayer = 0;
 
         // These are my own elements to keep state info.
-
+        bool load = false;
         bool init = false;
 
         OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
@@ -124,6 +126,9 @@ namespace mrv
 
         //! Add a file.
         void add(const std::shared_ptr<FilesModelItem>&);
+
+        //! Add a batch of files.
+        void add(const std::vector<std::shared_ptr<FilesModelItem> >&);
 
         //! Replace a file at a certain index.
         void replace(const std::size_t, const std::shared_ptr<FilesModelItem>&);

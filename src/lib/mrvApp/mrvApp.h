@@ -106,6 +106,10 @@ namespace mrv
         //! Open a file (with optional audio) or directory.
         void open(const std::string&, const std::string& = std::string());
 
+        //! Open a set of files (with optional audio) or directory.
+        void open(const std::vector<std::string >&,
+                  const std::string& = std::string());
+
         //! Open a file dialog.
         void openDialog();
 

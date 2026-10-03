@@ -26,7 +26,6 @@ parser.add_argument('version', type=str,
 
 args = parser.parse_args()
 branch=args.version
-num_downloads = 0
 
 # Base SourceForge directory URL
 
@@ -51,6 +50,8 @@ headers = {
     'User-Agent': 'Wget/1.21.4'
 }
 
+global num_downloads
+num_downloads = 0
 
 KNOWN_SF_MIRRORS = [
     "ufpr", "altushost-swe", "netix", "nav", "kent", "nchc", "jaist",
@@ -85,6 +86,7 @@ def download_with_best_mirror(file_url, output_path, filename):
     print(f"Benchmarking mirrors for {filename}...")
     ranked = benchmark_mirrors(file_url, KNOWN_SF_MIRRORS)
 
+    global num_downloads
     downloaded = False
     for latency, mirror, final_url in ranked:
         print(f"Trying mirror '{mirror}' ({latency:.2f}s)...")
@@ -146,13 +148,14 @@ def download_with_best_mirror(file_url, output_path, filename):
 
             print(f"\n✓ Download complete: {os.path.abspath(output_path)} (Size: {os.path.getsize(output_path)} bytes)")
             downloaded = True
-            num_downloads += 1
             
         except requests.exceptions.RequestException as e:
             print(f"Mirror '{mirror}' failed: {e}, trying next...")
 
     if not downloaded:
         print(f"✗ ALL MIRRORS FAILED FOR: {filename}")
+    else:
+        num_downloads += 1
     
 def parse_sourceforge_page(html_content, base_url):
     """
@@ -218,4 +221,4 @@ def download_url(base_url, dest_dir, mrv2_prefix):
 download_url(VULKAN_URL, VULKAN_DIR, 'vmrv2')
 download_url(OPENGL_URL, OPENGL_DIR, 'mrv2')
 
-print("Num downloads are:",num_downloads)
+print("Number of downloads are:",num_downloads)
