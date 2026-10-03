@@ -8,7 +8,7 @@ v1.8.0
 - Command-Line: Now -systemInfo will now show up the start up message.
 - Command-Line: Now -systemInfo properly displays the graphics card information on the OpenGL backend.
 
-- Core/Command-Line: Opening many files at once no longer reads every one of them immediately.
+- Core/Command-Line: Opening many files at once or a directory no longer reads every one of them immediately.
 
 Fixes
 -----
