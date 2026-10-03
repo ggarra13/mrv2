@@ -1,3 +1,14 @@
+v1.8.0
+======
+
+- UI: Movie files and sequences with associated audio also allow turning off any of the two tracks.
+- UI: Improved the look of the Notes Panel's AnnotationWidget, as it was functional but ugly.
+
+Translations
+------------
+	- New documentation on codecs.
+	- New AI translations on all supported languages.
+
 v1.7.9
 ======
 

@@ -1406,29 +1406,26 @@ namespace mrv
         if (displayOptions.markers)
             item->set();
 
-        if (isOtio)
+        std::vector<std::string> tracks;
+        std::vector<bool> tracksActive;
+        getActiveTracks(tracks, tracksActive, ui);
+        unsigned numTracks = tracks.size();
+        if (numTracks > 1)
         {
-            std::vector<std::string> tracks;
-            std::vector<bool> tracksActive;
-            getActiveTracks(tracks, tracksActive, ui);
-            unsigned numTracks = tracks.size();
-            if (numTracks > 1)
+            for (unsigned i = 0; i < tracks.size(); ++i)
             {
-                for (unsigned i = 0; i < tracks.size(); ++i)
-                {
-                    /* xgettext:c++-format */
-                    std::string msg =
-                        tl::string::Format(_("Timeline/Visible Tracks/{0}"))
-                            .arg(tracks[i]);
+                /* xgettext:c++-format */
+                std::string msg =
+                    tl::string::Format(_("Timeline/Visible Tracks/{0}"))
+                    .arg(tracks[i]);
 
-                    idx = menu->add(
-                        msg.c_str(), 0,
-                        (Fl_Callback*)toggle_timeline_active_track_cb, ui,
-                        FL_MENU_TOGGLE);
-                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                    if (tracksActive[i])
-                        item->set();
-                }
+                idx = menu->add(
+                    msg.c_str(), 0,
+                    (Fl_Callback*)toggle_timeline_active_track_cb, ui,
+                    FL_MENU_TOGGLE);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (tracksActive[i])
+                    item->set();
             }
 
             if (player)
