@@ -612,6 +612,9 @@ VP9 - Codec developed by Google.  High compression
       balance disk space vs. quality.
       Good for high-end delivery for either Web or 
       online review.
+      It is currently the only format that supports
+      dynamic per-frame HDR, perfect companion for
+      vmrv2.
 Cineform - codec developed by GoPro, that rivals 
            ProRes in features, except for HDR.  
            It was discontinued in 2021, but most 
@@ -627,6 +630,11 @@ AV1 - New generation codec which is gaining support from
 HAP - RGB/A codec which is optimized for fast playback with
       CPU decoding.  It does not compress that well.
       It needs hap-alpha* presets to save alpha channel.
+HEVC - Only supported on HW due to license and patent
+       restrictions.
+OAPV - A competitor to VP9 that offers better YUV formats with
+       support for an alpha channel, but no HDR yet.
+
 
 Hardware encoding is only supported on newer MacBook
 Pro with M1 or newer chips.  H264, Prores, VP9 and

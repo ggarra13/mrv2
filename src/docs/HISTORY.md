@@ -5,6 +5,8 @@ v1.7.9
 - UI: Secondary and Main Window now draw black borders when any of them is in Presentation Mode.  If not in presentation mode, they will use the color set in **Preferences->Language and Colors->BG Color**.
 - UI: Added back **Playback->Toggle In/Out OTIO clip** for .otio and .otioz.
 - UI: Changing Preferences->Loading->Missing Frame immediately reloads the suquence being shown for updating.
+- UI/Core: Added File->Reload Media context menu on the clips of the Files panel.  This allows reloading the media to refresh frames that are currently being rendered.
+- UI/Core: Changing between Preferences->Loading->Missing Frames now automatically refreshes the file being viewed.
 
 - Command-Line: -mr or -mediaRefence is now available.
 - Edit: Media Reference Keys are now saved in the session file.
@@ -33,6 +35,11 @@ Libraries
 	- OpenAPV v1.1.1.2 - with version, alpha and license information.
 	- OpenColorIO v2.6.0 - with new color interop ID functions.
 	- OpenEXR v3.5.1 - fixed possible ZSTD overruns.
+
+Translations
+------------
+
+	- Updated Japanese translations by @coolvitto.
 
 
 v1.7.8
