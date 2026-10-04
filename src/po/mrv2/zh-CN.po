@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 11:24-0300\n"
+"POT-Creation-Date: 2026-10-04 14:27-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Insecty <insecty_l@163.com>\n"
 "Language: zh-CN\n"
@@ -3516,6 +3516,12 @@ msgstr "转到上一个文件。"
 
 msgid "Go to Next File."
 msgstr "转到下一个文件。"
+
+msgid "Go to Listed File."
+msgstr "转到列表中的文件。"
+
+msgid "Select B File."
+msgstr "选择 B 文件。"
 
 msgid "Toggle A and B comparison."
 msgstr "切换 A 和 B 的比较。"
@@ -8848,9 +8854,6 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "任务信息失败"
 
-#~ msgid "Remove audio gap(s) at the ones at current time."
-#~ msgstr "删除当前时间的音频间隔。"
-
 #~ msgid "Complexity"
 #~ msgstr "复杂程度"
 
@@ -8891,6 +8894,9 @@ msgstr "任务信息失败"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "用于文本绘图的无效字体"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "删除当前时间的音频间隔。"
 
 #~ msgid "Repeat  Frame"
 #~ msgstr "Repeat  Frame"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 11:24-0300\n"
+"POT-Creation-Date: 2026-10-04 14:27-0300\n"
 "PO-Revision-Date: 2024-05-09 12:13-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -3300,7 +3300,7 @@ msgid "Remove selected items."
 msgstr "Remove selected items."
 
 msgid "Remove audio gap(s) at the current time."
-msgstr "Remove audio clips at the current time."
+msgstr "Remove audio gap(s) at the current time."
 
 msgid "Insert video gap(s) at current time."
 msgstr "Insert video gap(s) at current time."
@@ -3577,6 +3577,12 @@ msgstr "Go to Previous File."
 
 msgid "Go to Next File."
 msgstr "Go to Next File."
+
+msgid "Go to Listed File."
+msgstr "Go to Listed File."
+
+msgid "Select B File."
+msgstr "Select B File."
 
 msgid "Toggle A and B comparison."
 msgstr "Toggle A and B comparison."
@@ -9040,9 +9046,6 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "task info failed"
 
-#~ msgid "Remove audio gap(s) at the ones at current time."
-#~ msgstr "Remove audio gap(s) at the ones at current time."
-
 #~ msgid "Complexity"
 #~ msgstr "Complexity"
 
@@ -9083,6 +9086,9 @@ msgstr "task info failed"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Invalid font for text drawing"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "Remove audio gap(s) at the ones at current time."
 
 #~ msgid "Repeat  Frame"
 #~ msgstr "Repeat  Frame"

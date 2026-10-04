@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 11:24-0300\n"
+"POT-Creation-Date: 2026-10-04 14:27-0300\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -3570,6 +3570,12 @@ msgstr "पिछली फ़ाइल पर जाएँ।"
 
 msgid "Go to Next File."
 msgstr "अगली फ़ाइल पर जाएँ।"
+
+msgid "Go to Listed File."
+msgstr "सूचीबद्ध फ़ाइल पर जाएँ।"
+
+msgid "Select B File."
+msgstr "B फ़ाइल चुनें।"
 
 msgid "Toggle A and B comparison."
 msgstr "A और B तुलना को चालू/बंद करें।"
@@ -9032,9 +9038,6 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
 
-#~ msgid "Remove audio gap(s) at the ones at current time."
-#~ msgstr "वर्तमान समय पर ऑडियो गैप हटाएँ।"
-
 #~ msgid "Complexity"
 #~ msgstr "जटिलता"
 
@@ -9075,6 +9078,9 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "वर्तमान समय पर ऑडियो गैप हटाएँ।"
 
 #~ msgid "Repeat  Frame"
 #~ msgstr "फ्रेम को दोहराएँ"

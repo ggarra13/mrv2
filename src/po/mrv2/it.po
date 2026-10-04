@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 11:24-0300\n"
+"POT-Creation-Date: 2026-10-04 14:27-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: it\n"
@@ -3609,6 +3609,12 @@ msgstr "Vai al file precedente."
 
 msgid "Go to Next File."
 msgstr "Vai al file successivo."
+
+msgid "Go to Listed File."
+msgstr "Vai al file elencato."
+
+msgid "Select B File."
+msgstr "Seleziona il file B."
 
 msgid "Toggle A and B comparison."
 msgstr "Attiva/disattiva il confronto A e B."
@@ -9135,9 +9141,6 @@ msgstr "host_statistics64 non riuscito"
 msgid "task info failed"
 msgstr "Informazione dell'attività non riuscita"
 
-#~ msgid "Remove audio gap(s) at the ones at current time."
-#~ msgstr "Rimuovi gli spazi audio presenti al tempo corrente."
-
 #~ msgid "Complexity"
 #~ msgstr "Complexità"
 
@@ -9180,6 +9183,9 @@ msgstr "Informazione dell'attività non riuscita"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Tipo di carattere non valido per il disegno di testo"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "Rimuovi gli spazi audio presenti al tempo corrente."
 
 #~ msgid "Repeat  Frame"
 #~ msgstr "Ripeti il telaio"

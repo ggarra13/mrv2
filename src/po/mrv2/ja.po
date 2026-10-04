@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 11:24-0300\n"
+"POT-Creation-Date: 2026-10-04 14:27-0300\n"
 "PO-Revision-Date: 2026-09-29 22:48+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -3534,6 +3534,12 @@ msgstr "前のファイルに移動します。"
 
 msgid "Go to Next File."
 msgstr "次のファイルに移動します。"
+
+msgid "Go to Listed File."
+msgstr "一覧表示されたファイルに移動します。"
+
+msgid "Select B File."
+msgstr "Bファイルを選択します。"
 
 msgid "Toggle A and B comparison."
 msgstr "A と B の比較を切り替えます。"
@@ -8879,9 +8885,6 @@ msgstr "host_statistics64 に失敗しました"
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました"
 
-#~ msgid "Remove audio gap(s) at the ones at current time."
-#~ msgstr "現在の時刻にあるオーディオギャップを削除します。"
-
 #~ msgid "Complexity"
 #~ msgstr "複雑さ"
 
@@ -8922,6 +8925,9 @@ msgstr "タスク情報の取得に失敗しました"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "テキスト描画用の無効なフォント"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "現在の時刻にあるオーディオギャップを削除します。"
 
 #~ msgid "Repeat  Frame"
 #~ msgstr "フレームの繰り返し"

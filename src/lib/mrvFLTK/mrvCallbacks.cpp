@@ -538,6 +538,17 @@ namespace mrv
     void goto_file_cb(Fl_Widget* w, void* data)
     {
         ViewerUI* ui = App::ui;
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Go to Listed File."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         size_t Aindex = (size_t)data;
         auto model = App::app->filesModel();
         auto numFiles = model->observeFiles()->getSize();
@@ -550,6 +561,17 @@ namespace mrv
     void select_Bfile_cb(Fl_Widget* w, void* data)
     {
         ViewerUI* ui = App::ui;
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Select B File."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         size_t Bindex = (size_t)data;
         auto model = App::app->filesModel();
         auto numFiles = model->observeFiles()->getSize();

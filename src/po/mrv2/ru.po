@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 11:24-0300\n"
+"POT-Creation-Date: 2026-10-04 14:27-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: ru\n"
@@ -3611,6 +3611,12 @@ msgstr "Перейти к предыдущему файлу."
 
 msgid "Go to Next File."
 msgstr "Перейти к следующему файлу."
+
+msgid "Go to Listed File."
+msgstr "Перейти к файлу из списка."
+
+msgid "Select B File."
+msgstr "Выбрать файл B."
 
 msgid "Toggle A and B comparison."
 msgstr "Переключить сравнение A и B."
@@ -9099,9 +9105,6 @@ msgstr "shop_statistics64 не сработал"
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
 
-#~ msgid "Remove audio gap(s) at the ones at current time."
-#~ msgstr "Удалить аудиоразрыв(ы) в текущий момент времени."
-
 #~ msgid "Complexity"
 #~ msgstr "Сложность"
 
@@ -9144,6 +9147,9 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Неверный шрифт для текстового рисунка"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "Удалить аудиоразрыв(ы) в текущий момент времени."
 
 #~ msgid "Repeat  Frame"
 #~ msgstr "Повторить"
