@@ -274,10 +274,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Open a movie or a sequence."));
+            ui->uiStatusBar->message(_("Open a movie or a sequence."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -291,12 +291,12 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Open a movie stored on the web with "
+            ui->uiStatusBar->message(_("Open a movie stored on the web with "
                                           "https protocol.  Demo movie is "
                                           "default."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -339,11 +339,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Open a single image even if it "
+            ui->uiStatusBar->message(_("Open a single image even if it "
                                           "is part of a sequence."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -357,10 +357,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Load the selected file."));
+            ui->uiStatusBar->message(_("Load the selected file."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -379,11 +379,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Open a sequence with an audio "
+            ui->uiStatusBar->message(_("Open a sequence with an audio "
                                           "file."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -397,10 +397,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Open all files in a directory."));
+            ui->uiStatusBar->message(_("Open all files in a directory."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -436,10 +436,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Open a new instance of the player."));
+            ui->uiStatusBar->message(_("Open a new instance of the player."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -461,10 +461,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to Previous File, Looping to End."));
+            ui->uiStatusBar->message(_("Go to Previous File, Looping to End."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -479,10 +479,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to Next File, Looping to Start."));
+            ui->uiStatusBar->message(_("Go to Next File, Looping to Start."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -497,10 +497,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to Previous File."));
+            ui->uiStatusBar->message(_("Go to Previous File."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -518,10 +518,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to Next File."));
+            ui->uiStatusBar->message(_("Go to Next File."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -567,10 +567,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle A and B comparison."));
+            ui->uiStatusBar->message(_("Toggle A and B comparison."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -594,10 +594,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare A."));
+            ui->uiStatusBar->message(_("Compare A."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -615,10 +615,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare B."));
+            ui->uiStatusBar->message(_("Compare B."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -635,10 +635,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare Wipe."));
+            ui->uiStatusBar->message(_("Compare Wipe."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -655,10 +655,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare Overlay."));
+            ui->uiStatusBar->message(_("Compare Overlay."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -675,10 +675,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare A - B difference."));
+            ui->uiStatusBar->message(_("Compare A - B difference."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -695,10 +695,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare A + B."));
+            ui->uiStatusBar->message(_("Compare A + B."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -715,10 +715,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare A * B."));
+            ui->uiStatusBar->message(_("Compare A * B."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -735,10 +735,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare A next to flipped B."));
+            ui->uiStatusBar->message(_("Compare A next to flipped B."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -755,10 +755,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare A and B Horizontally."));
+            ui->uiStatusBar->message(_("Compare A and B Horizontally."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -775,10 +775,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare A and B Vertically."));
+            ui->uiStatusBar->message(_("Compare A and B Vertically."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -795,10 +795,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Compare A and one or many clips Tiled."));
+            ui->uiStatusBar->message(_("Compare A and one or many clips Tiled."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -889,11 +889,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Save a single frame of the current "
+            ui->uiStatusBar->message(_("Save a single frame of the current "
                                           "clip."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -906,11 +906,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Keep saving frames to the same "
+            ui->uiStatusBar->message(_("Keep saving frames to the same "
                                           "folder."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -934,11 +934,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Save the audio of the current "
+            ui->uiStatusBar->message(_("Save the audio of the current "
                                           "clip."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -993,10 +993,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Export a movie or a sequence."));
+            ui->uiStatusBar->message(_("Export a movie or a sequence."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1208,10 +1208,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Save annotations as a PDF."));
+            ui->uiStatusBar->message(_("Save annotations as a PDF."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1237,11 +1237,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Save annotations only as a movie "
+            ui->uiStatusBar->message(_("Save annotations only as a movie "
                                           "or sequence."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1450,10 +1450,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Save annotations as a .json file"));
+            ui->uiStatusBar->message(_("Save annotations as a .json file"));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1490,10 +1490,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Close current file."));
+            ui->uiStatusBar->message(_("Close current file."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1525,10 +1525,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Close all files."));
+            ui->uiStatusBar->message(_("Close all files."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1573,12 +1573,12 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Exit the program.  Warns if "
+            ui->uiStatusBar->message(_("Exit the program.  Warns if "
                                           "edits or annotations have been "
                                           "made."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1700,10 +1700,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Previous layer."));
+            ui->uiStatusBar->message(_("Previous layer."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1722,10 +1722,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Next layer."));
+            ui->uiStatusBar->message(_("Next layer."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1745,10 +1745,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("No debanding."));
+            ui->uiStatusBar->message(_("No debanding."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1764,11 +1764,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Blur movie a bit to avoid "
+            ui->uiStatusBar->message(_("Blur movie a bit to avoid "
                                           "banding."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1784,11 +1784,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Blur movie medium to avoid "
+            ui->uiStatusBar->message(_("Blur movie medium to avoid "
                                           "banding."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1804,11 +1804,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Blur movie high to avoid "
+            ui->uiStatusBar->message(_("Blur movie high to avoid "
                                           "banding."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1825,11 +1825,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Minify filter with nearest "
+            ui->uiStatusBar->message(_("Minify filter with nearest "
                                           "algorithm."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1857,11 +1857,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Minify filter with linear "
+            ui->uiStatusBar->message(_("Minify filter with linear "
                                           "algorithm."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1889,11 +1889,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Magnify filter with nearest "
+            ui->uiStatusBar->message(_("Magnify filter with nearest "
                                           "algorithm."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1921,11 +1921,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Magnify filter with linear "
+            ui->uiStatusBar->message(_("Magnify filter with linear "
                                           "algorithm."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1953,10 +1953,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Mirror clip in X."));
+            ui->uiStatusBar->message(_("Mirror clip in X."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1974,10 +1974,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Mirror clip in Y."));
+            ui->uiStatusBar->message(_("Mirror clip in Y."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1995,10 +1995,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Use HDR data from file."));
+            ui->uiStatusBar->message(_("Use HDR data from file."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2015,10 +2015,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Don't use HDR data."));
+            ui->uiStatusBar->message(_("Don't use HDR data."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2035,10 +2035,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Use Latest HDR data."));
+            ui->uiStatusBar->message(_("Use Latest HDR data."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2055,10 +2055,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Rotate image 90 degrees."));
+            ui->uiStatusBar->message(_("Rotate image 90 degrees."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2076,10 +2076,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Rotate image -90 degrees."));
+            ui->uiStatusBar->message(_("Rotate image -90 degrees."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2114,11 +2114,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Show the red channel of the "
+            ui->uiStatusBar->message(_("Show the red channel of the "
                                           "layer."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2132,11 +2132,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Show the green channel of the "
+            ui->uiStatusBar->message(_("Show the green channel of the "
                                           "layer."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2150,11 +2150,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Show the blue channel of the "
+            ui->uiStatusBar->message(_("Show the blue channel of the "
                                           "layer."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2168,11 +2168,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Show the alpha channel of the "
+            ui->uiStatusBar->message(_("Show the alpha channel of the "
                                           "layer."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2186,11 +2186,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Show the combined lumma channel of "
+            ui->uiStatusBar->message(_("Show the combined lumma channel of "
                                           "the layer."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2204,11 +2204,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Show the RGB channel of the "
+            ui->uiStatusBar->message(_("Show the RGB channel of the "
                                           "layer."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2222,11 +2222,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Normalize the image to be "
+            ui->uiStatusBar->message(_("Normalize the image to be "
                                           "between 0 and 1."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2243,11 +2243,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Ignore OpenEXR chromaticities if "
+            ui->uiStatusBar->message(_("Ignore OpenEXR chromaticities if "
                                           "present."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2264,11 +2264,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Show values below 0 and above 1 as "
+            ui->uiStatusBar->message(_("Show values below 0 and above 1 as "
                                           "red pixels"));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2285,10 +2285,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle HDR peak detection to adjust the movie's luminosity while playing."));
+            ui->uiStatusBar->message(_("Toggle HDR peak detection to adjust the movie's luminosity while playing."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2304,10 +2304,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Select Tonemap algorithm."));
+            ui->uiStatusBar->message(_("Select Tonemap algorithm."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2334,10 +2334,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Select Gamut mapping algorithm."));
+            ui->uiStatusBar->message(_("Select Gamut mapping algorithm."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2364,10 +2364,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggles Fullscreen Mode."));
+            ui->uiStatusBar->message(_("Toggles Fullscreen Mode."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2396,10 +2396,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggles Presentation Mode."));
+            ui->uiStatusBar->message(_("Toggles Presentation Mode."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2429,11 +2429,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggles Window to Float above "
+            ui->uiStatusBar->message(_("Toggles Window to Float above "
                                           "others."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2451,10 +2451,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggles a Secondary Window."));
+            ui->uiStatusBar->message(_("Toggles a Secondary Window."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2514,10 +2514,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Secondary Window to Float above others."));
+            ui->uiStatusBar->message(_("Toggle Secondary Window to Float above others."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2541,10 +2541,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Mouse clicks are delivered to the OS windows below.  Used with transparency."));
+            ui->uiStatusBar->message(_("Mouse clicks are delivered to the OS windows below.  Used with transparency."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2558,10 +2558,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Make UI more transparent."));
+            ui->uiStatusBar->message(_("Make UI more transparent."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2576,10 +2576,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Make UI less transparent."));
+            ui->uiStatusBar->message(_("Make UI less transparent."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2594,11 +2594,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Only allow one side panel at a "
+            ui->uiStatusBar->message(_("Only allow one side panel at a "
                                           "time."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2660,6 +2660,20 @@ namespace mrv
         auto label = label_with_tab;
         if (label_with_tab[label_with_tab.size() - 1] == '\t')
             label = label_with_tab.substr(0, label_with_tab.size() - 1);
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+        {
+            std::string msg = tl::string::Format(_("Show {0} Window.")).arg(label);
+            ui->uiStatusBar->message(msg.c_str());
+            return;
+        }
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         show_window_cb(label, ui);
     }
 
@@ -2668,10 +2682,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Show About Window."));
+            ui->uiStatusBar->message(_("Show About Window."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2779,10 +2793,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Action Dock (Annotations/Edit tools)."));
+            ui->uiStatusBar->message(_("Toggle Action Dock (Annotations/Edit tools)."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2825,10 +2839,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Menu Bar."));
+            ui->uiStatusBar->message(_("Toggle Menu Bar."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2845,10 +2859,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Top Bar."));
+            ui->uiStatusBar->message(_("Toggle Top Bar."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2865,10 +2879,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Pixel Bar."));
+            ui->uiStatusBar->message(_("Toggle Pixel Bar."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2885,10 +2899,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Timeline Bar."));
+            ui->uiStatusBar->message(_("Toggle Timeline Bar."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2914,10 +2928,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Status Bar (this bar)."));
+            ui->uiStatusBar->message(_("Toggle Status Bar (this bar)."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3016,10 +3030,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Show HUD Options."));
+            ui->uiStatusBar->message(_("Show HUD Options."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3038,10 +3052,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggles auto framing of the view."));
+            ui->uiStatusBar->message(_("Toggles auto framing of the view."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3062,10 +3076,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle TV Safe Areas."));
+            ui->uiStatusBar->message(_("Toggle TV Safe Areas."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3080,11 +3094,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle the display of OpenEXR's "
+            ui->uiStatusBar->message(_("Toggle the display of OpenEXR's "
                                           "Data Window."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3099,11 +3113,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Ignore the OpenEXR Display "
+            ui->uiStatusBar->message(_("Ignore the OpenEXR Display "
                                           "Window."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3115,14 +3129,15 @@ namespace mrv
     }
 
     void toggle_display_window_cb(Fl_Menu_* m, ViewerUI* ui)
-    {        switch(Fl::callback_reason())
+    {
+        switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle the display of OpenEXR's "
+            ui->uiStatusBar->message(_("Toggle the display of OpenEXR's "
                                           "Display Window."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3138,10 +3153,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Set the Film Cropping Mask."));
+            ui->uiStatusBar->message(_("Set the Film Cropping Mask."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3160,10 +3175,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Play Forward."));
+            ui->uiStatusBar->message(_("Play Forward."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3176,10 +3191,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Play Backward."));
+            ui->uiStatusBar->message(_("Play Backward."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3192,10 +3207,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Stop Playback."));
+            ui->uiStatusBar->message(_("Stop Playback."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3208,10 +3223,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Playback."));
+            ui->uiStatusBar->message(_("Toggle Playback."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3225,10 +3240,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Set In Point."));
+            ui->uiStatusBar->message(_("Set In Point."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3244,10 +3259,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Set Out Point."));
+            ui->uiStatusBar->message(_("Set Out Point."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3263,10 +3278,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle In and Out Points."));
+            ui->uiStatusBar->message(_("Toggle In and Out Points."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3323,10 +3338,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Loop Mode."));
+            ui->uiStatusBar->message(_("Loop Mode."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3338,10 +3353,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Play Once Mode."));
+            ui->uiStatusBar->message(_("Play Once Mode."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3353,10 +3368,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Play Ping-Pong Mode."));
+            ui->uiStatusBar->message(_("Play Ping-Pong Mode."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3370,10 +3385,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Select OCIO Input Color Space."));
+            ui->uiStatusBar->message(_("Select OCIO Input Color Space."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3408,10 +3423,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Bring up OCIO presets window."));
+            ui->uiStatusBar->message(_("Bring up OCIO presets window."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3430,10 +3445,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle OpenColorIO (OCIO)."));
+            ui->uiStatusBar->message(_("Toggle OpenColorIO (OCIO)."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3449,11 +3464,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle between OCIO and "
+            ui->uiStatusBar->message(_("Toggle between OCIO and "
                                           "Colors topbar."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3476,10 +3491,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Current OCIO Input Color Space."));
+            ui->uiStatusBar->message(_("Current OCIO Input Color Space."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3505,10 +3520,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Current OCIO Look."));
+            ui->uiStatusBar->message(_("Current OCIO Look."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3534,10 +3549,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Current OCIO Display / View for monitor."));
+            ui->uiStatusBar->message(_("Current OCIO Display / View for monitor."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3588,10 +3603,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Current OCIO Display / View for all monitors."));
+            ui->uiStatusBar->message(_("Current OCIO Display / View for all monitors."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3631,10 +3646,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Video Levels from video clip."));
+            ui->uiStatusBar->message(_("Video Levels from video clip."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3655,10 +3670,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Video Levels Legal Range for SDR."));
+            ui->uiStatusBar->message(_("Video Levels Legal Range for SDR."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3679,10 +3694,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Video Levels Legal Range for HDR."));
+            ui->uiStatusBar->message(_("Video Levels Legal Range for HDR."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3703,10 +3718,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Video Levels Full Range."));
+            ui->uiStatusBar->message(_("Video Levels Full Range."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3727,10 +3742,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("No Alpha Blend."));
+            ui->uiStatusBar->message(_("No Alpha Blend."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3746,10 +3761,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Straight Alpha Blend."));
+            ui->uiStatusBar->message(_("Straight Alpha Blend."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3765,10 +3780,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Premultiplied Alpha Blend."));
+            ui->uiStatusBar->message(_("Premultiplied Alpha Blend."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3784,10 +3799,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to Start Frame."));
+            ui->uiStatusBar->message(_("Go to Start Frame."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3800,10 +3815,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to End Frame."));
+            ui->uiStatusBar->message(_("Go to End Frame."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3816,10 +3831,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to Next Frame."));
+            ui->uiStatusBar->message(_("Go to Next Frame."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3832,10 +3847,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to Previous Frame."));
+            ui->uiStatusBar->message(_("Go to Previous Frame."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3848,10 +3863,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go Forwards 10 Seconds."));
+            ui->uiStatusBar->message(_("Go Forwards 10 Seconds."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3869,10 +3884,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go Backwards 10 Seconds."));
+            ui->uiStatusBar->message(_("Go Backwards 10 Seconds."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3890,11 +3905,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle In / Out for the OTIO "
+            ui->uiStatusBar->message(_("Toggle In / Out for the OTIO "
                                           "clip."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3950,10 +3965,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Next OTIO clip."));
+            ui->uiStatusBar->message(_("Next OTIO clip."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -3989,10 +4004,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Previous OTIO clip."));
+            ui->uiStatusBar->message(_("Previous OTIO clip."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4028,10 +4043,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Previous Annotation Point."));
+            ui->uiStatusBar->message(_("Previous Annotation Point."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4067,10 +4082,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Next Annotation Point."));
+            ui->uiStatusBar->message(_("Next Annotation Point."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4105,10 +4120,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Annotation Visibility."));
+            ui->uiStatusBar->message(_("Toggle Annotation Visibility."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4124,11 +4139,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Clear Annotation for Current "
+            ui->uiStatusBar->message(_("Clear Annotation for Current "
                                           "Frame."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4149,11 +4164,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Clear Annotations for ALL "
+            ui->uiStatusBar->message(_("Clear Annotations for ALL "
                                           "Frames."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4184,11 +4199,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("No Thumbnails in Timeline "
+            ui->uiStatusBar->message(_("No Thumbnails in Timeline "
                                           "Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4211,11 +4226,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Editing in Timeline "
+            ui->uiStatusBar->message(_("Toggle Editing in Timeline "
                                           "Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4237,10 +4252,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Editing video and audio clips with same In and Out Points."));
+            ui->uiStatusBar->message(_("Toggle Editing video and audio clips with same In and Out Points."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4262,10 +4277,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Frame Timeline View."));
+            ui->uiStatusBar->message(_("Frame Timeline View."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4283,11 +4298,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Scrolling in Timeline "
+            ui->uiStatusBar->message(_("Toggle Scrolling in Timeline "
                                           "Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4310,10 +4325,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Track Information in Timeline Viewport."));
+            ui->uiStatusBar->message(_("Toggle Track Information in Timeline Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4339,10 +4354,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Clip Information in Timeline Viewport."));
+            ui->uiStatusBar->message(_("Toggle Clip Information in Timeline Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4368,10 +4383,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Markers in Timeline Viewport."));
+            ui->uiStatusBar->message(_("Toggle Markers in Timeline Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4395,10 +4410,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Track in Timeline Viewport."));
+            ui->uiStatusBar->message(_("Toggle Track in Timeline Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4422,10 +4437,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Transitions in Timeline Viewport."));
+            ui->uiStatusBar->message(_("Toggle Transitions in Timeline Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4449,11 +4464,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle OTIO's Media Reference "
+            ui->uiStatusBar->message(_("Select OTIO's Media Reference "
                                           "Key."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4489,10 +4504,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Set Small Thumbnails in Timeline Viewport."));
+            ui->uiStatusBar->message(_("Set Small Thumbnails in Timeline Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4517,10 +4532,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Set Medium Thumbnails in Timeline Viewport."));
+            ui->uiStatusBar->message(_("Set Medium Thumbnails in Timeline Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4545,10 +4560,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Set Large Thumbnails in Timeline Viewport."));
+            ui->uiStatusBar->message(_("Set Large Thumbnails in Timeline Viewport."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4643,10 +4658,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Flip Pen Colors."));
+            ui->uiStatusBar->message(_("Flip Pen Colors."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4742,10 +4757,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to First Image Version."));
+            ui->uiStatusBar->message(_("Go to First Image Version."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4758,10 +4773,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to Previous Image Version."));
+            ui->uiStatusBar->message(_("Go to Previous Image Version."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4774,10 +4789,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to Next Image Version."));
+            ui->uiStatusBar->message(_("Go to Next Image Version."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4790,10 +4805,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Go to Last Image Version."));
+            ui->uiStatusBar->message(_("Go to Last Image Version."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4806,10 +4821,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Give a donation to support development and unlock features."));
+            ui->uiStatusBar->message(_("Give a donation to support development and unlock features."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4841,10 +4856,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Online documentation."));
+            ui->uiStatusBar->message(_("Online documentation."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4858,10 +4873,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Annotations."));
+            ui->uiStatusBar->message(_("Toggle Annotations."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4876,10 +4891,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Sync Elements."));
+            ui->uiStatusBar->message(_("Toggle Sync Elements."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4925,10 +4940,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Toggle Receive Elements."));
+            ui->uiStatusBar->message(_("Toggle Receive Elements."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4975,11 +4990,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Save state of UI and files to "
+            ui->uiStatusBar->message(_("Save state of UI and files to "
                                           "a new .mrv2s session file."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4997,11 +5012,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Save state of UI and files to "
+            ui->uiStatusBar->message(_("Save state of UI and files to "
                                           "a .mrv2s session file."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -5029,11 +5044,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Load a session file which stores "
+            ui->uiStatusBar->message(_("Load a session file which stores "
                                           "the state of the UI and files."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -5050,11 +5065,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Save and restart a temporary "
+            ui->uiStatusBar->message(_("Save and restart a temporary "
                                           "session."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -5203,10 +5218,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            App::ui->uiStatusBar->copy_label(_("Clone the File."));
+            App::ui->uiStatusBar->message(_("Clone the File."));
             return;
         case FL_REASON_LOST_FOCUS:
-            App::ui->uiStatusBar->copy_label("");
+            App::ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -5252,10 +5267,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            App::ui->uiStatusBar->copy_label(_("Reload the File."));
+            App::ui->uiStatusBar->message(_("Reload the File."));
             return;
         case FL_REASON_LOST_FOCUS:
-            App::ui->uiStatusBar->copy_label("");
+            App::ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -5328,10 +5343,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Set 3D Stereo image."));
+            ui->uiStatusBar->message(_("Set 3D Stereo image."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -5390,10 +5405,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Update the current frame cache."));
+            ui->uiStatusBar->message(_("Update the current frame cache."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -5411,10 +5426,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Refresh the frame cache."));
+            ui->uiStatusBar->message(_("Refresh the frame cache."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -5437,10 +5452,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            App::ui->uiStatusBar->copy_label(_("Refresh the movie."));
+            App::ui->uiStatusBar->message(_("Refresh the movie."));
             return;
         case FL_REASON_LOST_FOCUS:
-            App::ui->uiStatusBar->copy_label("");
+            App::ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -5465,11 +5480,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            App::ui->uiStatusBar->copy_label(_("Copy the Filename to the "
+            App::ui->uiStatusBar->message(_("Copy the Filename to the "
                                           "clipboard."));
             return;
         case FL_REASON_LOST_FOCUS:
-            App::ui->uiStatusBar->copy_label("");
+            App::ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -5491,10 +5506,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Bring up the File Manager."));
+            ui->uiStatusBar->message(_("Bring up the File Manager."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;

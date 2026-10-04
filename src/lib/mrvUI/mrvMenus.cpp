@@ -1425,7 +1425,7 @@ namespace mrv
                 idx = menu->add(
                     msg.c_str(), 0,
                     (Fl_Callback*)toggle_timeline_active_track_cb, ui,
-                    FL_MENU_TOGGLE);
+                    FL_MENU_TOGGLE | FL_MENU_CHATTY);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                 if (tracksActive[i])
                     item->set();
@@ -1451,7 +1451,7 @@ namespace mrv
                                 msg.c_str(), 0,
                                 (Fl_Callback*)
                                 timeline_media_reference_key_cb, ui,
-                                FL_MENU_RADIO);
+                                FL_MENU_CHATTY | FL_MENU_RADIO);
 
                             if ((key == keys[i]) ||
                                 (key.empty() && keys[i] == "DEFAULT_MEDIA"))
@@ -2230,8 +2230,8 @@ namespace mrv
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,
             ui, mode);
         menu->add(
-            _("Help/About"), kToggleAbout.hotkey(), (Fl_Callback*)window_cb,
-            ui);
+            _("Help/About"), kToggleAbout.hotkey(), (Fl_Callback*)about_cb,
+            ui, mode);
 
         menu->menu_end();
 

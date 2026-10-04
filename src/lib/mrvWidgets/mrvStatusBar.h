@@ -25,7 +25,7 @@ namespace mrv
 
         //! Handle event (for opening Log panel when clicked on it)
         int handle(int event) override;
-        
+
         void timeout(float seconds);
 
         //! Save the current color scheme of the widget.  Used at creation
@@ -37,6 +37,9 @@ namespace mrv
 
         //! Clear the status bar and restore the colors
         void clear();
+
+        //! Copy the label removing timeouts.
+        void message(const char*);
 
         //! Set up the default status message.
         void default_message();

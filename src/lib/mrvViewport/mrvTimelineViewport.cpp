@@ -60,6 +60,8 @@
 
 #include <tlDevice/IOutput.h>
 
+#include <tlTimeline/Edit.h>
+
 #include <tlCore/HDR.h>
 #include <tlCore/Matrix.h>
 #include <tlCore/StringFormat.h>
@@ -303,6 +305,11 @@ namespace mrv
             }
 
             p.ui->uiTimeline->setEditMode(mode);
+
+            nlohmann::json msg;
+            msg["command"] = "setEditMode";
+            msg["value"] = mode;
+            tcp->pushMessage(msg);
         }
 
         ActionMode TimelineViewport::getActionMode() noexcept

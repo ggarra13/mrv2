@@ -2076,7 +2076,7 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Remove audio gap(s) at the ones at current time."));
+            ui->uiStatusBar->copy_label(_("Remove audio gap(s) at the current time."));
             return;
         case FL_REASON_LOST_FOCUS:
             ui->uiStatusBar->copy_label("");
@@ -2475,6 +2475,8 @@ namespace mrv
         const auto& time = getTime(player);
         updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
+
+        tcp->pushMessage("Edit/Selected/Add Transition", time);
 
         set_edit_mode_cb(EditMode::kFull, ui);
     }
@@ -4236,9 +4238,9 @@ namespace mrv
         if (mode != EditMode::kNone)
         {
             Message msg;
-            msg["command"] = "setEditMode";
+            msg["command"] = "Editing";
             msg["value"] = mode;
-            msg["height"] = H;
+            msg["height"] = H / ui->uiView->pixels_per_unit();
             tcp->pushMessage(msg);
         }
     }

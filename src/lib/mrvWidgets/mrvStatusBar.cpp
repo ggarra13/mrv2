@@ -45,13 +45,27 @@ namespace mrv
         label += " - " + gpu;
         if (gpu == _("GPU: Unknown"))
             Fl::repeat_timeout(1.0, (Fl_Timeout_Handler)all_ok_cb, this);
-        
+
         copy_label(label.c_str());
     }
 
     void StatusBar::default_message()
     {
         Fl::add_timeout(1.0, (Fl_Timeout_Handler)all_ok_cb, this);
+    }
+
+    void StatusBar::message(const char* msg)
+    {
+        restore_colors();
+        Fl_Group::copy_label(msg);
+        if (strlen(msg) == 0)
+        {
+            Fl::add_timeout(1.0, (Fl_Timeout_Handler)all_ok_cb, this);
+        }
+        else
+        {
+            Fl::remove_timeout((Fl_Timeout_Handler)all_ok_cb, this);
+        }
     }
 
     void StatusBar::save_colors()
@@ -128,8 +142,8 @@ namespace mrv
                 return 1;
             }
         }
-        
+
         return Fl_Group::handle(event);
     }
-    
+
 } // namespace mrv

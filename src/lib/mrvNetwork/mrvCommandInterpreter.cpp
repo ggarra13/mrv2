@@ -1253,7 +1253,7 @@ namespace mrv
                 if ((!value && imageInfoPanel) || (value && !imageInfoPanel))
                     image_info_panel_cb(nullptr, ui);
             }
-            else if (c == "setEditMode")
+            else if (c == "Editing")
             {
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
@@ -1264,6 +1264,7 @@ namespace mrv
                 EditMode value = message["value"];
                 editMode = value;
                 editModeH = message["height"];
+                editModeH *= ui->uiView->pixels_per_unit();
                 bool presentation = ui->uiView->getPresentationMode();
                 if (!presentation)
                     ui->uiView->resizeWindow();
@@ -1500,6 +1501,10 @@ namespace mrv
             {
                 edit_selected_remove_cb(nullptr, ui);
             }
+            else if (c == "Edit/Selected/Add Transition")
+            {
+                edit_selected_add_transition_cb(nullptr, ui);
+            }
             else if (c == "Edit/Undo")
             {
                 edit_undo_cb(nullptr, ui);
@@ -1507,6 +1512,11 @@ namespace mrv
             else if (c == "Edit/Redo")
             {
                 edit_redo_cb(nullptr, ui);
+            }
+            else if (c == "setEditMode")
+            {
+                timeline::EditMode editMode = message["value"];
+                ui->uiView->setEditMode(editMode);
             }
             else if (c == "setFilesPanelOptions")
             {
