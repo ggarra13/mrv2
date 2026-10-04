@@ -3,6 +3,7 @@ v1.8.0
 
 - UI: Movie files and sequences with associated audio also allow turning off any of the two tracks.
 - UI: Built-in File Requester (used mainly on Linux) no longer shows the patterns in a floating window.
+- UI: Added tooltips in the status bar for each menu entry.
 
 - Command-Line: Now -systemInfo will list all libraries used in the players.
 - Command-Line: Now -systemInfo will now show up the start up message.
@@ -17,6 +18,8 @@ Fixes
 - UI: Area selection had a bug which prevented it from marking an area bigger than one pixel.
 
 - Command-Line: Displaying -systemInfo does not hang the Vulkan backend.
+
+- Edit: Made all Edit functions work properly.
 
 - Core: Switching back to **Preferences->Loading->Missing Frames->Error** would not trigger a reload of the file.
 

@@ -242,10 +242,7 @@ namespace mrv
 
     void open_files_cb(const std::vector< std::string >& files, ViewerUI* ui)
     {
-        for (const auto& file : files)
-        {
-            ui->app->open(file);
-        }
+        ui->app->open(files);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -274,12 +271,36 @@ namespace mrv
 
     void open_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Open a movie or a sequence."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const std::vector<std::string>& files = open_image_file(NULL, true);
         open_files_cb(files, ui);
     }
 
     void open_url_movie_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Open a movie stored on the web with "
+                                          "https protocol.  Demo movie is "
+                                          "default."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         URLMovieUI urlMovie;
         while (urlMovie.uiMain->shown())
         {
@@ -315,12 +336,35 @@ namespace mrv
 
     void open_single_image_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Open a single image even if it "
+                                          "is part of a sequence."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const std::vector<std::string>& files = open_image_file(NULL, false);
         open_single_files_cb(files, ui);
     }
 
     void open_recent_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Load the selected file."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
         if (!item || !item->label())
             return;
@@ -332,12 +376,35 @@ namespace mrv
 
     void open_separate_audio_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Open a sequence with an audio "
+                                          "file."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         ui->app->openSeparateAudioDialog();
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void open_directory_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Open all files in a directory."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         std::string dir = open_directory(NULL);
         if (dir.empty())
             return;
@@ -366,6 +433,17 @@ namespace mrv
 
     void open_new_instance_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Open a new instance of the player."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
 #ifdef _WIN32
         std::string program = rootpath() + "/bin/mrv2.exe";
 #else
@@ -380,6 +458,17 @@ namespace mrv
 
     void previous_file_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to Previous File, Looping to End."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = ui->app->filesModel();
         model->prev();
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -387,6 +476,17 @@ namespace mrv
 
     void next_file_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to Next File, Looping to Start."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = ui->app->filesModel();
         model->next();
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -394,6 +494,17 @@ namespace mrv
 
     void previous_file_limited_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to Previous File."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = ui->app->filesModel();
         auto Aindex = model->observeAIndex()->get();
         if (Aindex <= 0)
@@ -404,6 +515,17 @@ namespace mrv
 
     void next_file_limited_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to Next File."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = ui->app->filesModel();
         auto numFiles = model->observeFiles()->getSize();
         auto Aindex = model->observeAIndex()->get();
@@ -442,6 +564,17 @@ namespace mrv
 
     void toggle_compare_a_and_b_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle A and B comparison."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto aIndex = model->observeAIndex()->get();
         if (aIndex < 0)
@@ -458,6 +591,17 @@ namespace mrv
 
     void compare_a_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare A."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::A;
@@ -468,6 +612,17 @@ namespace mrv
 
     void compare_b_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare B."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::B;
@@ -477,6 +632,17 @@ namespace mrv
 
     void compare_wipe_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare Wipe."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::Wipe;
@@ -486,6 +652,17 @@ namespace mrv
 
     void compare_overlay_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare Overlay."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::Overlay;
@@ -495,6 +672,17 @@ namespace mrv
 
     void compare_difference_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare A - B difference."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::Difference;
@@ -504,6 +692,17 @@ namespace mrv
 
     void compare_add_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare A + B."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::Add;
@@ -513,6 +712,17 @@ namespace mrv
 
     void compare_multiply_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare A * B."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::Multiply;
@@ -522,6 +732,17 @@ namespace mrv
 
     void compare_butterfly_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare A next to flipped B."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::Butterfly;
@@ -531,6 +752,17 @@ namespace mrv
 
     void compare_horizontal_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare A and B Horizontally."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::Horizontal;
@@ -540,6 +772,17 @@ namespace mrv
 
     void compare_vertical_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare A and B Vertically."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::Vertical;
@@ -549,6 +792,17 @@ namespace mrv
 
     void compare_tile_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Compare A and one or many clips Tiled."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto model = App::app->filesModel();
         auto o = model->observeCompareOptions()->get();
         o.mode = timeline::CompareMode::Tile;
@@ -632,12 +886,35 @@ namespace mrv
 
     void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Save a single frame of the current "
+                                          "clip."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         save_single_frame_renaming(w, ui, true);
     }
 
     void save_single_frame_to_folder_cb(Fl_Menu_* w, ViewerUI* ui)
     {
-
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Keep saving frames to the same "
+                                          "folder."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -654,6 +931,18 @@ namespace mrv
 
     void save_audio_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Save the audio of the current "
+                                          "clip."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -701,6 +990,17 @@ namespace mrv
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Export a movie or a sequence."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
@@ -905,6 +1205,17 @@ namespace mrv
     void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui)
     {
 #ifdef MRV2_PDF
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Save annotations as a PDF."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -923,6 +1234,18 @@ namespace mrv
 
     void save_annotations_only_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Save annotations only as a movie "
+                                          "or sequence."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto view = ui->uiView;
         auto player = view->getTimelinePlayer();
         if (!player)
@@ -1124,6 +1447,17 @@ namespace mrv
 
     void save_annotations_as_json_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Save annotations as a .json file"));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto view = ui->uiView;
         auto player = view->getTimelinePlayer();
         if (!player)
@@ -1153,6 +1487,17 @@ namespace mrv
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Close current file."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         int ok = check_for_changes(ui);
         if (ok == 0)
             return;
@@ -1177,6 +1522,17 @@ namespace mrv
 
     void close_all_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Close all files."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         int ok = check_for_changes(ui);
         if (ok == 0)
             return;
@@ -1214,6 +1570,19 @@ namespace mrv
 
     void exit_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Exit the program.  Warns if "
+                                          "edits or annotations have been "
+                                          "made."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         int ok = check_for_changes(ui);
         if (ok == 0)
             return;
@@ -1328,6 +1697,17 @@ namespace mrv
 
     void previous_channel_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Previous layer."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         int value = ui->uiColorChannel->value();
         const int size = ui->uiColorChannel->size() - 1;
         --value;
@@ -1339,6 +1719,17 @@ namespace mrv
 
     void next_channel_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Next layer."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         int value = App::ui->uiColorChannel->value();
         const int size = ui->uiColorChannel->size() - 1;
         ++value;
@@ -1351,6 +1742,17 @@ namespace mrv
 #ifdef VULKAN_BACKEND
     void debanding_none_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("No debanding."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::ShaderOptions o = ui->uiView->getShaderOptions();
         o.debanding = timeline::Debanding::kNone;
         ui->uiView->setShaderOptions(o);
@@ -1359,6 +1761,18 @@ namespace mrv
 
     void debanding_low_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Blur movie a bit to avoid "
+                                          "banding."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::ShaderOptions o = ui->uiView->getShaderOptions();
         o.debanding = timeline::Debanding::Low;
         ui->uiView->setShaderOptions(o);
@@ -1367,6 +1781,18 @@ namespace mrv
 
     void debanding_medium_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Blur movie medium to avoid "
+                                          "banding."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::ShaderOptions o = ui->uiView->getShaderOptions();
         o.debanding = timeline::Debanding::Medium;
         ui->uiView->setShaderOptions(o);
@@ -1375,6 +1801,18 @@ namespace mrv
 
     void debanding_high_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Blur movie high to avoid "
+                                          "banding."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::ShaderOptions o = ui->uiView->getShaderOptions();
         o.debanding = timeline::Debanding::High;
         ui->uiView->setShaderOptions(o);
@@ -1384,6 +1822,18 @@ namespace mrv
 
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Minify filter with nearest "
+                                          "algorithm."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         // Legacy code
         {
             timeline::DisplayOptions o = ui->app->displayOptions();
@@ -1404,6 +1854,18 @@ namespace mrv
 
     void minify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Minify filter with linear "
+                                          "algorithm."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         // Legacy code
         {
             timeline::DisplayOptions o = ui->app->displayOptions();
@@ -1424,6 +1886,18 @@ namespace mrv
 
     void magnify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Magnify filter with nearest "
+                                          "algorithm."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         // Legacy code
         {
             timeline::DisplayOptions o = ui->app->displayOptions();
@@ -1444,6 +1918,18 @@ namespace mrv
 
     void magnify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Magnify filter with linear "
+                                          "algorithm."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         // Legacy code
         {
             timeline::DisplayOptions o = ui->app->displayOptions();
@@ -1464,6 +1950,17 @@ namespace mrv
 
     void mirror_x_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Mirror clip in X."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::DisplayOptions o = ui->app->displayOptions();
         o.mirror.x ^= 1;
         ui->app->setDisplayOptions(o);
@@ -1474,6 +1971,17 @@ namespace mrv
 
     void mirror_y_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Mirror clip in Y."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::DisplayOptions o = ui->app->displayOptions();
         o.mirror.y ^= 1;
         ui->app->setDisplayOptions(o);
@@ -1484,6 +1992,17 @@ namespace mrv
 
     void hdr_data_from_file_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Use HDR data from file."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::DisplayOptions o = ui->app->displayOptions();
         o.hdrInfo = timeline::HDRInformation::FromFile;
         ui->app->setDisplayOptions(o);
@@ -1493,6 +2012,17 @@ namespace mrv
 
     void hdr_data_inactive_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Don't use HDR data."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::DisplayOptions o = ui->app->displayOptions();
         o.hdrInfo = timeline::HDRInformation::Inactive;
         ui->app->setDisplayOptions(o);
@@ -1502,6 +2032,17 @@ namespace mrv
 
     void hdr_data_active_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Use Latest HDR data."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::DisplayOptions o = ui->app->displayOptions();
         o.hdrInfo = timeline::HDRInformation::Active;
         ui->app->setDisplayOptions(o);
@@ -1511,6 +2052,17 @@ namespace mrv
 
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Rotate image 90 degrees."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         float r = ui->uiView->getRotation();
         r += 90.F;
         if (r == 270.F)
@@ -1521,6 +2073,17 @@ namespace mrv
 
     void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Rotate image -90 degrees."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         float r = ui->uiView->getRotation();
         r -= 90.F;
         if (r == -270.F)
@@ -1548,42 +2111,126 @@ namespace mrv
 
     void toggle_red_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Show the red channel of the "
+                                          "layer."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const timeline::Channels channel = timeline::Channels::Red;
         toggle_channel(ui, channel);
     }
 
     void toggle_green_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Show the green channel of the "
+                                          "layer."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const timeline::Channels channel = timeline::Channels::Green;
         toggle_channel(ui, channel);
     }
 
     void toggle_blue_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Show the blue channel of the "
+                                          "layer."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const timeline::Channels channel = timeline::Channels::Blue;
         toggle_channel(ui, channel);
     }
 
     void toggle_alpha_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Show the alpha channel of the "
+                                          "layer."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const timeline::Channels channel = timeline::Channels::Alpha;
         toggle_channel(ui, channel);
     }
 
     void toggle_lumma_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Show the combined lumma channel of "
+                                          "the layer."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const timeline::Channels channel = timeline::Channels::Lumma;
         toggle_channel(ui, channel);
     }
 
     void toggle_color_channel_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Show the RGB channel of the "
+                                          "layer."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const timeline::Channels channel = timeline::Channels::Color;
         toggle_channel(ui, channel);
     }
 
     void toggle_normalize_image_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Normalize the image to be "
+                                          "between 0 and 1."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::DisplayOptions o = ui->app->displayOptions();
         o.normalize.enabled = !o.normalize.enabled;
         ui->app->setDisplayOptions(o);
@@ -1593,6 +2240,18 @@ namespace mrv
 
     void toggle_ignore_chromaticities_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Ignore OpenEXR chromaticities if "
+                                          "present."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::DisplayOptions o = ui->app->displayOptions();
         o.ignoreChromaticities = !o.ignoreChromaticities;
         ui->app->setDisplayOptions(o);
@@ -1602,6 +2261,18 @@ namespace mrv
 
     void toggle_invalid_values_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Show values below 0 and above 1 as "
+                                          "red pixels"));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::DisplayOptions o = ui->app->displayOptions();
         o.invalidValues ^= 1;
         ui->app->setDisplayOptions(o);
@@ -1611,6 +2282,17 @@ namespace mrv
 
     void toggle_hdr_peak_detection_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle HDR peak detection to adjust the movie's luminosity while playing."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::HDROptions o = ui->uiView->getHDROptions();
         o.peak_detection ^= 1;
         ui->uiView->setHDROptions(o);
@@ -1619,6 +2301,17 @@ namespace mrv
 
     void select_hdr_tonemap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Select Tonemap algorithm."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const Fl_Menu_Item* item = m->mvalue();
         const std::string algorithm = item->label();
 
@@ -1638,6 +2331,17 @@ namespace mrv
 
     void select_hdr_gamut_mapping_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Select Gamut mapping algorithm."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const Fl_Menu_Item* item = m->mvalue();
         const std::string algorithm = item->label();
 
@@ -1657,6 +2361,17 @@ namespace mrv
 
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggles Fullscreen Mode."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         MyViewport* view = ui->uiView;
         bool active = !view->getFullScreenMode();
         ui->uiView->setFullScreenMode(active);
@@ -1678,6 +2393,17 @@ namespace mrv
 
     void toggle_presentation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggles Presentation Mode."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         MyViewport* view = ui->uiView;
 
         const bool presentation = !view->getPresentationMode();
@@ -1700,6 +2426,18 @@ namespace mrv
 
     void toggle_float_on_top_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggles Window to Float above "
+                                          "others."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         bool active = true;
         const Fl_Menu_Item* item = m->mvalue();
         if (!item->value())
@@ -1710,6 +2448,17 @@ namespace mrv
 
     void toggle_secondary_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggles a Secondary Window."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         MainWindow* window;
         MyViewport* view;
 
@@ -1762,6 +2511,17 @@ namespace mrv
 
     void toggle_secondary_float_on_top_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Secondary Window to Float above others."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         if (!ui->uiSecondary || !ui->uiSecondary->window()->visible())
         {
@@ -1778,12 +2538,34 @@ namespace mrv
 
     void toggle_click_through(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Mouse clicks are delivered to the OS windows below.  Used with transparency."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         bool value = !ui->uiMain->get_click_through();
         ui->uiMain->set_click_through(value);
     }
 
     void more_ui_transparency(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Make UI more transparent."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         int alpha = ui->uiMain->get_alpha();
         alpha -= 5;
         ui->uiMain->set_alpha(alpha);
@@ -1791,6 +2573,17 @@ namespace mrv
 
     void less_ui_transparency(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Make UI less transparent."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         int alpha = ui->uiMain->get_alpha();
         alpha += 5;
         ui->uiMain->set_alpha(alpha);
@@ -1798,6 +2591,18 @@ namespace mrv
 
     void toggle_one_panel_only_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Only allow one side panel at a "
+                                          "time."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         panel::onlyOne(!panel::onlyOne());
     }
 
@@ -1860,6 +2665,17 @@ namespace mrv
 
     void about_cb(Fl_Widget* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Show About Window."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         show_window_cb(_("About"), ui);
     }
 
@@ -1960,6 +2776,17 @@ namespace mrv
 
     void toggle_action_tool_bar(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Action Dock (Annotations/Edit tools)."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Group* bar = ui->uiToolsGroup;
 
         if (bar->visible())
@@ -1995,6 +2822,17 @@ namespace mrv
 
     void toggle_menu_bar(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Menu Bar."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         toggle_ui_bar(ui, ui->uiMenuGroup);
         save_ui_state(ui, ui->uiMenuGroup);
         bool send = ui->uiPrefs->SendUI->value();
@@ -2004,6 +2842,17 @@ namespace mrv
 
     void toggle_top_bar(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Top Bar."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         toggle_ui_bar(ui, ui->uiTopBar);
         save_ui_state(ui, ui->uiTopBar);
         bool send = ui->uiPrefs->SendUI->value();
@@ -2013,6 +2862,17 @@ namespace mrv
 
     void toggle_pixel_bar(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Pixel Bar."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         toggle_ui_bar(ui, ui->uiPixelBar);
         save_ui_state(ui, ui->uiPixelBar);
         bool send = ui->uiPrefs->SendUI->value();
@@ -2022,6 +2882,17 @@ namespace mrv
 
     void toggle_timeline_bar(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Timeline Bar."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         toggle_ui_bar(ui, ui->uiBottomBar);
         save_ui_state(ui, ui->uiBottomBar);
         if (ui->uiBottomBar->visible())
@@ -2040,6 +2911,17 @@ namespace mrv
 
     void toggle_status_bar(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Status Bar (this bar)."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         toggle_ui_bar(ui, ui->uiStatusGroup);
         save_ui_state(ui, ui->uiStatusGroup);
         bool send = ui->uiPrefs->SendUI->value();
@@ -2131,6 +3013,17 @@ namespace mrv
 
     void hud_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Show HUD Options."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         if (!hudClass)
         {
             MyViewport* view = ui->uiView;
@@ -2142,6 +3035,17 @@ namespace mrv
 
     void frame_view_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggles auto framing of the view."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto view = ui->uiView;
         view->setFrameView(item->value());
@@ -2155,6 +3059,17 @@ namespace mrv
 
     void toggle_safe_areas_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle TV Safe Areas."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         bool checked = !ui->uiView->getSafeAreas();
         ui->uiView->setSafeAreas(checked);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -2162,6 +3077,18 @@ namespace mrv
 
     void toggle_data_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle the display of OpenEXR's "
+                                          "Data Window."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         bool checked = !ui->uiView->getDataWindow();
         ui->uiView->setDataWindow(checked);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -2169,6 +3096,18 @@ namespace mrv
 
     void toggle_ignore_display_window_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Ignore the OpenEXR Display "
+                                          "Window."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         bool checked = !ui->uiView->getIgnoreDisplayWindow();
         ui->uiView->setIgnoreDisplayWindow(checked);
         refresh_media_cb(m, ui);
@@ -2176,7 +3115,19 @@ namespace mrv
     }
 
     void toggle_display_window_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
+    {        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle the display of OpenEXR's "
+                                          "Display Window."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
+
         bool checked = !ui->uiView->getDisplayWindow();
         ui->uiView->setDisplayWindow(checked);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -2184,6 +3135,17 @@ namespace mrv
 
     void masking_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Set the Film Cropping Mask."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         // Find offset of View/Mask submenu
         int offset = w->find_index(_("View/Mask")) + 1;
 
@@ -2195,27 +3157,82 @@ namespace mrv
     // Playback callbacks
     void play_forwards_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Play Forward."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         ui->uiView->playForwards();
     }
 
     void play_backwards_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Play Backward."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         ui->uiView->playBackwards();
     }
 
     void stop_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Stop Playback."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         ui->uiView->stop();
     }
 
     void toggle_playback_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Playback."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         ui->uiView->togglePlayback();
     }
 
     // In/Out point callbacks
     void playback_set_in_point_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Set In Point."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         TimelineClass* c = ui->uiTimeWindow;
         c->uiStartButton->value(!c->uiStartButton->value());
         c->uiStartButton->do_callback();
@@ -2224,6 +3241,17 @@ namespace mrv
 
     void playback_set_out_point_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Set Out Point."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         TimelineClass* c = ui->uiTimeWindow;
         c->uiEndButton->value(!c->uiEndButton->value());
         c->uiEndButton->do_callback();
@@ -2232,6 +3260,17 @@ namespace mrv
 
     void playback_toggle_in_out_points_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle In and Out Points."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         static OTIO_NS::TimeRange inOut = time::invalidTimeRange;
 
         auto player = ui->uiView->getTimelinePlayer();
@@ -2281,20 +3320,64 @@ namespace mrv
 
     void playback_loop_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Loop Mode."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         playback_loop_mode(ui, timeline::Loop::Loop);
     }
     void playback_once_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Play Once Mode."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         playback_loop_mode(ui, timeline::Loop::Once);
     }
     void playback_ping_pong_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Play Ping-Pong Mode."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         playback_loop_mode(ui, timeline::Loop::PingPong);
     }
 
     // OCIO callbacks
     void attach_ocio_ics_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Select OCIO Input Color Space."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         mrv::PopupMenu* w = ui->uiICS;
         std::string ret =
             make_ocio_chooser(w->label(), OCIOBrowser::kInputColorSpace);
@@ -2322,6 +3405,17 @@ namespace mrv
 
     void ocio_presets_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Bring up OCIO presets window."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         if (!OCIOPresetsClass)
         {
             MyViewport* view = ui->uiView;
@@ -2333,6 +3427,17 @@ namespace mrv
 
     void toggle_ocio_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle OpenColorIO (OCIO)."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         timeline::OCIOOptions options = ui->uiView->getOCIOOptions();
         options.enabled = !options.enabled;
         ui->uiView->setOCIOOptions(options);
@@ -2341,6 +3446,18 @@ namespace mrv
 
     void toggle_ocio_topbar_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle between OCIO and "
+                                          "Colors topbar."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         if (ui->uiOCIO->visible())
         {
             ui->uiOCIO->hide();
@@ -2356,6 +3473,17 @@ namespace mrv
 
     void current_ocio_ics_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Current OCIO Input Color Space."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const Fl_Menu_Item* selected = m->mvalue();
         char pathname[1024];
         int ret = m->item_pathname(pathname, 1024, selected);
@@ -2374,6 +3502,17 @@ namespace mrv
 
     void current_ocio_look_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Current OCIO Look."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const Fl_Menu_Item* selected = m->mvalue();
         char pathname[1024];
         int ret = m->item_pathname(pathname, 1024, selected);
@@ -2392,6 +3531,17 @@ namespace mrv
 
     void monitor_ocio_view_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Current OCIO Display / View for monitor."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         int monitorId = -1;
         const Fl_Menu_Item* selected = m->mvalue();
         char pathname[1024];
@@ -2435,6 +3585,17 @@ namespace mrv
 
     void all_monitors_ocio_view_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Current OCIO Display / View for all monitors."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         // Get item selected
         const Fl_Menu_Item* selected = m->mvalue();
         char pathname[1024];
@@ -2467,6 +3628,17 @@ namespace mrv
 
     void video_levels_from_file_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Video Levels from video clip."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::FromFile;
@@ -2480,6 +3652,17 @@ namespace mrv
 
     void video_levels_legal_range_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Video Levels Legal Range for SDR."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::LegalRange;
@@ -2493,6 +3676,17 @@ namespace mrv
 
     void video_levels_legal_range_hdr_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Video Levels Legal Range for HDR."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::LegalRange;
@@ -2506,6 +3700,17 @@ namespace mrv
 
     void video_levels_full_range_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Video Levels Full Range."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::FullRange;
@@ -2519,6 +3724,17 @@ namespace mrv
 
     void alpha_blend_none_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("No Alpha Blend."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.alphaBlend = timeline::AlphaBlend::kNone;
@@ -2527,6 +3743,17 @@ namespace mrv
 
     void alpha_blend_straight_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Straight Alpha Blend."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.alphaBlend = timeline::AlphaBlend::Straight;
@@ -2535,6 +3762,17 @@ namespace mrv
 
     void alpha_blend_premultiplied_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Premultiplied Alpha Blend."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
         o.alphaBlend = timeline::AlphaBlend::Premultiplied;
@@ -2543,26 +3781,81 @@ namespace mrv
 
     void start_frame_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to Start Frame."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         ui->uiView->startFrame();
     }
 
     void end_frame_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to End Frame."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         ui->uiView->endFrame();
     }
 
     void next_frame_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to Next Frame."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         ui->uiView->frameNext();
     }
 
     void previous_frame_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to Previous Frame."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         ui->uiView->framePrev();
     }
 
     void next_second_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go Forwards 10 Seconds."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -2573,6 +3866,17 @@ namespace mrv
 
     void previous_second_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go Backwards 10 Seconds."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -2583,6 +3887,18 @@ namespace mrv
 
     void toggle_otio_clip_in_out_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle In / Out for the OTIO "
+                                          "clip."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -2631,6 +3947,17 @@ namespace mrv
 
     void next_clip_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Next OTIO clip."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -2659,6 +3986,17 @@ namespace mrv
 
     void previous_clip_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Previous OTIO clip."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -2687,6 +4025,17 @@ namespace mrv
 
     void previous_annotation_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Previous Annotation Point."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const auto& view = ui->uiView;
         const auto& player = view->getTimelinePlayer();
         if (!player)
@@ -2715,6 +4064,17 @@ namespace mrv
 
     void next_annotation_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Next Annotation Point."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const auto& view = ui->uiView;
         const auto& player = view->getTimelinePlayer();
         if (!player)
@@ -2742,6 +4102,17 @@ namespace mrv
 
     void toggle_visible_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Annotation Visibility."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         bool value = !ui->uiView->getShowAnnotations();
         ui->uiView->setShowAnnotations(value);
         ui->uiView->redrawWindows();
@@ -2750,6 +4121,18 @@ namespace mrv
 
     void annotation_clear_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Clear Annotation for Current "
+                                          "Frame."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -2763,6 +4146,18 @@ namespace mrv
 
     void annotation_clear_all_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Clear Annotations for ALL "
+                                          "Frames."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -2786,6 +4181,18 @@ namespace mrv
 
     void timeline_thumbnails_none_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("No Thumbnails in Timeline "
+                                          "Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = false;
         Message msg;
@@ -2801,6 +4208,18 @@ namespace mrv
 
     void toggle_timeline_editable_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Editing in Timeline "
+                                          "Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         bool editable = (bool)item->value();
         ui->uiTimeline->setEditable(editable);
@@ -2815,6 +4234,17 @@ namespace mrv
 
     void toggle_timeline_edit_associated_clips_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Editing video and audio clips with same In and Out Points."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
         options.editAssociatedClips = item->value();
@@ -2829,6 +4259,17 @@ namespace mrv
 
     void timeline_frame_view_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Frame Timeline View."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Message msg;
         msg["command"] = "Timeline/FrameView";
         if (ui->uiPrefs->SendUI->value())
@@ -2839,6 +4280,18 @@ namespace mrv
 
     void toggle_timeline_scroll_to_current_frame_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Scrolling in Timeline "
+                                          "Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         bool value = item->value();
         auto settings = ui->app->settings();
@@ -2854,6 +4307,17 @@ namespace mrv
 
     void toggle_timeline_track_info_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Track Information in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
         options.trackInfo = item->value();
@@ -2872,6 +4336,17 @@ namespace mrv
 
     void toggle_timeline_clip_info_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Clip Information in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
         options.clipInfo = item->value();
@@ -2890,6 +4365,17 @@ namespace mrv
 
     void toggle_timeline_markers_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Markers in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
         options.markers = item->value();
@@ -2906,6 +4392,17 @@ namespace mrv
 
     void toggle_timeline_active_track_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Track in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         std::string track = item->label();
 
@@ -2922,6 +4419,17 @@ namespace mrv
 
     void toggle_timeline_transitions_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Transitions in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
         options.transitions = item->value();
@@ -2938,6 +4446,18 @@ namespace mrv
 
     void timeline_media_reference_key_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle OTIO's Media Reference "
+                                          "Key."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player) return;
 
@@ -2966,6 +4486,17 @@ namespace mrv
 
     void timeline_thumbnails_small_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Set Small Thumbnails in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
         options.thumbnailHeight = 50 * ui->uiView->pixels_per_unit();
@@ -2983,6 +4514,17 @@ namespace mrv
 
     void timeline_thumbnails_medium_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Set Medium Thumbnails in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
         options.thumbnailHeight = 75 * ui->uiView->pixels_per_unit();;
@@ -3000,6 +4542,17 @@ namespace mrv
 
     void timeline_thumbnails_large_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Set Large Thumbnails in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
         options.thumbnailHeight = 100 * ui->uiView->pixels_per_unit();;
@@ -3087,6 +4640,17 @@ namespace mrv
 
     void flip_pen_color_cb(Fl_Button* o, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Flip Pen Colors."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         uint8_t r, g, b;
         Fl_Color c = ui->uiOldPenColor->color();
         Fl::get_color(c, r, g, b);
@@ -3175,26 +4739,81 @@ namespace mrv
     // Versioning
     void first_image_version_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to First Image Version."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         image_version_cb(ui, -1, true);
     }
 
     void previous_image_version_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to Previous Image Version."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         image_version_cb(ui, -1, false);
     }
 
     void next_image_version_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to Next Image Version."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         image_version_cb(ui, 1, false);
     }
 
     void last_image_version_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Go to Last Image Version."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         image_version_cb(ui, 1, true);
     }
 
     void unlock_features_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Give a donation to support development and unlock features."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
 #ifdef _WIN32
         std::string helper = rootpath() + "/bin/license_helper.exe";
 #else
@@ -3219,12 +4838,34 @@ namespace mrv
 
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Online documentation."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const std::string& docs = docspath();
         fl_open_uri(docs.c_str());
     }
 
     void toggle_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Annotations."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         bool value = ui->uiView->getShowAnnotations();
         ui->uiView->setShowAnnotations(!value);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -3232,6 +4873,17 @@ namespace mrv
 
     void toggle_sync_send_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Sync Elements."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const Fl_Menu_Item* item = m->mvalue();
         std::string label = item->label();
         if (label == _("Media"))
@@ -3270,6 +4922,17 @@ namespace mrv
 
     void toggle_sync_receive_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Toggle Receive Elements."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const Fl_Menu_Item* item = m->mvalue();
         std::string label = item->label();
         if (label == _("Media"))
@@ -3309,6 +4972,18 @@ namespace mrv
 
     void save_session_as_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Save state of UI and files to "
+                                          "a new .mrv2s session file."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const std::string& file = save_session_file();
         if (file.empty())
             return;
@@ -3319,6 +4994,18 @@ namespace mrv
 
     void save_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Save state of UI and files to "
+                                          "a .mrv2s session file."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const std::string file = session::current();
         if (file.empty())
             return save_session_as_cb(m, ui);
@@ -3339,6 +5026,18 @@ namespace mrv
 
     void load_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Load a session file which stores "
+                                          "the state of the UI and files."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         const std::string& fileName = open_session_file();
         if (fileName.empty())
             return;
@@ -3348,6 +5047,18 @@ namespace mrv
 
     void reload_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Save and restart a temporary "
+                                          "session."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         std::string fileName = session::current();
         if (fileName.empty())
             fileName = tmppath() + "/temp.mrv2s";
@@ -3489,6 +5200,17 @@ namespace mrv
 
     void clone_file_cb(Fl_Menu_* m, void* d)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            App::ui->uiStatusBar->copy_label(_("Clone the File."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            App::ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto ui = App::ui;
         auto app = ui->app;
         auto model = app->filesModel();
@@ -3527,6 +5249,17 @@ namespace mrv
 
     void refresh_media_cb(Fl_Menu_* m, void* d)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            App::ui->uiStatusBar->copy_label(_("Reload the File."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            App::ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto app = App::app;
         auto model = app->filesModel();
         auto files = model->observeFiles()->get();
@@ -3592,6 +5325,17 @@ namespace mrv
     void set_stereo_cb(Fl_Menu_* m, void* d)
     {
         auto ui = App::ui;
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Set 3D Stereo image."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto app = ui->app;
         auto model = app->filesModel();
         size_t numFiles = model->observeFiles()->getSize();
@@ -3643,6 +5387,17 @@ namespace mrv
     void update_video_frame_cb(Fl_Menu_* m, void* d)
     {
         auto ui = App::ui;
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Update the current frame cache."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -3653,6 +5408,17 @@ namespace mrv
     void refresh_file_cache_cb(Fl_Menu_* m, void* d)
     {
         auto ui = App::ui;
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Refresh the frame cache."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -3668,6 +5434,17 @@ namespace mrv
 
     void refresh_movie_cb(Fl_Menu_* m, void* d)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            App::ui->uiStatusBar->copy_label(_("Refresh the movie."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            App::ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto app = App::app;
         auto model = app->filesModel();
         if (model->observeFiles()->getSize() < 1)
@@ -3685,6 +5462,18 @@ namespace mrv
 
     void copy_filename_cb(Fl_Menu_* m, void* d)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            App::ui->uiStatusBar->copy_label(_("Copy the Filename to the "
+                                          "clipboard."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            App::ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto app = App::app;
         auto model = app->filesModel();
         if (model->observeFiles()->getSize() < 1)
@@ -3699,6 +5488,17 @@ namespace mrv
     void file_manager_cb(Fl_Menu_* m, void* d)
     {
         auto ui = App::ui;
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->copy_label(_("Bring up the File Manager."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->copy_label("");
+            return;
+        default:
+            break;
+        }
         auto app = ui->app;
         auto model = app->filesModel();
 

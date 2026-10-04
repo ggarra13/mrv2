@@ -1447,58 +1447,58 @@ namespace mrv
                 int Aindex = message["value"];
                 add_clip_to_timeline_cb(Aindex, ui);
             }
-            else if (c == "Edit/Remove Selected")
-            {
-                edit_remove_selected_cb(nullptr, ui);
-            }
             else if (c == "Edit/Frame/Cut")
             {
-                edit_cut_frame_cb(nullptr, ui);
+                edit_frame_cut_cb(nullptr, ui);
             }
             else if (c == "Edit/Frame/Copy")
             {
-                edit_copy_frame_cb(nullptr, ui);
+                edit_frame_copy_cb(nullptr, ui);
             }
             else if (c == "Edit/Frame/Paste")
             {
-                edit_paste_frame_cb(nullptr, ui);
+                edit_frame_paste_cb(nullptr, ui);
             }
             else if (c == "Edit/Frame/Insert")
             {
-                edit_insert_frame_cb(nullptr, ui);
+                edit_frame_insert_cb(nullptr, ui);
             }
-            else if (c == "Edit/Audio Clip/Insert")
+            else if (c == "Edit/Time/Slice") // OK
+            {
+                edit_time_slice_clip_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Time/Remove") // OK
+            {
+                edit_time_remove_clip_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Time/Audio Clip/Insert") // OK
             {
                 std::string audioFile = message["value"];
-                edit_insert_audio_clip_cb(ui, audioFile);
+                edit_time_insert_audio_clip(ui, audioFile);
             }
-            else if (c == "Edit/Audio Clip/Remove")
+            else if (c == "Edit/Time/Audio Gap/Insert") // OK
             {
-                edit_remove_audio_clip_cb(nullptr, ui);
+                edit_time_insert_audio_gap_cb(nullptr, ui);
             }
-            else if (c == "Edit/Audio Gap/Insert")
+            else if (c == "Edit/Time/Audio Clip/Remove") // OK
             {
-                edit_insert_audio_gap_cb(nullptr, ui);
+                edit_time_remove_audio_clip_cb(nullptr, ui);
             }
-            else if (c == "Edit/Audio Gap/Remove")
+            else if (c == "Edit/Time/Audio Gap/Remove")  // OK
             {
-                edit_remove_audio_gap_cb(nullptr, ui);
+                edit_time_remove_audio_gap_cb(nullptr, ui);
             }
-            else if (c == "Edit/Video Gap/Insert")
+            else if (c == "Edit/Time/Video Gap/Insert") // OK
             {
-                edit_insert_video_gap_cb(nullptr, ui);
+                edit_time_insert_video_gap_cb(nullptr, ui);
             }
-            else if (c == "Edit/Video Gap/Remove")
+            else if (c == "Edit/Time/Video Gap/Remove") // OK
             {
-                edit_remove_video_gap_cb(nullptr, ui);
+                edit_time_remove_video_gap_cb(nullptr, ui);
             }
-            else if (c == "Edit/Slice")
+            else if (c == "Edit/Selected/Remove")
             {
-                edit_slice_clip_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Remove")
-            {
-                edit_remove_clip_cb(nullptr, ui);
+                edit_selected_remove_cb(nullptr, ui);
             }
             else if (c == "Edit/Undo")
             {

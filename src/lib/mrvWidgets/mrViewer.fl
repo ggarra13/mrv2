@@ -941,11 +941,11 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar open
+          label TopBar
           xywh {0 30 934 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
-            label Layers open
+            label Layers
             xywh {0 30 247 29} color 1397969664 labeltype NO_LABEL
           } {
             Fl_Menu_Button uiColorChannel {
@@ -959,14 +959,14 @@ player->setVideoLayer(layerId);
 auto model = v->app->filesModel();
 auto item = model->observeA()->get();
 model->setLayer(item, layerId);
-uiView->updateVideoLayers(layerId);} open selected
+uiView->updateVideoLayers(layerId);} open
               tooltip {Allows you to select different image channels or layers.} xywh {0 30 247 29} down_box DOWN_BOX labelsize 10 resizable
               code2 {o->disable_label_on_popup();}
               class {mrv::PopupMenu}
             } {}
           }
           Fl_Group uiCOLORS {
-            label {Exposure, Saturation, and Gamma} open
+            label {Exposure, Saturation, and Gamma}
             xywh {247 30 686 29} labeltype NO_LABEL hide
           } {
             Fl_Group {} {
@@ -1188,7 +1188,7 @@ uiView->updateOCIOOptions();} open
             xywh {0 86 934 472} labeltype NO_LABEL hide resizable
           }
           Fl_Pack uiViewGroup {
-            label ViewGroup
+            label ViewGroup open
             xywh {0 59 934 501} type HORIZONTAL box FLAT_BOX labeltype NO_LABEL
             code3 {o->fixed( uiToolsGroup, uiToolsGroup->w() );
 uiMain->workspace = uiViewGroup;}
@@ -1197,13 +1197,13 @@ uiMain->workspace = uiViewGroup;}
             Fl_Group uiToolsGroup {open
               xywh {0 59 42 501}
             } {
-              Fl_Group uiEditGroup {
+              Fl_Group uiEditGroup {open
                 xywh {0 59 42 501} box FLAT_BOX hide
               } {
                 Fl_Button uiSelect {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Select );}
-                  image {../../icons/EditSelect.svg} compress_image 1 xywh {2 60 40 50} down_box DOWN_BOX selection_color 14
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Select );} selected
+                  tooltip {Clip Selection Tool.} image {../../icons/EditSelect.svg} compress_image 1 xywh {2 60 40 50} down_box DOWN_BOX selection_color 14
                   class {mrv::Button}
                 }
                 Fl_Button uiMove {
@@ -1550,7 +1550,7 @@ o->setUI( this );}
           } {}
         }
         Fl_Group uiPixelBar {
-          label PixelBar open
+          label PixelBar
           xywh {0 619 934 30} box FLAT_BOX color 56 labeltype NO_LABEL labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
@@ -1560,7 +1560,7 @@ o->setUI( this );}
           } {}
         }
         Fl_Group uiStatusGroup {
-          label StatusBar open
+          label StatusBar
           xywh {0 649 934 25} color 0 labeltype NO_LABEL
         } {
           Fl_Group uiStatusBar {open

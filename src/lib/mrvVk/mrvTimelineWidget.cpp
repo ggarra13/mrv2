@@ -222,7 +222,7 @@ namespace mrv
         {
             return vlk::MAX_FRAMES_IN_FLIGHT;
         }
-        
+
         void TimelineWidget::setContext(
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel,
@@ -1748,7 +1748,7 @@ namespace mrv
             }
             if (key == FL_Delete && p.editMode == timeline::EditMode::Select)
             {
-                edit_remove_selected_cb(nullptr, p.ui);
+                edit_selected_remove_cb(nullptr, p.ui);
                 return 1;
             }
             bool send = App::ui->uiPrefs->SendTimeline->value();
