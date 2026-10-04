@@ -1097,10 +1097,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Copy a Frame."));
+            ui->uiStatusBar->message(_("Copy a Frame."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1148,10 +1148,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Cut a Frame."));
+            ui->uiStatusBar->message(_("Cut a Frame."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1234,10 +1234,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Paste a Frame."));
+            ui->uiStatusBar->message(_("Paste a Frame."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1339,10 +1339,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Insert a Cut or Copied Frame."));
+            ui->uiStatusBar->message(_("Insert a Cut or Copied Frame."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1420,11 +1420,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Slice the timeline at the current "
+            ui->uiStatusBar->message(_("Slice the timeline at the current "
                                           "time."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1481,11 +1481,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Remove clip(s) at the current "
+            ui->uiStatusBar->message(_("Remove clip(s) at the current "
                                           "time."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1716,11 +1716,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Insert audio clip at the current "
+            ui->uiStatusBar->message(_("Insert audio clip at the current "
                                           "time."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1736,11 +1736,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Insert audio gap(s) at the current "
+            ui->uiStatusBar->message(_("Insert audio gap(s) at the current "
                                           "time."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1896,11 +1896,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Remove audio clips at the current "
+            ui->uiStatusBar->message(_("Remove audio clips at the current "
                                           "time."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -1962,10 +1962,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Remove selected items."));
+            ui->uiStatusBar->message(_("Remove selected items."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2076,10 +2076,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Remove audio gap(s) at the current time."));
+            ui->uiStatusBar->message(_("Remove audio gap(s) at the current time."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2141,10 +2141,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Insert video gap(s) at current time."));
+            ui->uiStatusBar->message(_("Insert video gap(s) at current time."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2266,10 +2266,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Remove video gap(s) at current time."));
+            ui->uiStatusBar->message(_("Remove video gap(s) at current time."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2392,10 +2392,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Add transition between 2 or 4 selected and contiguous items."));
+            ui->uiStatusBar->message(_("Add transition between 2 or 4 selected and contiguous items."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2486,10 +2486,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Undo Last Edit Operation."));
+            ui->uiStatusBar->message(_("Undo Last Edit Operation."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2539,10 +2539,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Redo Last Edit Operation."));
+            ui->uiStatusBar->message(_("Redo Last Edit Operation."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2790,11 +2790,11 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->copy_label(_("Save the current timeline as an "
+            ui->uiStatusBar->message(_("Save the current timeline as an "
                                           ".otio file."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->copy_label("");
+            ui->uiStatusBar->message("");
             return;
         default:
             break;
