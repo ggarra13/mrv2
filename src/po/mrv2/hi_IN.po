@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-02 22:02-0300\n"
+"POT-Creation-Date: 2026-10-04 09:34-0300\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1256,8 +1256,10 @@ msgstr "टाइमलाइन:"
 
 msgid ""
 "Media reference to open OTIO timelines with for clips that have several "
-"versions of their media (examples: \"Proxy\" and \"Full\"."
+"versions of their media (examples: \"Proxy\" and \"Full\")."
 msgstr ""
+"ऐसे क्लिप के लिए OTIO टाइमलाइन खोलने हेतु मीडिया संदर्भ जिनके मीडिया के कई "
+"संस्करण हैं (उदाहरण: \"Proxy\" और \"Full\")."
 
 msgid "Miscellaneous:"
 msgstr "विविध:"
@@ -3254,9 +3256,48 @@ msgstr "अनज़िप करना"
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "EDDL वस्तु '{0}' अब लोड नहीं है. वापस नहीं कर सका या लाल."
 
+msgid "Copy a Frame."
+msgstr "फ़्रेम की प्रतिलिपि बनाएँ।"
+
+msgid "Cut a Frame."
+msgstr "फ़्रेम काटें।"
+
+msgid "Paste a Frame."
+msgstr "फ़्रेम चिपकाएँ।"
+
 #, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "{0} को {1} में जोड़ नहीं सका."
+
+msgid "Insert a Cut or Copied Frame."
+msgstr "काटे या कॉपी किए गए फ़्रेम को सम्मिलित करें।"
+
+msgid "Slice the timeline at the current time."
+msgstr "वर्तमान समय पर टाइमलाइन को विभाजित करें।"
+
+msgid "Remove clip(s) at the current time."
+msgstr "वर्तमान समय पर क्लिप हटाएँ।"
+
+msgid "Insert audio clip at the current time."
+msgstr "वर्तमान समय पर ऑडियो क्लिप सम्मिलित करें।"
+
+msgid "Insert audio gap(s) at the current time."
+msgstr "वर्तमान समय पर ऑडियो गैप सम्मिलित करें।"
+
+msgid "Remove audio clips at the current time."
+msgstr "वर्तमान समय पर ऑडियो क्लिप हटाएँ।"
+
+msgid "Remove selected items."
+msgstr "चयनित आइटम हटाएँ।"
+
+msgid "Remove audio gap(s) at the ones at current time."
+msgstr "वर्तमान समय पर ऑडियो गैप हटाएँ।"
+
+msgid "Insert video gap(s) at current time."
+msgstr "वर्तमान समय पर वीडियो गैप सम्मिलित करें।"
+
+msgid "Remove video gap(s) at current time."
+msgstr "वर्तमान समय पर वीडियो गैप हटाएँ।"
 
 msgid "Items selected must be on the same track."
 msgstr "चयनित आइटम एक ही ट्रैक पर होने चाहिए।"
@@ -3264,6 +3305,9 @@ msgstr "चयनित आइटम एक ही ट्रैक पर हो
 #, c++-format
 msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr "चयनित आइटम ट्रैक पर लगातार होने चाहिए। बायाँ {0}। दायाँ {1}।"
+
+msgid "Add transition between 2 or 4 selected and contiguous items."
+msgstr "2 या 4 चयनित और सन्निहित आइटम के बीच ट्रांज़िशन जोड़ें।"
 
 #, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
@@ -3275,6 +3319,12 @@ msgstr "कृपया दो सटे हुए वीडियो क्ल�
 msgid "Please select two contiguous audio clips."
 msgstr "कृपया दो सटे हुए ऑडियो क्लिप चुनें।"
 
+msgid "Undo Last Edit Operation."
+msgstr "अंतिम संपादन कार्रवाई पूर्ववत करें।"
+
+msgid "Redo Last Edit Operation."
+msgstr "अंतिम संपादन कार्रवाई फिर से करें।"
+
 #, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr ". बीजियो फ़ाइल को सहेज नहीं सका: {0}"
@@ -3285,6 +3335,9 @@ msgstr "{0} सहेजने में त्रुटि {1}"
 
 msgid "Empty EDL file.  Not saving."
 msgstr "खाली ईएल फ़ाइल. सहेजा नहीं जा सकता."
+
+msgid "Save the current timeline as an .otio file."
+msgstr "वर्तमान टाइमलाइन को .otio फ़ाइल के रूप में सहेजें।"
 
 msgid "Destination file is invalid."
 msgstr "गंतव्य फ़ाइल अवैध है."
@@ -3479,14 +3532,98 @@ msgstr "वरीयताएँ"
 msgid "About"
 msgstr "के बारे में"
 
+msgid "Open a movie or a sequence."
+msgstr "फ़िल्म या अनुक्रम खोलें।"
+
+msgid ""
+"Open a movie stored on the web with https protocol.  Demo movie is default."
+msgstr ""
+"https प्रोटोकॉल का उपयोग करके वेब पर संग्रहीत फ़िल्म खोलें।  डेमो फ़िल्म "
+"डिफ़ॉल्ट है।"
+
+msgid "Open a single image even if it is part of a sequence."
+msgstr "किसी एकल छवि को खोलें, भले ही वह किसी अनुक्रम का हिस्सा हो।"
+
+msgid "Load the selected file."
+msgstr "चयनित फ़ाइल लोड करें।"
+
+msgid "Open a sequence with an audio file."
+msgstr "ऑडियो फ़ाइल के साथ अनुक्रम खोलें।"
+
+msgid "Open all files in a directory."
+msgstr "किसी डायरेक्टरी की सभी फ़ाइलें खोलें।"
+
+msgid "Open a new instance of the player."
+msgstr "प्लेयर का एक नया इंस्टेंस खोलें।"
+
 msgid "Could not open a new mrv2 instance"
 msgstr "नई mrv2 इंस्टेंस खोलने में असमर्थ"
+
+msgid "Go to Previous File, Looping to End."
+msgstr "पिछली फ़ाइल पर जाएँ, अंत तक पहुँचने पर फिर से शुरू करें।"
+
+msgid "Go to Next File, Looping to Start."
+msgstr "अगली फ़ाइल पर जाएँ, शुरुआत तक पहुँचने पर फिर से शुरू करें।"
+
+msgid "Go to Previous File."
+msgstr "पिछली फ़ाइल पर जाएँ।"
+
+msgid "Go to Next File."
+msgstr "अगली फ़ाइल पर जाएँ।"
+
+msgid "Toggle A and B comparison."
+msgstr "A और B तुलना को चालू/बंद करें।"
+
+msgid "Compare A."
+msgstr "A की तुलना करें।"
+
+msgid "Compare B."
+msgstr "B की तुलना करें।"
+
+msgid "Compare Wipe."
+msgstr "Wipe की तुलना करें।"
+
+msgid "Compare Overlay."
+msgstr "Overlay की तुलना करें।"
+
+msgid "Compare A - B difference."
+msgstr "A - B के अंतर की तुलना करें।"
+
+msgid "Compare A + B."
+msgstr "A + B की तुलना करें।"
+
+msgid "Compare A * B."
+msgstr "A * B की तुलना करें।"
+
+msgid "Compare A next to flipped B."
+msgstr "उलटे हुए B के बगल में A की तुलना करें।"
+
+msgid "Compare A and B Horizontally."
+msgstr "A और B की क्षैतिज रूप से तुलना करें।"
+
+msgid "Compare A and B Vertically."
+msgstr "A और B की ऊर्ध्वाधर रूप से तुलना करें।"
+
+msgid "Compare A and one or many clips Tiled."
+msgstr "A और एक या कई क्लिप की टाइलों में तुलना करें।"
 
 msgid "File extension cannot be empty."
 msgstr "फ़ाइल एक्सटेंशन रिक्त नहीं हो सकता."
 
+msgid "Save a single frame of the current clip."
+msgstr "वर्तमान क्लिप की एकल फ़्रेम सहेजें।"
+
+msgid "Keep saving frames to the same folder."
+msgstr "फ़्रेम को उसी फ़ोल्डर में सहेजते रहें।"
+
+msgid "Save the audio of the current clip."
+msgstr "वर्तमान क्लिप का ऑडियो सहेजें।"
+
 msgid "Saving audio but not with an audio extension."
 msgstr "ऑडियो सहेज रहा है लेकिन एक ऑडियो एक्सटेंशन के साथ नहीं है."
+
+msgid "Export a movie or a sequence."
+msgstr "फ़िल्म या अनुक्रम निर्यात करें।"
 
 msgid "Saving audio but current clip does not have audio."
 msgstr "ऑडियो सहेजी जा रही है लेकिन मौजूदा क्लिप के पास ऑडियो नहीं है."
@@ -3494,20 +3631,328 @@ msgstr "ऑडियो सहेजी जा रही है लेकिन 
 msgid "Saving video but with an audio extension."
 msgstr "वीडियो को सहेज रहा है लेकिन एक ऑडियो एक्सटेंशन के साथ."
 
+msgid "Save annotations as a PDF."
+msgstr "एनोटेशन को PDF के रूप में सहेजें।"
+
+msgid "Save annotations only as a movie or sequence."
+msgstr "केवल एनोटेशन को फ़िल्म या अनुक्रम के रूप में सहेजें।"
+
 msgid "Cannot save annotations to .otio file"
 msgstr "एनोटेशन्स को.Oiio फ़ाइल में सहेजा नहीं जा सकता"
+
+msgid "Save annotations as a .json file"
+msgstr "एनोटेशन को .json फ़ाइल के रूप में सहेजें।"
+
+msgid "Close current file."
+msgstr "वर्तमान फ़ाइल बंद करें।"
+
+msgid "Exit the program.  Warns if edits or annotations have been made."
+msgstr ""
+"प्रोग्राम से बाहर निकलें।  यदि संपादन या एनोटेशन किए गए हैं, तो चेतावनी दें।"
+
+msgid "Previous layer."
+msgstr "पिछला लेयर।"
+
+msgid "Next layer."
+msgstr "अगला लेयर।"
+
+msgid "No debanding."
+msgstr "कोई डिबैंडिंग नहीं।"
+
+msgid "Blur movie a bit to avoid banding."
+msgstr ""
+
+msgid "Blur movie medium to avoid banding."
+msgstr ""
+
+msgid "Blur movie high to avoid banding."
+msgstr ""
+
+msgid "Minify filter with nearest algorithm."
+msgstr ""
+
+msgid "Minify filter with linear algorithm."
+msgstr ""
+
+msgid "Magnify filter with nearest algorithm."
+msgstr ""
+
+msgid "Magnify filter with linear algorithm."
+msgstr ""
+
+msgid "Mirror clip in X."
+msgstr ""
+
+msgid "Mirror clip in Y."
+msgstr ""
+
+#, fuzzy
+msgid "Use HDR data from file."
+msgstr "फ़ाइल से HDR डेटा"
+
+msgid "Don't use HDR data."
+msgstr ""
+
+msgid "Use Latest HDR data."
+msgstr ""
+
+#, fuzzy
+msgid "Rotate image 90 degrees."
+msgstr "छवि को + 90 डिग्री घुमाएं"
+
+#, fuzzy
+msgid "Rotate image -90 degrees."
+msgstr "छवियों को - 90 डिग्री घुमाएं"
+
+#, fuzzy
+msgid "Show the red channel of the layer."
+msgstr "ब फ़ाइल के ऊपर एक फ़ाइल दिखाएँ"
+
+msgid "Show the green channel of the layer."
+msgstr ""
+
+#, fuzzy
+msgid "Show the blue channel of the layer."
+msgstr "ब फ़ाइल के ऊपर एक फ़ाइल दिखाएँ"
+
+msgid "Show the alpha channel of the layer."
+msgstr ""
+
+msgid "Show the combined lumma channel of the layer."
+msgstr ""
+
+#, fuzzy
+msgid "Show the RGB channel of the layer."
+msgstr "ब फ़ाइल के ऊपर एक फ़ाइल दिखाएँ"
+
+#, fuzzy
+msgid "Normalize the image to be between 0 and 1."
+msgstr "0 और 1 के बीच छवि के टिंट बदलें."
+
+#, fuzzy
+msgid "Ignore OpenEXR chromaticities if present."
+msgstr "टॉगलिकता अनदेखा करें"
+
+msgid "Show values below 0 and above 1 as red pixels"
+msgstr ""
+
+msgid ""
+"Toggle HDR peak detection to adjust the movie's luminosity while playing."
+msgstr ""
+
+#, fuzzy
+msgid "Select Tonemap algorithm."
+msgstr "टोनमैप एल्गोरिदम"
+
+msgid "Select Gamut mapping algorithm."
+msgstr ""
+
+#, fuzzy
+msgid "Toggles Fullscreen Mode."
+msgstr "पूरा स्क्रीन टॉगल करें"
+
+#, fuzzy
+msgid "Toggles Presentation Mode."
+msgstr "प्रस्तुतीकरण टॉगल करें"
+
+msgid "Toggles Window to Float above others."
+msgstr "विंडो को अन्य विंडो के ऊपर फ़्लोट करने के लिए चालू/बंद करें।"
+
+msgid "Toggles a Secondary Window."
+msgstr "द्वितीयक विंडो को चालू/बंद करें।"
+
+msgid "Toggle Secondary Window to Float above others."
+msgstr "द्वितीयक विंडो को अन्य विंडो के ऊपर फ़्लोट करने के लिए चालू/बंद करें।"
+
+msgid ""
+"Mouse clicks are delivered to the OS windows below.  Used with transparency."
+msgstr ""
+"माउस क्लिक नीचे स्थित OS विंडो को भेजे जाते हैं।  पारदर्शिता के साथ उपयोग "
+"किया जाता है।"
+
+msgid "Make UI more transparent."
+msgstr "UI को अधिक पारदर्शी बनाएँ।"
+
+msgid "Make UI less transparent."
+msgstr "UI को कम पारदर्शी बनाएँ।"
+
+msgid "Only allow one side panel at a time."
+msgstr "एक समय में केवल एक साइड पैनल की अनुमति दें।"
+
+#, c++-format
+msgid "Show {0} Window."
+msgstr "{0} विंडो दिखाएँ।"
+
+msgid "Show About Window."
+msgstr "अबाउट विंडो दिखाएँ।"
+
+msgid "Toggle Action Dock (Annotations/Edit tools)."
+msgstr "एक्शन डॉक (एनोटेशन/संपादन उपकरण) को चालू/बंद करें।"
+
+msgid "Toggle Menu Bar."
+msgstr "मेनू बार को चालू/बंद करें।"
+
+msgid "Toggle Top Bar."
+msgstr "शीर्ष बार को चालू/बंद करें।"
+
+msgid "Toggle Pixel Bar."
+msgstr "पिक्सेल बार को चालू/बंद करें।"
+
+msgid "Toggle Timeline Bar."
+msgstr "टाइमलाइन बार को चालू/बंद करें।"
+
+msgid "Toggle Status Bar (this bar)."
+msgstr "स्थिति बार (यह बार) को चालू/बंद करें।"
+
+msgid "Show HUD Options."
+msgstr "HUD विकल्प दिखाएँ।"
+
+msgid "Toggles auto framing of the view."
+msgstr "दृश्य की स्वचालित फ़्रेमिंग को चालू/बंद करें।"
+
+msgid "Toggle TV Safe Areas."
+msgstr "TV सुरक्षित क्षेत्रों को चालू/बंद करें।"
+
+msgid "Toggle the display of OpenEXR's Data Window."
+msgstr "OpenEXR की डेटा विंडो के प्रदर्शन को चालू/बंद करें।"
+
+msgid "Ignore the OpenEXR Display Window."
+msgstr "OpenEXR की डिस्प्ले विंडो को अनदेखा करें।"
+
+msgid "Toggle the display of OpenEXR's Display Window."
+msgstr "OpenEXR की डिस्प्ले विंडो के प्रदर्शन को चालू/बंद करें।"
+
+msgid "Set the Film Cropping Mask."
+msgstr "फ़िल्म क्रॉपिंग मास्क सेट करें।"
 
 msgid "View/Mask"
 msgstr "दृश्य/मास्क"
 
+msgid "Play Forward."
+msgstr "आगे चलाएँ।"
+
+msgid "Play Backward."
+msgstr "पीछे चलाएँ।"
+
+msgid "Stop Playback."
+msgstr "प्लेबैक रोकें।"
+
+msgid "Toggle Playback."
+msgstr "प्लेबैक को चालू/बंद करें।"
+
+msgid "Set In Point."
+msgstr "इन पॉइंट सेट करें।"
+
+msgid "Set Out Point."
+msgstr "आउट पॉइंट सेट करें।"
+
+msgid "Toggle In and Out Points."
+msgstr "इन और आउट पॉइंट को चालू/बंद करें।"
+
+msgid "Loop Mode."
+msgstr "लूप मोड।"
+
+msgid "Play Once Mode."
+msgstr "एक बार चलाने का मोड।"
+
+msgid "Play Ping-Pong Mode."
+msgstr "पिंग-पोंग मोड।"
+
+msgid "Select OCIO Input Color Space."
+msgstr "OCIO इनपुट कलर स्पेस चुनें।"
+
+msgid "Bring up OCIO presets window."
+msgstr "OCIO प्रीसेट विंडो खोलें।"
+
+msgid "Toggle OpenColorIO (OCIO)."
+msgstr "OpenColorIO (OCIO) को चालू/बंद करें।"
+
+msgid "Toggle between OCIO and Colors topbar."
+msgstr "OCIO और Colors शीर्ष बार के बीच स्विच करें।"
+
+msgid "Current OCIO Input Color Space."
+msgstr "वर्तमान OCIO इनपुट कलर स्पेस।"
+
 msgid "OCIO/     Input Color Space"
 msgstr "OCIO/     इनपुट रंग जगह"
+
+msgid "Current OCIO Look."
+msgstr "वर्तमान OCIO लुक।"
 
 msgid "OCIO/     Look"
 msgstr "OCIO/      रूप"
 
+msgid "Current OCIO Display / View for monitor."
+msgstr "मॉनिटर के लिए वर्तमान OCIO डिस्प्ले / व्यू।"
+
+msgid "Current OCIO Display / View for all monitors."
+msgstr "सभी मॉनिटर के लिए वर्तमान OCIO डिस्प्ले / व्यू।"
+
 msgid "All Monitors"
 msgstr "सभी मॉनीटर"
+
+msgid "Video Levels from video clip."
+msgstr "वीडियो क्लिप से वीडियो लेवल।"
+
+msgid "Video Levels Legal Range for SDR."
+msgstr "SDR के लिए वीडियो लेवल की लीगल रेंज।"
+
+msgid "Video Levels Legal Range for HDR."
+msgstr "HDR के लिए वीडियो लेवल की लीगल रेंज।"
+
+msgid "Video Levels Full Range."
+msgstr "वीडियो लेवल की फ़ुल रेंज।"
+
+msgid "No Alpha Blend."
+msgstr "कोई अल्फा ब्लेंड नहीं।"
+
+msgid "Straight Alpha Blend."
+msgstr "स्ट्रेट अल्फा ब्लेंड।"
+
+msgid "Premultiplied Alpha Blend."
+msgstr "प्रीमल्टिप्लाइड अल्फा ब्लेंड।"
+
+msgid "Go to Start Frame."
+msgstr "पहली फ़्रेम पर जाएँ।"
+
+msgid "Go to End Frame."
+msgstr "अंतिम फ़्रेम पर जाएँ।"
+
+msgid "Go to Next Frame."
+msgstr "अगली फ़्रेम पर जाएँ।"
+
+msgid "Go to Previous Frame."
+msgstr "पिछली फ़्रेम पर जाएँ।"
+
+msgid "Go Forwards 10 Seconds."
+msgstr "10 सेकंड आगे जाएँ।"
+
+msgid "Go Backwards 10 Seconds."
+msgstr "10 सेकंड पीछे जाएँ।"
+
+msgid "Toggle In / Out for the OTIO clip."
+msgstr "OTIO क्लिप के लिए इन / आउट को चालू/बंद करें।"
+
+msgid "Next OTIO clip."
+msgstr "अगला OTIO क्लिप।"
+
+msgid "Previous OTIO clip."
+msgstr "पिछला OTIO क्लिप।"
+
+msgid "Previous Annotation Point."
+msgstr "पिछला एनोटेशन पॉइंट।"
+
+msgid "Next Annotation Point."
+msgstr "अगला एनोटेशन पॉइंट।"
+
+msgid "Toggle Annotation Visibility."
+msgstr "एनोटेशन की दृश्यता को चालू/बंद करें।"
+
+msgid "Clear Annotation for Current Frame."
+msgstr "वर्तमान फ़्रेम का एनोटेशन साफ़ करें।"
+
+msgid "Clear Annotations for ALL Frames."
+msgstr "सभी फ़्रेम के एनोटेशन साफ़ करें।"
 
 msgid ""
 "You are about to clear all annotations.  You can still undo the operation "
@@ -3516,14 +3961,84 @@ msgstr ""
 "आप सभी एनोटेशन साफ़ करने वाले हैं। आप तुरंत बाद इस क्रिया को पूर्ववत कर सकते"
 " हैं। क्या आप जारी रखना चाहते हैं?"
 
+msgid "No Thumbnails in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में कोई थंबनेल नहीं।"
+
+msgid "Toggle Editing in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में संपादन को चालू/बंद करें।"
+
+msgid "Toggle Editing video and audio clips with same In and Out Points."
+msgstr ""
+"समान इन और आउट पॉइंट वाले वीडियो और ऑडियो क्लिप के संपादन को चालू/बंद करें।"
+
+msgid "Frame Timeline View."
+msgstr "टाइमलाइन दृश्य को फ़्रेम में फिट करें।"
+
+msgid "Toggle Scrolling in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में स्क्रॉलिंग को चालू/बंद करें।"
+
+msgid "Toggle Track Information in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में ट्रैक जानकारी को चालू/बंद करें।"
+
+msgid "Toggle Clip Information in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में क्लिप जानकारी को चालू/बंद करें।"
+
+msgid "Toggle Markers in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में मार्कर को चालू/बंद करें।"
+
+msgid "Toggle Track in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में ट्रैक को चालू/बंद करें।"
+
+msgid "Toggle Transitions in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में ट्रांज़िशन को चालू/बंद करें।"
+
+msgid "Select OTIO's Media Reference Key."
+msgstr "OTIO की मीडिया संदर्भ कुंजी चुनें।"
+
+msgid "Set Small Thumbnails in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में छोटे थंबनेल सेट करें।"
+
+msgid "Set Medium Thumbnails in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में मध्यम थंबनेल सेट करें।"
+
+msgid "Set Large Thumbnails in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में बड़े थंबनेल सेट करें।"
+
 msgid "Pick Color"
 msgstr "रंग लें"
 
 msgid "Pick Draw Color and Alpha"
 msgstr "रंग तथा अल्फा ड्रा करें"
 
+msgid "Flip Pen Colors."
+msgstr "पेन के रंग उलटें।"
+
+msgid "Go to First Image Version."
+msgstr "पहले इमेज संस्करण पर जाएँ।"
+
+msgid "Go to Previous Image Version."
+msgstr "पिछले इमेज संस्करण पर जाएँ।"
+
+msgid "Go to Next Image Version."
+msgstr "अगले इमेज संस्करण पर जाएँ।"
+
+msgid "Go to Last Image Version."
+msgstr "अंतिम इमेज संस्करण पर जाएँ।"
+
+msgid "Give a donation to support development and unlock features."
+msgstr "विकास का समर्थन करने और सुविधाओं को अनलॉक करने के लिए दान करें।"
+
 msgid "Install is broken.  Missing license_helper"
 msgstr "इंस्टॉलेशन खराब है। license_helper गायब है"
+
+msgid "Online documentation."
+msgstr "ऑनलाइन दस्तावेज़।"
+
+msgid "Toggle Annotations."
+msgstr "एनोटेशन को चालू/बंद करें।"
+
+msgid "Toggle Sync Elements."
+msgstr "सिंक्रोनाइज़ेशन तत्वों को चालू/बंद करें।"
 
 msgid "Media"
 msgstr "मीडिया"
@@ -3537,11 +4052,50 @@ msgstr "पैन एवं ज़ूम"
 msgid "Timeline"
 msgstr "टाइम-लाइन"
 
+msgid "Toggle Receive Elements."
+msgstr "रिसीव तत्वों को चालू/बंद करें।"
+
+msgid "Save state of UI and files to a new .mrv2s session file."
+msgstr "UI और फ़ाइलों की स्थिति को एक नई .mrv2s सत्र फ़ाइल में सहेजें।"
+
+msgid "Save state of UI and files to a .mrv2s session file."
+msgstr "UI और फ़ाइलों की स्थिति को एक .mrv2s सत्र फ़ाइल में सहेजें।"
+
+msgid "Load a session file which stores the state of the UI and files."
+msgstr "UI और फ़ाइलों की स्थिति संग्रहीत करने वाली सत्र फ़ाइल लोड करें।"
+
+msgid "Save and restart a temporary session."
+msgstr "एक अस्थायी सत्र सहेजें और पुनः आरंभ करें।"
+
 msgid "Could not restart mrv2 instance with a session file."
 msgstr "सत्र फ़ाइल के साथ mrv2 इंस्टेंस को पुनः प्रारंभ नहीं किया जा सका।"
 
 msgid "Edit Text Annotation"
 msgstr "पाठ व्याख्या संपादित करें"
+
+msgid "Clone the File."
+msgstr "फ़ाइल का क्लोन बनाएँ।"
+
+msgid "Reload the File."
+msgstr "फ़ाइल को पुनः लोड करें।"
+
+msgid "Set 3D Stereo image."
+msgstr "3D स्टीरियो इमेज सेट करें।"
+
+msgid "Update the current frame cache."
+msgstr "वर्तमान फ़्रेम कैश अपडेट करें।"
+
+msgid "Refresh the frame cache."
+msgstr "फ़्रेम कैश को रीफ़्रेश करें।"
+
+msgid "Refresh the movie."
+msgstr "फ़िल्म को रीफ़्रेश करें।"
+
+msgid "Copy the Filename to the clipboard."
+msgstr "फ़ाइलनाम को क्लिपबोर्ड पर कॉपी करें।"
+
+msgid "Bring up the File Manager."
+msgstr "फ़ाइल मैनेजर खोलें।"
 
 msgid "No item selected"
 msgstr "कोई वस्तु चुना नहीं गया"
@@ -4419,17 +4973,17 @@ msgstr "संपादन/समय/ऑडियो गैप/सम्मि�
 msgid "Edit/Time/Audio Gap/Remove"
 msgstr "संपादन/समय/ऑडियो गैप/हटाएँ"
 
-msgid "Edit/Selected/Add Transition"
-msgstr "संपादन/चयनित/ट्रांज़िशन जोड़ें"
-
-msgid "Edit/Selected/Remove Items"
-msgstr "संपादन/चयनित/आइटम हटाएँ"
-
 msgid "Edit/Time/Remove Clips"
 msgstr "संपादन/समय/क्लिप्स हटाएँ"
 
 msgid "Edit/Time/Slice"
 msgstr "संपादन/समय/काटें"
+
+msgid "Edit/Selected/Add Transition"
+msgstr "संपादन/चयनित/ट्रांज़िशन जोड़ें"
+
+msgid "Edit/Selected/Remove Items"
+msgstr "संपादन/चयनित/आइटम हटाएँ"
 
 msgid "Edit/Undo"
 msgstr "संपादन/पहले जैसा"
@@ -6001,6 +6555,9 @@ msgstr "टाइल समूह"
 
 msgid "ViewGroup"
 msgstr "टाइल समूह"
+
+msgid "Clip Selection Tool."
+msgstr "क्लिप चयन उपकरण।"
 
 msgid "Undo Last Edit."
 msgstr "अंतिम संपादन पूर्ववत करें।"
@@ -8528,9 +9085,6 @@ msgstr "कार्य सूचना असफल"
 #~ msgid "Repeat  Frame"
 #~ msgstr "फ्रेम को दोहराएँ"
 
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री सेट करें."
-
 #~ msgid "Get file sequence audio directory."
 #~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री प्राप्त करें."
 
@@ -9128,9 +9682,6 @@ msgstr "कार्य सूचना असफल"
 #~ msgid "Renderer"
 #~ msgstr "रेंडरर"
 
-#~ msgid "Video Levels Legal Range HDR"
-#~ msgstr "वीडियो स्तर - वैध सीमा HDR"
-
 #~ msgid "Enter a UR."
 #~ msgstr "एक URL दर्ज करें।"
 
@@ -9214,9 +9765,6 @@ msgstr "कार्य सूचना असफल"
 #~ msgstr ""
 #~ "आपका वेइलैंड कम्पोज़िटर “फ्लोट ऑन टॉप” का समर्थन नहीं करता। विंडो की शीर्ष "
 #~ "पट्टी पर जाएँ और RMB->More Actions->Keep Above Others चुनें।"
-
-#~ msgid "Load Movie or Sequence"
-#~ msgstr "चलचित्र लोड करें या अनुक्रम लोड करें"
 
 #~ msgid "uiMenuBar"
 #~ msgstr "मेन्यू पट्टी"

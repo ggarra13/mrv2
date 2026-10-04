@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-02 22:02-0300\n"
+"POT-Creation-Date: 2026-10-04 09:34-0300\n"
 "PO-Revision-Date: 2026-09-29 22:48+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -1259,8 +1259,8 @@ msgstr "タイムライン："
 
 msgid ""
 "Media reference to open OTIO timelines with for clips that have several "
-"versions of their media (examples: \"Proxy\" and \"Full\"."
-msgstr ""
+"versions of their media (examples: \"Proxy\" and \"Full\")."
+msgstr "メディアの複数のバージョン（例: \"Proxy\" や \"Full\"）を持つクリップの OTIO タイムラインを開くためのメディア参照。"
 
 msgid "Miscellaneous:"
 msgstr "その他 :"
@@ -3226,9 +3226,48 @@ msgstr "解凍"
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "EDLアイテム '{0}' は読み込まれていません。元に戻す/やり直しはできません。"
 
+msgid "Copy a Frame."
+msgstr "フレームをコピーします。"
+
+msgid "Cut a Frame."
+msgstr "フレームを切り取ります。"
+
+msgid "Paste a Frame."
+msgstr "フレームを貼り付けます。"
+
 #, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "{0} を貼り付けられませんでした。エラー {1}。"
+
+msgid "Insert a Cut or Copied Frame."
+msgstr "切り取ったフレームまたはコピーしたフレームを挿入します。"
+
+msgid "Slice the timeline at the current time."
+msgstr "現在の時刻でタイムラインを分割します。"
+
+msgid "Remove clip(s) at the current time."
+msgstr "現在の時刻のクリップを削除します。"
+
+msgid "Insert audio clip at the current time."
+msgstr "現在の時刻にオーディオクリップを挿入します。"
+
+msgid "Insert audio gap(s) at the current time."
+msgstr "現在の時刻にオーディオギャップを挿入します。"
+
+msgid "Remove audio clips at the current time."
+msgstr "現在の時刻のオーディオクリップを削除します。"
+
+msgid "Remove selected items."
+msgstr "選択した項目を削除します。"
+
+msgid "Remove audio gap(s) at the ones at current time."
+msgstr "現在の時刻にあるオーディオギャップを削除します。"
+
+msgid "Insert video gap(s) at current time."
+msgstr "現在の時刻にビデオギャップを挿入します。"
+
+msgid "Remove video gap(s) at current time."
+msgstr "現在の時刻のビデオギャップを削除します。"
 
 msgid "Items selected must be on the same track."
 msgstr "選択されたアイテムは同じトラック上にある必要があります。"
@@ -3236,6 +3275,9 @@ msgstr "選択されたアイテムは同じトラック上にある必要があ
 #, c++-format
 msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr "選択したアイテムはトラック上で連続している必要があります。左 {0}。右 {0}。"
+
+msgid "Add transition between 2 or 4 selected and contiguous items."
+msgstr "選択した連続する 2 個または 4 個の項目の間にトランジションを追加します。"
 
 #, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
@@ -3247,6 +3289,12 @@ msgstr "連続する 2つのビデオクリップを選択してください。"
 msgid "Please select two contiguous audio clips."
 msgstr "連続する 2つのオーディオクリップを選択してください。"
 
+msgid "Undo Last Edit Operation."
+msgstr "最後の編集操作を元に戻します。"
+
+msgid "Redo Last Edit Operation."
+msgstr "最後の編集操作をやり直します。"
+
 #, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr ".otio ファイルを保存できませんでした : {0}"
@@ -3257,6 +3305,9 @@ msgstr "{0} の保存中にエラーが発生しました。{1}"
 
 msgid "Empty EDL file.  Not saving."
 msgstr "EDL ファイルが空です。保存しません。"
+
+msgid "Save the current timeline as an .otio file."
+msgstr "現在のタイムラインを .otio ファイルとして保存します。"
 
 msgid "Destination file is invalid."
 msgstr "出力先ファイルが無効です。"
@@ -3447,14 +3498,96 @@ msgstr "環境設定"
 msgid "About"
 msgstr "情報"
 
+msgid "Open a movie or a sequence."
+msgstr "ムービーまたはシーケンスを開きます。"
+
+msgid ""
+"Open a movie stored on the web with https protocol.  Demo movie is default."
+msgstr "https プロトコルで Web 上に保存されたムービーを開きます。  デモムービーがデフォルトです。"
+
+msgid "Open a single image even if it is part of a sequence."
+msgstr "シーケンスの一部であっても、単一の画像を開きます。"
+
+msgid "Load the selected file."
+msgstr "選択したファイルを読み込みます。"
+
+msgid "Open a sequence with an audio file."
+msgstr "オーディオファイル付きでシーケンスを開きます。"
+
+msgid "Open all files in a directory."
+msgstr "ディレクトリ内のすべてのファイルを開きます。"
+
+msgid "Open a new instance of the player."
+msgstr "プレーヤーの新しいインスタンスを開きます。"
+
 msgid "Could not open a new mrv2 instance"
 msgstr "新しいmrv2インスタンスを開けませんでした"
+
+msgid "Go to Previous File, Looping to End."
+msgstr "前のファイルに移動し、最後まで到達したらループします。"
+
+msgid "Go to Next File, Looping to Start."
+msgstr "次のファイルに移動し、最初まで到達したらループします。"
+
+msgid "Go to Previous File."
+msgstr "前のファイルに移動します。"
+
+msgid "Go to Next File."
+msgstr "次のファイルに移動します。"
+
+msgid "Toggle A and B comparison."
+msgstr "A と B の比較を切り替えます。"
+
+msgid "Compare A."
+msgstr "A を比較します。"
+
+msgid "Compare B."
+msgstr "B を比較します。"
+
+msgid "Compare Wipe."
+msgstr "ワイプ比較を行います。"
+
+msgid "Compare Overlay."
+msgstr "オーバーレイ比較を行います。"
+
+msgid "Compare A - B difference."
+msgstr "A - B の差分を比較します。"
+
+msgid "Compare A + B."
+msgstr "A + B を比較します。"
+
+msgid "Compare A * B."
+msgstr "A * B を比較します。"
+
+msgid "Compare A next to flipped B."
+msgstr "反転した B の隣に A を表示して比較します。"
+
+msgid "Compare A and B Horizontally."
+msgstr "A と B を水平方向に比較します。"
+
+msgid "Compare A and B Vertically."
+msgstr "A と B を垂直方向に比較します。"
+
+msgid "Compare A and one or many clips Tiled."
+msgstr "A と 1 つ以上のクリップをタイル表示で比較します。"
 
 msgid "File extension cannot be empty."
 msgstr "ファイル拡張子は空にできません。"
 
+msgid "Save a single frame of the current clip."
+msgstr "現在のクリップの単一フレームを保存します。"
+
+msgid "Keep saving frames to the same folder."
+msgstr "同じフォルダーにフレームを保存し続けます。"
+
+msgid "Save the audio of the current clip."
+msgstr "現在のクリップのオーディオを保存します。"
+
 msgid "Saving audio but not with an audio extension."
 msgstr "オーディオを保存していますが、オーディオ拡張子ではありません。"
+
+msgid "Export a movie or a sequence."
+msgstr "ムービーまたはシーケンスを書き出します。"
 
 msgid "Saving audio but current clip does not have audio."
 msgstr "オーディオを保存しようとしていますが、現在のクリップにはオーディオがありません。"
@@ -3462,25 +3595,361 @@ msgstr "オーディオを保存しようとしていますが、現在のクリ
 msgid "Saving video but with an audio extension."
 msgstr "ビデオを保存しようとしていますが、オーディオ拡張子です。"
 
+msgid "Save annotations as a PDF."
+msgstr "注釈を PDF として保存します。"
+
+msgid "Save annotations only as a movie or sequence."
+msgstr "注釈のみをムービーまたはシーケンスとして保存します。"
+
 msgid "Cannot save annotations to .otio file"
 msgstr "注釈を .otio ファイルに保存できません"
+
+msgid "Save annotations as a .json file"
+msgstr "注釈を .json ファイルとして保存します。"
+
+msgid "Close current file."
+msgstr "現在のファイルを閉じます。"
+
+msgid "Exit the program.  Warns if edits or annotations have been made."
+msgstr "プログラムを終了します。  編集または注釈が行われている場合は警告します。"
+
+msgid "Previous layer."
+msgstr "前のレイヤー。"
+
+msgid "Next layer."
+msgstr "次のレイヤー。"
+
+msgid "No debanding."
+msgstr "デバンディングなし。"
+
+msgid "Blur movie a bit to avoid banding."
+msgstr "バンディングを避けるため、ムービーを少しぼかします。"
+
+msgid "Blur movie medium to avoid banding."
+msgstr "バンディングを避けるため、ムービーを中程度にぼかします。"
+
+msgid "Blur movie high to avoid banding."
+msgstr "バンディングを避けるため、ムービーを強くぼかします。"
+
+msgid "Minify filter with nearest algorithm."
+msgstr "ニアレストアルゴリズムによる縮小フィルター。"
+
+msgid "Minify filter with linear algorithm."
+msgstr "線形アルゴリズムによる縮小フィルター。"
+
+msgid "Magnify filter with nearest algorithm."
+msgstr "ニアレストアルゴリズムによる拡大フィルター。"
+
+msgid "Magnify filter with linear algorithm."
+msgstr "線形アルゴリズムによる拡大フィルター。"
+
+msgid "Mirror clip in X."
+msgstr "クリップを X 軸方向に反転します。"
+
+msgid "Mirror clip in Y."
+msgstr "クリップを Y 軸方向に反転します。"
+
+msgid "Use HDR data from file."
+msgstr "ファイルの HDR データを使用します。"
+
+msgid "Don't use HDR data."
+msgstr "HDR データを使用しません。"
+
+msgid "Use Latest HDR data."
+msgstr "最新の HDR データを使用します。"
+
+msgid "Rotate image 90 degrees."
+msgstr "画像を 90 度回転します。"
+
+msgid "Rotate image -90 degrees."
+msgstr "画像を -90 度回転します。"
+
+msgid "Show the red channel of the layer."
+msgstr "レイヤーの赤チャンネルを表示します。"
+
+msgid "Show the green channel of the layer."
+msgstr "レイヤーの緑チャンネルを表示します。"
+
+msgid "Show the blue channel of the layer."
+msgstr "レイヤーの青チャンネルを表示します。"
+
+msgid "Show the alpha channel of the layer."
+msgstr "レイヤーのアルファチャンネルを表示します。"
+
+msgid "Show the combined lumma channel of the layer."
+msgstr "レイヤーの合成輝度チャンネルを表示します。"
+
+msgid "Show the RGB channel of the layer."
+msgstr "レイヤーの RGB チャンネルを表示します。"
+
+msgid "Normalize the image to be between 0 and 1."
+msgstr "画像を 0 から 1 の範囲に正規化します。"
+
+msgid "Ignore OpenEXR chromaticities if present."
+msgstr "存在する場合は OpenEXR の色度情報を無視します。"
+
+msgid "Show values below 0 and above 1 as red pixels"
+msgstr "0 未満および 1 より大きい値を赤いピクセルとして表示します。"
+
+msgid ""
+"Toggle HDR peak detection to adjust the movie's luminosity while playing."
+msgstr "再生中にムービーの輝度を調整する HDR ピーク検出を切り替えます。"
+
+msgid "Select Tonemap algorithm."
+msgstr "トーンマップアルゴリズムを選択します。"
+
+msgid "Select Gamut mapping algorithm."
+msgstr "色域マッピングアルゴリズムを選択します。"
+
+msgid "Toggles Fullscreen Mode."
+msgstr "フルスクリーンモードを切り替えます。"
+
+msgid "Toggles Presentation Mode."
+msgstr "プレゼンテーションモードを切り替えます。"
+
+msgid "Toggles Window to Float above others."
+msgstr "ウィンドウを他のウィンドウより前面にフロート表示するか切り替えます。"
+
+msgid "Toggles a Secondary Window."
+msgstr "セカンダリウィンドウを切り替えます。"
+
+msgid "Toggle Secondary Window to Float above others."
+msgstr "セカンダリウィンドウを他のウィンドウより前面にフロート表示するか切り替えます。"
+
+msgid ""
+"Mouse clicks are delivered to the OS windows below.  Used with transparency."
+msgstr "マウスクリックを下にある OS ウィンドウに渡します。  透明表示とともに使用します。"
+
+msgid "Make UI more transparent."
+msgstr "UI の透明度を上げます。"
+
+msgid "Make UI less transparent."
+msgstr "UI の透明度を下げます。"
+
+msgid "Only allow one side panel at a time."
+msgstr "一度に 1 つのサイドパネルのみを表示します。"
+
+#, c++-format
+msgid "Show {0} Window."
+msgstr "{0} ウィンドウを表示します。"
+
+msgid "Show About Window."
+msgstr "バージョン情報ウィンドウを表示します。"
+
+msgid "Toggle Action Dock (Annotations/Edit tools)."
+msgstr "アクションドック（注釈/編集ツール）を切り替えます。"
+
+msgid "Toggle Menu Bar."
+msgstr "メニューバーを切り替えます。"
+
+msgid "Toggle Top Bar."
+msgstr "トップバーを切り替えます。"
+
+msgid "Toggle Pixel Bar."
+msgstr "ピクセルバーを切り替えます。"
+
+msgid "Toggle Timeline Bar."
+msgstr "タイムラインバーを切り替えます。"
+
+msgid "Toggle Status Bar (this bar)."
+msgstr "ステータスバー（このバー）を切り替えます。"
+
+msgid "Show HUD Options."
+msgstr "HUD オプションを表示します。"
+
+msgid "Toggles auto framing of the view."
+msgstr "ビューの自動フレーミングを切り替えます。"
+
+msgid "Toggle TV Safe Areas."
+msgstr "TV セーフエリアを切り替えます。"
+
+msgid "Toggle the display of OpenEXR's Data Window."
+msgstr "OpenEXR のデータウィンドウの表示を切り替えます。"
+
+msgid "Ignore the OpenEXR Display Window."
+msgstr "OpenEXR の表示ウィンドウを無視します。"
+
+msgid "Toggle the display of OpenEXR's Display Window."
+msgstr "OpenEXR の表示ウィンドウの表示を切り替えます。"
+
+msgid "Set the Film Cropping Mask."
+msgstr "フィルムクロッピングマスクを設定します。"
 
 msgid "View/Mask"
 msgstr "表示/マスク"
 
+msgid "Play Forward."
+msgstr "順方向に再生します。"
+
+msgid "Play Backward."
+msgstr "逆方向に再生します。"
+
+msgid "Stop Playback."
+msgstr "再生を停止します。"
+
+msgid "Toggle Playback."
+msgstr "再生を切り替えます。"
+
+msgid "Set In Point."
+msgstr "イン点を設定します。"
+
+msgid "Set Out Point."
+msgstr "アウト点を設定します。"
+
+msgid "Toggle In and Out Points."
+msgstr "イン点とアウト点を切り替えます。"
+
+msgid "Loop Mode."
+msgstr "ループモード。"
+
+msgid "Play Once Mode."
+msgstr "1 回再生モード。"
+
+msgid "Play Ping-Pong Mode."
+msgstr "ピンポン再生モード。"
+
+msgid "Select OCIO Input Color Space."
+msgstr "OCIO 入力カラースペースを選択します。"
+
+msgid "Bring up OCIO presets window."
+msgstr "OCIO プリセットウィンドウを表示します。"
+
+msgid "Toggle OpenColorIO (OCIO)."
+msgstr "OpenColorIO (OCIO) を切り替えます。"
+
+msgid "Toggle between OCIO and Colors topbar."
+msgstr "OCIO とカラーのトップバーを切り替えます。"
+
+msgid "Current OCIO Input Color Space."
+msgstr "現在の OCIO 入力カラースペース。"
+
 msgid "OCIO/     Input Color Space"
 msgstr "OCIO/     入力カラースペース"
+
+msgid "Current OCIO Look."
+msgstr "現在の OCIO ルック。"
 
 msgid "OCIO/     Look"
 msgstr "OCIO/     ルック"
 
+msgid "Current OCIO Display / View for monitor."
+msgstr "モニターの現在の OCIO 表示 / ビュー。"
+
+msgid "Current OCIO Display / View for all monitors."
+msgstr "すべてのモニターの現在の OCIO 表示 / ビュー。"
+
 msgid "All Monitors"
 msgstr "すべてのモニター"
+
+msgid "Video Levels from video clip."
+msgstr "ビデオクリップのビデオレベル。"
+
+msgid "Video Levels Legal Range for SDR."
+msgstr "SDR のビデオレベル リーガルレンジ。"
+
+msgid "Video Levels Legal Range for HDR."
+msgstr "HDR のビデオレベル リーガルレンジ。"
+
+msgid "Video Levels Full Range."
+msgstr "ビデオレベル フルレンジ。"
+
+msgid "No Alpha Blend."
+msgstr "アルファブレンドなし。"
+
+msgid "Straight Alpha Blend."
+msgstr "ストレートアルファブレンド。"
+
+msgid "Premultiplied Alpha Blend."
+msgstr "プリマルチプライドアルファブレンド。"
+
+msgid "Go to Start Frame."
+msgstr "開始フレームに移動します。"
+
+msgid "Go to End Frame."
+msgstr "終了フレームに移動します。"
+
+msgid "Go to Next Frame."
+msgstr "次のフレームに移動します。"
+
+msgid "Go to Previous Frame."
+msgstr "前のフレームに移動します。"
+
+msgid "Go Forwards 10 Seconds."
+msgstr "10 秒進みます。"
+
+msgid "Go Backwards 10 Seconds."
+msgstr "10 秒戻ります。"
+
+msgid "Toggle In / Out for the OTIO clip."
+msgstr "OTIO クリップのイン / アウトを切り替えます。"
+
+msgid "Next OTIO clip."
+msgstr "次の OTIO クリップ。"
+
+msgid "Previous OTIO clip."
+msgstr "前の OTIO クリップ。"
+
+msgid "Previous Annotation Point."
+msgstr "前の注釈ポイント。"
+
+msgid "Next Annotation Point."
+msgstr "次の注釈ポイント。"
+
+msgid "Toggle Annotation Visibility."
+msgstr "注釈の表示/非表示を切り替えます。"
+
+msgid "Clear Annotation for Current Frame."
+msgstr "現在のフレームの注釈をクリアします。"
+
+msgid "Clear Annotations for ALL Frames."
+msgstr "すべてのフレームの注釈をクリアします。"
 
 msgid ""
 "You are about to clear all annotations.  You can still undo the operation "
 "right after. Do you want to continue?"
 msgstr "すべての注釈をクリアしようとしています。操作直後であれば元に戻せます。続行しますか？"
+
+msgid "No Thumbnails in Timeline Viewport."
+msgstr "タイムラインビューポートにサムネイルを表示しません。"
+
+msgid "Toggle Editing in Timeline Viewport."
+msgstr "タイムラインビューポートでの編集を切り替えます。"
+
+msgid "Toggle Editing video and audio clips with same In and Out Points."
+msgstr "同じイン点とアウト点を持つビデオクリップとオーディオクリップの編集を切り替えます。"
+
+msgid "Frame Timeline View."
+msgstr "タイムラインビューをフレームに合わせます。"
+
+msgid "Toggle Scrolling in Timeline Viewport."
+msgstr "タイムラインビューポートのスクロールを切り替えます。"
+
+msgid "Toggle Track Information in Timeline Viewport."
+msgstr "タイムラインビューポートのトラック情報を切り替えます。"
+
+msgid "Toggle Clip Information in Timeline Viewport."
+msgstr "タイムラインビューポートのクリップ情報を切り替えます。"
+
+msgid "Toggle Markers in Timeline Viewport."
+msgstr "タイムラインビューポートのマーカーを切り替えます。"
+
+msgid "Toggle Track in Timeline Viewport."
+msgstr "タイムラインビューポートのトラックを切り替えます。"
+
+msgid "Toggle Transitions in Timeline Viewport."
+msgstr "タイムラインビューポートのトランジションを切り替えます。"
+
+msgid "Select OTIO's Media Reference Key."
+msgstr "OTIO のメディア参照キーを選択します。"
+
+msgid "Set Small Thumbnails in Timeline Viewport."
+msgstr "タイムラインビューポートのサムネイルを小に設定します。"
+
+msgid "Set Medium Thumbnails in Timeline Viewport."
+msgstr "タイムラインビューポートのサムネイルを中に設定します。"
+
+msgid "Set Large Thumbnails in Timeline Viewport."
+msgstr "タイムラインビューポートのサムネイルを大に設定します。"
 
 msgid "Pick Color"
 msgstr "カラーを選択"
@@ -3488,8 +3957,35 @@ msgstr "カラーを選択"
 msgid "Pick Draw Color and Alpha"
 msgstr "描画カラーとアルファを選択"
 
+msgid "Flip Pen Colors."
+msgstr "ペンの色を反転します。"
+
+msgid "Go to First Image Version."
+msgstr "最初の画像バージョンに移動します。"
+
+msgid "Go to Previous Image Version."
+msgstr "前の画像バージョンに移動します。"
+
+msgid "Go to Next Image Version."
+msgstr "次の画像バージョンに移動します。"
+
+msgid "Go to Last Image Version."
+msgstr "最後の画像バージョンに移動します。"
+
+msgid "Give a donation to support development and unlock features."
+msgstr "開発を支援し、機能のロックを解除するために寄付します。"
+
 msgid "Install is broken.  Missing license_helper"
 msgstr "インストールが破損しています。license_helper が見つかりません"
+
+msgid "Online documentation."
+msgstr "オンラインドキュメント。"
+
+msgid "Toggle Annotations."
+msgstr "注釈の表示を切り替えます。"
+
+msgid "Toggle Sync Elements."
+msgstr "同期要素を切り替えます。"
 
 msgid "Media"
 msgstr "メディア"
@@ -3503,11 +3999,50 @@ msgstr "パンとズーム"
 msgid "Timeline"
 msgstr "タイムライン"
 
+msgid "Toggle Receive Elements."
+msgstr "受信要素を切り替えます。"
+
+msgid "Save state of UI and files to a new .mrv2s session file."
+msgstr "UI とファイルの状態を新しい .mrv2s セッションファイルに保存します。"
+
+msgid "Save state of UI and files to a .mrv2s session file."
+msgstr "UI とファイルの状態を .mrv2s セッションファイルに保存します。"
+
+msgid "Load a session file which stores the state of the UI and files."
+msgstr "UI とファイルの状態を保存したセッションファイルを読み込みます。"
+
+msgid "Save and restart a temporary session."
+msgstr "一時セッションを保存して再起動します。"
+
 msgid "Could not restart mrv2 instance with a session file."
 msgstr "セッションファイルで mrv2 インスタンスを再起動できませんでした。"
 
 msgid "Edit Text Annotation"
 msgstr "テキスト注釈を編集"
+
+msgid "Clone the File."
+msgstr "ファイルを複製します。"
+
+msgid "Reload the File."
+msgstr "ファイルを再読み込みします。"
+
+msgid "Set 3D Stereo image."
+msgstr "3D ステレオ画像を設定します。"
+
+msgid "Update the current frame cache."
+msgstr "現在のフレームキャッシュを更新します。"
+
+msgid "Refresh the frame cache."
+msgstr "フレームキャッシュを更新します。"
+
+msgid "Refresh the movie."
+msgstr "ムービーを更新します。"
+
+msgid "Copy the Filename to the clipboard."
+msgstr "ファイル名をクリップボードにコピーします。"
+
+msgid "Bring up the File Manager."
+msgstr "ファイルマネージャーを表示します。"
 
 msgid "No item selected"
 msgstr "アイテムが選択されていません"
@@ -4370,17 +4905,17 @@ msgstr "編集/時間/オーディオギャップ/挿入"
 msgid "Edit/Time/Audio Gap/Remove"
 msgstr "編集/時間/オーディオギャップ/削除"
 
-msgid "Edit/Selected/Add Transition"
-msgstr "編集/選択/トランジションを追加"
-
-msgid "Edit/Selected/Remove Items"
-msgstr "編集/選択/項目を削除"
-
 msgid "Edit/Time/Remove Clips"
 msgstr "編集/時間/クリップを削除"
 
 msgid "Edit/Time/Slice"
 msgstr "編集/時間/スライス"
+
+msgid "Edit/Selected/Add Transition"
+msgstr "編集/選択/トランジションを追加"
+
+msgid "Edit/Selected/Remove Items"
+msgstr "編集/選択/項目を削除"
 
 msgid "Edit/Undo"
 msgstr "編集/元に戻す"
@@ -5938,6 +6473,9 @@ msgstr "タイルグループ"
 
 msgid "ViewGroup"
 msgstr "ビューのグループ"
+
+msgid "Clip Selection Tool."
+msgstr "クリップ選択ツール。"
 
 msgid "Undo Last Edit."
 msgstr "最後の編集操作を元に戻す。"
@@ -8385,9 +8923,6 @@ msgstr "タスク情報の取得に失敗しました"
 #~ msgid "Repeat  Frame"
 #~ msgstr "フレームの繰り返し"
 
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "ファイルシーケンスのオーディオディレクトリを設定します。"
-
 #~ msgid "Get file sequence audio directory."
 #~ msgstr "ファイルシーケンスのオーディオディレクトリを取得します。"
 
@@ -8971,9 +9506,6 @@ msgstr "タスク情報の取得に失敗しました"
 #~ msgid "Renderer"
 #~ msgstr "レンダラー"
 
-#~ msgid "Video Levels Legal Range HDR"
-#~ msgstr "ビデオレベル リーガルレンジ HDR"
-
 #~ msgid "Enter a UR."
 #~ msgstr "URL を入力してください。"
 
@@ -9043,9 +9575,6 @@ msgstr "タスク情報の取得に失敗しました"
 
 #~ msgid "Vulkan format detected {0}"
 #~ msgstr "Vulkan フォーマットを検出しました {0}"
-
-#~ msgid "Load Movie or Sequence"
-#~ msgstr "ムービーまたはシーケンスを読み込み"
 
 #~ msgid "uiMenuBar"
 #~ msgstr "メニューバー"

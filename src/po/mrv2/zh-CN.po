@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-02 22:02-0300\n"
+"POT-Creation-Date: 2026-10-04 09:34-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Insecty <insecty_l@163.com>\n"
 "Language: zh-CN\n"
@@ -1260,8 +1260,8 @@ msgstr "时间线："
 
 msgid ""
 "Media reference to open OTIO timelines with for clips that have several "
-"versions of their media (examples: \"Proxy\" and \"Full\"."
-msgstr ""
+"versions of their media (examples: \"Proxy\" and \"Full\")."
+msgstr "用于打开 OTIO 时间线的媒体引用，适用于媒体具有多个版本的剪辑（例如：\"Proxy\" 和 \"Full\"）。"
 
 msgid "Miscellaneous:"
 msgstr "杂项:"
@@ -3208,9 +3208,48 @@ msgstr "解压缩"
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "EDL 项目 '{0}' 不再装入。 无法撤消或重做"
 
+msgid "Copy a Frame."
+msgstr "复制帧。"
+
+msgid "Cut a Frame."
+msgstr "剪切帧。"
+
+msgid "Paste a Frame."
+msgstr "粘贴帧。"
+
 #, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "无法粘贴 {0}  错误 {1}"
+
+msgid "Insert a Cut or Copied Frame."
+msgstr "插入剪切或复制的帧。"
+
+msgid "Slice the timeline at the current time."
+msgstr "在当前时间切分时间线。"
+
+msgid "Remove clip(s) at the current time."
+msgstr "删除当前时间的剪辑。"
+
+msgid "Insert audio clip at the current time."
+msgstr "在当前时间插入音频剪辑。"
+
+msgid "Insert audio gap(s) at the current time."
+msgstr "在当前时间插入音频间隔。"
+
+msgid "Remove audio clips at the current time."
+msgstr "删除当前时间的音频剪辑。"
+
+msgid "Remove selected items."
+msgstr "删除选中的项目。"
+
+msgid "Remove audio gap(s) at the ones at current time."
+msgstr "删除当前时间的音频间隔。"
+
+msgid "Insert video gap(s) at current time."
+msgstr "在当前时间插入视频间隔。"
+
+msgid "Remove video gap(s) at current time."
+msgstr "删除当前时间的视频间隔。"
 
 msgid "Items selected must be on the same track."
 msgstr "所选项目必须在同一轨道上。"
@@ -3218,6 +3257,9 @@ msgstr "所选项目必须在同一轨道上。"
 #, c++-format
 msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr "所选项目必须在轨道上连续。左侧 {0}。右侧 {1}。"
+
+msgid "Add transition between 2 or 4 selected and contiguous items."
+msgstr "在 2 个或 4 个选中的连续项目之间添加转场。"
 
 #, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
@@ -3229,6 +3271,12 @@ msgstr "请选择两个相邻的视频剪辑。"
 msgid "Please select two contiguous audio clips."
 msgstr "请选择两个相邻的音频剪辑。"
 
+msgid "Undo Last Edit Operation."
+msgstr "撤销上一次编辑操作。"
+
+msgid "Redo Last Edit Operation."
+msgstr "重做上一次编辑操作。"
+
 #, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "无法保存. otio 文件: {0}"
@@ -3239,6 +3287,9 @@ msgstr "保存 {0} 出错  {1}"
 
 msgid "Empty EDL file.  Not saving."
 msgstr "空 EDL 文件, 未保存"
+
+msgid "Save the current timeline as an .otio file."
+msgstr "将当前时间线保存为 .otio 文件。"
 
 msgid "Destination file is invalid."
 msgstr "目的文件无效"
@@ -3429,14 +3480,96 @@ msgstr "首选项"
 msgid "About"
 msgstr "关于"
 
+msgid "Open a movie or a sequence."
+msgstr "打开影片或图像序列。"
+
+msgid ""
+"Open a movie stored on the web with https protocol.  Demo movie is default."
+msgstr "使用 https 协议打开存储在网络上的影片。  默认使用演示影片。"
+
+msgid "Open a single image even if it is part of a sequence."
+msgstr "打开单个图像，即使它属于图像序列的一部分。"
+
+msgid "Load the selected file."
+msgstr "加载选中的文件。"
+
+msgid "Open a sequence with an audio file."
+msgstr "打开带有音频文件的图像序列。"
+
+msgid "Open all files in a directory."
+msgstr "打开目录中的所有文件。"
+
+msgid "Open a new instance of the player."
+msgstr "打开播放器的新实例。"
+
 msgid "Could not open a new mrv2 instance"
 msgstr "无法打开新的 mrv2 实例"
+
+msgid "Go to Previous File, Looping to End."
+msgstr "转到上一个文件，到末尾后循环。"
+
+msgid "Go to Next File, Looping to Start."
+msgstr "转到下一个文件，到开头后循环。"
+
+msgid "Go to Previous File."
+msgstr "转到上一个文件。"
+
+msgid "Go to Next File."
+msgstr "转到下一个文件。"
+
+msgid "Toggle A and B comparison."
+msgstr "切换 A 和 B 的比较。"
+
+msgid "Compare A."
+msgstr "比较 A。"
+
+msgid "Compare B."
+msgstr "比较 B。"
+
+msgid "Compare Wipe."
+msgstr "使用 Wipe 比较。"
+
+msgid "Compare Overlay."
+msgstr "使用 Overlay 比较。"
+
+msgid "Compare A - B difference."
+msgstr "比较 A - B 的差异。"
+
+msgid "Compare A + B."
+msgstr "比较 A + B。"
+
+msgid "Compare A * B."
+msgstr "比较 A * B。"
+
+msgid "Compare A next to flipped B."
+msgstr "将 A 与翻转后的 B 并排比较。"
+
+msgid "Compare A and B Horizontally."
+msgstr "水平比较 A 和 B。"
+
+msgid "Compare A and B Vertically."
+msgstr "垂直比较 A 和 B。"
+
+msgid "Compare A and one or many clips Tiled."
+msgstr "将 A 与一个或多个剪辑以平铺方式比较。"
 
 msgid "File extension cannot be empty."
 msgstr "文件扩展名不能为空 。"
 
+msgid "Save a single frame of the current clip."
+msgstr "保存当前剪辑的单帧。"
+
+msgid "Keep saving frames to the same folder."
+msgstr "继续将帧保存到同一文件夹。"
+
+msgid "Save the audio of the current clip."
+msgstr "保存当前剪辑的音频。"
+
 msgid "Saving audio but not with an audio extension."
 msgstr "保存音频, 但不使用音频扩展名 。"
+
+msgid "Export a movie or a sequence."
+msgstr "导出影片或图像序列。"
 
 msgid "Saving audio but current clip does not have audio."
 msgstr "保存音频, 但当前片段没有音频 。"
@@ -3444,25 +3577,361 @@ msgstr "保存音频, 但当前片段没有音频 。"
 msgid "Saving video but with an audio extension."
 msgstr "保存视频, 但有音频扩展。"
 
+msgid "Save annotations as a PDF."
+msgstr "将注释保存为 PDF。"
+
+msgid "Save annotations only as a movie or sequence."
+msgstr "仅将注释保存为影片或图像序列。"
+
 msgid "Cannot save annotations to .otio file"
 msgstr "无法将批注保存到. otio 文件"
+
+msgid "Save annotations as a .json file"
+msgstr "将注释保存为 .json 文件"
+
+msgid "Close current file."
+msgstr "关闭当前文件。"
+
+msgid "Exit the program.  Warns if edits or annotations have been made."
+msgstr "退出程序。  如果进行了编辑或添加了注释，则发出警告。"
+
+msgid "Previous layer."
+msgstr "上一个图层。"
+
+msgid "Next layer."
+msgstr "下一个图层。"
+
+msgid "No debanding."
+msgstr "不进行去色带。"
+
+msgid "Blur movie a bit to avoid banding."
+msgstr "稍微模糊影片以避免色带。"
+
+msgid "Blur movie medium to avoid banding."
+msgstr "中度模糊影片以避免色带。"
+
+msgid "Blur movie high to avoid banding."
+msgstr "高度模糊影片以避免色带。"
+
+msgid "Minify filter with nearest algorithm."
+msgstr "使用最近邻算法的缩小滤镜。"
+
+msgid "Minify filter with linear algorithm."
+msgstr "使用线性算法的缩小滤镜。"
+
+msgid "Magnify filter with nearest algorithm."
+msgstr "使用最近邻算法的放大滤镜。"
+
+msgid "Magnify filter with linear algorithm."
+msgstr "使用线性算法的放大滤镜。"
+
+msgid "Mirror clip in X."
+msgstr "在 X 轴上镜像剪辑。"
+
+msgid "Mirror clip in Y."
+msgstr "在 Y 轴上镜像剪辑。"
+
+msgid "Use HDR data from file."
+msgstr "使用文件中的 HDR 数据。"
+
+msgid "Don't use HDR data."
+msgstr "不使用 HDR 数据。"
+
+msgid "Use Latest HDR data."
+msgstr "使用最新的 HDR 数据。"
+
+msgid "Rotate image 90 degrees."
+msgstr "将图像旋转 90 度。"
+
+msgid "Rotate image -90 degrees."
+msgstr "将图像旋转 -90 度。"
+
+msgid "Show the red channel of the layer."
+msgstr "显示图层的红色通道。"
+
+msgid "Show the green channel of the layer."
+msgstr "显示图层的绿色通道。"
+
+msgid "Show the blue channel of the layer."
+msgstr "显示图层的蓝色通道。"
+
+msgid "Show the alpha channel of the layer."
+msgstr "显示图层的 Alpha 通道。"
+
+msgid "Show the combined lumma channel of the layer."
+msgstr "显示图层的组合亮度通道。"
+
+msgid "Show the RGB channel of the layer."
+msgstr "显示图层的 RGB 通道。"
+
+msgid "Normalize the image to be between 0 and 1."
+msgstr "将图像归一化到 0 到 1 之间。"
+
+msgid "Ignore OpenEXR chromaticities if present."
+msgstr "忽略 OpenEXR 色度信息（如果存在）。"
+
+msgid "Show values below 0 and above 1 as red pixels"
+msgstr "将低于 0 和高于 1 的值显示为红色像素"
+
+msgid ""
+"Toggle HDR peak detection to adjust the movie's luminosity while playing."
+msgstr "切换 HDR 峰值检测，以便在播放时调整影片的亮度。"
+
+msgid "Select Tonemap algorithm."
+msgstr "选择色调映射算法。"
+
+msgid "Select Gamut mapping algorithm."
+msgstr "选择色域映射算法。"
+
+msgid "Toggles Fullscreen Mode."
+msgstr "切换全屏模式。"
+
+msgid "Toggles Presentation Mode."
+msgstr "切换演示模式。"
+
+msgid "Toggles Window to Float above others."
+msgstr "切换窗口，使其浮动在其他窗口之上。"
+
+msgid "Toggles a Secondary Window."
+msgstr "切换辅助窗口。"
+
+msgid "Toggle Secondary Window to Float above others."
+msgstr "切换辅助窗口，使其浮动在其他窗口之上。"
+
+msgid ""
+"Mouse clicks are delivered to the OS windows below.  Used with transparency."
+msgstr "鼠标点击将传递给下方的操作系统窗口。  与透明模式一起使用。"
+
+msgid "Make UI more transparent."
+msgstr "使界面更加透明。"
+
+msgid "Make UI less transparent."
+msgstr "使界面更加不透明。"
+
+msgid "Only allow one side panel at a time."
+msgstr "一次只允许一个侧面板。"
+
+#, c++-format
+msgid "Show {0} Window."
+msgstr "显示 {0} 窗口。"
+
+msgid "Show About Window."
+msgstr "显示“关于”窗口。"
+
+msgid "Toggle Action Dock (Annotations/Edit tools)."
+msgstr "切换操作停靠栏（注释/编辑工具）。"
+
+msgid "Toggle Menu Bar."
+msgstr "切换菜单栏。"
+
+msgid "Toggle Top Bar."
+msgstr "切换顶部栏。"
+
+msgid "Toggle Pixel Bar."
+msgstr "切换像素栏。"
+
+msgid "Toggle Timeline Bar."
+msgstr "切换时间线栏。"
+
+msgid "Toggle Status Bar (this bar)."
+msgstr "切换状态栏（此栏）。"
+
+msgid "Show HUD Options."
+msgstr "显示 HUD 选项。"
+
+msgid "Toggles auto framing of the view."
+msgstr "切换视图的自动取景。"
+
+msgid "Toggle TV Safe Areas."
+msgstr "切换电视安全区域。"
+
+msgid "Toggle the display of OpenEXR's Data Window."
+msgstr "切换 OpenEXR 数据窗口的显示。"
+
+msgid "Ignore the OpenEXR Display Window."
+msgstr "忽略 OpenEXR 显示窗口。"
+
+msgid "Toggle the display of OpenEXR's Display Window."
+msgstr "切换 OpenEXR 显示窗口的显示。"
+
+msgid "Set the Film Cropping Mask."
+msgstr "设置影片裁剪遮罩。"
 
 msgid "View/Mask"
 msgstr "视图/遮罩"
 
+msgid "Play Forward."
+msgstr "向前播放。"
+
+msgid "Play Backward."
+msgstr "向后播放。"
+
+msgid "Stop Playback."
+msgstr "停止播放。"
+
+msgid "Toggle Playback."
+msgstr "切换播放。"
+
+msgid "Set In Point."
+msgstr "设置入点。"
+
+msgid "Set Out Point."
+msgstr "设置出点。"
+
+msgid "Toggle In and Out Points."
+msgstr "切换入点和出点。"
+
+msgid "Loop Mode."
+msgstr "循环模式。"
+
+msgid "Play Once Mode."
+msgstr "单次播放模式。"
+
+msgid "Play Ping-Pong Mode."
+msgstr "往返播放模式。"
+
+msgid "Select OCIO Input Color Space."
+msgstr "选择 OCIO 输入色彩空间。"
+
+msgid "Bring up OCIO presets window."
+msgstr "打开 OCIO 预设窗口。"
+
+msgid "Toggle OpenColorIO (OCIO)."
+msgstr "切换 OpenColorIO (OCIO)。"
+
+msgid "Toggle between OCIO and Colors topbar."
+msgstr "在 OCIO 和颜色顶部栏之间切换。"
+
+msgid "Current OCIO Input Color Space."
+msgstr "当前 OCIO 输入色彩空间。"
+
 msgid "OCIO/     Input Color Space"
 msgstr "OCIO/     输入色彩空间"
+
+msgid "Current OCIO Look."
+msgstr "当前 OCIO Look。"
 
 msgid "OCIO/     Look"
 msgstr "OCIO/     视图"
 
+msgid "Current OCIO Display / View for monitor."
+msgstr "当前用于显示器的 OCIO Display / View。"
+
+msgid "Current OCIO Display / View for all monitors."
+msgstr "当前用于所有显示器的 OCIO Display / View。"
+
 msgid "All Monitors"
 msgstr "所有监视器"
+
+msgid "Video Levels from video clip."
+msgstr "来自视频剪辑的视频电平。"
+
+msgid "Video Levels Legal Range for SDR."
+msgstr "SDR 的视频电平合法范围。"
+
+msgid "Video Levels Legal Range for HDR."
+msgstr "HDR 的视频电平合法范围。"
+
+msgid "Video Levels Full Range."
+msgstr "视频电平全范围。"
+
+msgid "No Alpha Blend."
+msgstr "无 Alpha 混合。"
+
+msgid "Straight Alpha Blend."
+msgstr "直接 Alpha 混合。"
+
+msgid "Premultiplied Alpha Blend."
+msgstr "预乘 Alpha 混合。"
+
+msgid "Go to Start Frame."
+msgstr "转到起始帧。"
+
+msgid "Go to End Frame."
+msgstr "转到结束帧。"
+
+msgid "Go to Next Frame."
+msgstr "转到下一帧。"
+
+msgid "Go to Previous Frame."
+msgstr "转到上一帧。"
+
+msgid "Go Forwards 10 Seconds."
+msgstr "向前跳转 10 秒。"
+
+msgid "Go Backwards 10 Seconds."
+msgstr "向后跳转 10 秒。"
+
+msgid "Toggle In / Out for the OTIO clip."
+msgstr "切换 OTIO 剪辑的入点/出点。"
+
+msgid "Next OTIO clip."
+msgstr "下一个 OTIO 剪辑。"
+
+msgid "Previous OTIO clip."
+msgstr "上一个 OTIO 剪辑。"
+
+msgid "Previous Annotation Point."
+msgstr "上一个注释点。"
+
+msgid "Next Annotation Point."
+msgstr "下一个注释点。"
+
+msgid "Toggle Annotation Visibility."
+msgstr "切换注释可见性。"
+
+msgid "Clear Annotation for Current Frame."
+msgstr "清除当前帧的注释。"
+
+msgid "Clear Annotations for ALL Frames."
+msgstr "清除所有帧的注释。"
 
 msgid ""
 "You are about to clear all annotations.  You can still undo the operation "
 "right after. Do you want to continue?"
 msgstr "您即将清除所有注释。您仍然可以立即撤销此操作。要继续吗？"
+
+msgid "No Thumbnails in Timeline Viewport."
+msgstr "时间线视口中不显示缩略图。"
+
+msgid "Toggle Editing in Timeline Viewport."
+msgstr "切换时间线视口中的编辑功能。"
+
+msgid "Toggle Editing video and audio clips with same In and Out Points."
+msgstr "切换对具有相同入点和出点的视频及音频剪辑进行编辑。"
+
+msgid "Frame Timeline View."
+msgstr "适配时间线视图。"
+
+msgid "Toggle Scrolling in Timeline Viewport."
+msgstr "切换时间线视口中的滚动。"
+
+msgid "Toggle Track Information in Timeline Viewport."
+msgstr "切换时间线视口中的轨道信息。"
+
+msgid "Toggle Clip Information in Timeline Viewport."
+msgstr "切换时间线视口中的剪辑信息。"
+
+msgid "Toggle Markers in Timeline Viewport."
+msgstr "切换时间线视口中的标记。"
+
+msgid "Toggle Track in Timeline Viewport."
+msgstr "切换时间线视口中的轨道。"
+
+msgid "Toggle Transitions in Timeline Viewport."
+msgstr "切换时间线视口中的转场。"
+
+msgid "Select OTIO's Media Reference Key."
+msgstr "选择 OTIO 的媒体引用键。"
+
+msgid "Set Small Thumbnails in Timeline Viewport."
+msgstr "在时间线视口中设置小缩略图。"
+
+msgid "Set Medium Thumbnails in Timeline Viewport."
+msgstr "在时间线视口中设置中等缩略图。"
+
+msgid "Set Large Thumbnails in Timeline Viewport."
+msgstr "在时间线视口中设置大缩略图。"
 
 msgid "Pick Color"
 msgstr "选择颜色"
@@ -3470,8 +3939,35 @@ msgstr "选择颜色"
 msgid "Pick Draw Color and Alpha"
 msgstr "选择绘图颜色和透明度"
 
+msgid "Flip Pen Colors."
+msgstr "反转画笔颜色。"
+
+msgid "Go to First Image Version."
+msgstr "转到第一个图像版本。"
+
+msgid "Go to Previous Image Version."
+msgstr "转到上一个图像版本。"
+
+msgid "Go to Next Image Version."
+msgstr "转到下一个图像版本。"
+
+msgid "Go to Last Image Version."
+msgstr "转到最后一个图像版本。"
+
+msgid "Give a donation to support development and unlock features."
+msgstr "捐赠以支持开发并解锁功能。"
+
 msgid "Install is broken.  Missing license_helper"
 msgstr "安装已损坏。缺少 license_helper"
+
+msgid "Online documentation."
+msgstr "在线文档。"
+
+msgid "Toggle Annotations."
+msgstr "切换注释。"
+
+msgid "Toggle Sync Elements."
+msgstr "切换同步元素。"
 
 msgid "Media"
 msgstr "媒体"
@@ -3485,11 +3981,50 @@ msgstr "Pan And Zoom"
 msgid "Timeline"
 msgstr "时间线"
 
+msgid "Toggle Receive Elements."
+msgstr "切换接收元素。"
+
+msgid "Save state of UI and files to a new .mrv2s session file."
+msgstr "将界面和文件的状态保存到新的 .mrv2s 会话文件。"
+
+msgid "Save state of UI and files to a .mrv2s session file."
+msgstr "将界面和文件的状态保存到 .mrv2s 会话文件。"
+
+msgid "Load a session file which stores the state of the UI and files."
+msgstr "加载存储界面和文件状态的会话文件。"
+
+msgid "Save and restart a temporary session."
+msgstr "保存并重新启动临时会话。"
+
 msgid "Could not restart mrv2 instance with a session file."
 msgstr "无法使用会话文件重新启动 mrv2 实例。"
 
 msgid "Edit Text Annotation"
 msgstr "编辑文本注释"
+
+msgid "Clone the File."
+msgstr "克隆文件。"
+
+msgid "Reload the File."
+msgstr "重新加载文件。"
+
+msgid "Set 3D Stereo image."
+msgstr "设置 3D 立体图像。"
+
+msgid "Update the current frame cache."
+msgstr "更新当前帧缓存。"
+
+msgid "Refresh the frame cache."
+msgstr "刷新帧缓存。"
+
+msgid "Refresh the movie."
+msgstr "刷新影片。"
+
+msgid "Copy the Filename to the clipboard."
+msgstr "将文件名复制到剪贴板。"
+
+msgid "Bring up the File Manager."
+msgstr "打开文件管理器。"
 
 msgid "No item selected"
 msgstr "未选中项目"
@@ -4352,17 +4887,17 @@ msgstr "编辑/时间/音频间隙/插入"
 msgid "Edit/Time/Audio Gap/Remove"
 msgstr "编辑/时间/音频间隙/移除"
 
-msgid "Edit/Selected/Add Transition"
-msgstr "编辑/选中/添加转场"
-
-msgid "Edit/Selected/Remove Items"
-msgstr "编辑/选中/移除项目"
-
 msgid "Edit/Time/Remove Clips"
 msgstr "编辑/时间/移除剪辑"
 
 msgid "Edit/Time/Slice"
 msgstr "编辑/时间/切片"
+
+msgid "Edit/Selected/Add Transition"
+msgstr "编辑/选中/添加转场"
+
+msgid "Edit/Selected/Remove Items"
+msgstr "编辑/选中/移除项目"
 
 msgid "Edit/Undo"
 msgstr "编辑/撤消"
@@ -5928,6 +6463,9 @@ msgstr "TileGroup"
 
 msgid "ViewGroup"
 msgstr "TileGroup"
+
+msgid "Clip Selection Tool."
+msgstr "剪辑选择工具。"
 
 msgid "Undo Last Edit."
 msgstr "撤销上一次编辑。"
@@ -8354,9 +8892,6 @@ msgstr "任务信息失败"
 #~ msgid "Repeat  Frame"
 #~ msgstr "Repeat  Frame"
 
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "设置文件序列音频目录"
-
 #~ msgid "Get file sequence audio directory."
 #~ msgstr "获取文件序列音频目录"
 
@@ -8939,9 +9474,6 @@ msgstr "任务信息失败"
 #~ msgid "Renderer"
 #~ msgstr "渲染器"
 
-#~ msgid "Video Levels Legal Range HDR"
-#~ msgstr "视频级别 - 合法范围 HDR"
-
 #~ msgid "Enter a UR."
 #~ msgstr "输入一个 URL。"
 
@@ -9023,9 +9555,6 @@ msgstr "任务信息失败"
 #~ "Your Wayland compositor does not support Float on Top.  Go to the title bar "
 #~ "of the Window and click RMB->->More Actions->Keep Above Others"
 #~ msgstr "您的 Wayland 复合器不支持“置顶显示”。请前往窗口标题栏，右键单击，然后选择“更多操作”→“始终置顶”。"
-
-#~ msgid "Load Movie or Sequence"
-#~ msgstr "导入影片或序列"
 
 #~ msgid "uiMenuBar"
 #~ msgstr "菜单栏"

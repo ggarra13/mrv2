@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-02 22:02-0300\n"
+"POT-Creation-Date: 2026-10-04 09:34-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1297,8 +1297,10 @@ msgstr "Línea de tiempo:"
 
 msgid ""
 "Media reference to open OTIO timelines with for clips that have several "
-"versions of their media (examples: \"Proxy\" and \"Full\"."
+"versions of their media (examples: \"Proxy\" and \"Full\")."
 msgstr ""
+"Referencia de medios para abrir en archivos OTIO con clips que tienen varias"
+" versiones de sus medios (ejemplos: \"Proxy\" y \"Full\")."
 
 msgid "Miscellaneous:"
 msgstr "Varios:"
@@ -3325,9 +3327,48 @@ msgstr "Descompresión"
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "Item de EDL '{0}' ya no está cargado.  No puedo deshacer ni rehacer."
 
+msgid "Copy a Frame."
+msgstr "Copiar un Cuadro."
+
+msgid "Cut a Frame."
+msgstr "Cortar un Cuadro."
+
+msgid "Paste a Frame."
+msgstr "Pegar Cuadro"
+
 #, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "No pude pegar {0}.  Error {1}."
+
+msgid "Insert a Cut or Copied Frame."
+msgstr "Insertar un Cuadro Cortado o Copiado"
+
+msgid "Slice the timeline at the current time."
+msgstr "Rebanar la línea de tiempo al cuadro actual."
+
+msgid "Remove clip(s) at the current time."
+msgstr "Eliminar clip(s) en el cuadro actual."
+
+msgid "Insert audio clip at the current time."
+msgstr "Insertar un clip de audio en el cuadro actual."
+
+msgid "Insert audio gap(s) at the current time."
+msgstr "Insertar hueco(s) de audio en el cuadro actual."
+
+msgid "Remove audio clips at the current time."
+msgstr "Eliminar clips de audio en el cuadro actual."
+
+msgid "Remove selected items."
+msgstr "Eliminar items seleccionados."
+
+msgid "Remove audio gap(s) at the ones at current time."
+msgstr "Eliminar hueco(s) de audio en el cuadro actual."
+
+msgid "Insert video gap(s) at current time."
+msgstr "Añadir hueco(s) de video en el cuadro actual."
+
+msgid "Remove video gap(s) at current time."
+msgstr "Elimiminar hueco(s) de video en el cuadro actual."
 
 msgid "Items selected must be on the same track."
 msgstr "Los elementos seleccionados deben estar en la misma pista."
@@ -3337,6 +3378,9 @@ msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr ""
 "Los elementos seleccionados deben ser contiguos en la pista. Izquierda {0}. "
 "Derecha {1}."
+
+msgid "Add transition between 2 or 4 selected and contiguous items."
+msgstr "Agregar transición entre 2 o 4 items seleccionados y contiguous."
 
 #, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
@@ -3349,6 +3393,12 @@ msgstr "Por favor seleccione dos clips de vídeo contiguos."
 msgid "Please select two contiguous audio clips."
 msgstr "Por favor seleccione dos clips de audio contiguos."
 
+msgid "Undo Last Edit Operation."
+msgstr "Deshacer Última Edición."
+
+msgid "Redo Last Edit Operation."
+msgstr "Rehacer Última Edición."
+
 #, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
@@ -3359,6 +3409,9 @@ msgstr "Error grabando {0}. {1}"
 
 msgid "Empty EDL file.  Not saving."
 msgstr "Archivo EDL vacío.  No grabando."
+
+msgid "Save the current timeline as an .otio file."
+msgstr "Grabar la línea de tiempo actual como un archivo .otio."
 
 msgid "Destination file is invalid."
 msgstr "Archivo de destino es inválido."
@@ -3551,14 +3604,98 @@ msgstr "Preferencias"
 msgid "About"
 msgstr "Acerca"
 
+msgid "Open a movie or a sequence."
+msgstr "Abrir una Película o Secuencia"
+
+msgid ""
+"Open a movie stored on the web with https protocol.  Demo movie is default."
+msgstr ""
+"Abrir una película guardada en la web con protocolo https.  Por defecto una "
+"pellícula de demo."
+
+msgid "Open a single image even if it is part of a sequence."
+msgstr "Abrir una sola imagen incluso si es parte de una secuencia."
+
+msgid "Load the selected file."
+msgstr "Cargar el archivo seleccionado."
+
+msgid "Open a sequence with an audio file."
+msgstr "Abrir una secuencia con archivo de audio."
+
+msgid "Open all files in a directory."
+msgstr "Abrir todos los archivos en una carpeta."
+
+msgid "Open a new instance of the player."
+msgstr "Abrir una nueva instancia del reproductor."
+
 msgid "Could not open a new mrv2 instance"
 msgstr "No pude abrir una nueva instancia de mrv2"
+
+msgid "Go to Previous File, Looping to End."
+msgstr "Ir al Archivo Previo, haciendo Loop al Final."
+
+msgid "Go to Next File, Looping to Start."
+msgstr "Ir al Archivo Siguiente, haciendo Loop al Comienzo."
+
+msgid "Go to Previous File."
+msgstr "Ir al Archivo Previo."
+
+msgid "Go to Next File."
+msgstr "Ir al Archivo Siguiente."
+
+msgid "Toggle A and B comparison."
+msgstr "Modo de comparación A/B."
+
+msgid "Compare A."
+msgstr "Comparar A."
+
+msgid "Compare B."
+msgstr "Comparar B."
+
+msgid "Compare Wipe."
+msgstr "Comparar Limpiaparabrisas."
+
+msgid "Compare Overlay."
+msgstr "Comparar Overlay."
+
+msgid "Compare A - B difference."
+msgstr "Comparar Diferencia A - B."
+
+msgid "Compare A + B."
+msgstr "Comparar A + B."
+
+msgid "Compare A * B."
+msgstr "Comparar A * B."
+
+msgid "Compare A next to flipped B."
+msgstr "Comparar A junto a B invertido."
+
+msgid "Compare A and B Horizontally."
+msgstr "Comparar A y B Horizontalmente"
+
+msgid "Compare A and B Vertically."
+msgstr "Comparar A y B Verticalmente."
+
+msgid "Compare A and one or many clips Tiled."
+msgstr "Comparar A y uno o más clips en mosaico."
 
 msgid "File extension cannot be empty."
 msgstr "Extensión del archivo no puede estar vacía."
 
+msgid "Save a single frame of the current clip."
+msgstr "Guardar un Solo Cuadro del clip actual."
+
+msgid "Keep saving frames to the same folder."
+msgstr "Seguir grabando cuadros a la misma carpeta."
+
+msgid "Save the audio of the current clip."
+msgstr "Grabar el audio del clip actual."
+
 msgid "Saving audio but not with an audio extension."
 msgstr "Guardar audio pero no con una extensión de audio."
+
+msgid "Export a movie or a sequence."
+msgstr "Exportar una película o secuencia."
 
 msgid "Saving audio but current clip does not have audio."
 msgstr "Grabando audio pero el clip actual no tiene audio."
@@ -3566,20 +3703,319 @@ msgstr "Grabando audio pero el clip actual no tiene audio."
 msgid "Saving video but with an audio extension."
 msgstr "Grabando video pero con una extension de audio."
 
+msgid "Save annotations as a PDF."
+msgstr "Guardar Anotaciones a PDF"
+
+msgid "Save annotations only as a movie or sequence."
+msgstr "Guardar los cuadros de anotaciones como película o secuencia."
+
 msgid "Cannot save annotations to .otio file"
 msgstr "No puedo grabar anotaciones a un archivo .otio."
+
+msgid "Save annotations as a .json file"
+msgstr "Grabar anotaciones a un archivo .json."
+
+msgid "Close current file."
+msgstr "Cerrar archivo actual."
+
+msgid "Exit the program.  Warns if edits or annotations have been made."
+msgstr ""
+"Salir de programa.  Advierte si ediciones o anotaciones han sido hechas."
+
+msgid "Previous layer."
+msgstr "Capa Previa."
+
+msgid "Next layer."
+msgstr "Capa Siguiente."
+
+msgid "No debanding."
+msgstr "Sin bandas."
+
+msgid "Blur movie a bit to avoid banding."
+msgstr "Difuminar película un poco para evitar bandas."
+
+msgid "Blur movie medium to avoid banding."
+msgstr "Difuminar película en punto medio para evitar bandas."
+
+msgid "Blur movie high to avoid banding."
+msgstr "Difuminar película en punto alto para evitar bandas."
+
+msgid "Minify filter with nearest algorithm."
+msgstr "Filtro de minificación con algoritmo mas próximo."
+
+msgid "Minify filter with linear algorithm."
+msgstr "Filtro de minificación con algoritmo linear."
+
+msgid "Magnify filter with nearest algorithm."
+msgstr "Filtro de magnificación con algoritmo mas próximo."
+
+msgid "Magnify filter with linear algorithm."
+msgstr "Filtro de magnificación con algoritmo linear."
+
+msgid "Mirror clip in X."
+msgstr "Espejar el clip en X."
+
+msgid "Mirror clip in Y."
+msgstr "Espejar el clip en Y."
+
+msgid "Use HDR data from file."
+msgstr "Datos de HDR Del Archivo."
+
+msgid "Don't use HDR data."
+msgstr "No usar datos HDR."
+
+msgid "Use Latest HDR data."
+msgstr "Usar Últimos Datos HDR."
+
+msgid "Rotate image 90 degrees."
+msgstr "Rotar la imagen +90 grados."
+
+msgid "Rotate image -90 degrees."
+msgstr "Rotar la imagen -90 grados."
+
+msgid "Show the red channel of the layer."
+msgstr "Mostrar el canal rojo de la capa."
+
+msgid "Show the green channel of the layer."
+msgstr "Mostrar el canal verde de la capa."
+
+msgid "Show the blue channel of the layer."
+msgstr "Mostrar el canal azul de la capa."
+
+msgid "Show the alpha channel of the layer."
+msgstr "Mostrar el canal alfa de la capa."
+
+msgid "Show the combined lumma channel of the layer."
+msgstr "Mostrar luma combinada de la capa."
+
+msgid "Show the RGB channel of the layer."
+msgstr "Mostra los canales RGB de la capa."
+
+msgid "Normalize the image to be between 0 and 1."
+msgstr "Normaliza la imagen entre 0 y 1."
+
+msgid "Ignore OpenEXR chromaticities if present."
+msgstr "Ignorar las cromáticas de OpenEXR."
+
+msgid "Show values below 0 and above 1 as red pixels"
+msgstr "Mostrar los valores menores que 0 y mayores que 1 con píxeles rojos."
+
+msgid ""
+"Toggle HDR peak detection to adjust the movie's luminosity while playing."
+msgstr ""
+"Alternar detección de picos en HDR para ajustar la luminosidad de las "
+"películas al reproducir."
+
+msgid "Select Tonemap algorithm."
+msgstr "Seleccionar algoritmo de Mapeo de Tonos."
+
+msgid "Select Gamut mapping algorithm."
+msgstr "Seleccionar algoritmo de mapeo de Gamut."
+
+msgid "Toggles Fullscreen Mode."
+msgstr "Alternar Pantalla Completa"
+
+msgid "Toggles Presentation Mode."
+msgstr "Alternar Modo de Presentación"
+
+msgid "Toggles Window to Float above others."
+msgstr "Alternar Ventana para Flotar sobre otras."
+
+msgid "Toggles a Secondary Window."
+msgstr "Alternar la Vista Secundaria."
+
+msgid "Toggle Secondary Window to Float above others."
+msgstr "Alternar Flotar para la Vista Secundaria."
+
+msgid ""
+"Mouse clicks are delivered to the OS windows below.  Used with transparency."
+msgstr ""
+"Clicks del ratón son enviados a las ventanas bajo la ventana.  Usar con "
+"transparencia de UI."
+
+msgid "Make UI more transparent."
+msgstr "Más transparencia de la interfaz de usuario"
+
+msgid "Make UI less transparent."
+msgstr "Más transparencia de la interfaz de usuario"
+
+msgid "Only allow one side panel at a time."
+msgstr "Sólo permitir un panel lateral al mismo tiempo."
+
+#, c++-format
+msgid "Show {0} Window."
+msgstr "Mostrar la Ventana {0}."
+
+msgid "Show About Window."
+msgstr "Mostrar Ventana de Acerca de mrv2"
+
+msgid "Toggle Action Dock (Annotations/Edit tools)."
+msgstr "Alternar Panel de Herramientas."
+
+msgid "Toggle Menu Bar."
+msgstr "Alternar Barra de Menu."
+
+msgid "Toggle Top Bar."
+msgstr "Alternar Barra Superior."
+
+msgid "Toggle Pixel Bar."
+msgstr "Alternar Barra de Píxel."
+
+msgid "Toggle Timeline Bar."
+msgstr "Alternar Línea de Tiempo."
+
+msgid "Toggle Status Bar (this bar)."
+msgstr "Alternar Barra de Estátus (esta barra)."
+
+msgid "Show HUD Options."
+msgstr "Setear las opciones de HUD."
+
+msgid "Toggles auto framing of the view."
+msgstr "Alternar auto encuadre en la vista."
+
+msgid "Toggle TV Safe Areas."
+msgstr "Alternar Áreas Seguras de TV."
+
+msgid "Toggle the display of OpenEXR's Data Window."
+msgstr "Alternar Ventana de Datos de OpenEXR."
+
+msgid "Ignore the OpenEXR Display Window."
+msgstr "Ignorar la Ventana de Display de OpenEXR."
+
+msgid "Toggle the display of OpenEXR's Display Window."
+msgstr "Alternar Ventana de Display de OpenEXR."
+
+msgid "Set the Film Cropping Mask."
+msgstr "Setear la máscara de recorte de Film."
 
 msgid "View/Mask"
 msgstr "Vista/Máscara"
 
+msgid "Play Forward."
+msgstr "Reproducir Para Adelante."
+
+msgid "Play Backward."
+msgstr "Reproducir Para Atrás."
+
+msgid "Stop Playback."
+msgstr "Parar reproducción."
+
+msgid "Toggle Playback."
+msgstr "Alternar Reproduccón"
+
+msgid "Set In Point."
+msgstr "Establecer Punto de Entrada."
+
+msgid "Set Out Point."
+msgstr "Establecer Punto de Salida."
+
+msgid "Toggle In and Out Points."
+msgstr "Alternar Puntos de Entrada y Salida."
+
+msgid "Loop Mode."
+msgstr "Modo de Bucle."
+
+msgid "Play Once Mode."
+msgstr "Modo de Reproducción una vez."
+
+msgid "Play Ping-Pong Mode."
+msgstr "Modo de Reproducción de Ping-Pong."
+
+msgid "Select OCIO Input Color Space."
+msgstr "Seleccionar Espacio de Color de Entrada de OCIO."
+
+msgid "Bring up OCIO presets window."
+msgstr "Abrir ventana de preseteos de OCIO."
+
+msgid "Toggle OpenColorIO (OCIO)."
+msgstr "Alternar OpenColorIO (OCIO)."
+
+msgid "Toggle between OCIO and Colors topbar."
+msgstr "Alternar entre la barra de OCIO y de colores."
+
+msgid "Current OCIO Input Color Space."
+msgstr "Espacio de Color de Entrada OCIO Actual."
+
 msgid "OCIO/     Input Color Space"
 msgstr "OCIO/      Color de Entrada"
+
+msgid "Current OCIO Look."
+msgstr "Look de OCIO actual."
 
 msgid "OCIO/     Look"
 msgstr "OCIO/     Look"
 
+msgid "Current OCIO Display / View for monitor."
+msgstr "Display / Vista de OCIO Actual."
+
+msgid "Current OCIO Display / View for all monitors."
+msgstr "Display / Vista de OCIO Actual para todos los monitores."
+
 msgid "All Monitors"
 msgstr "All Monitors"
+
+msgid "Video Levels from video clip."
+msgstr "Niveles de Vídeo del clip."
+
+msgid "Video Levels Legal Range for SDR."
+msgstr "Niveles de video - rango legal SDR."
+
+msgid "Video Levels Legal Range for HDR."
+msgstr "Niveles de video - rango legal HDR."
+
+msgid "Video Levels Full Range."
+msgstr "Niveles de Vídeo de Rango Completo."
+
+msgid "No Alpha Blend."
+msgstr "Sin Mezcla Alfa."
+
+msgid "Straight Alpha Blend."
+msgstr "Mezcla Alfa Derecha."
+
+msgid "Premultiplied Alpha Blend."
+msgstr "Mezcla Alpha Premultiplicada."
+
+msgid "Go to Start Frame."
+msgstr "Ir al cuadro de comienzo."
+
+msgid "Go to End Frame."
+msgstr "Ir al cuadro final."
+
+msgid "Go to Next Frame."
+msgstr "Ir al Cuadro Próximo."
+
+msgid "Go to Previous Frame."
+msgstr "Ir al Cuadro Previo."
+
+msgid "Go Forwards 10 Seconds."
+msgstr "Ir 10 segundos hacia adelante."
+
+msgid "Go Backwards 10 Seconds."
+msgstr "Ir 10 segundos hacia atrás."
+
+msgid "Toggle In / Out for the OTIO clip."
+msgstr "Alternar Punto de Entrada/Salida del Clip .otio"
+
+msgid "Next OTIO clip."
+msgstr "Clip OTIO Próximo."
+
+msgid "Previous OTIO clip."
+msgstr "Clip OTIO Previo."
+
+msgid "Previous Annotation Point."
+msgstr "Ir a Anotación Previa."
+
+msgid "Next Annotation Point."
+msgstr "Ir a Anotación Siguiente."
+
+msgid "Toggle Annotation Visibility."
+msgstr "Alternar Panel de Anotación."
+
+msgid "Clear Annotation for Current Frame."
+msgstr "Borrar Anotación para el Cuadro Actual."
+
+msgid "Clear Annotations for ALL Frames."
+msgstr "Borrar Todos los Cuadros de la Anotaciones."
 
 msgid ""
 "You are about to clear all annotations.  You can still undo the operation "
@@ -3588,14 +4024,85 @@ msgstr ""
 "Está por borrar todas las anotaciones.  Puede luego usar 'Deshacer' (Undo) "
 "para recuperarlas.  ¿Quiere continuar?"
 
+msgid "No Thumbnails in Timeline Viewport."
+msgstr "Sin miniaturas en la ventana de Edición."
+
+msgid "Toggle Editing in Timeline Viewport."
+msgstr "Alternar Ventana de Edición Editable."
+
+msgid "Toggle Editing video and audio clips with same In and Out Points."
+msgstr ""
+"Alternar Editar clips de vídeo y audio juntos cuando comparten puntos de "
+"entrada."
+
+msgid "Frame Timeline View."
+msgstr "Enmarcar Ventana de Edición."
+
+msgid "Toggle Scrolling in Timeline Viewport."
+msgstr "Alternar paneo de la Ventana de Edición."
+
+msgid "Toggle Track Information in Timeline Viewport."
+msgstr "Alternar Información de las Pistas en la Ventana de Edición."
+
+msgid "Toggle Clip Information in Timeline Viewport."
+msgstr "Alternar Información de los CLips en la Ventana de Edición."
+
+msgid "Toggle Markers in Timeline Viewport."
+msgstr "Alternar Marcadores en la Ventana de Edición."
+
+msgid "Toggle Track in Timeline Viewport."
+msgstr "Alternar Pista en la Ventana de Edición."
+
+msgid "Toggle Transitions in Timeline Viewport."
+msgstr "Mostrar Transiciones en la Ventana de Edición."
+
+msgid "Select OTIO's Media Reference Key."
+msgstr "Seleccionar la LLave de Referencia de Medio de OTIO."
+
+msgid "Set Small Thumbnails in Timeline Viewport."
+msgstr "Setear Miniaturas Pequeñas en la Ventana de Edición."
+
+msgid "Set Medium Thumbnails in Timeline Viewport."
+msgstr "Setear Miniaturas Medias en la Ventana de Edición."
+
+msgid "Set Large Thumbnails in Timeline Viewport."
+msgstr "Setear Miniaturas Grandes en la Ventana de Edición."
+
 msgid "Pick Color"
 msgstr "Elegir Color"
 
 msgid "Pick Draw Color and Alpha"
 msgstr "Elegir Color y Opacidad de Dibujo"
 
+msgid "Flip Pen Colors."
+msgstr "Intercambiar Color del Lápiz."
+
+msgid "Go to First Image Version."
+msgstr "Ir a Primera Versión del Clip."
+
+msgid "Go to Previous Image Version."
+msgstr "Ir a Versión Previa del Clip."
+
+msgid "Go to Next Image Version."
+msgstr "Ir a Próxima Versión del Clip"
+
+msgid "Go to Last Image Version."
+msgstr "Ir a Última Versión de la Imagen."
+
+msgid "Give a donation to support development and unlock features."
+msgstr "De una donación para soportar el desarrollo y destrabar prestaciones."
+
 msgid "Install is broken.  Missing license_helper"
 msgstr "La instalación está dañada. Falta license_helper"
+
+msgid "Online documentation."
+msgstr "Documentación Online."
+
+msgid "Toggle Annotations."
+msgstr "Alternar Mostrar Anotaciones."
+
+msgid "Toggle Sync Elements."
+msgstr "Alternar Elementos de Sincronismo en conección WebRTC."
 
 msgid "Media"
 msgstr "Medios"
@@ -3609,11 +4116,51 @@ msgstr "Paneo y Zoom"
 msgid "Timeline"
 msgstr "Línea de Tiempo"
 
+msgid "Toggle Receive Elements."
+msgstr "Alternar Elementos de Recibir en conección WebRTC"
+
+msgid "Save state of UI and files to a new .mrv2s session file."
+msgstr "Corre el mismo o otro mrv2 con un archivo de sesión."
+
+msgid "Save state of UI and files to a .mrv2s session file."
+msgstr ""
+"Grabe el estado de la IU y archivos a con un archivo de sesión .mrv2s."
+
+msgid "Load a session file which stores the state of the UI and files."
+msgstr "Cargue un archivo de sesión que guarda el estado de la IU y archivos."
+
+msgid "Save and restart a temporary session."
+msgstr "Grabar y recargar una sesión temporaria."
+
 msgid "Could not restart mrv2 instance with a session file."
 msgstr "Corre el mismo o otro mrv2 con un archivo de sesión."
 
 msgid "Edit Text Annotation"
 msgstr "Editar Anotación de Texto"
+
+msgid "Clone the File."
+msgstr "Cerrar archivo actual."
+
+msgid "Reload the File."
+msgstr "Recargar el Arhivo."
+
+msgid "Set 3D Stereo image."
+msgstr "Setear el otro ojo de la imagen estéreo."
+
+msgid "Update the current frame cache."
+msgstr "Actualizar el cache del cuadro actual."
+
+msgid "Refresh the frame cache."
+msgstr "Refrescar el cache de cuadros."
+
+msgid "Refresh the movie."
+msgstr "Refrescar la película."
+
+msgid "Copy the Filename to the clipboard."
+msgstr "Copy el Nombre del Archivo al clipboard."
+
+msgid "Bring up the File Manager."
+msgstr "Abra el Buscador de Archivos."
 
 msgid "No item selected"
 msgstr "Ningún item seleccionado"
@@ -4489,17 +5036,17 @@ msgstr "Editar/Tiempo/Espacio de audio/Insertar"
 msgid "Edit/Time/Audio Gap/Remove"
 msgstr "Editar/Tiempo/Espacio de audio/Eliminar"
 
-msgid "Edit/Selected/Add Transition"
-msgstr "Editar/Seleccionado/Añadir transición"
-
-msgid "Edit/Selected/Remove Items"
-msgstr "Editar/Seleccionado/Eliminar elementos"
-
 msgid "Edit/Time/Remove Clips"
 msgstr "Editar/Tiempo/Eliminar clips"
 
 msgid "Edit/Time/Slice"
 msgstr "Editar/Tiempo/Cortar"
+
+msgid "Edit/Selected/Add Transition"
+msgstr "Editar/Seleccionado/Añadir transición"
+
+msgid "Edit/Selected/Remove Items"
+msgstr "Editar/Seleccionado/Eliminar elementos"
 
 msgid "Edit/Undo"
 msgstr "Editar/&Deshacer"
@@ -6084,6 +6631,9 @@ msgstr "TileGroup"
 
 msgid "ViewGroup"
 msgstr "ViewGroup"
+
+msgid "Clip Selection Tool."
+msgstr "Herramienta de Selección de Clips."
 
 msgid "Undo Last Edit."
 msgstr "Deshacer Última Edición."
@@ -8632,9 +9182,6 @@ msgstr "task info falló"
 #~ msgid "Repeat  Frame"
 #~ msgstr "Repetir Cuadro"
 
-#~ msgid "Set file sequence audio directory."
-#~ msgstr "Setear el directorio de audio para la secuencia."
-
 #~ msgid "Get file sequence audio directory."
 #~ msgstr "Obtener el directorio de audio para la secuencia."
 
@@ -9236,9 +9783,6 @@ msgstr "task info falló"
 #~ msgid "Renderer"
 #~ msgstr "Renderizador"
 
-#~ msgid "Video Levels Legal Range HDR"
-#~ msgstr "Niveles de video - rango legal HDR"
-
 #~ msgid "Enter a UR."
 #~ msgstr "Introduzca una URL."
 
@@ -9325,9 +9869,6 @@ msgstr "task info falló"
 #~ "Tus compositor Wayland no soporta Siempre Arriba.  Vaya a la barra de título"
 #~ " de la imagen de Window y cliqueá Botón Derecho del Ratón->Mas "
 #~ "Acciones->Mantener sobre Otras"
-
-#~ msgid "Load Movie or Sequence"
-#~ msgstr "Cargar Película o Secuencia"
 
 #~ msgid "uiMenuBar"
 #~ msgstr "uiMenuBar"
