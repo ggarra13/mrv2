@@ -352,10 +352,28 @@ namespace mrv
 
             // Start the annotation render.
             timeline::RenderOptions renderOptions;
-            renderOptions.glyphTexture = false;
             renderOptions.vaoSize = 16 * memory::megabyte;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
 
+            // Check if we have a text annotation and make sure to create the
+            // glyph texture.
+            bool glyphTexture = false;
+            for (const auto& annotation : annotations)
+            {
+                if (glyphTexture)
+                    break;
+                const auto& shapes = annotation->shapes;
+                for (const auto& shape : shapes)
+                {
+                    if (auto s = dynamic_cast<VKTextShape*>(shape.get()))
+                    {
+                        glyphTexture = true;
+                        break;
+                    }
+                }
+            }
+
+            renderOptions.glyphTexture = glyphTexture;
             render->begin(vk.cmd, annotationBuffer, frameIndex,
                           renderSize, renderOptions);
             render->setOCIOOptions(timeline::OCIOOptions());

@@ -22,6 +22,7 @@ Fixes
 - Edit: Made all Edit functions work properly.
 
 - Core: Switching back to **Preferences->Loading->Missing Frames->Error** would not trigger a reload of the file.
+- Core: Adding a text annotation no longer crashes vmrv2.  This was a regressionfrom v1.7.8.
 
 
 Translations
