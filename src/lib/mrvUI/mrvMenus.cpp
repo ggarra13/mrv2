@@ -1621,7 +1621,7 @@ namespace mrv
                     idx = menu->add(
                         _("Image/Compare/Toggle A and B"), 0,
                         (Fl_Callback*)toggle_compare_a_and_b_cb,
-                        ui, 0);
+                        ui, mode);
 
                     snprintf(buf, 256, _("Image/Compare/%s"), fileName.c_str());
                     idx = menu->add(
