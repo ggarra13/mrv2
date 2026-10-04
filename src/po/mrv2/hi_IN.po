@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 09:34-0300\n"
+"POT-Creation-Date: 2026-10-04 11:24-0300\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -3290,7 +3290,7 @@ msgstr "वर्तमान समय पर ऑडियो क्लिप �
 msgid "Remove selected items."
 msgstr "चयनित आइटम हटाएँ।"
 
-msgid "Remove audio gap(s) at the ones at current time."
+msgid "Remove audio gap(s) at the current time."
 msgstr "वर्तमान समय पर ऑडियो गैप हटाएँ।"
 
 msgid "Insert video gap(s) at current time."
@@ -3660,100 +3660,91 @@ msgid "No debanding."
 msgstr "कोई डिबैंडिंग नहीं।"
 
 msgid "Blur movie a bit to avoid banding."
-msgstr ""
+msgstr "बैंडिंग से बचने के लिए फ़िल्म को थोड़ा धुंधला करें।"
 
 msgid "Blur movie medium to avoid banding."
-msgstr ""
+msgstr "बैंडिंग से बचने के लिए फ़िल्म को मध्यम रूप से धुंधला करें।"
 
 msgid "Blur movie high to avoid banding."
-msgstr ""
+msgstr "बैंडिंग से बचने के लिए फ़िल्म को अधिक धुंधला करें।"
 
 msgid "Minify filter with nearest algorithm."
-msgstr ""
+msgstr "नज़दीकी एल्गोरिदम के साथ मिनिफ़ाई फ़िल्टर का उपयोग करें।"
 
 msgid "Minify filter with linear algorithm."
-msgstr ""
+msgstr "लीनियर एल्गोरिदम के साथ मिनिफ़ाई फ़िल्टर का उपयोग करें।"
 
 msgid "Magnify filter with nearest algorithm."
-msgstr ""
+msgstr "नज़दीकी एल्गोरिदम के साथ मैग्निफ़ाई फ़िल्टर का उपयोग करें।"
 
 msgid "Magnify filter with linear algorithm."
-msgstr ""
+msgstr "लीनियर एल्गोरिदम के साथ मैग्निफ़ाई फ़िल्टर का उपयोग करें।"
 
 msgid "Mirror clip in X."
-msgstr ""
+msgstr "क्लिप को X अक्ष पर मिरर करें।"
 
 msgid "Mirror clip in Y."
-msgstr ""
+msgstr "क्लिप को Y अक्ष पर मिरर करें।"
 
-#, fuzzy
 msgid "Use HDR data from file."
-msgstr "फ़ाइल से HDR डेटा"
+msgstr "फ़ाइल से HDR डेटा का उपयोग करें।"
 
 msgid "Don't use HDR data."
-msgstr ""
+msgstr "HDR डेटा का उपयोग न करें।"
 
 msgid "Use Latest HDR data."
-msgstr ""
+msgstr "नवीनतम HDR डेटा का उपयोग करें।"
 
-#, fuzzy
 msgid "Rotate image 90 degrees."
-msgstr "छवि को + 90 डिग्री घुमाएं"
+msgstr "छवि को 90 डिग्री घुमाएँ।"
 
-#, fuzzy
 msgid "Rotate image -90 degrees."
-msgstr "छवियों को - 90 डिग्री घुमाएं"
+msgstr "छवि को -90 डिग्री घुमाएँ।"
 
-#, fuzzy
 msgid "Show the red channel of the layer."
-msgstr "ब फ़ाइल के ऊपर एक फ़ाइल दिखाएँ"
+msgstr "लेयर का लाल चैनल दिखाएँ।"
 
 msgid "Show the green channel of the layer."
-msgstr ""
+msgstr "लेयर का हरा चैनल दिखाएँ।"
 
-#, fuzzy
 msgid "Show the blue channel of the layer."
-msgstr "ब फ़ाइल के ऊपर एक फ़ाइल दिखाएँ"
+msgstr "लेयर का नीला चैनल दिखाएँ।"
 
 msgid "Show the alpha channel of the layer."
-msgstr ""
+msgstr "लेयर का अल्फ़ा चैनल दिखाएँ।"
 
 msgid "Show the combined lumma channel of the layer."
-msgstr ""
+msgstr "लेयर का संयुक्त ल्यूमा चैनल दिखाएँ।"
 
-#, fuzzy
 msgid "Show the RGB channel of the layer."
-msgstr "ब फ़ाइल के ऊपर एक फ़ाइल दिखाएँ"
+msgstr "लेयर का RGB चैनल दिखाएँ।"
 
-#, fuzzy
 msgid "Normalize the image to be between 0 and 1."
-msgstr "0 और 1 के बीच छवि के टिंट बदलें."
+msgstr "छवि को 0 और 1 के बीच सामान्यीकृत करें।"
 
-#, fuzzy
 msgid "Ignore OpenEXR chromaticities if present."
-msgstr "टॉगलिकता अनदेखा करें"
+msgstr "यदि मौजूद हों तो OpenEXR क्रोमैटिसिटी को अनदेखा करें।"
 
 msgid "Show values below 0 and above 1 as red pixels"
-msgstr ""
+msgstr "0 से कम और 1 से अधिक मानों को लाल पिक्सेल के रूप में दिखाएँ"
 
 msgid ""
 "Toggle HDR peak detection to adjust the movie's luminosity while playing."
 msgstr ""
+"HDR पीक डिटेक्शन को टॉगल करें ताकि प्लेबैक के दौरान फ़िल्म की चमक समायोजित "
+"हो।"
 
-#, fuzzy
 msgid "Select Tonemap algorithm."
-msgstr "टोनमैप एल्गोरिदम"
+msgstr "टोनमैप एल्गोरिदम चुनें।"
 
 msgid "Select Gamut mapping algorithm."
-msgstr ""
+msgstr "गैमट मैपिंग एल्गोरिदम चुनें।"
 
-#, fuzzy
 msgid "Toggles Fullscreen Mode."
-msgstr "पूरा स्क्रीन टॉगल करें"
+msgstr "फ़ुलस्क्रीन मोड को टॉगल करें।"
 
-#, fuzzy
 msgid "Toggles Presentation Mode."
-msgstr "प्रस्तुतीकरण टॉगल करें"
+msgstr "प्रेज़ेंटेशन मोड को टॉगल करें।"
 
 msgid "Toggles Window to Float above others."
 msgstr "विंडो को अन्य विंडो के ऊपर फ़्लोट करने के लिए चालू/बंद करें।"
@@ -9040,6 +9031,9 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "वर्तमान समय पर ऑडियो गैप हटाएँ।"
 
 #~ msgid "Complexity"
 #~ msgstr "जटिलता"

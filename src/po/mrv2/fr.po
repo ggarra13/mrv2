@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 09:34-0300\n"
+"POT-Creation-Date: 2026-10-04 11:24-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: fr\n"
@@ -3322,8 +3322,8 @@ msgstr "Supprimer les clips audio à l'instant actuel."
 msgid "Remove selected items."
 msgstr "Supprimer les éléments sélectionnés."
 
-msgid "Remove audio gap(s) at the ones at current time."
-msgstr "Supprimer le ou les espaces audio à l'instant actuel."
+msgid "Remove audio gap(s) at the current time."
+msgstr "Supprimer la ou les lacunes audio à l'instant actuel."
 
 msgid "Insert video gap(s) at current time."
 msgstr "Insérer un ou plusieurs espaces vidéo à l'instant actuel."
@@ -3607,72 +3607,59 @@ msgstr "Aller au fichier précédent."
 msgid "Go to Next File."
 msgstr "Aller au fichier suivant."
 
-#, fuzzy
 msgid "Toggle A and B comparison."
-msgstr "A/Mode de comparaison B."
+msgstr "Activer/désactiver la comparaison A et B."
 
-#, fuzzy
 msgid "Compare A."
-msgstr "Comparer A"
+msgstr "Comparer A."
 
-#, fuzzy
 msgid "Compare B."
-msgstr "Comparer B"
+msgstr "Comparer B."
 
-#, fuzzy
 msgid "Compare Wipe."
-msgstr "Comparer Essuie-glace"
+msgstr "Comparer avec balayage."
 
-#, fuzzy
 msgid "Compare Overlay."
-msgstr "Comparer Superposition"
+msgstr "Comparer avec superposition."
 
-#, fuzzy
 msgid "Compare A - B difference."
-msgstr "Comparer la différence"
+msgstr "Comparer la différence A - B."
 
-#, fuzzy
 msgid "Compare A + B."
-msgstr "Comparer A"
+msgstr "Comparer A + B."
 
-#, fuzzy
 msgid "Compare A * B."
-msgstr "Comparer A"
+msgstr "Comparer A * B."
 
 msgid "Compare A next to flipped B."
-msgstr ""
+msgstr "Comparer A à côté de B inversé."
 
-#, fuzzy
 msgid "Compare A and B Horizontally."
-msgstr "Comparer horizontalement"
+msgstr "Comparer A et B horizontalement."
 
-#, fuzzy
 msgid "Compare A and B Vertically."
-msgstr "Comparer Vertical"
+msgstr "Comparer A et B verticalement."
 
 msgid "Compare A and one or many clips Tiled."
-msgstr ""
+msgstr "Comparer A et un ou plusieurs clips en mosaïque."
 
 msgid "File extension cannot be empty."
 msgstr "L'extension de fichier ne peut pas être vide."
 
-#, fuzzy
 msgid "Save a single frame of the current clip."
-msgstr "Enregistrez un seul cadre."
+msgstr "Enregistrer une seule image du clip actuel."
 
 msgid "Keep saving frames to the same folder."
-msgstr ""
+msgstr "Continuer à enregistrer les images dans le même dossier."
 
-#, fuzzy
 msgid "Save the audio of the current clip."
-msgstr "Réglez le mutisme de l'audio."
+msgstr "Enregistrer l'audio du clip actuel."
 
 msgid "Saving audio but not with an audio extension."
 msgstr "Enregistrement audio mais pas avec une extension audio."
 
-#, fuzzy
 msgid "Export a movie or a sequence."
-msgstr "Charger le film ou la séquence"
+msgstr "Exporter un film ou une séquence."
 
 msgid "Saving audio but current clip does not have audio."
 msgstr "Enregistrer l'audio mais le clip courant n'a pas d'audio."
@@ -3680,39 +3667,35 @@ msgstr "Enregistrer l'audio mais le clip courant n'a pas d'audio."
 msgid "Saving video but with an audio extension."
 msgstr "Enregistrement vidéo mais avec une extension audio."
 
-#, fuzzy
 msgid "Save annotations as a PDF."
-msgstr "Enregistrer les annotations dans le PDF"
+msgstr "Enregistrer les annotations au format PDF."
 
-#, fuzzy
 msgid "Save annotations only as a movie or sequence."
-msgstr "Enregistrez seulement les images annotées, pas toute la séquence."
+msgstr ""
+"Enregistrer uniquement les annotations sous forme de film ou de séquence."
 
 msgid "Cannot save annotations to .otio file"
 msgstr "Impossible d'enregistrer les annotations dans le fichier.otio"
 
-#, fuzzy
 msgid "Save annotations as a .json file"
-msgstr "Impossible d'enregistrer les annotations dans le fichier.otio"
+msgstr "Enregistrer les annotations dans un fichier .json"
 
-#, fuzzy
 msgid "Close current file."
-msgstr "Fermer le nom de fichier actuel"
+msgstr "Fermer le fichier actuel."
 
 msgid "Exit the program.  Warns if edits or annotations have been made."
 msgstr ""
+"Quitter le programme. Avertit si des modifications ou des annotations ont "
+"été effectuées."
 
-#, fuzzy
 msgid "Previous layer."
-msgstr "Image précédente"
+msgstr "Calque précédent."
 
-#, fuzzy
 msgid "Next layer."
-msgstr "Nom du fichier suivant"
+msgstr "Calque suivant."
 
-#, fuzzy
 msgid "No debanding."
-msgstr "Chargement"
+msgstr "Pas de débandeing."
 
 msgid "Blur movie a bit to avoid banding."
 msgstr "Flouter légèrement le film pour éviter le banding."
@@ -9176,6 +9159,9 @@ msgstr "host_statistics64 a échoué"
 
 msgid "task info failed"
 msgstr "l'information de la tâche a échoué"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "Supprimer le ou les espaces audio à l'instant actuel."
 
 #~ msgid "Complexity"
 #~ msgstr "Complexité"

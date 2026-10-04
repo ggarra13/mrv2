@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 09:34-0300\n"
+"POT-Creation-Date: 2026-10-04 11:24-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Insecty <insecty_l@163.com>\n"
 "Language: zh-CN\n"
@@ -3242,7 +3242,7 @@ msgstr "删除当前时间的音频剪辑。"
 msgid "Remove selected items."
 msgstr "删除选中的项目。"
 
-msgid "Remove audio gap(s) at the ones at current time."
+msgid "Remove audio gap(s) at the current time."
 msgstr "删除当前时间的音频间隔。"
 
 msgid "Insert video gap(s) at current time."
@@ -8847,6 +8847,9 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "任务信息失败"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "删除当前时间的音频间隔。"
 
 #~ msgid "Complexity"
 #~ msgstr "复杂程度"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 09:34-0300\n"
+"POT-Creation-Date: 2026-10-04 11:24-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -3315,7 +3315,7 @@ msgstr "Audioclips an der aktuellen Zeit entfernen."
 msgid "Remove selected items."
 msgstr "Ausgewählte Elemente entfernen."
 
-msgid "Remove audio gap(s) at the ones at current time."
+msgid "Remove audio gap(s) at the current time."
 msgstr "Audiolücke(n) an der aktuellen Zeit entfernen."
 
 msgid "Insert video gap(s) at current time."
@@ -9114,6 +9114,9 @@ msgstr "host_statistik64 fehlgeschlagen"
 
 msgid "task info failed"
 msgstr "Task-Info fehlgeschlagen"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "Audiolücke(n) an der aktuellen Zeit entfernen."
 
 #~ msgid "Complexity"
 #~ msgstr "Komplexität"

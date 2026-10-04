@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 09:34-0300\n"
+"POT-Creation-Date: 2026-10-04 11:24-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: ru\n"
@@ -3329,8 +3329,8 @@ msgstr "Удалить аудиоклипы в текущий момент вр�
 msgid "Remove selected items."
 msgstr "Удалить выбранные элементы."
 
-msgid "Remove audio gap(s) at the ones at current time."
-msgstr "Удалить аудиоразрыв(ы) в текущий момент времени."
+msgid "Remove audio gap(s) at the current time."
+msgstr "Удалить пробелы в аудио в текущий момент времени."
 
 msgid "Insert video gap(s) at current time."
 msgstr "Вставить видеоразрыв(ы) в текущий момент времени."
@@ -9098,6 +9098,9 @@ msgstr "shop_statistics64 не сработал"
 
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "Удалить аудиоразрыв(ы) в текущий момент времени."
 
 #~ msgid "Complexity"
 #~ msgstr "Сложность"
