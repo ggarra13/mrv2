@@ -5,12 +5,14 @@ v1.8.0
 - UI: Built-in File Requester (used mainly on Linux) no longer shows the patterns in a floating window.
 - UI: Added tooltips in the status bar for each menu entry.
 - UI/Core: Annotations are now drawn much faster, as they don't need three render engines.
+- UI/Compare has been moved to Image/Compare Mode.  You can now also easily select what to compare from the RMBB menus.
 
 - Command-Line: Now -systemInfo will list all libraries used in the players.
 - Command-Line: Now -systemInfo will now show up the start up message.
 - Command-Line: Now -systemInfo properly displays the graphics card information on the OpenGL backend.
 
 - Core/Command-Line: Opening many files at once or a directory no longer reads every one of them immediately.
+- Core: The Vulkan backend now starts much faster and uses less memory. 
 
 
 Fixes

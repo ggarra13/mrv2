@@ -1239,49 +1239,6 @@ namespace mrv
         if (hudClass)
             item->set();
 
-        snprintf(buf, 256, "%s", _("View/Compare/None"));
-        idx = menu->add(
-            buf, kCompareNone.hotkey(), (Fl_Callback*)compare_a_cb, ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Overlay"));
-        idx = menu->add(
-            buf, kCompareOverlay.hotkey(), (Fl_Callback*)compare_overlay_cb, ui,
-            mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Wipe"));
-        idx = menu->add(
-            buf, kCompareWipe.hotkey(), (Fl_Callback*)compare_wipe_cb, ui,
-            mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Difference"));
-        idx = menu->add(
-            buf, kCompareDifference.hotkey(),
-            (Fl_Callback*)compare_difference_cb, ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Add"));
-        idx = menu->add(
-            buf, kCompareAdd.hotkey(),
-            (Fl_Callback*)compare_add_cb, ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Multiply"));
-        idx = menu->add(
-            buf, kCompareAdd.hotkey(),
-            (Fl_Callback*)compare_multiply_cb, ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Horizontal"));
-        idx = menu->add(
-            buf, kCompareHorizontal.hotkey(),
-            (Fl_Callback*)compare_horizontal_cb, ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Vertical"));
-        idx = menu->add(
-            buf, kCompareVertical.hotkey(), (Fl_Callback*)compare_vertical_cb,
-            ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Tile"));
-        idx = menu->add(
-            buf, kCompareTile.hotkey(), (Fl_Callback*)compare_tile_cb, ui,
-            mode);
 
         mode = FL_MENU_CHATTY;
         if (numFiles == 0)
@@ -1521,120 +1478,117 @@ namespace mrv
                     (Fl_Callback*)next_image_version_cb, ui, mode);
             }
 
-            if (numFiles > 1)
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
+
+            auto o = model->observeCompareOptions()->get();
+            idx = menu->add(
+                _("Image/Compare Mode/A"), 0, (Fl_Callback*)compare_a_cb,
+                ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::A)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/B"), 0, (Fl_Callback*)compare_b_cb,
+                ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::B)
+                item->set();
+
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
+            idx = menu->add(
+                _("Image/Compare Mode/Wipe"), 0,
+                (Fl_Callback*)compare_wipe_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Wipe)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Overlay"), 0,
+                (Fl_Callback*)compare_overlay_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Overlay)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Difference"), 0,
+                (Fl_Callback*)compare_difference_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Difference)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Add"), 0,
+                (Fl_Callback*)compare_add_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Add)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Multiply"), 0,
+                (Fl_Callback*)compare_multiply_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Multiply)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Horizontal"), 0,
+                (Fl_Callback*)compare_horizontal_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Horizontal)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Vertical"), 0,
+                (Fl_Callback*)compare_vertical_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Vertical)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Tile"), 0,
+                (Fl_Callback*)compare_tile_cb, ui, mode | FL_MENU_DIVIDER);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Tile)
+                item->set();
+
+            const auto& Aindex = model->observeAIndex()->get();
+            const auto& Bindexes = model->observeBIndexes()->get();
+
+            mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
+            for (size_t i = 0; i < numFiles; ++i)
             {
-                mode = FL_MENU_CHATTY | FL_MENU_RADIO;
 
-                auto o = model->observeCompareOptions()->get();
+                const auto& path = files[i]->path;
+                fileName = path.getBaseName() + path.getNumber() +
+                           path.getSuffix() + path.getExtension() +
+                           path.getRequest();
+                snprintf(buf, 256, _("Image/Go to/%s"), fileName.c_str());
+                std::uintptr_t ptr = i;
                 idx = menu->add(
-                    _("Image/Compare Mode/A"), 0, (Fl_Callback*)compare_a_cb,
+                    buf, 0, (Fl_Callback*)goto_file_cb, (void*)ptr, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (i == Aindex)
+                    item->set();
+                else
+                    item->clear();
+
+                idx = menu->add(
+                    _("Image/Compare/Toggle A and B"), 0,
+                    (Fl_Callback*)toggle_compare_a_and_b_cb,
                     ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::A)
-                    item->set();
 
+                snprintf(buf, 256, _("Image/Compare/%s"), fileName.c_str());
                 idx = menu->add(
-                    _("Image/Compare Mode/B"), 0, (Fl_Callback*)compare_b_cb,
-                    ui, mode);
+                    buf, 0, (Fl_Callback*)select_Bfile_cb, (void*)ptr,
+                    mode);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::B)
-                    item->set();
-
-                mode = FL_MENU_CHATTY | FL_MENU_RADIO;
-                idx = menu->add(
-                    _("Image/Compare Mode/Wipe"), 0,
-                    (Fl_Callback*)compare_wipe_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Wipe)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Overlay"), 0,
-                    (Fl_Callback*)compare_overlay_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Overlay)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Difference"), 0,
-                    (Fl_Callback*)compare_difference_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Difference)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Add"), 0,
-                    (Fl_Callback*)compare_add_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Add)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Multiply"), 0,
-                    (Fl_Callback*)compare_multiply_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Multiply)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Horizontal"), 0,
-                    (Fl_Callback*)compare_horizontal_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Horizontal)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Vertical"), 0,
-                    (Fl_Callback*)compare_vertical_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Vertical)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Tile"), 0,
-                    (Fl_Callback*)compare_tile_cb, ui, mode | FL_MENU_DIVIDER);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Tile)
-                    item->set();
-
-                const auto& Aindex = model->observeAIndex()->get();
-                const auto& Bindexes = model->observeBIndexes()->get();
-
-                mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
-                for (size_t i = 0; i < numFiles; ++i)
+                for (size_t j = 0; j < Bindexes.size(); ++j)
                 {
-
-                    const auto& path = files[i]->path;
-                    fileName = path.getBaseName() + path.getNumber() +
-                               path.getSuffix() + path.getExtension() +
-                               path.getRequest();
-                    snprintf(buf, 256, _("Image/Go to/%s"), fileName.c_str());
-                    std::uintptr_t ptr = i;
-                    idx = menu->add(
-                        buf, 0, (Fl_Callback*)goto_file_cb, (void*)ptr, mode);
-                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                    if (i == Aindex)
-                        item->set();
-                    else
-                        item->clear();
-
-                    idx = menu->add(
-                        _("Image/Compare/Toggle A and B"), 0,
-                        (Fl_Callback*)toggle_compare_a_and_b_cb,
-                        ui, mode);
-
-                    snprintf(buf, 256, _("Image/Compare/%s"), fileName.c_str());
-                    idx = menu->add(
-                        buf, 0, (Fl_Callback*)select_Bfile_cb, (void*)ptr,
-                        mode);
-                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                    for (size_t j = 0; j < Bindexes.size(); ++j)
+                    if (i == Bindexes[j])
                     {
-                        if (i == Bindexes[j])
-                        {
-                            item->set();
-                            break;
-                        }
+                        item->set();
+                        break;
                     }
                 }
             }
