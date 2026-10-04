@@ -24,6 +24,18 @@ namespace tl
 {
     namespace timeline_vlk
     {
+        namespace
+        {
+            //! Pipelines are cached by name and by pipeline group (the
+            //! render target they were built for).  The main target has an
+            //! empty group, so its keys are the plain pipeline names.
+            std::string pipelineKey(const std::string& name,
+                                    const std::string& group)
+            {
+                return group.empty() ? name : name + "@" + group;
+            }
+        }
+
         void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
         {
             TLRENDER_P();
@@ -156,17 +168,18 @@ namespace tl
             pipelineState.renderPass = renderPass;
             pipelineState.layout = pipelineLayout;
 
+            const std::string key = pipelineKey(pipelineName, p.pipelineGroup);
             VkPipeline pipeline;
-            if (p.pipelines.count(pipelineName) == 0)
+            if (p.pipelines.count(key) == 0)
             {
                 DEBUG_PIPELINE("CREATING   pipeline " << pipelineName);
                 pipeline = pipelineState.create(device);
-                p.pipelines[pipelineName] = std::make_pair(pipelineState,
+                p.pipelines[key] = std::make_pair(pipelineState,
                                                            pipeline);
             }
             else
             {
-                const auto& pair = p.pipelines[pipelineName];
+                const auto& pair = p.pipelines[key];
                 const auto& oldPipelineState = pair.first;
                 VkPipeline oldPipeline = pair.second;
                 if (pipelineState != oldPipelineState)
@@ -176,7 +189,7 @@ namespace tl
                         oldPipeline);
                     pipeline = pipelineState.create(device);
                     auto pair = std::make_pair(pipelineState, pipeline);
-                    p.pipelines[pipelineName] = pair;
+                    p.pipelines[key] = pair;
                 }
                 else
                 {
@@ -186,7 +199,7 @@ namespace tl
 
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-            p.currentPipeline = pipelineName;
+            p.currentPipeline = key;
         }
 
         void Render::createPipeline(
@@ -248,15 +261,18 @@ namespace tl
         {
             TLRENDER_P();
 
-            if (p.currentPipeline == pipelineName)
+            const std::string key = pipelineKey(pipelineName, p.pipelineGroup);
+            if (p.currentPipeline == key)
                 return;
 
-            const auto& pair = p.pipelines[pipelineName];
-            VkPipeline pipeline = pair.second;
+            const auto pipelineIt = p.pipelines.find(key);
+            if (pipelineIt == p.pipelines.end())
+                return;
+            VkPipeline pipeline = pipelineIt->second.second;
 
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-            p.currentPipeline = pipelineName;
+            p.currentPipeline = key;
 
             ++(p.currentStats.pipelineChanges);
         }

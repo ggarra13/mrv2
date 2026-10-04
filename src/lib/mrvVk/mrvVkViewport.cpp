@@ -558,8 +558,6 @@ namespace mrv
 
             // Destroy main renderers
             vk.render.reset();
-            vk.annotationRender.reset();
-            vk.overlayRender.reset();
 
             // Destroy auxiliary render classes
             vk.lines.reset();
@@ -628,9 +626,6 @@ namespace mrv
                 // Set the renderers's max nits
                 if (!vk.render)
                     vk.render = timeline_vlk::Render::create(ctx, context);
-
-                if (!vk.annotationRender)
-                    vk.annotationRender = timeline_vlk::Render::create(ctx, context);
 
 #if FLTK_HAVE_PEN_SUPPORT
                 if (!desktop::X11() && !desktop::XWayland())
@@ -1147,7 +1142,7 @@ namespace mrv
                 }
 
                 _drawAnnotations(
-                    vk.annotation, vk.annotationRender,
+                    vk.annotation,
                     mvp, currentTime, annotations, voannotations, viewportSize);
 
             }
@@ -1176,19 +1171,12 @@ namespace mrv
                         vk.overlay = vlk::OffscreenBuffer::create(ctx,
                                                                   renderSize,
                                                                   offscreenBufferOptions);
-                        if (!vk.overlayRender)
-                        {
-                            if (auto context = vk.context.lock())
-                            {
-                                vk.overlayRender = timeline_vlk::Render::create(ctx, context);
-                            }
-                        }
                     }
 
                     const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
 
                     _drawAnnotations(
-                        vk.overlay, vk.overlayRender,
+                        vk.overlay,
                         renderMVP, currentTime, annotations, voannotations,
                         renderSize);
 

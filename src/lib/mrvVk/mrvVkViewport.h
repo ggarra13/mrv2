@@ -114,7 +114,6 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
             void _drawAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
-                const std::shared_ptr<tl::timeline_vlk::Render>& render,
                 const math::Matrix4x4f& renderMVP,
                 const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>&
@@ -125,7 +124,6 @@ namespace mrv
 #else
             void _drawAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
-                const std::shared_ptr<tl::timeline_vlk::Render>& render,
                 const math::Matrix4x4f& renderMVP,
                 const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>&

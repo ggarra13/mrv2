@@ -1642,6 +1642,108 @@ namespace tl
             p.fbo->transitionToShaderRead(p.cmd);
         }
 
+        void Render::beginPass(
+            VkCommandBuffer& cmd,
+            const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+            const math::Size2i& renderSize,
+            const timeline::RenderOptions& renderOptions,
+            const std::string& pipelineGroup)
+        {
+            TLRENDER_P();
+
+            // Save the state of the outer pass.
+            Private::PassState outer;
+            outer.cmd = p.cmd;
+            outer.fbo = p.fbo;
+            outer.renderPass = p.renderPass;
+            outer.renderSize = p.renderSize;
+            outer.transform = p.transform;
+            outer.viewport = p.viewport;
+            outer.clipRectEnabled = p.clipRectEnabled;
+            outer.clipRect = p.clipRect;
+            outer.pipelineGroup = p.pipelineGroup;
+            outer.currentPipeline = p.currentPipeline;
+            outer.renderOptions = p.renderOptions;
+            p.passStack.push_back(std::move(outer));
+
+            // Retarget the renderer.  Note that we deliberately do NOT touch
+            // p.frameIndex, the garbage collector or the VAO pool: those are
+            // per frame and were set up by begin().
+            p.cmd = cmd;
+            p.fbo = fbo;
+            p.renderPass = fbo->getClearRenderPass();
+            p.renderSize = renderSize;
+            p.renderOptions = renderOptions;
+            p.pipelineGroup = pipelineGroup;
+            p.currentPipeline.clear();
+            p.clipRectEnabled = false;
+
+            if (renderOptions.glyphTexture && !p.glyphTextureAtlas)
+            {
+                p.glyphTextureAtlas = vlk::TextureAtlas::create(
+                    ctx, 1, 4096, image::PixelType::L_U8,
+                    timeline::ImageFilter::Linear);
+            }
+
+#if USE_DYNAMIC_RGBA_WRITE_MASKS
+            if (ctx.vkCmdSetColorWriteMaskEXT)
+            {
+                const VkColorComponentFlags allMask[] =
+                    { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                      VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+                ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+            }
+#endif
+
+#if USE_DYNAMIC_STENCILS
+            if (ctx.vkCmdSetStencilTestEnableEXT)
+            {
+                ctx.vkCmdSetStencilTestEnableEXT(cmd, VK_FALSE);
+                ctx.vkCmdSetStencilOpEXT(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                vkCmdSetStencilCompareMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFFFFFFFF);
+                vkCmdSetStencilWriteMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFFFFFFFF);
+            }
+#endif
+
+            setTransform(
+                math::ortho(
+                    0.F, static_cast<float>(renderSize.w), 0.F,
+                    static_cast<float>(renderSize.h), -1.F, 1.F));
+        }
+
+        void Render::endPass()
+        {
+            TLRENDER_P();
+
+            if (p.passStack.empty())
+                return;
+
+            // Same as end(): leave the target ready to be sampled.
+            p.fbo->transitionToShaderRead(p.cmd);
+
+            // Restore the outer pass.
+            Private::PassState outer = std::move(p.passStack.back());
+            p.passStack.pop_back();
+
+            p.cmd = outer.cmd;
+            p.fbo = std::move(outer.fbo);
+            p.renderPass = outer.renderPass;
+            p.renderSize = outer.renderSize;
+            p.transform = outer.transform;
+            p.viewport = outer.viewport;
+            p.clipRectEnabled = outer.clipRectEnabled;
+            p.clipRect = outer.clipRect;
+            p.pipelineGroup = std::move(outer.pipelineGroup);
+            p.currentPipeline = std::move(outer.currentPipeline);
+            p.renderOptions = std::move(outer.renderOptions);
+        }
+
         VkCommandBuffer Render::getCommandBuffer() const
         {
             return _p->cmd;

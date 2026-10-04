@@ -86,6 +86,30 @@ namespace tl
                 const timeline::RenderOptions& = timeline::RenderOptions());
             void end() override;
 
+            //! Begin an additional offscreen pass inside the frame started by
+            //! begin().  This lets ONE renderer draw into several buffers
+            //! (video, annotations, output-device overlay) without
+            //! re-running the per-frame setup of begin() (garbage
+            //! collection, VAO pool bind).
+            //!
+            //! The state of the outer pass (fbo, render size, transform,
+            //! viewport, clip rect, pipeline group) is saved and restored by
+            //! endPass().
+            //!
+            //! \param pipelineGroup Name used to keep this target's
+            //! pipelines apart from the ones of other targets with a
+            //! different render pass (for example "annotation").
+            void beginPass(
+                VkCommandBuffer& cmd,
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const math::Size2i& renderSize,
+                const timeline::RenderOptions& renderOptions,
+                const std::string& pipelineGroup);
+
+            //! End a pass started with beginPass() and restore the outer
+            //! pass state.
+            void endPass();
+
             Fl_Vk_Context& getContext() const;
             VkCommandBuffer getCommandBuffer() const;
             uint32_t getFrameIndex() const;

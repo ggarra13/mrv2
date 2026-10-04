@@ -326,7 +326,6 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
-            const std::shared_ptr<tl::timeline_vlk::Render>& render,
             const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
             const std::vector<std::shared_ptr<voice::Annotation> >& voannotations,
@@ -334,7 +333,6 @@ namespace mrv
 #else
             void Viewport::_drawAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
-                const std::shared_ptr<tl::timeline_vlk::Render>& render,
                 const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
                 const std::vector<std::shared_ptr<bool> >& voannotations,
@@ -343,6 +341,9 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
+
+            // We use the viewport's single renderer.
+            const auto& render = vk.render;
 
             // Transition annotation buffer to start rendering to it.
             if (annotationBuffer)
@@ -374,10 +375,16 @@ namespace mrv
             }
 
             renderOptions.glyphTexture = glyphTexture;
-            render->begin(vk.cmd, annotationBuffer, frameIndex,
-                          renderSize, renderOptions);
-            render->setOCIOOptions(timeline::OCIOOptions());
-            render->setLUTOptions(timeline::LUTOptions());
+
+            // Draw into the annotation buffer with the same renderer used for
+            // the video.  Each target gets its own pipeline group so the
+            // pipelines are not recreated every time we switch targets.
+            // We do not touch the OCIO/LUT options: they belong to the video
+            // and are not used by annotations.
+            const std::string pipelineGroup =
+                (annotationBuffer == vk.overlay) ? "overlay" : "annotation";
+            render->beginPass(vk.cmd, annotationBuffer, renderSize,
+                              renderOptions, pipelineGroup);
             render->setTransform(renderMVP);
 
             render->beginRenderPass();
@@ -486,7 +493,7 @@ namespace mrv
             }
 #endif
             render->endRenderPass();
-            render->end();
+            render->endPass();
         }
 
         void Viewport::_compositeAnnotations(

@@ -45,10 +45,10 @@ namespace mrv
 
             image::PixelType colorBufferType = image::PixelType::RGBA_F32;
 
-            //! Offscreen renderers
+            //! The one and only offscreen renderer.  It draws the video,
+            //! the viewport annotations and the output-device overlay
+            //! (see timeline_vlk::Render::beginPass).
             std::shared_ptr<timeline_vlk::Render> render;
-            std::shared_ptr<timeline_vlk::Render> annotationRender;
-            std::shared_ptr<timeline_vlk::Render> overlayRender;
 
             //! Offscreen buffers
             std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
