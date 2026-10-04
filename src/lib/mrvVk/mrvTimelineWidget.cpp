@@ -915,7 +915,7 @@ namespace mrv
 
                         timeline::RenderOptions renderOptions;
                         renderOptions.clear = true;
-                        renderOptions.vaoSize = 16 * memory::megabyte;
+                        renderOptions.vaoSize = 32 * memory::megabyte;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
 
