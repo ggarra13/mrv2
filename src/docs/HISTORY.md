@@ -1,3 +1,12 @@
+v1.8.2
+======
+
+Libraries
+---------
+
+	- FLTK Vulkan branch v2.4.4.
+
+
 v1.8.1
 ======
 
