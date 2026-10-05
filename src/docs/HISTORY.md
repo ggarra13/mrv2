@@ -1,7 +1,14 @@
 v1.8.1
 ======
 
-- Added a dependency on lunasvg as it provides better rasterization of SVG images.
+- Core/Vulkan: Improved performance of the Vulkan backend.
+- Core/Vulkan: Improved memory footprint of the Vulkan backend.
+- Core/Vulkan: Made Text Tool Annotations be created on demand for faster annotations.
+
+- Core: Made the SVG reader be thread safe.
+- Core: Made the SVG reader support <text> tags.
+- Core: Made the SVG reader support gradients.
+- Core: Made the SVG reader support embedded .pngs.
 
 Fixes
 -----
