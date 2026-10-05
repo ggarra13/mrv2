@@ -466,7 +466,7 @@ namespace tl
                                 {
                                     out->set_media_reference(
                                         new OTIO_NS::ExternalReference(
-                                            inputPath.getFileName(true),
+                                            inputPath.getFileName(false),
                                             info.videoTime));
                                 }
                                 return out;
@@ -546,7 +546,7 @@ namespace tl
                         auto audioClip = new OTIO_NS::Clip;
                         audioClip->set_source_range(*audioInfo.audioTime);
                         audioClip->set_media_reference(new OTIO_NS::ExternalReference(
-                                                           inputAudioPath.getFileName(true),
+                                                           inputAudioPath.getFileName(false),
                                                            audioInfo.audioTime));
 
                         audioTrack = new OTIO_NS::Track("Audio", std::nullopt, OTIO_NS::Track::Kind::audio);
@@ -563,7 +563,7 @@ namespace tl
                     auto audioClip = new OTIO_NS::Clip;
                     audioClip->set_source_range(*info.audioTime);
                     audioClip->set_media_reference(new OTIO_NS::ExternalReference(
-                                                       inputPath.getFileName(true),
+                                                       inputPath.getFileName(false),
                                                        info.audioTime));
 
                     audioTrack = new OTIO_NS::Track("Audio", std::nullopt, OTIO_NS::Track::Kind::audio);

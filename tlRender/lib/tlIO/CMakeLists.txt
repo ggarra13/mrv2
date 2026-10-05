@@ -54,8 +54,9 @@ set(SOURCE
     Write.cpp
 )
 
+find_package(lunasvg REQUIRED)
 set(LIBRARIES)
-set(LIBRARIES_PRIVATE)
+set(LIBRARIES_PRIVATE lunasvg::lunasvg)
 if(TLRENDER_JPEG)
     list(APPEND HEADERS_PRIVATE JPEG.h)
     list(APPEND SOURCE JPEG.cpp JPEGRead.cpp JPEGWrite.cpp)

@@ -6,8 +6,7 @@
 #include <tlCore/FileIO.h>
 #include <tlCore/StringFormat.h>
 
-#include <FL/Fl_SVG_Image.H>
-#include <FL/Fl.H>
+#include <lunasvg/lunasvg.h>
 
 #include <cmath>
 #include <cstring>
@@ -33,7 +32,7 @@ namespace tl
                 return out;
             }
 
-            std::unique_ptr<Fl_SVG_Image> load(
+            std::unique_ptr<lunasvg::Document> load(
                 const std::string& fileName,
                 const file::MemoryRead* memory)
             {
@@ -41,8 +40,7 @@ namespace tl
                 auto fileIO = memory ?
                     file::FileIO::create(path, *memory) :
                     file::FileIO::create(path, file::Mode::Read);
-                auto out = std::make_unique<Fl_SVG_Image>(fileName.c_str(),
-                                                          file::read(fileIO).c_str());
+                auto out = lunasvg::Document::loadFromData(file::read(fileIO));
                 if (!out)
                 {
                     throw std::runtime_error(string::Format(
@@ -55,12 +53,12 @@ namespace tl
             //! own keeps the document's aspect ratio, so that scaling one
             //! dimension does not quietly stretch the drawing.
             image::Size renderSize(
-                const Fl_SVG_Image& doc,
-                const math::Size2i& requested,
+                const lunasvg::Document& doc,
+                const image::Size& requested,
                 const std::string& fileName)
             {
-                const int w = doc.w();
-                const int h = doc.h();
+                const int w = doc.width();
+                const int h = doc.height();
                 if (w <= 0 || h <= 0)
                 {
                     throw std::runtime_error(string::Format(
@@ -69,7 +67,8 @@ namespace tl
                 image::Size out(w, h);
                 if (requested.w > 0 && requested.h > 0)
                 {
-                    // pass-thru
+                    out.w = requested.w;
+                    out.h = requested.h;
                 }
                 else if (requested.w > 0)
                 {
@@ -86,9 +85,7 @@ namespace tl
                 return out;
             }
 
-            image::Info imageInfo(
-                const Fl_SVG_Image& svg,
-                const image::Size& size)
+            image::Info imageInfo(const image::Size& size)
             {
                 image::Info out(size, image::PixelType::RGBA_U8);
                 out.layout.mirror.y = true;
@@ -96,15 +93,16 @@ namespace tl
             }
         }
 
-        Decode::Decode()
+        Decode::Decode(const io::Options& options) :
+            _requestedSize(requestedSize(options))
         {}
 
         Decode::~Decode()
         {}
 
-        std::shared_ptr<Decode> Decode::create()
+        std::shared_ptr<Decode> Decode::create(const io::Options& options)
         {
-            return std::shared_ptr<Decode>(new Decode);
+            return std::shared_ptr<Decode>(new Decode(options));
         }
 
         io::Info Decode::getInfo(
@@ -114,7 +112,7 @@ namespace tl
             auto svg = load(fileName, memory);
             io::Info out;
             const image::Size size = renderSize(*svg, _requestedSize, fileName);
-            out.video.push_back(imageInfo(*svg, size));
+            out.video.push_back(imageInfo(size));
             return out;
         }
 
@@ -125,34 +123,31 @@ namespace tl
             const OTIO_NS::RationalTime& time,
             const io::Options&)
         {
+            io::VideoData out;
+
+            out.time = time;
+
             auto svg = load(fileName, memory);
-            if (!svg || svg->fail() != 0)
+            const image::Size size = renderSize(*svg, _requestedSize, fileName);
+            auto bitmap = svg->renderToBitmap(size.w, size.h);
+            if (bitmap.isNull())
             {
                 throw std::runtime_error(string::Format(
-                    "Cannot render file: \"{0}\"").arg(fileName));
+                                             "Cannot render file: \"{0}\"").arg(fileName));
             }
+            // lunasvg rasterizes to premultiplied ARGB32.
+            bitmap.convertToRGBA();
+            out.image = image::Image::create(imageInfo(size));
 
-            const image::Size size = renderSize(*svg, _requestedSize, fileName);
-
+            const size_t rowByteCount = static_cast<size_t>(size.w) * 4;
+            for (int y = 0; y < size.h; ++y)
             {
-                Fl::lock();
-                svg->resize(size.w, size.h);
-                Fl::unlock();
+                std::memcpy(
+                    out.image->getData() + y * rowByteCount,
+                    bitmap.data() + y * bitmap.stride(),
+                    rowByteCount);
             }
 
-            io::VideoData out;
-            out.time = time;
-            out.image = image::Image::create(imageInfo(*svg, size));
-
-            if (svg->data() && svg->data()[0])
-            {
-                const size_t dataSize = svg->data_w() * svg->data_h() * svg->d();
-                std::memcpy(out.image->getData(), svg->data()[0], dataSize);
-            }
-            else
-            {
-                throw std::runtime_error(string::Format("Cannot rasterize file: \"{0}\"").arg(fileName));
-            }
             image::Tags tags;
             io::addOtioTags(tags, fileName, time);
 

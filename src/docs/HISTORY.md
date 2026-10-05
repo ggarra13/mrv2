@@ -1,3 +1,13 @@
+v1.8.1
+======
+
+- Added a dependency on lunasvg as it provides better rasterization of SVG images.
+
+Libraries
+---------
+
+	- lunasvg v3.5.0
+
 v1.8.0
 ======
 
