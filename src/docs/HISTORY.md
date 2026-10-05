@@ -4,7 +4,7 @@ v1.8.2
 Libraries
 ---------
 
-	- FLTK Vulkan branch v2.4.4.
+	- FLTK v2.4.4 with new Selection protocol. 
 
 
 v1.8.1
