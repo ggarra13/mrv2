@@ -1,3 +1,18 @@
+v1.8.1
+======
+
+- Added a dependency on lunasvg as it provides better rasterization of SVG images.
+
+Fixes
+-----
+
+- Fixed loading files with relative paths from the command-line.
+
+Libraries
+---------
+
+	- lunasvg v3.5.0
+
 v1.8.0
 ======
 

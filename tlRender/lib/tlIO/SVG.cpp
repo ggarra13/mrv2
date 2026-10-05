@@ -36,12 +36,12 @@ namespace tl
         std::shared_ptr<io::IDecode>
         ReadPlugin::decode(const io::Options& options)
         {
-            return Decode::create();
+            return Decode::create(options);
         }
 
         std::string ReadPlugin::getPluginInfo(const io::Options&) const
         {
-            return "0.5";
+            return "3.5.0";
         }
 
     } // namespace svg

@@ -29,13 +29,13 @@ namespace tl
         class Decode : public io::IDecode
         {
         protected:
-            Decode();
+            Decode(const io::Options&);
 
         public:
             virtual ~Decode();
 
             //! Create a new decoder.
-            static std::shared_ptr<Decode> create();
+            static std::shared_ptr<Decode> create(const io::Options&);
 
             io::Info getInfo(
                 const std::string& fileName,
@@ -48,7 +48,7 @@ namespace tl
                 const io::Options& = io::Options()) override;
 
         private:
-            math::Size2i _requestedSize;
+            image::Size _requestedSize;
         };
 
         //! SVG read plugin.

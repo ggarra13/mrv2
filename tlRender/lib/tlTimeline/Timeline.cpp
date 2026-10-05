@@ -464,9 +464,12 @@ namespace tl
                                 }
                                 else
                                 {
+                                    bool listdir = false;
+                                    if (inputPath.hasProtocol())
+                                        listdir = true;
                                     out->set_media_reference(
                                         new OTIO_NS::ExternalReference(
-                                            inputPath.getFileName(true),
+                                            inputPath.getFileName(listdir),
                                             info.videoTime));
                                 }
                                 return out;
@@ -545,8 +548,11 @@ namespace tl
 
                         auto audioClip = new OTIO_NS::Clip;
                         audioClip->set_source_range(*audioInfo.audioTime);
+                        bool listdir = false;
+                        if (inputAudioPath.hasProtocol())
+                            listdir = true;
                         audioClip->set_media_reference(new OTIO_NS::ExternalReference(
-                                                           inputAudioPath.getFileName(true),
+                                                           inputAudioPath.getFileName(listdir),
                                                            audioInfo.audioTime));
 
                         audioTrack = new OTIO_NS::Track("Audio", std::nullopt, OTIO_NS::Track::Kind::audio);
@@ -562,8 +568,11 @@ namespace tl
 
                     auto audioClip = new OTIO_NS::Clip;
                     audioClip->set_source_range(*info.audioTime);
+                    bool listdir = false;
+                    if (inputPath.hasProtocol())
+                        listdir = true;
                     audioClip->set_media_reference(new OTIO_NS::ExternalReference(
-                                                       inputPath.getFileName(true),
+                                                       inputPath.getFileName(listdir),
                                                        info.audioTime));
 
                     audioTrack = new OTIO_NS::Track("Audio", std::nullopt, OTIO_NS::Track::Kind::audio);
