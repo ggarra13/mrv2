@@ -29,10 +29,10 @@ namespace tl
             std::function<void(const std::vector<timeline::MoveData>&)>
             moveCallback;
             std::shared_ptr<observer::Value<bool> > scrub;
-            std::shared_ptr<observer::Value<OTIO_NS::RationalTime> > timeScrub;
+            std::shared_ptr<observer::Value<otime::RationalTime> > timeScrub;
             std::vector<int> frameMarkers;
             int minimumHeight = 0;
-            std::shared_ptr<TIMELINEUI::ThumbnailGenerator> thumbnailGenerator;
+            std::shared_ptr<ThumbnailSystem> thumbnailSystem;
             std::unordered_map<std::string,
                                std::vector<std::shared_ptr<image::Glyph>> > labelsCache;
             struct Track
@@ -45,9 +45,9 @@ namespace tl
 
                 std::vector<std::shared_ptr<IItem> > items;
                 std::vector<int> otioIndexes;
-                
+
                 std::map<int, std::vector<std::shared_ptr<EffectItem> > > effects;
-                
+
 
                 std::vector<std::shared_ptr<TransitionItem> > transitions;
                 std::vector<int> otioTransitionIndexes;
@@ -91,7 +91,7 @@ namespace tl
                 Left,
                 Right,
             };
-            
+
             struct MouseItemData
             {
                 MouseItemData();
@@ -122,9 +122,9 @@ namespace tl
             };
             MouseData mouse;
 
-            std::shared_ptr<observer::ValueObserver<OTIO_NS::RationalTime> >
+            std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
                 currentTimeObserver;
-            std::shared_ptr<observer::ValueObserver<OTIO_NS::TimeRange> >
+            std::shared_ptr<observer::ValueObserver<otime::TimeRange> >
                 inOutRangeObserver;
             std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
                 cacheInfoObserver;

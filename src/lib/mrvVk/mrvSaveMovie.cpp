@@ -69,7 +69,7 @@ namespace mrv
                         if (videoFrames.empty()) return;
                         for (auto videoFrame : videoFrames)
                         {
-                            if (videoFrame.time == startTime)
+                            if (videoFrame.time.almost_equal(startTime))
                                 found = true;
                         }
                     },
@@ -118,21 +118,24 @@ namespace mrv
         auto context = ui->app->getContext();
 
         // Get I/O cache and store its size.
-        auto ioSystem = context->getSystem<io::System>();
-        auto cache = ioSystem->getCache();
+        auto ioSystem = context->getSystem<io::WriteSystem>();
+        // auto cache = ioSystem->getCache();
 
-        size_t oldCacheSize = cache->getMax();
+        // size_t oldCacheSize = cache->getMax();
 
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
+        const std::string& number = path.getNumber();
         const std::string& suffix = path.getSuffix();
-
-        std::string number = path.getNumber();
-        if (!number.empty()) number = std::to_string(startTime.to_frames());
-
         const std::string extension = string::toLower(path.getExtension());
 
         std::string newFile = directory + baseName + number + suffix + extension;
+
+
+        timeline::OCIOOptions savedOCIOOptions;
+        timeline::HDROptions savedHdrOptions;
+        bool restoreHdrOptions = false;
+        bool restoreOCIOOptions = false;
 
         try
         {
@@ -204,8 +207,8 @@ namespace mrv
             std::string inputFile = Aitem->path.get();
 
             // Make I/O cache be 1Gb to deal with long movies fine.
-            size_t bytes = memory::gigabyte;
-            cache->setMax(bytes);
+            // size_t bytes = memory::gigabyte;
+            // cache->setMax(bytes);
 
             auto context = ui->app->getContext();
             auto timeline = player->timeline();
@@ -279,13 +282,14 @@ namespace mrv
                         timeRange.duration().rescaled_to(sampleRate));
                 }
             }
+
 #ifdef TLRENDER_FFMPEG
             const std::string& profile = getLabel(options.ffmpegProfile);
 
             std::string newExtension = extension;
             if (profile.substr(0, 6) == "ProRes")
             {
-                if (!(extension == ".mov"))
+                if (extension != ".mov")
                 {
                     LOG_WARNING(_("ProRes profiles need a .mov movie "
                                   "extension.  Changing it to .mov."));
@@ -331,6 +335,16 @@ namespace mrv
                     newExtension = ".mov";
                 }
             }
+            else if (profile == "OAPV")
+            {
+                if (extension != ".mov" && extension != ".mp4")
+                {
+                    LOG_WARNING(
+                        _("OAPV profile needs a .mp4 extension.  Changing "
+                          "it to .mp4"));
+                    newExtension = ".mp4";
+                }
+            }
 
             newFile = directory + baseName + number + suffix + newExtension;
 
@@ -338,15 +352,16 @@ namespace mrv
             {
                 if (fs::exists(newFile))
                 {
+                    /* xgettext:c++-format */
                     throw std::runtime_error(
                         string::Format(_("New file {0} already exist!  "
                                          "Cannot overwrite it."))
                             .arg(newFile));
                 }
             }
+#endif
 
             path = file::Path(newFile);
-#endif
 
             bool saveEXR = (extension == ".exr" ||
                             extension == ".sxr");
@@ -374,6 +389,31 @@ namespace mrv
 
             player->start();
             waitForFrame(player, startTime);
+
+            // \@bug:
+            //       Note that libplacebo and OpenColorIO have different
+            //       concepts of white.  Also, OpenColorIO and OpenEXR cannot
+            //       parse HDR10+ metadata.
+            savedHdrOptions = view->getHDROptions();
+            savedOCIOOptions = view->getOCIOOptions();
+            timeline::OCIOOptions ocioOptions = savedOCIOOptions;
+
+            timeline::HDROptions hdrOptions = savedHdrOptions;
+            hdrOptions.exportMode = options.exportMode;
+            view->setHDROptions(hdrOptions);
+            restoreHdrOptions = true;
+
+            if (saveEXR &&
+                options.exportMode != timeline::HDRExportMode::BakedHDR)
+            {
+                ocioOptions.enabled = false;
+                view->setOCIOOptions(ocioOptions);
+                restoreOCIOOptions = true;
+            }
+
+            msg = string::Format(_("HDR Export mode {0}")).
+                  arg(hdrOptions.exportMode);
+            LOG_STATUS(msg);
 
             bool interactive = view->visible_r();
             if (interactive)
@@ -418,6 +458,7 @@ namespace mrv
 
             if (!writerPlugin)
             {
+                /* xgettext:c++-format */
                 throw std::runtime_error(
                     string::Format(_("{0}: Cannot open writer plugin."))
                         .arg(file));
@@ -458,7 +499,7 @@ namespace mrv
                 }
 
                 outputInfo.size = renderSize;
-                outputInfo = writerPlugin->getWriteInfo(outputInfo);
+                outputInfo = writerPlugin->getInfo(outputInfo);
 
                 if (image::PixelType::kNone == outputInfo.pixelType)
                 {
@@ -511,6 +552,7 @@ namespace mrv
                     std::string profileName =
                         entries[(int)options.ffmpegProfile];
 
+                    /* xgettext:c++-format */
                     msg = tl::string::Format(
                         _("Using profile {0}, pixel format {1}."))
                           .arg(profileName)
@@ -518,6 +560,7 @@ namespace mrv
                     LOG_STATUS(msg);
                     if (!options.ffmpegPreset.empty())
                     {
+                        /* xgettext:c++-format */
                         msg = tl::string::Format(_("Using preset {0}."))
                               .arg(options.ffmpegPreset);
                         LOG_STATUS(msg);
@@ -643,7 +686,8 @@ namespace mrv
             view->setHudActive(false);
 
             // Turn off tonemapping so libplacebo does not get used.
-            view->setToneMapping(false);
+            if (savingMovie)
+                view->setToneMapping(false);
 
             // Prepare annotations without HUD, cursors, and overlay with
             // a centered and frame image for easier checking.
@@ -684,11 +728,13 @@ namespace mrv
                 if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
                         ffmpeg::AudioCodec::kNone ||
                     !hasAudio)
+                    /* xgettext:c-format */
                     snprintf(
                         title, 1024,
                         _("Saving Movie without Audio %" PRId64 " - %" PRId64),
                         startFrame, endFrame);
                 else
+                    /* xgettext:c-format */
                     snprintf(
                         title, 1024,
                         _("Saving Movie with Audio %" PRId64 " - %" PRId64),
@@ -696,6 +742,7 @@ namespace mrv
             }
             else if (hasAudio && savingAudio)
             {
+                /* xgettext:c-format */
                 snprintf(
                     title, 1024, _("Saving Audio %" PRId64 " - %" PRId64),
                     startFrame, endFrame);
@@ -704,6 +751,7 @@ namespace mrv
 #endif
                 if (hasVideo && !savingMovie && !savingAudio)
             {
+                /* xgettext:c-format */
                 snprintf(
                     title, 1024,
                     _("Saving Pictures without Audio %" PRId64 " - %" PRId64),
@@ -1003,9 +1051,9 @@ namespace mrv
                         auto tags = view->getTags();
                         if (saveEXR)
                         {
-                            std::string ics = ocio::ics();
-                            if (!ics.empty() && ics != _("None"))
-                                tags["colorInteropID"] = ics;
+                            const std::string id = ocio::getInteropID(false);
+                            if (!id.empty())
+                                tags["ColorInteropID"] = id;
                         }
                         outputImage->setTags(tags);
 
@@ -1033,7 +1081,7 @@ namespace mrv
                     // movies can lag behind the seek
                     // When saving video and not options.annotations, we cannot
                     // use seek as it corrupts the timeline.
-                    if (hasVideo)
+                    if (options.annotations && hasVideo)
                         player->frameNext();
                     else
                         player->seek(currentTime);
@@ -1042,17 +1090,30 @@ namespace mrv
                     waitForFrame(player, currentTime);
                 }
             }
+
+            writer->finish();
         }
         catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
         }
 
+        if (restoreHdrOptions)
+        {
+            view->setHDROptions(savedHdrOptions);
+        }
+        if (restoreOCIOOptions)
+        {
+            view->setOCIOOptions(savedOCIOOptions);
+        }
+
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
+        view->setPresentationMode(presentation);
         view->setShowVideo(true);
         view->setSaveOverlay(false);
         view->setToneMapping(true);
+        view->redraw();
 
         player->seek(currentTime);
         player->setMute(mute);
@@ -1069,7 +1130,7 @@ namespace mrv
 
         App::unsaved_annotations = false;
 
-        cache->setMax(oldCacheSize);
+        // cache->setMax(oldCacheSize);
     }
 
 } // namespace mrv

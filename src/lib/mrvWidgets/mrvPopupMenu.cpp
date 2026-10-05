@@ -82,9 +82,9 @@ namespace mrv
         // picking.
         if (children() <= 2)
             return nullptr;
-        
+
         const Fl_Menu_Item* m = Fl_Menu_Button::popup();
-    
+
         if (_disable_submenus && m && (m->flags & FL_SUBMENU))
             return nullptr;
         if (m && _enable_label)
@@ -115,13 +115,16 @@ namespace mrv
             }
             else
             {
-                if (_enable_character)
+                if (_enable_label_on_popup)
                 {
-                    select_character(this);
-                }
-                else
-                {
-                    copy_label(m->label());
+                    if (_enable_character)
+                    {
+                        select_character(this);
+                    }
+                    else
+                    {
+                        copy_label(m->label());
+                    }
                 }
             }
         }
@@ -197,6 +200,7 @@ namespace mrv
         Fl_Menu_Button(X, Y, W, H, l),
         _enable_glyph(false),
         _enable_label(true),
+        _enable_label_on_popup(true),
         _enable_character(false),
         _disable_submenus(false)
     {

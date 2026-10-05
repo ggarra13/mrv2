@@ -135,12 +135,12 @@ namespace mrv
 
 
             // Set Edit mode
-            msg["command"] = "setEditMode";
+            msg["command"] = "Editing";
             EditMode mode = (editMode == EditMode::kFull)
                             ? EditMode::kFull
                             : EditMode::kTimeline;
             msg["value"] = mode;
-            msg["height"] = editModeH;
+            msg["height"] = editModeH / view->pixels_per_unit();
             pushToPeer(peerId, msg);
 
 

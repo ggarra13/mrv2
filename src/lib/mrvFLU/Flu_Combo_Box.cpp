@@ -20,6 +20,8 @@
 #include <stdlib.h>
 #include <FL/math.h>
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvFLU/Flu_Combo_Box.h"
 
 Flu_Combo_Box ::Flu_Combo_Box(int X, int Y, int W, int H, const char* l) :
@@ -53,13 +55,13 @@ Flu_Combo_Box ::Flu_Combo_Box(int X, int Y, int W, int H, const char* l) :
 
 Flu_Combo_Box::~Flu_Combo_Box() {}
 
-void Flu_Combo_Box ::set_combo_widget(Fl_Widget* w)
+void Flu_Combo_Box::set_combo_widget(Fl_Widget* w)
 {
     _cbox = w;
     this->add(w);
 }
 
-void Flu_Combo_Box ::input_cb(Fl_Widget*, void* v)
+void Flu_Combo_Box::input_cb(Fl_Widget*, void* v)
 {
     // taken from Fl_Counter.cxx
     Flu_Combo_Box& t = *(Flu_Combo_Box*)v;
@@ -82,7 +84,7 @@ void Flu_Combo_Box ::input_cb(Fl_Widget*, void* v)
     }
 }
 
-void Flu_Combo_Box ::resize(int X, int Y, int W, int H)
+void Flu_Combo_Box::resize(int X, int Y, int W, int H)
 {
     Fl_Group::resize(X, Y, W, H);
     input.resize(
@@ -90,7 +92,7 @@ void Flu_Combo_Box ::resize(int X, int Y, int W, int H)
         W - 18 - Fl::box_dw(box()), H - Fl::box_dh(box()));
 }
 
-void Flu_Combo_Box ::draw()
+void Flu_Combo_Box::draw()
 {
     int W = 18, H = h() - 4;
     int X = x() + w() - W - 2, Y = y() + 2;
@@ -138,7 +140,7 @@ int global_y(Fl_Widget* w)
     return y;
 }
 
-Flu_Combo_Box::Popup ::Popup(Flu_Combo_Box* b, Fl_Widget* c, int H) :
+Flu_Combo_Box::Popup::Popup(Flu_Combo_Box* b, Fl_Widget* c, int H) :
     Fl_Double_Window(
         global_x(b) - 2,          // Fl::x()+b->window()->x()+b->x()-2,
         global_y(b) + b->h() - 2, // Fl::y()+b->window()->y()+b->y()+b->h()-2,
@@ -153,8 +155,16 @@ Flu_Combo_Box::Popup ::Popup(Flu_Combo_Box* b, Fl_Widget* c, int H) :
     add(c);
     end();
 
-#ifdef LINUX
-    set_menu_window();
+#ifdef __linux__
+    if (mrv::desktop::Wayland())
+    {
+        // Map as an xdg_popup, positioned relative to the parent window.
+        // Do NOT also call set_menu_window(): the driver then assumes this
+        // is one of FLTK's internal Menu_Window classes and downcasts it.
+        set_flag(Fl_Window::POPUP);
+    }
+    else
+        set_menu_window();
 #else
     set_modal();
 #endif
@@ -162,19 +172,19 @@ Flu_Combo_Box::Popup ::Popup(Flu_Combo_Box* b, Fl_Widget* c, int H) :
     c->resize(1, 1, w() - 2, h() - 2);
 }
 
-Flu_Combo_Box::Popup ::~Popup()
+Flu_Combo_Box::Popup::~Popup()
 {
     while (children())
         remove(child(0));
 }
 
-void Flu_Combo_Box ::value(const char* v)
+void Flu_Combo_Box::value(const char* v)
 {
     if (_value(v))
         input.value(v);
 }
 
-void Flu_Combo_Box ::selected(const char* v)
+void Flu_Combo_Box::selected(const char* v)
 {
     if (v)
     {
@@ -184,19 +194,21 @@ void Flu_Combo_Box ::selected(const char* v)
     do_callback();
 }
 
-int Flu_Combo_Box::Popup ::handle(int event)
+int Flu_Combo_Box::Popup::handle(int event)
 {
 
     if (event == FL_MOVE || event == FL_PUSH || event == FL_DRAG)
     {
-        // FL_MOVE is also generated while the window is moving
-        // this attempts to keep the popup window moving with the enclosing
-        // window
-        // position( combo->window()->x()+combo->x()-2,
-        // combo->window()->y()+combo->y()+combo->h()-2 );
+#if defined(_WIN32) || defined(__APPLE__)
         position(global_x(combo) - 2, global_y(combo) + combo->h() - 2);
-        // this lets the mouse move event also move the selected item
-        combo->_hilight(event, Fl::event_x(), Fl::event_y());
+#endif
+        static bool in_hilight = false;
+        if (!in_hilight)
+        {
+            in_hilight = true;
+            combo->_hilight(event, Fl::event_x(), Fl::event_y());
+            in_hilight = false;
+        }
     }
 
     if (event == FL_DRAG)
@@ -252,7 +264,7 @@ int Flu_Combo_Box::Popup ::handle(int event)
     return Fl_Double_Window::handle(event);
 }
 
-int Flu_Combo_Box ::handle(int event)
+int Flu_Combo_Box::handle(int event)
 {
     if (event == FL_KEYDOWN && Fl::event_key(FL_Tab))
         return Fl_Group::handle(event);

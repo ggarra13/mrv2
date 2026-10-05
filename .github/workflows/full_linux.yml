@@ -148,6 +148,7 @@ jobs:
           TLRENDER_JPEG: ON
           TLRENDER_NDI: OFF
           TLRENDER_NET: ON
+          TLRENDER_OAPV: ON
           TLRENDER_OPENJPH: ON
           TLRENDER_RAW: ON
           TLRENDER_SGI: ON

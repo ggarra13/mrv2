@@ -4,54 +4,79 @@
 
 #include <tlIO/TIFF.h>
 
+#include <tlCore/Error.h>
+#include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 
-#include <tiffio.h>
-
+#include <array>
 #include <sstream>
 
 namespace tl
 {
     namespace tiff
     {
-        void Plugin::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+
+        std::shared_ptr<io::IDecode> ReadPlugin::decode(const io::Options&)
         {
-            IPlugin::_init(
-                "TIFF",
-                {{".tiff", io::FileType::Sequence},
-                 {".tif", io::FileType::Sequence}},
-                cache, logSystem);
-            TIFFSetErrorHandler(nullptr);
-            TIFFSetWarningHandler(nullptr);
+            return Decode::create();
         }
 
-        Plugin::Plugin() {}
-
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        void ReadPlugin::_init(const std::shared_ptr<log::System>& logSystem)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(cache, logSystem);
+            std::map<std::string, io::FileType> exts;
+            exts[".tif"] = io::FileType::Sequence;
+            exts[".tiff"] = io::FileType::Sequence;
+            IReadPlugin::_init("STB", exts, logSystem);
+        }
+
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return "TIFF";
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
+        void WritePlugin::_init(const std::shared_ptr<log::System>& logSystem)
+        {
+            std::map<std::string, io::FileType> exts;
+            exts[".tif"] = io::FileType::Sequence;
+            exts[".tiff"] = io::FileType::Sequence;
+            IWritePlugin::_init("TIFF", exts, logSystem);
+        }
+
+        std::shared_ptr<WritePlugin> WritePlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<WritePlugin>(new WritePlugin);
+            out->_init(logSystem);
+            return out;
+        }
+
+        std::shared_ptr<io::IWrite> WritePlugin::write(
+            const file::Path& path, const io::Info& info,
             const io::Options& options)
         {
-            return Read::create(path, memory, options, _cache, _logSystem);
+            if (info.video.empty() ||
+                (!info.video.empty() &&
+                 !_isCompatible(info.video[0], options)))
+                throw std::runtime_error(string::Format("{0}: {1}")
+                                         .arg(path.get())
+                                         .arg("Unsupported video depth"));
+            return Write::create(path, info, options, _logSystem.lock());
         }
 
-        image::Info Plugin::getWriteInfo(
+        std::string WritePlugin::getPluginInfo(const io::Options&) const
+        {
+            return "TIFF";
+        }
+
+        image::Info WritePlugin::getInfo(
             const image::Info& info, const io::Options& options) const
         {
             image::Info out;
@@ -99,17 +124,5 @@ namespace tl
             return out;
         }
 
-        std::shared_ptr<io::IWrite> Plugin::write(
-            const file::Path& path, const io::Info& info,
-            const io::Options& options)
-        {
-            if (info.video.empty() ||
-                (!info.video.empty() &&
-                 !_isWriteCompatible(info.video[0], options)))
-                throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(path.get())
-                                             .arg("Unsupported video"));
-            return Write::create(path, info, options, _logSystem);
-        }
-    } // namespace tiff
+    } // namespace stb
 } // namespace tl

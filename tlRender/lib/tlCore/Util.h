@@ -141,8 +141,8 @@
         const auto i = std::find_if(                                           \
             labels.begin(), labels.end(),                                      \
             [s](const std::string& value) {                                    \
-                return tl::string::compare(                             \
-                    s, value, tl::string::Compare::CaseInsensitive);    \
+                return tl::string::compare(                                    \
+                    s, value, tl::string::Compare::CaseInsensitive);           \
             });                                                                \
         if (i == labels.end())                                                 \
         {                                                                      \

@@ -52,7 +52,7 @@ sudo dnf -y install m4 perl perl-CPAN
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 
 #
-# Install dependencies
+# Install dependencies (for cutting-edge build)
 #
 sudo dnf -y install alsa-lib-devel \
                automake \
@@ -79,9 +79,33 @@ sudo dnf -y install alsa-lib-devel \
 	       tk-devel \
 	       tcl-devel \ 
 	       wayland-devel \
-	       wayland-protocols-devel  \
-	       wget
-
+	       wayland-protocols-devel
+	       
+#
+# These are Dependencies for using OS system libs, instead of building them
+# from scratch (-D USE_SYSTEM_LIBS=ON).  This option is currently untested on
+# Rocky Linux 8.10.
+#
+sudo dnf install \
+    aom-devel \
+    dav1d-devel \
+    expat-devel \
+    glfw-devel \
+    imath-devel \
+    minizip-ng-devel \
+    OpenColorIO-devel \
+    snappy-devel \
+    libssh2-devel \
+    svt-av1-devel \
+    pystring-devel \
+    libvpx-devel \
+    yaml-cpp-devel \
+    meson \
+    nasm \
+    json-devel \
+    python3-pip \
+    python3-devel
+    
 # If you are building the Vulkan version of vmrv2, you need to install
 # The VulkanSDK components
 
@@ -101,9 +125,9 @@ sudo dnf install shaderc
 #
 # To compile you need a newer compiler than those in Red Hat.
 #
-sudo dnf install gcc-toolset-14
+sudo dnf install gcc-toolset-15
 
-scl enable gcc-toolset-14 bash
+scl enable gcc-toolset-15 bash
 
 #
 # rustup for cargo

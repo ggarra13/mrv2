@@ -21,6 +21,7 @@
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/CompareOptions.h>
 #include <tlTimeline/DisplayOptions.h>
+#include <tlTimeline/HDROptions.h>
 #include <tlTimeline/Timeline.h>
 #include <tlTimeline/Player.h>
 
@@ -84,6 +85,10 @@ void mrv2_enums(py::module& m)
         .value("B44A", Imf::B44A_COMPRESSION)
         .value("DWAA", Imf::DWAA_COMPRESSION)
         .value("DWAB", Imf::DWAB_COMPRESSION)
+        .value("HTJ2K256", Imf::HTJ2K256_COMPRESSION)
+        .value("HTJ2K32", Imf::HTJ2K32_COMPRESSION)
+        .value("LJ2K", Imf::LJ2K_COMPRESSION)
+        .value("ZSTD", Imf::ZSTD_COMPRESSION)
         //.value("HT256", Imf::HT256_COMPRESSION)
         ;
 
@@ -243,11 +248,16 @@ void mrv2_enums(py::module& m)
         .value("Audio", timeline::TimerMode::Audio)
         .export_values();
 
-    py::enum_<timeline::FileSequenceAudio>(timeline, "FileSequenceAudio")
-        .value("kNone", timeline::FileSequenceAudio::kNone)
-        .value("BaseName", timeline::FileSequenceAudio::BaseName)
-        .value("FileName", timeline::FileSequenceAudio::FileName)
-        .value("Directory", timeline::FileSequenceAudio::Directory)
+    py::enum_<timeline::ImageSeqAudio>(timeline, "ImageSeqAudio")
+        .value("kNone", timeline::ImageSeqAudio::kNone)
+        .value("Ext", timeline::ImageSeqAudio::Ext)
+        .value("FileName", timeline::ImageSeqAudio::FileName)
+        .export_values();
+
+    py::enum_<timeline::HDRExportMode>(image, "HDRExportMode")
+        .value("BakedHDR", timeline::HDRExportMode::BakedHDR)
+        .value("LinearHDR", timeline::HDRExportMode::LinearHDR)
+        .value("BakedSDR", timeline::HDRExportMode::BakedSDR)
         .export_values();
 
 #ifdef TLRENDER_USD

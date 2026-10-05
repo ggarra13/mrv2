@@ -114,7 +114,8 @@ namespace tl
 
         void IItem::_init(
             const std::string& objectName, const OTIO_NS::TimeRange& timeRange,
-            const OTIO_NS::TimeRange& trimmedRange, double scale,
+            const OTIO_NS::TimeRange& trimmedRange,
+            const OTIO_NS::TimeRange& availableRange, double scale,
             const ItemOptions& options, const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& data,
             const std::shared_ptr<system::Context>& context,
@@ -125,6 +126,7 @@ namespace tl
 
             _timeRange = timeRange;
             _trimmedRange = trimmedRange;
+            _availableRange = availableRange;
             _scale = scale;
             _options = options;
             _displayOptions = displayOptions;

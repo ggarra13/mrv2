@@ -156,6 +156,10 @@ namespace mrv
             //! Skipped frames
             static uint64_t droppedFrames;
 
+            //! Whether the one view is in presentation mode (full screen with
+            //! no menus, bars or dock tools).
+            static bool presentation;
+
             //! We store really image::Color4f but since we need to reverse
             //! the R and B channels (as they are read in BGR order), we process
             //! floats.
@@ -164,24 +168,23 @@ namespace mrv
             //! Mark the buffer as raw, so we will delete with free().
             bool rawImage = true;
 
-            //! Store the size of previous buffer so we avoid allocating it again.
+            //! Store the size of previous buffer so we avoid allocating it
+            //! again.
             size_t rawImageSize = 0;
 
             //! Whether the view is in full screen mode
             bool fullScreen = false;
 
-            //! Whether the view is in presentation mode (full screen with no menus,
-            //! bars or dock tools).
-            bool presentation = false;
-
             //! Sets whether the window starts in maximized mode.
             bool maximized = false;
 
-            //! Whether the current frame represengs a missing frame in a sequence.
+            //! Whether the current frame represengs a missing frame in a
+            //! sequence.
             bool missingFrame = false;
 
-            //! Default missing frame type.  Should be static.
-            MissingFrameType missingFrameType = kBlackFrame;
+            //! Default missing frame type.
+            tl::io::MissingFrames missingFrameType =
+                tl::io::MissingFrames::Black;
 
             //! Auxiliary variable used to hide cursor in presentation mode.
             std::chrono::high_resolution_clock::time_point presentationTime;

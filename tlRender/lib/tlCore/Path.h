@@ -227,6 +227,36 @@ namespace tl
             bool operator != (const DirListOptions&) const;
         };
 
+        //! Frame sequence.
+        struct FrameSeq
+        {
+            FrameSeq() = default;
+            explicit FrameSeq(const math::Int64Range&, int inc = 1);
+            FrameSeq(int64_t, int64_t, int inc = 1);
+            explicit FrameSeq(int64_t);
+
+            math::Int64Range range;
+            int      inc = 1;
+
+            bool operator == (const FrameSeq&) const;
+            bool operator != (const FrameSeq&) const;
+        };
+
+        //! Convert frames to frame sequences.
+         std::vector<FrameSeq> toFrameSeq(const std::vector<int64_t>&);
+
+        //! Convert a frame sequence to frames.
+         std::vector<int64_t> toFrames(const FrameSeq&);
+
+        //! Convert frame sequences to frames.
+         std::vector<int64_t> toFrames(const std::vector<FrameSeq>&);
+
+        //! Convert a frame sequence to a label.
+         std::string getLabel(const FrameSeq&);
+
+        //! Convert frame sequences to a label.
+         std::string getLabel(const std::vector<FrameSeq>&);
+
         //! Directory list entry.
         struct DirEntry
         {
@@ -243,6 +273,15 @@ namespace tl
         std::vector<DirEntry> dirList(
             const std::filesystem::path&,
             const DirListOptions& = DirListOptions());
+
+        //! Find the frames of a sequence on disk.
+        //!
+        //! expandSeq() searches only when the path has no range yet, so it
+        //! cannot find the frames of a sequence whose range was stated rather
+        //! than discovered. This always searches.
+        std::vector<FrameSeq> findSeq(
+            const Path&,
+            const PathOptions& = PathOptions());
 
         //! Expand a file sequence. This function will search the directory for
         //! other frames that match the given file name.

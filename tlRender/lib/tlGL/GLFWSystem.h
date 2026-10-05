@@ -20,7 +20,7 @@ namespace tl
         protected:
             void _init(const std::shared_ptr<system::Context>&);
 
-            GLFWSystem();
+            GLFWSystem(const std::shared_ptr<system::Context>&);
 
         public:
             virtual ~GLFWSystem();

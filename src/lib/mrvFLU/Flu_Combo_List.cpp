@@ -20,7 +20,7 @@
 
 #include "mrvFLU/Flu_Combo_List.h"
 
-Flu_Combo_List ::Flu_Combo_List(int X, int Y, int W, int H, const char* l) :
+Flu_Combo_List::Flu_Combo_List(int X, int Y, int W, int H, const char* l) :
     Flu_Combo_Box(X, Y, W, H, l),
     list(0, 0, 0, 0)
 {
@@ -30,9 +30,9 @@ Flu_Combo_List ::Flu_Combo_List(int X, int Y, int W, int H, const char* l) :
     set_combo_widget(&list);
 }
 
-Flu_Combo_List ::~Flu_Combo_List() {}
+Flu_Combo_List::~Flu_Combo_List() {}
 
-void Flu_Combo_List ::cb()
+void Flu_Combo_List::cb()
 {
     if (list.value())
         selected(list.text(list.value()));
@@ -40,24 +40,26 @@ void Flu_Combo_List ::cb()
         _value(value());
 }
 
-void Flu_Combo_List ::_hilight(int event, int x, int y)
+void Flu_Combo_List::_hilight(int event, int x, int y)
 {
+    int right = list.x() + list.w();
     if (list.scrollbar.visible())
+        right -= list.scrollbar.w();
+
+    if (x > list.x() && y > list.y() && x < right &&
+        y < (list.y() + list.h()))
     {
-        if (x > list.x() && y > list.y() &&
-            x < (list.x() + list.w() - list.scrollbar.w()) &&
-            y < (list.y() + list.h()))
-            list.handle(FL_DRAG);
-    }
-    else
-    {
-        if (x > list.x() && y > list.y() && x < (list.x() + list.w()) &&
-            y < (list.y() + list.h()))
-            list.handle(FL_DRAG);
+        // Fl_Browser_ is an Fl_Group: its FL_DRAG handling forwards the
+        // event to Fl::pushed().  FLTK sets that to the grabbing Popup on
+        // every FL_PUSH, which would re-enter Popup::handle() forever.
+        Fl_Widget* saved = Fl::pushed();
+        Fl::pushed(&list);
+        list.handle(FL_DRAG);
+        Fl::pushed(saved);
     }
 }
 
-bool Flu_Combo_List ::_value(const char* v)
+bool Flu_Combo_List::_value(const char* v)
 {
     // see if 'v' is in the list, and if so, make it the current selection
     for (int i = 1; i <= list.size(); i++)
@@ -71,7 +73,7 @@ bool Flu_Combo_List ::_value(const char* v)
     return false;
 }
 
-const char* Flu_Combo_List ::_next()
+const char* Flu_Combo_List::_next()
 {
     int v = list.value();
     if (v < list.size())
@@ -80,7 +82,7 @@ const char* Flu_Combo_List ::_next()
     return list.text(list.value());
 }
 
-const char* Flu_Combo_List ::_previous()
+const char* Flu_Combo_List::_previous()
 {
     int v = list.value();
     if (v > 1)

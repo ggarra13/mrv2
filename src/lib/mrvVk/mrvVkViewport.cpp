@@ -99,9 +99,6 @@ namespace mrv
             TimelineViewport(X, Y, W, H, L),
             _vk(new VKPrivate)
         {
-            TLRENDER_P();
-
-            // m_debugSync = true;
         }
 
         Viewport::~Viewport() {}
@@ -377,6 +374,11 @@ namespace mrv
             }
         }
 
+        int Viewport::get_max_frames_in_flight()
+        {
+            return vlk::MAX_FRAMES_IN_FLIGHT;
+        }
+
         std::vector<const char*> Viewport::get_device_extensions()
         {
             std::vector<const char*> out;
@@ -556,8 +558,6 @@ namespace mrv
 
             // Destroy main renderers
             vk.render.reset();
-            vk.annotationRender.reset();
-            vk.overlayRender.reset();
 
             // Destroy auxiliary render classes
             vk.lines.reset();
@@ -620,15 +620,12 @@ namespace mrv
                 // Add the thumbnail system if not present.
                 if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
                 {
-                    context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+                    timelineui_vk::ThumbnailSystem::create(context, ctx);
                 }
 
                 // Set the renderers's max nits
                 if (!vk.render)
                     vk.render = timeline_vlk::Render::create(ctx, context);
-
-                if (!vk.annotationRender)
-                    vk.annotationRender = timeline_vlk::Render::create(ctx, context);
 
 #if FLTK_HAVE_PEN_SUPPORT
                 if (!desktop::X11() && !desktop::XWayland())
@@ -715,14 +712,12 @@ namespace mrv
 
         void Viewport::draw()
         {
+
             TLRENDER_P();
             MRV2_VK();
 
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
-
-            // Clamp frameIndex
-            frameIndex = frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
 
             // Clear the frame
             begin_render_pass(cmd);
@@ -819,8 +814,9 @@ namespace mrv
                     timeline::VideoFrame& video = emptyVideo;
                     if (!p.videoData.empty())
                         video = p.videoData[0];
+
                     if (p.missingFrame &&
-                        p.missingFrameType != MissingFrameType::kBlackFrame)
+                        p.missingFrameType != tl::io::MissingFrames::Black)
                     {
                         video = p.lastVideoFrame;
                     }
@@ -992,6 +988,7 @@ namespace mrv
             locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
+            renderOptions.vaoSize = 16 * memory::megabyte;
 
             _updateHDRMetadata();
 
@@ -1035,10 +1032,12 @@ namespace mrv
                     vk.render->setLUTOptions(p.lutOptions);
                     vk.render->setHDROptions(p.hdrOptions);
                     vk.render->setMonitorCapabilities(p.monitor);
-                    if (p.missingFrame &&
-                        p.missingFrameType != MissingFrameType::kBlackFrame)
+                    if (p.missingFrame)
                     {
-                        _drawMissingFrame(renderSize);
+                        if (p.missingFrameType != io::MissingFrames::Black)
+                        {
+                            _drawMissingFrame(renderSize);
+                        }
                     }
                     else
                     {
@@ -1143,7 +1142,7 @@ namespace mrv
                 }
 
                 _drawAnnotations(
-                    vk.annotation, vk.annotationRender,
+                    vk.annotation,
                     mvp, currentTime, annotations, voannotations, viewportSize);
 
             }
@@ -1172,19 +1171,12 @@ namespace mrv
                         vk.overlay = vlk::OffscreenBuffer::create(ctx,
                                                                   renderSize,
                                                                   offscreenBufferOptions);
-                        if (!vk.overlayRender)
-                        {
-                            if (auto context = vk.context.lock())
-                            {
-                                vk.overlayRender = timeline_vlk::Render::create(ctx, context);
-                            }
-                        }
                     }
 
                     const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
 
                     _drawAnnotations(
-                        vk.overlay, vk.overlayRender,
+                        vk.overlay,
                         renderMVP, currentTime, annotations, voannotations,
                         renderSize);
 
@@ -1267,10 +1259,13 @@ namespace mrv
 
                 if (vk.vao && vk.vbo)
                 {
-                    const VkColorComponentFlags allMask[] =
-                        { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-                          VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
-                    ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+                    if (ctx.vkCmdSetColorWriteMaskEXT)
+                    {
+                        const VkColorComponentFlags allMask[] =
+                            { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                              VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+                        ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+                    }
 
                     vk.vao->bind(frameIndex);
                     vk.vao->draw(cmd, vk.vbo);
@@ -2095,7 +2090,7 @@ namespace mrv
             std::cerr << "Tonemapping Enabled: " << (p.hdrOptions.tonemap ? "YES" : "NO") << std::endl;
             std::cerr << "HDR Data Max CLL: " << p.hdrOptions.hdrData.maxCLL << std::endl;
             std::cerr << "HDR Data Max FALL: " << p.hdrOptions.hdrData.maxFALL << std::endl;
-            std::cerr << "HDR Data Max Luminance: " << p.hdrOptions.hdrData.displayMasteringLuminance.getMax() << std::endl;
+            std::cerr << "HDR Data Max Luminance: " << p.hdrOptions.hdrData.displayMasteringLuminance.max() << std::endl;
 
             // OCIO state
             const int screen_idx = this->screen_num();

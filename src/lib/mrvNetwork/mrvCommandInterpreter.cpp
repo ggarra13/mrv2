@@ -129,6 +129,12 @@ namespace mrv
 
             tcp->lock();
 
+            // MSVC limits block nesting to 128 levels (error C1061) and
+            // every "else if" adds one level, so the dispatch is split in
+            // several shorter chains.  Each chain sets handled = false when
+            // it does not recognise the command.
+            bool handled = true;
+
             if (c == "sync")
             {
                 const std::string peerId = message.value(kLocalPeerIdKey,
@@ -529,1032 +535,1071 @@ namespace mrv
                 ui->uiUndoDraw->activate();
                 view->redo();
             }
-            else if (c == "setEnvironmentMapOptions")
+            else
             {
-                bool receive = prefs->ReceivePanAndZoom->value();
-                if (!receive || !view)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                const EnvironmentMapOptions& o = message["value"];
-                view->setEnvironmentMapOptions(o);
+                handled = false;
             }
-            else if (c == "setOCIOOptions")
-            {
-                bool receive = prefs->ReceiveColor->value();
-                if (!receive || !view)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                const tl::timeline::OCIOOptions& local = view->getOCIOOptions();
-                tl::timeline::OCIOOptions o = message["value"];
 
-                // If we cannot read the config file, keep the local one
-                replace_path(o.fileName);
-                if (o.fileName.empty() || !file::isReadable(o.fileName))
+            if (!handled)
+            {
+                handled = true;
+                if (c == "setEnvironmentMapOptions")
                 {
-                    o.fileName = local.fileName;
+                    bool receive = prefs->ReceivePanAndZoom->value();
+                    if (!receive || !view)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    const EnvironmentMapOptions& o = message["value"];
+                    view->setEnvironmentMapOptions(o);
+                }
+                else if (c == "setOCIOOptions")
+                {
+                    bool receive = prefs->ReceiveColor->value();
+                    if (!receive || !view)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    const tl::timeline::OCIOOptions& local = view->getOCIOOptions();
+                    tl::timeline::OCIOOptions o = message["value"];
+
+                    // If we cannot read the config file, keep the local one
+                    replace_path(o.fileName);
                     if (o.fileName.empty() || !file::isReadable(o.fileName))
                     {
-                        o.fileName = prefs->uiPrefsOCIOConfig->value();
+                        o.fileName = local.fileName;
+                        if (o.fileName.empty() || !file::isReadable(o.fileName))
+                        {
+                            o.fileName = prefs->uiPrefsOCIOConfig->value();
+                        }
+                    }
+
+                    int index = ocio::icsIndex(o.input);
+                    ui->uiICS->value(index);
+
+                    std::string mergedView =
+                        ocio::combineView(o.display, o.view);
+                    index = ocio::viewIndex(mergedView);
+                    ui->uiOCIOView->value(index);
+
+                    index = ocio::lookIndex(o.look);
+                    ui->uiOCIOLook->value(index);
+
+                    view->setOCIOOptions(o);
+                }
+                else if (c == "Display Options")
+                {
+                    bool receive = prefs->ReceiveColor->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    const tl::timeline::DisplayOptions& o = message["value"];
+                    app->setDisplayOptions(o);
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                }
+                else if (c == "setBackgroundOptions")
+                {
+                    const tl::timeline::BackgroundOptions& o = message["value"];
+                    view->setBackgroundOptions(o);
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                }
+                else if (c == "setCompareOptions")
+                {
+                    const tl::timeline::CompareOptions& o = message["value"];
+                    app->filesModel()->setCompareOptions(o);
+                }
+                else if (c == "setStereo3DOptions")
+                {
+                    const Stereo3DOptions& o = message["value"];
+                    app->filesModel()->setStereo3DOptions(o);
+                }
+                else if (c == "Set A Index")
+                {
+                    int value = message["value"];
+                    app->filesModel()->setA(value);
+                }
+                else if (c == "Set B Indexes")
+                {
+                    std::vector<int> values = message["value"];
+                    app->filesModel()->clearB();
+                    for (auto value : values)
+                    {
+                        app->filesModel()->setB(value, true);
                     }
                 }
+                else if (c == "Set Stereo Index")
+                {
+                    int value = message["value"];
+                    app->filesModel()->setStereo(value);
+                }
+                else if (c == "Image Options")
+                {
+                    bool receive = prefs->ReceiveColor->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    const tl::timeline::ImageOptions& o = message["value"];
+                    app->setImageOptions(o);
+                }
+                else if (c == "LUT Options")
+                {
+                    bool receive = prefs->ReceiveColor->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    const tl::timeline::LUTOptions& o = message["value"];
+                    app->setLUTOptions(o);
+                }
+                else if (c == "gain")
+                {
+                    bool receive = prefs->ReceiveColor->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    float value = message["value"];
+                    ui->uiGain->value(value);
+                    ui->uiGain->do_callback();
+                }
+                else if (c == "gamma")
+                {
+                    bool receive = prefs->ReceiveColor->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    float value = message["value"];
+                    ui->uiGamma->value(value);
+                    ui->uiGamma->do_callback();
+                }
+                else if (c == "saturation")
+                {
+                    bool receive = prefs->ReceiveColor->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    float value = message["value"];
+                    ui->uiSaturation->value(value);
+                    ui->uiSaturation->do_callback();
+                }
+                else if (c == "Clear Note Annotation")
+                {
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive || !player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    clear_note_annotation_cb(ui);
+                    if (annotationsPanel)
+                    {
+                        //annotationsPanel->notes->value("");
+                    }
+                }
+                else if (c == "Create Note Annotation")
+                {
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive || !player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    const std::string& text = message["value"];
+                    add_note_annotation_cb(ui, text);
+                    if (annotationsPanel)
+                    {
+                        //annotationsPanel->notes->value(text.c_str());
+                    }
+                }
+                else if (c == "Create Shape")
+                {
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive || !player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto annotation = player->getAnnotation();
+                    if (!annotation)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto shape = messageToShape(message["value"]);
+                    annotation->shapes.push_back(shape);
 
-                int index = ocio::icsIndex(o.input);
-                ui->uiICS->value(index);
-
-                std::string mergedView =
-                    ocio::combineView(o.display, o.view);
-                index = ocio::viewIndex(mergedView);
-                ui->uiOCIOView->value(index);
-
-                index = ocio::lookIndex(o.look);
-                ui->uiOCIOLook->value(index);
-
-                view->setOCIOOptions(o);
-            }
-            else if (c == "Display Options")
-            {
-                bool receive = prefs->ReceiveColor->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                const tl::timeline::DisplayOptions& o = message["value"];
-                app->setDisplayOptions(o);
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            }
-            else if (c == "setBackgroundOptions")
-            {
-                const tl::timeline::BackgroundOptions& o = message["value"];
-                view->setBackgroundOptions(o);
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            }
-            else if (c == "setCompareOptions")
-            {
-                const tl::timeline::CompareOptions& o = message["value"];
-                app->filesModel()->setCompareOptions(o);
-            }
-            else if (c == "setStereo3DOptions")
-            {
-                const Stereo3DOptions& o = message["value"];
-                app->filesModel()->setStereo3DOptions(o);
-            }
-            else if (c == "Set A Index")
-            {
-                int value = message["value"];
-                app->filesModel()->setA(value);
-            }
-            else if (c == "Set B Indexes")
-            {
-                std::vector<int> values = message["value"];
-                app->filesModel()->clearB();
-                for (auto value : values)
-                {
-                    app->filesModel()->setB(value, true);
-                }
-            }
-            else if (c == "Set Stereo Index")
-            {
-                int value = message["value"];
-                app->filesModel()->setStereo(value);
-            }
-            else if (c == "Image Options")
-            {
-                bool receive = prefs->ReceiveColor->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                const tl::timeline::ImageOptions& o = message["value"];
-                app->setImageOptions(o);
-            }
-            else if (c == "LUT Options")
-            {
-                bool receive = prefs->ReceiveColor->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                const tl::timeline::LUTOptions& o = message["value"];
-                app->setLUTOptions(o);
-            }
-            else if (c == "gain")
-            {
-                bool receive = prefs->ReceiveColor->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                float value = message["value"];
-                ui->uiGain->value(value);
-                ui->uiGain->do_callback();
-            }
-            else if (c == "gamma")
-            {
-                bool receive = prefs->ReceiveColor->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                float value = message["value"];
-                ui->uiGamma->value(value);
-                ui->uiGamma->do_callback();
-            }
-            else if (c == "saturation")
-            {
-                bool receive = prefs->ReceiveColor->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                float value = message["value"];
-                ui->uiSaturation->value(value);
-                ui->uiSaturation->do_callback();
-            }
-            else if (c == "Clear Note Annotation")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive || !player)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                clear_note_annotation_cb(ui);
-                if (annotationsPanel)
-                {
-                    //annotationsPanel->notes->value("");
-                }
-            }
-            else if (c == "Create Note Annotation")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive || !player)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                const std::string& text = message["value"];
-                add_note_annotation_cb(ui, text);
-                if (annotationsPanel)
-                {
-                    //annotationsPanel->notes->value(text.c_str());
-                }
-            }
-            else if (c == "Create Shape")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive || !player)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                auto annotation = player->getAnnotation();
-                if (!annotation)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                auto shape = messageToShape(message["value"]);
-                annotation->shapes.push_back(shape);
-
-                // Create annotation menus if not there already
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-                view->updateUndoRedoButtons();
-                view->redrawWindows();
-            }
-            else if (c == "Remove Shape")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive || !player)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                auto annotation = player->getAnnotation();
-                if (!annotation)
-                {
-                    tcp->unlock();
-                    return;
-                }
-
-                int index = message["value"];
-                if (index >= 0 && index < annotation->shapes.size())
-                {
-                    auto shape = annotation->shapes[index];
-                    annotation->remove(shape);
+                    // Create annotation menus if not there already
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                    view->updateUndoRedoButtons();
                     view->redrawWindows();
-                    ui->uiTimeline->redraw();
                 }
-            }
-            else if (c == "Laser Fade")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive || !player)
+                else if (c == "Remove Shape")
                 {
-                    tcp->unlock();
-                    return;
-                }
-                auto annotation = player->getAnnotation();
-                if (!annotation)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                auto shape = annotation->lastShape();
-                if (!shape)
-                {
-                    tcp->unlock();
-                    return;
-                }
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive || !player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto annotation = player->getAnnotation();
+                    if (!annotation)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
 
-                // Start laser fading
-                LaserFadeData* laserData = new LaserFadeData;
-                laserData->view = view;
-                laserData->annotation = annotation;
-                laserData->shape = shape;
+                    int index = message["value"];
+                    if (index >= 0 && index < annotation->shapes.size())
+                    {
+                        auto shape = annotation->shapes[index];
+                        annotation->remove(shape);
+                        view->redrawWindows();
+                        ui->uiTimeline->redraw();
+                    }
+                }
+                else if (c == "Laser Fade")
+                {
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive || !player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto annotation = player->getAnnotation();
+                    if (!annotation)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto shape = annotation->lastShape();
+                    if (!shape)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
 
-                Fl::add_timeout(
-                    0.0, (Fl_Timeout_Handler)MyViewport::laserFade_cb,
-                    laserData);
+                    // Start laser fading
+                    LaserFadeData* laserData = new LaserFadeData;
+                    laserData->view = view;
+                    laserData->annotation = annotation;
+                    laserData->shape = shape;
 
-                // Create annotation menus if not there already
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-                view->redrawWindows();
-            }
-            else if (c == "Add Shape Point")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive || !player)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                auto annotation = player->getAnnotation();
-                if (!annotation)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                auto lastShape = annotation->lastShape();
-                if (!lastShape)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                auto shape = dynamic_cast< draw::PathShape* >(lastShape.get());
-                if (!shape)
-                {
-                    tcp->unlock();
-                    return;
-                }
+                    Fl::add_timeout(
+                        0.0, (Fl_Timeout_Handler)MyViewport::laserFade_cb,
+                        laserData);
 
-                draw::Point value = message["value"];
+                    // Create annotation menus if not there already
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                    view->redrawWindows();
+                }
+                else if (c == "Add Shape Point")
+                {
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive || !player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto annotation = player->getAnnotation();
+                    if (!annotation)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto lastShape = annotation->lastShape();
+                    if (!lastShape)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto shape = dynamic_cast< draw::PathShape* >(lastShape.get());
+                    if (!shape)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+
+                    draw::Point value = message["value"];
 
 #ifdef OPENGL_BACKEND
-                math::Size2i size = App::ui->uiView->getRenderSize();
-                value.y = size.h - value.y;
+                    math::Size2i size = App::ui->uiView->getRenderSize();
+                    value.y = size.h - value.y;
 #endif
-                shape->pts.push_back(value);
-                view->redrawWindows();
-            }
-            else if (c == "Update Shape")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive || !player)
-                {
-                    tcp->unlock();
-                    return;
+                    shape->pts.push_back(value);
+                    view->redrawWindows();
                 }
-                auto annotation = player->getAnnotation();
-                if (!annotation)
+                else if (c == "Update Shape")
                 {
-                    tcp->unlock();
-                    return;
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive || !player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto annotation = player->getAnnotation();
+                    if (!annotation)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto shape = messageToShape(message["value"]);
+                    annotation->shapes.pop_back();
+                    annotation->shapes.push_back(shape);
+                    view->updateUndoRedoButtons();
+                    view->redrawWindows();
                 }
-                auto shape = messageToShape(message["value"]);
-                annotation->shapes.pop_back();
-                annotation->shapes.push_back(shape);
-                view->updateUndoRedoButtons();
-                view->redrawWindows();
-            }
-            else if (c == "End Shape")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive || !player)
+                else if (c == "End Shape")
                 {
-                    tcp->unlock();
-                    return;
-                }
-                auto annotation = player->getAnnotation();
-                if (!annotation)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                auto shape = messageToShape(message["value"]);
-                annotation->shapes.push_back(shape);
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive || !player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto annotation = player->getAnnotation();
+                    if (!annotation)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    auto shape = messageToShape(message["value"]);
+                    annotation->shapes.push_back(shape);
 
-                // Create annotation menus if not there already
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-                view->updateUndoRedoButtons();
-                view->redrawWindows();
-            }
-            else if (c == "updateVideoCache")
-            {
-                if (!player)
-                {
-                    tcp->unlock();
-                    return;
+                    // Create annotation menus if not there already
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                    view->updateUndoRedoButtons();
+                    view->redrawWindows();
                 }
-                const OTIO_NS::RationalTime& time = message["value"];
-                player->updateVideoCache(time);
-            }
-            else if (c == "clearCache")
-            {
-                if (!player)
+                else if (c == "updateVideoCache")
                 {
-                    tcp->unlock();
-                    return;
+                    if (!player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    const OTIO_NS::RationalTime& time = message["value"];
+                    player->updateVideoCache(time);
                 }
-                player->clearCache();
-            }
-            else if (c == "Create Annotation")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive || !player)
+                else if (c == "clearCache")
                 {
-                    tcp->unlock();
-                    return;
+                    if (!player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    player->clearCache();
                 }
-                bool allFrames = message["value"];
-                player->createAnnotation(allFrames);
-            }
-            else if (c == "Annotations")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive || !player)
+                else if (c == "Create Annotation")
                 {
-                    tcp->unlock();
-                    return;
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive || !player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool allFrames = message["value"];
+                    player->createAnnotation(allFrames);
                 }
-
-                const std::vector<draw::Annotation>& tmp = message["value"];
-
-                std::vector< std::shared_ptr<draw::Annotation> > annotations;
-                for (const auto& ann : tmp)
+                else if (c == "Annotations")
                 {
-                    std::shared_ptr< draw::Annotation > annotation =
-                        messageToAnnotation(ann);
-                    annotations.push_back(annotation);
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive || !player)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+
+                    const std::vector<draw::Annotation>& tmp = message["value"];
+
+                    std::vector< std::shared_ptr<draw::Annotation> > annotations;
+                    for (const auto& ann : tmp)
+                    {
+                        std::shared_ptr< draw::Annotation > annotation =
+                            messageToAnnotation(ann);
+                        annotations.push_back(annotation);
+                    }
+                    player->mergeAllAnnotations(annotations);
+
+                    ui->uiTimeline->redraw();
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
                 }
-                player->mergeAllAnnotations(annotations);
-
-                ui->uiTimeline->redraw();
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            }
-            else if (c == "viewPosAndZoom")
-            {
-                bool receive = prefs->ReceivePanAndZoom->value();
-                if (!receive || !view)
+                else if (c == "viewPosAndZoom")
                 {
-                    tcp->unlock();
-                    return;
+                    bool receive = prefs->ReceivePanAndZoom->value();
+                    if (!receive || !view)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+
+                    float remoteZoom = message["zoom"];
+
+                    // When all files are closed, we get an infinite zoom (null),
+                    if (isinf(remoteZoom))
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+
+                    const math::Vector2i& remoteViewPos = message["viewPos"];
+                    const auto& remoteViewport = message["viewport"];
+                    const auto viewport = view->getViewportSize();
+                    const auto renderSize = view->getRenderSize();
+
+                    // Output values
+                    math::Vector2i localViewPos; // Local view position (panning)
+                    float localZoom;             // Local zoom factor
+
+                    // Call the function to match the remote image position
+                    matchRemoteImagePosition(
+                        remoteViewPos, remoteZoom, remoteViewport, renderSize,
+                        viewport, localViewPos, localZoom);
+
+                    view->setViewPosAndZoom(localViewPos, localZoom);
                 }
-
-                float remoteZoom = message["zoom"];
-
-                // When all files are closed, we get an infinite zoom (null),
-                if (isinf(remoteZoom))
+                else if (c == "Show Annotations")
                 {
-                    tcp->unlock();
-                    return;
-                }
-
-                const math::Vector2i& remoteViewPos = message["viewPos"];
-                const auto& remoteViewport = message["viewport"];
-                const auto viewport = view->getViewportSize();
-                const auto renderSize = view->getRenderSize();
-
-                // Output values
-                math::Vector2i localViewPos; // Local view position (panning)
-                float localZoom;             // Local zoom factor
-
-                // Call the function to match the remote image position
-                matchRemoteImagePosition(
-                    remoteViewPos, remoteZoom, remoteViewport, renderSize,
-                    viewport, localViewPos, localZoom);
-
-                view->setViewPosAndZoom(localViewPos, localZoom);
-            }
-            else if (c == "Show Annotations")
-            {
-                bool receive = prefs->ReceiveAnnotations->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                view->setShowAnnotations(value);
-            }
-            else if (c == "Menu Bar")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if (value)
-                {
-                    ui->uiMenuBar->show();
+                    bool receive = prefs->ReceiveAnnotations->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    view->setShowAnnotations(value);
                 }
                 else
                 {
-                    ui->uiMenuBar->hide();
+                    handled = false;
                 }
-                ui->uiRegion->layout();
-                ui->uiMain->fill_menu(ui->uiMenuBar);
             }
-            else if (c == "Top Bar")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if (value)
-                {
-                    ui->uiTopBar->show();
-                }
-                else
-                {
-                    ui->uiTopBar->hide();
-                }
-                ui->uiRegion->layout();
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            }
-            else if (c == "Pixel Bar")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if (value)
-                {
-                    ui->uiPixelBar->show();
-                }
-                else
-                {
-                    ui->uiPixelBar->hide();
-                }
-                ui->uiRegion->layout();
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            }
-            else if (c == "Bottom Bar")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if (value)
-                {
-                    ui->uiBottomBar->show();
-                }
-                else
-                {
-                    ui->uiBottomBar->hide();
-                }
-                ui->uiRegion->layout();
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            }
-            else if (c == "Status Bar")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if (value)
-                {
-                    ui->uiStatusBar->show();
-                }
-                else
-                {
-                    ui->uiStatusBar->hide();
-                }
-                ui->uiRegion->layout();
-            }
-            else if (c == "Action Bar")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if (value)
-                {
-                    ui->uiToolsGroup->show();
-                }
-                else
-                {
-                    ui->uiToolsGroup->hide();
-                }
-                ui->uiViewGroup->layout();
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-            }
-            else if (c == "Fullscreen")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive || !view)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                view->setFullScreenMode(value);
-            }
-            else if (c == "Presentation")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive || !view)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                view->setPresentationMode(value);
-            }
-            else if (c == "Selection Area")
-            {
-                bool receive = prefs->ReceiveColor->value();
-                if (!receive || !view)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                const math::Box2i& area = message["value"];
-                view->setSelectionArea(area);
-            }
-            else if (c == "One Panel Only")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && panel::onlyOne()) ||
-                    (value && !panel::onlyOne()))
-                    toggle_one_panel_only_cb(nullptr, ui);
-            }
-            else if (c == "Color Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && colorPanel) || (value && !colorPanel))
-                    color_panel_cb(nullptr, ui);
-            }
-            else if (c == "Annotations Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && annotationsPanel) ||
-                    (value && !annotationsPanel))
-                    annotations_panel_cb(nullptr, ui);
-            }
-            else if (c == "Background Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && backgroundPanel) || (value && !backgroundPanel))
-                    background_panel_cb(nullptr, ui);
-            }
-            else if (c == "Color Area Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && colorAreaPanel) || (value && !colorAreaPanel))
-                    color_area_panel_cb(nullptr, ui);
-            }
-            else if (c == "Compare Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && comparePanel) || (value && !comparePanel))
-                    compare_panel_cb(nullptr, ui);
-            }
-            else if (c == "Devices Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && devicesPanel) || (value && !devicesPanel))
-                    devices_panel_cb(nullptr, ui);
-            }
-            else if (c == "Environment Map Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && environmentMapPanel) ||
-                    (value && !environmentMapPanel))
-                    environment_map_panel_cb(nullptr, ui);
-            }
-            else if (c == "Files Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && filesPanel) || (value && !filesPanel))
-                    files_panel_cb(nullptr, ui);
-            }
-            else if (c == "Histogram Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && histogramPanel) || (value && !histogramPanel))
-                    histogram_panel_cb(nullptr, ui);
-            }
-            else if (c == "Media Info Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && imageInfoPanel) || (value && !imageInfoPanel))
-                    image_info_panel_cb(nullptr, ui);
-            }
-            else if (c == "setEditMode")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                EditMode value = message["value"];
-                editMode = value;
-                editModeH = message["height"];
-                bool presentation = ui->uiView->getPresentationMode();
-                if (!presentation)
-                    ui->uiView->resizeWindow();
 
-                set_edit_mode_cb(value, ui);
-            }
-            else if (c == "WebRTC Panel")
+            if (!handled)
             {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
+                handled = true;
+                if (c == "Menu Bar")
                 {
-                    tcp->unlock();
-                    return;
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if (value)
+                    {
+                        ui->uiMenuBar->show();
+                    }
+                    else
+                    {
+                        ui->uiMenuBar->hide();
+                    }
+                    ui->uiRegion->layout();
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
                 }
-                bool value = message["value"];
-                if ((!value && webrtcPanel) || (value && !webrtcPanel))
-                    webrtc_panel_cb(nullptr, ui);
-            }
-            else if (c == "USD Panel")
-            {
+                else if (c == "Top Bar")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if (value)
+                    {
+                        ui->uiTopBar->show();
+                    }
+                    else
+                    {
+                        ui->uiTopBar->hide();
+                    }
+                    ui->uiRegion->layout();
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                }
+                else if (c == "Pixel Bar")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if (value)
+                    {
+                        ui->uiPixelBar->show();
+                    }
+                    else
+                    {
+                        ui->uiPixelBar->hide();
+                    }
+                    ui->uiRegion->layout();
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                }
+                else if (c == "Bottom Bar")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if (value)
+                    {
+                        ui->uiBottomBar->show();
+                    }
+                    else
+                    {
+                        ui->uiBottomBar->hide();
+                    }
+                    ui->uiRegion->layout();
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                }
+                else if (c == "Status Bar")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if (value)
+                    {
+                        ui->uiStatusBar->show();
+                    }
+                    else
+                    {
+                        ui->uiStatusBar->hide();
+                    }
+                    ui->uiRegion->layout();
+                }
+                else if (c == "Action Bar")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if (value)
+                    {
+                        ui->uiToolsGroup->show();
+                    }
+                    else
+                    {
+                        ui->uiToolsGroup->hide();
+                    }
+                    ui->uiViewGroup->layout();
+                    ui->uiMain->fill_menu(ui->uiMenuBar);
+                }
+                else if (c == "Fullscreen")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive || !view)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    view->setFullScreenMode(value);
+                }
+                else if (c == "Presentation")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive || !view)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    view->setPresentationMode(value);
+                }
+                else if (c == "Selection Area")
+                {
+                    bool receive = prefs->ReceiveColor->value();
+                    if (!receive || !view)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    const math::Box2i& area = message["value"];
+                    view->setSelectionArea(area);
+                }
+                else if (c == "One Panel Only")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && panel::onlyOne()) ||
+                        (value && !panel::onlyOne()))
+                        toggle_one_panel_only_cb(nullptr, ui);
+                }
+                else if (c == "Color Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && colorPanel) || (value && !colorPanel))
+                        color_panel_cb(nullptr, ui);
+                }
+                else if (c == "Annotations Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && annotationsPanel) ||
+                        (value && !annotationsPanel))
+                        annotations_panel_cb(nullptr, ui);
+                }
+                else if (c == "Background Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && backgroundPanel) || (value && !backgroundPanel))
+                        background_panel_cb(nullptr, ui);
+                }
+                else if (c == "Color Area Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && colorAreaPanel) || (value && !colorAreaPanel))
+                        color_area_panel_cb(nullptr, ui);
+                }
+                else if (c == "Compare Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && comparePanel) || (value && !comparePanel))
+                        compare_panel_cb(nullptr, ui);
+                }
+                else if (c == "Devices Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && devicesPanel) || (value && !devicesPanel))
+                        devices_panel_cb(nullptr, ui);
+                }
+                else if (c == "Environment Map Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && environmentMapPanel) ||
+                        (value && !environmentMapPanel))
+                        environment_map_panel_cb(nullptr, ui);
+                }
+                else if (c == "Files Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && filesPanel) || (value && !filesPanel))
+                        files_panel_cb(nullptr, ui);
+                }
+                else if (c == "Histogram Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && histogramPanel) || (value && !histogramPanel))
+                        histogram_panel_cb(nullptr, ui);
+                }
+                else if (c == "Media Info Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && imageInfoPanel) || (value && !imageInfoPanel))
+                        image_info_panel_cb(nullptr, ui);
+                }
+                else if (c == "Editing")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    EditMode value = message["value"];
+                    editMode = value;
+                    editModeH = message["height"];
+                    editModeH *= ui->uiView->pixels_per_unit();
+                    bool presentation = ui->uiView->getPresentationMode();
+                    if (!presentation)
+                        ui->uiView->resizeWindow();
+
+                    set_edit_mode_cb(value, ui);
+                }
+                else if (c == "WebRTC Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && webrtcPanel) || (value && !webrtcPanel))
+                        webrtc_panel_cb(nullptr, ui);
+                }
+                else if (c == "USD Panel")
+                {
 #ifdef TLRENDER_USD
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && usdPanel) || (value && !usdPanel))
-                    usd_panel_cb(nullptr, ui);
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && usdPanel) || (value && !usdPanel))
+                        usd_panel_cb(nullptr, ui);
 #endif
-            }
-            else if (c == "NDI Panel")
-            {
+                }
+                else if (c == "NDI Panel")
+                {
 #ifdef TLRENDER_NDI
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && ndiPanel) || (value && !ndiPanel))
-                    ndi_panel_cb(nullptr, ui);
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && ndiPanel) || (value && !ndiPanel))
+                        ndi_panel_cb(nullptr, ui);
 #endif
-            }
-            // Logs panel is not sent nor received.
-            else if (c == "Python Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
                 }
+                // Logs panel is not sent nor received.
+                else if (c == "Python Panel")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
 #ifdef MRV2_PYBIND11
-                bool value = message["value"];
-                if ((!value && pythonPanel) || (value && !pythonPanel))
-                    python_panel_cb(nullptr, ui);
+                    bool value = message["value"];
+                    if ((!value && pythonPanel) || (value && !pythonPanel))
+                        python_panel_cb(nullptr, ui);
 #endif
-            }
-            else if (c == "Settings Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
                 }
-                bool value = message["value"];
-                if ((!value && settingsPanel) || (value && !settingsPanel))
-                    settings_panel_cb(nullptr, ui);
-            }
-            else if (c == "Vectorscope Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
+                else if (c == "Settings Panel")
                 {
-                    tcp->unlock();
-                    return;
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && settingsPanel) || (value && !settingsPanel))
+                        settings_panel_cb(nullptr, ui);
                 }
-                bool value = message["value"];
-                if ((!value && vectorscopePanel) ||
-                    (value && !vectorscopePanel))
-                    vectorscope_panel_cb(nullptr, ui);
-            }
-            else if (c == "Waveform Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
+                else if (c == "Vectorscope Panel")
                 {
-                    tcp->unlock();
-                    return;
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && vectorscopePanel) ||
+                        (value && !vectorscopePanel))
+                        vectorscope_panel_cb(nullptr, ui);
                 }
-                bool value = message["value"];
-                if ((!value && waveformPanel) ||
-                    (value && !waveformPanel))
-                    waveform_panel_cb(nullptr, ui);
-            }
-            else if (c == "Stereo 3D Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
+                else if (c == "Waveform Panel")
                 {
-                    tcp->unlock();
-                    return;
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && waveformPanel) ||
+                        (value && !waveformPanel))
+                        waveform_panel_cb(nullptr, ui);
                 }
-                bool value = message["value"];
-                if ((!value && stereo3DPanel) || (value && !stereo3DPanel))
-                    stereo3D_panel_cb(nullptr, ui);
-            }
-            else if (c == "Stats Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
+                else if (c == "Stereo 3D Panel")
                 {
-                    tcp->unlock();
-                    return;
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && stereo3DPanel) || (value && !stereo3DPanel))
+                        stereo3D_panel_cb(nullptr, ui);
                 }
-                bool value = message["value"];
-                if ((!value && statsPanel) || (value && !statsPanel))
-                    stats_panel_cb(nullptr, ui);
-            }
-            else if (c == "setTimelineDisplayOptions")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
+                else if (c == "Stats Panel")
                 {
-                    tcp->unlock();
-                    return;
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    if ((!value && statsPanel) || (value && !statsPanel))
+                        stats_panel_cb(nullptr, ui);
                 }
-                TIMELINEUI::DisplayOptions value = message["value"];
-                ui->uiTimeline->setDisplayOptions(value);
-            }
-            else if (c == "Timeline/FrameView")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
+                else
                 {
-                    tcp->unlock();
-                    return;
+                    handled = false;
                 }
-                ui->uiTimeline->frameView();
             }
-            else if (c == "Timeline/ScrollToCurrentFrame")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                ui->uiTimeline->setScrollToCurrentFrame(value);
-            }
-            else if (c == "setTimelineEditable")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                ui->uiTimeline->setEditable(value);
-            }
-            else if (c == "Clear Frame Annotations")
-            {
-                annotation_clear_cb(nullptr, ui);
-            }
-            else if (c == "Clear All Annotations")
-            {
-                annotation_clear_all_cb(nullptr, ui);
-            }
-            else if (c == "Create New Timeline")
-            {
-                create_new_timeline_cb(ui);
-            }
-            else if (c == "Add Clip to Timeline")
-            {
-                int Aindex = message["value"];
-                add_clip_to_timeline_cb(Aindex, ui);
-            }
-            else if (c == "Edit/Remove Selected")
-            {
-                edit_remove_selected_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Frame/Cut")
-            {
-                edit_cut_frame_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Frame/Copy")
-            {
-                edit_copy_frame_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Frame/Paste")
-            {
-                edit_paste_frame_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Frame/Insert")
-            {
-                edit_insert_frame_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Audio Clip/Insert")
-            {
-                std::string audioFile = message["value"];
-                edit_insert_audio_clip_cb(ui, audioFile);
-            }
-            else if (c == "Edit/Audio Clip/Remove")
-            {
-                edit_remove_audio_clip_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Audio Gap/Insert")
-            {
-                edit_insert_audio_gap_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Audio Gap/Remove")
-            {
-                edit_remove_audio_gap_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Video Gap/Insert")
-            {
-                edit_insert_video_gap_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Video Gap/Remove")
-            {
-                edit_remove_video_gap_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Slice")
-            {
-                edit_slice_clip_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Remove")
-            {
-                edit_remove_clip_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Undo")
-            {
-                edit_undo_cb(nullptr, ui);
-            }
-            else if (c == "Edit/Redo")
-            {
-                edit_redo_cb(nullptr, ui);
-            }
-            else if (c == "setFilesPanelOptions")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
 
-                const FilesPanelOptions& o = message["value"];
-                app->filesModel()->setFilesPanelOptions(o);
-            }
-            else if (c == "setMediaReferenceKey")
+            if (!handled)
             {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
+                handled = true;
+                if (c == "setTimelineDisplayOptions")
                 {
-                    tcp->unlock();
-                    return;
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    TIMELINEUI::DisplayOptions value = message["value"];
+                    ui->uiTimeline->setDisplayOptions(value);
                 }
-                std::string key = message["value"];
-
-                const auto& timeline = player->timeline();
-                if (!timeline) return;
-
-                timeline->setMediaReferenceKey(key);
-                player->clearCache();
-                ui->uiTimeline->setTimelinePlayer(nullptr);
-                ui->uiTimeline->setTimelinePlayer(player);
-                ui->uiView->redrawWindows();
-            }
-            else if (c == "Protocol Version")
-            {
-                int value = message["value"];
-                if (value != kProtocolVersion)
+                else if (c == "Timeline/FrameView")
                 {
-                    /* xgettext:c++-format */
-                    const std::string msg =
-                        tl::string::Format(
-                            _("Server protocol version is {0}.  Client "
-                              "protocol version is {1}"))
-                            .arg(value)
-                            .arg(kProtocolVersion);
-                    LOG_ERROR(msg);
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    ui->uiTimeline->frameView();
+                }
+                else if (c == "Timeline/ScrollToCurrentFrame")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    ui->uiTimeline->setScrollToCurrentFrame(value);
+                }
+                else if (c == "setTimelineEditable")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    bool value = message["value"];
+                    ui->uiTimeline->setEditable(value);
+                }
+                else if (c == "Clear Frame Annotations")
+                {
+                    annotation_clear_cb(nullptr, ui);
+                }
+                else if (c == "Clear All Annotations")
+                {
+                    annotation_clear_all_cb(nullptr, ui);
+                }
+                else if (c == "Create New Timeline")
+                {
+                    create_new_timeline_cb(ui);
+                }
+                else if (c == "Add Clip to Timeline")
+                {
+                    int Aindex = message["value"];
+                    add_clip_to_timeline_cb(Aindex, ui);
+                }
+                else if (c == "Edit/Frame/Cut")
+                {
+                    edit_frame_cut_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Frame/Copy")
+                {
+                    edit_frame_copy_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Frame/Paste")
+                {
+                    edit_frame_paste_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Frame/Insert")
+                {
+                    edit_frame_insert_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Time/Slice") // OK
+                {
+                    edit_time_slice_clip_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Time/Remove") // OK
+                {
+                    edit_time_remove_clip_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Time/Audio Clip/Insert") // OK
+                {
+                    std::string audioFile = message["value"];
+                    edit_time_insert_audio_clip(ui, audioFile);
+                }
+                else if (c == "Edit/Time/Audio Gap/Insert") // OK
+                {
+                    edit_time_insert_audio_gap_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Time/Audio Clip/Remove") // OK
+                {
+                    edit_time_remove_audio_clip_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Time/Audio Gap/Remove")  // OK
+                {
+                    edit_time_remove_audio_gap_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Time/Video Gap/Insert") // OK
+                {
+                    edit_time_insert_video_gap_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Time/Video Gap/Remove") // OK
+                {
+                    edit_time_remove_video_gap_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Selected/Remove")
+                {
+                    edit_selected_remove_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Selected/Add Transition")
+                {
+                    edit_selected_add_transition_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Undo")
+                {
+                    edit_undo_cb(nullptr, ui);
+                }
+                else if (c == "Edit/Redo")
+                {
+                    edit_redo_cb(nullptr, ui);
+                }
+                else if (c == "setEditMode")
+                {
+                    timeline::EditMode editMode = message["value"];
+                    ui->uiView->setEditMode(editMode);
+                }
+                else if (c == "setFilesPanelOptions")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+
+                    const FilesPanelOptions& o = message["value"];
+                    app->filesModel()->setFilesPanelOptions(o);
+                }
+                else if (c == "setMediaReferenceKey")
+                {
+                    bool receive = prefs->ReceiveUI->value();
+                    if (!receive)
+                    {
+                        tcp->unlock();
+                        return;
+                    }
+                    std::string key = message["value"];
+
+                    player->setMediaReferenceKey(key);
+                    player->clearCache();
+                    ui->uiTimeline->setTimelinePlayer(nullptr);
+                    ui->uiTimeline->setTimelinePlayer(player);
+                    ui->uiView->redrawWindows();
+                }
+                else if (c == "Protocol Version")
+                {
+                    int value = message["value"];
+                    if (value != kProtocolVersion)
+                    {
+                        /* xgettext:c++-format */
+                        const std::string msg =
+                            tl::string::Format(
+                                _("Server protocol version is {0}.  Client "
+                                  "protocol version is {1}"))
+                                .arg(value)
+                                .arg(kProtocolVersion);
+                        LOG_ERROR(msg);
+                    }
+                }
+                else
+                {
+                    handled = false;
                 }
             }
-            else
+
+            if (!handled)
             {
                 // @todo: Unknown command
                 std::string err =

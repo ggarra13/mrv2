@@ -79,12 +79,12 @@ namespace tl
         {
             const size_t vertexByteCount = gl::getByteCount(type);
             std::vector<uint8_t> out(
-                (range.getMax() - range.getMin() + 1) * 3 * vertexByteCount);
+                (range.max() - range.min() + 1) * 3 * vertexByteCount);
             uint8_t* p = out.data();
             switch (type)
             {
             case gl::VBOType::Pos2_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex2* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -100,7 +100,7 @@ namespace tl
                 }
                 break;
             case gl::VBOType::Pos2_F32_UV_U16:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex2* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -130,7 +130,7 @@ namespace tl
                 }
                 break;
             case gl::VBOType::Pos2_F32_Color_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex2* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -175,12 +175,12 @@ namespace tl
         {
             const size_t vertexByteCount = gl::getByteCount(type);
             std::vector<uint8_t> out(
-                (range.getMax() - range.getMin() + 1) * 3 * vertexByteCount);
+                (range.max() - range.min() + 1) * 3 * vertexByteCount);
             uint8_t* p = out.data();
             switch (type)
             {
             case gl::VBOType::Pos3_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -197,7 +197,7 @@ namespace tl
                 }
                 break;
             case gl::VBOType::Pos3_F32_UV_U16:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -228,7 +228,7 @@ namespace tl
                 }
                 break;
             case gl::VBOType::Pos3_F32_UV_U16_Normal_U10:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -278,7 +278,7 @@ namespace tl
                 }
                 break;
             case gl::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -352,7 +352,7 @@ namespace tl
                 }
                 break;
             case gl::VBOType::Pos3_F32_UV_F32_Normal_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -382,7 +382,7 @@ namespace tl
                 }
                 break;
             case gl::VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -435,12 +435,12 @@ namespace tl
         {
             return objectCount;
         }
-        
+
         size_t VBO::getTotalByteCount()
         {
             return totalByteCount;
         }
-        
+
         struct VBO::Private
         {
             std::size_t size = 0;
@@ -451,10 +451,10 @@ namespace tl
         void VBO::_init(std::size_t size, VBOType type)
         {
             TLRENDER_P();
-            
+
             ++objectCount;
             totalByteCount += size * getByteCount(type);
-            
+
             p.size = size;
             p.type = type;
             glGenBuffers(1, &p.vbo);
@@ -478,7 +478,7 @@ namespace tl
                 glDeleteBuffers(1, &p.vbo);
                 p.vbo = 0;
             }
-            
+
             --objectCount;
             totalByteCount -= p.size * getByteCount(p.type);
         }

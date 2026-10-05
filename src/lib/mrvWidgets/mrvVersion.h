@@ -27,6 +27,7 @@ namespace mrv
     const std::string running_info();
     const std::string cpu_info();
     const std::string gpu_info();
+    const std::string about_message();
 
     void about_message(mrv::TextBrowser* b);
     void thanks_message(mrv::TextBrowser* b);

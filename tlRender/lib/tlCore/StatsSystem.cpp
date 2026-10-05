@@ -15,7 +15,7 @@ namespace tl
 
     namespace system
     {
-        
+
         struct StatsSystem::Private
         {
             std::vector<std::pair<std::string, std::function<int64_t(void)> > > samplers;
@@ -26,7 +26,7 @@ namespace tl
         };
 
         StatsSystem::StatsSystem(const std::shared_ptr<Context>& context) :
-            ISystem(),
+            ISystem(context, "tl::system::StatsSystem"),
             _p(new Private)
         {
             TLRENDER_P();
@@ -176,4 +176,3 @@ namespace tl
         }
     }
 }
-    

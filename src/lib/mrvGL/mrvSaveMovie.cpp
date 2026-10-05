@@ -58,21 +58,20 @@ namespace mrv
 
         bool found = false;
 
-        auto cacheInfoObserver =
-            observer::ValueObserver<timeline::PlayerCacheInfo>::create(
-                player->player()->observeCacheInfo(),
-                [&startTime, &found](const timeline::PlayerCacheInfo& value)
-                {
-                    for (const auto& t : value.videoFrames)
+        auto videoDataObserver =
+            observer::ListObserver<timeline::VideoFrame>::create(
+                player->player()->observeCurrentVideo(),
+                [&found, &player, &startTime]
+                (const std::vector<timeline::VideoFrame>& videoFrames)
                     {
-                        if (startTime >= t.start_time() &&
-                            startTime <= t.end_time_exclusive())
+                        if (videoFrames.empty()) return;
+                        for (auto videoFrame : videoFrames)
                         {
-                            found = true;
-                            break;
+                            if (videoFrame.time == startTime)
+                                found = true;
                         }
-                    }
-                });
+                    },
+                observer::CallbackAction::Trigger);
 
         while (!found)
         {
@@ -117,10 +116,7 @@ namespace mrv
         auto context = ui->app->getContext();
 
         // Get I/O cache and store its size.
-        auto ioSystem = context->getSystem<io::System>();
-        auto cache = ioSystem->getCache();
-
-        size_t oldCacheSize = cache->getMax();
+        auto ioSystem = context->getSystem<io::WriteSystem>();
 
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
@@ -128,7 +124,26 @@ namespace mrv
         const std::string& suffix = path.getSuffix();
         const std::string extension = string::toLower(path.getExtension());
 
+        bool saveEXR = (extension == ".exr" ||
+                        extension == ".sxr");
+        bool saveHDR = (extension == ".hdr");
+        bool saveJPEG = (extension == ".jpg" || extension == ".jpeg");
+
         std::string newFile = directory + baseName + number + suffix + extension;
+
+        timeline::OCIOOptions savedOCIOOptions;
+        bool restoreOCIOOptions = false;
+
+        if (saveEXR &&
+            options.exportMode == timeline::HDRExportMode::LinearHDR)
+        {
+            savedOCIOOptions = view->getOCIOOptions();
+            timeline::OCIOOptions ocioOptions = savedOCIOOptions;
+            restoreOCIOOptions = true;
+
+            ocioOptions.enabled = false;
+            view->setOCIOOptions(ocioOptions);
+        }
 
         try
         {
@@ -199,10 +214,6 @@ namespace mrv
             auto Aitem = model->observeA()->get();
             std::string inputFile = Aitem->path.get();
 
-            // Make I/O cache be 1Gb to deal with long movies fine.
-            size_t bytes = memory::gigabyte;
-            cache->setMax(bytes);
-
             auto context = ui->app->getContext();
             auto timeline = player->timeline();
 
@@ -241,20 +252,25 @@ namespace mrv
             // Render information.
             const auto& info = player->ioInfo();
 
+
             OTIO_NS::TimeRange videoTime = time::invalidTimeRange;
             if (info.videoTime.has_value())
                 videoTime = info.videoTime.value();
 
-            const bool hasVideo = (!info.video.empty()) && options.saveVideo;
-
-            if (player->timeRange() != timeRange ||
-                videoTime.start_time() != timeRange.start_time() ||
-                videoTime.duration() != timeRange.duration())
+            const bool hasVideo = (!info.video.empty() ||
+                                   info.videoTime.has_value()) &&
+                                  options.saveVideo;
+            if (hasVideo)
             {
-                double videoRate = videoTime.duration().rate();
-                videoTime = OTIO_NS::TimeRange(
-                    timeRange.start_time().rescaled_to(videoRate),
-                    timeRange.duration().rescaled_to(videoRate));
+                if (player->timeRange() != timeRange ||
+                    info.videoTime->start_time() != timeRange.start_time() ||
+                    info.videoTime->duration() != timeRange.duration())
+                {
+                    double videoRate = info.videoTime->duration().rate();
+                    videoTime = OTIO_NS::TimeRange(
+                        timeRange.start_time().rescaled_to(videoRate),
+                        timeRange.duration().rescaled_to(videoRate));
+                }
             }
 
             auto audioTime = time::invalidTimeRange;
@@ -327,6 +343,16 @@ namespace mrv
                     newExtension = ".mov";
                 }
             }
+            else if (profile == "OAPV")
+            {
+                if (extension != ".mov" && extension != ".mp4")
+                {
+                    LOG_WARNING(
+                        _("OAPV profile needs a .mp4 extension.  Changing "
+                          "it to .mp4"));
+                    newExtension = ".mp4";
+                }
+            }
 
             newFile = directory + baseName + number + suffix + newExtension;
 
@@ -341,14 +367,9 @@ namespace mrv
                             .arg(newFile));
                 }
             }
-
-            path = file::Path(newFile);
 #endif
 
-            bool saveEXR = (extension == ".exr" ||
-                            extension == ".sxr");
-            bool saveHDR = (extension == ".hdr");
-            bool saveJPEG = (extension == ".jpg" || extension == ".jpeg");
+            path = file::Path(newFile);
 
             if (time::compareExact(videoTime, time::invalidTimeRange))
                 videoTime = audioTime;
@@ -573,7 +594,7 @@ namespace mrv
                 }
 #endif
 
-                outputInfo = writerPlugin->getWriteInfo(outputInfo);
+                outputInfo = writerPlugin->getInfo(outputInfo);
                 if (image::PixelType::kNone == outputInfo.pixelType)
                 {
                     outputInfo.pixelType = image::PixelType::RGB_U8;
@@ -785,8 +806,10 @@ namespace mrv
                 }
                 else
                 {
-                    /* xgettext:c++-format */
-                    msg = string::Format(_("Saving... {0}")).arg(currentTime);
+                    auto playerTime = player->currentTime();
+                    msg = string::Format(_("Saving... {0}"))
+                          .arg(currentTime)
+                          .arg(playerTime);
                     LOG_STATUS(msg);
                 }
 
@@ -1077,17 +1100,20 @@ namespace mrv
                         {
                             auto hdrData = videoFrame[0].layers[0].image->getHDR();
                             if (hdrData)
+                            {
                                 outputImage->setHDR(*hdrData);
+                            }
                         }
 
                         auto tags = view->getTags();
                         if (saveEXR)
                         {
-                            std::string ics = ocio::ics();
-                            if (!ics.empty() && ics != _("None"))
-                                tags["colorInteropID"] = ics;
+                            const std::string id = ocio::getInteropID(false);
+                            if (!id.empty())
+                                tags["ColorInteropID"] = id;
                         }
                         outputImage->setTags(tags);
+
                         writer->writeVideo(currentTime, outputImage);
                     }
                 }
@@ -1110,27 +1136,31 @@ namespace mrv
                     // use seek as it corrupts the timeline.
                     if (options.annotations && hasVideo)
                         player->frameNext();
-                    else if (!hasVideo)
+                    else
                         player->seek(currentTime);
 
                     // We wait for the frame to arrive in cache.
                     waitForFrame(player, currentTime);
                 }
-
-#ifdef VULKAN_BACKEND
-                frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
-#endif
             }
+
+            writer->finish();
         }
         catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
         }
 
+        if (restoreOCIOOptions)
+        {
+            view->setOCIOOptions(savedOCIOOptions);
+        }
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
         view->setHudActive(hud);
         view->setPresentationMode(presentation);
         view->setShowVideo(true);
+        view->redraw();
+
         player->seek(currentTime);
         player->setMute(mute);
         ui->uiTimeline->valid(0); // needed
@@ -1145,8 +1175,6 @@ namespace mrv
         }
 
         App::unsaved_annotations = false;
-
-        cache->setMax(oldCacheSize);
     }
 
 } // namespace mrv

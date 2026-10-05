@@ -120,13 +120,17 @@ if(BUILD_PYTHON)
 	endif()
     endif()
 
-    if (UNIX)
+    if (APPLE)
 	install( DIRECTORY ${MRV2_PYTHON_LIBS}
             DESTINATION lib
             COMPONENT applications )
     elseif(WIN32)
 	install( DIRECTORY ${MRV2_PYTHON_LIBS}
             DESTINATION bin
+            COMPONENT applications )
+    elseif(UNIX)
+	install( DIRECTORY ${MRV2_PYTHON_LIBS}
+            DESTINATION lib
             COMPONENT applications )
     endif()
 endif()

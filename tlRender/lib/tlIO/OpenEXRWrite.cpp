@@ -45,7 +45,7 @@ namespace tl
         void Write::_init(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             TLRENDER_P();
 
@@ -55,9 +55,9 @@ namespace tl
             if (i != options.end())
             {
                 std::stringstream ss(i->second);
-                int i;
-                ss >> i;
-                _compression = static_cast<Imf::Compression>(i);
+                int j;
+                ss >> j;
+                _compression = static_cast<Imf::Compression>(j);
             }
             i = options.find("OpenEXR/PixelType");
             if (i != options.end())
@@ -76,6 +76,18 @@ namespace tl
             {
                 std::stringstream ss(i->second);
                 ss >> _dwaCompressionLevel;
+            }
+            i = options.find("OpenEXR/lossyHTJ2KQuality");
+            if (i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> _lossyHTJ2KQuality;
+            }
+            i = options.find("OpenEXR/zstdCompressionLevel");
+            if (i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> _zstdCompressionLevel;
             }
             i = options.find("OpenEXR/Speed");
             if (i != options.end())
@@ -105,7 +117,7 @@ namespace tl
         std::shared_ptr<Write> Write::create(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             auto out = std::shared_ptr<Write>(new Write);
             out->_init(path, info, options, logSystem);
@@ -169,6 +181,12 @@ namespace tl
                 Imath::V2f(0.F, 0.F), 1.F, Imf::INCREASING_Y, _compression);
             header.zipCompressionLevel() = _zipCompressionLevel;
             header.dwaCompressionLevel() = _dwaCompressionLevel;
+
+            // HTJ2K default is 110f.  Valid range 1 to 150.
+            header.lossyHTJ2KQuality() = _lossyHTJ2KQuality;
+
+            // Valid range is 1 through 22.
+            header.zstdCompressionLevel() = _zstdCompressionLevel;
 
             auto hdr = image->getHDR();
             if (hdr)

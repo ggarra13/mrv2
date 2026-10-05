@@ -63,8 +63,9 @@ namespace tl
                 timeRange = timeRangeOpt.value();
             }
             const OTIO_NS::TimeRange trimmedRange = item->trimmed_range();
+            const OTIO_NS::TimeRange availableRange = item->available_range();
             IItem::_init(
-                objectName, timeRange, trimmedRange, scale, options,
+                objectName, timeRange, trimmedRange, availableRange, scale, options,
                 displayOptions, itemData, context, parent);
             TLRENDER_P();
 

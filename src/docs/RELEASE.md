@@ -27,7 +27,7 @@ The same license works for both **mrv2** and **vmrv2**, so you can have both ins
 Without a donation license, the following features are unavailable:
 
 ```
-Annotations (Solo+)
+Full Annotations and Color Area Selection (Solo+)
 Python (Standard+)
 Editing (Edit+)
 Voice and Link Annotations (Pro)

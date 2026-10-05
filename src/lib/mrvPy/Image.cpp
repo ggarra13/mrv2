@@ -227,16 +227,16 @@ Contains all classes and enums related to image controls.
             _("Add a :class:`mrv2.math.Vector3f` to image."))
         .def_readwrite(
             "brightness", &timeline::Color::brightness,
-            _("Change a :class:`mrv2.math.Vector3f` of brightness"
-              " to image."))
+            _("Change a :class:`mrv2.math.Vector3f` of brightness (gain)"
+              " to image.  Only the x channel is used."))
         .def_readwrite(
             "contrast", &timeline::Color::contrast,
             _("Change a :class:`mrv2.math.Vector3f` of contrast"
-              " to image."))
+              " to image.  Only the x channel is used."))
         .def_readwrite(
             "saturation", &timeline::Color::saturation,
             _("Change a :class:`mrv2.math.Vector3f` of saturation"
-              " to image."))
+              " to image. Only the x channel is used."))
         .def_readwrite(
             "tint", &timeline::Color::tint,
             _("Change tint of image to image between 0 and 1."))

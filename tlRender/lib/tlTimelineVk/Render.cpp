@@ -1009,11 +1009,6 @@ namespace tl
                                               return vlk::Texture::getObjectCount();
                                           });
             }
-
-            p.glyphTextureAtlas = vlk::TextureAtlas::create(
-                ctx, 1, 4096, image::PixelType::L_U8,
-                timeline::ImageFilter::Linear);
-
         }
 
         Render::Render(Fl_Vk_Context& context) :
@@ -1021,22 +1016,6 @@ namespace tl
             _p(new Private)
         {
             TLRENDER_P();
-
-            // ----------------------------------------------------------------
-            //  Pool initialization – create the pool on first use.
-            //
-            //  The pool is a member of Private:
-            //    std::shared_ptr<vlk::VAOPool> vaoPool;
-            //
-            //  Call  p.vaoPool->bind(p.frameIndex)  once per frame, e.g. in
-            //  Render::begin() - NOT here
-            // ----------------------------------------------------------------
-            if (!p.vaoPool)
-            {
-                VkDeviceSize slotSize =
-                    static_cast<VkDeviceSize>(64 * memory::megabyte);
-                p.vaoPool = vlk::VAOPool::create(ctx, slotSize);
-            }
 
             for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
             {
@@ -1074,7 +1053,14 @@ namespace tl
                 {
                     vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
                 }
+                g.pipelines.clear();
+                g.pipelineLayouts.clear();
+                g.bindingSets.clear();
+                g.textures.clear();
+                g.buffers.clear();
             }
+            p.vaoPool.reset();
+            p.glyphTextureAtlas.reset();
         }
 
         std::shared_ptr<Render> Render::create(
@@ -1103,27 +1089,61 @@ namespace tl
             p.fbo = fbo;
             p.renderPass = fbo->getClearRenderPass();
             p.frameIndex = frameIndex;
+
+
+
+
+
+            // ----------------------------------------------------------------
+            //  Pool initialization – create the pool on first use.
+            //
+            //  The pool is a member of Private:
+            //    std::shared_ptr<vlk::VAOPool> vaoPool;
+            //
+            //  Call  p.vaoPool->bind(p.frameIndex)  once per frame, e.g. in
+            //  Render::begin() - NOT here
+            // ----------------------------------------------------------------
+            if (!p.vaoPool)
+            {
+                VkDeviceSize slotSize =
+                    static_cast<VkDeviceSize>(renderOptions.vaoSize);
+                p.vaoPool = vlk::VAOPool::create(ctx, slotSize);
+            }
+
+            if (renderOptions.glyphTexture && !p.glyphTextureAtlas)
+            {
+                p.glyphTextureAtlas = vlk::TextureAtlas::create(
+                    ctx, 1, 4096, image::PixelType::L_U8,
+                    timeline::ImageFilter::Linear);
+            }
+
             p.vaoPool->bind(frameIndex);
 
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
-            const VkColorComponentFlags allMask[] =
-                { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-                  VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
-            ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+            if (ctx.vkCmdSetColorWriteMaskEXT)
+            {
+                const VkColorComponentFlags allMask[] =
+                    { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                      VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+                ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+            }
 #endif
 
 #if USE_DYNAMIC_STENCILS
-            ctx.vkCmdSetStencilTestEnableEXT(cmd, VK_FALSE);
-            ctx.vkCmdSetStencilOpEXT(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                     VK_STENCIL_OP_KEEP,
-                                     VK_STENCIL_OP_KEEP,
-                                     VK_STENCIL_OP_KEEP,
-                                     VK_COMPARE_OP_ALWAYS);
+            if (ctx.vkCmdSetStencilTestEnableEXT)
+            {
+                ctx.vkCmdSetStencilTestEnableEXT(cmd, VK_FALSE);
+                ctx.vkCmdSetStencilOpEXT(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
 
-            vkCmdSetStencilCompareMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                       0xFFFFFFFF);
-            vkCmdSetStencilWriteMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                     0xFFFFFFFF);
+                vkCmdSetStencilCompareMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFFFFFFFF);
+                vkCmdSetStencilWriteMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFFFFFFFF);
+            }
 #endif
 
             begin(renderSize, renderOptions);
@@ -1620,6 +1640,108 @@ namespace tl
             TLRENDER_P();
 
             p.fbo->transitionToShaderRead(p.cmd);
+        }
+
+        void Render::beginPass(
+            VkCommandBuffer& cmd,
+            const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+            const math::Size2i& renderSize,
+            const timeline::RenderOptions& renderOptions,
+            const std::string& pipelineGroup)
+        {
+            TLRENDER_P();
+
+            // Save the state of the outer pass.
+            Private::PassState outer;
+            outer.cmd = p.cmd;
+            outer.fbo = p.fbo;
+            outer.renderPass = p.renderPass;
+            outer.renderSize = p.renderSize;
+            outer.transform = p.transform;
+            outer.viewport = p.viewport;
+            outer.clipRectEnabled = p.clipRectEnabled;
+            outer.clipRect = p.clipRect;
+            outer.pipelineGroup = p.pipelineGroup;
+            outer.currentPipeline = p.currentPipeline;
+            outer.renderOptions = p.renderOptions;
+            p.passStack.push_back(std::move(outer));
+
+            // Retarget the renderer.  Note that we deliberately do NOT touch
+            // p.frameIndex, the garbage collector or the VAO pool: those are
+            // per frame and were set up by begin().
+            p.cmd = cmd;
+            p.fbo = fbo;
+            p.renderPass = fbo->getClearRenderPass();
+            p.renderSize = renderSize;
+            p.renderOptions = renderOptions;
+            p.pipelineGroup = pipelineGroup;
+            p.currentPipeline.clear();
+            p.clipRectEnabled = false;
+
+            if (renderOptions.glyphTexture && !p.glyphTextureAtlas)
+            {
+                p.glyphTextureAtlas = vlk::TextureAtlas::create(
+                    ctx, 1, 4096, image::PixelType::L_U8,
+                    timeline::ImageFilter::Linear);
+            }
+
+#if USE_DYNAMIC_RGBA_WRITE_MASKS
+            if (ctx.vkCmdSetColorWriteMaskEXT)
+            {
+                const VkColorComponentFlags allMask[] =
+                    { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                      VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+                ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+            }
+#endif
+
+#if USE_DYNAMIC_STENCILS
+            if (ctx.vkCmdSetStencilTestEnableEXT)
+            {
+                ctx.vkCmdSetStencilTestEnableEXT(cmd, VK_FALSE);
+                ctx.vkCmdSetStencilOpEXT(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_STENCIL_OP_KEEP,
+                                         VK_COMPARE_OP_ALWAYS);
+                vkCmdSetStencilCompareMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                           0xFFFFFFFF);
+                vkCmdSetStencilWriteMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                         0xFFFFFFFF);
+            }
+#endif
+
+            setTransform(
+                math::ortho(
+                    0.F, static_cast<float>(renderSize.w), 0.F,
+                    static_cast<float>(renderSize.h), -1.F, 1.F));
+        }
+
+        void Render::endPass()
+        {
+            TLRENDER_P();
+
+            if (p.passStack.empty())
+                return;
+
+            // Same as end(): leave the target ready to be sampled.
+            p.fbo->transitionToShaderRead(p.cmd);
+
+            // Restore the outer pass.
+            Private::PassState outer = std::move(p.passStack.back());
+            p.passStack.pop_back();
+
+            p.cmd = outer.cmd;
+            p.fbo = std::move(outer.fbo);
+            p.renderPass = outer.renderPass;
+            p.renderSize = outer.renderSize;
+            p.transform = outer.transform;
+            p.viewport = outer.viewport;
+            p.clipRectEnabled = outer.clipRectEnabled;
+            p.clipRect = outer.clipRect;
+            p.pipelineGroup = std::move(outer.pipelineGroup);
+            p.currentPipeline = std::move(outer.currentPipeline);
+            p.renderOptions = std::move(outer.renderOptions);
         }
 
         VkCommandBuffer Render::getCommandBuffer() const
@@ -2570,96 +2692,100 @@ namespace tl
         {
             TLRENDER_P();
 
-           // 1. Identify what specifically changed
-           const bool tonemapChanged = (value.tonemap != p.hdrOptions.tonemap);
-           const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
-           const bool peakDetectionChanged = (value.peak_detection != p.hdrOptions.peak_detection);
-           const bool algorithmChanged = (value.algorithm != p.hdrOptions.algorithm);
-           const bool oldIsHDRPlus = image::isHDRPlus(p.hdrOptions.hdrData);
-           const bool oldIsDolby = image::isHDRDolbyVision(p.hdrOptions.hdrData);
+            // 1. Identify what specifically changed
+            const bool exportModeChanged = (value.exportMode != p.hdrOptions.exportMode);
+            const bool tonemapChanged = (value.tonemap != p.hdrOptions.tonemap);
+            const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
+            const bool peakDetectionChanged = (value.peak_detection != p.hdrOptions.peak_detection);
+            const bool algorithmChanged = (value.algorithm != p.hdrOptions.algorithm);
+            const bool oldIsHDRPlus = image::isHDRPlus(p.hdrOptions.hdrData);
+            const bool oldIsDolby = image::isHDRDolbyVision(p.hdrOptions.hdrData);
 
-           // Determine if we should run Peak Detection
-           // Requirement: Tonemap ON, Peak Detection ON, and
-           // NOT HDR10+/Dolby
-           const bool isHDRPlus = image::isHDRPlus(value.hdrData);
-           const bool isDolby = image::isHDRDolbyVision(value.hdrData);
+            // Determine if we should run Peak Detection
+            // Requirement: Tonemap ON, Peak Detection ON, and
+            // NOT HDR10+/Dolby
+            const bool isHDRPlus = image::isHDRPlus(value.hdrData);
+            const bool isDolby = image::isHDRDolbyVision(value.hdrData);
 
-           const bool metadataChanged = (isHDRPlus != oldIsHDRPlus) ||
-                                        (isDolby != oldIsDolby);
+            const bool metadataChanged = (isHDRPlus != oldIsHDRPlus) ||
+                                         (isDolby != oldIsDolby);
 
-           if (tonemapChanged || algorithmChanged || metadataChanged)
-           {
+            if (exportModeChanged || tonemapChanged || algorithmChanged ||
+                metadataChanged)
+            {
 #if defined(TLRENDER_LIBPLACEBO)
-               if (p.placeboData && p.placeboData->state)
-               {
-                   pl_shader_obj_destroy(&p.placeboData->state);
-                   p.placeboData->state = NULL;
-               }
+                if (p.placeboData && p.placeboData->state)
+                {
+                    pl_shader_obj_destroy(&p.placeboData->state);
+                    p.placeboData->state = NULL;
+                }
 #endif
-           }
+            }
 
-           // 2. Optimization: Initialize update flag based on Option changes
-           bool updateDisplayShader = (tonemapChanged || hdrDataChanged ||
-                                       peakDetectionChanged ||
-                                       algorithmChanged ||
-                                       metadataChanged);
+            // 2. Optimization: Initialize update flag based on Option changes
+            bool updateDisplayShader = (tonemapChanged || hdrDataChanged ||
+                                        peakDetectionChanged ||
+                                        algorithmChanged ||
+                                        exportModeChanged ||
+                                        metadataChanged);
 
-           p.hdrOptions = value;
+            p.hdrOptions = value;
 
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.tonemap)
             {
-                const bool effectivePeakDetection =
-                    p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
+               const bool effectivePeakDetection =
+                   p.hdrOptions.tonemap &&
+                   p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
 
-                if (!p.placeboData || peakDetectionChanged || hdrDataChanged ||
-                    metadataChanged)
-                {
-                    if (p.placeboData)
-                    {
-                        for (auto& tex : p.placeboData->textures)
-                        {
-                            p.garbage[p.frameIndex].textures.push_back(tex);
-                        }
-                    }
+               if (!p.placeboData || peakDetectionChanged || hdrDataChanged ||
+                   metadataChanged || exportModeChanged)
+               {
+                   if (p.placeboData)
+                   {
+                       for (auto& tex : p.placeboData->textures)
+                       {
+                           p.garbage[p.frameIndex].textures.push_back(tex);
+                       }
+                   }
 
-                    // This ensures we have a valid object even if
-                    // 'effectivePeakDetection' is false
-                    p.placeboData.reset(new LibPlaceboData(ctx, effectivePeakDetection));
-                }
+                   // This ensures we have a valid object even if
+                   // 'effectivePeakDetection' is false
+                   p.placeboData.reset(new LibPlaceboData(ctx, effectivePeakDetection));
+               }
 
-                // --- LOGIC B: Run Peak Detection Compute Shader ---
-                // Only run the expensive compute shader if actually enabled and valid.
-                if (effectivePeakDetection && p.buffers["video"])
-                {
-                    // Persistent states
-                    static float previous_avg = 0.F;
-                    static float current_avg = PL_COLOR_SDR_WHITE;
-                    static float current_peak = PL_COLOR_SDR_WHITE;
+               // --- LOGIC B: Run Peak Detection Compute Shader ---
+               // Only run the expensive compute shader if actually enabled and valid.
+               if (effectivePeakDetection && p.buffers["video"])
+               {
+                   // Persistent states
+                   static float previous_avg = 0.F;
+                   static float current_avg = PL_COLOR_SDR_WHITE;
+                   static float current_peak = PL_COLOR_SDR_WHITE;
 
-                    // IMPORTANT: If peak detection was just enabled or content changed,
-                    // reset the "previous" values so the first frame of detection always
-                    // triggers a "New Shot" recreation.
-                    if (peakDetectionChanged || hdrDataChanged)
-                    {
-                        previous_avg = 0.F;
-                    }
+                   // IMPORTANT: If peak detection was just enabled or content changed,
+                   // reset the "previous" values so the first frame of detection always
+                   // triggers a "New Shot" recreation.
+                   if (peakDetectionChanged || hdrDataChanged)
+                   {
+                       previous_avg = 0.F;
+                   }
 
-                    const std::string shaderName = "hdr_peak_detection";
-                    const auto shader = p.compute[shaderName];
-                    const auto img = p.buffers["video"];
+                   const std::string shaderName = "hdr_peak_detection";
+                   const auto shader = p.compute[shaderName];
+                   const auto img = p.buffers["video"];
 
-                    _createBindingSet(shader);
+                   _createBindingSet(shader);
 
-                    shader->bind(p.frameIndex);
-                    shader->setFBO("img", img);
+                   shader->bind(p.frameIndex);
+                   shader->setFBO("img", img);
 
-                    const std::string pipelineLayoutName = shaderName;
-                    _bindComputeDescriptorSets(pipelineLayoutName,
-                                               shader);
+                   const std::string pipelineLayoutName = shaderName;
+                   _bindComputeDescriptorSets(pipelineLayoutName,
+                                              shader);
 
-                    VkCommandBuffer cmd = p.placeboData->ssboCmds[p.frameIndex];
-                    vkResetCommandBuffer(cmd, 0);
+                   VkCommandBuffer cmd = p.placeboData->ssboCmds[p.frameIndex];
+                   vkResetCommandBuffer(cmd, 0);
 
                     VkCommandBufferBeginInfo beginInfo = {};
                     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -2732,7 +2858,7 @@ namespace tl
             }
             else
             {
-                // Only destroy data if Tone Mapping is completely OFF
+                // Only destroy data if tone-mapping is completely OFF
                 if (p.placeboData)
                 {
                     for (auto& tex : p.placeboData->textures)
@@ -2980,7 +3106,8 @@ namespace tl
                     dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                     dst_colorspace.transfer  = PL_COLOR_TRC_PQ;
                     dst_colorspace.hdr.min_luma = p.monitor.min_nits;
-                    dst_colorspace.hdr.max_luma = p.monitor.max_nits;
+                    dst_colorspace.hdr.max_luma = std::min(p.monitor.max_nits,
+                                                           10000.F);
 
                     if (p.monitor.red.x > 0)
                     {
@@ -3059,7 +3186,7 @@ namespace tl
                         cmap.inverse_tone_mapping = false;
                         cmap.metadata = PL_HDR_METADATA_NONE;
                     }
-                }
+                } // p.monitor.hdr_enabled
 
 
                 //
@@ -3076,6 +3203,31 @@ namespace tl
 
                     cmap.gamut_mapping = nullptr;
                     cmap.tone_mapping_function = nullptr;
+                }
+
+                switch (p.hdrOptions.exportMode)
+                {
+                case timeline::HDRExportMode::LinearHDR:
+                    memset(&dst_colorspace, 0, sizeof(pl_color_space));
+                    dst_colorspace.primaries = src_colorspace.primaries;
+                    dst_colorspace.transfer  = PL_COLOR_TRC_LINEAR;
+                    dst_colorspace.hdr = src_colorspace.hdr;
+
+                    cmap.gamut_mapping = nullptr;
+                    cmap.tone_mapping_function = nullptr;
+                    cmap.inverse_tone_mapping = false;
+                    cmap.metadata = PL_HDR_METADATA_NONE;
+                    break;
+                case timeline::HDRExportMode::BakedSDR:
+                    memset(&dst_colorspace, 0, sizeof(dst_colorspace));
+                    dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+                    dst_colorspace.transfer  = src_colorspace.transfer;
+                    dst_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE;
+                    dst_colorspace.hdr.min_luma = 0.f;
+                    break;
+                case timeline::HDRExportMode::BakedHDR:
+                default:
+                    break;
                 }
 
                 pl_color_space_infer(&src_colorspace);

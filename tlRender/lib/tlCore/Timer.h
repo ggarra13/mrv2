@@ -66,9 +66,7 @@ namespace tl
             TLRENDER_NON_COPYABLE(TimerSystem);
 
         protected:
-            void _init(const std::shared_ptr<system::Context>&);
-
-            TimerSystem();
+            TimerSystem(const std::shared_ptr<system::Context>&);
 
         public:
             virtual ~TimerSystem();

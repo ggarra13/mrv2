@@ -73,6 +73,20 @@ namespace mrv
         bool saveHDR = string::compare(
             extension, ".hdr", string::Compare::CaseInsensitive);
 
+        timeline::OCIOOptions savedOCIOOptions;
+        bool restoreOCIOOptions = false;
+
+        if (saveEXR &&
+            options.exportMode == timeline::HDRExportMode::LinearHDR)
+        {
+            savedOCIOOptions = view->getOCIOOptions();
+            timeline::OCIOOptions ocioOptions = savedOCIOOptions;
+            restoreOCIOOptions = true;
+
+            ocioOptions.enabled = false;
+            view->setOCIOOptions(ocioOptions);
+        }
+
         try
         {
 
@@ -161,7 +175,7 @@ namespace mrv
 
             // Create the writer.
             auto writerPlugin =
-                context->getSystem<io::System>()->getPlugin(path);
+                context->getSystem<io::WriteSystem>()->getPlugin(path);
 
             if (!writerPlugin)
             {
@@ -321,7 +335,7 @@ namespace mrv
                 LOG_STATUS(msg);
             }
 
-            outputInfo = writerPlugin->getWriteInfo(outputInfo);
+            outputInfo = writerPlugin->getInfo(outputInfo);
             if (image::PixelType::kNone == outputInfo.pixelType)
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
@@ -546,9 +560,9 @@ namespace mrv
 
             if (saveEXR)
             {
-                std::string ics = ocio::ics();
-                if (!ics.empty() && ics != _("None"))
-                    tags["colorInteropID"] = ics;
+                const std::string id = ocio::getInteropID(false);
+                if (!id.empty())
+                    tags["ColorInteropID"] = id;
             }
 
             outputImage->setTags(tags);
@@ -559,6 +573,12 @@ namespace mrv
             LOG_ERROR(e.what());
             ret = -1;
         }
+
+        if (restoreOCIOOptions)
+        {
+            view->setOCIOOptions(savedOCIOOptions);
+        }
+
         return ret;
     }
 

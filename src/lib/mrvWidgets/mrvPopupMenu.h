@@ -33,14 +33,18 @@ namespace mrv
         void enable_label() { _enable_label = true; }
         void enable_character() { _enable_character = true; }
         void disable_submenus() { _disable_submenus = true; }
+        void disable_label_on_popup() { _enable_label_on_popup = false; }
 
         virtual int handle(int e) override;
 
         virtual void draw() override;
 
     protected:
-        bool _enable_glyph, _enable_label, _enable_character,
-            _disable_submenus;
+        bool _enable_glyph;
+        bool _enable_label;
+        bool _enable_label_on_popup;
+        bool _enable_character;
+        bool _disable_submenus;
     };
 
 } // namespace mrv

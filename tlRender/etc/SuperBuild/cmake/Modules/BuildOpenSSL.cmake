@@ -19,6 +19,8 @@ if (NOT OpenSSL_FOUND)
 	endif()
     endif()
     list(APPEND OpenSSL_DEPENDENCIES ZLIB)
+    
+    
     message(STATUS "OpenSSL DEPENDENCIES=${OpenSSL_DEPENDENCIES}")
 
     #
@@ -133,6 +135,9 @@ if (NOT OpenSSL_FOUND)
 	    # Not done here, but in pre-flight script of mrv2
 	    add_custom_target(
 		OpenSSL_install ALL
+		${CMAKE_COMMAND} -E echo "VCKPG_LIB_DIR=${VCPKG_LIB_DIR}"
+		${CMAKE_COMMAND} -E echo "VCKPG_INCLUDE_DIR=${VCPKG_INCLUDE_DIR}"
+		${CMAKE_COMMAND} -E echo "VCKPG_BIN_DIR=${VCPKG_BIN_DIR}"
 		${CMAKE_COMMAND} -E echo "Copying openssl directories to CMAKE_INSTALL_PREFIX..."
 		COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_LIB_DIR} ${CMAKE_INSTALL_PREFIX}/lib
 		COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${VCPKG_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include

@@ -158,14 +158,8 @@ namespace mrv
             try
             {
                 const auto context = App::app->getContext();
-#ifdef OPENGL_BACKEND
                 auto thumbnailSystem =
-                    context->getSystem<timelineui::ThumbnailSystem>();
-#endif
-#ifdef VULKAN_BACKEND
-                auto thumbnailSystem =
-                    context->getSystem<timelineui_vk::ThumbnailSystem>();
-#endif
+                    context->getSystem<TIMELINEUI::ThumbnailSystem>();
 
 #ifdef MRV2_PYBIND11
                 // Only release the GIL if this thread currently holds it
@@ -232,14 +226,7 @@ namespace mrv
         void ThumbnailPanel::_cancelRequests()
         {
             const auto context = App::app->getContext();
-#ifdef OPENGL_BACKEND
-            auto thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
-#endif
-
-#ifdef VULKAN_BACKEND
-            auto thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
-#endif
-
+            auto thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
             std::vector<uint64_t> ids;
             for (const auto& i : thumbnailRequests)
             {

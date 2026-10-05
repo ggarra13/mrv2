@@ -218,6 +218,11 @@ namespace mrv
             format() = VK_FORMAT_B8G8R8A8_UNORM;
         }
 
+        int TimelineWidget::get_max_frames_in_flight()
+        {
+            return vlk::MAX_FRAMES_IN_FLIGHT;
+        }
+
         void TimelineWidget::setContext(
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel,
@@ -267,10 +272,8 @@ namespace mrv
 
             if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
             {
-                context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+                p.thumbnailSystem = timelineui_vk::ThumbnailSystem::create(context, ctx);
             }
-
-            p.thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
 
             setStopOnScrub(false);
 
@@ -299,12 +302,13 @@ namespace mrv
             Fl::remove_timeout(timerEvent_cb, this);
         }
 
-        std::vector<const OTIO_NS::Item* > TimelineWidget::getSelectedItems() const
+        std::vector<timeline::MoveData>
+        TimelineWidget::getSelectedItems() const
         {
             return _p->timelineWidget->getSelectedItems();
         }
 
-        std::vector<const OTIO_NS::Transition* >
+        std::vector<timeline::MoveData>
         TimelineWidget::getSelectedTransitions() const
         {
             return _p->timelineWidget->getSelectedTransitions();
@@ -911,6 +915,7 @@ namespace mrv
 
                         timeline::RenderOptions renderOptions;
                         renderOptions.clear = true;
+                        renderOptions.vaoSize = 16 * memory::megabyte;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
 
@@ -1004,11 +1009,13 @@ namespace mrv
 
                 if (p.vao && p.vbo)
                 {
-
-                    const VkColorComponentFlags allMask[] =
-                        { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-                          VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
-                    ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+                    if (ctx.vkCmdSetColorWriteMaskEXT)
+                    {
+                        const VkColorComponentFlags allMask[] =
+                            { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                              VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+                        ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+                    }
 
                     p.vao->bind(frameIndex);
                     p.vao->draw(cmd, p.vbo);
@@ -1741,7 +1748,7 @@ namespace mrv
             }
             if (key == FL_Delete && p.editMode == timeline::EditMode::Select)
             {
-                edit_remove_selected_cb(nullptr, p.ui);
+                edit_selected_remove_cb(nullptr, p.ui);
                 return 1;
             }
             bool send = App::ui->uiPrefs->SendTimeline->value();

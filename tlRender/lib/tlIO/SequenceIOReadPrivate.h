@@ -20,8 +20,6 @@ namespace tl
         {
             void addTags(Info&);
 
-            size_t threadCount = sequenceThreadCount;
-
             Info info;
 
             struct InfoRequest

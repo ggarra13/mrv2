@@ -16,7 +16,11 @@
 #include <tlCore/LogSystem.h>
 
 #include <tlIO/FFmpeg.h>
-#include <tlIO/FFmpegMacros.h>
+#include <tlIO/IOMacros.h>
+
+#ifdef TLRENDER_DOVI
+#include <libdovi/rpu_parser.h>
+#endif
 
 #ifdef TLRENDER_DOVI
 #include <libdovi/rpu_parser.h>
@@ -777,7 +781,7 @@ namespace tl
         void Write::_init(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             IWrite::_init(path, options, info, logSystem);
 
@@ -1350,6 +1354,10 @@ namespace tl
                     // the existing H.264 bit-depth switch.
                     avProfile = AV_PROFILE_HEVC_MAIN;
                     break;
+                case Profile::OAPV:
+                    avCodecID = AV_CODEC_ID_APV;
+                    avProfile = AV_PROFILE_UNKNOWN;
+                    break;
                 default:
                     break;
                 }
@@ -1425,6 +1433,10 @@ namespace tl
                 else if (!avCodec && avCodecID == AV_CODEC_ID_PRORES)
                 {
                     avCodec = avcodec_find_encoder_by_name("prores_ks");
+                }
+                else if (!avCodec && avCodecID == AV_CODEC_ID_APV)
+                {
+                    avCodec = avcodec_find_encoder_by_name("libaopv");
                 }
 
                 if (!avCodec)
@@ -1935,7 +1947,6 @@ namespace tl
                     rational.first, rational.second};
                 if (profile == Profile::VP9)
                 {
-
                     if (pix_fmt == AV_PIX_FMT_YUVA420P)
                     {
                         av_dict_set(
@@ -1955,6 +1966,15 @@ namespace tl
                         }
                     }
                 }
+                else if (profile == Profile::OAPV)
+                {
+                    if (pix_fmt == AV_PIX_FMT_YUVA444P10LE ||
+                        pix_fmt == AV_PIX_FMT_YUVA444P12LE)
+                    {
+                        av_dict_set(
+                            &p.avVideoStream->metadata, "alpha_mode", "1", 0);
+                    }
+                }
 
                 for (const auto& i : p.info.tags)
                 {
@@ -1963,7 +1983,9 @@ namespace tl
                         i.second.c_str(), 0);
                 }
 
-                p.videoStartTime = p.info.videoTime->start_time();
+                p.videoStartTime = p.info.videoTime.has_value() ?
+                                   p.info.videoTime->start_time() :
+                                   OTIO_NS::RationalTime(0.F, 24.F);
                 // Set timecode
                 option = p.options.find("timecode");
                 if (option != p.options.end())
@@ -2164,6 +2186,11 @@ namespace tl
 
         Write::~Write()
         {
+            finish();
+        }
+
+        void Write::finish()
+        {
             TLRENDER_P();
 
             if (p.opened)
@@ -2200,43 +2227,54 @@ namespace tl
                             .arg(p.fileName)
                             .arg(getErrorLabel(r)));
                 }
+
+                p.opened = false;
             }
 
             if (p.swsContext)
             {
                 sws_freeContext(p.swsContext);
+                p.swsContext = nullptr;
             }
             if (p.avHwFrame)
             {
                 av_frame_free(&p.avHwFrame);
+                p.avHwFrame = nullptr;
             }
             if (p.avHWFramesCtx)
             {
                 av_buffer_unref(&p.avHWFramesCtx);
+                p.avHWFramesCtx = nullptr;
             }
             if (p.avHWDeviceCtx)
             {
                 av_buffer_unref(&p.avHWDeviceCtx);
+                p.avHWDeviceCtx = nullptr;
             }
             if (p.avFrame2)
             {
                 av_frame_free(&p.avFrame2);
+                p.avFrame2 = nullptr;
             }
             if (p.avFrame)
             {
                 av_frame_free(&p.avFrame);
+                p.avFrame = nullptr;
             }
             if (p.avAudioFrame)
             {
                 av_frame_free(&p.avAudioFrame);
+                p.avAudioFrame = nullptr;
             }
             if (p.avPacket)
             {
                 av_packet_free(&p.avPacket);
+                p.avPacket = nullptr;
             }
             if (p.avAudioPacket)
             {
                 av_packet_free(&p.avAudioPacket);
+                p.avAudioPacket = nullptr;
             }
             if (p.avAudioFifo)
             {
@@ -2246,25 +2284,30 @@ namespace tl
             if (p.avAudioCodecContext)
             {
                 avcodec_free_context(&p.avAudioCodecContext);
+                p.avAudioCodecContext = nullptr;
             }
             if (p.avCodecContext)
             {
                 avcodec_free_context(&p.avCodecContext);
+                p.avCodecContext = nullptr;
             }
             if (p.avFormatContext && p.avFormatContext->pb)
             {
                 avio_closep(&p.avFormatContext->pb);
+                p.avFormatContext->pb = nullptr;
+                p.avFormatContext = nullptr;
             }
             if (p.avFormatContext)
             {
                 avformat_free_context(p.avFormatContext);
+                p.avFormatContext = nullptr;
             }
         }
 
         std::shared_ptr<Write> Write::create(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             auto out = std::shared_ptr<Write>(new Write);
             out->_init(path, info, options, logSystem);
@@ -2293,14 +2336,13 @@ namespace tl
             case image::PixelType::RGBA_U8:
             case image::PixelType::RGBA_U16:
             {
-                const size_t channelCount =
-                    image::getChannelCount(info.pixelType);
-                for (size_t i = 0; i < channelCount; i++)
-                {
-                    p.avFrame2->data[i] +=
-                        p.avFrame2->linesize[i] * (info.size.h - 1);
-                    p.avFrame2->linesize[i] = -p.avFrame2->linesize[i];
-                }
+                // Every type the plugin accepts is packed -- GRAY8, GRAY16,
+                // RGB24, RGB48, RGBA, RGBA64 -- so the pixels are all in the
+                // first plane whatever the depth, and that is the only one
+                // there is to turn over.
+                p.avFrame2->data[0] +=
+                    p.avFrame2->linesize[0] * (info.size.h - 1);
+                p.avFrame2->linesize[0] = -p.avFrame2->linesize[0];
                 break;
             }
             case image::PixelType::YUV_420P_U8:
@@ -2309,11 +2351,27 @@ namespace tl
             case image::PixelType::YUV_420P_U16:
             case image::PixelType::YUV_422P_U16:
             case image::PixelType::YUV_444P_U16:
+            {
                 //! \bug How do we flip YUV data?
-                throw std::runtime_error(
-                    string::Format("{0}: Incompatible pixel type")
-                        .arg(p.fileName));
-                break;
+                // subsampled (half height) only for 4:2:0; full height
+                // otherwise.
+                const bool halfChromaH =
+                    image::PixelType::YUV_420P_U8  == info.pixelType ||
+                    image::PixelType::YUV_420P_U16 == info.pixelType;
+                const int planeH[3] = {
+                    static_cast<int>(info.size.h),
+                    static_cast<int>(halfChromaH ? info.size.h / 2 : info.size.h),
+                    static_cast<int>(halfChromaH ? info.size.h / 2 : info.size.h) };
+                for (int i = 0; i < 3; ++i)
+                {
+                    if (p.avFrame2->data[i] && p.avFrame2->linesize[i])
+                    {
+                        p.avFrame2->data[i] += p.avFrame2->linesize[i] * (planeH[i] - 1);
+                        p.avFrame2->linesize[i] = -p.avFrame2->linesize[i];
+                    }
+                }
+            }
+            break;
             default:
                 throw std::runtime_error(
                     string::Format("{0}: Incompatible pixel type")
@@ -2349,9 +2407,8 @@ namespace tl
 
                 if (string::toLower(p.path.getExtension()) != ".mkv")
                 {
-                    throw std::runtime_error(
-                            "Saving videos with HDR data per frame "
-                            "requires VPX and a .mkv container");
+                    LOG_WARNING("Saving videos with HDR data per frame "
+                                "requires VP9 and a .mkv container");
                 }
             }
             else
@@ -2574,6 +2631,7 @@ namespace tl
 
             }
         }
+
         void Write::_attach_stream_hdr_metadata(AVStream* stream)
         {
             TLRENDER_P();
@@ -2609,10 +2667,10 @@ namespace tl
                 mdm->white_point[1] = av_d2q(wy, 100000);
                 mdm->has_primaries = 1;
 
-                float min_lum = p.hdr.displayMasteringLuminance.getMin();
+                float min_lum = p.hdr.displayMasteringLuminance.min();
                 if (min_lum <= 0.F)
                     min_lum = 1.F;
-                float max_lum = p.hdr.displayMasteringLuminance.getMax();
+                float max_lum = p.hdr.displayMasteringLuminance.max();
 
                 mdm->max_luminance = av_d2q(max_lum, 10000);
                 mdm->min_luminance = av_d2q(min_lum, 10000);
@@ -2692,10 +2750,10 @@ namespace tl
 
                 mdm->has_primaries = 1;
 
-                float min_lum = p.hdr.displayMasteringLuminance.getMin();
+                float min_lum = p.hdr.displayMasteringLuminance.min();
                 if (min_lum <= 0.F)
                     min_lum = 1.F;
-                float max_lum = p.hdr.displayMasteringLuminance.getMax();
+                float max_lum = p.hdr.displayMasteringLuminance.max();
 
                 mdm->max_luminance = av_d2q(max_lum, 10000);
                 mdm->min_luminance = av_d2q(min_lum, 10000);

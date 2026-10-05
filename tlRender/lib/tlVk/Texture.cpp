@@ -323,7 +323,6 @@ namespace tl
 
             createCommandPool();
             createImage();
-            allocateMemory();
             createImageView();
             createSampler();
 
@@ -385,7 +384,6 @@ namespace tl
 
             createCommandPool();
             createImage();
-            allocateMemory();
             createImageView();
             createSampler();
 
@@ -671,8 +669,10 @@ namespace tl
 
             VK_CHECK(vmaCreateBuffer(ctx.allocator, &bufInfo, &allocInfo,
                                      &stagingBuffer, &stagingAllocation, nullptr));
+#ifndef NDEBUG
             vmaSetAllocationName(ctx.allocator, stagingAllocation,
                                  "Texture Copy Buffer 1");
+#endif
 
             // Copy image data to buffer, respecting alignment AND
             // format conversion
@@ -1025,8 +1025,10 @@ namespace tl
                                          &stagingBuffer, &stagingAllocation,
                                          nullptr));
 
+#ifndef NDEBUG
                 vmaSetAllocationName(ctx.allocator, stagingAllocation,
                                      "Texture Copy Buffer 2");
+#endif
 
                 void* mapped;
                 VK_CHECK(vmaMapMemory(ctx.allocator, stagingAllocation,
@@ -1220,14 +1222,10 @@ namespace tl
             VK_CHECK(vmaCreateImage(ctx.allocator, &imageInfo, &allocInfo,
                                     &p.image, &p.allocation, nullptr));
 
+#ifndef NDEBUG
             vmaSetAllocationName(ctx.allocator, p.allocation,
                                  "Texture createImage");
-        }
-
-        void Texture::allocateMemory()
-        {
-            TLRENDER_P();
-
+#endif
         }
 
         void Texture::createImageView()

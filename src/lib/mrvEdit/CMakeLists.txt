@@ -4,6 +4,7 @@
 
 set(HEADERS
     mrvCreateEDLFromFiles.h
+    mrvEditAlgorithm.h
     mrvEditCallbacks.h
     mrvEditMode.h
     mrvEditUtil.h
@@ -11,6 +12,7 @@ set(HEADERS
 
 set(SOURCES
     mrvCreateEDLFromFiles.cpp
+    mrvEditAlgorithm.cpp
     mrvEditCallbacks.cpp
     mrvEditMode.cpp
     mrvEditUtil.cpp

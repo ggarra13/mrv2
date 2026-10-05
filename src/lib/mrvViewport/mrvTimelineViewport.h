@@ -29,9 +29,12 @@
 #include <tlTimeline/PlayerOptions.h>
 #include <tlTimeline/ShaderOptions.h>
 
-#include <tlDraw/Shape.h>
+#include <tlIO/SequenceIO.h>
 
 #include <tlCore/ValueObserver.h>
+
+#include <tlDraw/Shape.h>
+
 
 
 class ViewerUI;
@@ -288,7 +291,7 @@ namespace mrv
             void setGhostNext(int);
 
             //! Set the missing frame type.
-            void setMissingFrameType(const MissingFrameType);
+            void setMissingFrameType(const tl::io::MissingFrames);
 
             //
             const std::vector<tl::timeline::VideoFrame>&
@@ -572,6 +575,8 @@ namespace mrv
             void _startVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice);
             void _stopVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice);
             void _stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice);
+
+            void _updateLayers();
 
             void _stopVoiceRecording();
             void _stopVoicePlaying();

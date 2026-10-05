@@ -25,10 +25,10 @@ namespace tl
         TLRENDER_ENUM_SERIALIZE(TimeUnits);
 
         //! Convert a time value to text.
-        std::string timeToText(const opentime::RationalTime&, timeline::TimeUnits);
+        std::string timeToText(const OTIO_NS::RationalTime&, timeline::TimeUnits);
 
         //! Convert text to a time value.
-        opentime::RationalTime textToTime(
+        OTIO_NS::RationalTime textToTime(
             const std::string& text, double rate, timeline::TimeUnits units,
             opentime::ErrorStatus* error = nullptr);
 
@@ -57,7 +57,7 @@ namespace tl
             observeTimeUnitsChanged() const;
 
             //! Get a time label in the current time units.
-            virtual std::string getLabel(const opentime::RationalTime&) const = 0;
+            virtual std::string getLabel(const OTIO_NS::RationalTime&) const = 0;
 
         protected:
             std::shared_ptr<observer::Value<bool> > _timeUnitsChanged;
@@ -90,7 +90,7 @@ namespace tl
             //! Set the time units.
             void setTimeUnits(TimeUnits);
 
-            std::string getLabel(const opentime::RationalTime&) const override;
+            std::string getLabel(const OTIO_NS::RationalTime&) const override;
 
             TLRENDER_PRIVATE();
         };

@@ -136,6 +136,24 @@ namespace mrv
         p.layers->setIfChanged(_getLayers());
     }
 
+    void FilesModel::add(
+        const std::vector<std::shared_ptr<FilesModelItem> >& items)
+    {
+        TLRENDER_P();
+
+        if (items.empty()) return;
+
+        auto files = p.files->get();
+        files.insert(files.end(), items.begin(), items.end());
+        p.files->setIfChanged(files);               // one notification
+
+        p.a->setIfChanged(files.back()); // Make only the *last* item A
+        p.aIndex->setIfChanged(_index(p.a->get()));
+
+        p.active->setIfChanged(_getActive()); // one activation → one timeline
+        p.layers->setIfChanged(_getLayers());
+    }
+
     void FilesModel::replace(
         const std::size_t index, const std::shared_ptr<FilesModelItem>& item)
     {

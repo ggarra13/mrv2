@@ -6,6 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"POT-Creation-Date: 2026-10-04 14:27-0300\n"
 "PO-Revision-Date: 2024-05-09 12:13-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -200,12 +201,6 @@ msgstr "Set file sequence audio file name."
 msgid "Get file sequence audio file name."
 msgstr "Get file sequence audio file name."
 
-msgid "Set file sequence audio directory."
-msgstr "Set file sequence audio directory."
-
-msgid "Get file sequence audio directory."
-msgstr "Get file sequence audio directory."
-
 msgid "Set maximum file sequence digits."
 msgstr "Set maximum file sequence digits."
 
@@ -304,6 +299,7 @@ msgstr "Save a session file."
 msgid "Save and reload session file restarting mrv2."
 msgstr "Save and reload session file restarting mrv2."
 
+#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Duplicated Python plugin {0} in {1} and {2}."
 
@@ -589,14 +585,26 @@ msgstr "Enabled Levels."
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
 msgstr "Add a :class:`mrv2.math.Vector3f` to image."
 
-msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-msgstr "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+msgid ""
+"Change a :class:`mrv2.math.Vector3f` of brightness (gain) to image.  Only "
+"the x channel is used."
+msgstr ""
+"Change a :class:`mrv2.math.Vector3f` of brightness (gain) to image.  Only "
+"the x channel is used."
 
-msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-msgstr "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+msgid ""
+"Change a :class:`mrv2.math.Vector3f` of contrast to image.  Only the x "
+"channel is used."
+msgstr ""
+"Change a :class:`mrv2.math.Vector3f` of contrast to image.  Only the x "
+"channel is used."
 
-msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-msgstr "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+msgid ""
+"Change a :class:`mrv2.math.Vector3f` of saturation to image. Only the x "
+"channel is used."
+msgstr ""
+"Change a :class:`mrv2.math.Vector3f` of saturation to image. Only the x "
+"channel is used."
 
 msgid "Change tint of image to image between 0 and 1."
 msgstr "Change tint of image to image between 0 and 1."
@@ -916,6 +924,9 @@ msgstr "Save annotations."
 msgid "Save resolution."
 msgstr "Save resolution."
 
+msgid "HDR Export Mode."
+msgstr "HDR Export Mode."
+
 msgid "FFmpeg Profile."
 msgstr "FFmpeg Profile."
 
@@ -957,6 +968,12 @@ msgstr "OpenEXR's Zip Compression Level."
 
 msgid "OpenEXR's DWA Compression Level."
 msgstr "OpenEXR's DWA Compression Level."
+
+msgid "OpenEXR's Lossy HJ2K Compression Level."
+msgstr "OpenEXR's Lossy HJ2K Compression Level."
+
+msgid "OpenEXR's ZSTD Compression Level."
+msgstr "OpenEXR's ZSTD Compression Level."
 
 msgid ""
 "\n"
@@ -1125,6 +1142,7 @@ msgstr "Get all voice and mouse directions for current frame as a JSON file."
 msgid "Get all URL/File/AI directions for current frame as a JSON file."
 msgstr "Get all URL/File/AI directions for current frame as a JSON file."
 
+#, c++-format
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
 
@@ -1252,6 +1270,16 @@ msgstr "Connect to a WebRTC project at <value>."
 msgid "Connect to a WebRTC room at <value>."
 msgstr "Connect to a WebRTC room at <value>."
 
+msgid "Timeline:"
+msgstr "Timeline:"
+
+msgid ""
+"Media reference to open OTIO timelines with for clips that have several "
+"versions of their media (examples: \"Proxy\" and \"Full\")."
+msgstr ""
+"Media reference to open OTIO timelines with for clips that have several "
+"versions of their media (examples: \"Proxy\" and \"Full\")."
+
 msgid "Miscellaneous:"
 msgstr "Miscellaneous:"
 
@@ -1297,9 +1325,11 @@ msgstr "Preferences Location: "
 msgid "Temp Location: "
 msgstr "Temp Location: "
 
+#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "Could not read python script '{0}'"
 
+#, c++-format
 msgid "Running python script '{0}'"
 msgstr "Running python script '{0}'"
 
@@ -1312,6 +1342,7 @@ msgstr "Python Error: "
 msgid "Caching..."
 msgstr "Caching..."
 
+#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "Filename '{0}' does not exist or does not have read permissions."
 
@@ -1321,9 +1352,11 @@ msgstr "Print the log to the console."
 msgid "Show this message."
 msgstr "Show this message."
 
+#, c++-format
 msgid "Cannot parse option \"{0}\": {1}"
 msgstr "Cannot parse option \"{0}\": {1}"
 
+#, c++-format
 msgid "Cannot parse argument \"{0}\": {1}"
 msgstr "Cannot parse argument \"{0}\": {1}"
 
@@ -1457,6 +1490,7 @@ msgstr "Editor/&External Editor"
 msgid "Scripts/Add To Script List"
 msgstr "Scripts/Add To Script List"
 
+#, c-format
 msgid "Scripts/%s"
 msgstr "Scripts/%s"
 
@@ -1467,6 +1501,7 @@ msgstr ""
 "Type in your python code here.  Select an area to execute just a portion of "
 "it.  Press Keypad Enter to run it."
 
+#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "Python file {0} already exists.  Do you want to overwrite it?"
 
@@ -1488,18 +1523,22 @@ msgstr "The stream is in an unrecoverable error state."
 msgid "Type your editor command"
 msgstr "Type your editor command"
 
+#, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr "{0} will be replaced with the line number.  {1} with the file name"
 
+#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "Regular expression error: {0}"
 
+#, c++-format
 msgid "Could not open python editor: {0}"
 msgstr "Could not open python editor: {0}"
 
 msgid "Search String:"
 msgstr "Search String:"
 
+#, c-format
 msgid "No occurrences of '%s' found!"
 msgstr "No occurrences of '%s' found!"
 
@@ -1536,23 +1575,12 @@ msgstr "With Metadata"
 msgid "Without Metadata"
 msgstr "Without Metadata"
 
+#, c++-format
 msgid "Streaming {0} {1}..."
 msgstr "Streaming {0} {1}..."
 
 msgid "Stop streaming"
 msgstr "Stop streaming"
-
-msgid "Complexity"
-msgstr "Complexity"
-
-msgid "Draw Mode"
-msgstr "Draw Mode"
-
-msgid "Stage Cache"
-msgstr "Stage Cache"
-
-msgid "Disk Cache in GB"
-msgstr "Disk Cache in GB"
 
 msgid "Type"
 msgstr "Type"
@@ -1646,6 +1674,25 @@ msgstr "Audio file name"
 
 msgid "Maximum Digits"
 msgstr "Maximum Digits"
+
+msgid "Spatial Coordinates"
+msgstr "Spatial Coordinates"
+
+msgid ""
+"Use the Spatial Coordinates in OTIO files to position and size the clips.\n"
+"\n"
+"* None: Ignore the spatial coordinates.\n"
+"* Coordinates: Use the spatial coordinates when clips provide them.\n"
+"* Normalize: Use the spatial coordinates, and display clips without them at the size of the first clip.  Use this to play clips of differing resolutions at the same size."
+msgstr ""
+"Use the Spatial Coordinates in OTIO files to position and size the clips.\n"
+"\n"
+"* None: Ignore the spatial coordinates.\n"
+"* Coordinates: Use the spatial coordinates when clips provide them.\n"
+"* Normalize: Use the spatial coordinates, and display clips without them at the size of the first clip.  Use this to play clips of differing resolutions at the same size."
+
+msgid "Compatibility"
+msgstr "Compatibility"
 
 msgid "Performance"
 msgstr "Performance"
@@ -1897,9 +1944,11 @@ msgstr "1:16"
 msgid "Pick"
 msgstr "Pick"
 
+#, c-format
 msgid "%.3f seconds "
 msgstr "%.3f seconds "
 
+#, c-format
 msgid "Video Stream #%d"
 msgstr "Video Stream #%d"
 
@@ -2167,6 +2216,7 @@ msgstr "Last modified date of file"
 msgid "Load an image or movie file"
 msgstr "Load an image or movie file"
 
+#, c-format
 msgid "Audio Stream #%d"
 msgstr "Audio Stream #%d"
 
@@ -2185,6 +2235,7 @@ msgstr "Number of audio channels"
 msgid "Format"
 msgstr "Format"
 
+#, c-format
 msgid "%d Hz."
 msgstr "%d Hz."
 
@@ -2194,6 +2245,7 @@ msgstr "Frequency"
 msgid "Frequency of audio"
 msgstr "Frequency of audio"
 
+#, c-format
 msgid "%d kb/s"
 msgstr "%d kb/s"
 
@@ -2218,6 +2270,7 @@ msgstr "Duration"
 msgid "Duration of Audio"
 msgstr "Duration of Audio"
 
+#, c-format
 msgid "Subtitle Stream #%d"
 msgstr "Subtitle Stream #%d"
 
@@ -2289,9 +2342,6 @@ msgstr "Previous filename"
 
 msgid "Next filename"
 msgstr "Next filename"
-
-msgid "Filter EDLs"
-msgstr "Filter EDLs"
 
 msgid "Select one or more B images."
 msgstr "Select one or more B images."
@@ -2538,9 +2588,11 @@ msgstr "Makes the following annotation show on all frames."
 msgid "Frame Note"
 msgstr "Frame Note"
 
+#, c++-format
 msgid "STUN server is {0}"
 msgstr "STUN server is {0}"
 
+#, c++-format
 msgid "TURN server is {0}"
 msgstr "TURN server is {0}"
 
@@ -2560,12 +2612,15 @@ msgstr ""
 msgid "No Web RTC Studio set.  Please update Preferences->WebRTC->Studio"
 msgstr "No Web RTC Studio set.  Please update Preferences->WebRTC->Studio"
 
+#, c++-format
 msgid "The room ID is: {0}"
 msgstr "The room ID is: {0}"
 
+#, c++-format
 msgid "The player ID is: {0}"
 msgstr "The player ID is: {0}"
 
+#, c++-format
 msgid "Downloading {0}..."
 msgstr "Downloading {0}..."
 
@@ -2575,9 +2630,11 @@ msgstr "Server listening on port "
 msgid "ComfyUI listening on port "
 msgstr "ComfyUI listening on port "
 
+#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr "Server protocol version is {0}.  Client protocol version is {1}"
 
+#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "Remote file {0} does not exist on local filesystem."
 
@@ -2587,6 +2644,7 @@ msgstr "Not connected via WebRTC; cannot fetch remote file."
 msgid "Peer not connected."
 msgstr "Peer not connected."
 
+#, c++-format
 msgid ""
 "{0} is only reachable via relay (TURN), which would consume VPS bandwidth. "
 "Skipping fetch to avoid unexpected costs."
@@ -2594,6 +2652,7 @@ msgstr ""
 "{0} is only reachable via relay (TURN), which would consume VPS bandwidth. "
 "Skipping fetch to avoid unexpected costs."
 
+#, c++-format
 msgid "Already fetching {0} from another sync request; skipping duplicate."
 msgstr "Already fetching {0} from another sync request; skipping duplicate."
 
@@ -2610,12 +2669,15 @@ msgstr ""
 msgid "Download failed."
 msgstr "Download failed."
 
+#, c++-format
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr "Remote file {0} not found locally and no peer to fetch it from."
 
+#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Remote file {0} matches file name {1} but not path."
 
+#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Remote file {0} does not match local filename."
 
@@ -2625,6 +2687,7 @@ msgstr "WARN:\t"
 msgid "ERROR:\t"
 msgstr "ERROR:\t"
 
+#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
@@ -2632,6 +2695,7 @@ msgstr ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 
+#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "Iteration {0} will check version={1}"
 
@@ -2645,27 +2709,34 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Example:  gizmo_v003.0001.exr"
 
+#, c++-format
 msgid "Could not replace {0} with {1}"
 msgstr "Could not replace {0} with {1}"
 
 msgid "Annotation already existed at this time"
 msgstr "Annotation already existed at this time"
 
+#, c++-format
 msgid "Failed to open the file {0} for writing."
 msgstr "Failed to open the file {0} for writing."
 
+#, c++-format
 msgid "Failed to write to the file {0}."
 msgstr "Failed to write to the file {0}."
 
+#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "Session saved to \"{0}\"."
 
+#, c++-format
 msgid "Failed to open the file '{0}' for reading."
 msgstr "Failed to open the file '{0}' for reading."
 
+#, c++-format
 msgid "Failed to load the file '{0}."
 msgstr "Failed to load the file '{0}."
 
+#, c++-format
 msgid ""
 "Movie File '{0}' is not readable.\n"
 "\n"
@@ -2675,6 +2746,7 @@ msgstr ""
 "\n"
 "Do you want to replace it with another?"
 
+#, c++-format
 msgid ""
 "Sequence '{0}' is not readable.\n"
 "\n"
@@ -2684,6 +2756,7 @@ msgstr ""
 "\n"
 "Do you want to replace it with another?"
 
+#, c++-format
 msgid ""
 "Audio File '{0}' is not readable.\n"
 "\n"
@@ -2693,9 +2766,11 @@ msgstr ""
 "\n"
 "Do you want to replace it with another?"
 
+#, c++-format
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "Reading preferences from \"{0}{1}\"."
 
+#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "Failed to retrieve {0}."
 
@@ -2709,9 +2784,11 @@ msgstr ""
 msgid "Debanding is not set to None.  This can make images show blurred"
 msgstr "Debanding is not set to None.  This can make images show blurred"
 
+#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "Could not open color theme from \"{0}\"."
 
+#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "Loaded color themes from \"{0}\"."
 
@@ -2721,27 +2798,34 @@ msgstr "Setting OCIO config from preferences."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Setting OCIO config from OCIO environment variable."
 
+#, c++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Path mappings have been loaded from \"{0}{1}\"."
 
+#, c++-format
 msgid "Error deleting directory: \"{0}\"."
 msgstr "Error deleting directory: \"{0}\"."
 
+#, c++-format
 msgid "Cleaned directory: \"{0}\"."
 msgstr "Cleaned directory: \"{0}\"."
 
+#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
 
 msgid "Resetting hotkeys to default."
 msgstr "Resetting hotkeys to default."
 
+#, c++-format
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "Path mappings have been saved to \"{0}{1}\"."
 
+#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys have been saved to \"{0}{1}.prefs\"."
 
+#, c++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Preferences have been saved to: \"{0}{1}\"."
 
@@ -2751,6 +2835,7 @@ msgstr "Removing "
 msgid "OCIO config is now:"
 msgstr "OCIO config is now:"
 
+#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "OCIO file \"{0}\" not found or not readable."
 
@@ -2760,57 +2845,74 @@ msgstr "Setting OCIO config to default:"
 msgid "Setting OCIO config to built-in:"
 msgstr "Setting OCIO config to built-in:"
 
+#, c++-format
 msgid "Path mapping for {0} already exists!"
 msgstr "Path mapping for {0} already exists!"
 
+#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "Comparing {0} to prefix {1}"
 
+#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "Found a match.  File is now {0}"
 
 msgid "OCIO config file cannot be empty."
 msgstr "OCIO config file cannot be empty."
 
+#, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "OCIO config '{0}' does not exist or is not readable."
 
+#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "Invalid OCIO Ics '{0}'."
 
+#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr "Invalid OCIO Look '{0}'."
 
+#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "Invalid OCIO Display/View '{0}'."
 
+#, c++-format
 msgid "Could not split '{0}' into display and view."
 msgstr "Could not split '{0}' into display and view."
 
+#, c++-format
 msgid "No default view for display '{0}'.  Does display exist?"
 msgstr "No default view for display '{0}'.  Does display exist?"
 
+#, c++-format
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Setting OCIO Preset '{0}'."
 
+#, c++-format
 msgid "Preset '{0}' not found."
 msgstr "Preset '{0}' not found."
 
+#, c++-format
 msgid "OCIO Preset '{0}' already exists!"
 msgstr "OCIO Preset '{0}' already exists!"
 
+#, c++-format
 msgid "Failed to load the file '{0}'."
 msgstr "Failed to load the file '{0}'."
 
+#, c++-format
 msgid "Loaded {0} ocio presets from \"{1}\"."
 msgstr "Loaded {0} ocio presets from \"{1}\"."
 
+#, c++-format
 msgid "Failed to open the file '{0}' for saving."
 msgstr "Failed to open the file '{0}' for saving."
 
+#, c++-format
 msgid "Failed to save the file '{0}'."
 msgstr "Failed to save the file '{0}'."
 
+#, c++-format
 msgid "OCIO presets have been saved to \"{0}\"."
 msgstr "OCIO presets have been saved to \"{0}\"."
 
@@ -2841,6 +2943,7 @@ msgstr "Russian"
 msgid "Japanese"
 msgstr "Japanese"
 
+#, c++-format
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -2848,6 +2951,7 @@ msgstr ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
 
+#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "Set Language to {0}, Numbers to {1}"
 
@@ -2980,6 +3084,7 @@ msgstr ""
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 
+#, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
@@ -2987,6 +3092,7 @@ msgstr ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
 
+#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -3152,18 +3258,67 @@ msgstr "Invalid index for add clip to timeline."
 msgid "Could not get current path."
 msgstr "Could not get current path."
 
+msgid "Unzipping"
+msgstr "Unzipping"
+
+#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 
+msgid "Copy a Frame."
+msgstr "Copy a Frame."
+
+msgid "Cut a Frame."
+msgstr "Cut a Frame."
+
+msgid "Paste a Frame."
+msgstr "Paste a Frame."
+
+#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "Could not paste {0}.  Error {1}."
+
+msgid "Insert a Cut or Copied Frame."
+msgstr "Insert a Cut or Copied Frame."
+
+msgid "Slice the timeline at the current time."
+msgstr "Slice the timeline at the current time."
+
+msgid "Remove clip(s) at the current time."
+msgstr "Remove clip(s) at the current time."
+
+msgid "Insert audio clip at the current time."
+msgstr "Insert audio clip at the current time."
+
+msgid "Insert audio gap(s) at the current time."
+msgstr "Insert audio gap(s) at the current time."
+
+msgid "Remove audio clips at the current time."
+msgstr "Remove audio clips at the current time."
+
+msgid "Remove selected items."
+msgstr "Remove selected items."
+
+msgid "Remove audio gap(s) at the current time."
+msgstr "Remove audio gap(s) at the current time."
+
+msgid "Insert video gap(s) at current time."
+msgstr "Insert video gap(s) at current time."
+
+msgid "Remove video gap(s) at current time."
+msgstr "Remove video gap(s) at current time."
 
 msgid "Items selected must be on the same track."
 msgstr "Items selected must be on the same track."
 
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
-msgstr "Items selected must be contiguous on the track. Left {0}.  Right {1}."
+#, c++-format
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 
+msgid "Add transition between 2 or 4 selected and contiguous items."
+msgstr "Add transition between 2 or 4 selected and contiguous items."
+
+#, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
 msgstr "Please select two or four contiguous items.  Selected {0}."
 
@@ -3173,14 +3328,25 @@ msgstr "Please select two contiguous video clips."
 msgid "Please select two contiguous audio clips."
 msgstr "Please select two contiguous audio clips."
 
+msgid "Undo Last Edit Operation."
+msgstr "Undo Last Edit Operation."
+
+msgid "Redo Last Edit Operation."
+msgstr "Redo Last Edit Operation."
+
+#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "Could not save .otio file: {0}"
 
+#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error saving {0}. {1}"
 
 msgid "Empty EDL file.  Not saving."
 msgstr "Empty EDL file.  Not saving."
+
+msgid "Save the current timeline as an .otio file."
+msgstr "Save the current timeline as an .otio file."
 
 msgid "Destination file is invalid."
 msgstr "Destination file is invalid."
@@ -3188,6 +3354,7 @@ msgstr "Destination file is invalid."
 msgid "Unknown media reference"
 msgstr "Unknown media reference"
 
+#, c++-format
 msgid "Track #{0} - {1}"
 msgstr "Track #{0} - {1}"
 
@@ -3197,9 +3364,11 @@ msgstr "Cannot currently concatenate an .otio file."
 msgid "Cannot currently concatenate a directory."
 msgstr "Cannot currently concatenate a directory."
 
+#, c++-format
 msgid "Could not append video track {0}"
 msgstr "Could not append video track {0}"
 
+#, c++-format
 msgid "Could not append audio track {0}"
 msgstr "Could not append audio track {0}"
 
@@ -3294,6 +3463,13 @@ msgid "Default"
 msgstr "Default"
 
 msgid ""
+"You have EDLs in the current session.  These will not be saved in the "
+"session file.  Do you want to continue?"
+msgstr ""
+"You have EDLs in the current session.  These will not be saved in the "
+"session file.  Do you want to continue?"
+
+msgid ""
 "You have unsaved changes. Do you want to save the session before closing?"
 msgstr ""
 "You have unsaved changes. Do you want to save the session before closing?"
@@ -3364,14 +3540,103 @@ msgstr "Preferences"
 msgid "About"
 msgstr "About"
 
+msgid "Open a movie or a sequence."
+msgstr "Open a movie or a sequence."
+
+msgid ""
+"Open a movie stored on the web with https protocol.  Demo movie is default."
+msgstr ""
+"Open a movie stored on the web with https protocol.  Demo movie is default."
+
+msgid "Open a single image even if it is part of a sequence."
+msgstr "Open a single image even if it is part of a sequence."
+
+msgid "Load the selected file."
+msgstr "Load the selected file."
+
+msgid "Open a sequence with an audio file."
+msgstr "Open a sequence with an audio file."
+
+msgid "Open all files in a directory."
+msgstr "Open all files in a directory."
+
+msgid "Open a new instance of the player."
+msgstr "Open a new instance of the player."
+
 msgid "Could not open a new mrv2 instance"
 msgstr "Could not open a new mrv2 instance"
+
+msgid "Go to Previous File, Looping to End."
+msgstr "Go to Previous File, Looping to End."
+
+msgid "Go to Next File, Looping to Start."
+msgstr "Go to Next File, Looping to Start."
+
+msgid "Go to Previous File."
+msgstr "Go to Previous File."
+
+msgid "Go to Next File."
+msgstr "Go to Next File."
+
+msgid "Go to Listed File."
+msgstr "Go to Listed File."
+
+msgid "Select B File."
+msgstr "Select B File."
+
+msgid "Toggle A and B comparison."
+msgstr "Toggle A and B comparison."
+
+msgid "Compare A."
+msgstr "Compare A."
+
+msgid "Compare B."
+msgstr "Compare B."
+
+msgid "Compare Wipe."
+msgstr "Compare Wipe."
+
+msgid "Compare Overlay."
+msgstr "Compare Overlay."
+
+msgid "Compare A - B difference."
+msgstr "Compare A - B difference."
+
+msgid "Compare A + B."
+msgstr "Compare A + B."
+
+msgid "Compare A * B."
+msgstr "Compare A * B."
+
+msgid "Compare A next to flipped B."
+msgstr "Compare A next to flipped B."
+
+msgid "Compare A and B Horizontally."
+msgstr "Compare A and B Horizontally."
+
+msgid "Compare A and B Vertically."
+msgstr "Compare A and B Vertically."
+
+msgid "Compare A and one or many clips Tiled."
+msgstr "Compare A and one or many clips Tiled."
 
 msgid "File extension cannot be empty."
 msgstr "File extension cannot be empty."
 
+msgid "Save a single frame of the current clip."
+msgstr "Save a single frame of the current clip."
+
+msgid "Keep saving frames to the same folder."
+msgstr "Keep saving frames to the same folder."
+
+msgid "Save the audio of the current clip."
+msgstr "Save the audio of the current clip."
+
 msgid "Saving audio but not with an audio extension."
 msgstr "Saving audio but not with an audio extension."
+
+msgid "Export a movie or a sequence."
+msgstr "Export a movie or a sequence."
 
 msgid "Saving audio but current clip does not have audio."
 msgstr "Saving audio but current clip does not have audio."
@@ -3379,20 +3644,316 @@ msgstr "Saving audio but current clip does not have audio."
 msgid "Saving video but with an audio extension."
 msgstr "Saving video but with an audio extension."
 
+msgid "Save annotations as a PDF."
+msgstr "Save annotations as a PDF."
+
+msgid "Save annotations only as a movie or sequence."
+msgstr "Save annotations only as a movie or sequence."
+
 msgid "Cannot save annotations to .otio file"
 msgstr "Cannot save annotations to .otio file"
+
+msgid "Save annotations as a .json file"
+msgstr "Save annotations as a .json file"
+
+msgid "Close current file."
+msgstr "Close current file."
+
+msgid "Exit the program.  Warns if edits or annotations have been made."
+msgstr "Exit the program.  Warns if edits or annotations have been made."
+
+msgid "Previous layer."
+msgstr "Previous layer."
+
+msgid "Next layer."
+msgstr "Next layer."
+
+msgid "No debanding."
+msgstr "No debanding."
+
+msgid "Blur movie a bit to avoid banding."
+msgstr "Blur movie a bit to avoid banding."
+
+msgid "Blur movie medium to avoid banding."
+msgstr "Blur movie medium to avoid banding."
+
+msgid "Blur movie high to avoid banding."
+msgstr "Blur movie high to avoid banding."
+
+msgid "Minify filter with nearest algorithm."
+msgstr "Minify filter with nearest algorithm."
+
+msgid "Minify filter with linear algorithm."
+msgstr "Minify filter with linear algorithm."
+
+msgid "Magnify filter with nearest algorithm."
+msgstr "Magnify filter with nearest algorithm."
+
+msgid "Magnify filter with linear algorithm."
+msgstr "Magnify filter with linear algorithm."
+
+msgid "Mirror clip in X."
+msgstr "Mirror clip in X."
+
+msgid "Mirror clip in Y."
+msgstr "Mirror clip in Y."
+
+msgid "Use HDR data from file."
+msgstr "Use HDR data from file."
+
+msgid "Don't use HDR data."
+msgstr "Don't use HDR data."
+
+msgid "Use Latest HDR data."
+msgstr "Use Latest HDR data."
+
+msgid "Rotate image 90 degrees."
+msgstr "Rotate image 90 degrees."
+
+msgid "Rotate image -90 degrees."
+msgstr "Rotate image -90 degrees."
+
+msgid "Show the red channel of the layer."
+msgstr "Show the red channel of the layer."
+
+msgid "Show the green channel of the layer."
+msgstr "Show the green channel of the layer."
+
+msgid "Show the blue channel of the layer."
+msgstr "Show the blue channel of the layer."
+
+msgid "Show the alpha channel of the layer."
+msgstr "Show the alpha channel of the layer."
+
+msgid "Show the combined lumma channel of the layer."
+msgstr "Show the combined lumma channel of the layer."
+
+msgid "Show the RGB channel of the layer."
+msgstr "Show the RGB channel of the layer."
+
+msgid "Normalize the image to be between 0 and 1."
+msgstr "Normalize the image to be between 0 and 1."
+
+msgid "Ignore OpenEXR chromaticities if present."
+msgstr "Ignore OpenEXR chromaticities if present."
+
+msgid "Show values below 0 and above 1 as red pixels"
+msgstr "Show values below 0 and above 1 as red pixels"
+
+msgid ""
+"Toggle HDR peak detection to adjust the movie's luminosity while playing."
+msgstr ""
+"Toggle HDR peak detection to adjust the movie's luminosity while playing."
+
+msgid "Select Tonemap algorithm."
+msgstr "Select Tonemap algorithm."
+
+msgid "Select Gamut mapping algorithm."
+msgstr "Select Gamut mapping algorithm."
+
+msgid "Toggles Fullscreen Mode."
+msgstr "Toggles Fullscreen Mode."
+
+msgid "Toggles Presentation Mode."
+msgstr "Toggles Presentation Mode."
+
+msgid "Toggles Window to Float above others."
+msgstr "Toggles Window to Float above others."
+
+msgid "Toggles a Secondary Window."
+msgstr "Toggles a Secondary Window."
+
+msgid "Toggle Secondary Window to Float above others."
+msgstr "Toggle Secondary Window to Float above others."
+
+msgid ""
+"Mouse clicks are delivered to the OS windows below.  Used with transparency."
+msgstr ""
+"Mouse clicks are delivered to the OS windows below.  Used with transparency."
+
+msgid "Make UI more transparent."
+msgstr "Make UI more transparent."
+
+msgid "Make UI less transparent."
+msgstr "Make UI less transparent."
+
+msgid "Only allow one side panel at a time."
+msgstr "Only allow one side panel at a time."
+
+#, c++-format
+msgid "Show {0} Window."
+msgstr "Show {0} Window."
+
+msgid "Show About Window."
+msgstr "Show About Window."
+
+msgid "Toggle Action Dock (Annotations/Edit tools)."
+msgstr "Toggle Action Dock (Annotations/Edit tools)."
+
+msgid "Toggle Menu Bar."
+msgstr "Toggle Menu Bar."
+
+msgid "Toggle Top Bar."
+msgstr "Toggle Top Bar."
+
+msgid "Toggle Pixel Bar."
+msgstr "Toggle Pixel Bar."
+
+msgid "Toggle Timeline Bar."
+msgstr "Toggle Timeline Bar."
+
+msgid "Toggle Status Bar (this bar)."
+msgstr "Toggle Status Bar (this bar)."
+
+msgid "Show HUD Options."
+msgstr "Show HUD Options."
+
+msgid "Toggles auto framing of the view."
+msgstr "Toggles auto framing of the view."
+
+msgid "Toggle TV Safe Areas."
+msgstr "Toggle TV Safe Areas."
+
+msgid "Toggle the display of OpenEXR's Data Window."
+msgstr "Toggle the display of OpenEXR's Data Window."
+
+msgid "Ignore the OpenEXR Display Window."
+msgstr "Ignore the OpenEXR Display Window."
+
+msgid "Toggle the display of OpenEXR's Display Window."
+msgstr "Toggle the display of OpenEXR's Display Window."
+
+msgid "Set the Film Cropping Mask."
+msgstr "Set the Film Cropping Mask."
 
 msgid "View/Mask"
 msgstr "View/Mask"
 
+msgid "Play Forward."
+msgstr "Play Forward."
+
+msgid "Play Backward."
+msgstr "Play Backward."
+
+msgid "Stop Playback."
+msgstr "Stop Playback."
+
+msgid "Toggle Playback."
+msgstr "Toggle Playback."
+
+msgid "Set In Point."
+msgstr "Set In Point."
+
+msgid "Set Out Point."
+msgstr "Set Out Point."
+
+msgid "Toggle In and Out Points."
+msgstr "Toggle In and Out Points."
+
+msgid "Loop Mode."
+msgstr "Loop Mode."
+
+msgid "Play Once Mode."
+msgstr "Play Once Mode."
+
+msgid "Play Ping-Pong Mode."
+msgstr "Play Ping-Pong Mode."
+
+msgid "Select OCIO Input Color Space."
+msgstr "Select OCIO Input Color Space."
+
+msgid "Bring up OCIO presets window."
+msgstr "Bring up OCIO presets window."
+
+msgid "Toggle OpenColorIO (OCIO)."
+msgstr "Toggle OpenColorIO (OCIO)."
+
+msgid "Toggle between OCIO and Colors topbar."
+msgstr "Toggle between OCIO and Colors topbar."
+
+msgid "Current OCIO Input Color Space."
+msgstr "Current OCIO Input Color Space."
+
 msgid "OCIO/     Input Color Space"
 msgstr "OCIO/     Input Color Space"
+
+msgid "Current OCIO Look."
+msgstr "Current OCIO Look."
 
 msgid "OCIO/     Look"
 msgstr "OCIO/     Look"
 
+msgid "Current OCIO Display / View for monitor."
+msgstr "Current OCIO Display / View for monitor."
+
+msgid "Current OCIO Display / View for all monitors."
+msgstr "Current OCIO Display / View for all monitors."
+
 msgid "All Monitors"
 msgstr "All Monitors"
+
+msgid "Video Levels from video clip."
+msgstr "Video Levels from video clip."
+
+msgid "Video Levels Legal Range for SDR."
+msgstr "Video Levels Legal Range for SDR."
+
+msgid "Video Levels Legal Range for HDR."
+msgstr "Video Levels Legal Range for HDR."
+
+msgid "Video Levels Full Range."
+msgstr "Video Levels Full Range."
+
+msgid "No Alpha Blend."
+msgstr "No Alpha Blend."
+
+msgid "Straight Alpha Blend."
+msgstr "Straight Alpha Blend."
+
+msgid "Premultiplied Alpha Blend."
+msgstr "Premultiplied Alpha Blend."
+
+msgid "Go to Start Frame."
+msgstr "Go to Start Frame."
+
+msgid "Go to End Frame."
+msgstr "Go to End Frame."
+
+msgid "Go to Next Frame."
+msgstr "Go to Next Frame."
+
+msgid "Go to Previous Frame."
+msgstr "Go to Previous Frame."
+
+msgid "Go Forwards 10 Seconds."
+msgstr "Go Forwards 10 Seconds."
+
+msgid "Go Backwards 10 Seconds."
+msgstr "Go Backwards 10 Seconds."
+
+msgid "Toggle In / Out for the OTIO clip."
+msgstr "Toggle In / Out for the OTIO clip."
+
+msgid "Next OTIO clip."
+msgstr "Next OTIO clip."
+
+msgid "Previous OTIO clip."
+msgstr "Previous OTIO clip."
+
+msgid "Previous Annotation Point."
+msgstr "Previous Annotation Point."
+
+msgid "Next Annotation Point."
+msgstr "Next Annotation Point."
+
+msgid "Toggle Annotation Visibility."
+msgstr "Toggle Annotation Visibility."
+
+msgid "Clear Annotation for Current Frame."
+msgstr "Clear Annotation for Current Frame."
+
+msgid "Clear Annotations for ALL Frames."
+msgstr "Clear Annotations for ALL Frames."
 
 msgid ""
 "You are about to clear all annotations.  You can still undo the operation "
@@ -3401,14 +3962,83 @@ msgstr ""
 "You are about to clear all annotations.  You can still undo the operation "
 "right after. Do you want to continue?"
 
+msgid "No Thumbnails in Timeline Viewport."
+msgstr "No Thumbnails in Timeline Viewport."
+
+msgid "Toggle Editing in Timeline Viewport."
+msgstr "Toggle Editing in Timeline Viewport."
+
+msgid "Toggle Editing video and audio clips with same In and Out Points."
+msgstr "Toggle Editing video and audio clips with same In and Out Points."
+
+msgid "Frame Timeline View."
+msgstr "Frame Timeline View."
+
+msgid "Toggle Scrolling in Timeline Viewport."
+msgstr "Toggle Scrolling in Timeline Viewport."
+
+msgid "Toggle Track Information in Timeline Viewport."
+msgstr "Toggle Track Information in Timeline Viewport."
+
+msgid "Toggle Clip Information in Timeline Viewport."
+msgstr "Toggle Clip Information in Timeline Viewport."
+
+msgid "Toggle Markers in Timeline Viewport."
+msgstr "Toggle Markers in Timeline Viewport."
+
+msgid "Toggle Track in Timeline Viewport."
+msgstr "Toggle Track in Timeline Viewport."
+
+msgid "Toggle Transitions in Timeline Viewport."
+msgstr "Toggle Transitions in Timeline Viewport."
+
+msgid "Select OTIO's Media Reference Key."
+msgstr "Select OTIO's Media Reference Key."
+
+msgid "Set Small Thumbnails in Timeline Viewport."
+msgstr "Set Small Thumbnails in Timeline Viewport."
+
+msgid "Set Medium Thumbnails in Timeline Viewport."
+msgstr "Set Medium Thumbnails in Timeline Viewport."
+
+msgid "Set Large Thumbnails in Timeline Viewport."
+msgstr "Set Large Thumbnails in Timeline Viewport."
+
 msgid "Pick Color"
 msgstr "Pick Color"
 
 msgid "Pick Draw Color and Alpha"
 msgstr "Pick Draw Color and Alpha"
 
+msgid "Flip Pen Colors."
+msgstr "Flip Pen Colors."
+
+msgid "Go to First Image Version."
+msgstr "Go to First Image Version."
+
+msgid "Go to Previous Image Version."
+msgstr "Go to Previous Image Version."
+
+msgid "Go to Next Image Version."
+msgstr "Go to Next Image Version."
+
+msgid "Go to Last Image Version."
+msgstr "Go to Last Image Version."
+
+msgid "Give a donation to support development and unlock features."
+msgstr "Give a donation to support development and unlock features."
+
 msgid "Install is broken.  Missing license_helper"
 msgstr "Install is broken.  Missing license_helper"
+
+msgid "Online documentation."
+msgstr "Online documentation."
+
+msgid "Toggle Annotations."
+msgstr "Toggle Annotations."
+
+msgid "Toggle Sync Elements."
+msgstr "Toggle Sync Elements."
 
 msgid "Media"
 msgstr "Media"
@@ -3422,12 +4052,20 @@ msgstr "Pan And Zoom"
 msgid "Timeline"
 msgstr "Timeline"
 
-msgid ""
-"You have EDLs in the current session.  These will not be saved in the "
-"session file.  Do you want to continue?"
-msgstr ""
-"You have EDLs in the current session.  These will not be saved in the "
-"session file.  Do you want to continue?"
+msgid "Toggle Receive Elements."
+msgstr "Toggle Receive Elements."
+
+msgid "Save state of UI and files to a new .mrv2s session file."
+msgstr "Save state of UI and files to a new .mrv2s session file."
+
+msgid "Save state of UI and files to a .mrv2s session file."
+msgstr "Save state of UI and files to a .mrv2s session file."
+
+msgid "Load a session file which stores the state of the UI and files."
+msgstr "Load a session file which stores the state of the UI and files."
+
+msgid "Save and restart a temporary session."
+msgstr "Save and restart a temporary session."
 
 msgid "Could not restart mrv2 instance with a session file."
 msgstr "Could not restart mrv2 instance with a session file."
@@ -3435,18 +4073,45 @@ msgstr "Could not restart mrv2 instance with a session file."
 msgid "Edit Text Annotation"
 msgstr "Edit Text Annotation"
 
+msgid "Clone the File."
+msgstr "Clone the File."
+
+msgid "Reload the File."
+msgstr "Reload the File."
+
+msgid "Set 3D Stereo image."
+msgstr "Set 3D Stereo image."
+
+msgid "Update the current frame cache."
+msgstr "Update the current frame cache."
+
+msgid "Refresh the frame cache."
+msgstr "Refresh the frame cache."
+
+msgid "Refresh the movie."
+msgstr "Refresh the movie."
+
+msgid "Copy the Filename to the clipboard."
+msgstr "Copy the Filename to the clipboard."
+
+msgid "Bring up the File Manager."
+msgstr "Bring up the File Manager."
+
 msgid "No item selected"
 msgstr "No item selected"
 
+#, c-format
 msgid "%s - Page %d"
 msgstr "%s - Page %d"
 
+#, c++-format
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Frame {0} - TC: {1} - S: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image too big.  Will save the viewport size."
 
+#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Viewport Size: {0} - X={1}, Y={2}"
 
@@ -3585,12 +4250,15 @@ msgstr ""
 msgid "Cannot save an NDI stream"
 msgstr "Cannot save an NDI stream"
 
+#, c++-format
 msgid "Saving movie to {0}."
 msgstr "Saving movie to {0}."
 
+#, c++-format
 msgid "Saving audio to {0}."
 msgstr "Saving audio to {0}."
 
+#, c++-format
 msgid "Saving pictures to {0}."
 msgstr "Saving pictures to {0}."
 
@@ -3616,77 +4284,79 @@ msgstr ""
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "HAP profile needs a .mov extension.  Changing it to .mov"
 
+msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
+msgstr "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
+
+#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "New file {0} already exist!  Cannot overwrite it."
 
-msgid "Rotated image info: {0}"
-msgstr "Rotated image info: {0}"
+#, c++-format
+msgid "HDR Export mode {0}"
+msgstr "HDR Export mode {0}"
 
-msgid "Scaled image info: {0}"
-msgstr "Scaled image info: {0}"
-
+#, c++-format
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Cannot open writer plugin."
 
-msgid "Image info: {0} {1}"
-msgstr "Image info: {0} {1}"
+#, c++-format
+msgid "Scaled image info: {0}"
+msgstr "Scaled image info: {0}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr "Image too big for Save Annotations.  Will scale to the viewport size."
-
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer plugin did not get output info.  Defaulting to {0}"
 
-msgid "Output info: {0} {1}"
-msgstr "Output info: {0} {1}"
-
+#, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Using profile {0}, pixel format {1}."
 
+#, c++-format
 msgid "Using preset {0}."
 msgstr "Using preset {0}."
 
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr "Offscreen Buffer info: {0}"
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr "Image info: {0} {1}"
+
+#, c++-format
+msgid "Output info: {0} {1}"
+msgstr "Output info: {0} {1}"
+
+#, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie without Audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie with Audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Invalid OpenGL format and type"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL info: {0}"
-
+#, c++-format
 msgid "Saving... {0}"
 msgstr "Saving... {0}"
 
-msgid "Unsupported output format"
-msgstr "Unsupported output format"
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr "Empty video data at time {0}.  Repeating frame."
-
+#, c++-format
 msgid "Render size: {0}"
 msgstr "Render size: {0}"
 
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "Image Layer '{0}' info: {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Offscreen Buffer info: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Unsupported output format: "
+#, c++-format
+msgid "Saved '{0}'."
+msgstr "Saved '{0}'."
 
 msgid "2.35"
 msgstr "2.35"
@@ -3697,20 +4367,53 @@ msgstr "1.85"
 msgid "1.66"
 msgstr "1.66"
 
+#, c-format
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "Cache: "
 
+#, c++-format
+msgid "HDR monitor min. nits = {0}"
+msgstr "HDR monitor min. nits = {0}"
+
+#, c++-format
+msgid "HDR monitor max. nits = {0}"
+msgstr "HDR monitor max. nits = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR monitor not found or not configured."
+
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "HDR monitor not detected by Vulkan or Window Manager."
+
+#, c++-format
+msgid "Vulkan color space is {0}"
+msgstr "Vulkan color space is {0}"
+
+#, c++-format
+msgid "Vulkan format is {0}"
+msgstr "Vulkan format is {0}"
+
+#, c++-format
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Changed to HDR active monitor at index {0}"
+
+#, c++-format
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "Changed to HDR supported but inactive monitor at index {0}"
+
+#, c++-format
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Changed to SDR monitor at index {0}"
+
 msgid "Edit Text"
 msgstr "Edit Text"
 
+#, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' is not a file, directory or url."
-
-msgid "Invalid font for text drawing"
-msgstr "Invalid font for text drawing"
 
 msgid "Could not convert message to shape: "
 msgstr "Could not convert message to shape: "
@@ -3724,9 +4427,11 @@ msgstr "Cannot play - audio annotation is empty"
 msgid "Status is not saved"
 msgstr "Status is not saved"
 
+#, c++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Audio annotation file {0} is missing or not exists!"
 
+#, c++-format
 msgid "Unhandled buffer format: {0} for output: {1}"
 msgstr "Unhandled buffer format: {0} for output: {1}"
 
@@ -3832,6 +4537,7 @@ msgstr "File/Close All"
 msgid "File/Save and Reload Session"
 msgstr "File/Save and Reload Session"
 
+#, c-format
 msgid "File/Recent/%s"
 msgstr "File/Recent/%s"
 
@@ -4081,6 +4787,7 @@ msgstr "Playback/Annotation/Clear"
 msgid "Playback/Annotation/Clear All"
 msgstr "Playback/Annotation/Clear All"
 
+#, c-format
 msgid "View/Mask/%s"
 msgstr "View/Mask/%s"
 
@@ -4153,9 +4860,11 @@ msgstr "Timeline/Transitions"
 msgid "Timeline/Markers"
 msgstr "Timeline/Markers"
 
+#, c++-format
 msgid "Timeline/Visible Tracks/{0}"
 msgstr "Timeline/Visible Tracks/{0}"
 
+#, c++-format
 msgid "Timeline/Media Reference/{0}"
 msgstr "Timeline/Media Reference/{0}"
 
@@ -4213,12 +4922,14 @@ msgstr "Image/Compare Mode/Vertical"
 msgid "Image/Compare Mode/Tile"
 msgstr "Image/Compare Mode/Tile"
 
+#, c-format
 msgid "Image/Go to/%s"
 msgstr "Image/Go to/%s"
 
 msgid "Image/Compare/Toggle A and B"
 msgstr "Image/Compare/Toggle A and B"
 
+#, c-format
 msgid "Image/Compare/%s"
 msgstr "Image/Compare/%s"
 
@@ -4255,17 +4966,17 @@ msgstr "Edit/Time/Audio Gap/Insert"
 msgid "Edit/Time/Audio Gap/Remove"
 msgstr "Edit/Time/Audio Gap/Remove"
 
-msgid "Edit/Selected/Add Transition"
-msgstr "Edit/Selected/Add Transition"
-
-msgid "Edit/Selected/Remove Items"
-msgstr "Edit/Selected/Remove Items"
-
 msgid "Edit/Time/Remove Clips"
 msgstr "Edit/Time/Remove Clips"
 
 msgid "Edit/Time/Slice"
 msgstr "Edit/Time/Slice"
+
+msgid "Edit/Selected/Add Transition"
+msgstr "Edit/Selected/Add Transition"
+
+msgid "Edit/Selected/Remove Items"
+msgstr "Edit/Selected/Remove Items"
 
 msgid "Edit/Undo"
 msgstr "Edit/Undo"
@@ -4285,24 +4996,31 @@ msgstr "OCIO/Toggle"
 msgid "OCIO/Current"
 msgstr "OCIO/Current"
 
+#, c-format
 msgid "OCIO/         ICS: %s"
 msgstr "OCIO/         ICS: %s"
 
+#, c-format
 msgid "OCIO/     Display: %s"
 msgstr "OCIO/     Display: %s"
 
+#, c-format
 msgid "OCIO/        View: %s"
 msgstr "OCIO/        View: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/  Monitor #%d Display: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/  Monitor #%d    View: %s"
 
+#, c-format
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/        Look: %s"
 
+#, c-format
 msgid "OCIO/        LUT: %s"
 msgstr "OCIO/        LUT: %s"
 
@@ -4354,6 +5072,7 @@ msgstr "Sync/Accept/Annotations"
 msgid "Sync/Accept/Audio"
 msgstr "Sync/Accept/Audio"
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -4361,6 +5080,7 @@ msgstr ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -4461,6 +5181,7 @@ msgstr "Wide list mode"
 msgid "Detail mode"
 msgstr "Detail mode"
 
+#, c-format
 msgid ""
 "Could not create directory '%s'. You may not have permission to perform this"
 " operation."
@@ -4468,12 +5189,15 @@ msgstr ""
 "Could not create directory '%s'. You may not have permission to perform this"
 " operation."
 
+#, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "An error occurred while trying to delete '%s'. %s"
 
+#, c-format
 msgid "File '%s' already exists!"
 msgstr "File '%s' already exists!"
 
+#, c-format
 msgid "Unable to rename '%s' to '%s'"
 msgstr "Unable to rename '%s' to '%s'"
 
@@ -4615,6 +5339,7 @@ msgstr "OpenUSD Compressed Asset"
 msgid "OpenUSD ASCII Asset"
 msgstr "OpenUSD ASCII Asset"
 
+#, c-format
 msgid "Another process using the file."
 msgstr "Another process using the file."
 
@@ -4714,9 +5439,11 @@ msgstr "With msvc "
 msgid "mrv2 depends on:"
 msgstr "mrv2 depends on:"
 
+#, c++-format
 msgid "Total Physical Memory: {0} Gb"
 msgstr "Total Physical Memory: {0} Gb"
 
+#, c++-format
 msgid "Total Virtual Memory: {0} Gb"
 msgstr "Total Virtual Memory: {0} Gb"
 
@@ -4768,6 +5495,7 @@ msgstr "Drag Box"
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "Unknown type for mrvOCIOBrowser"
 
+#, c++-format
 msgid ""
 "Wayland Compositor supports Float on Top only through hotkeys.  Press {0}."
 msgstr ""
@@ -4780,6 +5508,7 @@ msgstr ""
 "Your Wayland compositor does not support Float on Top.  Use your Window "
 "Manager to set a hotkey for it."
 
+#, c++-format
 msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 
@@ -4830,6 +5559,9 @@ msgstr "&File/&Clone"
 msgid "&File/&Refresh Cache"
 msgstr "&File/&Refresh Cache"
 
+msgid "&File/Reload Media"
+msgstr "&File/Reload Media"
+
 msgid "&Copy/&Filename"
 msgstr "&Copy/&Filename"
 
@@ -4869,6 +5601,7 @@ msgstr "Range"
 msgid "Mean"
 msgstr "Mean"
 
+#, c-format
 msgid "Track #%d - %s"
 msgstr "Track #%d - %s"
 
@@ -4884,6 +5617,7 @@ msgstr "Remove the current note."
 msgid "No annotations added yet."
 msgstr "No annotations added yet."
 
+#, c++-format
 msgid "This frame already has a note at {0}, frame {1}."
 msgstr "This frame already has a note at {0}, frame {1}."
 
@@ -5182,6 +5916,9 @@ msgid ""
 "        balance disk space vs. quality.\n"
 "        Good for high-end delivery for either Web or \n"
 "        online review.\n"
+"        It is currently the only format that supports\n"
+"        dynamic per-frame HDR, perfect companion for\n"
+"        vmrv2.\n"
 "  Cineform - codec developed by GoPro, that rivals \n"
 "             ProRes in features, except for HDR.  \n"
 "             It was discontinued in 2021, but most \n"
@@ -5197,6 +5934,11 @@ msgid ""
 "  HAP - RGB/A codec which is optimized for fast playback with\n"
 "        CPU decoding.  It does not compress that well.\n"
 "        It needs hap-alpha* presets to save alpha channel.\n"
+"  HEVC - Only supported on HW due to license and patent\n"
+"         restrictions.\n"
+"  OAPV - A competitor to VP9 that offers better YUV formats with\n"
+"         support for an alpha channel, but no HDR yet.\n"
+"\n"
 "\n"
 "  Hardware encoding is only supported on newer MacBook\n"
 "  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
@@ -5246,6 +5988,9 @@ msgstr ""
 "        balance disk space vs. quality.\n"
 "        Good for high-end delivery for either Web or \n"
 "        online review.\n"
+"        It is currently the only format that supports\n"
+"        dynamic per-frame HDR, perfect companion for\n"
+"        vmrv2.\n"
 "  Cineform - codec developed by GoPro, that rivals \n"
 "             ProRes in features, except for HDR.  \n"
 "             It was discontinued in 2021, but most \n"
@@ -5261,6 +6006,11 @@ msgstr ""
 "  HAP - RGB/A codec which is optimized for fast playback with\n"
 "        CPU decoding.  It does not compress that well.\n"
 "        It needs hap-alpha* presets to save alpha channel.\n"
+"  HEVC - Only supported on HW due to license and patent\n"
+"         restrictions.\n"
+"  OAPV - A competitor to VP9 that offers better YUV formats with\n"
+"         support for an alpha channel, but no HDR yet.\n"
+"\n"
 "\n"
 "  Hardware encoding is only supported on newer MacBook\n"
 "  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
@@ -5814,6 +6564,9 @@ msgstr "TileGroup"
 msgid "ViewGroup"
 msgstr "ViewGroup"
 
+msgid "Clip Selection Tool."
+msgstr "Clip Selection Tool."
+
 msgid "Undo Last Edit."
 msgstr "Undo Last Edit."
 
@@ -5919,6 +6672,15 @@ msgstr "AI Prompt"
 msgid "AI prompt to feed the image to AI."
 msgstr "AI prompt to feed the image to AI."
 
+msgid "Baked Display HDR"
+msgstr "Baked Display HDR"
+
+msgid "Scene Linear HDR"
+msgstr "Scene Linear HDR"
+
+msgid "Baked Display SDR"
+msgstr "Baked Display SDR"
+
 msgid "Half"
 msgstr "Half"
 
@@ -5940,6 +6702,12 @@ msgstr "Annotation Frames Only"
 msgid "Save only the annotation frames, not the whole sequence."
 msgstr "Save only the annotation frames, not the whole sequence."
 
+msgid "Export Mode"
+msgstr "Export Mode"
+
+msgid "HDR (Vulkan) Export mode."
+msgstr "HDR (Vulkan) Export mode."
+
 msgid "OpenEXR Options"
 msgstr "OpenEXR Options"
 
@@ -5955,8 +6723,14 @@ msgstr "OpenEXR's Compression Type"
 msgid "ZIP Compression"
 msgstr "ZIP Compression"
 
+msgid "zstd Compression"
+msgstr "zstd Compression"
+
 msgid "DWA Compression"
 msgstr "DWA Compression"
+
+msgid "Lossy HTJ2K"
+msgstr "Lossy HTJ2K"
 
 msgid "Contents"
 msgstr "Contents"
@@ -6198,14 +6972,23 @@ msgstr "CG"
 msgid "Studio"
 msgstr "Studio"
 
-msgid "Black Frame"
-msgstr "Black Frame"
+msgid "Error Frame"
+msgstr "Error Frame"
 
-msgid "Repeat  Frame"
-msgstr "Repeat  Frame"
+msgid "Hold Frame"
+msgstr "Hold Frame"
 
-msgid "Scratched  Frame"
-msgstr "Scratched  Frame"
+msgid "Scratched Frame"
+msgstr "Scratched Frame"
+
+msgid "Black  Frame"
+msgstr "Black  Frame"
+
+msgid "Skip Frame"
+msgstr "Skip Frame"
+
+msgid "Gap Frame"
+msgstr "Gap Frame"
 
 msgid "Always"
 msgstr "Always"
@@ -6671,12 +7454,6 @@ msgstr "Compare Panel"
 msgid "How to display timeline thumbnails in Compare Panel."
 msgstr "How to display timeline thumbnails in Compare Panel."
 
-msgid "Playlist Panel"
-msgstr "Playlist Panel"
-
-msgid "How to display timeline thumbnails in Playlist Panel."
-msgstr "How to display timeline thumbnails in Playlist Panel."
-
 msgid "Stereo Panel"
 msgstr "Stereo Panel"
 
@@ -7038,6 +7815,28 @@ msgstr ""
 
 msgid "Missing Frame"
 msgstr "Missing Frame"
+
+msgid "Black Frame"
+msgstr "Black Frame"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
 
 msgid "Path Mappings"
 msgstr "Path Mappings"
@@ -7577,24 +8376,31 @@ msgstr "Divide"
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 
+#, c++-format
 msgid "Unknown licese plan '{0}'"
 msgstr "Unknown licese plan '{0}'"
 
+#, c++-format
 msgid "License plan '{0}'"
 msgstr "License plan '{0}'"
 
+#, c++-format
 msgid "Supports annotations '{0}'"
 msgstr "Supports annotations '{0}'"
 
+#, c++-format
 msgid "Supports editing '{0}'"
 msgstr "Supports editing '{0}'"
 
+#, c++-format
 msgid "Supports layers '{0}'"
 msgstr "Supports layers '{0}'"
 
+#, c++-format
 msgid "Supports python '{0}'"
 msgstr "Supports python '{0}'"
 
+#, c++-format
 msgid "Supports voice annotations '{0}'"
 msgstr "Supports voice annotations '{0}'"
 
@@ -7607,9 +8413,11 @@ msgstr "Node-Locked"
 msgid "Floating"
 msgstr "Floating"
 
+#, c++-format
 msgid "Found floating license at '{0}'"
 msgstr "Found floating license at '{0}'"
 
+#, c++-format
 msgid "Did not find floating license at '{0}'"
 msgstr "Did not find floating license at '{0}'"
 
@@ -7619,12 +8427,15 @@ msgstr "Invalid expiration date"
 msgid "License expired"
 msgstr "License expired"
 
+#, c++-format
 msgid "{0} is not readable. Using system default."
 msgstr "{0} is not readable. Using system default."
 
+#, c++-format
 msgid "{0} Active Licenses from {1}."
 msgstr "{0} Active Licenses from {1}."
 
+#, c++-format
 msgid "Valid license for {0}"
 msgstr "Valid license for {0}"
 
@@ -7634,6 +8445,7 @@ msgstr "Could not release floating license"
 msgid "Released Floating License"
 msgstr "Released Floating License"
 
+#, c++-format
 msgid "Your {0} license will expire on {1}."
 msgstr "Your {0} license will expire on {1}."
 
@@ -8123,6 +8935,9 @@ msgstr "Scrub Mode"
 msgid "Area Selection Mode"
 msgstr "Area Selection Mode"
 
+msgid "Draw Mode"
+msgstr "Draw Mode"
+
 msgid "Erase Mode"
 msgstr "Erase Mode"
 
@@ -8231,32 +9046,67 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "task info failed"
 
-#~ msgid "HDR monitor min. nits = {0}"
-#~ msgstr "HDR monitor min. nits = {0}"
+#~ msgid "Complexity"
+#~ msgstr "Complexity"
 
-#~ msgid "HDR monitor max. nits = {0}"
-#~ msgstr "HDR monitor max. nits = {0}"
+#~ msgid "Stage Cache"
+#~ msgstr "Stage Cache"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR monitor not found or not configured."
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Disk Cache in GB"
 
-#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
-#~ msgstr "HDR monitor not detected by Vulkan or Window Manager."
+#, c++-format
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "Rotated image info: {0}"
 
-#~ msgid "Vulkan color space is {0}"
-#~ msgstr "Vulkan color space is {0}"
+#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr "Image too big for Save Annotations.  Will scale to the viewport size."
 
-#~ msgid "Vulkan format is {0}"
-#~ msgstr "Vulkan format is {0}"
+#, c++-format
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Invalid OpenGL format and type"
 
-#~ msgid "Changed to HDR active monitor at index {0}"
-#~ msgstr "Changed to HDR active monitor at index {0}"
+#, c++-format
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL info: {0}"
 
-#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
-#~ msgstr "Changed to HDR supported but inactive monitor at index {0}"
+#~ msgid "Unsupported output format"
+#~ msgstr "Unsupported output format"
 
-#~ msgid "Changed to SDR monitor at index {0}"
-#~ msgstr "Changed to SDR monitor at index {0}"
+#, c++-format
+#~ msgid "Empty video data at time {0}.  Repeating frame."
+#~ msgstr "Empty video data at time {0}.  Repeating frame."
+
+#, c++-format
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "Image Layer '{0}' info: {1} {2}"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Unsupported output format: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Invalid font for text drawing"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "Remove audio gap(s) at the ones at current time."
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Repeat  Frame"
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Get file sequence audio directory."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "Filter EDLs"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Playlist Panel"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr "How to display timeline thumbnails in Playlist Panel."
+
+#~ msgid "Linearize EXR"
+#~ msgstr "Linearize EXR"
 
 #~ msgid "BGR"
 #~ msgstr "BGR"
@@ -8825,9 +9675,6 @@ msgstr "task info failed"
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
 
-#~ msgid "Video Levels Legal Range HDR"
-#~ msgstr "Video Levels Legal Range HDR"
-
 #~ msgid "Enter a UR."
 #~ msgstr "Enter a UR."
 
@@ -8897,9 +9744,6 @@ msgstr "task info failed"
 
 #~ msgid "Vulkan format detected {0}"
 #~ msgstr "Vulkan format detected {0}"
-
-#~ msgid "Load Movie or Sequence"
-#~ msgstr "Load Movie or Sequence"
 
 #~ msgid "uiMenuBar"
 #~ msgstr "uiMenuBar"

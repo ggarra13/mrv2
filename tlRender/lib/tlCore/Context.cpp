@@ -67,7 +67,7 @@ namespace tl
             _systems.push_back(system);
             _systemTimes[system] = std::chrono::steady_clock::now();
         }
-        
+
         void Context::removeSystem(const std::shared_ptr<ICoreSystem>& system)
         {
             for (auto it = _systems.begin(); it != _systems.end(); )

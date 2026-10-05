@@ -43,7 +43,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 19;
+    const int kSessionVersion = 20;
 } // namespace
 
 namespace
@@ -121,6 +121,7 @@ namespace mrv
             Message time;
             Message playback;
             Message inOutRange;
+            Message mediaReferenceKey;
 
             if (player)
             {
@@ -143,6 +144,10 @@ namespace mrv
                 time = player->currentTime();
                 playback = player->playback();
                 inOutRange = player->inOutRange();
+
+                auto timeline = player->timeline();
+                if (timeline)
+                    mediaReferenceKey = timeline->getMediaReferenceKey();
             }
 
             timeline["annotations"] = annotation;
@@ -150,6 +155,7 @@ namespace mrv
             timeline["time"] = time;
             timeline["playback"] = playback;
             timeline["inOutRange"] = inOutRange;
+            timeline["mediaReferenceKey"] = mediaReferenceKey;
 
             Message bars = {
                 {"menu_bar", (bool)ui->uiMenuGroup->visible()},
@@ -554,6 +560,7 @@ namespace mrv
                     Aitem->annotations = item.annotations;
                     Aitem->voiceAnnotations = item.voiceAnnotations;
                     Aitem->videoLayer = item.videoLayer;
+                    Aitem->mediaReferenceKey = item.mediaReferenceKey;
                     Aitem->currentTime = item.currentTime;
                     Aitem->inOutRange = item.inOutRange;
 
@@ -563,6 +570,7 @@ namespace mrv
                     auto player = view->getTimelinePlayer();
                     if (player)
                     {
+                        player->setMediaReferenceKey(item.mediaReferenceKey);
                         player->setAllAnnotations(item.annotations);
                         player->setInOutRange(Aitem->inOutRange);
                         player->seek(Aitem->currentTime);
@@ -874,6 +882,13 @@ namespace mrv
                                     c->uiEndButton->value(1);
                                 }
                             }
+                        }
+
+                        if (version >= 20)
+                        {
+                            std::string key;
+                            j["mediaReferenceKey"].get_to(key);
+                            player->setMediaReferenceKey(key);
                         }
 
                         OTIO_NS::RationalTime time;

@@ -150,10 +150,10 @@ namespace mrv
                 vk.render->begin(renderSize);
                 vk.render->setOCIOOptions(p.ocioOptions);
                 vk.render->setLUTOptions(p.lutOptions);
-                if (p.missingFrame &&
-                    p.missingFrameType != MissingFrameType::kBlackFrame)
+                if (p.missingFrame)
                 {
-                    _drawMissingFrame(renderSize);
+                    if (p.missingFrameType != tl::io::MissingFrames::Black)
+                        _drawMissingFrame(renderSize);
                 }
                 else
                 {
@@ -245,7 +245,7 @@ namespace mrv
                 p.imageOptions, p.displayOptions, p.compareOptions,
                 getBackgroundOptions());
 
-            if (p.missingFrameType == MissingFrameType::kScratchedFrame)
+            if (p.missingFrameType == io::MissingFrames::Scratch)
             {
                 image::Color4f color(1, 0, 0, 0.8);
                 vk.lines->drawLine(vk.render,
@@ -326,7 +326,6 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
-            const std::shared_ptr<tl::timeline_vlk::Render>& render,
             const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
             const std::vector<std::shared_ptr<voice::Annotation> >& voannotations,
@@ -334,7 +333,6 @@ namespace mrv
 #else
             void Viewport::_drawAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
-                const std::shared_ptr<tl::timeline_vlk::Render>& render,
                 const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
                 const std::vector<std::shared_ptr<bool> >& voannotations,
@@ -344,6 +342,9 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
+            // We use the viewport's single renderer.
+            const auto& render = vk.render;
+
             // Transition annotation buffer to start rendering to it.
             if (annotationBuffer)
             {
@@ -352,12 +353,38 @@ namespace mrv
 
             // Start the annotation render.
             timeline::RenderOptions renderOptions;
+            renderOptions.vaoSize = 16 * memory::megabyte;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
 
-            render->begin(vk.cmd, annotationBuffer, frameIndex,
-                          renderSize, renderOptions);
-            render->setOCIOOptions(timeline::OCIOOptions());
-            render->setLUTOptions(timeline::LUTOptions());
+            // Check if we have a text annotation and make sure to create the
+            // glyph texture.
+            bool glyphTexture = false;
+            for (const auto& annotation : annotations)
+            {
+                if (glyphTexture)
+                    break;
+                const auto& shapes = annotation->shapes;
+                for (const auto& shape : shapes)
+                {
+                    if (auto s = dynamic_cast<VKTextShape*>(shape.get()))
+                    {
+                        glyphTexture = true;
+                        break;
+                    }
+                }
+            }
+
+            renderOptions.glyphTexture = glyphTexture;
+
+            // Draw into the annotation buffer with the same renderer used for
+            // the video.  Each target gets its own pipeline group so the
+            // pipelines are not recreated every time we switch targets.
+            // We do not touch the OCIO/LUT options: they belong to the video
+            // and are not used by annotations.
+            const std::string pipelineGroup =
+                (annotationBuffer == vk.overlay) ? "overlay" : "annotation";
+            render->beginPass(vk.cmd, annotationBuffer, renderSize,
+                              renderOptions, pipelineGroup);
             render->setTransform(renderMVP);
 
             render->beginRenderPass();
@@ -466,7 +493,7 @@ namespace mrv
             }
 #endif
             render->endRenderPass();
-            render->end();
+            render->endPass();
         }
 
         void Viewport::_compositeAnnotations(
@@ -1196,9 +1223,9 @@ namespace mrv
                 };
                 // Max display capability
                 m_hdr_metadata.maxLuminance =
-                    data.displayMasteringLuminance.getMax();
+                    data.displayMasteringLuminance.max();
                 m_hdr_metadata.minLuminance =
-                    data.displayMasteringLuminance.getMin();
+                    data.displayMasteringLuminance.min();
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
             }

@@ -19,6 +19,8 @@
 
 namespace tl
 {
+    namespace otime = opentime::OPENTIME_VERSION;
+    namespace otio = opentimelineio::OPENTIMELINEIO_VERSION;
 
     //! Time
     namespace time
@@ -52,10 +54,10 @@ namespace tl
             const std::optional<OTIO_NS::TimeRange>&);
 
         //! Get the frames in a time range.
-        std::vector<OTIO_NS::RationalTime> frames(const OTIO_NS::TimeRange&);
+        std::vector<otime::RationalTime> frames(const OTIO_NS::TimeRange&);
 
         //! Split a time range at into seconds.
-        std::vector<OTIO_NS::TimeRange> seconds(const OTIO_NS::TimeRange&);
+        std::vector<otime::TimeRange> seconds(const OTIO_NS::TimeRange&);
 
         //! Sleep for a given time.
         void sleep(const std::chrono::microseconds&);

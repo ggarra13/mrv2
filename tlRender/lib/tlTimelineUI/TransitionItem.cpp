@@ -76,7 +76,7 @@ namespace tl
             }
 
             IItem::_init(
-                "tl::TIMELINEUI::TransitionItem", timeRange, trimmedRange,
+                "tl::TIMELINEUI::TransitionItem", timeRange, trimmedRange, timeRange,
                 scale, options, displayOptions, itemData, context, parent);
         }
 

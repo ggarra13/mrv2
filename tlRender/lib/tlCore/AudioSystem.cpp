@@ -40,7 +40,6 @@ namespace tl
 
         void System::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init(context, "tl::audio::System");
             TLRENDER_P();
 
 #if defined(TLRENDER_AUDIO)
@@ -64,9 +63,12 @@ namespace tl
 #endif
         }
 
-        System::System() :
+        System::System(
+            const std::shared_ptr<system::Context>& context) :
+            system::ISystem(context, "tl::time::TimerSystem"),
             _p(new Private)
         {
+            _init(context);
         }
 
         System::~System() {}
@@ -77,8 +79,7 @@ namespace tl
             auto out = context->getSystem<System>();
             if (!out)
             {
-                out = std::shared_ptr<System>(new System);
-                out->_init(context);
+                out = std::shared_ptr<System>(new System(context));
             }
             return out;
         }

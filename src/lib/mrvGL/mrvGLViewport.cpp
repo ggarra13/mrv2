@@ -134,26 +134,6 @@ namespace mrv
                         gl::Shader::create(vertexSource, textureFragmentSource());
                     gl.annotationShader = gl::Shader::create(
                         vertexSource, annotationFragmentSource());
-
-                    //
-                    // \@bug: FLTK's Wayland does not initialize the vsync
-                    //        properly, so we do it here
-                    //
-                    int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
-                    if (!p.presentation)
-                    {
-                        if (vsync == MonitorVSync::kVSyncPresentationOnly ||
-                            vsync == MonitorVSync::kVSyncNone)
-                        {
-                            swap_interval(0);
-                            p.ui->uiTimeline->swap_interval(0);
-                        }
-                        else if (vsync == MonitorVSync::kVSyncAlways)
-                        {
-                            swap_interval(1);
-                            p.ui->uiTimeline->swap_interval(1);
-                        }
-                    }
                 }
                 catch (const std::exception& e)
                 {
@@ -263,8 +243,9 @@ namespace mrv
                         timeline::VideoFrame& video = emptyVideo;
                         if (!p.videoData.empty())
                             video = p.videoData[0];
+
                         if (p.missingFrame &&
-                            p.missingFrameType != MissingFrameType::kBlackFrame)
+                            p.missingFrameType != tl::io::MissingFrames::Black)
                         {
                             video = p.lastVideoFrame;
                         }
@@ -408,10 +389,11 @@ namespace mrv
 
                             gl.render->setLUTOptions(p.lutOptions);
                             gl.render->setHDROptions(p.hdrOptions);
-                            if (p.missingFrame &&
-                                p.missingFrameType != MissingFrameType::kBlackFrame)
+                            if (p.missingFrame)
                             {
-                                _drawMissingFrame(renderSize);
+                                if (p.missingFrameType !=
+                                    io::MissingFrames::Black)
+                                    _drawMissingFrame(renderSize);
                             }
                             else
                             {
@@ -449,6 +431,10 @@ namespace mrv
 
             float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
 
+            const bool secondary = _hasSecondaryViewport();
+            auto* target = secondary ? p.ui->uiSecondary->viewport()
+                           : reinterpret_cast<MyViewport*>(this);
+
             if (!p.presentation)
             {
                 Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
@@ -465,6 +451,13 @@ namespace mrv
                 {
                     p.ui->uiViewGroup->color(fl_rgb_color(ur, ug, ub));
                     p.ui->uiViewGroup->redraw();
+
+                    if (secondary)
+                    {
+                        auto group = p.ui->uiSecondary->group();
+                        group->color(fl_rgb_color(ur, ug, ub));
+                        group->redraw();
+                    }
                 }
             }
             else
@@ -473,6 +466,13 @@ namespace mrv
                 {
                     p.ui->uiViewGroup->color(fl_rgb_color(0, 0, 0));
                     p.ui->uiViewGroup->redraw();
+
+                    if (secondary)
+                    {
+                        auto group = p.ui->uiSecondary->group();
+                        group->color(fl_rgb_color(0, 0, 0));
+                        group->redraw();
+                    }
                 }
 
                 // Hide the cursor if in presentation time after 3 seconds of

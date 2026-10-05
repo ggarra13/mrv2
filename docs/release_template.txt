@@ -36,7 +36,7 @@ Support the project via PayPal to receive your license key.
 
 -------------------------------------------------------------------------------
 
-(v)mrv2 v1.7.6
+(v)mrv2 v1.7.8
 
 Open source professional players and review tools for VFX, animation and CGI for Windows, Linux and macOS has a new version.
 

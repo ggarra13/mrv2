@@ -10,7 +10,7 @@ if (NOT openjph_FOUND)
     include(ExternalProject)
 
     set(OpenJPH_GIT_REPOSITORY "https://github.com/aous72/OpenJPH.git")
-    set(OpenJPH_GIT_TAG "0.27.3")  # was 0.26.3
+    set(OpenJPH_GIT_TAG "0.32.0")  # was 0.27.3 
 
     set(OpenJPH_DEPENDENCIES ${ZLIB_DEP})
     message(STATUS "OpenJPH DEPENDENCIES=${OpenJPH_DEPENDENCIES}")

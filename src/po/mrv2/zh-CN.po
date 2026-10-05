@@ -5,6 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"POT-Creation-Date: 2026-10-04 14:27-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Insecty <insecty_l@163.com>\n"
 "Language: zh-CN\n"
@@ -198,12 +199,6 @@ msgstr "设置文件序列音频文件名"
 msgid "Get file sequence audio file name."
 msgstr "获取文件序列音频文件名"
 
-msgid "Set file sequence audio directory."
-msgstr "设置文件序列音频目录"
-
-msgid "Get file sequence audio directory."
-msgstr "获取文件序列音频目录"
-
 msgid "Set maximum file sequence digits."
 msgstr "设定最大文件序列位数"
 
@@ -302,6 +297,7 @@ msgstr "保存会话文件 。"
 msgid "Save and reload session file restarting mrv2."
 msgstr "保存并重新加载会话文件，同时重启 mrv2。"
 
+#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "复制的Python插件 {0} in {1} {2}"
 
@@ -580,14 +576,20 @@ msgstr "启用Levels"
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
 msgstr "Add a :class:`mrv2.math.Vector3f` to image."
 
-msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-msgstr "Change a :class:`mrv2.math.Vector3f` of brightness to image."
+msgid ""
+"Change a :class:`mrv2.math.Vector3f` of brightness (gain) to image.  Only "
+"the x channel is used."
+msgstr "使用 :class:`mrv2.math.Vector3f` 更改图像的亮度（增益）。仅使用 x 通道。"
 
-msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-msgstr "Change a :class:`mrv2.math.Vector3f` of contrast to image."
+msgid ""
+"Change a :class:`mrv2.math.Vector3f` of contrast to image.  Only the x "
+"channel is used."
+msgstr "使用 :class:`mrv2.math.Vector3f` 更改图像的对比度。仅使用 x 通道。"
 
-msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-msgstr "Change a :class:`mrv2.math.Vector3f` of saturation to image."
+msgid ""
+"Change a :class:`mrv2.math.Vector3f` of saturation to image. Only the x "
+"channel is used."
+msgstr "使用 :class:`mrv2.math.Vector3f` 更改图像的饱和度。仅使用 x 通道。"
 
 msgid "Change tint of image to image between 0 and 1."
 msgstr "图片之间的过渡值(0-1)"
@@ -907,6 +909,9 @@ msgstr "保存注释"
 msgid "Save resolution."
 msgstr "保存分辨率"
 
+msgid "HDR Export Mode."
+msgstr "HDR 导出模式。"
+
 msgid "FFmpeg Profile."
 msgstr "FFmpeg Profile"
 
@@ -948,6 +953,12 @@ msgstr "OpenEXR Zip 压缩率"
 
 msgid "OpenEXR's DWA Compression Level."
 msgstr "OpenEXR DWA 压缩率"
+
+msgid "OpenEXR's Lossy HJ2K Compression Level."
+msgstr "OpenEXR 的有损 HJ2K 压缩级别。"
+
+msgid "OpenEXR's ZSTD Compression Level."
+msgstr "OpenEXR 的 ZSTD 压缩级别。"
 
 msgid ""
 "\n"
@@ -1116,6 +1127,7 @@ msgstr "将当前帧的所有语音和鼠标方向以 JSON 文件形式获取。
 msgid "Get all URL/File/AI directions for current frame as a JSON file."
 msgstr "将当前帧的所有 URL/文件/AI 指令获取为 JSON 文件。"
 
+#, c++-format
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
 
@@ -1243,6 +1255,14 @@ msgstr "连接到 <value> 上的 WebRTC 项目。"
 msgid "Connect to a WebRTC room at <value>."
 msgstr "连接到位于 <value> 的 WebRTC 房间。"
 
+msgid "Timeline:"
+msgstr "时间线："
+
+msgid ""
+"Media reference to open OTIO timelines with for clips that have several "
+"versions of their media (examples: \"Proxy\" and \"Full\")."
+msgstr "用于打开 OTIO 时间线的媒体引用，适用于媒体具有多个版本的剪辑（例如：\"Proxy\" 和 \"Full\"）。"
+
 msgid "Miscellaneous:"
 msgstr "杂项:"
 
@@ -1288,9 +1308,11 @@ msgstr "首选项位置 :"
 msgid "Temp Location: "
 msgstr "临时位置："
 
+#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "无法读取 python 脚本 '{0}'"
 
+#, c++-format
 msgid "Running python script '{0}'"
 msgstr "运行 python 脚本 '{0}'"
 
@@ -1303,6 +1325,7 @@ msgstr "Python 错误 :"
 msgid "Caching..."
 msgstr "正在缓存..."
 
+#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "文件名 '{0}' 不存在, 或者没有读取权限 。"
 
@@ -1312,9 +1335,11 @@ msgstr "打印到控制台的日志 。"
 msgid "Show this message."
 msgstr "显示此消息 。"
 
+#, c++-format
 msgid "Cannot parse option \"{0}\": {1}"
 msgstr "无法分析“ {0} ” 选项 : {1}"
 
+#, c++-format
 msgid "Cannot parse argument \"{0}\": {1}"
 msgstr "无法分析参数“ {0} ” : {1}"
 
@@ -1448,6 +1473,7 @@ msgstr "Editor/&External Editor"
 msgid "Scripts/Add To Script List"
 msgstr "脚本/添加到脚本列表"
 
+#, c-format
 msgid "Scripts/%s"
 msgstr "脚本/%s"
 
@@ -1456,6 +1482,7 @@ msgid ""
 "it.  Press Keypad Enter to run it."
 msgstr "在此输入 python 代码。 选择一个区域执行它的一部分。 按Enter 键运行"
 
+#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "Python 文件 {0} 已经存在。 您想要覆盖它吗?"
 
@@ -1477,18 +1504,22 @@ msgstr "Stream处于无法恢复的错误状态 。"
 msgid "Type your editor command"
 msgstr "键入编辑器命令"
 
+#, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr "{0} 将被替换为行号 。 {1} 将替换为文件名"
 
+#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "正则表达式错误: {0}"
 
+#, c++-format
 msgid "Could not open python editor: {0}"
 msgstr "无法打开 python 编辑器: {0}"
 
 msgid "Search String:"
 msgstr "搜索字符串 :"
 
+#, c-format
 msgid "No occurrences of '%s' found!"
 msgstr "找不到 '%s' 发生事件!"
 
@@ -1525,23 +1556,12 @@ msgstr "带有元元元数据"
 msgid "Without Metadata"
 msgstr "没有元元数据"
 
+#, c++-format
 msgid "Streaming {0} {1}..."
 msgstr "串流 {0} {1}..."
 
 msgid "Stop streaming"
 msgstr "停止流流"
-
-msgid "Complexity"
-msgstr "复杂程度"
-
-msgid "Draw Mode"
-msgstr "绘制模式"
-
-msgid "Stage Cache"
-msgstr "缓存"
-
-msgid "Disk Cache in GB"
-msgstr "磁盘缓存 (GB)"
 
 msgid "Type"
 msgstr "类型"
@@ -1635,6 +1655,25 @@ msgstr "音频文件名"
 
 msgid "Maximum Digits"
 msgstr "最大位数"
+
+msgid "Spatial Coordinates"
+msgstr "空间坐标"
+
+msgid ""
+"Use the Spatial Coordinates in OTIO files to position and size the clips.\n"
+"\n"
+"* None: Ignore the spatial coordinates.\n"
+"* Coordinates: Use the spatial coordinates when clips provide them.\n"
+"* Normalize: Use the spatial coordinates, and display clips without them at the size of the first clip.  Use this to play clips of differing resolutions at the same size."
+msgstr ""
+"使用 OTIO 文件中的空间坐标来设置剪辑的位置和大小。\n"
+"\n"
+"* 无：忽略空间坐标。\n"
+"* 坐标：当剪辑提供空间坐标时使用这些坐标。\n"
+"* 归一化：使用空间坐标，并将没有空间坐标的剪辑以第一个剪辑的大小显示。使用此选项可以将不同分辨率的剪辑以相同大小播放。"
+
+msgid "Compatibility"
+msgstr "兼容性"
 
 msgid "Performance"
 msgstr "性能"
@@ -1873,9 +1912,11 @@ msgstr "1:16"
 msgid "Pick"
 msgstr "选取"
 
+#, c-format
 msgid "%.3f seconds "
 msgstr "% 3f 秒"
 
+#, c-format
 msgid "Video Stream #%d"
 msgstr "视频流 #%d"
 
@@ -2143,6 +2184,7 @@ msgstr "文件的最近修改日期"
 msgid "Load an image or movie file"
 msgstr "载入图像或影片"
 
+#, c-format
 msgid "Audio Stream #%d"
 msgstr "音频流 #%d"
 
@@ -2161,6 +2203,7 @@ msgstr "音频数量"
 msgid "Format"
 msgstr "格式"
 
+#, c-format
 msgid "%d Hz."
 msgstr "%d Hz."
 
@@ -2170,6 +2213,7 @@ msgstr "频率"
 msgid "Frequency of audio"
 msgstr "音频频率"
 
+#, c-format
 msgid "%d kb/s"
 msgstr "% d kb/s"
 
@@ -2194,6 +2238,7 @@ msgstr "持续时间"
 msgid "Duration of Audio"
 msgstr "音频持续时间"
 
+#, c-format
 msgid "Subtitle Stream #%d"
 msgstr "字幕流 #%d"
 
@@ -2265,9 +2310,6 @@ msgstr "上一个文件"
 
 msgid "Next filename"
 msgstr "下一个文件"
-
-msgid "Filter EDLs"
-msgstr "过滤器 EDLs"
 
 msgid "Select one or more B images."
 msgstr "选择一个或多个 B 图像 。"
@@ -2506,9 +2548,11 @@ msgstr "在所有帧上显示注解"
 msgid "Frame Note"
 msgstr "帧注释"
 
+#, c++-format
 msgid "STUN server is {0}"
 msgstr "STUN 服务器是 {0}"
 
+#, c++-format
 msgid "TURN server is {0}"
 msgstr "TURN 服务器为 {0}"
 
@@ -2527,12 +2571,15 @@ msgstr "未设置信令服务器。请在 首选项->WebRTC->信令 中进行设
 msgid "No Web RTC Studio set.  Please update Preferences->WebRTC->Studio"
 msgstr "未设置 WebRTC Studio。请在 首选项->WebRTC->Studio 中进行设置"
 
+#, c++-format
 msgid "The room ID is: {0}"
 msgstr "房间 ID 是：{0}"
 
+#, c++-format
 msgid "The player ID is: {0}"
 msgstr "播放器 ID 是：{0}"
 
+#, c++-format
 msgid "Downloading {0}..."
 msgstr "正在下载 {0}..."
 
@@ -2542,9 +2589,11 @@ msgstr "在端口监听服务器"
 msgid "ComfyUI listening on port "
 msgstr "ComfyUI 在端口监听"
 
+#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr "服务器协议版本为 {0}。 客户端协议版本为 {1}"
 
+#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "本地文件系统不存在远程文件 {0} 。"
 
@@ -2554,11 +2603,13 @@ msgstr "未通过 WebRTC 连接；无法获取远程文件。"
 msgid "Peer not connected."
 msgstr "对等端未连接。"
 
+#, c++-format
 msgid ""
 "{0} is only reachable via relay (TURN), which would consume VPS bandwidth. "
 "Skipping fetch to avoid unexpected costs."
 msgstr "{0} 只能通过中继（TURN）访问，这会消耗 VPS 带宽。为避免产生意外费用，已跳过获取操作。"
 
+#, c++-format
 msgid "Already fetching {0} from another sync request; skipping duplicate."
 msgstr "已在另一个同步请求中获取 {0}；跳过重复请求。"
 
@@ -2575,12 +2626,15 @@ msgstr ""
 msgid "Download failed."
 msgstr "下载失败。"
 
+#, c++-format
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr "本地未找到远程文件 {0}，且没有可用于获取该文件的对等端。"
 
+#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "远程文件 {0} 匹配文件名 {1}, 但不是路径 。"
 
+#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "远程文件 {0} 不匹配本地文件名 。"
 
@@ -2590,11 +2644,13 @@ msgstr "沃恩: 韦恩:"
 msgid "ERROR:\t"
 msgstr "错误:"
 
+#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 msgstr "从 {0} 创建的正则表达式。 它是 : {1}"
 
+#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "迭代 {0} 将检查版本 {1} 。"
 
@@ -2606,27 +2662,34 @@ msgstr "在此剪辑中没有版本。 请创建名为版本字符串的图像�
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "示例:  gizmo_v003.0001.exr"
 
+#, c++-format
 msgid "Could not replace {0} with {1}"
 msgstr "无法将 {0} 替换为 {1} 。"
 
 msgid "Annotation already existed at this time"
 msgstr "当前时间已经存在批注"
 
+#, c++-format
 msgid "Failed to open the file {0} for writing."
 msgstr "打开文件 {0} 以写入失败 。"
 
+#, c++-format
 msgid "Failed to write to the file {0}."
 msgstr "写入文件 {0} 失败 。"
 
+#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "会话已保存到\"{0}\"。"
 
+#, c++-format
 msgid "Failed to open the file '{0}' for reading."
 msgstr "打开文件 '{0}' 读取失败 。"
 
+#, c++-format
 msgid "Failed to load the file '{0}."
 msgstr "装入文件 '{0} 失败 。"
 
+#, c++-format
 msgid ""
 "Movie File '{0}' is not readable.\n"
 "\n"
@@ -2636,6 +2699,7 @@ msgstr ""
 "\n"
 "是否要用其他文件替换它？"
 
+#, c++-format
 msgid ""
 "Sequence '{0}' is not readable.\n"
 "\n"
@@ -2645,6 +2709,7 @@ msgstr ""
 "\n"
 "是否要用其他内容替换它？"
 
+#, c++-format
 msgid ""
 "Audio File '{0}' is not readable.\n"
 "\n"
@@ -2654,9 +2719,11 @@ msgstr ""
 "\n"
 "是否要用其他文件替换它？"
 
+#, c++-format
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "读取“ \"{0}{1}\" 的首选项"
 
+#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "获取 {0} 失败"
 
@@ -2668,9 +2735,11 @@ msgstr "设置面板中正在使用FFmpeg YUV 转换到 RGB 。 mrv2 将会减�
 msgid "Debanding is not set to None.  This can make images show blurred"
 msgstr "去色带未设置为“无”。这可能会使图像看起来模糊。"
 
+#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "无法打开 \"{0}\" 的颜色主题 。"
 
+#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "从 \"{0}\" 载入的颜色主题 。"
 
@@ -2680,27 +2749,34 @@ msgstr "设置基于偏好的OCIO配置"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "根据OCIO环境变量设置OCIO配置"
 
+#, c++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "从 \"{0}{1}\" 导入路径映射图"
 
+#, c++-format
 msgid "Error deleting directory: \"{0}\"."
 msgstr "删除目录时出错：“{0}”。"
 
+#, c++-format
 msgid "Cleaned directory: \"{0}\"."
 msgstr "已清理目录：“{0}”。"
 
+#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "正在从 \"{0}{1}.prefs\" 导入快捷键"
 
 msgid "Resetting hotkeys to default."
 msgstr "正在将快捷键重置为默认值。"
 
+#, c++-format
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "路径映射已保存到 \"{0}{1}\"。"
 
+#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "快捷键被保存到“ \"{0}{1}.prefs\"."
 
+#, c++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "首选项已保存为 \"{0}{1}\"."
 
@@ -2710,6 +2786,7 @@ msgstr "删除"
 msgid "OCIO config is now:"
 msgstr "OCIO 配置为:"
 
+#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "找不到或无法读取 OCIO 文件 \"{0}\" 。"
 
@@ -2719,57 +2796,74 @@ msgstr "设置 OCIO 默认配置 :"
 msgid "Setting OCIO config to built-in:"
 msgstr "设置 OCIO 内置配置 :"
 
+#, c++-format
 msgid "Path mapping for {0} already exists!"
 msgstr "{0} 路径映射已经存在!"
 
+#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "比较 {0} 到前缀 {1}"
 
+#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "找到了匹配文件。 文件现在是 {0}"
 
 msgid "OCIO config file cannot be empty."
 msgstr "OCIO 配置文件不能为空 。"
 
+#, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "OCIO 配置 '{0}' 不存在或不可读 。"
 
+#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "无效的 OCIO Ics '{0}' 。"
 
+#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr "无效的 OCIO 外观 '{0}' 。"
 
+#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "无效的 OCIO 显示/ 查看 '{0}' 。"
 
+#, c++-format
 msgid "Could not split '{0}' into display and view."
 msgstr "无法将 '{0}' 分割为显示和视图 。"
 
+#, c++-format
 msgid "No default view for display '{0}'.  Does display exist?"
 msgstr "显示“ {0} ” 没有默认视图。 显示是否存在?"
 
+#, c++-format
 msgid "Setting OCIO Preset '{0}'."
 msgstr "设置 OCIO 预设 '{0}' 。"
 
+#, c++-format
 msgid "Preset '{0}' not found."
 msgstr "找不到预设 '{0}' 。"
 
+#, c++-format
 msgid "OCIO Preset '{0}' already exists!"
 msgstr "OCIO 预设 '{0}' 已经存在!"
 
+#, c++-format
 msgid "Failed to load the file '{0}'."
 msgstr "装入文件 '{0}' 失败 。"
 
+#, c++-format
 msgid "Loaded {0} ocio presets from \"{1}\"."
 msgstr "从“ {1} ” 装入 {0} ocio 预设 。"
 
+#, c++-format
 msgid "Failed to open the file '{0}' for saving."
 msgstr "打开文件 '{0}' 保存失败 。"
 
+#, c++-format
 msgid "Failed to save the file '{0}'."
 msgstr "保存文件 '{0}' 失败 。"
 
+#, c++-format
 msgid "OCIO presets have been saved to \"{0}\"."
 msgstr "OCIO 预设已保存为 {0} 。"
 
@@ -2800,11 +2894,13 @@ msgstr "Russian"
 msgid "Japanese"
 msgstr "Japanese"
 
+#, c++-format
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
 msgstr "需要重新启动 mrv2 将语言更改为 {0}。  您确定要继续吗？"
 
+#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "设置语言为 {0}, 数字为 {1}"
 
@@ -2937,11 +3033,13 @@ msgstr ""
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.功能\t@B12@C7@b@.热键"
 
+#, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
 msgstr "快捷键 \"%s\" 已经被\"%s\" 使用。确定要覆盖它吗?"
 
+#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -3103,18 +3201,67 @@ msgstr "无效索引 添加剪辑到时间表时"
 msgid "Could not get current path."
 msgstr "无法获得当前路径"
 
+msgid "Unzipping"
+msgstr "解压缩"
+
+#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "EDL 项目 '{0}' 不再装入。 无法撤消或重做"
 
+msgid "Copy a Frame."
+msgstr "复制帧。"
+
+msgid "Cut a Frame."
+msgstr "剪切帧。"
+
+msgid "Paste a Frame."
+msgstr "粘贴帧。"
+
+#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "无法粘贴 {0}  错误 {1}"
+
+msgid "Insert a Cut or Copied Frame."
+msgstr "插入剪切或复制的帧。"
+
+msgid "Slice the timeline at the current time."
+msgstr "在当前时间切分时间线。"
+
+msgid "Remove clip(s) at the current time."
+msgstr "删除当前时间的剪辑。"
+
+msgid "Insert audio clip at the current time."
+msgstr "在当前时间插入音频剪辑。"
+
+msgid "Insert audio gap(s) at the current time."
+msgstr "在当前时间插入音频间隔。"
+
+msgid "Remove audio clips at the current time."
+msgstr "删除当前时间的音频剪辑。"
+
+msgid "Remove selected items."
+msgstr "删除选中的项目。"
+
+msgid "Remove audio gap(s) at the current time."
+msgstr "删除当前时间的音频间隔。"
+
+msgid "Insert video gap(s) at current time."
+msgstr "在当前时间插入视频间隔。"
+
+msgid "Remove video gap(s) at current time."
+msgstr "删除当前时间的视频间隔。"
 
 msgid "Items selected must be on the same track."
 msgstr "所选项目必须在同一轨道上。"
 
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
-msgstr "所选项目在轨道上必须是连续的。左侧 {0}。右侧 {1}。"
+#, c++-format
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr "所选项目必须在轨道上连续。左侧 {0}。右侧 {1}。"
 
+msgid "Add transition between 2 or 4 selected and contiguous items."
+msgstr "在 2 个或 4 个选中的连续项目之间添加转场。"
+
+#, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
 msgstr "请选择两个或四个连续的项目。已选 {0}。"
 
@@ -3124,14 +3271,25 @@ msgstr "请选择两个相邻的视频剪辑。"
 msgid "Please select two contiguous audio clips."
 msgstr "请选择两个相邻的音频剪辑。"
 
+msgid "Undo Last Edit Operation."
+msgstr "撤销上一次编辑操作。"
+
+msgid "Redo Last Edit Operation."
+msgstr "重做上一次编辑操作。"
+
+#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "无法保存. otio 文件: {0}"
 
+#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "保存 {0} 出错  {1}"
 
 msgid "Empty EDL file.  Not saving."
 msgstr "空 EDL 文件, 未保存"
+
+msgid "Save the current timeline as an .otio file."
+msgstr "将当前时间线保存为 .otio 文件。"
 
 msgid "Destination file is invalid."
 msgstr "目的文件无效"
@@ -3139,6 +3297,7 @@ msgstr "目的文件无效"
 msgid "Unknown media reference"
 msgstr "未知媒体引用未知"
 
+#, c++-format
 msgid "Track #{0} - {1}"
 msgstr "音轨 #{0} - {1}"
 
@@ -3148,9 +3307,11 @@ msgstr "无法将. otio 文件归结为. otio 文件"
 msgid "Cannot currently concatenate a directory."
 msgstr "无法连接目录"
 
+#, c++-format
 msgid "Could not append video track {0}"
 msgstr "无法附加视频轨道 {0}"
 
+#, c++-format
 msgid "Could not append audio track {0}"
 msgstr "无法附加音频轨道 {0}"
 
@@ -3245,6 +3406,11 @@ msgid "Default"
 msgstr "默认"
 
 msgid ""
+"You have EDLs in the current session.  These will not be saved in the "
+"session file.  Do you want to continue?"
+msgstr "您在当前会话中有 EDL 。 这些不会保存在会话文件中。 您想要继续吗?"
+
+msgid ""
 "You have unsaved changes. Do you want to save the session before closing?"
 msgstr "您有未保存的更改。是否在关闭前保存会话？"
 
@@ -3314,14 +3480,102 @@ msgstr "首选项"
 msgid "About"
 msgstr "关于"
 
+msgid "Open a movie or a sequence."
+msgstr "打开影片或图像序列。"
+
+msgid ""
+"Open a movie stored on the web with https protocol.  Demo movie is default."
+msgstr "使用 https 协议打开存储在网络上的影片。  默认使用演示影片。"
+
+msgid "Open a single image even if it is part of a sequence."
+msgstr "打开单个图像，即使它属于图像序列的一部分。"
+
+msgid "Load the selected file."
+msgstr "加载选中的文件。"
+
+msgid "Open a sequence with an audio file."
+msgstr "打开带有音频文件的图像序列。"
+
+msgid "Open all files in a directory."
+msgstr "打开目录中的所有文件。"
+
+msgid "Open a new instance of the player."
+msgstr "打开播放器的新实例。"
+
 msgid "Could not open a new mrv2 instance"
 msgstr "无法打开新的 mrv2 实例"
+
+msgid "Go to Previous File, Looping to End."
+msgstr "转到上一个文件，到末尾后循环。"
+
+msgid "Go to Next File, Looping to Start."
+msgstr "转到下一个文件，到开头后循环。"
+
+msgid "Go to Previous File."
+msgstr "转到上一个文件。"
+
+msgid "Go to Next File."
+msgstr "转到下一个文件。"
+
+msgid "Go to Listed File."
+msgstr "转到列表中的文件。"
+
+msgid "Select B File."
+msgstr "选择 B 文件。"
+
+msgid "Toggle A and B comparison."
+msgstr "切换 A 和 B 的比较。"
+
+msgid "Compare A."
+msgstr "比较 A。"
+
+msgid "Compare B."
+msgstr "比较 B。"
+
+msgid "Compare Wipe."
+msgstr "使用 Wipe 比较。"
+
+msgid "Compare Overlay."
+msgstr "使用 Overlay 比较。"
+
+msgid "Compare A - B difference."
+msgstr "比较 A - B 的差异。"
+
+msgid "Compare A + B."
+msgstr "比较 A + B。"
+
+msgid "Compare A * B."
+msgstr "比较 A * B。"
+
+msgid "Compare A next to flipped B."
+msgstr "将 A 与翻转后的 B 并排比较。"
+
+msgid "Compare A and B Horizontally."
+msgstr "水平比较 A 和 B。"
+
+msgid "Compare A and B Vertically."
+msgstr "垂直比较 A 和 B。"
+
+msgid "Compare A and one or many clips Tiled."
+msgstr "将 A 与一个或多个剪辑以平铺方式比较。"
 
 msgid "File extension cannot be empty."
 msgstr "文件扩展名不能为空 。"
 
+msgid "Save a single frame of the current clip."
+msgstr "保存当前剪辑的单帧。"
+
+msgid "Keep saving frames to the same folder."
+msgstr "继续将帧保存到同一文件夹。"
+
+msgid "Save the audio of the current clip."
+msgstr "保存当前剪辑的音频。"
+
 msgid "Saving audio but not with an audio extension."
 msgstr "保存音频, 但不使用音频扩展名 。"
+
+msgid "Export a movie or a sequence."
+msgstr "导出影片或图像序列。"
 
 msgid "Saving audio but current clip does not have audio."
 msgstr "保存音频, 但当前片段没有音频 。"
@@ -3329,25 +3583,361 @@ msgstr "保存音频, 但当前片段没有音频 。"
 msgid "Saving video but with an audio extension."
 msgstr "保存视频, 但有音频扩展。"
 
+msgid "Save annotations as a PDF."
+msgstr "将注释保存为 PDF。"
+
+msgid "Save annotations only as a movie or sequence."
+msgstr "仅将注释保存为影片或图像序列。"
+
 msgid "Cannot save annotations to .otio file"
 msgstr "无法将批注保存到. otio 文件"
+
+msgid "Save annotations as a .json file"
+msgstr "将注释保存为 .json 文件"
+
+msgid "Close current file."
+msgstr "关闭当前文件。"
+
+msgid "Exit the program.  Warns if edits or annotations have been made."
+msgstr "退出程序。  如果进行了编辑或添加了注释，则发出警告。"
+
+msgid "Previous layer."
+msgstr "上一个图层。"
+
+msgid "Next layer."
+msgstr "下一个图层。"
+
+msgid "No debanding."
+msgstr "不进行去色带。"
+
+msgid "Blur movie a bit to avoid banding."
+msgstr "稍微模糊影片以避免色带。"
+
+msgid "Blur movie medium to avoid banding."
+msgstr "中度模糊影片以避免色带。"
+
+msgid "Blur movie high to avoid banding."
+msgstr "高度模糊影片以避免色带。"
+
+msgid "Minify filter with nearest algorithm."
+msgstr "使用最近邻算法的缩小滤镜。"
+
+msgid "Minify filter with linear algorithm."
+msgstr "使用线性算法的缩小滤镜。"
+
+msgid "Magnify filter with nearest algorithm."
+msgstr "使用最近邻算法的放大滤镜。"
+
+msgid "Magnify filter with linear algorithm."
+msgstr "使用线性算法的放大滤镜。"
+
+msgid "Mirror clip in X."
+msgstr "在 X 轴上镜像剪辑。"
+
+msgid "Mirror clip in Y."
+msgstr "在 Y 轴上镜像剪辑。"
+
+msgid "Use HDR data from file."
+msgstr "使用文件中的 HDR 数据。"
+
+msgid "Don't use HDR data."
+msgstr "不使用 HDR 数据。"
+
+msgid "Use Latest HDR data."
+msgstr "使用最新的 HDR 数据。"
+
+msgid "Rotate image 90 degrees."
+msgstr "将图像旋转 90 度。"
+
+msgid "Rotate image -90 degrees."
+msgstr "将图像旋转 -90 度。"
+
+msgid "Show the red channel of the layer."
+msgstr "显示图层的红色通道。"
+
+msgid "Show the green channel of the layer."
+msgstr "显示图层的绿色通道。"
+
+msgid "Show the blue channel of the layer."
+msgstr "显示图层的蓝色通道。"
+
+msgid "Show the alpha channel of the layer."
+msgstr "显示图层的 Alpha 通道。"
+
+msgid "Show the combined lumma channel of the layer."
+msgstr "显示图层的组合亮度通道。"
+
+msgid "Show the RGB channel of the layer."
+msgstr "显示图层的 RGB 通道。"
+
+msgid "Normalize the image to be between 0 and 1."
+msgstr "将图像归一化到 0 到 1 之间。"
+
+msgid "Ignore OpenEXR chromaticities if present."
+msgstr "忽略 OpenEXR 色度信息（如果存在）。"
+
+msgid "Show values below 0 and above 1 as red pixels"
+msgstr "将低于 0 和高于 1 的值显示为红色像素"
+
+msgid ""
+"Toggle HDR peak detection to adjust the movie's luminosity while playing."
+msgstr "切换 HDR 峰值检测，以便在播放时调整影片的亮度。"
+
+msgid "Select Tonemap algorithm."
+msgstr "选择色调映射算法。"
+
+msgid "Select Gamut mapping algorithm."
+msgstr "选择色域映射算法。"
+
+msgid "Toggles Fullscreen Mode."
+msgstr "切换全屏模式。"
+
+msgid "Toggles Presentation Mode."
+msgstr "切换演示模式。"
+
+msgid "Toggles Window to Float above others."
+msgstr "切换窗口，使其浮动在其他窗口之上。"
+
+msgid "Toggles a Secondary Window."
+msgstr "切换辅助窗口。"
+
+msgid "Toggle Secondary Window to Float above others."
+msgstr "切换辅助窗口，使其浮动在其他窗口之上。"
+
+msgid ""
+"Mouse clicks are delivered to the OS windows below.  Used with transparency."
+msgstr "鼠标点击将传递给下方的操作系统窗口。  与透明模式一起使用。"
+
+msgid "Make UI more transparent."
+msgstr "使界面更加透明。"
+
+msgid "Make UI less transparent."
+msgstr "使界面更加不透明。"
+
+msgid "Only allow one side panel at a time."
+msgstr "一次只允许一个侧面板。"
+
+#, c++-format
+msgid "Show {0} Window."
+msgstr "显示 {0} 窗口。"
+
+msgid "Show About Window."
+msgstr "显示“关于”窗口。"
+
+msgid "Toggle Action Dock (Annotations/Edit tools)."
+msgstr "切换操作停靠栏（注释/编辑工具）。"
+
+msgid "Toggle Menu Bar."
+msgstr "切换菜单栏。"
+
+msgid "Toggle Top Bar."
+msgstr "切换顶部栏。"
+
+msgid "Toggle Pixel Bar."
+msgstr "切换像素栏。"
+
+msgid "Toggle Timeline Bar."
+msgstr "切换时间线栏。"
+
+msgid "Toggle Status Bar (this bar)."
+msgstr "切换状态栏（此栏）。"
+
+msgid "Show HUD Options."
+msgstr "显示 HUD 选项。"
+
+msgid "Toggles auto framing of the view."
+msgstr "切换视图的自动取景。"
+
+msgid "Toggle TV Safe Areas."
+msgstr "切换电视安全区域。"
+
+msgid "Toggle the display of OpenEXR's Data Window."
+msgstr "切换 OpenEXR 数据窗口的显示。"
+
+msgid "Ignore the OpenEXR Display Window."
+msgstr "忽略 OpenEXR 显示窗口。"
+
+msgid "Toggle the display of OpenEXR's Display Window."
+msgstr "切换 OpenEXR 显示窗口的显示。"
+
+msgid "Set the Film Cropping Mask."
+msgstr "设置影片裁剪遮罩。"
 
 msgid "View/Mask"
 msgstr "视图/遮罩"
 
+msgid "Play Forward."
+msgstr "向前播放。"
+
+msgid "Play Backward."
+msgstr "向后播放。"
+
+msgid "Stop Playback."
+msgstr "停止播放。"
+
+msgid "Toggle Playback."
+msgstr "切换播放。"
+
+msgid "Set In Point."
+msgstr "设置入点。"
+
+msgid "Set Out Point."
+msgstr "设置出点。"
+
+msgid "Toggle In and Out Points."
+msgstr "切换入点和出点。"
+
+msgid "Loop Mode."
+msgstr "循环模式。"
+
+msgid "Play Once Mode."
+msgstr "单次播放模式。"
+
+msgid "Play Ping-Pong Mode."
+msgstr "往返播放模式。"
+
+msgid "Select OCIO Input Color Space."
+msgstr "选择 OCIO 输入色彩空间。"
+
+msgid "Bring up OCIO presets window."
+msgstr "打开 OCIO 预设窗口。"
+
+msgid "Toggle OpenColorIO (OCIO)."
+msgstr "切换 OpenColorIO (OCIO)。"
+
+msgid "Toggle between OCIO and Colors topbar."
+msgstr "在 OCIO 和颜色顶部栏之间切换。"
+
+msgid "Current OCIO Input Color Space."
+msgstr "当前 OCIO 输入色彩空间。"
+
 msgid "OCIO/     Input Color Space"
 msgstr "OCIO/     输入色彩空间"
+
+msgid "Current OCIO Look."
+msgstr "当前 OCIO Look。"
 
 msgid "OCIO/     Look"
 msgstr "OCIO/     视图"
 
+msgid "Current OCIO Display / View for monitor."
+msgstr "当前用于显示器的 OCIO Display / View。"
+
+msgid "Current OCIO Display / View for all monitors."
+msgstr "当前用于所有显示器的 OCIO Display / View。"
+
 msgid "All Monitors"
 msgstr "所有监视器"
+
+msgid "Video Levels from video clip."
+msgstr "来自视频剪辑的视频电平。"
+
+msgid "Video Levels Legal Range for SDR."
+msgstr "SDR 的视频电平合法范围。"
+
+msgid "Video Levels Legal Range for HDR."
+msgstr "HDR 的视频电平合法范围。"
+
+msgid "Video Levels Full Range."
+msgstr "视频电平全范围。"
+
+msgid "No Alpha Blend."
+msgstr "无 Alpha 混合。"
+
+msgid "Straight Alpha Blend."
+msgstr "直接 Alpha 混合。"
+
+msgid "Premultiplied Alpha Blend."
+msgstr "预乘 Alpha 混合。"
+
+msgid "Go to Start Frame."
+msgstr "转到起始帧。"
+
+msgid "Go to End Frame."
+msgstr "转到结束帧。"
+
+msgid "Go to Next Frame."
+msgstr "转到下一帧。"
+
+msgid "Go to Previous Frame."
+msgstr "转到上一帧。"
+
+msgid "Go Forwards 10 Seconds."
+msgstr "向前跳转 10 秒。"
+
+msgid "Go Backwards 10 Seconds."
+msgstr "向后跳转 10 秒。"
+
+msgid "Toggle In / Out for the OTIO clip."
+msgstr "切换 OTIO 剪辑的入点/出点。"
+
+msgid "Next OTIO clip."
+msgstr "下一个 OTIO 剪辑。"
+
+msgid "Previous OTIO clip."
+msgstr "上一个 OTIO 剪辑。"
+
+msgid "Previous Annotation Point."
+msgstr "上一个注释点。"
+
+msgid "Next Annotation Point."
+msgstr "下一个注释点。"
+
+msgid "Toggle Annotation Visibility."
+msgstr "切换注释可见性。"
+
+msgid "Clear Annotation for Current Frame."
+msgstr "清除当前帧的注释。"
+
+msgid "Clear Annotations for ALL Frames."
+msgstr "清除所有帧的注释。"
 
 msgid ""
 "You are about to clear all annotations.  You can still undo the operation "
 "right after. Do you want to continue?"
 msgstr "您即将清除所有注释。您仍然可以立即撤销此操作。要继续吗？"
+
+msgid "No Thumbnails in Timeline Viewport."
+msgstr "时间线视口中不显示缩略图。"
+
+msgid "Toggle Editing in Timeline Viewport."
+msgstr "切换时间线视口中的编辑功能。"
+
+msgid "Toggle Editing video and audio clips with same In and Out Points."
+msgstr "切换对具有相同入点和出点的视频及音频剪辑进行编辑。"
+
+msgid "Frame Timeline View."
+msgstr "适配时间线视图。"
+
+msgid "Toggle Scrolling in Timeline Viewport."
+msgstr "切换时间线视口中的滚动。"
+
+msgid "Toggle Track Information in Timeline Viewport."
+msgstr "切换时间线视口中的轨道信息。"
+
+msgid "Toggle Clip Information in Timeline Viewport."
+msgstr "切换时间线视口中的剪辑信息。"
+
+msgid "Toggle Markers in Timeline Viewport."
+msgstr "切换时间线视口中的标记。"
+
+msgid "Toggle Track in Timeline Viewport."
+msgstr "切换时间线视口中的轨道。"
+
+msgid "Toggle Transitions in Timeline Viewport."
+msgstr "切换时间线视口中的转场。"
+
+msgid "Select OTIO's Media Reference Key."
+msgstr "选择 OTIO 的媒体引用键。"
+
+msgid "Set Small Thumbnails in Timeline Viewport."
+msgstr "在时间线视口中设置小缩略图。"
+
+msgid "Set Medium Thumbnails in Timeline Viewport."
+msgstr "在时间线视口中设置中等缩略图。"
+
+msgid "Set Large Thumbnails in Timeline Viewport."
+msgstr "在时间线视口中设置大缩略图。"
 
 msgid "Pick Color"
 msgstr "选择颜色"
@@ -3355,8 +3945,35 @@ msgstr "选择颜色"
 msgid "Pick Draw Color and Alpha"
 msgstr "选择绘图颜色和透明度"
 
+msgid "Flip Pen Colors."
+msgstr "反转画笔颜色。"
+
+msgid "Go to First Image Version."
+msgstr "转到第一个图像版本。"
+
+msgid "Go to Previous Image Version."
+msgstr "转到上一个图像版本。"
+
+msgid "Go to Next Image Version."
+msgstr "转到下一个图像版本。"
+
+msgid "Go to Last Image Version."
+msgstr "转到最后一个图像版本。"
+
+msgid "Give a donation to support development and unlock features."
+msgstr "捐赠以支持开发并解锁功能。"
+
 msgid "Install is broken.  Missing license_helper"
 msgstr "安装已损坏。缺少 license_helper"
+
+msgid "Online documentation."
+msgstr "在线文档。"
+
+msgid "Toggle Annotations."
+msgstr "切换注释。"
+
+msgid "Toggle Sync Elements."
+msgstr "切换同步元素。"
 
 msgid "Media"
 msgstr "媒体"
@@ -3370,10 +3987,20 @@ msgstr "Pan And Zoom"
 msgid "Timeline"
 msgstr "时间线"
 
-msgid ""
-"You have EDLs in the current session.  These will not be saved in the "
-"session file.  Do you want to continue?"
-msgstr "您在当前会话中有 EDL 。 这些不会保存在会话文件中。 您想要继续吗?"
+msgid "Toggle Receive Elements."
+msgstr "切换接收元素。"
+
+msgid "Save state of UI and files to a new .mrv2s session file."
+msgstr "将界面和文件的状态保存到新的 .mrv2s 会话文件。"
+
+msgid "Save state of UI and files to a .mrv2s session file."
+msgstr "将界面和文件的状态保存到 .mrv2s 会话文件。"
+
+msgid "Load a session file which stores the state of the UI and files."
+msgstr "加载存储界面和文件状态的会话文件。"
+
+msgid "Save and restart a temporary session."
+msgstr "保存并重新启动临时会话。"
 
 msgid "Could not restart mrv2 instance with a session file."
 msgstr "无法使用会话文件重新启动 mrv2 实例。"
@@ -3381,18 +4008,45 @@ msgstr "无法使用会话文件重新启动 mrv2 实例。"
 msgid "Edit Text Annotation"
 msgstr "编辑文本注释"
 
+msgid "Clone the File."
+msgstr "克隆文件。"
+
+msgid "Reload the File."
+msgstr "重新加载文件。"
+
+msgid "Set 3D Stereo image."
+msgstr "设置 3D 立体图像。"
+
+msgid "Update the current frame cache."
+msgstr "更新当前帧缓存。"
+
+msgid "Refresh the frame cache."
+msgstr "刷新帧缓存。"
+
+msgid "Refresh the movie."
+msgstr "刷新影片。"
+
+msgid "Copy the Filename to the clipboard."
+msgstr "将文件名复制到剪贴板。"
+
+msgid "Bring up the File Manager."
+msgstr "打开文件管理器。"
+
 msgid "No item selected"
 msgstr "未选中项目"
 
+#, c-format
 msgid "%s - Page %d"
 msgstr "%s - 第%d页"
 
+#, c++-format
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "图像太大。 将保存视图的大小 。"
 
+#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "视图端口大小 : {0} - X={1}, Y={2}"
 
@@ -3527,12 +4181,15 @@ msgstr "无法在此为当前帧创建注释。 已经存在全部帧注释 。"
 msgid "Cannot save an NDI stream"
 msgstr "无法保存 NDI 流"
 
+#, c++-format
 msgid "Saving movie to {0}."
 msgstr "将影片保存到 {0} 。"
 
+#, c++-format
 msgid "Saving audio to {0}."
 msgstr "将音频保存到 {0} 。"
 
+#, c++-format
 msgid "Saving pictures to {0}."
 msgstr "将图片保存到 {0} 。"
 
@@ -3554,77 +4211,79 @@ msgstr "GoPro Cineform 配置需要一个.mkv 的格式扩展。 将其修改为
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "HAP 配置需要. mov 扩展。 将其修改为. mov"
 
+msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
+msgstr "OAPV 配置文件需要使用 .mp4 扩展名。正在将其更改为 .mp4"
+
+#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新建文件 {0} 已经存在! 无法覆盖它"
 
-msgid "Rotated image info: {0}"
-msgstr "已旋转的图像信息: {0}"
+#, c++-format
+msgid "HDR Export mode {0}"
+msgstr "HDR 导出模式 {0}"
 
-msgid "Scaled image info: {0}"
-msgstr "缩放图像信息: {0}"
-
+#, c++-format
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: 无法打开插件"
 
-msgid "Image info: {0} {1}"
-msgstr "图像信息: {0} {1}"
+#, c++-format
+msgid "Scaled image info: {0}"
+msgstr "缩放图像信息: {0}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr "图像太大, 无法保存说明 。 将缩放到查看端大小 。"
-
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer 插件没有获得输出信息 。 默认为 {0}"
 
-msgid "Output info: {0} {1}"
-msgstr "输出信息: {0} {1}"
-
+#, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr "使用 profile {0}, 像素格式 {1} 。"
 
+#, c++-format
 msgid "Using preset {0}."
 msgstr "使用预设 {0} 。"
 
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr "离屏缓冲区信息：{0}"
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr "图像信息: {0} {1}"
+
+#, c++-format
+msgid "Output info: {0} {1}"
+msgstr "输出信息: {0} {1}"
+
+#, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie without Audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie with Audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Audio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: 无效的 OpenGL 格式和类型"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL 信息: {0}"
-
+#, c++-format
 msgid "Saving... {0}"
 msgstr "保存... {0}"
 
-msgid "Unsupported output format"
-msgstr "不支持的不支持输出格式"
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr "时间 {0} 空视频数据 重复帧"
-
+#, c++-format
 msgid "Render size: {0}"
 msgstr "渲染尺寸：{0}"
 
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "图像层 '{0}' 信息：{1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "离屏缓冲区信息：{0}"
-
-msgid "Unsupported output format: "
-msgstr "不支持的不支持输出格式: "
+#, c++-format
+msgid "Saved '{0}'."
+msgstr "已保存“{0}”。"
 
 msgid "2.35"
 msgstr "2.35"
@@ -3635,20 +4294,53 @@ msgstr "1.85"
 msgid "1.66"
 msgstr "1.66"
 
+#, c-format
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "缓存："
 
+#, c++-format
+msgid "HDR monitor min. nits = {0}"
+msgstr "HDR 显示器最小亮度（尼特）= {0}"
+
+#, c++-format
+msgid "HDR monitor max. nits = {0}"
+msgstr "HDR 显示器最大亮度（尼特）= {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "未找到HDR显示器或未配置。"
+
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "Vulkan 或窗口管理器未检测到 HDR 显示器。"
+
+#, c++-format
+msgid "Vulkan color space is {0}"
+msgstr "Vulkan 颜色空间为 {0}"
+
+#, c++-format
+msgid "Vulkan format is {0}"
+msgstr "Vulkan 格式为 {0}"
+
+#, c++-format
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "已切换到索引 {0} 的活动 HDR 显示器"
+
+#, c++-format
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "已切换到索引 {0} 的支持 HDR 但未激活的显示器"
+
+#, c++-format
+msgid "Changed to SDR monitor at index {0}"
+msgstr "已切换到索引 {0} 的 SDR 显示器"
+
 msgid "Edit Text"
 msgstr "编辑文本"
 
+#, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' 不是文件、目录或 URL。"
-
-msgid "Invalid font for text drawing"
-msgstr "用于文本绘图的无效字体"
 
 msgid "Could not convert message to shape: "
 msgstr "无法将信息转换为形状 :"
@@ -3662,9 +4354,11 @@ msgstr "无法播放 – 音频注释为空"
 msgid "Status is not saved"
 msgstr "状态未保存"
 
+#, c++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "音频注释文件 {0} 缺失或不存在！"
 
+#, c++-format
 msgid "Unhandled buffer format: {0} for output: {1}"
 msgstr "不支持的缓冲区格式：{0}，输出：{1}"
 
@@ -3770,6 +4464,7 @@ msgstr "文件/全部关闭"
 msgid "File/Save and Reload Session"
 msgstr "文件/保存并重新加载会话"
 
+#, c-format
 msgid "File/Recent/%s"
 msgstr "文件/最近/%s"
 
@@ -4019,6 +4714,7 @@ msgstr "播放/注释/清除"
 msgid "Playback/Annotation/Clear All"
 msgstr "播放/注释/全部清除"
 
+#, c-format
 msgid "View/Mask/%s"
 msgstr "视图/遮罩/%s"
 
@@ -4091,9 +4787,11 @@ msgstr "时间线/过渡"
 msgid "Timeline/Markers"
 msgstr "时间线/标记"
 
+#, c++-format
 msgid "Timeline/Visible Tracks/{0}"
 msgstr "时间线/可见音轨/{0}"
 
+#, c++-format
 msgid "Timeline/Media Reference/{0}"
 msgstr "时间线/媒体引用/{0}"
 
@@ -4151,12 +4849,14 @@ msgstr "图像/比较模式/垂直"
 msgid "Image/Compare Mode/Tile"
 msgstr "图像/比较模式/平铺"
 
+#, c-format
 msgid "Image/Go to/%s"
 msgstr "图像/转到/%s"
 
 msgid "Image/Compare/Toggle A and B"
 msgstr "图像/比较/切换 A 和 B"
 
+#, c-format
 msgid "Image/Compare/%s"
 msgstr "图像/比较/%s"
 
@@ -4193,17 +4893,17 @@ msgstr "编辑/时间/音频间隙/插入"
 msgid "Edit/Time/Audio Gap/Remove"
 msgstr "编辑/时间/音频间隙/移除"
 
-msgid "Edit/Selected/Add Transition"
-msgstr "编辑/选中/添加转场"
-
-msgid "Edit/Selected/Remove Items"
-msgstr "编辑/选中/移除项目"
-
 msgid "Edit/Time/Remove Clips"
 msgstr "编辑/时间/移除剪辑"
 
 msgid "Edit/Time/Slice"
 msgstr "编辑/时间/切片"
+
+msgid "Edit/Selected/Add Transition"
+msgstr "编辑/选中/添加转场"
+
+msgid "Edit/Selected/Remove Items"
+msgstr "编辑/选中/移除项目"
 
 msgid "Edit/Undo"
 msgstr "编辑/撤消"
@@ -4223,24 +4923,31 @@ msgstr "OCIO/切换"
 msgid "OCIO/Current"
 msgstr "OCIO/目前"
 
+#, c-format
 msgid "OCIO/         ICS: %s"
 msgstr "OCIO/         ICS: %s"
 
+#, c-format
 msgid "OCIO/     Display: %s"
 msgstr "OCIO/     Display: %s"
 
+#, c-format
 msgid "OCIO/        View: %s"
 msgstr "OCIO/        View: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/  Monitor #%d Display: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/  Monitor #%d    View: %s"
 
+#, c-format
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/        Look: %s"
 
+#, c-format
 msgid "OCIO/        LUT: %s"
 msgstr "OCIO/        LUT: %s"
 
@@ -4292,6 +4999,7 @@ msgstr "同步/接受/注释"
 msgid "Sync/Accept/Audio"
 msgstr "同步/接受/音频"
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -4299,6 +5007,7 @@ msgstr ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -4399,17 +5108,21 @@ msgstr "宽列表模式"
 msgid "Detail mode"
 msgstr "详细细节模式"
 
+#, c-format
 msgid ""
 "Could not create directory '%s'. You may not have permission to perform this"
 " operation."
 msgstr "无法创建目录 “%s ” 。 您可能没有执行此操作的权限 。"
 
+#, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "尝试删除 '%s' 时发生错误。%s"
 
+#, c-format
 msgid "File '%s' already exists!"
 msgstr "文件 '%s' 已经存在!"
 
+#, c-format
 msgid "Unable to rename '%s' to '%s'"
 msgstr "无法将 “%s” 重命名为 “%s”"
 
@@ -4551,6 +5264,7 @@ msgstr "OpenUSD Compressed Asset"
 msgid "OpenUSD ASCII Asset"
 msgstr "OpenUSD ASCII Asset"
 
+#, c-format
 msgid "Another process using the file."
 msgstr "另一个进程在使用文件"
 
@@ -4651,9 +5365,11 @@ msgstr "With msvc "
 msgid "mrv2 depends on:"
 msgstr "mrv2 depends on:"
 
+#, c++-format
 msgid "Total Physical Memory: {0} Gb"
 msgstr "物理内存总量：{0} GB"
 
+#, c++-format
 msgid "Total Virtual Memory: {0} Gb"
 msgstr "虚拟内存总量：{0} GB"
 
@@ -4705,6 +5421,7 @@ msgstr "拖放框"
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "MrvOCIOBrowser 的未知类型"
 
+#, c++-format
 msgid ""
 "Wayland Compositor supports Float on Top only through hotkeys.  Press {0}."
 msgstr "Wayland 复合器仅通过快捷键支持“置顶显示”。请按 {0}。"
@@ -4714,6 +5431,7 @@ msgid ""
 "Manager to set a hotkey for it."
 msgstr "Wayland 不支持顶部的浮点 。 使用您的窗口管理器设置热键 。"
 
+#, c++-format
 msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr "GNOME Shell 没有顶部浮点的 GNOME Shell 热键。 设置为“ {0} ”"
 
@@ -4764,6 +5482,9 @@ msgstr "&File/&Clone"
 msgid "&File/&Refresh Cache"
 msgstr "&File/&Refresh Cache"
 
+msgid "&File/Reload Media"
+msgstr "&文件/重新加载媒体"
+
 msgid "&Copy/&Filename"
 msgstr "&Copy/&Filename"
 
@@ -4803,6 +5524,7 @@ msgstr "范围"
 msgid "Mean"
 msgstr "平均"
 
+#, c-format
 msgid "Track #%d - %s"
 msgstr "音轨 #%d - %s"
 
@@ -4818,6 +5540,7 @@ msgstr "删除当前备注。"
 msgid "No annotations added yet."
 msgstr "尚未添加任何注释。"
 
+#, c++-format
 msgid "This frame already has a note at {0}, frame {1}."
 msgstr "此帧在 {0} 处已经有一条备注，帧 {1}。"
 
@@ -5116,6 +5839,9 @@ msgid ""
 "        balance disk space vs. quality.\n"
 "        Good for high-end delivery for either Web or \n"
 "        online review.\n"
+"        It is currently the only format that supports\n"
+"        dynamic per-frame HDR, perfect companion for\n"
+"        vmrv2.\n"
 "  Cineform - codec developed by GoPro, that rivals \n"
 "             ProRes in features, except for HDR.  \n"
 "             It was discontinued in 2021, but most \n"
@@ -5131,6 +5857,11 @@ msgid ""
 "  HAP - RGB/A codec which is optimized for fast playback with\n"
 "        CPU decoding.  It does not compress that well.\n"
 "        It needs hap-alpha* presets to save alpha channel.\n"
+"  HEVC - Only supported on HW due to license and patent\n"
+"         restrictions.\n"
+"  OAPV - A competitor to VP9 that offers better YUV formats with\n"
+"         support for an alpha channel, but no HDR yet.\n"
+"\n"
 "\n"
 "  Hardware encoding is only supported on newer MacBook\n"
 "  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
@@ -5145,55 +5876,66 @@ msgstr ""
 "  每种配置文件都有其优点和缺点。\n"
 "\n"
 "  None - 与 DVD 电影兼容的 MPEG-4。\n"
-"  H264 - 仅当 mrv2 以 GPL 编译时可用。它是\n"
+"  H264 - 仅当 mrv2 以 GPL 方式编译时可用。它是\n"
 "         最流行的编解码器之一，但现在\n"
 "         正逐渐过时。\n"
-"  ProRes - ProRes 是 Apple 开发的编解码器系列。\n"
-"           Normal 版本在画质和文件大小之间\n"
-"           取得了良好的平衡。\n"
+"  ProRes - ProRes 是由 Apple 开发的\n"
+"           一系列编解码器。\n"
+"           Normal 版本在质量和文件大小之间\n"
+"           取得了平衡。\n"
 "  ProRes_Proxy - 压缩率最高的 ProRes，提供\n"
 "                 最小的文件大小。\n"
 "                 适合离线编辑。\n"
 "  ProRes_LT - 比普通 ProRes 压缩率更高，但\n"
 "              低于 Proxy。适合离线编辑。\n"
 "  ProRes_HQ - 比普通 ProRes 压缩率更低。\n"
-"              常用于母版制作和最终交付。\n"
+"              通常用于母版制作和最终\n"
+"              交付。\n"
 "  ProRes_4444 - 最高质量的 ProRes 格式，\n"
 "                提供完整的 4:4:4\n"
 "                色度采样（每个像素的颜色信息）。\n"
-"                最大程度保留细节和色彩准确度，\n"
+"                最大限度地保留细节和色彩准确度，\n"
 "                非常适合高端工作流程，\n"
-"                如调色和视觉特效。\n"
-"                支持 Alpha 通道，可用于\n"
-"                合成带透明度的图形。\n"
+"                例如调色和视觉特效。\n"
+"                支持 Alpha 通道，可用于合成\n"
+"                带透明度的图形。\n"
 "  ProRes_XQ - ProRes 4444 的最高质量版本，\n"
 "              专为高动态范围（HDR）\n"
 "              图像而设计。\n"
-"  VP9 - Google 开发的编解码器。具有高压缩率。\n"
-"        支持各种像素格式，以便在\n"
-"        磁盘空间和画质之间取得平衡。\n"
-"        适合 Web 发布或\n"
-"        在线审阅的高质量交付。\n"
-"  Cineform - GoPro 开发的编解码器，除 HDR 外，\n"
-"             在功能方面可与 ProRes 相媲美。\n"
-"             已于 2021 年停止开发，但大多数\n"
-"             软件包可能仍支持它。\n"
-"             其压缩效果不如 ProRes 或 VP9。\n"
-"             支持 Alpha 通道，可用于\n"
-"             合成带透明度的图形。\n"
+"  VP9 - 由 Google 开发的编解码器。具有较高的\n"
+"        压缩率。\n"
+"        支持多种像素格式，以便在磁盘空间\n"
+"        和质量之间取得平衡。\n"
+"        适合 Web 或在线审片的高质量\n"
+"        交付。\n"
+"        目前它是唯一支持\n"
+"        逐帧动态 HDR 的格式，是\n"
+"        vmrv2 的完美搭档。\n"
+"  Cineform - 由 GoPro 开发的编解码器，在功能方面\n"
+"             可与 ProRes 相媲美，但不支持 HDR。\n"
+"             它于 2021 年停止开发，但大多数\n"
+"             软件包可能仍然支持它。\n"
+"             其压缩效果不如 ProRes\n"
+"             或 VP9。\n"
+"             支持 Alpha 通道，可用于合成\n"
+"             带透明度的图形。\n"
 "  AV1 - 新一代编解码器，正逐渐获得\n"
-"        Google、Netflix 和 Amazon 的支持。\n"
-"        在相同画质下，其压缩效果优于 VP9\n"
-"        或 H264，但需要更多计算机资源。\n"
-"        非常适合视频审阅。\n"
-"  HAP - 针对 CPU 解码高速播放优化的\n"
-"        RGB/A 编解码器。压缩效果并不理想。\n"
-"        保存 Alpha 通道需要使用 hap-alpha* 预设。\n"
+"        Google、Netflix 和 Amazon 的支持。以相同质量压缩时，\n"
+"        比 VP9 或 H264 的压缩效果更好，但需要更多的\n"
+"        计算资源。非常适合视频审片。\n"
+"  HAP - RGB/A 编解码器，针对使用 CPU 解码的\n"
+"        快速播放进行了优化。压缩效果并不理想。\n"
+"        保存 Alpha 通道时需要使用 hap-alpha* 预设。\n"
+"  HEVC - 由于许可证和专利限制，\n"
+"         仅支持硬件编码。\n"
+"  OAPV - VP9 的竞争格式，提供更好的 YUV 格式，\n"
+"         支持 Alpha 通道，但目前还不支持 HDR。\n"
 "\n"
-"  硬件编码仅支持配备 M1 或更新芯片的\n"
-"  新款 MacBook Pro。H264、ProRes、VP9 和\n"
+"\n"
+"  硬件编码仅支持较新的 MacBook Pro，\n"
+"  其搭载 M1 或更新的芯片。H264、ProRes、VP9 和\n"
 "  AV1 已获得支持或即将获得支持。\n"
-"  NVIDIA 支持 H264、HEVC，以及根据硬件和驱动程序而定的 AV1。\n"
+"  NVIDIA 支持 H264、HEVC，以及根据硬件和驱动程序的不同，支持 AV1。\n"
 "  "
 
 msgid "Pixel Format Help"
@@ -5728,6 +6470,9 @@ msgstr "TileGroup"
 msgid "ViewGroup"
 msgstr "TileGroup"
 
+msgid "Clip Selection Tool."
+msgstr "剪辑选择工具。"
+
 msgid "Undo Last Edit."
 msgstr "撤销上一次编辑。"
 
@@ -5833,6 +6578,15 @@ msgstr "AI 提示词"
 msgid "AI prompt to feed the image to AI."
 msgstr "用于将图像输入到 AI 的提示词。"
 
+msgid "Baked Display HDR"
+msgstr "烘焙显示 HDR"
+
+msgid "Scene Linear HDR"
+msgstr "场景线性 HDR"
+
+msgid "Baked Display SDR"
+msgstr "烘焙显示 SDR"
+
 msgid "Half"
 msgstr "Half"
 
@@ -5854,6 +6608,12 @@ msgstr "仅注释框架"
 msgid "Save only the annotation frames, not the whole sequence."
 msgstr "只保存注释框架,而不保存整个序列。"
 
+msgid "Export Mode"
+msgstr "导出模式"
+
+msgid "HDR (Vulkan) Export mode."
+msgstr "HDR（Vulkan）导出模式。"
+
 msgid "OpenEXR Options"
 msgstr "OpenEXR 选项"
 
@@ -5869,8 +6629,14 @@ msgstr "OpenEXR 压缩类型"
 msgid "ZIP Compression"
 msgstr "ZIP 压缩"
 
+msgid "zstd Compression"
+msgstr "zstd 压缩"
+
 msgid "DWA Compression"
 msgstr "DWA 压缩"
+
+msgid "Lossy HTJ2K"
+msgstr "有损 HTJ2K"
 
 msgid "Contents"
 msgstr "内容"
@@ -6112,14 +6878,23 @@ msgstr "CG"
 msgid "Studio"
 msgstr "Studio"
 
-msgid "Black Frame"
-msgstr "Black Frame"
+msgid "Error Frame"
+msgstr "错误帧"
 
-msgid "Repeat  Frame"
-msgstr "Repeat  Frame"
+msgid "Hold Frame"
+msgstr "保持帧"
 
-msgid "Scratched  Frame"
-msgstr "Scratched  Frame"
+msgid "Scratched Frame"
+msgstr "划痕帧"
+
+msgid "Black  Frame"
+msgstr "黑帧"
+
+msgid "Skip Frame"
+msgstr "跳过帧"
+
+msgid "Gap Frame"
+msgstr "间隔帧"
 
 msgid "Always"
 msgstr "总是"
@@ -6549,12 +7324,6 @@ msgstr "比较面板"
 msgid "How to display timeline thumbnails in Compare Panel."
 msgstr "如何在比较面板中显示时间线缩略图。"
 
-msgid "Playlist Panel"
-msgstr "播放列表面板"
-
-msgid "How to display timeline thumbnails in Playlist Panel."
-msgstr "如何在播放列表面板中显示时间线缩略图。"
-
 msgid "Stereo Panel"
 msgstr "立体声面板"
 
@@ -6876,6 +7645,28 @@ msgstr "搜索版本时, 此值是搜索第一个版本或最后一个版本时�
 
 msgid "Missing Frame"
 msgstr "缺失帧"
+
+msgid "Black Frame"
+msgstr "Black Frame"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"加载图像时，此设置用于控制如何处理缺失的帧（您可能需要重新加载或克隆序列）：\n"
+"\t* 错误帧\t   - 报告错误。\n"
+"\t* 保持帧\t   - 保留最后读取的帧。\n"
+"\t* 划痕帧  - 保留最后读取的帧，\n"
+"                             但在其上绘制红色叉号。\n"
+"\t* 黑帧\t   - 将当前帧替换为黑色。\n"
+"\t* 跳过帧\t   - 跳过当前帧。\n"
+"\t* 间隔帧\t   - 为缺失的帧添加一个 .otio Gap。"
 
 msgid "Path Mappings"
 msgstr "路径映射"
@@ -7393,24 +8184,31 @@ msgstr "Divide"
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 
+#, c++-format
 msgid "Unknown licese plan '{0}'"
 msgstr "未知的许可计划“{0}”"
 
+#, c++-format
 msgid "License plan '{0}'"
 msgstr "许可计划「{0}」"
 
+#, c++-format
 msgid "Supports annotations '{0}'"
 msgstr "支持注释「{0}」"
 
+#, c++-format
 msgid "Supports editing '{0}'"
 msgstr "支持编辑「{0}」"
 
+#, c++-format
 msgid "Supports layers '{0}'"
 msgstr "支持图层「{0}」"
 
+#, c++-format
 msgid "Supports python '{0}'"
 msgstr "支持 Python「{0}」"
 
+#, c++-format
 msgid "Supports voice annotations '{0}'"
 msgstr "支持语音注释「{0}」"
 
@@ -7423,9 +8221,11 @@ msgstr "节点锁定"
 msgid "Floating"
 msgstr "浮动"
 
+#, c++-format
 msgid "Found floating license at '{0}'"
 msgstr "在“{0}”找到浮动许可"
 
+#, c++-format
 msgid "Did not find floating license at '{0}'"
 msgstr "在“{0}”未找到浮动许可"
 
@@ -7435,12 +8235,15 @@ msgstr "无效的到期日期"
 msgid "License expired"
 msgstr "许可证已过期"
 
+#, c++-format
 msgid "{0} is not readable. Using system default."
 msgstr "{0} 无法读取。正在使用系统默认值。"
 
+#, c++-format
 msgid "{0} Active Licenses from {1}."
 msgstr "来自 {1} 的 {0} 个活动许可证。"
 
+#, c++-format
 msgid "Valid license for {0}"
 msgstr "{0} 的有效许可证"
 
@@ -7450,6 +8253,7 @@ msgstr "无法释放浮动许可证。"
 msgid "Released Floating License"
 msgstr "已释放浮动许可证"
 
+#, c++-format
 msgid "Your {0} license will expire on {1}."
 msgstr "您的 {0} 许可证将于 {1} 到期。"
 
@@ -7939,6 +8743,9 @@ msgstr "冲刷模式"
 msgid "Area Selection Mode"
 msgstr "区域选择模式"
 
+msgid "Draw Mode"
+msgstr "绘制模式"
+
 msgid "Erase Mode"
 msgstr "擦除模式"
 
@@ -8047,32 +8854,75 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "任务信息失败"
 
-#~ msgid "HDR monitor min. nits = {0}"
-#~ msgstr "HDR 显示器最小亮度（尼特）= {0}"
+#~ msgid "Complexity"
+#~ msgstr "复杂程度"
 
-#~ msgid "HDR monitor max. nits = {0}"
-#~ msgstr "HDR 显示器最大亮度（尼特）= {0}"
+#~ msgid "Stage Cache"
+#~ msgstr "缓存"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "未找到HDR显示器或未配置。"
+#~ msgid "Disk Cache in GB"
+#~ msgstr "磁盘缓存 (GB)"
 
-#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
-#~ msgstr "Vulkan 或窗口管理器未检测到 HDR 显示器。"
+#, c++-format
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "已旋转的图像信息: {0}"
 
-#~ msgid "Vulkan color space is {0}"
-#~ msgstr "Vulkan 颜色空间为 {0}"
+#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr "图像太大, 无法保存说明 。 将缩放到查看端大小 。"
 
-#~ msgid "Vulkan format is {0}"
-#~ msgstr "Vulkan 格式为 {0}"
+#, c++-format
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: 无效的 OpenGL 格式和类型"
 
-#~ msgid "Changed to HDR active monitor at index {0}"
-#~ msgstr "已切换到索引 {0} 的活动 HDR 显示器"
+#, c++-format
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL 信息: {0}"
 
-#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
-#~ msgstr "已切换到索引 {0} 的支持 HDR 但未激活的显示器"
+#~ msgid "Unsupported output format"
+#~ msgstr "不支持的不支持输出格式"
 
-#~ msgid "Changed to SDR monitor at index {0}"
-#~ msgstr "已切换到索引 {0} 的 SDR 显示器"
+#, c++-format
+#~ msgid "Empty video data at time {0}.  Repeating frame."
+#~ msgstr "时间 {0} 空视频数据 重复帧"
+
+#, c++-format
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "图像层 '{0}' 信息：{1} {2}"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "不支持的不支持输出格式: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "用于文本绘图的无效字体"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "删除当前时间的音频间隔。"
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Repeat  Frame"
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "获取文件序列音频目录"
+
+#~ msgid "Filter EDLs"
+#~ msgstr "过滤器 EDLs"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "播放列表面板"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr "如何在播放列表面板中显示时间线缩略图。"
+
+#~ msgid "Linearize EXR"
+#~ msgstr "线性化 EXR"
+
+#~ msgid ""
+#~ "If saving an EXR, try to linearize the result and save metadata to later use"
+#~ " with OpenImageIO.  Note:  this may not match exactly movies with "
+#~ "libplacebo, as they use slightly different math."
+#~ msgstr ""
+#~ "如果保存 EXR，请尝试将结果线性化，并保存元数据以便稍后与 OpenImageIO 一起使用。注意：这可能与使用 libplacebo "
+#~ "处理的影片不完全一致，因为它们使用的计算方法略有不同。"
 
 #~ msgid "BGR"
 #~ msgstr "BGR"
@@ -8633,9 +9483,6 @@ msgstr "任务信息失败"
 #~ msgid "Renderer"
 #~ msgstr "渲染器"
 
-#~ msgid "Video Levels Legal Range HDR"
-#~ msgstr "视频级别 - 合法范围 HDR"
-
 #~ msgid "Enter a UR."
 #~ msgstr "输入一个 URL。"
 
@@ -8717,9 +9564,6 @@ msgstr "任务信息失败"
 #~ "Your Wayland compositor does not support Float on Top.  Go to the title bar "
 #~ "of the Window and click RMB->->More Actions->Keep Above Others"
 #~ msgstr "您的 Wayland 复合器不支持“置顶显示”。请前往窗口标题栏，右键单击，然后选择“更多操作”→“始终置顶”。"
-
-#~ msgid "Load Movie or Sequence"
-#~ msgstr "导入影片或序列"
 
 #~ msgid "uiMenuBar"
 #~ msgstr "菜单栏"

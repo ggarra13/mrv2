@@ -26,8 +26,6 @@ extract_version
 # Pass the literal value OR use the @keychain: prefix to avoid shell history exposure:
 #   xcrun notarytool store-credentials  ← run once; then set:
 #   APP_PASSWORD="@keychain:mrv2-notarytool"
-MACOS_CERTIFICATE_BASE64="${MACOS_CERTIFICATE_BASE64}"
-P12_PASSWORD="${P12_PASSWORD}"
 APP_PASSWORD="${APP_PASSWORD:-@keychain:mrv2-notarytool}"
 
 
@@ -208,9 +206,15 @@ _sign_macho() {
         --sign "${DEVELOPER_ID}"
         --timestamp
     )
-    [[ -n "${ents}" && -f "${ents}" ]] && args+=(--entitlements "${ents}")
 
-    codesign "${args[@]}" "${target}" 2>&1 | grep -v "^$" || true
+    [[ -n "${ents}" && -f "${ents}" ]] &&
+        args+=(--entitlements "${ents}")
+
+    local output
+    if ! output=$(codesign "${args[@]}" "${target}" 2>&1); then
+        warn "codesign reported an issue signing: ${target}"
+        [[ -n "${output}" ]] && echo "${output}"
+    fi
 }
 
 # Sign a plain file (shell script, resource) — no hardened-runtime flag needed.
@@ -234,6 +238,15 @@ sign_bundle() {
     [[ -d "${bundle}" ]] || { warn "Bundle not found, skipping: ${bundle}"; return 0; }
 
     step "Signing bundle: $(basename "${bundle}")"
+
+    # Normalize permissions before signing. Files copied in from Homebrew
+    # (e.g. the Vulkan ICD manifests under Contents/Resources/etc/vulkan,
+    # copied by prepackage_macos.cmake's file(COPY ... FOLLOW_SYMLINK_CHAIN)
+    # with no FILE_PERMISSIONS override) keep the Cellar's usual read-only
+    # mode, which can make codesign unable to seal the bundle as a whole
+    # ("Permission denied" on the top-level bundle sign). Best-effort only —
+    # a failure here shouldn't abort the run.
+    chmod -R u+rwX "${bundle}" 2>/dev/null || true
 
     # ── 1. Individual .dylib files ────────────────────────────────────────────
     info "Signing .dylib files…"
@@ -269,7 +282,8 @@ sign_bundle() {
         fi
     done < <(find "${bundle}" -name "python*" -type f -print0)
 
-    # ── 5. Every other Mach-O binary in Contents/MacOS and Contents/bin ───────
+    # ── 5. Every other Mach-O binary in Contents/MacOS, Contents/bin, and
+    #      Contents/Resources/bin (mrv2/hdr/license_helper live here) ────────
     info "Signing executables…"
     while IFS= read -r -d '' exe; do
         # Skip symlinks (they don't need signing) and already-handled dirs.
@@ -279,6 +293,7 @@ sign_bundle() {
             _sign_macho "${exe}" "${ENTITLEMENTS}"
         fi
     done < <(find "${bundle}/Contents/MacOS" "${bundle}/Contents/bin" \
+                  "${bundle}/Contents/Resources/bin" \
                   -maxdepth 3 -type f -print0 2>/dev/null)
 
     # ── 6. Shell-script launchers (mrv2.sh / launcher.sh / hdr.sh) ───────────
@@ -287,7 +302,8 @@ sign_bundle() {
     while IFS= read -r -d '' sh; do
         info "  sh:    ${sh#"${bundle}/"}"
         _sign_plain "${sh}"
-    done < <(find "${bundle}/Contents/MacOS" -name "*.sh" -type f -print0 2>/dev/null)
+    done < <(find "${bundle}/Contents/MacOS" "${bundle}/Contents/Resources/bin" \
+                  -name "*.sh" -type f -print0 2>/dev/null)
 
     # ── 7. Sign the whole app bundle last ─────────────────────────────────────
     info "Signing top-level bundle…"
@@ -313,13 +329,19 @@ sign_bundle() {
 
 sign_all_bundles() {
     if [[ -n "${MRV2_APP:-}" ]]; then
-	sign_bundle "${PACK_DIR}/${MRV2_APP}"
+	if [[ -e "${PACK_DIR}/${MRV2_APP}" ]]; then
+	    sign_bundle "${PACK_DIR}/${MRV2_APP}"
+	fi
     fi
     if [[ -n "${VMRV2_APP:-}" ]]; then
-	sign_bundle "${PACK_DIR}/${VMRV2_APP}"
+	if [[ -e "${PACK_DIR}/${VMRV2_APP}" ]]; then
+	    sign_bundle "${PACK_DIR}/${VMRV2_APP}"
+	fi
     fi
     if [[ -n "${HDR_APP:-}" ]]; then
-        sign_bundle "${PACK_DIR}/${HDR_APP}"
+	if [[ -e "${PACK_DIR}/${HDR_APP}" ]]; then
+            sign_bundle "${PACK_DIR}/${HDR_APP}"
+	fi
     fi
 }
 
@@ -328,46 +350,9 @@ sign_all_bundles() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 create_dmg() {
-    step "Creating DMG: ${DMG_NAME}"
+    step "Creating DMG: ${DMG_NAME} with args ${VK_ARG}"
 
     runmeq.sh -t package ${VK_ARG}
-    
-    # local src_apps=()
-    # [[ -d "${PACK_DIR}/${MRV2_APP}" ]] && src_apps+=("${PACK_DIR}/${MRV2_APP}")
-    # [[ -n "${HDR_APP:-}" && -d "${PACK_DIR}/${HDR_APP}" ]] \
-    #     && src_apps+=("${PACK_DIR}/${HDR_APP}")
-    # [[ ${#src_apps[@]} -gt 0 ]] || die "No app bundles found in ${PACK_DIR}."
-
-    # local staging_dir
-    # staging_dir="$(mktemp -d)"
-    # trap 'rm -rf "${staging_dir}"' RETURN
-
-    # # Copy apps into a staging folder.
-    # for app in "${src_apps[@]}"; do
-    #     ditto "${app}" "${staging_dir}/$(basename "${app}")"
-    # done
-
-    # # Create a symlink to /Applications for drag-install UX.
-    # ln -s /Applications "${staging_dir}/Applications"
-
-    # local tmp_dmg="${PACK_DIR}/tmp_$$.dmg"
-    # local final_dmg="${PACK_DIR}/${DMG_NAME}"
-
-    # rm -f "${tmp_dmg}" "${final_dmg}"
-
-    # hdiutil create \
-    #     -volname "mrv2 Installer" \
-    #     -srcfolder "${staging_dir}" \
-    #     -ov -format UDRW \
-    #     "${tmp_dmg}"
-
-    # hdiutil convert "${tmp_dmg}" \
-    #     -format UDZO \
-    #     -imagekey zlib-level=9 \
-    #     -o "${final_dmg}"
-
-    # rm -f "${tmp_dmg}"
-    # ok "DMG created: ${final_dmg}"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -414,7 +399,8 @@ notarize() {
 
     if echo "${output}" | grep -q "status: Accepted"; then
         ok "Notarization accepted by Apple."
-    else submission UUID and fetch the detailed log for diagnosis.
+    else
+        # Extract the submission UUID and fetch the detailed log for diagnosis.
         local uuid
         uuid=$(echo "${output}" | grep -Eo 'id: [0-9a-f-]{36}' | head -1 | awk '{print $2}')
         if [[ -n "${uuid}" ]]; then
@@ -437,7 +423,7 @@ staple_target() {
 	echo "Need NOTARYTOOL_PROFILE set."
 	exit 0
     fi
-    local target="${1:-${PACKAGE_DIR}/${DMG_NAME}}"
+    local target="${1:-${PACKAGE_DIRECTORY}/${DMG_NAME}}"
     step "Stapling notarization ticket: $(basename "${target}")"
 
     xcrun stapler staple "${target}" \
@@ -486,7 +472,7 @@ verify() {
             || warn "  Gatekeeper check failed"
     done
 
-    local dmg="${PACKAGE_DIR}/${DMG_NAME}"
+    local dmg="${PACKAGE_DIRECTORY}/${DMG_NAME}"
     if [[ -f "${dmg}" ]]; then
         info "Checking DMG: $(basename "${dmg}")"
         codesign --verify --verbose=2 "${dmg}" \
@@ -597,7 +583,10 @@ fi
 
 export BUILD_DIR="${ROOT_DIR}/Release/"
 export PACK_DIR="${BUILD_DIR}/mrv2/src/mrv2-build/_CPack_Packages/Darwin/DragNDrop/${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}"
-export PACKAGE_DIR="packages/${BUILD_DIR}"
+
+if [[ -z "$PACKAGE_DIRECTORY" ]]; then
+    export PACKAGE_DIRECTORY="packages/${BUILD_DIR}"
+fi
 
 # Name of the DMG produced by CPack (or the one this script creates).
 DMG_NAME="${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}.dmg"

@@ -81,5 +81,8 @@ namespace mrv
         //! Save OCIO presets to disk.
         bool savePresets(const std::string& fileName);
 
+        //! Get interopID given current ICS settings
+        std::string getInteropID(bool fallbackToUnknown = false);
+
     } // namespace ocio
 } // namespace mrv

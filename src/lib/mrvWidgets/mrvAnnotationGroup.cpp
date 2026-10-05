@@ -313,11 +313,13 @@ namespace mrv
             if (time.almost_equal(w->time(), 1e-5))
             {
                 w->color(FL_CYAN);
+                w->redraw();
             }
             else
             {
                 w->set_collapsed(true);
                 w->color(FL_BACKGROUND_COLOR);
+                w->redraw();
             }
         }
     }

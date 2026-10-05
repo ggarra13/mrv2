@@ -453,16 +453,16 @@ namespace tl
                 switch (bitDepth)
                 {
                 case 8:
-                    header.image.channel[i].highData = image::U8Range.getMax();
+                    header.image.channel[i].highData = image::U8Range.max();
                     break;
                 case 10:
-                    header.image.channel[i].highData = image::U10Range.getMax();
+                    header.image.channel[i].highData = image::U10Range.max();
                     break;
                 case 12:
-                    header.image.channel[i].highData = image::U12Range.getMax();
+                    header.image.channel[i].highData = image::U12Range.max();
                     break;
                 case 16:
-                    header.image.channel[i].highData = image::U16Range.getMax();
+                    header.image.channel[i].highData = image::U16Range.max();
                     break;
                 default:
                     break;
@@ -596,39 +596,47 @@ namespace tl
             io->writeU32(size);
         }
 
-        void Plugin::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        void ReadPlugin::_init(const std::shared_ptr<log::System>& logSystem)
         {
-            IPlugin::_init(
-                "Cineon", {{".cin", io::FileType::Sequence}}, cache, logSystem);
+            std::map<std::string, io::FileType> exts;
+            exts[".cin"] = io::FileType::Sequence;
+            IReadPlugin::_init("Cineon", exts, logSystem);
         }
 
-        Plugin::Plugin() {}
-
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(cache, logSystem);
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::shared_ptr<io::IDecode> ReadPlugin::decode(const io::Options&)
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return Decode::create();
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options)
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
         {
-            return Read::create(path, memory, options, _cache, _logSystem);
+            return "Cineon";
         }
 
-        image::Info Plugin::getWriteInfo(
+        void WritePlugin::_init(const std::shared_ptr<log::System>& logSystem)
+        {
+            std::map<std::string, io::FileType> exts;
+            exts[".cin"] = io::FileType::Sequence;
+            IWritePlugin::_init("Cineon", exts, logSystem);
+        }
+
+        std::shared_ptr<WritePlugin> WritePlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<WritePlugin>(new WritePlugin);
+            out->_init(logSystem);
+            return out;
+        }
+
+        image::Info WritePlugin::getInfo(
             const image::Info& info, const io::Options& options) const
         {
             image::Info out;
@@ -643,21 +651,26 @@ namespace tl
             }
             out.layout.mirror.y = true;
             out.layout.alignment = 4;
-            out.layout.endian = memory::Endian::MSB;
             return out;
         }
 
-        std::shared_ptr<io::IWrite> Plugin::write(
+        std::shared_ptr<io::IWrite> WritePlugin::write(
             const file::Path& path, const io::Info& info,
             const io::Options& options)
         {
             if (info.video.empty() ||
                 (!info.video.empty() &&
-                 !_isWriteCompatible(info.video[0], options)))
+                 !_isCompatible(info.video[0], options)))
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(path.get())
-                                             .arg("Unsupported video"));
-            return Write::create(path, info, options, _logSystem);
+                                         .arg(path.get())
+                                         .arg("Unsupported video depth"));
+            return Write::create(path, info, options, _logSystem.lock());
         }
+
+        std::string WritePlugin::getPluginInfo(const io::Options&) const
+        {
+            return "Cineon";
+        }
+
     } // namespace cineon
 } // namespace tl

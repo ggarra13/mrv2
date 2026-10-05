@@ -20,7 +20,7 @@ namespace tl
     {
         //! Get the Vulkan's source texture format.
         VkFormat getTextureFormat(image::PixelType);
-        
+
         std::size_t getDataByteCount(
             const VkImageType type, uint32_t w, uint32_t h, uint32_t d,
             VkFormat format);
@@ -44,11 +44,11 @@ namespace tl
             TextureBorder U = TextureBorder::ClampToEdge;
             TextureBorder V = TextureBorder::ClampToEdge;
             TextureBorder W = TextureBorder::ClampToEdge;
-            
+
             bool operator==(const TextureBorders&) const;
             bool operator!=(const TextureBorders&) const;
-        };        
-        
+        };
+
         //! Vulkan texture options.
         struct TextureOptions
         {
@@ -65,7 +65,7 @@ namespace tl
         //! Get the Vulkan texture filter.
         VkFilter getTextureFilter(timeline::ImageFilter);
 
-        
+
         //! Vulkan texture.
         class Texture : public std::enable_shared_from_this<Texture>
         {
@@ -98,7 +98,7 @@ namespace tl
                 const uint32_t depth, const VkFormat format,
                 const std::string& name = "sampler1",
                 const TextureOptions& = TextureOptions());
-            
+
              //! Get the image information.
             const image::Info& getInfo() const;
 
@@ -107,7 +107,7 @@ namespace tl
 
             //! Get the options.
             const TextureOptions& getOptions() const;
-            
+
             //! Get the width.
             int getWidth() const;
 
@@ -128,7 +128,7 @@ namespace tl
             ///@{
 
             void setRGBToRGBA(bool t);
-            
+
             void copy(const std::shared_ptr<image::Image>&);
             void copy(const uint8_t*, const image::Info&,
                       const int rowPitch = 0);
@@ -140,7 +140,7 @@ namespace tl
             ///@}
 
             void setCurrentLayout(VkImageLayout);
-            
+
             void transition(
                 VkCommandBuffer cmd,
                 VkImageLayout newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
@@ -160,7 +160,7 @@ namespace tl
 
             //! Image's original source format.
             VkFormat getSourceFormat() const;
-            
+
             VkImageView getImageView() const;
 
             VkSampler getSampler() const;
@@ -168,27 +168,26 @@ namespace tl
             VkImage getImage() const;
 
             VkImageLayout getImageLayout() const;
-            
+
             //! Get the number of objects currenty instantiated.
             static size_t getObjectCount();
 
             //! Get the total number of bytes currently used.
             static size_t getTotalByteCount();
-            
+
         private:
             Fl_Vk_Context& ctx;
 
             void createImage();
-            void allocateMemory();
             void createCommandPool();
             void createImageView();
             void createSampler();
 
             static std::unique_ptr<SamplersCache> samplersCache;
-            
+
             TLRENDER_PRIVATE();
         };
-        
+
         //! Check whether the offscreen buffer should be created or re-created.
         bool doCreate(
             const std::shared_ptr<Texture>&, const math::Size2i&,

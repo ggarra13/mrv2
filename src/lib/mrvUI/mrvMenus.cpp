@@ -72,7 +72,7 @@ namespace mrv
         using namespace panel;
 
         Fl_Menu_Item* item = nullptr;
-        int mode = 0;
+        int mode = FL_MENU_CHATTY;
         char buf[1024];
 
         ViewerUI* ui = App::ui;
@@ -84,45 +84,52 @@ namespace mrv
         if (numFiles > 0)
         {
             Aitem = model->observeA()->get();
+            if (Aitem)
+            {
+                const std::string ext = Aitem->path.getExtension();
 
-            if (Aitem && string::compare(
-                             Aitem->path.getExtension(), ".otio",
-                             string::Compare::CaseInsensitive))
-                isOtio = true;
+                if (string::compare(ext, ".otio",
+                                    string::Compare::CaseInsensitive) ||
+                    string::compare(ext, ".otioz",
+                                string::Compare::CaseInsensitive))
+                    isOtio = true;
+            }
         }
+
         menu->clear();
 
         int idx;
+        mode = FL_MENU_CHATTY;
 
         menu->add(
             _("File/Open/Movie or Sequence"), kOpenImage.hotkey(),
-            (Fl_Callback*)open_cb, ui);
+            (Fl_Callback*)open_cb, ui, mode);
 
         menu->add(
             _("File/Open/URL Movie"), kOpenURLMovie.hotkey(),
-            (Fl_Callback*)open_url_movie_cb, ui);
+            (Fl_Callback*)open_url_movie_cb, ui, mode);
 
         menu->add(
             _("File/Open/With Separate Audio"), kOpenSeparateAudio.hotkey(),
-            (Fl_Callback*)open_separate_audio_cb, ui);
+            (Fl_Callback*)open_separate_audio_cb, ui, mode);
 
         menu->add(
             _("File/Open/Single Image"), kOpenSingleImage.hotkey(),
-            (Fl_Callback*)open_single_image_cb, ui);
+            (Fl_Callback*)open_single_image_cb, ui, mode);
 
         menu->add(
             _("File/Open/Directory"), kOpenDirectory.hotkey(),
-            (Fl_Callback*)open_directory_cb, ui, FL_MENU_DIVIDER);
+            (Fl_Callback*)open_directory_cb, ui, mode | FL_MENU_DIVIDER);
 
         menu->add(
             _("File/Open/Session"), kOpenSession.hotkey(),
-            (Fl_Callback*)load_session_cb, ui);
+            (Fl_Callback*)load_session_cb, ui, mode);
 
         menu->add(
             _("File/Open/New Program Instance"), kOpenNewInstance.hotkey(),
-            (Fl_Callback*)open_new_instance_cb, ui);
+            (Fl_Callback*)open_new_instance_cb, ui, mode);
 
-        mode = 0;
+        mode = FL_MENU_CHATTY;
         if (numFiles == 0)
             mode = FL_MENU_INACTIVE;
 
@@ -153,7 +160,7 @@ namespace mrv
             mode | FL_MENU_DIVIDER);
 
 
-        mode = 0;
+        mode = FL_MENU_CHATTY;
         if (!player || !player->hasAnnotations())
             mode = FL_MENU_INACTIVE;
 
@@ -171,7 +178,7 @@ namespace mrv
             (Fl_Callback*)save_annotations_as_json_cb, ui,
             mode | FL_MENU_DIVIDER);
 
-        mode = 0;
+        mode = FL_MENU_CHATTY;
         if (numFiles == 0)
             mode = FL_MENU_INACTIVE;
         menu->add(
@@ -179,10 +186,10 @@ namespace mrv
             (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER | mode);
         menu->add(
             _("File/Save/Session"), kSaveSession.hotkey(),
-            (Fl_Callback*)save_session_cb, ui);
+            (Fl_Callback*)save_session_cb, ui, mode);
         menu->add(
             _("File/Save/Session As"), kSaveSessionAs.hotkey(),
-            (Fl_Callback*)save_session_as_cb, ui);
+            (Fl_Callback*)save_session_as_cb, ui, mode);
 
         menu->add(
             _("File/Close Current"), kCloseCurrent.hotkey(),
@@ -199,6 +206,7 @@ namespace mrv
         SettingsObject* settings = ui->app->settings();
         const std::vector< std::string >& recentFiles = settings->recentFiles();
 
+        mode = FL_MENU_CHATTY;
         // Add files to Recent menu quoting the / to avoid splitting the menu
         for (auto file : recentFiles)
         {
@@ -206,15 +214,16 @@ namespace mrv
             file = string::commentCharacter(file, '/');
             /* xgettext:c-format */
             snprintf(buf, 256, _("File/Recent/%s"), file.c_str());
-            menu->add(buf, 0, (Fl_Callback*)open_recent_cb, ui);
+            menu->add(buf, 0, (Fl_Callback*)open_recent_cb, ui, mode);
         }
 
         menu->add(
-            _("File/Quit"), kQuitProgram.hotkey(), (Fl_Callback*)exit_cb, ui);
+            _("File/Quit"), kQuitProgram.hotkey(), (Fl_Callback*)exit_cb,
+            ui, mode);
 
         idx = menu->add(
             _("Window/Presentation"), kTogglePresentation.hotkey(),
-            (Fl_Callback*)toggle_presentation_cb, ui, FL_MENU_TOGGLE);
+            (Fl_Callback*)toggle_presentation_cb, ui, mode | FL_MENU_TOGGLE);
 
         const MyViewport* uiView = ui->uiView;
         const MyViewport* uiView2 = nullptr;
@@ -230,7 +239,7 @@ namespace mrv
 
         idx = menu->add(
             _("Window/Full Screen"), kFullScreen.hotkey(),
-            (Fl_Callback*)toggle_fullscreen_cb, ui, FL_MENU_TOGGLE);
+            (Fl_Callback*)toggle_fullscreen_cb, ui, mode | FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&menu->menu()[idx];
 
         if ((uiView->getFullScreenMode() && !uiView->getPresentationMode()) ||
@@ -244,7 +253,7 @@ namespace mrv
         idx = menu->add(
             _("Window/Float On Top"), kToggleFloatOnTop.hotkey(),
             (Fl_Callback*)toggle_float_on_top_cb, ui,
-            FL_MENU_TOGGLE | FL_MENU_DIVIDER);
+            mode | FL_MENU_TOGGLE | FL_MENU_DIVIDER);
         item = (Fl_Menu_Item*)&menu->menu()[idx];
         if (ui->uiMain->is_on_top())
             item->set();
@@ -253,7 +262,7 @@ namespace mrv
 
         idx = menu->add(
             _("Window/Secondary"), kToggleSecondary.hotkey(),
-            (Fl_Callback*)toggle_secondary_cb, ui, FL_MENU_TOGGLE);
+            (Fl_Callback*)toggle_secondary_cb, ui, mode | FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&menu->menu()[idx];
         if (ui->uiSecondary && ui->uiSecondary->window()->visible())
             item->set();
@@ -265,7 +274,7 @@ namespace mrv
             _("Window/Secondary Float On Top"),
             kToggleSecondaryFloatOnTop.hotkey(),
             (Fl_Callback*)toggle_secondary_float_on_top_cb, ui,
-            FL_MENU_TOGGLE | FL_MENU_DIVIDER);
+            mode | FL_MENU_TOGGLE | FL_MENU_DIVIDER);
         item = (Fl_Menu_Item*)&menu->menu()[idx];
         if (ui->uiSecondary && ui->uiSecondary->window()->is_on_top())
             item->set();
@@ -274,18 +283,18 @@ namespace mrv
 
         idx = menu->add(
             _("Window/Toggle Click Through"), kToggleClickThrough.hotkey(),
-            (Fl_Callback*)toggle_click_through, ui);
+            (Fl_Callback*)toggle_click_through, ui, mode);
         idx = menu->add(
             _("Window/More UI Transparency"), kUITransparencyMore.hotkey(),
-            (Fl_Callback*)more_ui_transparency, ui);
+            (Fl_Callback*)more_ui_transparency, ui, mode);
         idx = menu->add(
             _("Window/Less UI Transparency"), kUITransparencyMore.hotkey(),
-            (Fl_Callback*)less_ui_transparency, ui);
+            (Fl_Callback*)less_ui_transparency, ui, mode);
 
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Menu Bar"));
         idx = menu->add(
             buf, kToggleMenuBar.hotkey(), (Fl_Callback*)toggle_menu_bar, ui,
-            FL_MENU_TOGGLE);
+            FL_MENU_TOGGLE | mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiMenuGroup->visible())
             item->set();
@@ -293,7 +302,7 @@ namespace mrv
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Top Bar"));
         idx = menu->add(
             buf, kToggleTopBar.hotkey(), (Fl_Callback*)toggle_top_bar, ui,
-            FL_MENU_TOGGLE);
+            FL_MENU_TOGGLE | mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiTopBar->visible())
             item->set();
@@ -301,7 +310,7 @@ namespace mrv
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Pixel Bar"));
         idx = menu->add(
             buf, kTogglePixelBar.hotkey(), (Fl_Callback*)toggle_pixel_bar, ui,
-            FL_MENU_TOGGLE);
+            FL_MENU_TOGGLE | mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiPixelBar->visible())
             item->set();
@@ -309,7 +318,7 @@ namespace mrv
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Timeline Bar"));
         idx = menu->add(
             buf, kToggleTimeline.hotkey(), (Fl_Callback*)toggle_timeline_bar,
-            ui, FL_MENU_TOGGLE);
+            ui, mode | FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiBottomBar->visible())
             item->set();
@@ -317,7 +326,7 @@ namespace mrv
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Status Bar"));
         idx = menu->add(
             buf, kToggleStatusBar.hotkey(), (Fl_Callback*)toggle_status_bar, ui,
-            FL_MENU_TOGGLE);
+            mode | FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiStatusGroup->visible())
             item->set();
@@ -325,12 +334,12 @@ namespace mrv
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Action Dock"));
         idx = menu->add(
             buf, kToggleToolBar.hotkey(), (Fl_Callback*)toggle_action_tool_bar,
-            ui, FL_MENU_TOGGLE);
+            ui, mode | FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiToolsGroup->visible())
             item->set();
 
-        mode = FL_MENU_TOGGLE;
+        mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
         idx = menu->add(
@@ -372,7 +381,7 @@ namespace mrv
         idx = menu->add(
             _("Panel/One Panel Only"), kToggleOnePanelOnly.hotkey(),
             (Fl_Callback*)toggle_one_panel_only_cb, ui,
-            FL_MENU_TOGGLE | FL_MENU_DIVIDER);
+            mode | FL_MENU_TOGGLE | FL_MENU_DIVIDER);
         item = (Fl_Menu_Item*)&menu->menu()[idx];
         if (panel::onlyOne())
             item->set();
@@ -412,7 +421,7 @@ namespace mrv
             std::string tmp = pair.second;
             std::string menu_root = menu_panel_root;
 
-            mode = FL_MENU_TOGGLE;
+            mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
             unsigned hotkey = 0;
             if (tmp == "Files")
                 hotkey = kToggleReel.hotkey();
@@ -483,7 +492,7 @@ namespace mrv
             tmp = pair.first;
             std::string menu_name = menu_root + tmp + "\t";
             int idx = menu->add(
-                menu_name.c_str(), hotkey, (Fl_Callback*)window_cb, ui, mode);
+                menu_name.c_str(), hotkey, (Fl_Callback*)window_cb, ui);
             item = const_cast<Fl_Menu_Item*>(&menu->menu()[idx]);
             if (tmp == _("Files"))
             {
@@ -670,7 +679,7 @@ namespace mrv
             const timeline::BackgroundOptions& backgroundOptions =
                 uiView->getBackgroundOptions();
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             if (displayOptions.channels == timeline::Channels::Color)
@@ -679,7 +688,7 @@ namespace mrv
                 _("Render/Color Channel"), kColorChannel.hotkey(),
                 (Fl_Callback*)toggle_color_channel_cb, ui, mode);
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             if (displayOptions.channels == timeline::Channels::Red)
@@ -688,7 +697,7 @@ namespace mrv
                 _("Render/Red Channel"), kRedChannel.hotkey(),
                 (Fl_Callback*)toggle_red_channel_cb, ui, mode);
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             if (displayOptions.channels == timeline::Channels::Green)
@@ -697,7 +706,7 @@ namespace mrv
                 _("Render/Green Channel "), kGreenChannel.hotkey(),
                 (Fl_Callback*)toggle_green_channel_cb, ui, mode);
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             if (displayOptions.channels == timeline::Channels::Blue)
@@ -706,7 +715,7 @@ namespace mrv
                 _("Render/Blue Channel"), kBlueChannel.hotkey(),
                 (Fl_Callback*)toggle_blue_channel_cb, ui, mode);
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             if (displayOptions.channels == timeline::Channels::Alpha)
@@ -715,7 +724,7 @@ namespace mrv
                 _("Render/Alpha Channel"), kAlphaChannel.hotkey(),
                 (Fl_Callback*)toggle_alpha_channel_cb, ui, mode);
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             if (displayOptions.channels == timeline::Channels::Lumma)
@@ -725,7 +734,7 @@ namespace mrv
                 (Fl_Callback*)toggle_lumma_channel_cb, ui,
                 FL_MENU_DIVIDER | mode);
 
-            mode = FL_MENU_TOGGLE;
+            mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
 
@@ -735,7 +744,7 @@ namespace mrv
                 _("Render/Mirror X"), kFlipX.hotkey(),
                 (Fl_Callback*)mirror_x_cb, ui, mode);
 
-            mode = FL_MENU_TOGGLE;
+            mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
 
@@ -745,7 +754,7 @@ namespace mrv
                 _("Render/Mirror Y"), kFlipY.hotkey(),
                 (Fl_Callback*)mirror_y_cb, ui, FL_MENU_DIVIDER | mode);
 
-            mode = 0;
+            mode = FL_MENU_CHATTY;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             idx = menu->add(
@@ -756,7 +765,7 @@ namespace mrv
                 _("Render/Rotate/+90 Degrees"), kRotatePlus90.hotkey(),
                 (Fl_Callback*)rotate_plus_90_cb, ui, mode);
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
 
             idx = menu->add(
                 _("Render/Video Levels/From File"), kVideoLevelsFile.hotkey(),
@@ -796,7 +805,7 @@ namespace mrv
                 timeline::InputVideoLevels::FullRange)
                 item->set();
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
 
             idx = menu->add(
                 _("Render/Alpha Blend/None"), kAlphaBlendNone.hotkey(),
@@ -827,7 +836,7 @@ namespace mrv
 
 #ifdef VULKAN_BACKEND
 
-            mode = FL_MENU_TOGGLE;
+            mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
 
@@ -842,7 +851,7 @@ namespace mrv
             }
 #endif
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             std::string tonemap_root = _("Render/HDR/Tonemap");
@@ -861,7 +870,7 @@ namespace mrv
             }
 
             selected = static_cast<int>(hdrOptions.gamutMapping);
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
             std::string gamut_root = _("Render/HDR/Gamut Mapping");
@@ -879,7 +888,7 @@ namespace mrv
                 ++gammut;
             }
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
 
@@ -904,7 +913,7 @@ namespace mrv
             if (displayOptions.hdrInfo == timeline::HDRInformation::Active)
                 item->set();
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
 
@@ -920,7 +929,7 @@ namespace mrv
             const timeline::ShaderOptions& shaderOptions =
                 uiView->getShaderOptions();
 
-            mode = FL_MENU_RADIO;
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
 
@@ -994,7 +1003,7 @@ namespace mrv
                 timeline::ImageFilter::Linear)
                 item->set();
 
-            mode = FL_MENU_TOGGLE;
+            mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
 
@@ -1024,7 +1033,7 @@ namespace mrv
 
         timeline::Playback playback = timeline::Playback::Stop;
 
-        mode = FL_MENU_RADIO;
+        mode = FL_MENU_CHATTY | FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1049,7 +1058,7 @@ namespace mrv
         if (playback == timeline::Playback::Reverse)
             item->set();
 
-        mode = 0;
+        mode = FL_MENU_CHATTY;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
         menu->add(
@@ -1059,7 +1068,7 @@ namespace mrv
         // Set In/Out
         TimelineClass* c = ui->uiTimeWindow;
 
-        mode = FL_MENU_TOGGLE;
+        mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1096,7 +1105,7 @@ namespace mrv
         if (player)
             loop = player->loop();
 
-        mode = FL_MENU_RADIO;
+        mode = FL_MENU_CHATTY | FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1119,7 +1128,7 @@ namespace mrv
         if (loop == timeline::Loop::PingPong)
             item->set();
 
-        mode = 0;
+        mode = FL_MENU_CHATTY;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1148,7 +1157,7 @@ namespace mrv
 
         if (player)
         {
-            mode = 0;
+            mode = FL_MENU_CHATTY;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
 
@@ -1179,7 +1188,7 @@ namespace mrv
                     (Fl_Callback*)next_annotation_cb, ui,
                     FL_MENU_DIVIDER | mode);
 
-                int mode = FL_MENU_TOGGLE;
+                int mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
                 bool visible = ui->uiView->getShowAnnotations();
                 idx = menu->add(
                     _("Playback/Annotation/Toggle Visible"),
@@ -1191,11 +1200,11 @@ namespace mrv
 
                 menu->add(
                     _("Playback/Annotation/Clear"), kShapeFrameClear.hotkey(),
-                    (Fl_Callback*)annotation_clear_cb, ui);
+                    (Fl_Callback*)annotation_clear_cb, ui, mode);
                 menu->add(
                     _("Playback/Annotation/Clear All"),
                     kShapeFrameClearAll.hotkey(),
-                    (Fl_Callback*)annotation_clear_all_cb, ui);
+                    (Fl_Callback*)annotation_clear_all_cb, ui, mode);
             }
         }
 
@@ -1219,7 +1228,7 @@ namespace mrv
                 item->set();
         }
 
-        mode = 0;
+        mode = FL_MENU_CHATTY;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1230,51 +1239,8 @@ namespace mrv
         if (hudClass)
             item->set();
 
-        snprintf(buf, 256, "%s", _("View/Compare/None"));
-        idx = menu->add(
-            buf, kCompareNone.hotkey(), (Fl_Callback*)compare_a_cb, ui, mode);
 
-        snprintf(buf, 256, "%s", _("View/Compare/Overlay"));
-        idx = menu->add(
-            buf, kCompareOverlay.hotkey(), (Fl_Callback*)compare_overlay_cb, ui,
-            mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Wipe"));
-        idx = menu->add(
-            buf, kCompareWipe.hotkey(), (Fl_Callback*)compare_wipe_cb, ui,
-            mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Difference"));
-        idx = menu->add(
-            buf, kCompareDifference.hotkey(),
-            (Fl_Callback*)compare_difference_cb, ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Add"));
-        idx = menu->add(
-            buf, kCompareAdd.hotkey(),
-            (Fl_Callback*)compare_add_cb, ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Multiply"));
-        idx = menu->add(
-            buf, kCompareAdd.hotkey(),
-            (Fl_Callback*)compare_multiply_cb, ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Horizontal"));
-        idx = menu->add(
-            buf, kCompareHorizontal.hotkey(),
-            (Fl_Callback*)compare_horizontal_cb, ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Vertical"));
-        idx = menu->add(
-            buf, kCompareVertical.hotkey(), (Fl_Callback*)compare_vertical_cb,
-            ui, mode);
-
-        snprintf(buf, 256, "%s", _("View/Compare/Tile"));
-        idx = menu->add(
-            buf, kCompareTile.hotkey(), (Fl_Callback*)compare_tile_cb, ui,
-            mode);
-
-        mode = 0;
+        mode = FL_MENU_CHATTY;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1286,7 +1252,7 @@ namespace mrv
             _("Timeline/Cache/Update Frame"), kUpdateVideoFrame.hotkey(),
             (Fl_Callback*)update_video_frame_cb, ui, mode);
 
-        mode = FL_MENU_TOGGLE;
+        mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1307,7 +1273,7 @@ namespace mrv
         if (editable)
             item->set();
 
-        mode = 0;
+        mode = FL_MENU_CHATTY;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1315,7 +1281,7 @@ namespace mrv
             _("Timeline/Frame View"), kToggleTimelineFrameView.hotkey(),
             (Fl_Callback*)timeline_frame_view_cb, ui, mode);
 
-        mode = FL_MENU_TOGGLE;
+        mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1343,7 +1309,7 @@ namespace mrv
         if (displayOptions.clipInfo)
             item->set();
 
-        mode = FL_MENU_RADIO;
+        mode = FL_MENU_CHATTY | FL_MENU_RADIO;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
@@ -1353,6 +1319,11 @@ namespace mrv
             thumbnails_none = kToggleTimelineThumbnails.hotkey();
         else
             thumbnails_small = kToggleTimelineThumbnails.hotkey();
+
+        const float kPixels_per_unit = ui->uiView->pixels_per_unit();
+        const int kSmall = 50 * kPixels_per_unit;
+        const int kMedium = 75 * kPixels_per_unit;
+        const int kLarge = 100 * kPixels_per_unit;
 
         idx = menu->add(
             _("Timeline/Thumbnails/None"), thumbnails_none,
@@ -1364,22 +1335,22 @@ namespace mrv
             _("Timeline/Thumbnails/Small"), thumbnails_small,
             (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 50)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kSmall)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails/Medium"), 0,
             (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 100)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kMedium)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails/Large"), 0,
             (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 150)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kLarge)
             item->set();
 
-        mode = FL_MENU_TOGGLE;
+        mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
         idx = menu->add(
@@ -1395,29 +1366,26 @@ namespace mrv
         if (displayOptions.markers)
             item->set();
 
-        if (isOtio)
+        std::vector<std::string> tracks;
+        std::vector<bool> tracksActive;
+        getActiveTracks(tracks, tracksActive, ui);
+        unsigned numTracks = tracks.size();
+        if (numTracks > 1)
         {
-            std::vector<std::string> tracks;
-            std::vector<bool> tracksActive;
-            getActiveTracks(tracks, tracksActive, ui);
-            unsigned numTracks = tracks.size();
-            if (numTracks > 1)
+            for (unsigned i = 0; i < tracks.size(); ++i)
             {
-                for (unsigned i = 0; i < tracks.size(); ++i)
-                {
-                    /* xgettext:c++-format */
-                    std::string msg =
-                        tl::string::Format(_("Timeline/Visible Tracks/{0}"))
-                            .arg(tracks[i]);
+                /* xgettext:c++-format */
+                std::string msg =
+                    tl::string::Format(_("Timeline/Visible Tracks/{0}"))
+                    .arg(tracks[i]);
 
-                    idx = menu->add(
-                        msg.c_str(), 0,
-                        (Fl_Callback*)toggle_timeline_active_track_cb, ui,
-                        FL_MENU_TOGGLE);
-                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                    if (tracksActive[i])
-                        item->set();
-                }
+                idx = menu->add(
+                    msg.c_str(), 0,
+                    (Fl_Callback*)toggle_timeline_active_track_cb, ui,
+                    FL_MENU_TOGGLE | FL_MENU_CHATTY);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (tracksActive[i])
+                    item->set();
             }
 
             if (player)
@@ -1440,7 +1408,7 @@ namespace mrv
                                 msg.c_str(), 0,
                                 (Fl_Callback*)
                                 timeline_media_reference_key_cb, ui,
-                                FL_MENU_RADIO);
+                                FL_MENU_CHATTY | FL_MENU_RADIO);
 
                             if ((key == keys[i]) ||
                                 (key.empty() && keys[i] == "DEFAULT_MEDIA"))
@@ -1480,16 +1448,16 @@ namespace mrv
             {
                 menu->add(
                     _("Image/Next"), kNextImage.hotkey(),
-                    (Fl_Callback*)next_file_cb, ui);
+                    (Fl_Callback*)next_file_cb, ui, mode);
                 menu->add(
                     _("Image/Next Limited"), kNextImageLimited.hotkey(),
-                    (Fl_Callback*)next_file_limited_cb, ui);
+                    (Fl_Callback*)next_file_limited_cb, ui, mode);
                 menu->add(
                     _("Image/Previous"), kPreviousImage.hotkey(),
-                    (Fl_Callback*)previous_file_cb, ui);
+                    (Fl_Callback*)previous_file_cb, ui, mode);
                 menu->add(
                     _("Image/Previous Limited"), kPreviousImageLimited.hotkey(),
-                    (Fl_Callback*)previous_file_limited_cb, ui,
+                    (Fl_Callback*)previous_file_limited_cb, ui, mode |
                     FL_MENU_DIVIDER);
             }
 
@@ -1497,137 +1465,135 @@ namespace mrv
             {
                 menu->add(
                     _("Image/Version/First"), kFirstVersionImage.hotkey(),
-                    (Fl_Callback*)first_image_version_cb, ui);
+                    (Fl_Callback*)first_image_version_cb, ui, mode);
                 menu->add(
                     _("Image/Version/Last"), kLastVersionImage.hotkey(),
-                    (Fl_Callback*)last_image_version_cb, ui, FL_MENU_DIVIDER);
+                    (Fl_Callback*)last_image_version_cb, ui, mode |
+                    FL_MENU_DIVIDER);
                 menu->add(
                     _("Image/Version/Previous"), kPreviousVersionImage.hotkey(),
-                    (Fl_Callback*)previous_image_version_cb, ui);
+                    (Fl_Callback*)previous_image_version_cb, ui, mode);
                 menu->add(
                     _("Image/Version/Next"), kNextVersionImage.hotkey(),
-                    (Fl_Callback*)next_image_version_cb, ui);
+                    (Fl_Callback*)next_image_version_cb, ui, mode);
             }
 
-            if (numFiles > 1)
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
+
+            auto o = model->observeCompareOptions()->get();
+            idx = menu->add(
+                _("Image/Compare Mode/A"), 0, (Fl_Callback*)compare_a_cb,
+                ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::A)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/B"), 0, (Fl_Callback*)compare_b_cb,
+                ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::B)
+                item->set();
+
+            mode = FL_MENU_CHATTY | FL_MENU_RADIO;
+            idx = menu->add(
+                _("Image/Compare Mode/Wipe"), 0,
+                (Fl_Callback*)compare_wipe_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Wipe)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Overlay"), 0,
+                (Fl_Callback*)compare_overlay_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Overlay)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Difference"), 0,
+                (Fl_Callback*)compare_difference_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Difference)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Add"), 0,
+                (Fl_Callback*)compare_add_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Add)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Multiply"), 0,
+                (Fl_Callback*)compare_multiply_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Multiply)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Horizontal"), 0,
+                (Fl_Callback*)compare_horizontal_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Horizontal)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Vertical"), 0,
+                (Fl_Callback*)compare_vertical_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Vertical)
+                item->set();
+
+            idx = menu->add(
+                _("Image/Compare Mode/Tile"), 0,
+                (Fl_Callback*)compare_tile_cb, ui, mode | FL_MENU_DIVIDER);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (o.mode == timeline::CompareMode::Tile)
+                item->set();
+
+            const auto& Aindex = model->observeAIndex()->get();
+            const auto& Bindexes = model->observeBIndexes()->get();
+
+            mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
+            for (size_t i = 0; i < numFiles; ++i)
             {
-                mode = FL_MENU_RADIO;
 
-                auto o = model->observeCompareOptions()->get();
+                const auto& path = files[i]->path;
+                fileName = path.getBaseName() + path.getNumber() +
+                           path.getSuffix() + path.getExtension() +
+                           path.getRequest();
+                snprintf(buf, 256, _("Image/Go to/%s"), fileName.c_str());
+                std::uintptr_t ptr = i;
                 idx = menu->add(
-                    _("Image/Compare Mode/A"), 0, (Fl_Callback*)compare_a_cb,
+                    buf, 0, (Fl_Callback*)goto_file_cb, (void*)ptr, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (i == Aindex)
+                    item->set();
+                else
+                    item->clear();
+
+                idx = menu->add(
+                    _("Image/Compare/Toggle A and B"), 0,
+                    (Fl_Callback*)toggle_compare_a_and_b_cb,
                     ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::A)
-                    item->set();
 
+                snprintf(buf, 256, _("Image/Compare/%s"), fileName.c_str());
                 idx = menu->add(
-                    _("Image/Compare Mode/B"), 0, (Fl_Callback*)compare_b_cb,
-                    ui, mode);
+                    buf, 0, (Fl_Callback*)select_Bfile_cb, (void*)ptr,
+                    mode);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::B)
-                    item->set();
-
-                mode = FL_MENU_RADIO;
-                idx = menu->add(
-                    _("Image/Compare Mode/Wipe"), 0,
-                    (Fl_Callback*)compare_wipe_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Wipe)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Overlay"), 0,
-                    (Fl_Callback*)compare_overlay_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Overlay)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Difference"), 0,
-                    (Fl_Callback*)compare_difference_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Difference)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Add"), 0,
-                    (Fl_Callback*)compare_add_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Add)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Multiply"), 0,
-                    (Fl_Callback*)compare_multiply_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Multiply)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Horizontal"), 0,
-                    (Fl_Callback*)compare_horizontal_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Horizontal)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Vertical"), 0,
-                    (Fl_Callback*)compare_vertical_cb, ui, mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Vertical)
-                    item->set();
-
-                idx = menu->add(
-                    _("Image/Compare Mode/Tile"), 0,
-                    (Fl_Callback*)compare_tile_cb, ui, mode | FL_MENU_DIVIDER);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (o.mode == timeline::CompareMode::Tile)
-                    item->set();
-
-                const auto& Aindex = model->observeAIndex()->get();
-                const auto& Bindexes = model->observeBIndexes()->get();
-
-                mode = FL_MENU_TOGGLE;
-                for (size_t i = 0; i < numFiles; ++i)
+                for (size_t j = 0; j < Bindexes.size(); ++j)
                 {
-
-                    const auto& path = files[i]->path;
-                    fileName = path.getBaseName() + path.getNumber() +
-                               path.getSuffix() + path.getExtension() +
-                               path.getRequest();
-                    snprintf(buf, 256, _("Image/Go to/%s"), fileName.c_str());
-                    std::uintptr_t ptr = i;
-                    idx = menu->add(
-                        buf, 0, (Fl_Callback*)goto_file_cb, (void*)ptr, mode);
-                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                    if (i == Aindex)
-                        item->set();
-                    else
-                        item->clear();
-
-                    idx = menu->add(
-                        _("Image/Compare/Toggle A and B"), 0,
-                        (Fl_Callback*)toggle_compare_a_and_b_cb,
-                        ui, 0);
-
-                    snprintf(buf, 256, _("Image/Compare/%s"), fileName.c_str());
-                    idx = menu->add(
-                        buf, 0, (Fl_Callback*)select_Bfile_cb, (void*)ptr,
-                        mode);
-                    item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                    for (size_t j = 0; j < Bindexes.size(); ++j)
+                    if (i == Bindexes[j])
                     {
-                        if (i == Bindexes[j])
-                        {
-                            item->set();
-                            break;
-                        }
+                        item->set();
+                        break;
                     }
                 }
             }
 
-            mode = FL_MENU_TOGGLE;
+            mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
             if (!app::soporta_editing)
             {
                 mode |= FL_MENU_INACTIVE;
@@ -1642,63 +1608,63 @@ namespace mrv
             if (itemOptions.editAssociatedClips)
                 item->set();
 
-            mode = 0;
+            mode = FL_MENU_CHATTY;
             if (!app::soporta_editing)
             {
                 mode |= FL_MENU_INACTIVE;
             }
             menu->add(
                 _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),
-                (Fl_Callback*)edit_cut_frame_cb, ui, mode);
+                (Fl_Callback*)edit_frame_cut_cb, ui, mode);
             menu->add(
                 _("Edit/Frame/Copy"), kEditCopyFrame.hotkey(),
-                (Fl_Callback*)edit_copy_frame_cb, ui, mode);
+                (Fl_Callback*)edit_frame_copy_cb, ui, mode);
             menu->add(
                 _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
-                (Fl_Callback*)edit_paste_frame_cb, ui, mode);
+                (Fl_Callback*)edit_frame_paste_cb, ui, mode);
             menu->add(
                 _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
-                (Fl_Callback*)edit_insert_frame_cb, ui, mode);
+                (Fl_Callback*)edit_frame_insert_cb, ui, mode);
 
             menu->add(
                 _("Edit/Time/Audio Clip/Insert"),
                 kEditInsertAudioClip.hotkey(),
-                (Fl_Callback*)insert_audio_clip_cb, ui, mode);
+                (Fl_Callback*)edit_time_insert_audio_clip_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Audio Clip/Remove"),
                 kEditRemoveAudioClip.hotkey(),
-                (Fl_Callback*)edit_remove_audio_clip_cb, ui, mode);
+                (Fl_Callback*)edit_time_remove_audio_clip_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Video Gap/Insert"),
                 kEditInsertVideoGap.hotkey(),
-                (Fl_Callback*)edit_insert_video_gap_cb, ui, mode);
+                (Fl_Callback*)edit_time_insert_video_gap_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Video Gap/Remove"),
                 kEditRemoveVideoGap.hotkey(),
-                (Fl_Callback*)edit_remove_video_gap_cb, ui, mode);
+                (Fl_Callback*)edit_time_remove_video_gap_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Audio Gap/Insert"),
                 kEditInsertAudioGap.hotkey(),
-                (Fl_Callback*)edit_insert_audio_gap_cb, ui, mode);
+                (Fl_Callback*)edit_time_insert_audio_gap_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Audio Gap/Remove"),
                 kEditRemoveAudioGap.hotkey(),
-                (Fl_Callback*)edit_remove_audio_gap_cb, ui, mode);
+                (Fl_Callback*)edit_time_remove_audio_gap_cb, ui, mode);
+            menu->add(
+                _("Edit/Time/Remove Clips"), kEditRemoveClip.hotkey(),
+                (Fl_Callback*)edit_time_remove_clip_cb, ui, mode);
+            menu->add(
+                _("Edit/Time/Slice"), kEditSliceClip.hotkey(),
+                (Fl_Callback*)edit_time_slice_clip_cb, ui, mode);
 
 
             menu->add(_("Edit/Selected/Add Transition"),
                       kEditAddTransition.hotkey(),
-                      (Fl_Callback*)edit_add_transition_cb, ui, mode);
+                      (Fl_Callback*)edit_selected_add_transition_cb, ui, mode);
             menu->add(
                 _("Edit/Selected/Remove Items"),
                 kEditRemoveSelected.hotkey(),
-                (Fl_Callback*)edit_remove_selected_cb, ui, mode);
-            menu->add(
-                _("Edit/Time/Remove Clips"), kEditRemoveClip.hotkey(),
-                (Fl_Callback*)edit_remove_clip_cb, ui, mode);
-            menu->add(
-                _("Edit/Time/Slice"), kEditSliceClip.hotkey(),
-                (Fl_Callback*)edit_slice_clip_cb, ui, mode);
+                (Fl_Callback*)edit_selected_remove_cb, ui, mode);
 
 
             menu->add(
@@ -1741,16 +1707,16 @@ namespace mrv
         // }
 
 #ifdef TLRENDER_OCIO
-        mode = 0;
+        mode = FL_MENU_CHATTY;
         snprintf(buf, 256, "%s", _("OCIO/Presets"));
         idx = menu->add(
             buf, kOCIOPresetsToggle.hotkey(), (Fl_Callback*)ocio_presets_cb, ui,
-            FL_MENU_DIVIDER);
+            mode | FL_MENU_DIVIDER);
 
         idx = menu->add(
             _("OCIO/In Top Bar"), kOCIOInTopBarToggle.hotkey(),
             (Fl_Callback*)toggle_ocio_topbar_cb, ui,
-            FL_MENU_DIVIDER | FL_MENU_TOGGLE);
+            mode | FL_MENU_DIVIDER | FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (ui->uiOCIO->visible())
             item->set();
@@ -1758,7 +1724,7 @@ namespace mrv
         const timeline::OCIOOptions OCIOoptions = ui->uiView->getOCIOOptions();
         idx = menu->add(
             _("OCIO/Toggle"), kOCIOToggle.hotkey(),
-            (Fl_Callback*)toggle_ocio_cb, ui, FL_MENU_TOGGLE);
+            (Fl_Callback*)toggle_ocio_cb, ui, mode | FL_MENU_TOGGLE);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (OCIOoptions.enabled)
             item->set();
@@ -2031,7 +1997,7 @@ namespace mrv
         if (dynamic_cast< DummyClient* >(tcp) == nullptr ||
             panel::webrtcPanel)
         {
-            mode = FL_MENU_TOGGLE;
+            mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
 
             idx = menu->add(
                 _("Sync/Send/Media"), 0, (Fl_Callback*)toggle_sync_send_cb, ui,
@@ -2092,7 +2058,7 @@ namespace mrv
                 item->clear();
 
             /// ACCEPT
-            mode = FL_MENU_TOGGLE;
+            mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
 
             idx = menu->add(
                 _("Sync/Accept/Media"), 0, (Fl_Callback*)toggle_sync_receive_cb,
@@ -2157,6 +2123,7 @@ namespace mrv
 
 #ifdef MRV2_PYBIND11
         {
+            mode = 0;
             py::gil_scoped_acquire acquire;
 
             for (const auto& entry : pythonMenus)
@@ -2209,15 +2176,16 @@ namespace mrv
         }
 #endif
 
+        mode = FL_MENU_CHATTY;
         menu->add(
             _("Help/Unlock Features"), 0,
-            (Fl_Callback*) unlock_features_cb, ui, FL_MENU_DIVIDER);
+            (Fl_Callback*) unlock_features_cb, ui, mode | FL_MENU_DIVIDER);
         menu->add(
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,
-            ui);
+            ui, mode);
         menu->add(
-            _("Help/About"), kToggleAbout.hotkey(), (Fl_Callback*)window_cb,
-            ui);
+            _("Help/About"), kToggleAbout.hotkey(), (Fl_Callback*)about_cb,
+            ui, mode);
 
         menu->menu_end();
 

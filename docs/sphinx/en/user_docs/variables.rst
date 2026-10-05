@@ -1,6 +1,7 @@
 Environment variables
 =====================
 
+```
 EDITOR          - Editor to use as external editor in the Python Panel.
                   Default: vim.
 FLTK_BACKEND    - Linux only: if set to x11, overrides Wayland to use XWayland.
@@ -15,4 +16,4 @@ MRV2_LICENSEPATH    - Path to the floating license mrv2_licenses.lic.
 MRV2_STUDIOPATH     - Where to look up preferences settings first
                       for a studio setting (before the user settings).
 MRV2_WEBRTC_STUDIO  - Name of the studio for WebRTC connections. 
-
+```

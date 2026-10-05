@@ -614,6 +614,8 @@ namespace mrv
                     area.max = pos;
                     setSelectionArea(area);
                     redrawWindows();
+
+                    return 1;
                 }
                 else
                 {

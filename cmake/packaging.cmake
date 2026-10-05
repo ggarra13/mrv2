@@ -148,39 +148,6 @@ if(APPLE)
 	USE_SOURCE_PERMISSIONS
 	COMPONENT applications
     )
-    
-    # Configure README.md
-    configure_file(${MRV2_DIR}/etc/macOS/README.md.in
-	${CMAKE_BINARY_DIR}/README.md @ONLY
-    FILE_PERMISSIONS
-    OWNER_READ OWNER_WRITE 
-    GROUP_READ OWNER_WRITE 
-    WORLD_READ)
-
-    # Install README.md file at root of .dmg
-    install(FILES "${CMAKE_BINARY_DIR}/README.md"
-        DESTINATION .
-        COMPONENT applications
-    )
-    
-    # Configure runme.sh.in
-    configure_file(${MRV2_DIR}/etc/macOS/installation_script.command.in
-	${CMAKE_BINARY_DIR}/installation.command @ONLY
-    FILE_PERMISSIONS
-    OWNER_READ OWNER_WRITE OWNER_EXECUTE
-    GROUP_READ OWNER_WRITE OWNER_EXECUTE
-    WORLD_READ OWNER_EXECUTE)
-
-    # Install README.md file at root of .dmg
-    install(FILES "${CMAKE_BINARY_DIR}/installation.command"
-        DESTINATION .
-        COMPONENT applications
-	PERMISSIONS
-	OWNER_READ OWNER_EXECUTE
-	GROUP_READ OWNER_EXECUTE
-	WORLD_READ OWNER_EXECUTE
-    )
-
 
     if (EXISTS ${CMAKE_INSTALL_PREFIX}/bin/hdr)
 	

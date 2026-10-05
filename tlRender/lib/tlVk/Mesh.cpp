@@ -945,6 +945,11 @@ namespace tl
                 throw std::runtime_error("Failed to create vertex buffer with VMA");
             }
 
+#ifndef NDEBUG
+            vmaSetAllocationName(ctx.allocator, p.allocation,
+                                 "Mesh Ring Buffer");
+#endif
+
             VkPhysicalDeviceProperties props;
             vkGetPhysicalDeviceProperties(ctx.gpu, &props);
 

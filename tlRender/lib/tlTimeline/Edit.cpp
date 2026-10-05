@@ -7,7 +7,10 @@
 #include <tlTimeline/MemoryReference.h>
 
 #include <tlCore/Error.h>
+#include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
+
+#include <algorithm>
 
 namespace tl
 {
@@ -242,10 +245,11 @@ namespace tl
         } // namespace
 
         TLRENDER_ENUM_IMPL(
-            EditMode, "None", "Fill", "Move", "Ripple", "Roll", "Select",
+            EditMode, "None", "Fill", "Insert",
+            "Move", "Overwrite", "Ripple", "Roll", "Select",
             "Slice", "Slip", "Slide", "Trim");
         TLRENDER_ENUM_SERIALIZE_IMPL(EditMode);
-        
+
         OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>
         copy(const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& timeline)
         {

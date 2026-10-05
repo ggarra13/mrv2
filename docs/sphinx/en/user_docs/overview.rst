@@ -10,13 +10,15 @@ mrv2 and vmrv2 are two open source professional flipbook and review tools for th
 
 The difference between mrv2 and vmrv2 is their graphics engine.
 
-mrv2 uses OpenGL which is more battle tested but it is being deprecated while vmrv2 uses Vulkan which is the primary engine on Linux and modern Windows.  vmrv2 generally plays images and videos faster on modern GPUs and has support for Dynamic HDR, while mrv2 supports OpenUSD and uses static tone-mapping to simulate HDR, which may lead to somewhat incorrect colors.
+mrv2 uses OpenGL which is more battle tested but it is being deprecated on ALL platforms while vmrv2 uses Vulkan which is the primary engine on Linux and modern Windows.  macOS has a compatible Vulkan engine called MoltenVk which uses Metal.
+
+vmrv2 generally plays images and videos faster on modern GPUs and has support for Dynamic HDR, while mrv2 supports OpenUSD and uses static tone-mapping to simulate HDR, which may lead to somewhat incorrect colors.
 
 To put it in perspective, Netflix, YouTube and Disney in their premium subscription packages use HDR, so if you are working on a movie for them or one that will be released in Cinemas you will want to watch your dailies with vmrv2.
 
 From now on, when we refer to mrv2, we mean both mrv2 and vmrv2.
 
-mrv2 is focused on providing an intuitive, easy to use interface with the highest performance playback engine available at its code and a Python API for pipeline integration and customisation for total flexibility.
+mrv2 is focused on providing an intuitive, easy to use interface with the highest performance playback engine available at its core and a Python API for pipeline integration and customisation for total flexibility.
 
 mrv2 can handle collections of media sources quickly, loads specialised image formats and displays images with colour management. Users can quickly import, organise and group media into playlists and 'subsets', playing through and looping on media items and adding review notes and sketched annotations, allowing one to view the media in a highly interactive and collaborative way. This enables workflows that are essential for teams in VFX, animation and other post-production activities who need to see, on demand, the artwork that they and their colleagues are creating. For example one can jump between the viewed media source instantaneously, inspect pixels close-up, do frame-by-frame comparisons across multiple media sources, annotate the media with drawings and captions or add feedback notes to share.
 
@@ -28,7 +30,7 @@ In addition to that, you can use Link Annotations to have linked images with an 
 
 Albeit I use AI for math, coding, learning and general trouble-shooting, it is not for me as an artist.  I had a short stint on an AI project, but decided it was not for me.  Also doing hard-core AI requires thorough math knowledge which is not my strongest point.  I would rather concentrate on building a tool that helps artists get familiar with AI by using the same review concepts that appear in dailies.
 
-Current Version: v1.7.1 - Overview
+Current Version: v1.7.6 - Overview
 **********************************
 
 This version of the application is a robust and high performance playback and review solution. mrv2 has been deployed at multiple facilities and is used by multiple individuals daily since August 2022.

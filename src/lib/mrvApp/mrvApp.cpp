@@ -108,6 +108,12 @@ namespace py = pybind11;
 #    include <Poco/Net/SSLManager.h>
 #endif
 
+#ifdef TLRENDER_FFMPEG
+extern "C" {
+    #include <libavformat/avformat.h>
+}
+#endif
+
 #include <FL/platform.H>
 #include <FL/filename.H>
 #include <FL/fl_ask.H>
@@ -183,10 +189,12 @@ namespace mrv
         timeline::LUTOptions lutOptions;
 
         bool hud = true;
+
+        std::string mediaReferenceKey;
         bool resetSettings = false;
         bool resetHotkeys = false;
         bool displayVersion = false;
-        bool displaySysInfo = false;
+        bool displaySystemInfo = false;
         bool otioEditMode = false;
 
 #if defined(TLRENDER_USD)
@@ -507,6 +515,13 @@ namespace mrv
                     _("Connect to a WebRTC room at <value>.")),
 #endif
 
+                app::CmdLineHeader::create({}, _("Timeline:")),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.mediaReferenceKey, {"-mr", "-mediaReference"},
+                    _("Media reference to open OTIO timelines with for clips "
+                      "that have several versions of their media (examples: "
+                      "\"Proxy\" and \"Full\").")),
+
                 app::CmdLineHeader::create({}, _("Miscellaneous:")),
                 app::CmdLineFlagOption::create(
                     app::force_demo, {"-demo"},
@@ -515,7 +530,7 @@ namespace mrv
                     p.options.displayVersion, {"-version", "-v"},
                     _("Return the version and exit.")),
                 app::CmdLineFlagOption::create(
-                    p.options.displaySysInfo, {"-sys", "-systemInfo"},
+                    p.options.displaySystemInfo, {"-sys", "-systemInfo"},
                     _("Return the system information and exit."))});
 
         const int exitCode = getExit();
@@ -527,7 +542,7 @@ namespace mrv
         fl_open_callback(osx_open_cb);
 #endif
 
-        DBG;
+
         file::Path lastPath;
         const auto& unusedArgs = getUnusedArgs();
         for (const auto& unused : unusedArgs)
@@ -557,13 +572,20 @@ namespace mrv
             return;
         }
 
+        //
+        // Turn off messages if we are displaying system info
+        //
+        if (p.options.displaySystemInfo)
+        {
+            mrv::trace::logLevel = -1;
+        }
 
-        DBG;
+
         // Initialize FLTK.
         Fl::scheme("gtk+");
-        DBG;
+
         Fl::option(Fl::OPTION_VISIBLE_FOCUS, false);
-        DBG;
+
 
 #ifdef OPENGL_BACKEND
         Fl::use_high_res_GL(true);
@@ -575,14 +597,14 @@ namespace mrv
 
 
         Fl::set_fonts("-*");
-        DBG;
+
         Fl::lock(); // needed for NDI and multithreaded logging
 
-        DBG;
+
         // Create the Settings
         p.settings = new SettingsObject();
 
-        DBG;
+
 
         // Create the interface.
         ui = new ViewerUI();
@@ -590,7 +612,7 @@ namespace mrv
         {
             throw std::runtime_error(_("Cannot create window"));
         }
-        DBG;
+
 
         //
         // Initialize POCO Net for SSL connections.
@@ -600,16 +622,20 @@ namespace mrv
         Poco::Net::initializeSSL();
 #endif
 
+#ifdef TLRENDER_FFMPEG
+        avformat_network_init();
+#endif
+
         // Classes used to handle network connections
 #ifdef MRV2_NETWORK
         p.commandInterpreter = new CommandInterpreter(ui);
-        DBG;
+
 #endif
         tcp = new DummyClient();
 
         p.lutOptions = p.options.lutOptions;
 
-        DBG;
+
 #ifdef __APPLE__
         Fl_Mac_App_Menu::about = _("About mrv2");
         Fl_Mac_App_Menu::print = "Print Front Window";
@@ -630,7 +656,7 @@ namespace mrv
         ui->uiTimeline->setScrollBarsVisible(false);
 
 
-        DBG;
+
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
 
@@ -640,7 +666,7 @@ namespace mrv
         if (app::license_type == LicenseType::kFloating)
             Fl::add_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, this);
 
-        DBG;
+
         std::string version = "mrv2 v";
         version += mrv::version();
         version += " ";
@@ -650,7 +676,7 @@ namespace mrv
         LOG_STATUS(version);
         LOG_STATUS(msg);
 
-        DBG;
+
 
         {
             const std::string& info = mrv::build_info();
@@ -672,7 +698,7 @@ namespace mrv
 
         LOG_STATUS(_("Install Location: "));
         LOG_STATUS("\t" << mrv::rootpath());
-        DBG;
+
 
         if (!mrv::studiopath().empty())
         {
@@ -751,7 +777,7 @@ namespace mrv
             showUI = false;
             headless = true;
         }
-        if (p.options.displaySysInfo)
+        if (p.options.displaySystemInfo)
         {
             showUI = false;
             headless = true;
@@ -768,11 +794,22 @@ namespace mrv
 
 #endif
 
-        if (p.options.displaySysInfo)
+        if (p.options.displaySystemInfo)
         {
+#ifdef VULKAN_BACKEND
             ui->uiView->render_offscreen();
             ui->uiTimeline->render_offscreen();
-
+#endif
+#ifdef OPENGL_BACKEND
+            // Create a dummy window so there's an OpenGL context
+            Fl_Gl_Window* tmp = new Fl_Gl_Window(0, 0, 1, 1);
+            tmp->mode(FL_RGB | FL_DOUBLE | FL_OPENGL3);
+            tmp->border(0);
+            tmp->show();
+            Fl::check();
+            tmp->make_current();
+#endif
+            std::cout << mrv::about_message();
             std::cout << std::endl
                       << mrv::cpu_info()
                       << std::endl
@@ -784,6 +821,8 @@ namespace mrv
             ui->uiView->destroy();
             ui->uiTimeline->destroy();
 #endif
+            exit_cb(nullptr, ui);
+
             delete ui;
             ui = nullptr;
             return;
@@ -1055,18 +1094,9 @@ namespace mrv
                 p.options.fileNames.push_back(otioFile);
             }
 
-            bool foundAudio = false;
-            for (const auto& fileName : p.options.fileNames)
+            if (!p.options.fileNames.empty())
             {
-                if (file::isSequence(fileName) && !foundAudio)
-                {
-                    open(fileName, p.options.audioFileName);
-                    foundAudio = true;
-                }
-                else
-                {
-                    open(fileName);
-                }
+                open(p.options.fileNames, p.options.audioFileName);
             }
 
             if (auto player = p.player.get())
@@ -1107,6 +1137,7 @@ namespace mrv
         if (!p.options.compareFileName.empty())
         {
             open(p.options.compareFileName);
+
             p.filesModel->setCompareOptions(p.options.compareOptions);
             size_t numFiles = p.filesModel->observeFiles()->getSize();
             p.filesModel->setB(numFiles - 1, true);
@@ -1264,7 +1295,7 @@ namespace mrv
                 return;
             }
 
-            DBG;
+
             // Redirect Python's stdout/stderr to my own class
             p.pythonStdErrOutRedirect.reset(new PyStdErrOutStreamRedirect);
         }
@@ -1295,7 +1326,6 @@ namespace mrv
 #ifdef TLRENDER_BMD
         endBMDOutputStream();
 #endif
-
 
         delete p.mainControl;
         p.mainControl = nullptr;
@@ -1892,46 +1922,67 @@ namespace mrv
 #endif
 
     void
-    App::open(const std::string& fileName, const std::string& audioFileName)
+    App::open(const std::vector<std::string >& fileNames,
+              const std::string& audioFileName)
     {
         TLRENDER_P();
 
-        file::Path filePath(string::normalizePath(fileName));
-        file::Path audioFilePath(string::normalizePath(audioFileName));
-
-        if (filePath.getExtension() == ".mrv2s")
+        bool usedAudio = false;
+        std::vector<std::shared_ptr<FilesModelItem>> items;
+        for (auto& fileName : fileNames)
         {
-            p.session = true;
-            session::load(fileName);
-            return;
-        }
+            file::Path filePath(string::normalizePath(fileName));
+            file::Path audioFilePath(string::normalizePath(audioFileName));
+
+            if (filePath.getExtension() == ".mrv2s")
+            {
+                p.session = true;
+                session::load(fileName);
+                continue;
+            }
 
 
-        file::PathOptions pathOptions;
-        pathOptions.seqMaxDigits =
-            p.settings->getValue<int>("Misc/MaxFileSequenceDigits");
+            file::PathOptions pathOptions;
+            pathOptions.seqMaxDigits =
+                p.settings->getValue<int>("Misc/MaxFileSequenceDigits");
 
-        if (!filePath.hasSeqWildcard() &&
-            !file::isDirectory(fileName) && !file::isReadable(fileName))
-        {
-            /* xgettext:c-format */
-            const std::string err =
-                string::Format(_("Filename '{0}' does not exist or does not "
-                                 "have read permissions."))
+            if (!filePath.hasSeqWildcard() &&
+                !file::isDirectory(fileName) && !file::isReadable(fileName))
+            {
+                /* xgettext:c-format */
+                const std::string err =
+                    string::Format(_("Filename '{0}' does not exist or does not "
+                                     "have read permissions."))
                     .arg(fileName);
-            LOG_ERROR(err);
-            return;
+                LOG_ERROR(err);
+                continue;
+            }
+
+            for (const auto& path : timeline::getPaths(filePath, pathOptions,
+                                                       _context))
+            {
+                auto item = std::make_shared<FilesModelItem>();
+                item->path = path;
+                if (!usedAudio)
+                {
+                    item->audioPath = audioFilePath;
+                    usedAudio = true;
+                }
+                items.push_back(item);
+            }
         }
 
-        for (const auto& path :
-                 timeline::getPaths(filePath, pathOptions, _context) )
-        {
-            auto item = std::make_shared<FilesModelItem>();
-            item->path = path;
-            item->audioPath = audioFilePath;
+        if (!items.empty())
+            p.filesModel->add(items);
+    }
 
-            p.filesModel->add(item);
-        }
+    void
+    App::open(const std::string& fileName,
+              const std::string& audioFileName)
+    {
+        std::vector<std::string> fileNames;
+        fileNames.push_back(fileName);
+        open(fileNames, audioFileName);
     }
 
     void App::openSeparateAudioDialog()
@@ -2042,6 +2093,9 @@ namespace mrv
             p.settings->getValue<int>("SequenceIO/ThreadCount"));
         out["SequenceIO/DefaultSpeed"] =
             string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
+        io::MissingFrames missing;
+        missing = static_cast<io::MissingFrames>(ui->uiPrefs->uiMissingFrameType->value());
+        out["SequenceIO/MissingFrames"] = to_string(missing);
 
 #if defined(TLRENDER_EXR)
         out["OpenEXR/IgnoreDisplayWindow"] =
@@ -2121,6 +2175,8 @@ namespace mrv
         std::vector<std::shared_ptr<timeline::Timeline> > timelines(
             files.size());
 
+        // Preserve already-instantiated timelines for items that remain in
+        // the list
         for (size_t i = 0; i < files.size(); ++i)
         {
             const auto j = std::find(p.files.begin(), p.files.end(), files[i]);
@@ -2130,31 +2186,10 @@ namespace mrv
             }
         }
 
-        for (size_t i = 0; i < files.size(); ++i)
-        {
-            if (!timelines[i])
-            {
-                const auto& item = files[i];
-                try
-                {
-                    timelines[i] = _createTimeline(item);
-                    const auto info = timelines[i]->getIOInfo();
-                    for (const auto& video : info.video)
-                    {
-                        files[i]->videoLayers.push_back(video.name);
-                    }
-                }
-                catch (const std::exception& e)
-                {
-                    _log(e.what(), log::Type::Error);
-                }
-            }
-        }
-
         p.files = files;
         p.timelines = timelines;
 
-        panel::refreshThumbnails();
+        //panel::refreshThumbnails();
     }
 
     void App::_playerOptions(
@@ -2179,19 +2214,26 @@ namespace mrv
 
         timeline::Options options;
 
-        options.fileSequenceAudio = static_cast<timeline::FileSequenceAudio>(
+        // Handle FileSequence options
+        options.imageSeqAudio = static_cast<timeline::ImageSeqAudio>(
             p.settings->getValue<int>("FileSequence/Audio"));
-        options.fileSequenceAudioFileName =
+        options.imageSeqAudioFileName =
             p.settings->getValue<std::string>("FileSequence/AudioFileName");
-        options.fileSequenceAudioDirectory =
-            p.settings->getValue<std::string>("FileSequence/AudioDirectory");
 
-        options.videoRequestCount =
+        // Handle OTIO options
+        options.spatial = static_cast<timeline::Spatial>(p.settings->getValue<int>("OTIO/Spatial"));
+        options.compat = p.settings->getValue<bool>("OTIO/Compatibility");
+
+        // Handle Performance options
+        options.videoRequestMax =
             p.settings->getValue<int>("Performance/VideoRequestCount");
-        options.audioRequestCount =
+        options.audioRequestMax =
             p.settings->getValue<int>("Performance/AudioRequestCount");
 
+        // Handle I/O options
         options.ioOptions = _getIOOptions();
+
+        // Handle Misc. options
         options.pathOptions.seqMaxDigits = std::min(
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits"), 255);
 
@@ -2242,6 +2284,34 @@ namespace mrv
         const std::vector<std::shared_ptr<FilesModelItem> >& activeFiles)
     {
         TLRENDER_P();
+
+        // Deferred timeline creation: Ensure all active files have valid
+        // timelines
+        for (const auto& item : activeFiles)
+        {
+            auto i = std::find(p.files.begin(), p.files.end(), item);
+            if (i != p.files.end())
+            {
+                size_t idx = i - p.files.begin();
+                if (!p.timelines[idx])
+                {
+                    try
+                    {
+                        p.timelines[idx] = _createTimeline(item);
+                        const auto info = p.timelines[idx]->getIOInfo();
+                        item->videoLayers.clear();
+                        for (const auto& video : info.video)
+                        {
+                            item->videoLayers.push_back(video.name);
+                        }
+                    }
+                    catch (const std::exception& e)
+                    {
+                        _log(e.what(), log::Type::Error);
+                    }
+                }
+            }
+        }
 
         std::shared_ptr<TimelinePlayer> player;
         if (!p.activeFiles.empty() && isRunning() && p.player)
@@ -2298,7 +2368,10 @@ namespace mrv
                         item->ioInfo = player->ioInfo();
                         if (!item->init)
                         {
+                            std::string key = p.options.mediaReferenceKey;
                             item->init = true;
+                            item->mediaReferenceKey = key;
+                            player->setMediaReferenceKey(key);
                             item->speed = player->speed();
                             item->playback = player->playback();
                             item->loop = player->loop();
@@ -2355,7 +2428,7 @@ namespace mrv
                                 {
                                     const math::Int64Range& range = frames.value();
                                     const bool listdir = true;
-                                    file = item->path.getFrame(range.getMin(), listdir);
+                                    file = item->path.getFrame(range.min(), listdir);
                                 }
                                 p.settings->addRecentFile(file);
                             }
@@ -2364,6 +2437,7 @@ namespace mrv
                         {
                             if (isRunning())
                             {
+                                player->setMediaReferenceKey(item->mediaReferenceKey);
                                 player->setSpeed(item->speed);
                                 player->setLoop(item->loop);
                                 player->setInOutRange(item->inOutRange);
@@ -2415,7 +2489,7 @@ namespace mrv
             p.outputDevice->setPlayer(p.player ? p.player->player() : nullptr);
 #endif // TLRENDER_BMD
 
-        DBG;
+
 
         _layersUpdate(p.filesModel->observeLayers()->get());
 
@@ -2582,8 +2656,7 @@ namespace mrv
             uint64_t bytes = Gbytes * memory::gigabyte;
 
             // Update the I/O cache.
-            auto ioSystem = _context->getSystem<io::System>();
-            ioSystem->getCache()->setMax(bytes);
+            auto ioSystem = _context->getSystem<io::ReadSystem>();
 
             // old readAhead/readBehind code used when playing sequences.
             const auto timeline = p.player->timeline();

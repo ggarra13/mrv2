@@ -210,6 +210,29 @@ namespace tl
             math::Box2i clipRect;
             std::string currentPipeline;
 
+            //! Pipelines are cached by name AND by this group, so a single
+            //! renderer can draw to targets with different render passes
+            //! (video, annotations, overlay) without recreating pipelines
+            //! every time the target changes.  Empty for the main target.
+            std::string pipelineGroup;
+
+            //! State of the outer pass, saved by beginPass().
+            struct PassState
+            {
+                VkCommandBuffer cmd = VK_NULL_HANDLE;
+                std::shared_ptr<vlk::OffscreenBuffer> fbo;
+                VkRenderPass renderPass = VK_NULL_HANDLE;
+                math::Size2i renderSize;
+                math::Matrix4x4f transform;
+                math::Box2i viewport;
+                bool clipRectEnabled = false;
+                math::Box2i clipRect;
+                std::string pipelineGroup;
+                std::string currentPipeline;
+                timeline::RenderOptions renderOptions;
+            };
+            std::vector<PassState> passStack;
+
             struct FrameGarbage
             {
                 std::vector<VkPipeline> pipelines;

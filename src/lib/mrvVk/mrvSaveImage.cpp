@@ -175,7 +175,7 @@ namespace mrv
 
             // Create the writer.
             auto writerPlugin =
-                context->getSystem<io::System>()->getPlugin(path);
+                context->getSystem<io::WriteSystem>()->getPlugin(path);
 
             if (!writerPlugin)
             {
@@ -215,7 +215,7 @@ namespace mrv
             }
 
             outputInfo.size = renderSize;
-            outputInfo = writerPlugin->getWriteInfo(outputInfo);
+            outputInfo = writerPlugin->getInfo(outputInfo);
 
             if (image::PixelType::kNone == outputInfo.pixelType)
             {
@@ -405,6 +405,9 @@ namespace mrv
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
 
+            // Do NOT turn off tonemapping so libplacebo gets used.
+            view->setToneMapping(true);
+
             if (options.annotations)
             {
                 view->setSaveOverlay(true);
@@ -414,6 +417,35 @@ namespace mrv
                 view->setSaveOverlay(false);
             }
 
+            timeline::OCIOOptions savedOCIOOptions;
+            timeline::HDROptions savedHdrOptions;
+            bool restoreHdrOptions = false;
+            bool restoreOCIOOptions = false;
+
+            // \@bug:
+            //       Note that libplacebo and OpenColorIO have different
+            //       concepts of white.  Also, OpenColorIO and OpenEXR cannot
+            //       parse HDR10+ or DolbyVision metadata.
+            savedHdrOptions = view->getHDROptions();
+            timeline::HDROptions hdrOptions = savedHdrOptions;
+
+            savedOCIOOptions = view->getOCIOOptions();
+            timeline::OCIOOptions ocioOptions = savedOCIOOptions;
+
+            hdrOptions.exportMode = options.exportMode;
+            view->setHDROptions(hdrOptions);
+            restoreHdrOptions = true;
+
+            if (hdrOptions.exportMode != timeline::HDRExportMode::BakedHDR)
+            {
+                ocioOptions.enabled = false;
+                view->setOCIOOptions(ocioOptions);
+                restoreOCIOOptions = true;
+            }
+
+            msg = string::Format(_("HDR Export mode {0}")).
+                  arg(hdrOptions.exportMode);
+            LOG_STATUS(msg);
 
             view->redraw();
             view->flush(); // needed
@@ -552,19 +584,33 @@ namespace mrv
 
             if (saveEXR)
             {
-                std::string ics = ocio::ics();
-                if (!ics.empty() && ics != _("None"))
-                    tags["colorInteropID"] = ics;
+                const std::string id = ocio::getInteropID(false);
+                if (!id.empty())
+                    tags["ColorInteropID"] = id;
             }
 
             outputImage->setTags(tags);
             writer->writeVideo(currentTime, outputImage);
+
+            if (restoreOCIOOptions)
+            {
+                view->setOCIOOptions(savedOCIOOptions);
+            }
+            if (restoreHdrOptions)
+            {
+                view->setHDROptions(savedHdrOptions);
+            }
         }
         catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
             ret = -1;
         }
+
+        // Turn on tonemapping so libplacebo gets used.
+        view->setToneMapping(true);
+        view->redraw();
+
         return ret;
     }
 
@@ -731,6 +777,9 @@ namespace mrv
         auto settings = ui->app->settings();
         if (file::isReadable(file))
         {
+            msg = string::Format(_("Saved '{0}'.")).arg(file);
+            LOG_STATUS(msg);
+
             settings->addRecentFile(file);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }

@@ -137,9 +137,10 @@ namespace mrv
             void continuePlaying();
 
             void init_colorspace() FL_OVERRIDE;
+            int  get_max_frames_in_flight() FL_OVERRIDE;
 
-            std::vector<const OTIO_NS::Item* > getSelectedItems() const;
-            std::vector<const OTIO_NS::Transition* > getSelectedTransitions() const;
+            std::vector<timeline::MoveData> getSelectedItems() const;
+            std::vector<timeline::MoveData> getSelectedTransitions() const;
 
         protected:
             const float pixelRatio() const;

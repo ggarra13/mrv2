@@ -3,15 +3,35 @@ Introducción
 ============
 
 
-¿Qué es mrv2?
-*************
+¿Qué son mrv2 y mrv2?
+*********************
 
-mrv2 es un flipbook profesional y herramienta de revisión de código abierto para la industria de Efectos Visuales, Animación e Imágenes de Computación Gráfica.  mrv2 esta focalizado en proveer una interfaz fácil de usar e intuitiva con el motor de reproducción de mayor performance disponible y una API de Python para integración en los Pipelines de los estudios y para customizarlo con total facilidad.
+mrv2 y vmrv2 son dos herramientas profesionales de código abierto para flipbooks y revisión, destinadas a las industrias de Efectos Visuales, Animación y Gráficos por Computadora.
 
-mrv2 puede manejar colecciones de medios rápidamente, carga una multitud de formatos de imagen y video especializados y muestra la imágenes con manejo de color. Los usuarios pueden importar, organizar y agrupar medios en listas de reproducción de OTIO, reproduciendo items y agregando notas de revisiones y anotaciones dibujadas, permitiendo visualizar el contenido en forma interactiva y colaborativa.  Esto permite el flujo que es esencial para los equipos de efectos visuales, animación y otras actividades de post-production que necesitan ver, en demanda, el arte que ellos y sus colegas están creando.  Por ejemplo, uno puede cambiar de fuente de medios instantáneamente, inspeccionar pixels de cerca, hacer comparaciones cuadro a cuadro a través de multiple fuentes de medios, anotar los medios con dibujos y texto o agregar notas para compartir con otros.
+La diferencia entre mrv2 y vmrv2 es su motor gráfico.
+
+mrv2 utiliza OpenGL, que está mucho más probado en producción, pero está siendo descontinuado en TODAS las plataformas, mientras que vmrv2 utiliza Vulkan, que es el motor gráfico principal en Linux y en las versiones modernas de Windows. macOS cuenta con un motor Vulkan compatible llamado MoltenVK, que utiliza Metal.
+
+En general, vmrv2 reproduce imágenes y videos más rápidamente en las GPU modernas y ofrece compatibilidad con HDR dinámico, mientras que mrv2 es compatible con OpenUSD y utiliza un tone mapping estático para simular HDR, lo que puede producir colores algo incorrectos.
+
+Para ponerlo en perspectiva, Netflix, YouTube y Disney utilizan HDR en sus planes de suscripción premium. Por lo tanto, si estás trabajando en una película para ellos, o en una película que se estrenará en cines, querrás revisar tus dailies con vmrv2.
+
+A partir de ahora, cuando nos refiramos a mrv2, nos referimos tanto a mrv2 como a vmrv2.
+
+mrv2 está enfocado en proporcionar una interfaz intuitiva y fácil de usar, con el motor de reproducción de mayor rendimiento disponible en su corazón, además de una API de Python para la integración con pipelines y la personalización, ofreciendo una flexibilidad total.
+
+mrv2 puede manejar rápidamente colecciones de fuentes multimedia, cargar formatos de imagen especializados y mostrar imágenes con gestión de color. Los usuarios pueden importar, organizar y agrupar rápidamente medios en playlists y «subsets», reproducirlos y ponerlos en bucle, así como añadir notas de revisión y anotaciones dibujadas, permitiendo visualizar los medios de una manera altamente interactiva y colaborativa. Esto permite flujos de trabajo esenciales para equipos de VFX, animación y otras actividades de posproducción que necesitan poder ver, bajo demanda, las obras que ellos y sus colegas están creando. Por ejemplo, se puede saltar instantáneamente entre las distintas fuentes de medios, inspeccionar píxeles de cerca, realizar comparaciones fotograma a fotograma entre múltiples fuentes, anotar los medios con dibujos y textos, o añadir notas de feedback para compartir.
+
+Las versiones Pro de mrv2 y vmrv2 llevan los dailies a un nuevo nivel mediante el uso de anotaciones de voz y enlaces, para obtener feedback aún más rápido durante el proceso de revisión.
+
+Estas funciones son útiles para las revisiones grupales actuales, pero su acceso también a través de la API de Python permitirá, si estoy en lo cierto, que en un futuro potencial se pueda controlar la GenAI de una manera mucho más intuitiva, «dirigiendo» cómo quieres que se comporten tus personajes mediante tu voz y un puntero. La GenAI todavía no permite hacer esto, pero mrv2 allana el camino.
+
+Además, puedes utilizar las anotaciones de enlaces para tener imágenes vinculadas a un prompt de IA como referencias visuales en cualquier punto de tu timeline, de modo que tu motor de IA pueda realizar una transición entre ellas. Esto también está disponible desde Python para enviarlo a tu servicio de IA favorito, ya sea una herramienta propietaria o local de código abierto, siempre que lo permita.
+
+Aunque utilizo la IA para matemáticas, programación, aprendizaje y resolución general de problemas, no es para mí como artista. Tuve una breve experiencia trabajando en un proyecto de IA, pero decidí que no era lo mío. Además, trabajar en IA a un nivel profundo requiere sólidos conocimientos matemáticos, y las matemáticas no son precisamente mi punto fuerte. Prefiero concentrarme en desarrollar una herramienta que ayude a los artistas a familiarizarse con la IA utilizando los mismos conceptos de revisión que aparecen en los dailies.
 
 
-Versión Actual: v1.7.1 - Descripción General
+Versión Actual: v1.7.6 - Descripción General
 ********************************************
 
 Esta versión de la aplicación es una solución de revisión sólida y robusta. mrv2 ha sido desplegado en múltiples estudios y es usado por múltiples individuos diariamente desde Augosto del 2022.

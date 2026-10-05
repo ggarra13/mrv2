@@ -337,21 +337,21 @@ namespace tl
             p.fbo->transitionDepthToStencilAttachment(p.cmd);
 
 
+            p.buffers["wipe_image"]->transitionToColorAttachment(p.cmd);
+            p.buffers["wipe_image"]->beginClearRenderPass(p.cmd);
+            p.buffers["wipe_image"]->endRenderPass(p.cmd);
+
             // Draw left image to "wipe" buffer
             if (!videoFrame.empty() && !boxes.empty())
             {
-                p.buffers["wipe_image"]->transitionToColorAttachment(p.cmd);
-                p.buffers["wipe_image"]->beginClearRenderPass(p.cmd);
-                p.buffers["wipe_image"]->endRenderPass(p.cmd);
-
                 _drawVideo(
                     p.buffers["wipe_image"], "display",
                     videoFrame[0], boxes[0],
                     !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                     !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
-
-                p.buffers["wipe_image"]->transitionToShaderRead(p.cmd);
             }
+
+            p.buffers["wipe_image"]->transitionToShaderRead(p.cmd);
 
             // Draw stencil triangle mesh
             if (p.vbos["wipe"])
@@ -384,19 +384,25 @@ namespace tl
                 ds.depthTestEnable = VK_FALSE;
 
 #if USE_DYNAMIC_STENCILS
-                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
-                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_REPLACE,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_COMPARE_OP_ALWAYS);
+                if (ctx.vkCmdSetStencilTestEnableEXT)
+                {
+                    ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                    ctx.vkCmdSetStencilOpEXT(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_REPLACE,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_COMPARE_OP_ALWAYS);
 
-                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         0xFF);
-                vkCmdSetStencilCompareMask(p.cmd,
-                                           VK_STENCIL_FACE_FRONT_AND_BACK,
-                                           0xFF);
-                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                    vkCmdSetStencilWriteMask(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             0xFF);
+                    vkCmdSetStencilCompareMask(p.cmd,
+                                               VK_STENCIL_FACE_FRONT_AND_BACK,
+                                               0xFF);
+                    vkCmdSetStencilReference(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                }
 #else
                 ds.stencilTestEnable = VK_TRUE;
 
@@ -450,18 +456,24 @@ namespace tl
                 ds.depthTestEnable = VK_FALSE;
 
 #if USE_DYNAMIC_STENCILS
-                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
-                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_COMPARE_OP_EQUAL);
-                vkCmdSetStencilCompareMask(p.cmd,
-                                           VK_STENCIL_FACE_FRONT_AND_BACK,
-                                           0xFF);
-                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         0x00);
-                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                if (ctx.vkCmdSetStencilTestEnableEXT)
+                {
+                    ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                    ctx.vkCmdSetStencilOpEXT(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_COMPARE_OP_EQUAL);
+                    vkCmdSetStencilCompareMask(p.cmd,
+                                               VK_STENCIL_FACE_FRONT_AND_BACK,
+                                               0xFF);
+                    vkCmdSetStencilWriteMask(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             0x00);
+                    vkCmdSetStencilReference(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                }
 #else
                 ds.stencilTestEnable = VK_TRUE;
 
@@ -515,11 +527,9 @@ namespace tl
                 _drawVideo(
                     p.buffers["wipe_image"], "display",
                     videoFrame[1], boxes[1],
-                    !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
-                    !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
+                    imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
+                    displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
             }
-
-            p.buffers["wipe_image"]->transitionToShaderRead(p.cmd);
 
             if (p.vbos["wipe"])
             {
@@ -535,6 +545,8 @@ namespace tl
                 p.vbos["wipe"]->copy(convert(mesh, p.vbos["wipe"]->getType()));
             }
 
+
+            p.buffers["wipe_image"]->transitionToShaderRead(p.cmd);
 
             p.fbo->transitionToColorAttachment(p.cmd);
             p.fbo->transitionDepthToStencilAttachment(p.cmd);
@@ -554,18 +566,24 @@ namespace tl
                 ds.depthTestEnable = VK_FALSE;
 
 #if USE_DYNAMIC_STENCILS
-                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
-                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_REPLACE,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_COMPARE_OP_ALWAYS);
-                vkCmdSetStencilCompareMask(p.cmd,
-                                           VK_STENCIL_FACE_FRONT_AND_BACK,
-                                           0xFF);
-                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         0xFF);
-                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                if (ctx.vkCmdSetStencilTestEnableEXT)
+                {
+                    ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                    ctx.vkCmdSetStencilOpEXT(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_REPLACE,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_COMPARE_OP_ALWAYS);
+                    vkCmdSetStencilCompareMask(p.cmd,
+                                               VK_STENCIL_FACE_FRONT_AND_BACK,
+                                               0xFF);
+                    vkCmdSetStencilWriteMask(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             0xFF);
+                    vkCmdSetStencilReference(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK, 1);
+                }
 #else
                 ds.stencilTestEnable = VK_TRUE;
 
@@ -620,19 +638,25 @@ namespace tl
                 ds.depthTestEnable = VK_FALSE;
 
 #if USE_DYNAMIC_STENCILS
-                ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
-                ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_STENCIL_OP_KEEP,
-                                         VK_COMPARE_OP_EQUAL);
-                vkCmdSetStencilCompareMask(p.cmd,
-                                           VK_STENCIL_FACE_FRONT_AND_BACK,
-                                           0xFF);
-                vkCmdSetStencilWriteMask(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         0x00);
-                vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
-                                         1);
+                if (ctx.vkCmdSetStencilTestEnableEXT)
+                {
+                    ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
+                    ctx.vkCmdSetStencilOpEXT(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_STENCIL_OP_KEEP,
+                                             VK_COMPARE_OP_EQUAL);
+                    vkCmdSetStencilCompareMask(p.cmd,
+                                               VK_STENCIL_FACE_FRONT_AND_BACK,
+                                               0xFF);
+                    vkCmdSetStencilWriteMask(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             0x00);
+                    vkCmdSetStencilReference(p.cmd,
+                                             VK_STENCIL_FACE_FRONT_AND_BACK,
+                                             1);
+                }
 #else
                 ds.stencilTestEnable = VK_TRUE;
 

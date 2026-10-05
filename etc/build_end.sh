@@ -24,13 +24,12 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
 	. etc/windows/signing_installer.sh
     elif [[ $KERNEL == *Darwin* ]]; then
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Darwin-${ARCH}.dmg"
-	VK_ARG=""
-	if [[ "$MRV2_VK" == "ON" || "$MRV2_VK" == "1" ]]; then
-	    VK_ARG='-vk'
-	fi
-	etc/macos/codesign_notarize.sh sign-dmg ${VK_ARG}
-	etc/macos/codesign_notarize.sh notarize ${VK_ARG}
-	etc/macos/codesign_notarize.sh staple ${VK_ARG}
+	# Use the same flag that named the DMG above (mrv2_ARG, derived from
+	# MRV2_BACKEND) so codesign_notarize.sh looks in the matching build
+	# tree for the matching app/DMG names.
+	etc/macos/codesign_notarize.sh sign-dmg ${mrv2_ARG}
+	etc/macos/codesign_notarize.sh notarize ${mrv2_ARG}
+	etc/macos/codesign_notarize.sh staple ${mrv2_ARG}
     elif [[ $KERNEL == *Linux* ]]; then
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Linux-${ARCH}.deb"
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Linux-${ARCH}.rpm"

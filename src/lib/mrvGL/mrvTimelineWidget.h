@@ -28,11 +28,11 @@ namespace mrv
 {
 
     class TimelinePlayer;
-    
+
     namespace opengl
     {
         using namespace tl;
-        
+
         //! Timeline widget.
         class TimelineWidget : public GLWindow
         {
@@ -50,7 +50,7 @@ namespace mrv
 
             //! Get timelineUI's timelineWidget item options
             timelineui::ItemOptions getItemOptions() const;
-        
+
             //! Get timelineUI's timelineWidget display options
             timelineui::DisplayOptions getDisplayOptions() const;
 
@@ -83,7 +83,7 @@ namespace mrv
 
             //! Set the Display options.
             void setItemOptions(const timelineui::ItemOptions&);
-        
+
             //! Set the Display options.
             void setDisplayOptions(const timelineui::DisplayOptions&);
 
@@ -128,18 +128,18 @@ namespace mrv
             int keyReleaseEvent(unsigned key, const int modifiers);
 
             void setEditMode(const timeline::EditMode);
-            
+
             void moveCallback(const std::vector<tl::timeline::MoveData>&);
 
             void continuePlaying();
 
-            std::vector<const OTIO_NS::Item* > getSelectedItems() const;
-            std::vector<const OTIO_NS::Transition* > getSelectedTransitions() const;
-            
+            std::vector<timeline::MoveData> getSelectedItems() const;
+            std::vector<timeline::MoveData> getSelectedTransitions() const;
+
         protected:
 
             const float pixelRatio() const;
-        
+
             int enterEvent();
             int leaveEvent();
             int mousePressEvent();
@@ -163,7 +163,7 @@ namespace mrv
             void _setTimeUnits(tl::timeline::TimeUnits);
 
             void _cancelThumbnailRequests();
-        
+
             void _tickEvent();
             void _tickEvent(
                 const std::shared_ptr<ui::IWidget>&, bool visible, bool enabled,
@@ -207,5 +207,5 @@ namespace mrv
         };
 
     } // namespace opengl
-    
+
 } // namespace mrv

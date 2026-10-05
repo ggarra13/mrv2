@@ -6,6 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
+"POT-Creation-Date: 2026-10-04 14:27-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: pt\n"
@@ -196,12 +197,6 @@ msgstr "Definir o nome do ficheiro de udio da sequncia de ficheiros."
 msgid "Get file sequence audio file name."
 msgstr "Obter o nome do arquivo de sequncia de udio."
 
-msgid "Set file sequence audio directory."
-msgstr "Definir o diretrio de udio de sequncia de ficheiros."
-
-msgid "Get file sequence audio directory."
-msgstr "Obter o diretrio de udio de sequncia de arquivos."
-
 msgid "Set maximum file sequence digits."
 msgstr "Definir os dgitos mximos de sequncia de ficheiros."
 
@@ -298,6 +293,7 @@ msgstr "Gravar um ficheiro de sesso."
 msgid "Save and reload session file restarting mrv2."
 msgstr "Salvar e recarregar o arquivo de sessão reiniciando o mrv2."
 
+#, c++-format
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Complemento Python duplicado {0} em {1} e {2}."
 
@@ -575,14 +571,26 @@ msgstr "Nveis Activados."
 msgid "Add a :class:`mrv2.math.Vector3f` to image."
 msgstr "Adicione um :class:`mrv2.math.Vector3f`  imagem."
 
-msgid "Change a :class:`mrv2.math.Vector3f` of brightness to image."
-msgstr "Mudar um :class:`mrv2.math.Vector3f` de brilho para imagem."
+msgid ""
+"Change a :class:`mrv2.math.Vector3f` of brightness (gain) to image.  Only "
+"the x channel is used."
+msgstr ""
+"Altere o brilho (ganho) da imagem com um :class:`mrv2.math.Vector3f`. Apenas"
+" o canal x é usado."
 
-msgid "Change a :class:`mrv2.math.Vector3f` of contrast to image."
-msgstr "Mudar um :class:`mrv2.math.Vector3f` de contraste com a imagem."
+msgid ""
+"Change a :class:`mrv2.math.Vector3f` of contrast to image.  Only the x "
+"channel is used."
+msgstr ""
+"Altere o contraste da imagem com um :class:`mrv2.math.Vector3f`. Apenas o "
+"canal x é usado."
 
-msgid "Change a :class:`mrv2.math.Vector3f` of saturation to image."
-msgstr "Mudar um :class:`mrv2.math.Vector3f` de saturao para imagem."
+msgid ""
+"Change a :class:`mrv2.math.Vector3f` of saturation to image. Only the x "
+"channel is used."
+msgstr ""
+"Altere a saturação da imagem com um :class:`mrv2.math.Vector3f`. Apenas o "
+"canal x é usado."
 
 msgid "Change tint of image to image between 0 and 1."
 msgstr "Mudar o corante da imagem para a imagem entre 0 e 1."
@@ -903,6 +911,9 @@ msgstr "Salve anotaes."
 msgid "Save resolution."
 msgstr "Salve a resoluo."
 
+msgid "HDR Export Mode."
+msgstr "Modo de exportação HDR."
+
 msgid "FFmpeg Profile."
 msgstr "Perfil FFmpeg."
 
@@ -944,6 +955,12 @@ msgstr "Nvel de compresso Zip da OpenEXR."
 
 msgid "OpenEXR's DWA Compression Level."
 msgstr "Nvel de compresso DWA da OpenEXR."
+
+msgid "OpenEXR's Lossy HJ2K Compression Level."
+msgstr "Nível de compressão HJ2K com perdas do OpenEXR."
+
+msgid "OpenEXR's ZSTD Compression Level."
+msgstr "Nível de compressão ZSTD do OpenEXR."
 
 msgid ""
 "\n"
@@ -1112,6 +1129,7 @@ msgstr ""
 "Obter todas as instruções de URL/arquivo/IA para o quadro atual como um "
 "arquivo JSON."
 
+#, c++-format
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Canais: {1} {2} {3}"
 
@@ -1241,6 +1259,16 @@ msgstr "Conectar-se a um projeto WebRTC em <value>."
 msgid "Connect to a WebRTC room at <value>."
 msgstr "Conectar-se a uma sala WebRTC em <value>."
 
+msgid "Timeline:"
+msgstr "Linha do tempo:"
+
+msgid ""
+"Media reference to open OTIO timelines with for clips that have several "
+"versions of their media (examples: \"Proxy\" and \"Full\")."
+msgstr ""
+"Referência de mídia para abrir linhas do tempo OTIO de clipes que possuem "
+"várias versões de sua mídia (exemplos: \"Proxy\" e \"Full\")."
+
 msgid "Miscellaneous:"
 msgstr "Diversos:"
 
@@ -1286,9 +1314,11 @@ msgstr "Localização das Preferências:"
 msgid "Temp Location: "
 msgstr "Percorso temporaneo: "
 
+#, c++-format
 msgid "Could not read python script '{0}'"
 msgstr "No foi possvel ler o script python '{0}'"
 
+#, c++-format
 msgid "Running python script '{0}'"
 msgstr "Executar o script do python '{0}'"
 
@@ -1301,6 +1331,7 @@ msgstr "Erro de Python:"
 msgid "Caching..."
 msgstr "Armazenando em cache..."
 
+#, c++-format
 msgid "Filename '{0}' does not exist or does not have read permissions."
 msgstr "O nome de arquivo '{0}' no existe ou no tem permisses de leitura."
 
@@ -1310,9 +1341,11 @@ msgstr "Imprima o log para o console."
 msgid "Show this message."
 msgstr "Mostra esta mensagem."
 
+#, c++-format
 msgid "Cannot parse option \"{0}\": {1}"
 msgstr "Não foi possível analisar a opção \"{0}\": {1}"
 
+#, c++-format
 msgid "Cannot parse argument \"{0}\": {1}"
 msgstr "Não foi possível analisar o argumento \"{0}\": {1}"
 
@@ -1446,6 +1479,7 @@ msgstr "Editor/Editor externo"
 msgid "Scripts/Add To Script List"
 msgstr "Scripts/Adicionar  Lista de Scripts"
 
+#, c-format
 msgid "Scripts/%s"
 msgstr "Scripts/%s"
 
@@ -1456,6 +1490,7 @@ msgstr ""
 "Digite aqui o seu cdigo de python. Selecione uma rea para executar apenas "
 "uma poro dele. Pressione o teclado Entrar para execut- lo."
 
+#, c++-format
 msgid "Python file {0} already exists.  Do you want to overwrite it?"
 msgstr "O ficheiro Python {0} j existe. Deseja sobrescrev-lo?"
 
@@ -1477,18 +1512,22 @@ msgstr "O stream est num estado de erro irrecupervel."
 msgid "Type your editor command"
 msgstr "Digite o seu comando editor"
 
+#, c++-format
 msgid "{0} will be replaced with the line number.  {1} with the file name"
 msgstr "{0} ser substitudo pelo nmero de linha. {1} com o nome do ficheiro"
 
+#, c++-format
 msgid "Regular expression error: {0}"
 msgstr "Erro de expresso regular: {0}"
 
+#, c++-format
 msgid "Could not open python editor: {0}"
 msgstr "No foi possvel abrir o editor do python: {0}"
 
 msgid "Search String:"
 msgstr "Chave de Pesquisa:"
 
+#, c-format
 msgid "No occurrences of '%s' found!"
 msgstr "No foram encontradas ocorrncias de \"%s\"!"
 
@@ -1525,23 +1564,12 @@ msgstr "Com Metadados"
 msgid "Without Metadata"
 msgstr "Sem Metada"
 
+#, c++-format
 msgid "Streaming {0} {1}..."
 msgstr "Fluxo {0} {1}..."
 
 msgid "Stop streaming"
 msgstr "Pára de transmitir"
-
-msgid "Complexity"
-msgstr "Complexidade"
-
-msgid "Draw Mode"
-msgstr "Modo de desenho"
-
-msgid "Stage Cache"
-msgstr "Cache em estgio"
-
-msgid "Disk Cache in GB"
-msgstr "Cache de disco em GB"
 
 msgid "Type"
 msgstr "Tipo"
@@ -1635,6 +1663,25 @@ msgstr "Nome do ficheiro de udio"
 
 msgid "Maximum Digits"
 msgstr "Nmeros mximos"
+
+msgid "Spatial Coordinates"
+msgstr "Coordenadas espaciais"
+
+msgid ""
+"Use the Spatial Coordinates in OTIO files to position and size the clips.\n"
+"\n"
+"* None: Ignore the spatial coordinates.\n"
+"* Coordinates: Use the spatial coordinates when clips provide them.\n"
+"* Normalize: Use the spatial coordinates, and display clips without them at the size of the first clip.  Use this to play clips of differing resolutions at the same size."
+msgstr ""
+"Use as coordenadas espaciais nos arquivos OTIO para posicionar e dimensionar os clipes.\n"
+"\n"
+"* Nenhuma: Ignorar as coordenadas espaciais.\n"
+"* Coordenadas: Usar as coordenadas espaciais quando os clipes as fornecerem.\n"
+"* Normalizar: Usar as coordenadas espaciais e exibir os clipes que não as possuem no tamanho do primeiro clipe.  Use esta opção para reproduzir clipes com diferentes resoluções no mesmo tamanho."
+
+msgid "Compatibility"
+msgstr "Compatibilidade"
 
 msgid "Performance"
 msgstr "Desempenho"
@@ -1885,9 +1932,11 @@ msgstr "1:16"
 msgid "Pick"
 msgstr "Escolha"
 
+#, c-format
 msgid "%.3f seconds "
 msgstr "%.3f segundos"
 
+#, c-format
 msgid "Video Stream #%d"
 msgstr "Corrente de vdeo #%d"
 
@@ -2155,6 +2204,7 @@ msgstr "Data da ltima modificao do ficheiro"
 msgid "Load an image or movie file"
 msgstr "Carregar um ficheiro de imagem ou filme"
 
+#, c-format
 msgid "Audio Stream #%d"
 msgstr "Fluxo de Áudio #%d"
 
@@ -2173,6 +2223,7 @@ msgstr "Nmero de canais de udio"
 msgid "Format"
 msgstr "Formato"
 
+#, c-format
 msgid "%d Hz."
 msgstr "%d Hz."
 
@@ -2182,6 +2233,7 @@ msgstr "Frequncia"
 msgid "Frequency of audio"
 msgstr "Frequncia do udio"
 
+#, c-format
 msgid "%d kb/s"
 msgstr "%d kb/s"
 
@@ -2206,6 +2258,7 @@ msgstr "Durao"
 msgid "Duration of Audio"
 msgstr "Durao do udio"
 
+#, c-format
 msgid "Subtitle Stream #%d"
 msgstr "Corrente de Legendas #%d"
 
@@ -2277,9 +2330,6 @@ msgstr "Nome do ficheiro anterior"
 
 msgid "Next filename"
 msgstr "Prximo nome do ficheiro"
-
-msgid "Filter EDLs"
-msgstr "Filtro EDLs"
 
 msgid "Select one or more B images."
 msgstr "Selecione uma ou mais imagens B."
@@ -2528,9 +2578,11 @@ msgstr "Faz a seguinte anotao mostrar em todos os quadros."
 msgid "Frame Note"
 msgstr "Nota do quadro"
 
+#, c++-format
 msgid "STUN server is {0}"
 msgstr "O servidor STUN é {0}"
 
+#, c++-format
 msgid "TURN server is {0}"
 msgstr "O servidor TURN é {0}"
 
@@ -2555,12 +2607,15 @@ msgstr ""
 "Nenhum estúdio WebRTC foi configurado. Atualize "
 "Preferências->WebRTC->Estúdio"
 
+#, c++-format
 msgid "The room ID is: {0}"
 msgstr "O ID da sala é: {0}"
 
+#, c++-format
 msgid "The player ID is: {0}"
 msgstr "O ID do player é: {0}"
 
+#, c++-format
 msgid "Downloading {0}..."
 msgstr "Baixando {0}..."
 
@@ -2570,9 +2625,11 @@ msgstr "A escuta do servidor na porta"
 msgid "ComfyUI listening on port "
 msgstr "ComfyUI ouvindo no porto"
 
+#, c++-format
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
 msgstr "Server protocol version is {0}. Client protocol version is {1}"
 
+#, c++-format
 msgid "Remote file {0} does not exist on local filesystem."
 msgstr "O arquivo remoto {0} no existe no sistema de arquivos local."
 
@@ -2582,6 +2639,7 @@ msgstr "Não conectado via WebRTC; não é possível obter o arquivo remoto."
 msgid "Peer not connected."
 msgstr "O par não está conectado."
 
+#, c++-format
 msgid ""
 "{0} is only reachable via relay (TURN), which would consume VPS bandwidth. "
 "Skipping fetch to avoid unexpected costs."
@@ -2590,6 +2648,7 @@ msgstr ""
 "largura de banda do VPS. A obtenção do arquivo será ignorada para evitar "
 "custos inesperados."
 
+#, c++-format
 msgid "Already fetching {0} from another sync request; skipping duplicate."
 msgstr ""
 "O arquivo {0} já está sendo obtido por outra solicitação de sincronização; "
@@ -2608,15 +2667,18 @@ msgstr ""
 msgid "Download failed."
 msgstr "Falha no download."
 
+#, c++-format
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr ""
 "O arquivo remoto {0} não foi encontrado localmente e não há nenhum par do "
 "qual obtê-lo."
 
+#, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "O ficheiro remoto {0} corresponde ao nome do ficheiro {1} mas no ao caminho."
 
+#, c++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "O ficheiro remoto {0} no corresponde ao nome do ficheiro local."
 
@@ -2626,11 +2688,13 @@ msgstr "WARN:"
 msgid "ERROR:\t"
 msgstr "ERROR:"
 
+#, c++-format
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
 msgstr "Expresso regular criada a partir de {0}. : {1}"
 
+#, c++-format
 msgid "Iteration {0} will check version={1}"
 msgstr "Iterao {0} ir verificar a verso={1}"
 
@@ -2644,27 +2708,34 @@ msgstr ""
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Exemplo: gizmo_v003.001.exr"
 
+#, c++-format
 msgid "Could not replace {0} with {1}"
 msgstr "Não foi possível substituir {0} por {1}"
 
 msgid "Annotation already existed at this time"
 msgstr "A anotao j existia neste momento"
 
+#, c++-format
 msgid "Failed to open the file {0} for writing."
 msgstr "No foi possvel abrir o ficheiro {0} para escrita."
 
+#, c++-format
 msgid "Failed to write to the file {0}."
 msgstr "No foi possvel escrever no ficheiro {0}."
 
+#, c++-format
 msgid "Session saved to \"{0}\"."
 msgstr "Sesso salva em \"{0}\"."
 
+#, c++-format
 msgid "Failed to open the file '{0}' for reading."
 msgstr "No foi possvel abrir o ficheiro '{0}' para leitura."
 
+#, c++-format
 msgid "Failed to load the file '{0}."
 msgstr "No foi possvel carregar o ficheiro '{0}."
 
+#, c++-format
 msgid ""
 "Movie File '{0}' is not readable.\n"
 "\n"
@@ -2674,6 +2745,7 @@ msgstr ""
 "\n"
 "Deseja substituí-lo por outro?"
 
+#, c++-format
 msgid ""
 "Sequence '{0}' is not readable.\n"
 "\n"
@@ -2683,6 +2755,7 @@ msgstr ""
 "\n"
 "Deseja substituí-la por outra?"
 
+#, c++-format
 msgid ""
 "Audio File '{0}' is not readable.\n"
 "\n"
@@ -2692,9 +2765,11 @@ msgstr ""
 "\n"
 "Deseja substituí-lo por outro?"
 
+#, c++-format
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "Preferncias de leitura de \"{0}{1}\"."
 
+#, c++-format
 msgid "Failed to retrieve {0}."
 msgstr "No foi possvel recuperar {0}."
 
@@ -2710,9 +2785,11 @@ msgstr ""
 "O debanding não está definido como Nenhum. Isso pode fazer com que as "
 "imagens pareçam desfocadas."
 
+#, c++-format
 msgid "Could not open color theme from \"{0}\"."
 msgstr "No foi possvel abrir o tema de cores de \"{0}\"."
 
+#, c++-format
 msgid "Loaded color themes from \"{0}\"."
 msgstr "Temas de cor carregados de \"{0}\"."
 
@@ -2722,27 +2799,34 @@ msgstr "Configurar a configurao OCIO a partir de preferncias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Configurao da configurao OCIO a partir da varivel de ambiente OCIO."
 
+#, c++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Os mapeamentos de caminhos foram carregados a partir de \"{0}{1}\"."
 
+#, c++-format
 msgid "Error deleting directory: \"{0}\"."
 msgstr "Erro ao excluir o diretório: \"{0}\"."
 
+#, c++-format
 msgid "Cleaned directory: \"{0}\"."
 msgstr "Diretório limpo: \"{0}\"."
 
+#, c++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Carregando as teclas acessrias de \"{0}{1}.prefs\"."
 
 msgid "Resetting hotkeys to default."
 msgstr "Ripristino dei tasti rapidi ai valori predefiniti."
 
+#, c++-format
 msgid "Path mappings have been saved to \"{0}{1}\"."
 msgstr "Os mapas dos caminhos foram salvos para \"{0}{1}\"."
 
+#, c++-format
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "As teclas quentes foram salvas para \"{0}{1}.prefs\"."
 
+#, c++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "As preferncias foram salvas para: \"{0}{1}\"."
 
@@ -2752,6 +2836,7 @@ msgstr "Remoo"
 msgid "OCIO config is now:"
 msgstr "A configurao do OCIO est agora:"
 
+#, c++-format
 msgid "OCIO file \"{0}\" not found or not readable."
 msgstr "Ficheiro OCIO \"{0}\" no encontrado ou no legvel."
 
@@ -2761,57 +2846,74 @@ msgstr "Definir a configurao OCIO para padro:"
 msgid "Setting OCIO config to built-in:"
 msgstr "Configurao da configurao OCIO para incorporao:"
 
+#, c++-format
 msgid "Path mapping for {0} already exists!"
 msgstr "O mapeamento do caminho para {0} j existe!"
 
+#, c++-format
 msgid "Comparing {0} to prefix {1}"
 msgstr "Comparando {0} com o prefixo {1}"
 
+#, c++-format
 msgid "Found a match.  File is now {0}"
 msgstr "Encontrei uma correspondncia. O ficheiro  agora {0}"
 
 msgid "OCIO config file cannot be empty."
 msgstr "O arquivo de configurao OCIO no pode estar vazio."
 
+#, c++-format
 msgid "OCIO config '{0}' does not exist or is not readable."
 msgstr "A configurao OCIO '{0}' no existe ou no  legvel."
 
+#, c++-format
 msgid "Invalid OCIO Ics '{0}'."
 msgstr "OCIO Ics invlidos  {0} ."
 
+#, c++-format
 msgid "Invalid OCIO Look '{0}'."
 msgstr "OCIO invlido olhar \"{0}\"."
 
+#, c++-format
 msgid "Invalid OCIO Display/View '{0}'."
 msgstr "Display OCIO invlido/Ver '{0}'."
 
+#, c++-format
 msgid "Could not split '{0}' into display and view."
 msgstr "No foi possvel dividir '{0}' em exibio e visualizao."
 
+#, c++-format
 msgid "No default view for display '{0}'.  Does display exist?"
 msgstr "Nenhuma vista padrão para exibir '{0}'. Existe exibição?"
 
+#, c++-format
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Configurao do OCIO Preset '{0}'."
 
+#, c++-format
 msgid "Preset '{0}' not found."
 msgstr "Predefinir \"{0}\" no foi encontrado."
 
+#, c++-format
 msgid "OCIO Preset '{0}' already exists!"
 msgstr "OCIO Preset '{0}' j existe!"
 
+#, c++-format
 msgid "Failed to load the file '{0}'."
 msgstr "No foi possvel carregar o ficheiro '{0}'."
 
+#, c++-format
 msgid "Loaded {0} ocio presets from \"{1}\"."
 msgstr "Carregado {0} Presets ocio de \"{1}\"."
 
+#, c++-format
 msgid "Failed to open the file '{0}' for saving."
 msgstr "No foi possvel abrir o ficheiro '{0}' para salvar."
 
+#, c++-format
 msgid "Failed to save the file '{0}'."
 msgstr "No foi possvel salvar o ficheiro '{0}'."
 
+#, c++-format
 msgid "OCIO presets have been saved to \"{0}\"."
 msgstr "Os predefinidos da OCIO foram salvos em \"{0}\"."
 
@@ -2842,6 +2944,7 @@ msgstr "Russo"
 msgid "Japanese"
 msgstr "Japons"
 
+#, c++-format
 msgid ""
 "Need to reboot mrv2 to change language to {0}.  Are you sure you want to "
 "continue?"
@@ -2849,6 +2952,7 @@ msgstr ""
 "Precisa reiniciar o mrv2 para mudar a linguagem para {0}. Tem certeza de que"
 " deseja continuar?"
 
+#, c++-format
 msgid "Set Language to {0}, Numbers to {1}"
 msgstr "Definir a linguagem para {0}, os nmeros para {1}"
 
@@ -2981,11 +3085,13 @@ msgstr ""
 msgid "@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"
 msgstr "@B12@C7@b@.Funo @B12@C7@b@.Hotkey"
 
+#, c-format
 msgid ""
 "Hotkey \"%s\" already used in \"%s\".\n"
 "Do you want to override it?"
 msgstr "A tecla \"%s\" j utilizada em \"%s\". Deseja anul- la?"
 
+#, c++-format
 msgid ""
 "Corruption in hotkeys preferences. Hotkey '{0}' for {1} will not be "
 "available.  Already used in {2}."
@@ -3154,20 +3260,69 @@ msgstr "ndice invlido para adicionar clipe  linha do tempo."
 msgid "Could not get current path."
 msgstr "No foi possvel obter o caminho atual."
 
+msgid "Unzipping"
+msgstr "Descompactando"
+
+#, c++-format
 msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 msgstr "O item EDL '{0}' j no est carregado. No  possvel desfazer ou refazer."
 
+msgid "Copy a Frame."
+msgstr "Copiar um quadro."
+
+msgid "Cut a Frame."
+msgstr "Cortar um quadro."
+
+msgid "Paste a Frame."
+msgstr "Colar um quadro."
+
+#, c++-format
 msgid "Could not paste {0}.  Error {1}."
 msgstr "No foi possvel colar {0}. Erro {1}."
+
+msgid "Insert a Cut or Copied Frame."
+msgstr "Inserir um quadro cortado ou copiado."
+
+msgid "Slice the timeline at the current time."
+msgstr "Dividir a linha do tempo no tempo atual."
+
+msgid "Remove clip(s) at the current time."
+msgstr "Remover clipe(s) no tempo atual."
+
+msgid "Insert audio clip at the current time."
+msgstr "Inserir clipe de áudio no tempo atual."
+
+msgid "Insert audio gap(s) at the current time."
+msgstr "Inserir intervalo(s) de áudio no tempo atual."
+
+msgid "Remove audio clips at the current time."
+msgstr "Remover clipes de áudio no tempo atual."
+
+msgid "Remove selected items."
+msgstr "Remover itens selecionados."
+
+msgid "Remove audio gap(s) at the current time."
+msgstr "Remover lacunas de áudio no tempo atual."
+
+msgid "Insert video gap(s) at current time."
+msgstr "Inserir intervalo(s) de vídeo no tempo atual."
+
+msgid "Remove video gap(s) at current time."
+msgstr "Remover intervalo(s) de vídeo no tempo atual."
 
 msgid "Items selected must be on the same track."
 msgstr "Os itens selecionados devem estar na mesma faixa."
 
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
+#, c++-format
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr ""
 "Os itens selecionados devem ser contíguos na faixa. Esquerda {0}. Direita "
 "{1}."
 
+msgid "Add transition between 2 or 4 selected and contiguous items."
+msgstr "Adicionar transição entre 2 ou 4 itens selecionados e contíguos."
+
+#, c++-format
 msgid "Please select two or four contiguous items.  Selected {0}."
 msgstr ""
 "Por favor, selecione dois ou quatro itens contíguos. Selecionados {0}."
@@ -3178,14 +3333,25 @@ msgstr "Por favor, selecione dois clipes de vídeo contíguos."
 msgid "Please select two contiguous audio clips."
 msgstr "Por favor, selecione dois clipes de áudio contíguos."
 
+msgid "Undo Last Edit Operation."
+msgstr "Desfazer a última operação de edição."
+
+msgid "Redo Last Edit Operation."
+msgstr "Refazer a última operação de edição."
+
+#, c++-format
 msgid "Could not save .otio file: {0}"
 msgstr "No foi possvel salvar o ficheiro.otio: {0}"
 
+#, c++-format
 msgid "Error saving {0}. {1}"
 msgstr "Erro ao gravar {0}. {1}"
 
 msgid "Empty EDL file.  Not saving."
 msgstr "Ficheiro EDL vazio. No salvo."
+
+msgid "Save the current timeline as an .otio file."
+msgstr "Salvar a linha do tempo atual como um arquivo .otio."
 
 msgid "Destination file is invalid."
 msgstr "O ficheiro de destino no  vlido."
@@ -3193,6 +3359,7 @@ msgstr "O ficheiro de destino no  vlido."
 msgid "Unknown media reference"
 msgstr "Referência dos meios de comunicação desconhecidos"
 
+#, c++-format
 msgid "Track #{0} - {1}"
 msgstr "Pista #{0} - {1}"
 
@@ -3202,9 +3369,11 @@ msgstr "Atualmente no  possvel concatenar um arquivo.otio."
 msgid "Cannot currently concatenate a directory."
 msgstr "No  possvel concatenar um diretrio."
 
+#, c++-format
 msgid "Could not append video track {0}"
 msgstr "No foi possvel anexar a faixa de vdeo {0}"
 
+#, c++-format
 msgid "Could not append audio track {0}"
 msgstr "No foi possvel anexar a faixa de udio {0}"
 
@@ -3299,6 +3468,13 @@ msgid "Default"
 msgstr "Predefinido"
 
 msgid ""
+"You have EDLs in the current session.  These will not be saved in the "
+"session file.  Do you want to continue?"
+msgstr ""
+"Tem EDLs na sesso actual. Estes no sero salvos no ficheiro de sesso. Deseja "
+"continuar?"
+
+msgid ""
 "You have unsaved changes. Do you want to save the session before closing?"
 msgstr ""
 "Você tem alterações não salvas. Deseja salvar a sessão antes de fechar?"
@@ -3369,14 +3545,104 @@ msgstr "Preferncias"
 msgid "About"
 msgstr "Sobre"
 
+msgid "Open a movie or a sequence."
+msgstr "Abrir um filme ou uma sequência."
+
+msgid ""
+"Open a movie stored on the web with https protocol.  Demo movie is default."
+msgstr ""
+"Abrir um filme armazenado na web usando o protocolo https.  O filme de "
+"demonstração é o padrão."
+
+msgid "Open a single image even if it is part of a sequence."
+msgstr "Abrir uma única imagem mesmo que ela faça parte de uma sequência."
+
+msgid "Load the selected file."
+msgstr "Carregar o arquivo selecionado."
+
+msgid "Open a sequence with an audio file."
+msgstr "Abrir uma sequência com um arquivo de áudio."
+
+msgid "Open all files in a directory."
+msgstr "Abrir todos os arquivos em um diretório."
+
+msgid "Open a new instance of the player."
+msgstr "Abrir uma nova instância do player."
+
 msgid "Could not open a new mrv2 instance"
 msgstr "Não foi possível abrir uma nova instância do mrv2"
+
+msgid "Go to Previous File, Looping to End."
+msgstr "Ir para o arquivo anterior, repetindo até o final."
+
+msgid "Go to Next File, Looping to Start."
+msgstr "Ir para o próximo arquivo, repetindo até o início."
+
+msgid "Go to Previous File."
+msgstr "Ir para o arquivo anterior."
+
+msgid "Go to Next File."
+msgstr "Ir para o próximo arquivo."
+
+msgid "Go to Listed File."
+msgstr "Ir para o arquivo listado."
+
+msgid "Select B File."
+msgstr "Selecionar o arquivo B."
+
+msgid "Toggle A and B comparison."
+msgstr "Alternar a comparação entre A e B."
+
+msgid "Compare A."
+msgstr "Comparar A."
+
+msgid "Compare B."
+msgstr "Comparar B."
+
+msgid "Compare Wipe."
+msgstr "Comparar Wipe."
+
+msgid "Compare Overlay."
+msgstr "Comparar Overlay."
+
+msgid "Compare A - B difference."
+msgstr "Comparar a diferença A - B."
+
+msgid "Compare A + B."
+msgstr "Comparar A + B."
+
+msgid "Compare A * B."
+msgstr "Comparar A * B."
+
+msgid "Compare A next to flipped B."
+msgstr "Comparar A ao lado de B invertido."
+
+msgid "Compare A and B Horizontally."
+msgstr "Comparar A e B horizontalmente."
+
+msgid "Compare A and B Vertically."
+msgstr "Comparar A e B verticalmente."
+
+msgid "Compare A and one or many clips Tiled."
+msgstr "Comparar A e um ou vários clipes lado a lado."
 
 msgid "File extension cannot be empty."
 msgstr "A extenso do ficheiro no pode ser vazia."
 
+msgid "Save a single frame of the current clip."
+msgstr "Salvar um único quadro do clipe atual."
+
+msgid "Keep saving frames to the same folder."
+msgstr "Continuar salvando quadros na mesma pasta."
+
+msgid "Save the audio of the current clip."
+msgstr "Salvar o áudio do clipe atual."
+
 msgid "Saving audio but not with an audio extension."
 msgstr "Salvar áudio, mas não com uma extensão de áudio."
+
+msgid "Export a movie or a sequence."
+msgstr "Exportar um filme ou uma sequência."
 
 msgid "Saving audio but current clip does not have audio."
 msgstr "Salvar udio mas o clipe atual no tem udio."
@@ -3384,20 +3650,321 @@ msgstr "Salvar udio mas o clipe atual no tem udio."
 msgid "Saving video but with an audio extension."
 msgstr "Salvar vdeo, mas com uma extenso de udio."
 
+msgid "Save annotations as a PDF."
+msgstr "Salvar as anotações como PDF."
+
+msgid "Save annotations only as a movie or sequence."
+msgstr "Salvar apenas as anotações como um filme ou sequência."
+
 msgid "Cannot save annotations to .otio file"
 msgstr "Não foi possível salvar anotações no ficheiro.otio"
+
+msgid "Save annotations as a .json file"
+msgstr "Salvar as anotações como um arquivo .json"
+
+msgid "Close current file."
+msgstr "Fechar o arquivo atual."
+
+msgid "Exit the program.  Warns if edits or annotations have been made."
+msgstr ""
+"Sair do programa.  Emite um aviso se edições ou anotações tiverem sido "
+"feitas."
+
+msgid "Previous layer."
+msgstr "Camada anterior."
+
+msgid "Next layer."
+msgstr "Próxima camada."
+
+msgid "No debanding."
+msgstr "Sem debanding."
+
+msgid "Blur movie a bit to avoid banding."
+msgstr "Desfocar um pouco o filme para evitar banding."
+
+msgid "Blur movie medium to avoid banding."
+msgstr "Desfocar moderadamente o filme para evitar banding."
+
+msgid "Blur movie high to avoid banding."
+msgstr "Desfocar bastante o filme para evitar banding."
+
+msgid "Minify filter with nearest algorithm."
+msgstr "Filtro de redução com algoritmo de vizinho mais próximo."
+
+msgid "Minify filter with linear algorithm."
+msgstr "Filtro de redução com algoritmo linear."
+
+msgid "Magnify filter with nearest algorithm."
+msgstr "Filtro de ampliação com algoritmo de vizinho mais próximo."
+
+msgid "Magnify filter with linear algorithm."
+msgstr "Filtro de ampliação com algoritmo linear."
+
+msgid "Mirror clip in X."
+msgstr "Espelhar o clipe no eixo X."
+
+msgid "Mirror clip in Y."
+msgstr "Espelhar o clipe no eixo Y."
+
+msgid "Use HDR data from file."
+msgstr "Usar os dados HDR do arquivo."
+
+msgid "Don't use HDR data."
+msgstr "Não usar dados HDR."
+
+msgid "Use Latest HDR data."
+msgstr "Usar os dados HDR mais recentes."
+
+msgid "Rotate image 90 degrees."
+msgstr "Girar a imagem 90 graus."
+
+msgid "Rotate image -90 degrees."
+msgstr "Girar a imagem -90 graus."
+
+msgid "Show the red channel of the layer."
+msgstr "Mostrar o canal vermelho da camada."
+
+msgid "Show the green channel of the layer."
+msgstr "Mostrar o canal verde da camada."
+
+msgid "Show the blue channel of the layer."
+msgstr "Mostrar o canal azul da camada."
+
+msgid "Show the alpha channel of the layer."
+msgstr "Mostrar o canal alfa da camada."
+
+msgid "Show the combined lumma channel of the layer."
+msgstr "Mostrar o canal de luminância combinada da camada."
+
+msgid "Show the RGB channel of the layer."
+msgstr "Mostrar o canal RGB da camada."
+
+msgid "Normalize the image to be between 0 and 1."
+msgstr "Normalizar a imagem para ficar entre 0 e 1."
+
+msgid "Ignore OpenEXR chromaticities if present."
+msgstr "Ignorar as cromaticidades do OpenEXR, se presentes."
+
+msgid "Show values below 0 and above 1 as red pixels"
+msgstr "Mostrar valores abaixo de 0 e acima de 1 como pixels vermelhos"
+
+msgid ""
+"Toggle HDR peak detection to adjust the movie's luminosity while playing."
+msgstr ""
+"Alternar a detecção de picos HDR para ajustar a luminosidade do filme "
+"durante a reprodução."
+
+msgid "Select Tonemap algorithm."
+msgstr "Selecionar o algoritmo de tonemapping."
+
+msgid "Select Gamut mapping algorithm."
+msgstr "Selecionar o algoritmo de mapeamento de gamut."
+
+msgid "Toggles Fullscreen Mode."
+msgstr "Alternar o modo de tela cheia."
+
+msgid "Toggles Presentation Mode."
+msgstr "Alternar o modo de apresentação."
+
+msgid "Toggles Window to Float above others."
+msgstr "Alternar a janela para que fique flutuando acima das outras."
+
+msgid "Toggles a Secondary Window."
+msgstr "Alternar uma janela secundária."
+
+msgid "Toggle Secondary Window to Float above others."
+msgstr ""
+"Alternar a janela secundária para que fique flutuando acima das outras."
+
+msgid ""
+"Mouse clicks are delivered to the OS windows below.  Used with transparency."
+msgstr ""
+"Os cliques do mouse são enviados para as janelas do sistema operacional "
+"abaixo.  Usado com transparência."
+
+msgid "Make UI more transparent."
+msgstr "Tornar a IU mais transparente."
+
+msgid "Make UI less transparent."
+msgstr "Tornar a IU menos transparente."
+
+msgid "Only allow one side panel at a time."
+msgstr "Permitir apenas um painel lateral por vez."
+
+#, c++-format
+msgid "Show {0} Window."
+msgstr "Mostrar a janela {0}."
+
+msgid "Show About Window."
+msgstr "Mostrar a janela Sobre."
+
+msgid "Toggle Action Dock (Annotations/Edit tools)."
+msgstr "Alternar o painel de ações (ferramentas de anotações/edição)."
+
+msgid "Toggle Menu Bar."
+msgstr "Alternar a barra de menus."
+
+msgid "Toggle Top Bar."
+msgstr "Alternar a barra superior."
+
+msgid "Toggle Pixel Bar."
+msgstr "Alternar a barra de pixels."
+
+msgid "Toggle Timeline Bar."
+msgstr "Alternar a barra da linha do tempo."
+
+msgid "Toggle Status Bar (this bar)."
+msgstr "Alternar a barra de status (esta barra)."
+
+msgid "Show HUD Options."
+msgstr "Mostrar opções do HUD."
+
+msgid "Toggles auto framing of the view."
+msgstr "Alternar o enquadramento automático da visualização."
+
+msgid "Toggle TV Safe Areas."
+msgstr "Alternar as áreas seguras para TV."
+
+msgid "Toggle the display of OpenEXR's Data Window."
+msgstr "Alternar a exibição da janela de dados do OpenEXR."
+
+msgid "Ignore the OpenEXR Display Window."
+msgstr "Ignorar a janela de exibição do OpenEXR."
+
+msgid "Toggle the display of OpenEXR's Display Window."
+msgstr "Alternar a exibição da janela de exibição do OpenEXR."
+
+msgid "Set the Film Cropping Mask."
+msgstr "Definir a máscara de corte do filme."
 
 msgid "View/Mask"
 msgstr "Visualizar/Mscara"
 
+msgid "Play Forward."
+msgstr "Reproduzir para frente."
+
+msgid "Play Backward."
+msgstr "Reproduzir para trás."
+
+msgid "Stop Playback."
+msgstr "Parar a reprodução."
+
+msgid "Toggle Playback."
+msgstr "Alternar a reprodução."
+
+msgid "Set In Point."
+msgstr "Definir o ponto de entrada."
+
+msgid "Set Out Point."
+msgstr "Definir o ponto de saída."
+
+msgid "Toggle In and Out Points."
+msgstr "Alternar os pontos de entrada e saída."
+
+msgid "Loop Mode."
+msgstr "Modo de repetição."
+
+msgid "Play Once Mode."
+msgstr "Modo de reprodução única."
+
+msgid "Play Ping-Pong Mode."
+msgstr "Modo de reprodução Ping-Pong."
+
+msgid "Select OCIO Input Color Space."
+msgstr "Selecionar o espaço de cores de entrada da OCIO."
+
+msgid "Bring up OCIO presets window."
+msgstr "Abrir a janela de predefinições da OCIO."
+
+msgid "Toggle OpenColorIO (OCIO)."
+msgstr "Alternar o OpenColorIO (OCIO)."
+
+msgid "Toggle between OCIO and Colors topbar."
+msgstr "Alternar entre a barra superior da OCIO e a de Cores."
+
+msgid "Current OCIO Input Color Space."
+msgstr "Espaço de cores de entrada atual da OCIO."
+
 msgid "OCIO/     Input Color Space"
 msgstr "OCIO/Espao de cor de entrada"
+
+msgid "Current OCIO Look."
+msgstr "Look atual da OCIO."
 
 msgid "OCIO/     Look"
 msgstr "OCIO/    Look"
 
+msgid "Current OCIO Display / View for monitor."
+msgstr "Display / View atual da OCIO para o monitor."
+
+msgid "Current OCIO Display / View for all monitors."
+msgstr "Display / View atual da OCIO para todos os monitores."
+
 msgid "All Monitors"
 msgstr "Todos os Monitores"
+
+msgid "Video Levels from video clip."
+msgstr "Níveis de vídeo do clipe de vídeo."
+
+msgid "Video Levels Legal Range for SDR."
+msgstr "Níveis de vídeo na faixa legal para SDR."
+
+msgid "Video Levels Legal Range for HDR."
+msgstr "Níveis de vídeo na faixa legal para HDR."
+
+msgid "Video Levels Full Range."
+msgstr "Níveis de vídeo em faixa completa."
+
+msgid "No Alpha Blend."
+msgstr "Sem mistura alfa."
+
+msgid "Straight Alpha Blend."
+msgstr "Mistura alfa direta."
+
+msgid "Premultiplied Alpha Blend."
+msgstr "Mistura alfa pré-multiplicada."
+
+msgid "Go to Start Frame."
+msgstr "Ir para o quadro inicial."
+
+msgid "Go to End Frame."
+msgstr "Ir para o quadro final."
+
+msgid "Go to Next Frame."
+msgstr "Ir para o próximo quadro."
+
+msgid "Go to Previous Frame."
+msgstr "Ir para o quadro anterior."
+
+msgid "Go Forwards 10 Seconds."
+msgstr "Avançar 10 segundos."
+
+msgid "Go Backwards 10 Seconds."
+msgstr "Retroceder 10 segundos."
+
+msgid "Toggle In / Out for the OTIO clip."
+msgstr "Alternar ponto de entrada/saída do clipe OTIO."
+
+msgid "Next OTIO clip."
+msgstr "Próximo clipe OTIO."
+
+msgid "Previous OTIO clip."
+msgstr "Clipe OTIO anterior."
+
+msgid "Previous Annotation Point."
+msgstr "Ponto de anotação anterior."
+
+msgid "Next Annotation Point."
+msgstr "Próximo ponto de anotação."
+
+msgid "Toggle Annotation Visibility."
+msgstr "Alternar a visibilidade das anotações."
+
+msgid "Clear Annotation for Current Frame."
+msgstr "Limpar a anotação do quadro atual."
+
+msgid "Clear Annotations for ALL Frames."
+msgstr "Limpar as anotações de TODOS os quadros."
 
 msgid ""
 "You are about to clear all annotations.  You can still undo the operation "
@@ -3406,14 +3973,91 @@ msgstr ""
 "Você está prestes a apagar todas as anotações. Ainda pode desfazer a "
 "operação logo depois. Deseja continuar?"
 
+msgid "No Thumbnails in Timeline Viewport."
+msgstr "Sem miniaturas na área de visualização da linha do tempo."
+
+msgid "Toggle Editing in Timeline Viewport."
+msgstr "Alternar a edição na área de visualização da linha do tempo."
+
+msgid "Toggle Editing video and audio clips with same In and Out Points."
+msgstr ""
+"Alternar a edição de clipes de vídeo e áudio com os mesmos pontos de entrada"
+" e saída."
+
+msgid "Frame Timeline View."
+msgstr "Enquadrar a visualização da linha do tempo."
+
+msgid "Toggle Scrolling in Timeline Viewport."
+msgstr "Alternar a rolagem na área de visualização da linha do tempo."
+
+msgid "Toggle Track Information in Timeline Viewport."
+msgstr ""
+"Alternar as informações das faixas na área de visualização da linha do "
+"tempo."
+
+msgid "Toggle Clip Information in Timeline Viewport."
+msgstr ""
+"Alternar as informações dos clipes na área de visualização da linha do "
+"tempo."
+
+msgid "Toggle Markers in Timeline Viewport."
+msgstr "Alternar os marcadores na área de visualização da linha do tempo."
+
+msgid "Toggle Track in Timeline Viewport."
+msgstr "Alternar a faixa na área de visualização da linha do tempo."
+
+msgid "Toggle Transitions in Timeline Viewport."
+msgstr "Alternar as transições na área de visualização da linha do tempo."
+
+msgid "Select OTIO's Media Reference Key."
+msgstr "Selecionar a chave de referência de mídia do OTIO."
+
+msgid "Set Small Thumbnails in Timeline Viewport."
+msgstr ""
+"Definir miniaturas pequenas na área de visualização da linha do tempo."
+
+msgid "Set Medium Thumbnails in Timeline Viewport."
+msgstr "Definir miniaturas médias na área de visualização da linha do tempo."
+
+msgid "Set Large Thumbnails in Timeline Viewport."
+msgstr "Definir miniaturas grandes na área de visualização da linha do tempo."
+
 msgid "Pick Color"
 msgstr "Escolher a cor"
 
 msgid "Pick Draw Color and Alpha"
 msgstr "Escolha Desenhar Cor e Alfa"
 
+msgid "Flip Pen Colors."
+msgstr "Inverter as cores da caneta."
+
+msgid "Go to First Image Version."
+msgstr "Ir para a primeira versão da imagem."
+
+msgid "Go to Previous Image Version."
+msgstr "Ir para a versão anterior da imagem."
+
+msgid "Go to Next Image Version."
+msgstr "Ir para a próxima versão da imagem."
+
+msgid "Go to Last Image Version."
+msgstr "Ir para a última versão da imagem."
+
+msgid "Give a donation to support development and unlock features."
+msgstr ""
+"Fazer uma doação para apoiar o desenvolvimento e desbloquear recursos."
+
 msgid "Install is broken.  Missing license_helper"
 msgstr "A instalação está corrompida. license_helper ausente"
+
+msgid "Online documentation."
+msgstr "Documentação online."
+
+msgid "Toggle Annotations."
+msgstr "Alternar as anotações."
+
+msgid "Toggle Sync Elements."
+msgstr "Alternar os elementos de sincronização."
 
 msgid "Media"
 msgstr "Mdia"
@@ -3427,12 +4071,22 @@ msgstr "Panormica e zoom"
 msgid "Timeline"
 msgstr "Linha Do Tempo"
 
-msgid ""
-"You have EDLs in the current session.  These will not be saved in the "
-"session file.  Do you want to continue?"
+msgid "Toggle Receive Elements."
+msgstr "Alternar os elementos recebidos."
+
+msgid "Save state of UI and files to a new .mrv2s session file."
 msgstr ""
-"Tem EDLs na sesso actual. Estes no sero salvos no ficheiro de sesso. Deseja "
-"continuar?"
+"Salvar o estado da IU e dos arquivos em um novo arquivo de sessão .mrv2s."
+
+msgid "Save state of UI and files to a .mrv2s session file."
+msgstr "Salvar o estado da IU e dos arquivos em um arquivo de sessão .mrv2s."
+
+msgid "Load a session file which stores the state of the UI and files."
+msgstr ""
+"Carregar um arquivo de sessão que armazena o estado da IU e dos arquivos."
+
+msgid "Save and restart a temporary session."
+msgstr "Salvar e reiniciar uma sessão temporária."
 
 msgid "Could not restart mrv2 instance with a session file."
 msgstr ""
@@ -3441,18 +4095,45 @@ msgstr ""
 msgid "Edit Text Annotation"
 msgstr "Editar Anotao de Texto"
 
+msgid "Clone the File."
+msgstr "Clonar o arquivo."
+
+msgid "Reload the File."
+msgstr "Recarregar o arquivo."
+
+msgid "Set 3D Stereo image."
+msgstr "Definir imagem estéreo 3D."
+
+msgid "Update the current frame cache."
+msgstr "Atualizar o cache do quadro atual."
+
+msgid "Refresh the frame cache."
+msgstr "Atualizar o cache de quadros."
+
+msgid "Refresh the movie."
+msgstr "Atualizar o filme."
+
+msgid "Copy the Filename to the clipboard."
+msgstr "Copiar o nome do arquivo para a área de transferência."
+
+msgid "Bring up the File Manager."
+msgstr "Abrir o gerenciador de arquivos."
+
 msgid "No item selected"
 msgstr "Nenhum elemento seleccionado"
 
+#, c-format
 msgid "%s - Page %d"
 msgstr "%s - Pgina %d"
 
+#, c++-format
 msgid "Frame {0} - TC: {1} - S: {2}"
 msgstr "Quadro {0} - CT: {1} - S: {2}"
 
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
 
+#, c++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamanho do visor: {0} - X={1}, Y={2}"
 
@@ -3591,12 +4272,15 @@ msgstr ""
 msgid "Cannot save an NDI stream"
 msgstr "No foi possvel salvar um fluxo NDI"
 
+#, c++-format
 msgid "Saving movie to {0}."
 msgstr "A salvar o filme para {0}."
 
+#, c++-format
 msgid "Saving audio to {0}."
 msgstr "Salvar udio para {0}."
 
+#, c++-format
 msgid "Saving pictures to {0}."
 msgstr "Salvar imagens para {0}."
 
@@ -3624,79 +4308,79 @@ msgstr ""
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "O perfil HAP precisa de uma extenso.mov. Mud-lo para.mov"
 
+msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
+msgstr "O perfil OAPV requer uma extensão .mp4. Alterando para .mp4"
+
+#, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "O novo ficheiro {0} j existe! No  possvel sobrescrev- lo."
 
-msgid "Rotated image info: {0}"
-msgstr "Informaes sobre a imagem rotativa: {0}"
+#, c++-format
+msgid "HDR Export mode {0}"
+msgstr "Modo de exportação HDR {0}"
 
-msgid "Scaled image info: {0}"
-msgstr "Informao da imagem escalada: {0}"
-
+#, c++-format
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: No foi possvel abrir o plugin do gravador."
 
-msgid "Image info: {0} {1}"
-msgstr "Informao da imagem: {0} {1}"
+#, c++-format
+msgid "Scaled image info: {0}"
+msgstr "Informao da imagem escalada: {0}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-"Imagem muito grande para salvar anotações. Irá escalar para o tamanho do "
-"viewport."
-
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "O plugin do Writer no obteve informaes de sada. Por omisso para {0}"
 
-msgid "Output info: {0} {1}"
-msgstr "Informaes sobre a sada: {0} {1}"
-
+#, c++-format
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Usando o perfil {0}, o formato de pixel {1}."
 
+#, c++-format
 msgid "Using preset {0}."
 msgstr "Usando o predefinido {0}."
 
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr "Informações do buffer offscreen: {0}"
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr "Informao da imagem: {0} {1}"
+
+#, c++-format
+msgid "Output info: {0} {1}"
+msgstr "Informaes sobre a sada: {0} {1}"
+
+#, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Salvar filme sem udio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
 msgstr "Salvar filme com udio%<PRId64> -%<PRId64>"
 
+#, c-format
 msgid "Saving Audio %<PRId64> - %<PRId64>"
 msgstr "Salvar udio %<PRId64> - %<PRId64>"
 
+#, c-format
 msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgstr "Gravar imagens sem udio %<PRId64> - %<PRId64>"
 
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "udio apenas na linha do tempo, mas no tentando salvar udio."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Formato e tipo OpenGL invlidos"
-
-msgid "OpenGL info: {0}"
-msgstr "Informaes do OpenGL: {0}"
-
+#, c++-format
 msgid "Saving... {0}"
 msgstr "Salvar... {0}"
 
-msgid "Unsupported output format"
-msgstr "Formato de saída não suportado"
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr "Dados de vídeo vazios no tempo {0}. Repetir o quadro."
-
+#, c++-format
 msgid "Render size: {0}"
 msgstr "Tamanho de renderização: {0}"
 
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "Informações da Camada de Imagem '{0}': {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Informações do buffer offscreen: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Formato de saída não suportado: "
+#, c++-format
+msgid "Saved '{0}'."
+msgstr "'{0}' salvo."
 
 msgid "2.35"
 msgstr "2.35"
@@ -3707,20 +4391,53 @@ msgstr "1.85"
 msgid "1.66"
 msgstr "1.66"
 
+#, c-format
 msgid "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgstr "PMem: %<PRIu64> / %<PRIu64> MB VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "Cache: "
 
+#, c++-format
+msgid "HDR monitor min. nits = {0}"
+msgstr "Brilho mínimo do monitor HDR (nits) = {0}"
+
+#, c++-format
+msgid "HDR monitor max. nits = {0}"
+msgstr "Brilho máximo do monitor HDR (nits) = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR não encontrado ou não configurado."
+
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "Monitor HDR não detectado pelo Vulkan ou pelo gerenciador de janelas."
+
+#, c++-format
+msgid "Vulkan color space is {0}"
+msgstr "O espaço de cor Vulkan é {0}"
+
+#, c++-format
+msgid "Vulkan format is {0}"
+msgstr "O formato Vulkan é {0}"
+
+#, c++-format
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Alterado para o monitor HDR ativo no índice {0}"
+
+#, c++-format
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "Alterado para o monitor com suporte a HDR, mas inativo, no índice {0}"
+
+#, c++-format
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Alterado para monitor SDR no índice {0}"
+
 msgid "Edit Text"
 msgstr "Editar o Texto"
 
+#, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' não é um arquivo, diretório ou URL."
-
-msgid "Invalid font for text drawing"
-msgstr "Fonte invlida para desenho de texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No foi possvel converter a mensagem para forma:"
@@ -3734,9 +4451,11 @@ msgstr "Não é possível reproduzir – a anotação de áudio está vazia"
 msgid "Status is not saved"
 msgstr "O status não foi salvo"
 
+#, c++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "O arquivo de anotação de áudio {0} está ausente ou não existe!"
 
+#, c++-format
 msgid "Unhandled buffer format: {0} for output: {1}"
 msgstr "Formato de buffer não suportado: {0} para saída: {1}"
 
@@ -3842,6 +4561,7 @@ msgstr "Ficheiro/Fechar tudo"
 msgid "File/Save and Reload Session"
 msgstr "Ficheiro/Salvar e recarregar sessão"
 
+#, c-format
 msgid "File/Recent/%s"
 msgstr "Ficheiro/Recentes/%s"
 
@@ -4091,6 +4811,7 @@ msgstr "Reprodução/Anotação/Limpar"
 msgid "Playback/Annotation/Clear All"
 msgstr "Reprodução/Anotação/Limpar tudo"
 
+#, c-format
 msgid "View/Mask/%s"
 msgstr "Visualizar/Mscara/%s"
 
@@ -4163,9 +4884,11 @@ msgstr "Linha Do Tempo/Transies"
 msgid "Timeline/Markers"
 msgstr "Linha Do Tempo/Marcadores"
 
+#, c++-format
 msgid "Timeline/Visible Tracks/{0}"
 msgstr "Calendário/Pistas Visíveis/{0}"
 
+#, c++-format
 msgid "Timeline/Media Reference/{0}"
 msgstr "Linha Do Tempo/Referência de mídia/{0}"
 
@@ -4223,12 +4946,14 @@ msgstr "Imagem/Comparar o Modo/Vertical"
 msgid "Image/Compare Mode/Tile"
 msgstr "Imagem/Comparar o Modo/Telha"
 
+#, c-format
 msgid "Image/Go to/%s"
 msgstr "Imagem/Vá para/%s"
 
 msgid "Image/Compare/Toggle A and B"
 msgstr "Imagem/Comparar/Alternar A e B"
 
+#, c-format
 msgid "Image/Compare/%s"
 msgstr "Imagem/Comparar/%s"
 
@@ -4265,17 +4990,17 @@ msgstr "Editar/Tempo/Lacuna de áudio/Inserir"
 msgid "Edit/Time/Audio Gap/Remove"
 msgstr "Editar/Tempo/Lacuna de áudio/Remover"
 
-msgid "Edit/Selected/Add Transition"
-msgstr "Editar/Selecionado/Adicionar transição"
-
-msgid "Edit/Selected/Remove Items"
-msgstr "Editar/Selecionado/Remover itens"
-
 msgid "Edit/Time/Remove Clips"
 msgstr "Editar/Tempo/Remover clipes"
 
 msgid "Edit/Time/Slice"
 msgstr "Editar/Tempo/Cortar"
+
+msgid "Edit/Selected/Add Transition"
+msgstr "Editar/Selecionado/Adicionar transição"
+
+msgid "Edit/Selected/Remove Items"
+msgstr "Editar/Selecionado/Remover itens"
 
 msgid "Edit/Undo"
 msgstr "Editar/Desfazer"
@@ -4295,24 +5020,31 @@ msgstr "OCIO/Alternar"
 msgid "OCIO/Current"
 msgstr "OCIO/Atual"
 
+#, c-format
 msgid "OCIO/         ICS: %s"
 msgstr "OCIO/         ICS: %s"
 
+#, c-format
 msgid "OCIO/     Display: %s"
 msgstr "OCIO/     Display: %s"
 
+#, c-format
 msgid "OCIO/        View: %s"
 msgstr "OCIO/        View: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d Display: %s"
 msgstr "OCIO/  Monitor #%d Display: %s"
 
+#, c-format
 msgid "OCIO/  Monitor #%d    View: %s"
 msgstr "OCIO/  Monitor #%d    View: %s"
 
+#, c-format
 msgid "OCIO/        Look: %s"
 msgstr "OCIO/        Look: %s"
 
+#, c-format
 msgid "OCIO/        LUT: %s"
 msgstr "OCIO/        LUT: %s"
 
@@ -4364,6 +5096,7 @@ msgstr "Sincronizao/Aceitar/Anotaes"
 msgid "Sync/Accept/Audio"
 msgstr "Sincronizao/Aceitar/udio"
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function as a value or a tuple containing a Python "
 "function and a string with menu options in it."
@@ -4371,6 +5104,7 @@ msgstr ""
 "Em '{0}' esperava-se uma funo como um valor ou um tuple contendo uma funo "
 "Python e uma string com opes de menu nela."
 
+#, c++-format
 msgid ""
 "In '{0}' expected a function a tuple containing a Python function and a "
 "string with menu options in it."
@@ -4471,6 +5205,7 @@ msgstr "Modo de lista larga"
 msgid "Detail mode"
 msgstr "Modo de detalhe"
 
+#, c-format
 msgid ""
 "Could not create directory '%s'. You may not have permission to perform this"
 " operation."
@@ -4478,12 +5213,15 @@ msgstr ""
 "No foi possvel criar o diretrio %s. Poder no ter permisso para executar esta"
 " operao."
 
+#, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
 msgstr "Si è verificato un errore durante il tentativo di eliminare '%s'. %s"
 
+#, c-format
 msgid "File '%s' already exists!"
 msgstr "O ficheiro %s j existe!"
 
+#, c-format
 msgid "Unable to rename '%s' to '%s'"
 msgstr "No foi possvel renomear %s para %s"
 
@@ -4625,6 +5363,7 @@ msgstr "Activo comprimido OpenUSD"
 msgid "OpenUSD ASCII Asset"
 msgstr "Activo OpenUSD ASCII"
 
+#, c-format
 msgid "Another process using the file."
 msgstr "Outro processo usando o arquivo."
 
@@ -4724,9 +5463,11 @@ msgstr "Com msvc"
 msgid "mrv2 depends on:"
 msgstr "o mrv2 depende de:"
 
+#, c++-format
 msgid "Total Physical Memory: {0} Gb"
 msgstr "Memória física total: {0} GB"
 
+#, c++-format
 msgid "Total Virtual Memory: {0} Gb"
 msgstr "Memória virtual total: {0} GB"
 
@@ -4778,6 +5519,7 @@ msgstr "Caixa de Arrastar"
 msgid "Unknown type for mrvOCIOBrowser"
 msgstr "Tipo desconhecido para mrvoCIOBrowser"
 
+#, c++-format
 msgid ""
 "Wayland Compositor supports Float on Top only through hotkeys.  Press {0}."
 msgstr ""
@@ -4791,6 +5533,7 @@ msgstr ""
 "O Wayland não suporta Float on Top. Use o seu Gestor de Janelas para definir"
 " uma tecla quente para ele."
 
+#, c++-format
 msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr ""
 "Nenhuma tecla GNOME Shell para flutuar em cima. Definindo globalmente para "
@@ -4843,6 +5586,9 @@ msgstr "Ficheiro/Clone"
 msgid "&File/&Refresh Cache"
 msgstr "Ficheiro/Refrescar a Cache"
 
+msgid "&File/Reload Media"
+msgstr "&Arquivo/Recarregar mídia"
+
 msgid "&Copy/&Filename"
 msgstr "Copiado/Nome do ficheiro"
 
@@ -4882,6 +5628,7 @@ msgstr "Alcance"
 msgid "Mean"
 msgstr "Mdia"
 
+#, c-format
 msgid "Track #%d - %s"
 msgstr "Faixa #%d - %s"
 
@@ -4897,6 +5644,7 @@ msgstr "Remover a nota atual."
 msgid "No annotations added yet."
 msgstr "Nenhuma anotação foi adicionada ainda."
 
+#, c++-format
 msgid "This frame already has a note at {0}, frame {1}."
 msgstr "Este quadro já possui uma nota em {0}, quadro {1}."
 
@@ -5198,6 +5946,9 @@ msgid ""
 "        balance disk space vs. quality.\n"
 "        Good for high-end delivery for either Web or \n"
 "        online review.\n"
+"        It is currently the only format that supports\n"
+"        dynamic per-frame HDR, perfect companion for\n"
+"        vmrv2.\n"
 "  Cineform - codec developed by GoPro, that rivals \n"
 "             ProRes in features, except for HDR.  \n"
 "             It was discontinued in 2021, but most \n"
@@ -5213,6 +5964,11 @@ msgid ""
 "  HAP - RGB/A codec which is optimized for fast playback with\n"
 "        CPU decoding.  It does not compress that well.\n"
 "        It needs hap-alpha* presets to save alpha channel.\n"
+"  HEVC - Only supported on HW due to license and patent\n"
+"         restrictions.\n"
+"  OAPV - A competitor to VP9 that offers better YUV formats with\n"
+"         support for an alpha channel, but no HDR yet.\n"
+"\n"
 "\n"
 "  Hardware encoding is only supported on newer MacBook\n"
 "  Pro with M1 or newer chips.  H264, Prores, VP9 and\n"
@@ -5222,7 +5978,7 @@ msgid ""
 msgstr ""
 "\n"
 "  A configuração de Perfil permite selecionar\n"
-"  o codec e o perfil para salvar o vídeo.\n"
+"  o codec e o perfil para salvar vídeos.\n"
 "\n"
 "  Cada perfil tem suas vantagens e desvantagens.\n"
 "\n"
@@ -5257,6 +6013,9 @@ msgstr ""
 "        equilibrar espaço em disco e qualidade.\n"
 "        Bom para entrega de alta qualidade tanto pela Web quanto\n"
 "        para revisão online.\n"
+"        Atualmente, é o único formato que oferece suporte a HDR\n"
+"        dinâmico por quadro, sendo o complemento perfeito para o\n"
+"        vmrv2.\n"
 "  Cineform - Codec desenvolvido pela GoPro que rivaliza com o\n"
 "             ProRes em recursos, exceto em HDR.\n"
 "             Foi descontinuado em 2021, mas muitos pacotes ainda\n"
@@ -5266,16 +6025,22 @@ msgstr ""
 "             com transparência.\n"
 "  AV1 - Codec de nova geração que está ganhando suporte do\n"
 "        Google, Netflix e Amazon. Comprime melhor que VP9\n"
-"        ou H264 com a mesma qualidade, mas requer mais\n"
-"        recursos computacionais. Ideal para revisões de vídeo.\n"
+"        ou H264 com a mesma qualidade, mas requer mais recursos\n"
+"        computacionais. Ideal para revisões de vídeo.\n"
 "  HAP - Codec RGB/A otimizado para reprodução rápida com\n"
 "        decodificação por CPU. Não oferece uma compressão tão boa.\n"
 "        Requer predefinições hap-alpha* para salvar o canal alfa.\n"
+"  HEVC - Suportado apenas por hardware devido a restrições\n"
+"         de licença e patentes.\n"
+"  OAPV - Um concorrente do VP9 que oferece melhores formatos YUV\n"
+"         com suporte a canal alfa, mas ainda sem HDR.\n"
+"\n"
 "\n"
 "  A codificação por hardware é suportada apenas nos MacBook Pro\n"
-"  mais recentes com chips M1 ou superiores. H264, ProRes, VP9 e\n"
+"  mais recentes com chips M1 ou posteriores. H264, ProRes, VP9 e\n"
 "  AV1 são suportados ou terão suporte em breve.\n"
-"  A NVIDIA oferece suporte a H264, HEVC e, dependendo do hardware e dos drivers, AV1.\n"
+"  A NVIDIA oferece suporte a H264, HEVC e, dependendo do hardware\n"
+"  e dos drivers, AV1.\n"
 "  "
 
 msgid "Pixel Format Help"
@@ -5826,6 +6591,9 @@ msgstr "Grupo de Telha"
 msgid "ViewGroup"
 msgstr "Grupo de Telha"
 
+msgid "Clip Selection Tool."
+msgstr "Ferramenta de seleção de clipes."
+
 msgid "Undo Last Edit."
 msgstr "Desfazer a última edição."
 
@@ -5931,6 +6699,15 @@ msgstr "Prompt de IA"
 msgid "AI prompt to feed the image to AI."
 msgstr "Prompt de IA para enviar a imagem à IA."
 
+msgid "Baked Display HDR"
+msgstr "HDR de exibição integrado"
+
+msgid "Scene Linear HDR"
+msgstr "HDR linear da cena"
+
+msgid "Baked Display SDR"
+msgstr "SDR de exibição integrado"
+
 msgid "Half"
 msgstr "Metade"
 
@@ -5952,6 +6729,12 @@ msgstr "Apenas quadros de anotação"
 msgid "Save only the annotation frames, not the whole sequence."
 msgstr "Guarde apenas os quadros de anotação, não toda a sequência."
 
+msgid "Export Mode"
+msgstr "Modo de exportação"
+
+msgid "HDR (Vulkan) Export mode."
+msgstr "Modo de exportação HDR (Vulkan)."
+
 msgid "OpenEXR Options"
 msgstr "Opes OpenEXR"
 
@@ -5967,8 +6750,14 @@ msgstr "Tipo de compresso da OpenEXR"
 msgid "ZIP Compression"
 msgstr "Compresso ZIP"
 
+msgid "zstd Compression"
+msgstr "Compressão zstd"
+
 msgid "DWA Compression"
 msgstr "Compresso DWA"
+
+msgid "Lossy HTJ2K"
+msgstr "HTJ2K com perdas"
 
 msgid "Contents"
 msgstr "Conteúdo"
@@ -6210,14 +6999,23 @@ msgstr "CG"
 msgid "Studio"
 msgstr "Studio"
 
-msgid "Black Frame"
+msgid "Error Frame"
+msgstr "Quadro de erro"
+
+msgid "Hold Frame"
+msgstr "Manter quadro"
+
+msgid "Scratched Frame"
+msgstr "Quadro riscado"
+
+msgid "Black  Frame"
 msgstr "Quadro preto"
 
-msgid "Repeat  Frame"
-msgstr "Repetir o Quadro"
+msgid "Skip Frame"
+msgstr "Pular quadro"
 
-msgid "Scratched  Frame"
-msgstr "Quadro rasgado"
+msgid "Gap Frame"
+msgstr "Quadro de lacuna"
 
 msgid "Always"
 msgstr "Sempre"
@@ -6693,14 +7491,6 @@ msgstr "Painel de comparação"
 msgid "How to display timeline thumbnails in Compare Panel."
 msgstr "Como exibir as miniaturas da linha do tempo no painel de comparação."
 
-msgid "Playlist Panel"
-msgstr "Painel de listas de reprodução"
-
-msgid "How to display timeline thumbnails in Playlist Panel."
-msgstr ""
-"Como exibir as miniaturas da linha do tempo no painel de listas de "
-"reprodução."
-
 msgid "Stereo Panel"
 msgstr "Painel estéreo"
 
@@ -7066,6 +7856,28 @@ msgstr ""
 
 msgid "Missing Frame"
 msgstr "Quadro Faltado"
+
+msgid "Black Frame"
+msgstr "Quadro preto"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"Ao carregar imagens, esta configuração determina o que fazer com os quadros ausentes (pode ser necessário recarregar ou clonar a sequência):\n"
+"\t* Quadro de erro\t   - Relata um erro.\n"
+"\t* Manter quadro\t   - Mantém o último quadro lido.\n"
+"\t* Quadro riscado  - Mantém o último quadro lido,\n"
+"                             mas desenha uma cruz vermelha.\n"
+"\t* Quadro preto\t   - Substitui o quadro atual por preto.\n"
+"\t* Pular quadro\t   - Pula o quadro atual.\n"
+"\t* Quadro de lacuna\t   - Adiciona uma lacuna .otio para os quadros ausentes."
 
 msgid "Path Mappings"
 msgstr "Mapas do Caminho"
@@ -7613,24 +8425,31 @@ msgstr "Dividir"
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 
+#, c++-format
 msgid "Unknown licese plan '{0}'"
 msgstr "Plano de licença desconhecido '{0}'"
 
+#, c++-format
 msgid "License plan '{0}'"
 msgstr "Plano de licença «{0}»"
 
+#, c++-format
 msgid "Supports annotations '{0}'"
 msgstr "Suporta anotações «{0}»"
 
+#, c++-format
 msgid "Supports editing '{0}'"
 msgstr "Suporta edição «{0}»"
 
+#, c++-format
 msgid "Supports layers '{0}'"
 msgstr "Suporta camadas «{0}»"
 
+#, c++-format
 msgid "Supports python '{0}'"
 msgstr "Suporta Python «{0}»"
 
+#, c++-format
 msgid "Supports voice annotations '{0}'"
 msgstr "Suporta anotações de voz «{0}»"
 
@@ -7643,9 +8462,11 @@ msgstr "Vinculada ao computador"
 msgid "Floating"
 msgstr "Flutuante"
 
+#, c++-format
 msgid "Found floating license at '{0}'"
 msgstr "Licença flutuante encontrada em '{0}'"
 
+#, c++-format
 msgid "Did not find floating license at '{0}'"
 msgstr "Licença flutuante não encontrada em '{0}'"
 
@@ -7655,12 +8476,15 @@ msgstr "Data de expiração inválida"
 msgid "License expired"
 msgstr "Licença expirada"
 
+#, c++-format
 msgid "{0} is not readable. Using system default."
 msgstr "{0} não pode ser lido. Usando o padrão do sistema."
 
+#, c++-format
 msgid "{0} Active Licenses from {1}."
 msgstr "{0} licenças ativas de {1}."
 
+#, c++-format
 msgid "Valid license for {0}"
 msgstr "Licença válida para {0}"
 
@@ -7670,6 +8494,7 @@ msgstr "Não foi possível liberar a licença flutuante."
 msgid "Released Floating License"
 msgstr "Licença flutuante liberada"
 
+#, c++-format
 msgid "Your {0} license will expire on {1}."
 msgstr "Sua licença {0} expirará em {1}."
 
@@ -8159,6 +8984,9 @@ msgstr "Modo de arranque"
 msgid "Area Selection Mode"
 msgstr "Modo de Seleco de reas"
 
+msgid "Draw Mode"
+msgstr "Modo de desenho"
+
 msgid "Erase Mode"
 msgstr "Modo de eliminao"
 
@@ -8267,32 +9095,81 @@ msgstr "falhou o host_statistics64"
 msgid "task info failed"
 msgstr "Falhou a informao da tarefa"
 
-#~ msgid "HDR monitor min. nits = {0}"
-#~ msgstr "Brilho mínimo do monitor HDR (nits) = {0}"
+#~ msgid "Complexity"
+#~ msgstr "Complexidade"
 
-#~ msgid "HDR monitor max. nits = {0}"
-#~ msgstr "Brilho máximo do monitor HDR (nits) = {0}"
+#~ msgid "Stage Cache"
+#~ msgstr "Cache em estgio"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "Monitor HDR não encontrado ou não configurado."
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Cache de disco em GB"
 
-#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
-#~ msgstr "Monitor HDR não detectado pelo Vulkan ou pelo gerenciador de janelas."
+#, c++-format
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "Informaes sobre a imagem rotativa: {0}"
 
-#~ msgid "Vulkan color space is {0}"
-#~ msgstr "O espaço de cor Vulkan é {0}"
+#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr ""
+#~ "Imagem muito grande para salvar anotações. Irá escalar para o tamanho do "
+#~ "viewport."
 
-#~ msgid "Vulkan format is {0}"
-#~ msgstr "O formato Vulkan é {0}"
+#, c++-format
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Formato e tipo OpenGL invlidos"
 
-#~ msgid "Changed to HDR active monitor at index {0}"
-#~ msgstr "Alterado para o monitor HDR ativo no índice {0}"
+#, c++-format
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "Informaes do OpenGL: {0}"
 
-#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
-#~ msgstr "Alterado para o monitor com suporte a HDR, mas inativo, no índice {0}"
+#~ msgid "Unsupported output format"
+#~ msgstr "Formato de saída não suportado"
 
-#~ msgid "Changed to SDR monitor at index {0}"
-#~ msgstr "Alterado para monitor SDR no índice {0}"
+#, c++-format
+#~ msgid "Empty video data at time {0}.  Repeating frame."
+#~ msgstr "Dados de vídeo vazios no tempo {0}. Repetir o quadro."
+
+#, c++-format
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "Informações da Camada de Imagem '{0}': {1} {2}"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Formato de saída não suportado: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Fonte invlida para desenho de texto"
+
+#~ msgid "Remove audio gap(s) at the ones at current time."
+#~ msgstr "Remover intervalo(s) de áudio no tempo atual."
+
+#~ msgid "Repeat  Frame"
+#~ msgstr "Repetir o Quadro"
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Obter o diretrio de udio de sequncia de arquivos."
+
+#~ msgid "Filter EDLs"
+#~ msgstr "Filtro EDLs"
+
+#~ msgid "Playlist Panel"
+#~ msgstr "Painel de listas de reprodução"
+
+#~ msgid "How to display timeline thumbnails in Playlist Panel."
+#~ msgstr ""
+#~ "Como exibir as miniaturas da linha do tempo no painel de listas de "
+#~ "reprodução."
+
+#~ msgid "Linearize EXR"
+#~ msgstr "Linearizar EXR"
+
+#~ msgid ""
+#~ "If saving an EXR, try to linearize the result and save metadata to later use"
+#~ " with OpenImageIO.  Note:  this may not match exactly movies with "
+#~ "libplacebo, as they use slightly different math."
+#~ msgstr ""
+#~ "Ao salvar um EXR, tente linearizar o resultado e salvar os metadados para "
+#~ "uso posterior com o OpenImageIO.  Observação: isso pode não corresponder "
+#~ "exatamente aos filmes processados com o libplacebo, pois eles usam cálculos "
+#~ "ligeiramente diferentes."
 
 #~ msgid "BGR"
 #~ msgstr "BGR"
@@ -8861,9 +9738,6 @@ msgstr "Falhou a informao da tarefa"
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
 
-#~ msgid "Video Levels Legal Range HDR"
-#~ msgstr "Níveis de vídeo - faixa legal HDR"
-
 #~ msgid "Enter a UR."
 #~ msgstr "Insira uma URL."
 
@@ -8949,9 +9823,6 @@ msgstr "Falhou a informao da tarefa"
 #~ msgstr ""
 #~ "お使いのWaylandコンポジタはFloat on "
 #~ "Topをサポートしていません。ウィンドウのタイトルバーで右クリックし、［その他の操作］→［常に最前面に表示］を選択してください。"
-
-#~ msgid "Load Movie or Sequence"
-#~ msgstr "Carregar filme ou sequncia"
 
 #~ msgid "uiMenuBar"
 #~ msgstr "Barra de Menus"

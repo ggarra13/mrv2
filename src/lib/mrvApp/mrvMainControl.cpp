@@ -306,6 +306,7 @@ namespace mrv
         App* app = p.ui->app;
         p.volume = app->volume();
         p.mute = app->isMuted();
+        MyViewport* view = p.ui->uiView;
 
         const auto model = app->filesModel();
         const auto files = model->observeFiles()->get();
@@ -414,9 +415,12 @@ namespace mrv
             }
 
             // Set color channel (layer)
+
             int layer = player->videoLayer();
             if (layer >= 0 && layer < p.ui->uiColorChannel->children())
-                p.ui->uiColorChannel->value(layer);
+            {
+                view->updateVideoLayers(layer);
+            }
         }
         else
         {
@@ -432,7 +436,6 @@ namespace mrv
             c->uiVolume->redraw();
         }
 
-        MyViewport* view = p.ui->uiView;
         view->setCompareOptions(p.compareOptions);
 
         p.ocioOptions = view->getOCIOOptions();

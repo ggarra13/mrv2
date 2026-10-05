@@ -4,6 +4,7 @@
 
 #include "mrViewer.h"
 
+#include "mrvEdit/mrvEditAlgorithm.h"
 #include "mrvEdit/mrvEditCallbacks.h"
 #include "mrvEdit/mrvEditUtil.h"
 
@@ -16,29 +17,13 @@
 
 #include "mrvNetwork/mrvTCP.h"
 
-#include "mrvOS/mrvI8N.h"
+#include "mrvWidgets/mrvProgressReport.h"
+
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
 
-#include <tlTimeline/Timeline.h>
-#include <tlTimeline/Util.h>
+#include "mrvOS/mrvI8N.h"
 
-#include <tlIO/System.h>
-
-#include <tlCore/Path.h>
-#include <tlCore/File.h>
-#include <tlCore/FileInfo.h>
-#include <tlCore/StringFormat.h>
-
-#include <tlDraw/Annotation.h>
-
-#include <opentimelineio/clip.h>
-#include <opentimelineio/editAlgorithm.h>
-#include <opentimelineio/externalReference.h>
-#include <opentimelineio/gap.h>
-#include <opentimelineio/imageSequenceReference.h>
-#include <opentimelineio/timeline.h>
-#include <opentimelineio/transition.h>
 
 #include <set>
 #include <fstream>
@@ -48,6 +33,26 @@
 namespace fs = std::filesystem;
 
 #include <FL/fl_utf8.h>
+
+#include <tlTimeline/Util.h>
+
+#include <tlDraw/Annotation.h>
+
+#include <tlIO/System.h>
+
+#include <tlCore/Path.h>
+#include <tlCore/File.h>
+#include <tlCore/FileInfo.h>
+#include <tlCore/StringFormat.h>
+
+#include <opentimelineio/clip.h>
+#include <opentimelineio/editAlgorithm.h>
+#include <opentimelineio/externalReference.h>
+#include <opentimelineio/gap.h>
+#include <opentimelineio/imageSequenceReference.h>
+#include <opentimelineio/timeline.h>
+#include <opentimelineio/transition.h>
+
 
 
 
@@ -95,6 +100,7 @@ namespace mrv
         static std::vector<UndoRedo> undoBuffer;
         static std::vector<UndoRedo> redoBuffer;
 
+
         std::vector<Composition*> getTracks(OTIO_NS::Timeline* timeline)
         {
             std::vector<Composition*> out;
@@ -116,15 +122,70 @@ namespace mrv
             return getTracks(timeline);
         }
 
-        RationalTime getTime(TimelinePlayer* player)
+        OTIO_NS::Item* toItem(OTIO_NS::Timeline* timeline,
+                              const timeline::MoveData& move)
         {
-            const auto& timeline_range = player->timeRange();
-            const auto& startTime = timeline_range.start_time();
-            const auto time = player->currentTime() - startTime;
-            return time;
+            OTIO_NS::Item* out = nullptr;
+            if (move.fromTrack >= 0 &&
+                move.fromTrack < timeline->tracks()->children().size())
+            {
+                if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
+                        timeline->tracks()->children()[move.fromTrack]))
+                {
+                    out = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(track->children()[move.fromIndex]);
+                }
+            }
+            return out;
         }
 
-        const OTIO_NS::Timeline* createTimelineFromString(const std::string& s)
+        OTIO_NS::Transition* toTransition(OTIO_NS::Timeline* timeline,
+                                          const timeline::MoveData& move)
+        {
+            OTIO_NS::Transition* out = nullptr;
+            if (move.fromTrack >= 0 &&
+                move.fromTrack < timeline->tracks()->children().size())
+            {
+                if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
+                        timeline->tracks()->children()[move.fromTrack]))
+                {
+                    out = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Transition>(track->children()[move.fromIndex]);
+                }
+            }
+            return out;
+        }
+
+        std::vector<OTIO_NS::Transition*>
+        getSelectedTransitions(OTIO_NS::Timeline* timeline,
+                               const std::vector<timeline::MoveData>& moves)
+        {
+            std::vector<OTIO_NS::Transition*> out;
+            for (auto move : moves)
+            {
+                out.push_back(toTransition(timeline, move));
+            }
+            return out;
+        }
+
+        std::vector<OTIO_NS::Item*> getSelectedItems(OTIO_NS::Timeline* timeline,
+                                                     const std::vector<timeline::MoveData>& moves)
+        {
+            std::vector<OTIO_NS::Item*> out;
+            for (auto move : moves)
+            {
+                out.push_back(toItem(timeline, move));
+            }
+            return out;
+        }
+
+        OTIO_NS::RationalTime getTime(TimelinePlayer* player)
+        {
+            const OTIO_NS::TimeRange timeline_range = player->timeRange();
+            const OTIO_NS::RationalTime startTime = timeline_range.start_time();
+            const OTIO_NS::RationalTime out = player->currentTime() - startTime;
+            return out;
+        }
+
+        OTIO_NS::Timeline* createTimelineFromString(const std::string& s)
         {
             OTIO_NS::ErrorStatus error;
             auto timeline = dynamic_cast<OTIO_NS::Timeline*>(
@@ -138,6 +199,13 @@ namespace mrv
                 return nullptr;
             }
             return timeline;
+        }
+
+        OTIO_NS::Timeline* duplicateTimeline(const OTIO_NS::Timeline* orig)
+        {
+            const std::string json = orig->to_json_string();
+            auto out = createTimelineFromString(json);
+            return out;
         }
 
         int getIndex(const OTIO_NS::Composable* composable)
@@ -290,7 +358,6 @@ namespace mrv
                 ref->set_target_url_base(directory);
             }
         }
-
 
         void makeMediaAbsolute(OTIO_NS::MediaReference* media,
                                const std::string& directory,
@@ -468,7 +535,7 @@ namespace mrv
                         continue;
                     auto media = clip->media_reference();
                     if (auto ref =
-                            dynamic_cast<OTIO_NS::ExternalReference*>(media))
+                        dynamic_cast<OTIO_NS::ExternalReference*>(media))
                     {
                         file::Path urlPath(ref->target_url());
                         urlPath = getRelativePath(urlPath, otioFilePath);
@@ -476,7 +543,7 @@ namespace mrv
                     }
                     else if (
                         auto ref =
-                            dynamic_cast<OTIO_NS::ImageSequenceReference*>(media))
+                        dynamic_cast<OTIO_NS::ImageSequenceReference*>(media))
                     {
                         file::Path urlPath(
                             ref->target_url_base() + "/" + ref->name_prefix());
@@ -485,6 +552,19 @@ namespace mrv
                     }
                 }
             }
+        }
+
+
+        bool isOTIOZ()
+        {
+            auto model = App::app->filesModel();
+            auto item = model->observeA()->get();
+            if (!item)
+                return false;
+
+            auto path = item->path;
+
+            return file::isOTIOZ(path);
         }
 
         //! This routine makes paths absolute to /tmp directory if possible.
@@ -498,7 +578,8 @@ namespace mrv
             if (!item)
                 return;
             auto path = item->path;
-            auto audioPath = item->audioPath.isEmpty() ? path : item->audioPath;
+            auto audioPath = item->audioPath.isEmpty() ? path :
+                             item->audioPath;
 
             if (!file::isOTIOZ(path))
                 return;
@@ -558,7 +639,6 @@ namespace mrv
             }
         }
 
-
         std::string _otioFilename(ViewerUI* ui)
         {
             char buf[256];
@@ -571,55 +651,87 @@ namespace mrv
             return out;
         }
 
-        void toOtioFile(OTIO_NS::Timeline* timeline, ViewerUI* ui)
+        void toOtioFile(OTIO_NS::Timeline* otioTimeline, ViewerUI* ui)
         {
             auto model = ui->app->filesModel();
             int index = model->observeAIndex()->get();
             if (index < 0)
                 return;
 
-            auto destItem = model->observeA()->get();
-            auto path = destItem->path;
+            auto timeline = otioTimeline;
+
+            auto item = model->observeA()->get();
+            auto path = item->path;
             auto stack = timeline->tracks();
             auto tracks = stack->children();
             if (tracks.size() < 1)
                 return;
 
-            bool create = false;
+            bool reloadMedia = false;
+            bool refreshCache = true; //hasEmptyTracks(stack);
+
             std::string otioFile;
-
-            bool refreshCache = hasEmptyTracks(stack);
-
             if (file::isTemporaryEDL(path))
             {
                 otioFile = path.get();
             }
             else
             {
-                create = true;
                 otioFile = otioFilename(ui);
                 if (file::isOTIOZ(path))
                 {
+                    ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
+                                                                  _("Unzipping"));
+                    progress->show();
+                    Fl::check();
+
                     std::string dir = mrv::tmppath() + "/media";
-                    destItem->timeline->expandOTIOZ(dir);
-                    destItem->timeline.reset();
+                    item->timeline->expandOTIOZ(dir, [&](
+                                                        bool& aborted,
+                                                        const std::string& title,
+                                                        size_t done,
+                                                        size_t total)
+                        {
+                            // Safely update the UI
+                            progress->set_end(total);
+                            progress->set_value(done);
+
+                            if (!progress->window() ||
+                                (progress->window() &&
+                                 !progress->window()->shown()))
+                                aborted = true;
+
+                            Fl::check();
+                        });
+
+                    delete progress;
+
+                    // Change paths in OTIO timeline to point to /tmp/media
                     makePathsToTemp(timeline, ui);
 
-                    // needed to update Files Panel and I/O cache.
+                    // Reset the item's timeline::Timeline
+                    item->timeline.reset();
+
+                    // Needed to reload the movie and change it from .otioz to
+                    // EDL0x****.otio
+                    reloadMedia = true;
+
+                    // Needed to refresh the file caches.
                     refreshCache = true;
                 }
             }
 
             timeline->to_json_file(otioFile);
-            destItem->path = file::Path(otioFile);
+            item->path = file::Path(otioFile);
+
+            if (reloadMedia)
+            {
+                refresh_media_cb(nullptr, ui);
+            }
 
             if (refreshCache)
             {
                 refresh_file_cache_cb(nullptr, ui);
-            }
-            else if (create)
-            {
-                panel::refreshThumbnails();
             }
         }
 
@@ -886,14 +998,31 @@ namespace mrv
         makePathsAbsolute(timeline, ui);
     }
 
-    void edit_store_undo(TimelinePlayer* player, ViewerUI* ui)
+    // \@note: Player is a reference, as it can mutate after toOtioFile.
+    void edit_store_undo(TimelinePlayer*& player, ViewerUI* ui)
     {
+        auto oldPlayer = player;
+
+        UndoRedo buffer;
+        buffer.annotations = player->getAllAnnotations();
+
+        player->stop();
+        const OTIO_NS::RationalTime time = player->currentTime();
+
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
-        auto view = ui->uiView;
 
-        makePathsAbsolute(timeline, ui);
+        timeline = duplicateTimeline(timeline);
+        if (isOTIOZ())
+        {
+            makePathsToTemp(timeline, ui);
+        }
+        else
+        {
+            makePathsAbsolute(timeline, ui);
+        }
+        toOtioFile(timeline, ui);
 
         const std::string state = timeline->to_json_string();
         if (!undoBuffer.empty())
@@ -905,22 +1034,26 @@ namespace mrv
             }
         }
 
-        toOtioFile(timeline, ui);
-        UndoRedo buffer;
+        // Store timeline string and EDL name.
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
 
-        player = ui->uiView->getTimelinePlayer();
-        buffer.annotations = player->getAllAnnotations();
         undoBuffer.push_back(buffer);
-
         ui->uiUndoEdit->activate();
+
+        // Return new player if any.
+        player = ui->uiView->getTimelinePlayer();
+        // Update player's timeline and timeline viewport (uiTimeline).
+        updateTimeline(timeline, time, ui);
     }
 
     void edit_clear_redo(ViewerUI* ui)
     {
         redoBuffer.clear();
         ui->uiRedoEdit->deactivate();
+
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
     }
 
     bool edit_has_undo()
@@ -959,18 +1092,35 @@ namespace mrv
         ui->uiRedoEdit->activate();
     }
 
-    void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_frame_copy_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Copy a Frame."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        player->stop();
-
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
-        makePathsAbsolute(timeline, ui);
+
+        if (isOTIOZ())
+        {
+            makePathsToTemp(timeline, ui);
+        }
+        else
+        {
+            makePathsAbsolute(timeline, ui);
+        }
 
         const auto time = getTime(player);
 
@@ -993,26 +1143,38 @@ namespace mrv
         tcp->pushMessage("Edit/Frame/Copy", time);
     }
 
-    void edit_cut_frame_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_frame_cut_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Cut a Frame."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        edit_copy_frame_cb(m, ui);
+        auto time = getTime(player);
+
+        edit_frame_copy_cb(m, ui);
+
+        edit_store_undo(player, ui);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
+
         auto tracks = timeline->tracks()->children();
 
-        const auto startTime = player->timeRange().start_time();
-        const auto time = player->currentTime() - startTime;
         const auto one_frame = RationalTime(1.0, time.rate());
         const auto half_frame = RationalTime(0.4, time.rate());
         const RationalTime out_time = time + one_frame;
-
-        edit_store_undo(player, ui);
 
         OTIO_NS::ErrorStatus errorStatus;
         for (const auto& frame : copiedFrames)
@@ -1063,22 +1225,30 @@ namespace mrv
         updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
 
-
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
         tcp->pushMessage("Edit/Frame/Cut", time);
     }
 
-    void edit_paste_frame_cb(Fl_Menu_* m, ViewerUI* ui)
+    // Works with .otioz
+    void edit_frame_paste_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Paste a Frame."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player || copiedFrames.empty())
             return;
 
-        player->stop();
+        const OTIO_NS::RationalTime time = getTime(player);
 
-        const auto time = getTime(player);
+        edit_store_undo(player, ui);
 
         auto timeline = player->getTimeline();
         if (!timeline)
@@ -1089,7 +1259,6 @@ namespace mrv
 
         auto tracks = stack->children();
 
-        edit_store_undo(player, ui);
 
         double videoRate = 0.F, sampleRate = 0.F;
 
@@ -1158,32 +1327,38 @@ namespace mrv
         edit_clear_redo(ui);
 
         updateTimeline(timeline, scaledTime, ui);
-
         toOtioFile(timeline, ui);
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
         tcp->pushMessage("Edit/Frame/Paste", time);
     }
 
-    void edit_insert_frame_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_frame_insert_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Insert a Cut or Copied Frame."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player || copiedFrames.empty())
             return;
 
-        player->stop();
+        const OTIO_NS::RationalTime time = getTime(player);
+
+        edit_store_undo(player, ui);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
-        const auto time = getTime(player);
         auto tracks = timeline->tracks()->children();
-
-        edit_store_undo(player, ui);
 
         double videoRate = 0.F, sampleRate = 0.F;
         for (const auto& frame : copiedFrames)
@@ -1219,7 +1394,7 @@ namespace mrv
             if (track->kind() != frame.kind)
                 continue;
 
-            OTIO_NS::algo::insert(item, track, scaledTime);
+            mrv::algo::insert(item, track, scaledTime);
             frame.item = item;
         }
 
@@ -1235,25 +1410,34 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
         tcp->pushMessage("Edit/Frame/Insert", time);
     }
 
 
-    void edit_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui)
+    // Works with .otioz
+    void edit_time_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Slice the timeline at the current "
+                                          "time."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        player->stop();
+        const OTIO_NS::RationalTime time = getTime(player);
 
         edit_store_undo(player, ui);
 
-        const auto& time = getTime(player);
-        const auto& tracks = getTracks(player);
+        const auto tracks = getTracks(player);
 
         auto timeline = player->getTimeline();
         if (!timeline)
@@ -1286,30 +1470,40 @@ namespace mrv
 
         edit_clear_redo(ui);
 
-        player->setTimeline(timeline);
+        updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
-        tcp->pushMessage("Edit/Slice", time);
+        tcp->pushMessage("Edit/Time/Slice", time);
     }
 
-    void edit_remove_clip_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_time_remove_clip_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Remove clip(s) at the current "
+                                          "time."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        const auto& time = getTime(player);
-        const auto& tracks = getTracks(player);
+        const OTIO_NS::RationalTime time = getTime(player);
+
+        edit_store_undo(player, ui);
+
+        const auto tracks = getTracks(player);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
         auto stack = timeline->tracks();
-
-        edit_store_undo(player, ui);
 
         const auto half_frame = RationalTime(0.4, time.rate());
 
@@ -1339,19 +1533,18 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
-        tcp->pushMessage("Edit/Remove", time);
+        tcp->pushMessage("Edit/Time/Remove", time);
     }
 
-    void edit_insert_audio_clip_cb(ViewerUI* ui, const std::string& audioFile)
+    void edit_time_insert_audio_clip(ViewerUI* ui,
+                                     const std::string& audioFile)
     {
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        const auto& time = getTime(player);
+        const OTIO_NS::RationalTime time = getTime(player);
+
         auto compositions = getTracks(player);
 
         auto timeline = player->getTimeline();
@@ -1430,7 +1623,7 @@ namespace mrv
         }
 
         auto context = App::app->getContext();
-        auto ioSystem = context->getSystem<io::System>();
+        auto ioSystem = context->getSystem<io::ReadSystem>();
 
         for (auto composition : compositions)
         {
@@ -1443,7 +1636,7 @@ namespace mrv
 
             auto sampleRate = track->trimmed_range().duration().rate();
 
-            auto rangeInTrack = opentime::TimeRange(
+            auto rangeInTrack = OTIO_NS::TimeRange(
                 range.start_time().rescaled_to(sampleRate),
                 range.duration().rescaled_to(sampleRate));
 
@@ -1464,7 +1657,7 @@ namespace mrv
             int audioIndex = track->index_of_child(audioItem);
 
             const timeline::Options options;
-            if (auto read = ioSystem->read(audioPath, options.ioOptions))
+            if (auto read = ioSystem->audioRead(audioPath, options.ioOptions))
             {
                 const auto info = read->getInfo().get();
                 if (!info.audio.isValid())
@@ -1515,27 +1708,51 @@ namespace mrv
                 refresh_media_cb(nullptr, ui);
         }
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
-        tcp->pushMessage("Edit/Audio Clip/Insert", audioFile);
+        tcp->pushMessage("Edit/Time/Audio Clip/Insert", audioFile);
     }
 
-    void insert_audio_clip_cb(Fl_Menu_* w, ViewerUI* ui)
+    void edit_time_insert_audio_clip_cb(Fl_Menu_* w, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Insert audio clip at the current "
+                                          "time."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         std::string audioFile = open_audio_file(nullptr);
         if (audioFile.empty())
             return;
-        edit_insert_audio_clip_cb(ui, audioFile);
+        edit_time_insert_audio_clip(ui, audioFile);
     }
 
-    void edit_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_time_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Insert audio gap(s) at the current "
+                                          "time."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        const auto& time = getTime(player);
+        const OTIO_NS::RationalTime time = getTime(player);
+
+        edit_store_undo(player, ui);
+
         auto compositions = getTracks(player);
 
         auto timeline = player->getTimeline();
@@ -1567,8 +1784,6 @@ namespace mrv
 
         if (!item || itemIndex < 0)
             return;
-
-        edit_store_undo(player, ui);
 
         auto itemRange = item->trimmed_range();
         auto range = item->trimmed_range_in_parent().value();
@@ -1620,7 +1835,7 @@ namespace mrv
 
             auto sampleRate = track->trimmed_range().duration().rate();
 
-            auto rangeInTrack = opentime::TimeRange(
+            auto rangeInTrack = OTIO_NS::TimeRange(
                 range.start_time().rescaled_to(sampleRate),
                 range.duration().rescaled_to(sampleRate));
 
@@ -1638,7 +1853,7 @@ namespace mrv
             modified = true;
 
             int audioIndex = track->index_of_child(audioItem);
-            auto audioClipRange = opentime::TimeRange(
+            auto audioClipRange = OTIO_NS::TimeRange(
                 itemRange.start_time().rescaled_to(sampleRate),
                 itemRange.duration().rescaled_to(sampleRate));
             OTIO_NS::Gap* gap = new Gap(audioClipRange);
@@ -1673,29 +1888,36 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
-        tcp->pushMessage("Edit/Audio Gap/Insert", time);
+        tcp->pushMessage("Edit/Time/Audio Gap/Insert", time);
     }
 
-    void edit_remove_audio_clip_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_time_remove_audio_clip_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Remove audio clips at the current "
+                                          "time."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        const auto& time = getTime(player);
+        const OTIO_NS::RationalTime time = getTime(player);
+
+        edit_store_undo(player, ui);
+
         auto compositions = getTracks(player);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
-
-        edit_store_undo(player, ui);
-
-        auto selected = ui->uiTimeline->getSelectedItems();
-
 
         bool modified = false;
         OTIO_NS::ErrorStatus errorStatus;
@@ -1714,22 +1936,6 @@ namespace mrv
             if (!clip)
                 continue;
 
-            if (!selected.empty())
-            {
-                bool found = false;
-                for (auto& item : selected)
-                {
-                    if (item == OTIO_NS::dynamic_retainer_cast<Item>(clip))
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) continue;
-            }
-
-
             int clipIndex = track->index_of_child(clip);
             if (clipIndex < 0 || clipIndex >= track->children().size())
                 continue;
@@ -1747,34 +1953,45 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
-        tcp->pushMessage("Edit/Audio Clip/Remove", time);
+        tcp->pushMessage("Edit/Time/Audio Clip/Remove", time);
     }
 
 
-    void edit_remove_selected_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_selected_remove_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Remove selected items."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        const auto& time = getTime(player);
+        const OTIO_NS::RationalTime time = getTime(player);
+        auto itemIndices = ui->uiTimeline->getSelectedItems();
+        auto transitionIndices = ui->uiTimeline->getSelectedTransitions();
+
+        edit_store_undo(player, ui);
+
         auto compositions = getTracks(player);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
 
-        edit_store_undo(player, ui);
-
         bool modified = false;
 
         OTIO_NS::ErrorStatus errorStatus;
-        auto selectedItems = ui->uiTimeline->getSelectedItems();
+        auto selected = getSelectedItems(timeline, itemIndices);
 
-        for (auto& item : selectedItems)
+        for (auto& item : selected)
         {
             for (auto composition : compositions)
             {
@@ -1804,13 +2021,14 @@ namespace mrv
             }
         }
 
-        auto selectedTransitions = ui->uiTimeline->getSelectedTransitions();
+        auto transitions = getSelectedTransitions(timeline,
+                                                  transitionIndices);
 
-        for (auto& item : selectedTransitions)
+        for (auto& item : transitions)
         {
             for (auto composition : compositions)
             {
-                auto track = dynamic_cast<OTIO_NS::Track*>(composition);
+                auto track = dynamic_cast<Track*>(composition);
                 if (!track)
                     continue;
 
@@ -1849,29 +2067,37 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
-        tcp->pushMessage("Edit/Remove Selected", time);
+        tcp->pushMessage("Edit/Selected/Remove", time);
     }
 
 
-    void edit_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_time_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Remove audio gap(s) at the current time."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
-        const auto& time = getTime(player);
+        const OTIO_NS::RationalTime time = getTime(player);
+        auto itemIndices = ui->uiTimeline->getSelectedItems();
+
+        edit_store_undo(player, ui);
+
         auto compositions = getTracks(player);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
-
-        edit_store_undo(player, ui);
-
-        auto selected = ui->uiTimeline->getSelectedItems();
 
         bool modified = false;
         OTIO_NS::ErrorStatus errorStatus;
@@ -1890,21 +2116,6 @@ namespace mrv
             if (!gap)
                 continue;
 
-            if (!selected.empty())
-            {
-                bool found = false;
-                for (auto& item : selected)
-                {
-                    if (item == OTIO_NS::dynamic_retainer_cast<Item>(gap))
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) continue;
-            }
-
             int gapIndex = track->index_of_child(gap);
             if (gapIndex < 0 || gapIndex >= track->children().size())
                 continue;
@@ -1922,14 +2133,22 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
-        tcp->pushMessage("Edit/Audio Gap/Remove", time);
+        tcp->pushMessage("Edit/Time/Audio Gap/Remove", time);
     }
 
-    void edit_insert_video_gap_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_time_insert_video_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Insert video gap(s) at current time."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -1985,7 +2204,7 @@ namespace mrv
 
             auto rate = track->trimmed_range().duration().rate();
 
-            auto rangeInTrack = opentime::TimeRange(
+            auto rangeInTrack = OTIO_NS::TimeRange(
                 range.start_time().rescaled_to(rate),
                 range.duration().rescaled_to(rate));
 
@@ -2004,7 +2223,7 @@ namespace mrv
             modified = true;
 
             int videoIndex = track->index_of_child(videoItem);
-            auto videoClipRange = opentime::TimeRange(
+            auto videoClipRange = OTIO_NS::TimeRange(
                 clipRange.start_time().rescaled_to(rate),
                 clipRange.duration().rescaled_to(rate));
             OTIO_NS::Gap* gap = new Gap(videoClipRange);
@@ -2031,7 +2250,6 @@ namespace mrv
         }
 
         updateTimeline(timeline, time, ui);
-
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -2039,29 +2257,36 @@ namespace mrv
 
         panel::redrawThumbnails();
 
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
-
-        tcp->pushMessage("Edit/Video Gap/Insert", time);
+        tcp->pushMessage("Edit/Time/Video Gap/Insert", time);
     }
 
 
-    void edit_remove_video_gap_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_time_remove_video_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Remove video gap(s) at current time."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
         const auto& time = getTime(player);
-        auto compositions = getTracks(player);
+
+        edit_store_undo(player, ui);
 
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
 
-        edit_store_undo(player, ui);
-
-        auto selected = ui->uiTimeline->getSelectedItems();
+        auto compositions = getTracks(player);
 
         bool modified = false;
         OTIO_NS::ErrorStatus errorStatus;
@@ -2084,22 +2309,6 @@ namespace mrv
             if (gapIndex < 0 || gapIndex >= track->children().size())
                 continue;
 
-
-            if (!selected.empty())
-            {
-                bool found = false;
-                for (auto& item : selected)
-                {
-                    if (item == OTIO_NS::dynamic_retainer_cast<Item>(gap))
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) continue;
-            }
-
             modified = true;
             track->remove_child(gapIndex);
         }
@@ -2112,9 +2321,6 @@ namespace mrv
             edit_clear_redo(ui);
 
         panel::redrawThumbnails();
-
-        App::unsaved_edits = true;
-        ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Video Gap/Remove", time);
     }
@@ -2146,7 +2352,7 @@ namespace mrv
         {
             std::string err = string::Format(
                 _("Items selected must be contiguous on the track. "
-                  "Left {0}.  Right {1}."))
+                  "Left {0}.  Right {0}."))
                               .arg(left_range)
                               .arg(right_range);
             LOG_ERROR(err);
@@ -2181,21 +2387,33 @@ namespace mrv
     }
 
 
-    void edit_add_transition_cb(Fl_Menu_* m, ViewerUI* ui)
+    void edit_selected_add_transition_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Add transition between 2 or 4 selected and contiguous items."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
 
+        auto itemIndices = ui->uiTimeline->getSelectedItems();
+        edit_store_undo(player, ui);
+
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
 
-        makePathsAbsolute(timeline, ui);
+        auto selection = getSelectedItems(timeline, itemIndices);
 
-
-        auto selection = ui->uiTimeline->getSelectedItems();
         if (selection.size() != 2 && selection.size() != 4)
         {
             std::string err =
@@ -2258,11 +2476,24 @@ namespace mrv
         updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
 
+        tcp->pushMessage("Edit/Selected/Add Transition", time);
+
         set_edit_mode_cb(EditMode::kFull, ui);
     }
 
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Undo Last Edit Operation."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -2305,6 +2536,17 @@ namespace mrv
 
     void edit_redo_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Redo Last Edit Operation."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -2352,7 +2594,7 @@ namespace mrv
     }
 
     void shiftAnnotations(
-        const opentime::TimeRange& range, const opentime::RationalTime& insertTime,
+        const OTIO_NS::TimeRange& range, const OTIO_NS::RationalTime& insertTime,
         const bool previous, ViewerUI* ui)
     {
         using namespace draw;
@@ -2545,6 +2787,18 @@ namespace mrv
 
     void save_timeline_to_disk_cb(Fl_Menu_* m, ViewerUI* ui)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Save the current timeline as an "
+                                          ".otio file."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
 
         auto otioFile = save_otio(nullptr);
         if (otioFile.empty())
@@ -2557,26 +2811,16 @@ namespace mrv
     {
         create_new_timeline_cb(ui);
         add_clip_to_timeline_cb(index, ui);
+        panel::redrawThumbnails();
     }
 
-    /**
-     * Given a destination timeline and a source timeline, append source
-     * timeline to destination timeline.  Destination timeline conserves all
-     * transitions and may have some gaps added if some track in source timeline
-     * it is missing from the destination timeline.
-     *
-     * @param destTimeline   destination timeline which will be modified
-     * @param sourceTimeline source timeline to append
-     * @param inOutRange     source's in/out range to append
-     * @param timeRange      source's time range
-     */
     void addTimelineToEDL(
         OTIO_NS::Timeline* destTimeline, const OTIO_NS::Timeline* sourceTimeline,
         const TimeRange& inOutRange, const TimeRange& timeRange)
     {
         OTIO_NS::ErrorStatus errorStatus;
         auto globalStartTime =
-            OTIO_NS::RationalTime(0.0, sourceTimeline->duration().rate());
+            RationalTime(0.0, sourceTimeline->duration().rate());
         auto startTimeOpt = sourceTimeline->global_start_time();
         if (startTimeOpt.has_value())
             globalStartTime = startTimeOpt.value();
@@ -2600,7 +2844,7 @@ namespace mrv
 
         if (destStartTime.strictly_equal(time::invalidTime))
         {
-            destStartTime = OTIO_NS::RationalTime(0.0, 24.0);
+            destStartTime = RationalTime(0.0, 24.0);
         }
 
         // Then, append video tracks
@@ -2632,8 +2876,7 @@ namespace mrv
             if (duration.value() > 0.0)
             {
                 auto gapRange =
-                    OTIO_NS::TimeRange(OTIO_NS::RationalTime(0.0, duration.rate()),
-                                    duration);
+                    TimeRange(RationalTime(0.0, duration.rate()), duration);
                 auto gap = new OTIO_NS::Gap(gapRange);
                 track->append_child(gap, &errorStatus);
                 if (is_error(errorStatus))
@@ -2670,6 +2913,28 @@ namespace mrv
                         itemTrackRange.start_time().rescaled_to(videoRate) +
                             globalStartTime.rescaled_to(videoRate),
                         itemTrackRange.duration().rescaled_to(videoRate));
+
+                    // file::PathOptions options;
+                    // auto clip = OTIO_NS::dynamic_retainer_cast<Clip>(child);
+                    // file::Path path;
+                    // if (clip)
+                    //     path = timeline::getPath(clip->media_reference(),
+                    //                              "",
+                    //                              options);
+
+                    // std::cerr << "---------------- " << path.get(-1,
+                    // file::PathType::FileName)
+                    //           << std::endl;
+                    // std::cerr << "      itemRange=" << itemRange
+                    //           << std::endl;
+                    // std::cerr << " itemTrackRange=" << itemTrackRange
+                    //           << std::endl;
+                    // std::cerr << "     inOutRange=" << inOutRange <<
+                    // std::endl; std::cerr << "    globalRange=" <<
+                    // videoGlobalRange
+                    //           << std::endl;
+                    // std::cerr << "videoInOutRange=" << videoInOutRange <<
+                    // std::endl;
 
                     if (videoInOutRange.intersects(videoGlobalRange))
                     {
@@ -2715,17 +2980,20 @@ namespace mrv
                 }
                 else
                 {
-                    auto transition = dynamic_cast<Transition*>(clone);
-                     if (transition)
-                    {
-                        track->append_child(transition);
-                        if (is_error(errorStatus))
-                        {
-                            LOG_DEBUG("track->append_child(transition) failed "
-                                      "with:");
-                            LOG_ERROR(errorStatus.full_description);
-                         }
-                    }
+                    // auto transition = dynamic_cast<Transition*>(clone);
+                    // if (transition)
+                    // {
+                    //     track->append_child(transition);
+                    //     if (is_error(errorStatus))
+                    //     {
+                    //         LOG_DEBUG("track->append_child(transition) failed
+                    //         with:"); LOG_ERROR(errorStatus.full_description);
+                    //     }
+                    // }
+                    // else
+                    // {
+                    //     LOG_ERROR("Unknown child " << child->name());
+                    // }
                 }
             }
         }
@@ -2745,7 +3013,7 @@ namespace mrv
                 if (duration.value() > 0.0)
                 {
                     auto gapRange =
-                        OTIO_NS::TimeRange(OTIO_NS::RationalTime(0.0, duration.rate()), duration);
+                        TimeRange(RationalTime(0.0, duration.rate()), duration);
                     auto gap = new OTIO_NS::Gap(gapRange);
                     track->append_child(gap, &errorStatus);
                     if (is_error(errorStatus))
@@ -2785,7 +3053,7 @@ namespace mrv
             if (duration.value() > 0.0)
             {
                 auto gapRange =
-                    OTIO_NS::TimeRange(OTIO_NS::RationalTime(0.0, duration.rate()), duration);
+                    TimeRange(RationalTime(0.0, duration.rate()), duration);
                 auto gap = new OTIO_NS::Gap(gapRange);
                 track->append_child(gap, &errorStatus);
                 if (is_error(errorStatus))
@@ -2867,34 +3135,25 @@ namespace mrv
                 }
                 else
                 {
-                    auto transition = dynamic_cast<Transition*>(clone);
-                    if (transition)
-                    {
-                        track->append_child(transition, &errorStatus);
-                        if (is_error(errorStatus))
-                        {
-                            LOG_DEBUG("track->append_child(transition) failed "
-                                      "with:");
-                            LOG_ERROR(errorStatus.full_description);
-                        }
-                    }
-                    else
-                    {
-                        LOG_ERROR("Unknown child " << child->name());
-                    }
+                    // auto transition = dynamic_cast<Transition*>(clone);
+                    // if (transition)
+                    // {
+                    //     track->append_child(transition, &errorStatus);
+                    //     if (is_error(errorStatus))
+                    //     {
+                    //         LOG_DEBUG("track->append_child(transition) failed
+                    //         with:"); LOG_ERROR(errorStatus.full_description);
+                    //     }
+                    // }
+                    // selse
+                    // {
+                    //     LOG_ERROR("Unknown child " << child->name());
+                    // }
                 }
             }
         }
     }
 
-    /**
-     * Given a source and destination clips and destination timeline,
-     *
-     * @param sourceIndex    index of the clip to add
-     * @param destIndex      index of destination timeline
-     * @param destTimeline   Destination timeline.
-     * @param ui             ViewerUI
-     */
     void addClipToTimeline(
         const int sourceIndex, const int destIndex,
         OTIO_NS::Timeline* destTimeline, ViewerUI* ui)
@@ -2982,16 +3241,12 @@ namespace mrv
             return;
         }
 
+        // Handle dragging the clip to the timeline viewport or over another
+        // clip.
         if (!file::isTemporaryEDL(destItem->path))
         {
             // 1. Get the index of the currently displayed clip (the 'A' item)
             auto aIndex = ui->app->filesModel()->observeAIndex()->get();
-
-            if (file::isOTIOZ(destItem->path))
-            {
-                auto timeline = destItem->timeline->getTimeline();
-                toOtioFile(timeline, ui);
-            }
 
             // 2. Create a new timeline containing the currently displayed clip
             add_clip_to_new_timeline_cb(aIndex, ui);
@@ -3060,7 +3315,7 @@ namespace mrv
             //
             videoRate = 0.F;
             double sampleRate = 0.F;
-            opentime::TimeRange timeRange;
+            OTIO_NS::TimeRange timeRange;
             sanitizeVideoAndAudioRates(
                 destTimeline, timeRange, videoRate, sampleRate);
 
@@ -3108,18 +3363,31 @@ namespace mrv
         if (!player)
             return;
 
+        edit_store_undo(player, ui);
+
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
-
-        edit_store_undo(player, ui);
 
         // If an undo only operation, return immediately.
         if (moves.size() == 1 && moves[0].type == tl::timeline::MoveType::UndoOnly)
             return;
 
+        if (moves.empty())
+            return;
+
+        // Perform the actual move in the new player (if it was an .otioz file)
+        auto innerPlayer = player->player();
+        if (moves[0].type == tl::timeline::MoveType::Clip)
+        {
+            auto timeline = innerPlayer->getTimeline();
+            auto otioTimeline = timeline::move(timeline->getTimeline().value,
+                                               moves);
+            innerPlayer->getTimeline()->setTimeline(otioTimeline);
+        }
+
         const auto& startTimeOpt = timeline->global_start_time();
-        opentime::RationalTime startTime(0.0, timeline->duration().rate());
+        OTIO_NS::RationalTime startTime(0.0, timeline->duration().rate());
         if (startTimeOpt.has_value())
         {
             startTime = startTimeOpt.value();
@@ -3209,7 +3477,7 @@ namespace mrv
 
                 auto oldRange = item->trimmed_range_in_parent().value();
 
-                oldRange = opentime::TimeRange(
+                oldRange = OTIO_NS::TimeRange(
                     oldRange.start_time().rescaled_to(rate),
                     oldRange.duration().rescaled_to(rate));
 
@@ -3230,7 +3498,7 @@ namespace mrv
 
                     auto insertRange = item->trimmed_range_in_parent().value();
 
-                    opentime::RationalTime insertTime;
+                    OTIO_NS::RationalTime insertTime;
                     bool previous = toIndex > move.fromIndex;
                     if (previous)
                     {
@@ -3451,6 +3719,10 @@ namespace mrv
         if (!player)
             return false;
 
+        const auto& time = getTime(player);
+
+        edit_store_undo(player, ui);
+
         auto timeline = player->getTimeline();
         if (!timeline)
         {
@@ -3458,41 +3730,36 @@ namespace mrv
             return false;
         }
 
-        const auto& time = getTime(player);
         auto compositions = getTracks(player);
 
-        std::vector<int> audioMutedTracks;
-        OTIO_NS::ErrorStatus errorStatus;
-        unsigned index = 0;
+        std::vector<int> audioTracks;
+        audioTracks.reserve(compositions.size());
+
+        int index = 0;
         for (auto composition : compositions)
         {
             auto track = dynamic_cast<OTIO_NS::Track*>(composition);
-            if (!track)
-                continue;
-
-            if (trackIndex != index)
+            if (track)
             {
-                ++index;
-                continue;
-            }
+                bool enabled = track->enabled();
+                if (trackIndex == index)
+                    enabled ^= true;
+                track->set_enabled(enabled);
 
-            bool enabled = track->enabled();
-            enabled ^= true;
-            track->set_enabled(enabled);
-
-            if (track->kind() == OTIO_NS::Track::Kind::audio)
-            {
-                audioMutedTracks.push_back(!enabled);
+                if (track->kind () == OTIO_NS::Track::Kind::audio)
+                {
+                    audioTracks.push_back(enabled);
+                }
             }
-            break;
+            ++index;
         }
-
-        player->player()->setChannelMute(audioMutedTracks);
 
         makePathsAbsolute(timeline, ui);
 
         updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
+
+        player->player()->setChannelMute(audioTracks);
 
         refresh_file_cache_cb(nullptr, ui);
 
@@ -3772,6 +4039,14 @@ namespace mrv
                 ui->uiEditGroup->show();
                 ui->uiActionGroup->hide();
             }
+            else
+            {
+                if (!feature_needs_edit_or_later())
+                {
+                    ui->uiEditGroup->hide();
+                    ui->uiActionGroup->show();
+                }
+            }
         }
         else
         {
@@ -3963,9 +4238,9 @@ namespace mrv
         if (mode != EditMode::kNone)
         {
             Message msg;
-            msg["command"] = "setEditMode";
+            msg["command"] = "Editing";
             msg["value"] = mode;
-            msg["height"] = H;
+            msg["height"] = H / ui->uiView->pixels_per_unit();
             tcp->pushMessage(msg);
         }
     }
