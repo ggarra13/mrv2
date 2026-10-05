@@ -33,6 +33,7 @@ cd $dir
 #  Rebuild latest FLTK
 #
 
+ninja clean
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install 
 if [[ $? != 0 ]]; then
     echo "COMPILATON of FLTK failed"
@@ -56,6 +57,7 @@ cd $dir
 #
 #  Rebuild tlRender
 #
+ninja clean
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 if [[ $? != 0 ]]; then
     echo "COMPILATON of tlRender failed"
