@@ -99,6 +99,7 @@
 
 #include <libintl.h>
 #include <libpng16/png.h>
+#include <lunasvg/lunasvg.h>
 #include <minizip/mz.h>
 #include <nlohmann/json.hpp>
 #include <opentime/version.h>
@@ -976,6 +977,13 @@ namespace mrv
           << "Copyright (c) 2010, The WebM Project authors. All rights "
              "reserved."
           << endl
+          << endl;
+        o << "lunasvg v"
+          << LUNASVG_VERSION_MAJOR << "."
+          << LUNASVG_VERSION_MINOR << "."
+          << LUNASVG_VERSION_MICRO
+          << endl
+          << "Copyright (c) 2020-2026 Samuel Ugochukwu <sammycageagle@gmail.com>."        << endl
           << endl;
 #ifdef FLTK_USE_WAYLAND
         o << "libwayland v" << WAYLAND_VERSION << endl
