@@ -12,6 +12,7 @@ Fixes
 - UI: Fixed default values of Save Movie's **Advance Settings**.
 - UI: Fixed Timeline Viewport (Editing) getting activated when closing the Preference Window.
 - UI: Fixed Timeline Viewport's thumbnails on first starting the players.
+- UI/Core: Fixed refresh_media_cb starting playback due to **Preferences->Playback->Auto Playback**.
 
 
 Libraries

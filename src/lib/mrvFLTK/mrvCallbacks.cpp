@@ -5303,7 +5303,8 @@ namespace mrv
         if (files.size() < 1)
             return;
 
-        auto player = app->ui->uiView->getTimelinePlayer();
+        ViewerUI* ui = app->ui;
+        auto player = ui->uiView->getTimelinePlayer();
         const auto& time = player->currentTime();
 
         auto origIndex = model->observeAIndex()->get();
@@ -5314,7 +5315,8 @@ namespace mrv
 
         // If a sequence, make sure to reinit it as it
         // may have changed length due to Loading->Gap Frames
-        if (file::isSequence(media->path))
+        bool isSequence = file::isSequence(media->path);
+        if (isSequence)
             item->init = false;
 
         // Paths
@@ -5348,14 +5350,23 @@ namespace mrv
         item->ocioLook = media->ocioLook;
         item->lutOptions = media->lutOptions;
 
+        int autoPlayback = ui->uiPrefs->AutoPlayback->value();
+        ui->uiPrefs->AutoPlayback->value(0);
         model->replace(origIndex, item);
 
         auto newIndex = model->observeAIndex()->get();
         model->setA(newIndex);
 
+        ui->uiPrefs->AutoPlayback->value(autoPlayback);
+
         if (item->playback != timeline::Playback::Stop)
         {
             App::app->startPlayback();
+        }
+        else
+        {
+            player = ui->uiView->getTimelinePlayer();
+            player->seek(time);
         }
     }
 
