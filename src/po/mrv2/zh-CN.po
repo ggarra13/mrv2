@@ -4194,25 +4194,31 @@ msgid "Saving pictures to {0}."
 msgstr "将图片保存到 {0} 。"
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "ProRes 配置需要.mov 的格式扩展。 将其修改为.mov 。"
+msgstr "ProRes 配置文件需要使用 .mov 视频文件扩展名。  正在将其更改为 .mov。"
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
-msgstr "VP9 配置需要一个.mp4,.mkv 或.webm 的格式扩展。 将其修改为. mp4"
+".mkv"
+msgstr ""
+"VP9 配置文件需要使用 .mp4、.mkv 或 .webm 视频文件扩展名。  "
+"正在将其更改为 .mkv。"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
-msgstr "AV1 配置需要. mp4 或.mkv 的格式扩展。 将其修改为. mp4"
+msgstr ""
+"AV1 配置文件需要使用 .mp4 或 .mkv 视频文件扩展名。  "
+"正在将其更改为 .mp4。"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
-msgstr "GoPro Cineform 配置需要一个.mkv 的格式扩展。 将其修改为.mkv"
+msgstr ""
+"GoPro CineForm 配置文件需要使用 .mkv 视频文件扩展名。  "
+"正在将其更改为 .mkv。"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr "HAP 配置需要. mov 扩展。 将其修改为. mov"
+msgstr "HAP 配置文件需要使用 .mov 扩展名。  正在将其更改为 .mov。"
 
 msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
-msgstr "OAPV 配置文件需要使用 .mp4 扩展名。正在将其更改为 .mp4"
+msgstr "OAPV 配置文件需要使用 .mp4 扩展名。  正在将其更改为 .mp4。"
 
 #, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."

@@ -4323,25 +4323,31 @@ msgid "Saving pictures to {0}."
 msgstr "Enregistrement des images en {0}."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "Les profils ProRes ont besoin d'une extension de film.mov."
+msgstr "Les profils ProRes nécessitent une extension de fichier vidéo .mov.  Modification en .mov."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
-msgstr "Le profil VP9 a besoin d'une extension de film.mp4,.mkv ou.webm."
+".mkv"
+msgstr ""
+"Le profil VP9 nécessite une extension de fichier vidéo .mp4, .mkv ou .webm.  "
+"Modification en .mkv"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
-msgstr "Le profil AV1 a besoin d'une extension de film.mp4 ou.mkv."
+msgstr ""
+"Le profil AV1 nécessite une extension de fichier vidéo .mp4 ou .mkv.  "
+"Modification en .mp4"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
-msgstr "GoPro Le profil Cineform a besoin d'une extension de film.mkv."
+msgstr ""
+"Le profil GoPro CineForm nécessite une extension de fichier vidéo .mkv.  "
+"Modification en .mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr "Le profil HAP a besoin d'une extension.mov."
+msgstr "Le profil HAP nécessite une extension de fichier .mov.  Modification en .mov"
 
 msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
-msgstr "Le profil OAPV nécessite une extension .mp4. Modification en .mp4"
+msgstr "Le profil OAPV nécessite une extension de fichier .mp4.  Modification en .mp4"
 
 #, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."

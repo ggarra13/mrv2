@@ -4340,10 +4340,10 @@ msgstr ""
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
+".mkv"
 msgstr ""
 "Perfil VP9 necesita una extensión de película .mp4, .mkv o .webm.  Cambiando"
-" a .mp4."
+" a .mkv."
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""

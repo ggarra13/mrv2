@@ -4303,30 +4303,31 @@ msgid "Saving pictures to {0}."
 msgstr "Bilder auf {0} speichern."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "ProRes-Profile benötigen eine.mov-Filmerweiterung. Ändern auf.mov."
+msgstr "ProRes-Profile benötigen die Dateierweiterung .mov.  Änderung in .mov."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
+".mkv"
 msgstr ""
-"VP9 Profil bentigt eine.mp4,.mkv oder.webm Film-Erweiterung. ndern Sie es "
-"auf.mp4"
+"Das VP9-Profil benötigt die Dateierweiterung .mp4, .mkv oder .webm.  "
+"Änderung in .mkv"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
-"AV1-Profil bentigt eine.mp4 oder.mkv Film-Erweiterung. ndern Sie es auf.mp4"
+"Das AV1-Profil benötigt die Dateierweiterung .mp4 oder .mkv.  Änderung in "
+".mp4"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 msgstr ""
-"GoPro Cineform Profil bentigt eine.mkv Film-Erweiterung. ndern Sie es "
-"auf.mkv"
+"Das GoPro-CineForm-Profil benötigt die Dateierweiterung .mkv.  Änderung in "
+".mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr "HAP-Profil bentigt eine.mov-Erweiterung. ndern auf.mov"
+msgstr "Das HAP-Profil benötigt die Dateierweiterung .mov.  Änderung in .mov"
 
 msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
-msgstr "Das OAPV-Profil benötigt eine .mp4-Erweiterung. Änderung in .mp4"
+msgstr "Das OAPV-Profil benötigt die Dateierweiterung .mp4.  Änderung in .mp4"
 
 #, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
