@@ -1998,10 +1998,10 @@ namespace mrv
                 options.thumbnailHeight = 50 * ui->uiView->pixels_per_unit();
                 break;
             case 2: // Medium
-                options.thumbnailHeight = 100 * ui->uiView->pixels_per_unit();
+                options.thumbnailHeight = 75 * ui->uiView->pixels_per_unit();
                 break;
             case 3: // Large
-                options.thumbnailHeight = 150 * ui->uiView->pixels_per_unit();
+                options.thumbnailHeight = 100 * ui->uiView->pixels_per_unit();
                 break;
             }
             options.waveformHeight = options.thumbnailHeight / 2;
@@ -2012,10 +2012,6 @@ namespace mrv
             if (uiPrefs->uiPrefsTimeline->value())
             {
                 ui->uiBottomBar->show();
-                if (ui->uiEdit->value())
-                    set_edit_mode_cb(EditMode::kFull, ui);
-                else
-                    set_edit_mode_cb(EditMode::kSaved, ui);
             }
             else
             {
