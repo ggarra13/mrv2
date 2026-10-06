@@ -33,12 +33,15 @@
 
 #pragma once
 
+#include "mrvWidgets/mrvAnnotationInput.h"
+
+#include "mrvCore/mrvTimeObject.h"
+
 #include <tlDraw/Shape.h>
 
 #include <opentime/rationalTime.h>
 
 #include <FL/Fl_Group.H>
-#include <FL/Fl_Multiline_Input.H>
 #include <functional>
 #include <memory>
 #include <string>
@@ -101,7 +104,7 @@ public:
 
     std::shared_ptr<tl::draw::NoteShape> shape() { return note_; }
 
-    Fl_Multiline_Input *input() const { return input_; }
+    AnnotationInput *input() const { return input_; }
 
     // Set whether the display of the annotation should be like the one at
     // a current time.
@@ -119,7 +122,7 @@ private:
     std::shared_ptr<tl::draw::NoteShape>  note_;
     OTIO_NS::RationalTime time_;
 
-    Fl_Multiline_Input *input_;
+    AnnotationInput *input_;
     ExpandCallback expand_cb_;
 
     bool collapsed_;    // true: input hidden, title-row-only (empty note)

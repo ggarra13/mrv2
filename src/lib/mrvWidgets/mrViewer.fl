@@ -52,6 +52,9 @@ decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
 decl {\#include "mrvWidgets/mrvFPSInput.h"} {public global
 }
 
+decl {\#include "mrvWidgets/mrvLayoutUtil.h"} {public global
+}
+
 decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
 }
 
@@ -457,7 +460,7 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {0 0 934 56} box NO_BOX hide resizable
   class Fl_Double_Window
 } {
@@ -475,7 +478,9 @@ widget_class TimelineClass {
           user_data this user_data_type {ViewerUI*}
           callback {select_character(uiTimecodeSwitch);
 mrv::TimeUnits units = (mrv::TimeUnits) o->value();
-ui->uiTimeline->setUnits( units );}
+ui->uiTimeline->setUnits( units );
+if (mrv::panel::notesPanel)
+     mrv::panel::notesPanel->refresh();} open selected
           tooltip {Switch between Frame, Seconds and Timecode display} xywh {9 3 27 24}
           code3 {o->disable_label(); o->enable_character();}
           class {mrv::PopupMenu}
@@ -884,7 +889,7 @@ uiSecondary = nullptr;} {}
       user_data this user_data_type {ViewerUI*}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
-    exit_cb( o, v );} open
+    exit_cb( o, v );}
       xywh {0 0 934 674} type Double color 1 align 80 hide resizable
       class {mrv::MainWindow} size_range {934 674 0 0}
     } {
@@ -1202,7 +1207,7 @@ uiMain->workspace = uiViewGroup;}
               } {
                 Fl_Button uiSelect {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Select );} selected
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Select );}
                   tooltip {Clip Selection Tool.} image {../../icons/EditSelect.svg} compress_image 1 xywh {2 60 40 50} down_box DOWN_BOX selection_color 14
                   class {mrv::Button}
                 }

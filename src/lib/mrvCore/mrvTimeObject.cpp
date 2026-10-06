@@ -52,7 +52,7 @@ namespace mrv
     }
 
     void timeToText(
-        char* out, const otime::RationalTime& time,
+        char* out, const OTIO_NS::RationalTime& time,
         const TimeUnits units) noexcept
     {
         using namespace tl;
@@ -83,22 +83,22 @@ namespace mrv
         }
     }
 
-    otime::RationalTime textToTime(
+    OTIO_NS::RationalTime textToTime(
         const string::String& text, double rate, TimeUnits units,
-        otime::ErrorStatus* errorStatus)
+        opentime::ErrorStatus* errorStatus)
     {
-        otime::RationalTime out = tl::time::invalidTime;
+        OTIO_NS::RationalTime out = tl::time::invalidTime;
         switch (units)
         {
         case TimeUnits::Frames:
-            out = otime::RationalTime::from_frames(text.toInt(), rate);
+            out = OTIO_NS::RationalTime::from_frames(text.toInt(), rate);
             break;
         case TimeUnits::Seconds:
-            out = otime::RationalTime::from_seconds(text.toDouble())
+            out = OTIO_NS::RationalTime::from_seconds(text.toDouble())
                       .rescaled_to(rate);
             break;
         case TimeUnits::Timecode:
-            out = otime::RationalTime::from_timecode(
+            out = OTIO_NS::RationalTime::from_timecode(
                 text.c_str(), rate, errorStatus);
             break;
         default:

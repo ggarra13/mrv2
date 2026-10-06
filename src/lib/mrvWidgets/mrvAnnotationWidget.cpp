@@ -1,5 +1,7 @@
 // mrvAnnotationWidget.cpp
 
+#include "mrViewer.h"
+
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvFlmm/Flmm_ColorA_Chooser.h"
@@ -49,8 +51,8 @@ namespace mrv
     {
         box(FL_UP_BOX);
 
-        input_ = new Fl_Multiline_Input(X + pad_, Y + TITLE_H + pad_,
-                                        W - 2 * pad_, H - TITLE_H - 2 * pad_);
+        input_ = new AnnotationInput(X + pad_, Y + TITLE_H + pad_,
+                                     W - 2 * pad_, H - TITLE_H - 2 * pad_);
         input_->wrap(1);
         input_->cursor_color(FL_RED);
         input_->textcolor(FL_BLACK);
@@ -200,12 +202,15 @@ namespace mrv
                 toggle_collapsed();
                 return 1;
             }
-            if (!input_->active())
+            if (Fl::event_clicks() > 0)
             {
-                if (ex >= x() && ex <= x() + w() &&
-                    ey >= y() && ey <= y() + h()) {
-                    toggle_collapsed();
-                    return 1;
+                if (!input_->active())
+                {
+                    if (ex >= x() && ex <= x() + w() &&
+                        ey >= y() && ey <= y() + h()) {
+                        toggle_collapsed();
+                        return 1;
+                    }
                 }
             }
             break;
@@ -257,8 +262,12 @@ namespace mrv
         int tc_x = cx + circle_r + 8;
         int tc_w = w() / 2;
 
-        const std::string& timecode = time_.to_timecode();
-        fl_draw(timecode.c_str(), tc_x, y(), tc_w, TITLE_H,
+        TimelineClass* c = App::ui->uiTimeWindow;
+        TimeUnits units =
+            static_cast<TimeUnits>(c->uiTimecodeSwitch->value());
+        char time[24];
+        timeToText(time, time_, units);
+        fl_draw(time, tc_x, y(), tc_w, TITLE_H,
                 (Fl_Align)(FL_ALIGN_LEFT | FL_ALIGN_INSIDE));
 
         // Creation date (regular weight, right-aligned)
