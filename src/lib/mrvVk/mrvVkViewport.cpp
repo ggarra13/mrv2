@@ -938,6 +938,7 @@ namespace mrv
             {
                 Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
 
+
                 uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
                 Fl::get_color(c, ur, ug, ub, ua);
 
@@ -1034,10 +1035,7 @@ namespace mrv
                     vk.render->setMonitorCapabilities(p.monitor);
                     if (p.missingFrame)
                     {
-                        if (p.missingFrameType != io::MissingFrames::Black)
-                        {
-                            _drawMissingFrame(renderSize);
-                        }
+                        _drawMissingFrame(renderSize);
                     }
                     else
                     {

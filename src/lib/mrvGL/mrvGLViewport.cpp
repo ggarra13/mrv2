@@ -391,9 +391,7 @@ namespace mrv
                             gl.render->setHDROptions(p.hdrOptions);
                             if (p.missingFrame)
                             {
-                                if (p.missingFrameType !=
-                                    io::MissingFrames::Black)
-                                    _drawMissingFrame(renderSize);
+                                _drawMissingFrame(renderSize);
                             }
                             else
                             {

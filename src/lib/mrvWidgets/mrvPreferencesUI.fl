@@ -96,10 +96,10 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {1389 684 847 449} type Double resizable
-      code3 {main = m;} non_modal size_range {847 449 0 0} visible
+      xywh {0 0 847 449} type Double hide resizable
+      code3 {main = m;} non_modal size_range {847 449 0 0}
     } {
-      Fl_Group {} {open selected
+      Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
       } {
         Fl_Group {} {open
@@ -518,7 +518,7 @@ v->refresh();}
                 }
               }
               Fl_Group {} {
-                label View open
+                label View
                 xywh {358 285 410 88} box ROUNDED_BOX
               } {
                 Fl_Button uiPrefsViewBG {
@@ -832,8 +832,8 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
               }
             }
             Fl_Group {} {
-              label Thumbnails open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label Thumbnails
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Thumbnails open
@@ -1611,49 +1611,44 @@ v->uiOCIO_Display_View->do_callback();}
               xywh {288 38 555 360} align 5
             } {
               Fl_Group {} {open
-                xywh {324 141 488 180}
+                xywh {312 255 500 116} box THIN_UP_BOX
               } {
                 Fl_Input uiPrefsVersionRegex {
                   label {Version Regex}
-                  tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regular expression to match versions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 165 345 30} color 20 textcolor 56
+                  tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regular expression to match versions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 278 345 30} color 20 textcolor 56
                   code3 {o->value( "_v" );}
                 }
                 Fl_Spinner uiPrefsMaxImagesApart {
                   label {Maximum Images Apart}
-                  tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {593 245 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
+                  tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {593 325 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
                 }
               }
               Fl_Group {} {open
-                xywh {380 73 412 34}
+                xywh {308 55 500 160} box THIN_UP_BOX
               } {
                 Fl_Box {} {
                   label {Missing Frame}
-                  xywh {380 73 158 34}
+                  xywh {318 63 206 28} align 24
                 }
                 Fl_Menu_Button uiMissingFrameType {
-                  label {Black Frame} open
-                  xywh {545 73 247 34}
-                  code3 {o->enable_glyph();}
-                  class {mrv::PopupMenu}
-		  tooltip {When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):
+                  label {Black Frame}
+                  tooltip {When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):
 	* Error Frame	   - Reports an error.
 	* Hold Frame	   - Holds the last frame read.
 	* Scratched Frame  - Holds the last frame read
                              but draws a red cross.
 	* Black Frame	   - Replaces current frame with black.
 	* Skip Frame	   - Skips the current frame.
-	* Gap Frame	   - Adds an .otio Gap for the missing frames.}
+	* Gap Frame	   - Adds an .otio Gap for the missing frames.} xywh {527 64 247 27}
+                  code3 {o->enable_glyph();}
+                  class {mrv::PopupMenu}
                 } {
                   MenuItem {} {
-                    label {Error Frame} selected
+                    label {Error Frame}
                     xywh {0 0 100 20}
                   }
                   MenuItem {} {
                     label {Hold Frame}
-                    xywh {10 10 100 20}
-                  }
-                  MenuItem {} {
-                    label {Scratched Frame}
                     xywh {10 10 100 20}
                   }
                   MenuItem {} {
@@ -1668,6 +1663,23 @@ v->uiOCIO_Display_View->do_callback();}
                     label {Gap Frame}
                     xywh {40 40 100 20}
                   }
+                }
+                Fl_Check_Button uiPrefsScratchFrame {
+                  label {Scratch Frame}
+                  tooltip {When this is on, missing frames will have a cross on them.} xywh {526 117 20 20} down_box DOWN_BOX value 1 align 4
+                }
+                Fl_Button uiPrefsScratchColor {
+                  label {Scratch Color}
+                  callback {uchar r, g, b;
+Fl::get_color(o->color(),r,g,b);
+if (!fl_color_chooser(_("Pick Scratch Color"), r,g,b)) return;
+o->color( fl_rgb_color( r, g, b ) );
+o->redraw();} selected
+                  tooltip {Scratch Lines Color.} xywh {527 149 20 20} box EMBOSSED_BOX color 1 align 4
+                }
+                Fl_Spinner uiPrefsScratchWidth {
+                  label {Scratch Width}
+                  tooltip {Scratch Lines Width.} xywh {527 181 50 25} box DOWN_BOX color 20 selection_color 15 minimum 2 maximum 16 value 4 textcolor 56
                 }
               }
             }

@@ -1234,7 +1234,7 @@ namespace tl
                 AVCodecID avCodecID = AV_CODEC_ID_MPEG4;
                 Profile profile = Profile::kNone;
                 int avProfile = AV_PROFILE_UNKNOWN;
-                int avColorRange = AVCOL_RANGE_MPEG;
+                AVColorRange avColorRange = AVCOL_RANGE_MPEG;
                 auto option = p.options.find("FFmpeg/WriteProfile");
                 if (option != p.options.end())
                 {

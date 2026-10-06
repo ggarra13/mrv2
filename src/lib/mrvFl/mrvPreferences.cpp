@@ -78,7 +78,7 @@ namespace mrv
     int Preferences::selectiontextcolor;
 
     tl::io::MissingFrames Preferences::missingFrames =
-        tl::io::MissingFrames::Scratch;
+        tl::io::MissingFrames::Hold;
 
     Preferences::Preferences(bool resetSettings, bool resetHotkeys)
     {
@@ -833,6 +833,15 @@ namespace mrv
         loading.get("missing_frame_type", tmp, 0);
         uiPrefs->uiMissingFrameType->value(tmp);
         missingFrames = static_cast<tl::io::MissingFrames>(tmp);
+
+        loading.get("scratch_frame", tmp, 1);
+        uiPrefs->uiPrefsScratchFrame->value(tmp);
+
+        loading.get("scratch_color", tmp, fl_rgb_color(255, 0, 0));
+        uiPrefs->uiPrefsScratchColor->color(tmp);
+
+        loading.get("scratch_width", tmp, 4);
+        uiPrefs->uiPrefsScratchWidth->value(tmp);
 
         loading.get("version_regex", tmpS, "_v", 4096);
         if (strlen(tmpS) == 0)
@@ -1702,6 +1711,11 @@ namespace mrv
 
         loading.set("missing_frame_type", uiPrefs->uiMissingFrameType->value());
 
+        loading.set("scratch_frame", uiPrefs->uiPrefsScratchFrame->value());
+        loading.set("scratch_color",
+                    (int)uiPrefs->uiPrefsScratchColor->color());
+        loading.set("scratch_width", uiPrefs->uiPrefsScratchWidth->value());
+
         loading.set("version_regex", uiPrefs->uiPrefsVersionRegex->value());
         loading.set(
             "max_images_apart", (int)uiPrefs->uiPrefsMaxImagesApart->value());
@@ -2057,10 +2071,7 @@ namespace mrv
 
             tl::io::MissingFrames value = static_cast<tl::io::MissingFrames>(uiPrefs->uiMissingFrameType->value());
             ui->uiView->setMissingFrameType(value);
-            bool reopen = (value != missingFrames &&
-                           tl::io::isStructural(value) ||
-                           tl::io::isStructural(missingFrames));
-            if (reopen)
+            if (value != missingFrames)
             {
                 refresh_media_cb(nullptr, ui);
             }

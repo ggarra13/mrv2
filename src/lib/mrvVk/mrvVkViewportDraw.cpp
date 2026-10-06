@@ -152,8 +152,7 @@ namespace mrv
                 vk.render->setLUTOptions(p.lutOptions);
                 if (p.missingFrame)
                 {
-                    if (p.missingFrameType != tl::io::MissingFrames::Black)
-                        _drawMissingFrame(renderSize);
+                    _drawMissingFrame(renderSize);
                 }
                 else
                 {
@@ -237,24 +236,37 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            vk.render->drawVideo(
-                {p.lastVideoFrame},
-                timeline::getBoxes(p.compareOptions,
-                                   p.displayOptions,
-                                   {p.lastVideoFrame}),
-                p.imageOptions, p.displayOptions, p.compareOptions,
-                getBackgroundOptions());
-
-            if (p.missingFrameType == io::MissingFrames::Scratch)
+            if (p.missingFrameType != tl::io::MissingFrames::Black)
             {
-                image::Color4f color(1, 0, 0, 0.8);
+                vk.render->drawVideo(
+                    {p.lastVideoFrame},
+                    timeline::getBoxes(p.compareOptions,
+                                       p.displayOptions,
+                                       {p.lastVideoFrame}),
+                    p.imageOptions, p.displayOptions, p.compareOptions,
+                    getBackgroundOptions());
+            }
+
+            if (p.ui->uiPrefs->uiPrefsScratchFrame->value())
+            {
+                Fl_Color c = p.ui->uiPrefs->uiPrefsScratchColor->color();
+                int width = p.ui->uiPrefs->uiPrefsScratchWidth->value();
+
+                uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
+                Fl::get_color(c, ur, ug, ub, ua);
+
+                image::Color4f color(ur / 255.F,
+                                     ug / 255.F,
+                                     ub / 255.F,
+                                     0.8);
                 vk.lines->drawLine(vk.render,
                                    math::Vector2i(0, 0),
                                    math::Vector2i(renderSize.w, renderSize.h),
-                                   color, 4);
+                                   color, width);
                 vk.lines->drawLine(vk.render,
                                    math::Vector2i(0, renderSize.h),
-                                   math::Vector2i(renderSize.w, 0), color, 4);
+                                   math::Vector2i(renderSize.w, 0), color,
+                                   width);
             }
         }
 
