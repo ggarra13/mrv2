@@ -1,13 +1,17 @@
 v1.8.2
 ======
 
-- UI:  URL Movies are now added to the File->Recent Files list.
+- UI: URL Movies are now added to the File->Recent Files list.
+- UI/Core: Saving of movies now automatically tries to detect the color space to use (ie. SDR vs HDR), without having to manually set the override.
+- UI/Core: Saving of movies for most codecs defaults to "TV (Legal Range)" instead of "PC (Full Range)", unless you use **Advanced Settings** Override.
 
 Fixes
 -----
 
 - UI: Fixed Save Movie's **Advanced Settings**, Presets' tooltip.
 - UI: Fixed default values of Save Movie's **Advance Settings**.
+- UI: Fixed Timeline Viewport (Editing) getting activated when closing the Preference Window.
+- UI: Fixed Timeline Viewport's thumbnails on first starting the players.
 
 
 Libraries

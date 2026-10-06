@@ -225,7 +225,7 @@ settings->setValue("SaveMovie/Override", value);}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color Range", value);} open selected
+settings->setValue("SaveMovie/Color Range", value);} open
         tooltip {FFMpeg's Color Range for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
         code2 {auto settings = mrv::App::app->settings();
 int value = settings->getValue<int>("SaveMovie/Color Range");
@@ -290,7 +290,7 @@ else if (value == 1)  // HDR
       ColorTRC->value(i);
       ColorTRC->do_callback();
   }
-}} open
+}} open selected
         tooltip {FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected.} xywh {129 105 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
@@ -310,7 +310,7 @@ else if (value == 1)  // HDR
           callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color Space", value);}
+settings->setValue("SaveMovie/Color Space", value);} open
           tooltip {FFMpeg's Color Space for the codec selected} xywh {168 195 170 29} down_box BORDER_BOX
           code2 {auto settings = mrv::App::app->settings();
 int value = settings->getValue<int>("SaveMovie/Color Space");
