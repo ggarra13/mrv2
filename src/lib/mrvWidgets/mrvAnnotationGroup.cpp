@@ -133,7 +133,6 @@ namespace mrv
         button_->color(ann_colors::header_bg()); //
         button_->callback((Fl_Callback*)toggle_tab_cb, this);
 
-
         add_btn_ = new Fl_Button(x + w - (GROUP_MARGIN + TOOLS_MARGIN * 2),
                                  y + GROUP_MARGIN,
                                  TOOLS_MARGIN, BUTTON_H, "+");
@@ -149,7 +148,7 @@ namespace mrv
 
         for (Fl_Button* b : {add_btn_, remove_btn_})
         {
-            b->box(FL_FLAT_BOX);
+            b->box(FL_UP_BOX);
             b->color(ann_colors::header_bg());
             b->labelcolor(ann_colors::text());
             b->labelsize(16);
@@ -160,8 +159,6 @@ namespace mrv
             y + button_->y() + button_->h() + (GROUP_MARGIN * 2), // just below button
             w - (GROUP_MARGIN * 2), // width same as group within margin
             10);                    // changes when child add()ed
-        contents_->box(FL_FLAT_BOX);
-        contents_->color(ann_colors::panel_bg());
 
         empty_box_ = new Fl_Box(
             contents_->x(), contents_->y(), contents_->w(), 32,
