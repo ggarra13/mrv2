@@ -2422,9 +2422,14 @@ namespace mrv
                             if (!file::isTemporaryEDL(item->path) &&
                                 !file::isTemporaryNDI(item->path))
                             {
-                                std::string file = item->path.get();
+                                bool listdir = true;
+                                std::string file = item->path.getFileName(listdir);
+
+                                // If it is a sequence and not a protocol movie, store
+                                // the first frame not the frame the sequence the user
+                                // loaded it with.
                                 auto frames = item->path.getFrames();
-                                if (frames.has_value())
+                                if (!item->path.hasProtocol() && frames.has_value())
                                 {
                                     const math::Int64Range& range = frames.value();
                                     const bool listdir = true;

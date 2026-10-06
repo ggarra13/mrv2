@@ -1,10 +1,19 @@
 v1.8.2
 ======
 
+- UI:  URL Movies are now added to the File->Recent Files list.
+
+Fixes
+-----
+
+- UI: Fixed Save Movie's **Advanced Settings**, Presets' tooltip.
+- UI: Fixed default values of Save Movie's **Advance Settings**.
+
+
 Libraries
 ---------
 
-	- FLTK v2.4.4 with new Selection protocol. 
+	- FLTK v2.4.4 with new Clipboard Selection protocol. 
 
 
 v1.8.1
