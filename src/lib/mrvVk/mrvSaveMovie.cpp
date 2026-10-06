@@ -119,9 +119,6 @@ namespace mrv
 
         // Get I/O cache and store its size.
         auto ioSystem = context->getSystem<io::WriteSystem>();
-        // auto cache = ioSystem->getCache();
-
-        // size_t oldCacheSize = cache->getMax();
 
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
@@ -303,8 +300,8 @@ namespace mrv
                 {
                     LOG_WARNING(
                         _("VP9 profile needs a .mp4, .mkv or .webm movie "
-                          "extension.  Changing it to .mp4"));
-                    newExtension = ".mp4";
+                          "extension.  Changing it to .mkv"));
+                    newExtension = ".mkv";
                 }
             }
             else if (profile == "AV1")
