@@ -372,6 +372,7 @@ namespace mrv
 
     void AnnotationGroup::draw()
     {
+#if 0
         fl_push_clip(x(), y(), w(), h());
 
         fl_color(ann_colors::panel_bg());
@@ -382,6 +383,9 @@ namespace mrv
 
         draw_children();
         fl_pop_clip();
+#else
+        Fl_Group::draw();
+#endif
     }
 
     void AnnotationGroup::enforce_single_active(AnnotationWidget *keep_active)

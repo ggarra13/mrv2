@@ -41,11 +41,7 @@ namespace mrv
             return ret;
         auto annotation = player->getAnnotation();
         if (!annotation)
-        {
-            annotation = player->createAnnotation(false);
-            if (!annotation)
-                return ret;
-        }
+            return ret;
 
         std::shared_ptr< draw::Shape > s;
         for (const auto& shape : annotation->shapes)
@@ -57,10 +53,8 @@ namespace mrv
             }
         }
         if (!s)
-        {
-            s = std::make_shared< draw::NoteShape >();
-            annotation->push_back(s);
-        }
+            return ret;
+
         auto shape = dynamic_cast< draw::NoteShape* >(s.get());
         if (!shape)
             return ret;

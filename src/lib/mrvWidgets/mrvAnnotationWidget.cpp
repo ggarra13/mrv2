@@ -6,6 +6,7 @@
 
 #include "mrvFlmm/Flmm_ColorA_Chooser.h"
 
+#include "mrvWidgets/mrvAnnotationGroup.h"
 #include "mrvWidgets/mrvAnnotationWidget.h"
 #include "mrvWidgets/mrvLayoutUtil.h"
 
@@ -151,7 +152,6 @@ namespace mrv
             }
         } else {
             // Restore full editable size.
-                        // Restore full editable size.
             input_->resize(x() + pad_, y() + TITLE_H + pad_,
                            w() - 2 * pad_, expanded_h_ - TITLE_H - 2 * pad_);
             input_->show();
@@ -191,6 +191,15 @@ namespace mrv
     {
         switch (event) {
         case FL_PUSH: {
+            if (!current_)
+            {
+                AnnotationGroup* g =
+                    dynamic_cast<AnnotationGroup*>(parent()->parent());
+                set_collapsed(false);
+                g->enforce_single_active(this);
+                return 1;
+            }
+
             int ex = Fl::event_x();
             int ey = Fl::event_y();
 
@@ -211,14 +220,8 @@ namespace mrv
             }
             if (Fl::event_clicks() > 0)
             {
-                if (!input_->locked())
-                {
-                    if (ex >= x() && ex <= x() + w() &&
-                        ey >= y() && ey <= y() + h()) {
-                        toggle_collapsed();
-                        return 1;
-                    }
-                }
+                toggle_collapsed();
+                return 1;
             }
             break;
         }
