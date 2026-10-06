@@ -113,7 +113,7 @@ namespace mrv
         const std::string& c = message["command"];
 
         auto app = ui->app;
-        auto prefs = ui->uiPrefs;
+        auto uiPrefs = ui->uiPrefs;
         auto view = ui->uiView;
         TimelinePlayer* player = nullptr;
         if (view)
@@ -144,7 +144,7 @@ namespace mrv
             }
             else if (c == "setPlayback")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -169,7 +169,7 @@ namespace mrv
             }
             else if (c == "setLoop")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -180,7 +180,7 @@ namespace mrv
             }
             else if (c == "Open File")
             {
-                bool receive = prefs->ReceiveMedia->value();
+                bool receive = uiPrefs->ReceiveMedia->value();
                 if (!receive)
                 {
                     tcp->unlock();
@@ -209,17 +209,17 @@ namespace mrv
             }
             else if (c == "closeAll")
             {
-                if (prefs->ReceiveMedia->value())
+                if (uiPrefs->ReceiveMedia->value())
                     close_all_cb(nullptr, ui);
             }
             else if (c == "closeCurrent")
             {
-                if (prefs->ReceiveMedia->value())
+                if (uiPrefs->ReceiveMedia->value())
                     close_current_cb(nullptr, ui);
             }
             else if (c == "Media Items")
             {
-                bool receive = prefs->ReceiveMedia->value();
+                bool receive = uiPrefs->ReceiveMedia->value();
                 if (!receive)
                 {
                     tcp->unlock();
@@ -238,7 +238,7 @@ namespace mrv
             }
             else if (c == "seek")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -249,7 +249,7 @@ namespace mrv
             }
             else if (c == "Timeline Key Press")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -261,7 +261,7 @@ namespace mrv
             }
             else if (c == "Timeline Key Release")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -273,7 +273,7 @@ namespace mrv
             }
             else if (c == "Timeline Mouse Press")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -286,7 +286,7 @@ namespace mrv
             }
             else if (c == "Timeline Mouse Move")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -300,7 +300,7 @@ namespace mrv
             }
             else if (c == "Timeline Mouse Release")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -317,7 +317,7 @@ namespace mrv
             }
             else if (c == "Timeline Widget Scroll")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -330,7 +330,7 @@ namespace mrv
             }
             else if (c == "Timeline Fit")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -340,7 +340,7 @@ namespace mrv
             }
             else if (c == "setInOutRange")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -351,7 +351,7 @@ namespace mrv
             }
             else if (c == "setSpeed")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -362,7 +362,7 @@ namespace mrv
             }
             else if (c == "setInPoint")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -372,7 +372,7 @@ namespace mrv
             }
             else if (c == "resetInPoint")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -383,7 +383,7 @@ namespace mrv
             }
             else if (c == "setOutPoint")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -394,7 +394,7 @@ namespace mrv
             }
             else if (c == "resetInPoint")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -405,7 +405,7 @@ namespace mrv
             }
             else if (c == "setVideoLayer")
             {
-                bool receive = prefs->ReceiveColor->value();
+                bool receive = uiPrefs->ReceiveColor->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -419,7 +419,7 @@ namespace mrv
             }
             else if (c == "Redraw Panel Thumbnails")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive)
                 {
                     tcp->unlock();
@@ -429,7 +429,7 @@ namespace mrv
             }
             else if (c == "setVolume")
             {
-                bool receive = prefs->ReceiveAudio->value();
+                bool receive = uiPrefs->ReceiveAudio->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -444,7 +444,7 @@ namespace mrv
             }
             else if (c == "setMute")
             {
-                bool receive = prefs->ReceiveAudio->value();
+                bool receive = uiPrefs->ReceiveAudio->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -459,7 +459,7 @@ namespace mrv
             }
             else if (c == "setAudioOffset")
             {
-                bool receive = prefs->ReceiveAudio->value();
+                bool receive = uiPrefs->ReceiveAudio->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -471,7 +471,7 @@ namespace mrv
             }
             else if (c == "start")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -482,7 +482,7 @@ namespace mrv
             }
             else if (c == "end")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -493,7 +493,7 @@ namespace mrv
             }
             else if (c == "framePrev")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -504,7 +504,7 @@ namespace mrv
             }
             else if (c == "frameNext")
             {
-                bool receive = prefs->ReceiveTimeline->value();
+                bool receive = uiPrefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
                     tcp->unlock();
@@ -515,7 +515,7 @@ namespace mrv
             }
             else if (c == "undo")
             {
-                bool receive = prefs->ReceiveAnnotations->value();
+                bool receive = uiPrefs->ReceiveAnnotations->value();
                 if (!receive || !view)
                 {
                     tcp->unlock();
@@ -526,7 +526,7 @@ namespace mrv
             }
             else if (c == "redo")
             {
-                bool receive = prefs->ReceiveAnnotations->value();
+                bool receive = uiPrefs->ReceiveAnnotations->value();
                 if (!receive || !view)
                 {
                     tcp->unlock();
@@ -545,7 +545,7 @@ namespace mrv
                 handled = true;
                 if (c == "setEnvironmentMapOptions")
                 {
-                    bool receive = prefs->ReceivePanAndZoom->value();
+                    bool receive = uiPrefs->ReceivePanAndZoom->value();
                     if (!receive || !view)
                     {
                         tcp->unlock();
@@ -556,7 +556,7 @@ namespace mrv
                 }
                 else if (c == "setOCIOOptions")
                 {
-                    bool receive = prefs->ReceiveColor->value();
+                    bool receive = uiPrefs->ReceiveColor->value();
                     if (!receive || !view)
                     {
                         tcp->unlock();
@@ -572,7 +572,7 @@ namespace mrv
                         o.fileName = local.fileName;
                         if (o.fileName.empty() || !file::isReadable(o.fileName))
                         {
-                            o.fileName = prefs->uiPrefsOCIOConfig->value();
+                            o.fileName = uiPrefs->OCIOConfig->value();
                         }
                     }
 
@@ -591,7 +591,7 @@ namespace mrv
                 }
                 else if (c == "Display Options")
                 {
-                    bool receive = prefs->ReceiveColor->value();
+                    bool receive = uiPrefs->ReceiveColor->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -638,7 +638,7 @@ namespace mrv
                 }
                 else if (c == "Image Options")
                 {
-                    bool receive = prefs->ReceiveColor->value();
+                    bool receive = uiPrefs->ReceiveColor->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -649,7 +649,7 @@ namespace mrv
                 }
                 else if (c == "LUT Options")
                 {
-                    bool receive = prefs->ReceiveColor->value();
+                    bool receive = uiPrefs->ReceiveColor->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -660,7 +660,7 @@ namespace mrv
                 }
                 else if (c == "gain")
                 {
-                    bool receive = prefs->ReceiveColor->value();
+                    bool receive = uiPrefs->ReceiveColor->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -672,7 +672,7 @@ namespace mrv
                 }
                 else if (c == "gamma")
                 {
-                    bool receive = prefs->ReceiveColor->value();
+                    bool receive = uiPrefs->ReceiveColor->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -684,7 +684,7 @@ namespace mrv
                 }
                 else if (c == "saturation")
                 {
-                    bool receive = prefs->ReceiveColor->value();
+                    bool receive = uiPrefs->ReceiveColor->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -696,7 +696,7 @@ namespace mrv
                 }
                 else if (c == "Clear Note Annotation")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive || !player)
                     {
                         tcp->unlock();
@@ -710,7 +710,7 @@ namespace mrv
                 }
                 else if (c == "Create Note Annotation")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive || !player)
                     {
                         tcp->unlock();
@@ -725,7 +725,7 @@ namespace mrv
                 }
                 else if (c == "Create Shape")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive || !player)
                     {
                         tcp->unlock();
@@ -747,7 +747,7 @@ namespace mrv
                 }
                 else if (c == "Remove Shape")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive || !player)
                     {
                         tcp->unlock();
@@ -771,7 +771,7 @@ namespace mrv
                 }
                 else if (c == "Laser Fade")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive || !player)
                     {
                         tcp->unlock();
@@ -806,7 +806,7 @@ namespace mrv
                 }
                 else if (c == "Add Shape Point")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive || !player)
                     {
                         tcp->unlock();
@@ -842,7 +842,7 @@ namespace mrv
                 }
                 else if (c == "Update Shape")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive || !player)
                     {
                         tcp->unlock();
@@ -862,7 +862,7 @@ namespace mrv
                 }
                 else if (c == "End Shape")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive || !player)
                     {
                         tcp->unlock();
@@ -903,7 +903,7 @@ namespace mrv
                 }
                 else if (c == "Create Annotation")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive || !player)
                     {
                         tcp->unlock();
@@ -914,7 +914,7 @@ namespace mrv
                 }
                 else if (c == "Annotations")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive || !player)
                     {
                         tcp->unlock();
@@ -937,7 +937,7 @@ namespace mrv
                 }
                 else if (c == "viewPosAndZoom")
                 {
-                    bool receive = prefs->ReceivePanAndZoom->value();
+                    bool receive = uiPrefs->ReceivePanAndZoom->value();
                     if (!receive || !view)
                     {
                         tcp->unlock();
@@ -971,7 +971,7 @@ namespace mrv
                 }
                 else if (c == "Show Annotations")
                 {
-                    bool receive = prefs->ReceiveAnnotations->value();
+                    bool receive = uiPrefs->ReceiveAnnotations->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -991,7 +991,7 @@ namespace mrv
                 handled = true;
                 if (c == "Menu Bar")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1011,7 +1011,7 @@ namespace mrv
                 }
                 else if (c == "Top Bar")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1031,7 +1031,7 @@ namespace mrv
                 }
                 else if (c == "Pixel Bar")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1051,7 +1051,7 @@ namespace mrv
                 }
                 else if (c == "Bottom Bar")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1071,7 +1071,7 @@ namespace mrv
                 }
                 else if (c == "Status Bar")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1090,7 +1090,7 @@ namespace mrv
                 }
                 else if (c == "Action Bar")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1110,7 +1110,7 @@ namespace mrv
                 }
                 else if (c == "Fullscreen")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive || !view)
                     {
                         tcp->unlock();
@@ -1121,7 +1121,7 @@ namespace mrv
                 }
                 else if (c == "Presentation")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive || !view)
                     {
                         tcp->unlock();
@@ -1132,7 +1132,7 @@ namespace mrv
                 }
                 else if (c == "Selection Area")
                 {
-                    bool receive = prefs->ReceiveColor->value();
+                    bool receive = uiPrefs->ReceiveColor->value();
                     if (!receive || !view)
                     {
                         tcp->unlock();
@@ -1143,7 +1143,7 @@ namespace mrv
                 }
                 else if (c == "One Panel Only")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1156,7 +1156,7 @@ namespace mrv
                 }
                 else if (c == "Color Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1168,7 +1168,7 @@ namespace mrv
                 }
                 else if (c == "Annotations Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1181,7 +1181,7 @@ namespace mrv
                 }
                 else if (c == "Background Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1193,7 +1193,7 @@ namespace mrv
                 }
                 else if (c == "Color Area Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1205,7 +1205,7 @@ namespace mrv
                 }
                 else if (c == "Compare Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1217,7 +1217,7 @@ namespace mrv
                 }
                 else if (c == "Devices Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1229,7 +1229,7 @@ namespace mrv
                 }
                 else if (c == "Environment Map Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1242,7 +1242,7 @@ namespace mrv
                 }
                 else if (c == "Files Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1254,7 +1254,7 @@ namespace mrv
                 }
                 else if (c == "Histogram Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1266,7 +1266,7 @@ namespace mrv
                 }
                 else if (c == "Media Info Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1278,7 +1278,7 @@ namespace mrv
                 }
                 else if (c == "Editing")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1296,7 +1296,7 @@ namespace mrv
                 }
                 else if (c == "WebRTC Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1309,7 +1309,7 @@ namespace mrv
                 else if (c == "USD Panel")
                 {
 #ifdef TLRENDER_USD
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1323,7 +1323,7 @@ namespace mrv
                 else if (c == "NDI Panel")
                 {
 #ifdef TLRENDER_NDI
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1337,7 +1337,7 @@ namespace mrv
                 // Logs panel is not sent nor received.
                 else if (c == "Python Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1351,7 +1351,7 @@ namespace mrv
                 }
                 else if (c == "Settings Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1363,7 +1363,7 @@ namespace mrv
                 }
                 else if (c == "Vectorscope Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1376,7 +1376,7 @@ namespace mrv
                 }
                 else if (c == "Waveform Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1389,7 +1389,7 @@ namespace mrv
                 }
                 else if (c == "Stereo 3D Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1401,7 +1401,7 @@ namespace mrv
                 }
                 else if (c == "Stats Panel")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1422,7 +1422,7 @@ namespace mrv
                 handled = true;
                 if (c == "setTimelineDisplayOptions")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1433,7 +1433,7 @@ namespace mrv
                 }
                 else if (c == "Timeline/FrameView")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1443,7 +1443,7 @@ namespace mrv
                 }
                 else if (c == "Timeline/ScrollToCurrentFrame")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1454,7 +1454,7 @@ namespace mrv
                 }
                 else if (c == "setTimelineEditable")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1552,7 +1552,7 @@ namespace mrv
                 }
                 else if (c == "setFilesPanelOptions")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();
@@ -1564,7 +1564,7 @@ namespace mrv
                 }
                 else if (c == "setMediaReferenceKey")
                 {
-                    bool receive = prefs->ReceiveUI->value();
+                    bool receive = uiPrefs->ReceiveUI->value();
                     if (!receive)
                     {
                         tcp->unlock();

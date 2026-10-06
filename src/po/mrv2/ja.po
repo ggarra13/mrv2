@@ -4216,8 +4216,8 @@ msgstr "ProRes プロファイルには .mov ムービー拡張子が必要で�
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
-msgstr "VP9 プロファイルには .mp4、.mkv、または .webm ムービー拡張子が必要です。.mp4 に変更します"
+".mkv"
+msgstr "VP9 プロファイルには .mp4、.mkv、または .webm ムービー拡張子が必要です。.mkv に変更します"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr "AV1 プロファイルには .mp4 または .mkv ムービー拡張子が必要です。.mp4 に変更します"

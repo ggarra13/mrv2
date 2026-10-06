@@ -187,6 +187,17 @@ namespace mrv
                     options.ffmpegColorPrimaries;
                 ioOptions["FFmpeg/ColorTRC"] = options.ffmpegColorTRC;
             }
+            else
+            {
+                auto hdrOptions = view->getHDROptions();
+                if (tl::image::isHDR(hdrOptions.hdrData))
+                {
+                    ioOptions["FFmpeg/ColorRange"] = "TV (Legal Range)";
+                    ioOptions["FFmpeg/ColorSpace"] = "bt2020nc";
+                    ioOptions["FFmpeg/ColorPrimaries"] = "bt2020";
+                    ioOptions["FFmpeg/ColorTRC"] = "bt2100 (smpte2084)";
+                }
+            }
 #endif
 
 #ifdef TLRENDER_EXR
@@ -1155,7 +1166,7 @@ namespace mrv
         {
             view->setOCIOOptions(savedOCIOOptions);
         }
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setPresentationMode(presentation);
         view->setShowVideo(true);

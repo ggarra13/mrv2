@@ -53,7 +53,7 @@ namespace
         snprintf(buf, 256, "MRV2_VOICEOVER%p.%zu.wav", ui, voiceOverIndex);
 #endif
         PreferencesUI* uiPrefs = ui->uiPrefs;
-        const std::string tmpdir = uiPrefs->uiPrefsVoiceOverPath->value();
+        const std::string tmpdir = uiPrefs->VoiceOverPath->value();
         auto out = tmpdir + '/' + buf;
 
         ++voiceOverIndex;
@@ -159,7 +159,7 @@ static int rtAudioPlaybackCallback(
     // Increment the counter based on playback speed set in preferences.
     PreferencesUI* uiPrefs = mrv::App::ui->uiPrefs;
     audio->rtCurrentFrame += nFrames *
-                             (uiPrefs->uiPrefsVoiceOverSpeed->value() + 1);
+                             (uiPrefs->VoiceOverSpeed->value() + 1);
     
     return 0; // Return 0 to continue streaming
 }

@@ -1234,6 +1234,7 @@ namespace tl
                 AVCodecID avCodecID = AV_CODEC_ID_MPEG4;
                 Profile profile = Profile::kNone;
                 int avProfile = AV_PROFILE_UNKNOWN;
+                AVColorRange avColorRange = AVCOL_RANGE_MPEG;
                 auto option = p.options.find("FFmpeg/WriteProfile");
                 if (option != p.options.end())
                 {
@@ -1341,6 +1342,7 @@ namespace tl
                 case Profile::HAP:
                     avCodecID = AV_CODEC_ID_HAP;
                     avProfile = AV_PROFILE_UNKNOWN;
+                    avColorRange = AVCOL_RANGE_JPEG;
                     break;
                 case Profile::AV1_AOM:
                     avCodecID = AV_CODEC_ID_AV1;
@@ -1506,17 +1508,7 @@ namespace tl
                 const auto rational = time::toRational(p.avSpeed);
                 p.avCodecContext->time_base = {rational.second, rational.first};
                 p.avCodecContext->framerate = {rational.first, rational.second};
-
-                if (avCodecID == AV_CODEC_ID_PRORES || hardwareEncode)
-                {
-                    // Equivalent to -color_range tv (1)
-                    p.avCodecContext->color_range = AVCOL_RANGE_MPEG;
-                }
-                else
-                {
-                    // Equivalent to -color_range pc (2)
-                    p.avCodecContext->color_range = AVCOL_RANGE_JPEG;
-                }
+                p.avCodecContext->color_range = avColorRange;
 
                 std::string value;
                 option = p.options.find("FFmpeg/ColorRange");

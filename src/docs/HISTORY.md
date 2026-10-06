@@ -1,7 +1,37 @@
+v1.8.2
+======
+
+- UI: URL Movies are now added to the File->Recent Files list.
+- UI/Core: Saving of movies now automatically tries to detect the color space to use (ie. SDR vs HDR), without having to manually set the override.
+- UI/Core: Saving of movies for most codecs defaults to "TV (Legal Range)" instead of "PC (Full Range)", unless you use **Advanced Settings** Override.
+
+Fixes
+-----
+
+- UI: Fixed Save Movie's **Advanced Settings**, Presets' tooltip.
+- UI: Fixed default values of Save Movie's **Advance Settings**.
+- UI: Fixed Timeline Viewport (Editing) getting activated when closing the Preference Window.
+- UI: Fixed Timeline Viewport's thumbnails on first starting the players.
+- UI/Core: Fixed refresh_media_cb starting playback due to **Preferences->Playback->Auto Playback**.
+
+
+Libraries
+---------
+
+	- FLTK v2.4.4 with new Clipboard Selection protocol. 
+
+
 v1.8.1
 ======
 
-- Added a dependency on lunasvg as it provides better rasterization of SVG images.
+- Core/Vulkan: Improved performance of the Vulkan backend.
+- Core/Vulkan: Improved memory footprint of the Vulkan backend.
+- Core/Vulkan: Made Text Tool Annotations be created on demand for faster annotations.
+
+- Core: Made the SVG reader be thread safe.
+- Core: Made the SVG reader support <text> tags.
+- Core: Made the SVG reader support gradients.
+- Core: Made the SVG reader support embedded .pngs.
 
 Fixes
 -----

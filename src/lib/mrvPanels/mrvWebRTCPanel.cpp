@@ -159,7 +159,7 @@ namespace mrv
                     // "secret".
                     std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
                     if (studio.empty())
-                        studio = p.ui->uiPrefs->uiPrefsWebRTCStudio->value();
+                        studio = p.ui->uiPrefs->WebRTCStudio->value();
 
                     if (!mrv::app::soporta_voice)
                     {

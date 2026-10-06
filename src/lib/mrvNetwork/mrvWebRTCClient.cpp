@@ -41,7 +41,7 @@ namespace mrv
         }
         else
         {
-            stunServer = App::ui->uiPrefs->uiPrefsWebRTCStunServer->value();
+            stunServer = App::ui->uiPrefs->WebRTCStunServer->value();
         }
 
         std::string turnServer;
@@ -52,7 +52,7 @@ namespace mrv
         }
         else
         {
-            turnServer = App::ui->uiPrefs->uiPrefsWebRTCTurnServer->value();
+            turnServer = App::ui->uiPrefs->WebRTCTurnServer->value();
         }
 
         std::string msg = string::Format(_("STUN server is {0}")).

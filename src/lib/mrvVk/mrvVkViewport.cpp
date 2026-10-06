@@ -797,7 +797,7 @@ namespace mrv
             {
                 vk.colorBufferType = image::PixelType::RGBA_U8;
 
-                int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
+                int accuracy = p.ui->uiPrefs->ColorAccuracy->value();
                 switch (accuracy)
                 {
                 case kAccuracyFloat32:
@@ -936,7 +936,8 @@ namespace mrv
 
             if (!p.presentation)
             {
-                Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
+                Fl_Color c = p.ui->uiPrefs->ViewBG->color();
+
 
                 uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
                 Fl::get_color(c, ur, ug, ub, ua);
@@ -1034,10 +1035,7 @@ namespace mrv
                     vk.render->setMonitorCapabilities(p.monitor);
                     if (p.missingFrame)
                     {
-                        if (p.missingFrameType != io::MissingFrames::Black)
-                        {
-                            _drawMissingFrame(renderSize);
-                        }
+                        _drawMissingFrame(renderSize);
                     }
                     else
                     {
@@ -1214,9 +1212,9 @@ namespace mrv
             const float rotation = _getRotation();
             bool blitViewport = false;
             if (this == p.ui->uiView)
-                blitViewport = p.ui->uiPrefs->uiPrefsBlitMainViewport->value();
+                blitViewport = p.ui->uiPrefs->BlitMainViewport->value();
             else
-                blitViewport = p.ui->uiPrefs->uiPrefsBlitSecondaryViewport->value();
+                blitViewport = p.ui->uiPrefs->BlitSecondaryViewport->value();
             if (p.presentation ||
                 blitViewport == kNoBlit ||
                 p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||

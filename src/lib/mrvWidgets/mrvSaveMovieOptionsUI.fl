@@ -209,7 +209,7 @@ o->textcolor(FL_BLACK);}
       }
     }
     Fl_Window uiAdvancedSettings {
-      label {Advanced Settings}
+      label {Advanced Settings} open
       xywh {0 0 416 355} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
@@ -290,8 +290,8 @@ else if (value == 1)  // HDR
       ColorTRC->value(i);
       ColorTRC->do_callback();
   }
-}} open
-        tooltip {FFMpeg's Color Range for the codec selected} xywh {129 105 170 29} down_box BORDER_BOX
+}} open selected
+        tooltip {FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected.} xywh {129 105 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
           label bt709
@@ -310,8 +310,11 @@ else if (value == 1)  // HDR
           callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color Space", value);}
+settings->setValue("SaveMovie/Color Space", value);} open
           tooltip {FFMpeg's Color Space for the codec selected} xywh {168 195 170 29} down_box BORDER_BOX
+          code2 {auto settings = mrv::App::app->settings();
+int value = settings->getValue<int>("SaveMovie/Color Space");
+o->value(value);}
         } {
           MenuItem {} {
             label bt709
@@ -393,6 +396,9 @@ settings->setValue("SaveMovie/Color Space", value);}
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Color Primaries", value);}
           tooltip {FFMpeg's Color Primaries setting for the codec selected.} xywh {169 152 170 29} down_box BORDER_BOX
+          code2 {auto settings = mrv::App::app->settings();
+int value = settings->getValue<int>("SaveMovie/Color Primaries");
+o->value(value);}
         } {
           MenuItem {} {
             label bt709
@@ -449,8 +455,11 @@ settings->setValue("SaveMovie/Color Primaries", value);}
           callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color TRC", value);} open
+settings->setValue("SaveMovie/Color TRC", value);}
           tooltip {FFMpeg's Color Transfer Function settings for the codec selected.} xywh {168 236 170 26} down_box BORDER_BOX
+          code2 {auto settings = mrv::App::app->settings();
+int value = settings->getValue<int>("SaveMovie/Color TRC");
+o->value(value);}
         } {
           MenuItem {} {
             label bt709
@@ -943,8 +952,7 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {selected
-    }
+}} {}
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
   } {

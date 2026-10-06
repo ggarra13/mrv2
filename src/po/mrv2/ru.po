@@ -4305,25 +4305,31 @@ msgid "Saving pictures to {0}."
 msgstr "Сохранение фотографий до {0}."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "Прорецензии должны быть дополнены фильмом.mov, изменить его на.mov."
+msgstr "Профили ProRes требуют расширения видеофайла .mov.  Изменение на .mov."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
-msgstr "Профиль VP9 нуждается в.mp4,.mkv или.webm расширения фильма."
+".mkv"
+msgstr ""
+"Профиль VP9 требует расширения видеофайла .mp4, .mkv или .webm.  "
+"Изменение на .mkv"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
-msgstr "Профиль AV1 требует расширения фильма.mp4 или.mkv."
+msgstr ""
+"Профиль AV1 требует расширения видеофайла .mp4 или .mkv.  "
+"Изменение на .mp4"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
-msgstr "Профиль GoPro Cineform требует расширения фильма.mkv."
+msgstr ""
+"Профиль GoPro CineForm требует расширения видеофайла .mkv.  "
+"Изменение на .mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr "Профиль HAP требует расширения.mov."
+msgstr "Профиль HAP требует расширения файла .mov.  Изменение на .mov"
 
 msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
-msgstr "Для профиля OAPV требуется расширение .mp4. Изменение на .mp4"
+msgstr "Профиль OAPV требует расширения файла .mp4.  Изменение на .mp4"
 
 #, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."

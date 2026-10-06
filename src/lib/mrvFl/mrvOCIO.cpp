@@ -596,7 +596,7 @@ namespace mrv
             ViewerUI* ui = App::ui;
             PreferencesUI* uiPrefs = ui->uiPrefs;
 
-            const char* var = uiPrefs->uiPrefsOCIOConfig->value();
+            const char* var = uiPrefs->OCIOConfig->value();
             if (var && strlen(var) > 0)
             {
                 setConfig(var);
@@ -604,9 +604,9 @@ namespace mrv
                 try
                 {
                     const char* configName =
-                        uiPrefs->uiPrefsOCIOConfig->value();
+                        uiPrefs->OCIOConfig->value();
                     OCIOconfig = OCIO::Config::CreateFromFile(configName);
-                    uiPrefs->uiPrefsOCIOConfig->tooltip(
+                    uiPrefs->OCIOConfig->tooltip(
                         OCIOconfig->getDescription());
 
                     defaultDisplay = OCIOconfig->getDefaultDisplay();
@@ -908,7 +908,7 @@ namespace mrv
         {
             ViewerUI* ui = App::ui;
             PreferencesUI* uiPrefs = ui->uiPrefs;
-            const char* out = uiPrefs->uiPrefsOCIOConfig->value();
+            const char* out = uiPrefs->OCIOConfig->value();
             if (!out)
                 return "";
             return out;
@@ -937,7 +937,7 @@ namespace mrv
                 }
             }
 
-            const char* oldconfig = uiPrefs->uiPrefsOCIOConfig->value();
+            const char* oldconfig = uiPrefs->OCIOConfig->value();
             if (oldconfig && strlen(oldconfig) > 0)
             {
                 // Same config file.  Nothing to do.
@@ -945,7 +945,7 @@ namespace mrv
                     return;
             }
 
-            uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+            uiPrefs->OCIOConfig->value(config.c_str());
             ocio::setup();
         }
 
