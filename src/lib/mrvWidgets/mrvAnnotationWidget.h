@@ -112,6 +112,8 @@ public:
 
     void select_color();
 
+    bool is_current() const { return current_; }
+
     static void note_changed_cb(Fl_Multiline_Input* o, void* data);
 
     // Height reserved for the title row, public so callers can lay
@@ -119,6 +121,10 @@ public:
     static const int TITLE_H = 28;
 
 private:
+    bool current_ = false;   // true when this note is at the current frame
+    void update_colors();
+
+
     std::shared_ptr<tl::draw::NoteShape>  note_;
     OTIO_NS::RationalTime time_;
 

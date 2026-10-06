@@ -49,14 +49,15 @@ namespace mrv
           expanded_h_(H),
           pad_(4)
     {
-        box(FL_UP_BOX);
+        box(FL_FLAT_BOX);
 
         input_ = new AnnotationInput(X + pad_, Y + TITLE_H + pad_,
                                      W - 2 * pad_, H - TITLE_H - 2 * pad_);
         input_->wrap(1);
-        input_->cursor_color(FL_RED);
-        input_->textcolor(FL_BLACK);
         input_->box(FL_FLAT_BOX);
+        input_->textcolor(ann_colors::text());
+        input_->cursor_color(ann_colors::text());
+        input_->selection_color(ann_colors::selection());
         input_->value(note_->text.c_str());
         input_->when(FL_WHEN_CHANGED);
         input_->callback((Fl_Callback*)note_changed_cb, nullptr);
@@ -68,6 +69,7 @@ namespace mrv
 
         end();
         resizable(input_);
+        update_colors();
     }
 
     void AnnotationWidget::resize(int X, int Y, int W, int H)
@@ -142,7 +144,6 @@ namespace mrv
                 input_->resize(x() + pad_, y() + TITLE_H + pad_, mw, mh);
                 note_->text = input_->value();
                 input_->insert_position(0, 0);
-                input_->deactivate();
 
                 Fl_Group::resize(x(), y(), w(), TITLE_H + mh + 2 * pad_);
                 collapsed_ = false;
@@ -150,19 +151,25 @@ namespace mrv
             }
         } else {
             // Restore full editable size.
-            input_->activate();
+                        // Restore full editable size.
             input_->resize(x() + pad_, y() + TITLE_H + pad_,
                            w() - 2 * pad_, expanded_h_ - TITLE_H - 2 * pad_);
-            input_->take_focus();
             input_->show();
             Fl_Group::resize(x(), y(), w(), expanded_h_);
             collapsed_ = false;
             shrunk_ = false;
 
+            update_colors();       // unlock BEFORE asking for focus
+            input_->take_focus();
+
             if (expand_cb_) {
                 expand_cb_(this);
             }
         }
+
+        if (collapse && Fl::focus() == input_)
+            Fl::focus(nullptr);
+        update_colors();
 
         mrv::relayout(this);
     }
@@ -204,7 +211,7 @@ namespace mrv
             }
             if (Fl::event_clicks() > 0)
             {
-                if (!input_->active())
+                if (!input_->locked())
                 {
                     if (ex >= x() && ex <= x() + w() &&
                         ey >= y() && ey <= y() + h()) {
@@ -255,8 +262,8 @@ namespace mrv
 
         // Timecode (bold, left of center, after the circle)
         Fl_Color text_color = FL_FOREGROUND_COLOR;
-        if (color() == FL_CYAN)
-            text_color = fl_contrast(FL_WHITE, color());
+
+        text_color = ann_colors::text();
         fl_font(FL_HELVETICA_BOLD, 13);
         fl_color(text_color);
         int tc_x = cx + circle_r + 8;
@@ -277,26 +284,14 @@ namespace mrv
                 (Fl_Align)(FL_ALIGN_RIGHT | FL_ALIGN_INSIDE));
 
         fl_pop_clip();
-
-        // Divider line under the title row (only meaningful when expanded,
-        // but harmless to draw regardless)
-        fl_color(fl_darker(FL_BACKGROUND_COLOR));
-        fl_line(x() + 1, y() + TITLE_H, x() + w() - 2, y() + TITLE_H);
     }
 
     // Set whether the display of the annotation should be like the one at
     // a current time.
     void AnnotationWidget::at_current_time(bool value)
     {
-        if (value)
-        {
-            color(FL_CYAN);
-        }
-        else
-        {
-            color(FL_BACKGROUND_COLOR);
-        }
-        redraw();
+        current_ = value;
+        update_colors();
     }
 
     void AnnotationWidget::note_changed_cb(Fl_Multiline_Input* o, void* d)
@@ -305,5 +300,21 @@ namespace mrv
         {
             panel::annotationsPanel->notes->value(o->value());
         }
+    }
+
+    void AnnotationWidget::update_colors()
+    {
+        const bool editing = !is_collapsed();
+
+        // Current frame, or being edited -> highlighted brown.
+        Fl_Color bg = (current_ || editing) ? ann_colors::current_bg()
+                                            : ann_colors::panel_bg();
+        color(bg);
+
+        // Editing: dark input with border.  Otherwise: blends into the card.
+        input_->locked(!editing);
+        input_->color(editing ? ann_colors::edit_bg() : bg);
+        input_->textcolor(ann_colors::text());
+        redraw();
     }
 }

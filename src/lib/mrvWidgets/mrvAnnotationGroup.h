@@ -48,6 +48,8 @@ namespace mrv
         Fl_Button* button() { return button_; }
         void layout();
 
+        void draw() override;
+
 
         // Whole-group collapse state (hides/shows the entire note list).
         bool is_collapsed() const { return collapsed_; }
