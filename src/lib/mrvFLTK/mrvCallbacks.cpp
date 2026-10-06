@@ -1700,7 +1700,7 @@ namespace mrv
         release_license();
 
         // Remove any temporary EDLs in tmppath
-        if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
+        if (ui->uiPrefs->RemoveEDLs->value())
             removeTemporaryEDLs(ui);
 
         // Remove thumbnail system.
@@ -2522,7 +2522,7 @@ namespace mrv
             view->setTimelinePlayer(ui->uiView->getTimelinePlayer());
             window->show();
 
-            bool value = ui->uiPrefs->uiPrefsSecondaryOnTop->value();
+            bool value = ui->uiPrefs->SecondaryOnTop->value();
             window->always_on_top(value);
 
             view->frameView();

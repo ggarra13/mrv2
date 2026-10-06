@@ -191,7 +191,7 @@ namespace mrv
                 }
             }
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsFilesPanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->FilesPanelThumbnails->value();
             size = panel::calculateImageSize(thumbnailType);
 
 
@@ -334,7 +334,7 @@ namespace mrv
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsFilesPanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->FilesPanelThumbnails->value();
             image::Size size = panel::calculateImageSize(thumbnailType);
 
             for (auto& m : r.map)

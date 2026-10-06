@@ -61,7 +61,7 @@ namespace mrv
         {
             using namespace panel;
             if (!force &&
-                App::ui->uiPrefs->uiPrefsManualPanelThumbnails->value())
+                App::ui->uiPrefs->ManualPanelThumbnails->value())
                 return;
             if (filesPanel)
             {
@@ -297,7 +297,7 @@ namespace mrv
             }
             pythonPanel = new PythonPanel(ui);
 #    ifdef __APPLE__
-            if (!ui->uiPrefs->uiPrefsMacOSMenus->value())
+            if (!ui->uiPrefs->MacOSMenus->value())
 #    endif
                 ui->uiMain->fill_menu(ui->uiMenuBar);
 #endif

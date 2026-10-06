@@ -429,7 +429,7 @@ namespace mrv
                             p.isScrubbing = true;
                             if (Fl::event_alt())
                             {
-                                float multiplier = p.ui->uiPrefs->uiPrefsAltScrubbingSensitivity->value();
+                                float multiplier = p.ui->uiPrefs->AltScrubbingSensitivity->value();
                                 scrub(multiplier);
                             }
                             else
@@ -476,7 +476,7 @@ namespace mrv
                                 return 0;
 
                             const int X = Fl::event_x() * pixels_per_unit();
-                            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * 20;
+                            const float scale = p.ui->uiPrefs->ScrubbingSensitivity->value() * 20;
                             float dx = (X - p.mousePress.x) / scale;
 
                             if (std::abs(dx) >= 1.0F)
@@ -1234,14 +1234,14 @@ namespace mrv
                 if (!children())
                 {
                     Fl_Widget* oldFocus = Fl::focus();
-                    if (p.ui->uiPrefs->uiPrefsRaiseOnEnter->value())
+                    if (p.ui->uiPrefs->RaiseOnEnter->value())
                         Fl::focus(this);
                     if (oldFocus)
                         oldFocus->redraw();
                 }
 
 #ifdef __APPLE__
-                if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
+                if (p.ui->uiMenuBar && p.ui->uiPrefs->MacOSMenus->value())
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
 #endif
                 _updateCursor();
@@ -1473,7 +1473,7 @@ namespace mrv
                             Fl::event_button() == FL_LEFT_MOUSE &&
                             p.actionMode == ActionMode::kScrub)
                         {
-                            if (p.ui->uiPrefs->uiPrefsSingleClickPlayback->value())
+                            if (p.ui->uiPrefs->SingleClickPlayback->value())
                             {
                                 p.lastEvent = 0;
                                 if (!p.player)

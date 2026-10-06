@@ -1166,7 +1166,7 @@ namespace mrv
         {
             view->setOCIOOptions(savedOCIOOptions);
         }
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setPresentationMode(presentation);
         view->setShowVideo(true);

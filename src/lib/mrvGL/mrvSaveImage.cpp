@@ -613,7 +613,7 @@ namespace mrv
 
         }
 
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
         view->setPresentationMode(presentation);
@@ -658,7 +658,7 @@ namespace mrv
             _save_single_frame(file, ui, options, frameIndex);
         }
 
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
         view->setPresentationMode(presentation);
@@ -734,7 +734,7 @@ namespace mrv
             }
         }
 
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
         view->setPresentationMode(presentation);

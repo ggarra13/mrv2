@@ -116,7 +116,7 @@ namespace mrv
             if (player)
                 time = player->currentTime();
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsStereo3DPanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->Stereo3DPanelThumbnails->value();
             size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
@@ -378,7 +378,7 @@ namespace mrv
             if (!player)
                 return;
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsStereo3DPanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->Stereo3DPanelThumbnails->value();
             image::Size size = panel::calculateImageSize(thumbnailType);
 
             const auto& model = App::app->filesModel();

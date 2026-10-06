@@ -247,10 +247,10 @@ namespace mrv
                     getBackgroundOptions());
             }
 
-            if (p.ui->uiPrefs->uiPrefsScratchFrame->value())
+            if (p.ui->uiPrefs->ScratchFrame->value())
             {
-                Fl_Color c = p.ui->uiPrefs->uiPrefsScratchColor->color();
-                int width = p.ui->uiPrefs->uiPrefsScratchWidth->value();
+                Fl_Color c = p.ui->uiPrefs->ScratchColor->color();
+                int width = p.ui->uiPrefs->ScratchWidth->value();
 
                 uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
                 Fl::get_color(c, ur, ug, ub, ua);
@@ -637,7 +637,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
+            Fl_Color c = p.ui->uiPrefs->ViewSelection->color();
             uint8_t r, g, b;
             Fl::get_color(c, r, g, b);
 
@@ -769,7 +769,7 @@ namespace mrv
             const math::Vector2i shadowPos1{ 1, 1 };
             const math::Vector2i shadowPos2{ -1, -1 };
 
-            Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
+            Fl_Color c = p.ui->uiPrefs->ViewHud->color();
             uint8_t r, g, b;
             Fl::get_color(c, r, g, b);
             const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
@@ -793,7 +793,7 @@ namespace mrv
             const math::Size2i& viewportSize = getViewportSize();
 
             // Calculate resolution multiplier.
-            uint16_t fontSize = p.ui->uiPrefs->uiPrefsHudFontSize->value() *
+            uint16_t fontSize = p.ui->uiPrefs->HudFontSize->value() *
                                 self->pixels_per_unit();
             const image::FontInfo fontInfo(kFontFamily, fontSize);
 

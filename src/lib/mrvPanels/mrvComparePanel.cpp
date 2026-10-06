@@ -144,7 +144,7 @@ namespace mrv
             if (player)
                 time = player->currentTime();
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsComparePanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->ComparePanelThumbnails->value();
             size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
@@ -609,7 +609,7 @@ namespace mrv
             auto Bindices = model->observeBIndexes()->get();
             auto o = model->observeCompareOptions()->get();
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsComparePanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->ComparePanelThumbnails->value();
 
             for (int i = 0; i < numFiles; ++i)
             {

@@ -251,46 +251,46 @@ namespace mrv
         Fl_Preferences gui(base, "ui");
 
         gui.get("single_instance", tmp, 0);
-        uiPrefs->uiPrefsSingleInstance->value((bool)tmp);
+        uiPrefs->SingleInstance->value((bool)tmp);
 
         gui.get("tooltips", tmp, 1);
-        uiPrefs->uiPrefsTooltips->value((bool)tmp);
+        uiPrefs->Tooltips->value((bool)tmp);
 
         gui.get("menubar", tmp, 1);
-        uiPrefs->uiPrefsMenuBar->value((bool)tmp);
+        uiPrefs->MenuBar->value((bool)tmp);
 
         gui.get("topbar", tmp, 1);
-        uiPrefs->uiPrefsTopbar->value((bool)tmp);
+        uiPrefs->Topbar->value((bool)tmp);
 
         gui.get("pixel_toolbar", tmp, 1);
-        uiPrefs->uiPrefsPixelToolbar->value((bool)tmp);
+        uiPrefs->PixelToolbar->value((bool)tmp);
 
         gui.get("timeline_toolbar", tmp, 1);
-        uiPrefs->uiPrefsTimeline->value((bool)tmp);
+        uiPrefs->Timeline->value((bool)tmp);
 
         gui.get("status_toolbar", tmp, 1);
-        uiPrefs->uiPrefsStatusBar->value((bool)tmp);
+        uiPrefs->StatusBar->value((bool)tmp);
 
         gui.get("action_toolbar", tmp, 1);
-        uiPrefs->uiPrefsToolBar->value((bool)tmp);
+        uiPrefs->ToolBar->value((bool)tmp);
 
         gui.get("one_panel_only", tmp, 0);
-        uiPrefs->uiPrefsOnePanelOnly->value((bool)tmp);
+        uiPrefs->OnePanelOnly->value((bool)tmp);
 
         gui.get("macOS_menus", tmp, 0);
-        uiPrefs->uiPrefsMacOSMenus->value((bool)tmp);
+        uiPrefs->MacOSMenus->value((bool)tmp);
 
         gui.get("raise_on_enter", tmp, 0);
-        uiPrefs->uiPrefsRaiseOnEnter->value((bool)tmp);
+        uiPrefs->RaiseOnEnter->value((bool)tmp);
 
         gui.get("timeline_display", tmp, 0);
-        uiPrefs->uiPrefsTimelineDisplay->value(tmp);
+        uiPrefs->TimelineDisplay->value(tmp);
 
         gui.get("timeline_video_offset", tmpF, 0.0);
         uiPrefs->uiStartTimeOffset->value(tmpF);
 
         gui.get("timeline_thumbnails", tmp, 0);
-        uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
+        uiPrefs->TimelineThumbnails->value(tmp);
 
         gui.get("panel_thumbnails", tmp, 1);
 
@@ -305,40 +305,40 @@ namespace mrv
         gui.get("panel_thumbnails_size", tmp, default_panel_thumbnails);
 
         gui.get("files_panel_thumbnails_size", tmp, default_panel_thumbnails);
-        uiPrefs->uiPrefsFilesPanelThumbnails->value(tmp);
+        uiPrefs->FilesPanelThumbnails->value(tmp);
 
         gui.get("compare_panel_thumbnails_size", tmp, default_panel_thumbnails);
-        uiPrefs->uiPrefsComparePanelThumbnails->value(tmp);
+        uiPrefs->ComparePanelThumbnails->value(tmp);
 
         gui.get("stereo3D_panel_thumbnails_size", tmp, default_panel_thumbnails);
-        uiPrefs->uiPrefsStereo3DPanelThumbnails->value(tmp);
+        uiPrefs->Stereo3DPanelThumbnails->value(tmp);
 
         gui.get("panel_thumbnails_manually", tmp, 0);
-        uiPrefs->uiPrefsManualPanelThumbnails->value(tmp);
+        uiPrefs->ManualPanelThumbnails->value(tmp);
 
         gui.get("remove_edls", tmp, 1);
-        uiPrefs->uiPrefsRemoveEDLs->value(tmp);
+        uiPrefs->RemoveEDLs->value(tmp);
 
         gui.get("timeline_edit_mode", tmp, 0);
-        uiPrefs->uiPrefsEditMode->value(tmp);
+        uiPrefs->EditMode->value(tmp);
 
         gui.get("timeline_edit_view", tmp, 0);
-        uiPrefs->uiPrefsEditView->value(tmp);
+        uiPrefs->EditView->value(tmp);
 
         gui.get("timeline_edit_thumbnails", tmp, 1);
-        uiPrefs->uiPrefsEditThumbnails->value(tmp);
+        uiPrefs->EditThumbnails->value(tmp);
 
         gui.get("timeline_edit_transitions", tmp, 1);
-        uiPrefs->uiPrefsShowTransitions->value(tmp);
+        uiPrefs->ShowTransitions->value(tmp);
 
         gui.get("timeline_edit_markers", tmp, 0);
-        uiPrefs->uiPrefsShowMarkers->value(tmp);
+        uiPrefs->ShowMarkers->value(tmp);
 
         gui.get("timeline_editable", tmp, 1);
-        uiPrefs->uiPrefsTimelineEditable->value(tmp);
+        uiPrefs->TimelineEditable->value(tmp);
 
         gui.get("timeline_edit_associated_clips", tmp, 1);
-        uiPrefs->uiPrefsEditAssociatedClips->value(tmp);
+        uiPrefs->EditAssociatedClips->value(tmp);
 
 #ifdef __APPLE__
         {
@@ -355,26 +355,26 @@ namespace mrv
             Fl_Preferences win(gui, "window");
 
             win.get("auto_fit_image", tmp, 1);
-            uiPrefs->uiPrefsAutoFitImage->value(tmp);
+            uiPrefs->AutoFitImage->value(tmp);
 
             win.get("always_on_top", tmp, 0);
-            uiPrefs->uiPrefsAlwaysOnTop->value(tmp);
+            uiPrefs->AlwaysOnTop->value(tmp);
 
             win.get("secondary_on_top", tmp, 1);
-            uiPrefs->uiPrefsSecondaryOnTop->value(tmp);
+            uiPrefs->SecondaryOnTop->value(tmp);
 
             win.get("open_mode", tmp, 0);
 
             {
                 Fl_Round_Button* r;
-                for (int i = 0; i < uiPrefs->uiPrefsOpenMode->children(); ++i)
+                for (int i = 0; i < uiPrefs->OpenMode->children(); ++i)
                 {
 
-                    r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(i);
+                    r = (Fl_Round_Button*)uiPrefs->OpenMode->child(i);
                     r->value(0);
                 }
 
-                r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(tmp);
+                r = (Fl_Round_Button*)uiPrefs->OpenMode->child(tmp);
                 r->value(1);
             }
         }
@@ -386,19 +386,19 @@ namespace mrv
         Fl_Preferences view(gui, "view");
 
         view.get("gain", tmpF, 1.0f);
-        uiPrefs->uiPrefsViewGain->value(tmpF);
+        uiPrefs->ViewGain->value(tmpF);
 
         view.get("gamma", tmpF, 1.0f);
-        uiPrefs->uiPrefsViewGamma->value(tmpF);
+        uiPrefs->ViewGamma->value(tmpF);
 
         view.get("auto_frame", tmp, 1);
-        uiPrefs->uiPrefsAutoFrame->value((bool)tmp);
+        uiPrefs->AutoFrame->value((bool)tmp);
 
         view.get("safe_areas", tmp, 0);
-        uiPrefs->uiPrefsSafeAreas->value((bool)tmp);
+        uiPrefs->SafeAreas->value((bool)tmp);
 
         view.get("ocio_in_top_bar", tmp, 0);
-        uiPrefs->uiPrefsOCIOInTopBar->value((bool)tmp);
+        uiPrefs->OCIOInTopBar->value((bool)tmp);
 
         view.get("debanding", tmp, 0);
 
@@ -409,25 +409,25 @@ namespace mrv
         }
 #endif
 
-        uiPrefs->uiPrefsDebanding->value(tmp);
+        uiPrefs->Debanding->value(tmp);
 
         view.get("video_levels", tmp, 0);
-        uiPrefs->uiPrefsVideoLevels->value(tmp);
+        uiPrefs->VideoLevels->value(tmp);
 
         view.get("alpha_blend", tmp, 1);
-        uiPrefs->uiPrefsAlphaBlend->value(tmp);
+        uiPrefs->AlphaBlend->value(tmp);
 
         view.get("minify_filter", tmp, 1);
-        uiPrefs->uiPrefsMinifyFilter->value(tmp);
+        uiPrefs->MinifyFilter->value(tmp);
 
         view.get("magnify_filter", tmp, 1);
-        uiPrefs->uiPrefsMagnifyFilter->value(tmp);
+        uiPrefs->MagnifyFilter->value(tmp);
 
         view.get("crop_area", tmp, 0);
-        uiPrefs->uiPrefsCropArea->value(tmp);
+        uiPrefs->CropArea->value(tmp);
 
         view.get("zoom_speed", tmp, 2);
-        uiPrefs->uiPrefsZoomSpeed->value(tmp);
+        uiPrefs->ZoomSpeed->value(tmp);
 
         //
         // HDR
@@ -435,38 +435,38 @@ namespace mrv
         Fl_Preferences hdr(gui, "hdr");
 
         hdr.get("vulkan_use_rgb", tmp, 0);
-        uiPrefs->uiPrefsVulkanUseRGB->value(tmp);
+        uiPrefs->VulkanUseRGB->value(tmp);
 
         hdr.get("chromaticities", tmp, 0);
-        uiPrefs->uiPrefsChromaticities->value(tmp);
+        uiPrefs->Chromaticities->value(tmp);
 
 
         //
         // HDR Peak Detection
         //
         hdr.get("peak_detection", tmp, 0);
-        uiPrefs->uiPrefsHDRPeakDetection->value(tmp);
+        uiPrefs->HDRPeakDetection->value(tmp);
 
         hdr.get("peak_detection_percentile", tmpF, 100.F);
-        uiPrefs->uiPrefsHDRPeakPercentile->value(tmpF);
+        uiPrefs->HDRPeakPercentile->value(tmpF);
 
         hdr.get("peak_detection_smoothing_period", tmpF, 20.F);
-        uiPrefs->uiPrefsHDRPeakSmoothingPeriod->value(tmpF);
+        uiPrefs->HDRPeakSmoothingPeriod->value(tmpF);
 
         hdr.get("peak_detection_low_limit", tmpF, 1.F);
-        uiPrefs->uiPrefsHDRPeakLowLimit->value(tmpF);
+        uiPrefs->HDRPeakLowLimit->value(tmpF);
 
         hdr.get("peak_detection_high_limit", tmpF, 3.F);
-        uiPrefs->uiPrefsHDRPeakHighLimit->value(tmpF);
+        uiPrefs->HDRPeakHighLimit->value(tmpF);
 
         hdr.get("hdr_data", tmp, 0);
-        uiPrefs->uiPrefsHDRInfo->value(tmp);
+        uiPrefs->HDRInfo->value(tmp);
 
         hdr.get("tonemap_algorithm", tmp, 5);  // spline is default as libplacebo and mpv
-        uiPrefs->uiPrefsTonemapAlgorithm->value(tmp);
+        uiPrefs->TonemapAlgorithm->value(tmp);
 
         hdr.get("gamut_mapping", tmp, 0);  // Auto is default
-        uiPrefs->uiPrefsGamutMapping->value(tmp);
+        uiPrefs->GamutMapping->value(tmp);
 
         DBG3;
         //
@@ -588,16 +588,16 @@ namespace mrv
             Fl_Preferences colors(view, "colors");
 
             colors.get("background_color", tmp, 0x20202000);
-            uiPrefs->uiPrefsViewBG->color(tmp);
+            uiPrefs->ViewBG->color(tmp);
 
             colors.get("text_overlay_color", tmp, 0xFFFF0000);
-            uiPrefs->uiPrefsViewTextOverlay->color(tmp);
+            uiPrefs->ViewTextOverlay->color(tmp);
 
             colors.get("selection_color", tmp, 0xFFFFFF00);
-            uiPrefs->uiPrefsViewSelection->color(tmp);
+            uiPrefs->ViewSelection->color(tmp);
 
             colors.get("hud_color", tmp, 0xF0F08000);
-            uiPrefs->uiPrefsViewHud->color(tmp);
+            uiPrefs->ViewHud->color(tmp);
         }
 
         //
@@ -653,7 +653,7 @@ namespace mrv
             }
         }
 
-        var = uiPrefs->uiPrefsOCIOConfig->value();
+        var = uiPrefs->OCIOConfig->value();
         if (!var || strlen(var) == 0 || resetSettings)
         {
             setConfig(ocio::ocioDefault);
@@ -702,31 +702,31 @@ namespace mrv
         Fl_Preferences hud(view, "hud");
 
         hud.get("directory", tmp, 0);
-        uiPrefs->uiPrefsHudDirectory->value((bool)tmp);
+        uiPrefs->HudDirectory->value((bool)tmp);
         hud.get("filename", tmp, 0);
-        uiPrefs->uiPrefsHudFilename->value((bool)tmp);
+        uiPrefs->HudFilename->value((bool)tmp);
         hud.get("fps", tmp, 0);
-        uiPrefs->uiPrefsHudFPS->value((bool)tmp);
+        uiPrefs->HudFPS->value((bool)tmp);
         hud.get("frame", tmp, 0);
-        uiPrefs->uiPrefsHudFrame->value((bool)tmp);
+        uiPrefs->HudFrame->value((bool)tmp);
         hud.get("timecode", tmp, 0);
-        uiPrefs->uiPrefsHudTimecode->value((bool)tmp);
+        uiPrefs->HudTimecode->value((bool)tmp);
         hud.get("resolution", tmp, 0);
 
-        uiPrefs->uiPrefsHudResolution->value((bool)tmp);
+        uiPrefs->HudResolution->value((bool)tmp);
         hud.get("frame_range", tmp, 0);
-        uiPrefs->uiPrefsHudFrameRange->value((bool)tmp);
+        uiPrefs->HudFrameRange->value((bool)tmp);
         hud.get("frame_count", tmp, 0);
-        uiPrefs->uiPrefsHudFrameCount->value((bool)tmp);
+        uiPrefs->HudFrameCount->value((bool)tmp);
         hud.get("cache", tmp, 0);
-        uiPrefs->uiPrefsHudCache->value((bool)tmp);
+        uiPrefs->HudCache->value((bool)tmp);
         hud.get("memory", tmp, 0);
-        uiPrefs->uiPrefsHudMemory->value((bool)tmp);
+        uiPrefs->HudMemory->value((bool)tmp);
         hud.get("attributes", tmp, 0);
-        uiPrefs->uiPrefsHudAttributes->value((bool)tmp);
+        uiPrefs->HudAttributes->value((bool)tmp);
 
         hud.get("font_size", tmp, 12);
-        uiPrefs->uiPrefsHudFontSize->value(tmp);
+        uiPrefs->HudFontSize->value(tmp);
 
         Fl_Preferences win(view, "window");
 
@@ -764,15 +764,15 @@ namespace mrv
         //
 
         flu.get("quick_folder_travel", tmp, 1);
-        uiPrefs->uiPrefsFileReqFolder->value((bool)tmp);
+        uiPrefs->FileReqFolder->value((bool)tmp);
         Flu_File_Chooser::singleButtonTravelDrawer = (bool)tmp;
 
         flu.get("thumbnails", tmp, 1);
-        uiPrefs->uiPrefsFileReqThumbnails->value((bool)tmp);
+        uiPrefs->FileReqThumbnails->value((bool)tmp);
         Flu_File_Chooser::thumbnailsFileReq = (bool)tmp;
 
         flu.get("usd_thumbnails", tmp, 1);
-        uiPrefs->uiPrefsUSDThumbnails->value((bool)tmp);
+        uiPrefs->USDThumbnails->value((bool)tmp);
         Flu_File_Chooser::thumbnailsUSD = (bool)tmp;
 
         //
@@ -781,45 +781,45 @@ namespace mrv
         Fl_Preferences playback(base, "playback");
 
         playback.get("auto_playback", tmp, 1);
-        uiPrefs->uiPrefsAutoPlayback->value(tmp);
+        uiPrefs->AutoPlayback->value(tmp);
 
         playback.get("single_click_playback", tmp, 0);
-        uiPrefs->uiPrefsSingleClickPlayback->value(tmp);
+        uiPrefs->SingleClickPlayback->value(tmp);
 
         playback.get("auto_hide_pixel_bar", tmp, kAutoHideOpenGLOnly);
-        uiPrefs->uiPrefsAutoHidePixelBar->value(tmp);
+        uiPrefs->AutoHidePixelBar->value(tmp);
 
         playback.get("fps", tmpF, 24.0);
-        uiPrefs->uiPrefsFPS->value(tmpF);
+        uiPrefs->FPS->value(tmpF);
 
         playback.get("loop", tmp, 0);
-        uiPrefs->uiPrefsLoopMode->value(tmp);
+        uiPrefs->LoopMode->value(tmp);
 
         playback.get("scrubbing_sensitivity", tmpF, 5.0f);
-        uiPrefs->uiPrefsScrubbingSensitivity->value(tmpF);
+        uiPrefs->ScrubbingSensitivity->value(tmpF);
 
         playback.get("scrub_auto_playback", tmp, 1);
-        uiPrefs->uiPrefsScrubAutoPlay->value(tmp);
+        uiPrefs->ScrubAutoPlay->value(tmp);
 
         playback.get("scrubbing_loop_mode", tmp, 0);
-        uiPrefs->uiPrefsScrubbingLoopMode->value(tmp);
+        uiPrefs->ScrubbingLoopMode->value(tmp);
 
 
         Fl_Preferences pixel_toolbar(base, "pixel_toolbar");
 
         pixel_toolbar.get("RGBA_pixel", tmp, 0);
-        uiPrefs->uiPrefsPixelRGBA->value(tmp);
+        uiPrefs->PixelRGBA->value(tmp);
 
         pixel_toolbar.get("pixel_values", tmp, 0);
         if (version < kPreferencesVersion)
             tmp += 2;
-        uiPrefs->uiPrefsPixelValues->value(tmp);
+        uiPrefs->PixelValues->value(tmp);
 
         pixel_toolbar.get("HSV_pixel", tmp, 0);
-        uiPrefs->uiPrefsPixelHSV->value(tmp);
+        uiPrefs->PixelHSV->value(tmp);
 
         pixel_toolbar.get("Lumma_pixel", tmp, 0);
-        uiPrefs->uiPrefsPixelLumma->value(tmp);
+        uiPrefs->PixelLumma->value(tmp);
 
         Fl_Preferences loading(base, "loading");
 
@@ -828,30 +828,30 @@ namespace mrv
 #else
         loading.get("native_file_chooser", tmp, 0);
 #endif
-        uiPrefs->uiPrefsNativeFileChooser->value((bool)tmp);
+        uiPrefs->NativeFileChooser->value((bool)tmp);
 
         loading.get("missing_frame_type", tmp, 0);
         uiPrefs->uiMissingFrameType->value(tmp);
         missingFrames = static_cast<tl::io::MissingFrames>(tmp);
 
         loading.get("scratch_frame", tmp, 1);
-        uiPrefs->uiPrefsScratchFrame->value(tmp);
+        uiPrefs->ScratchFrame->value(tmp);
 
         loading.get("scratch_color", tmp, fl_rgb_color(255, 0, 0));
-        uiPrefs->uiPrefsScratchColor->color(tmp);
+        uiPrefs->ScratchColor->color(tmp);
 
         loading.get("scratch_width", tmp, 4);
-        uiPrefs->uiPrefsScratchWidth->value(tmp);
+        uiPrefs->ScratchWidth->value(tmp);
 
         loading.get("version_regex", tmpS, "_v", 4096);
         if (strlen(tmpS) == 0)
         {
             strcpy(tmpS, "_v");
         }
-        uiPrefs->uiPrefsVersionRegex->value(tmpS);
+        uiPrefs->VersionRegex->value(tmpS);
 
         loading.get("max_images_apart", tmp, 10);
-        uiPrefs->uiPrefsMaxImagesApart->value(tmp);
+        uiPrefs->MaxImagesApart->value(tmp);
 
         char key[2048];
 
@@ -933,11 +933,11 @@ namespace mrv
         Fl_Preferences errors(base, "errors");
         errors.get("log_display", tmp, 2);
 
-        uiPrefs->uiPrefsRaiseLogWindowOnError->value(tmp);
+        uiPrefs->RaiseLogWindowOnError->value(tmp);
         LogDisplay::prefs = (LogDisplay::ShowPreferences)tmp;
 
         errors.get("ffmpeg_log_display", tmp, 0);
-        uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value(tmp);
+        uiPrefs->RaiseLogWindowOnFFmpegError->value(tmp);
         LogDisplay::ffmpegPrefs = (LogDisplay::ShowPreferences)tmp;
 
         Fl_Preferences video(base, "opengl");
@@ -947,36 +947,36 @@ namespace mrv
 // #ifdef __linux__
 //         tmp = 1;  // \@bug: Linux must have Always VSync for now (NVidia bug?)
 // #endif
-        uiPrefs->uiPrefsOpenGLVsync->value(tmp);
+        uiPrefs->OpenGLVsync->value(tmp);
 
         video.get("color_buffers_accuracy", tmp, 0);
-        uiPrefs->uiPrefsColorAccuracy->value(tmp);
+        uiPrefs->ColorAccuracy->value(tmp);
 
         video.get("blit_viewports", tmp, 0);
-        uiPrefs->uiPrefsBlitMainViewport->value(tmp);
-        uiPrefs->uiPrefsBlitSecondaryViewport->value(tmp);
+        uiPrefs->BlitMainViewport->value(tmp);
+        uiPrefs->BlitSecondaryViewport->value(tmp);
 
         video.get("blit_main_viewport", tmp, 0);
-        uiPrefs->uiPrefsBlitMainViewport->value(tmp);
+        uiPrefs->BlitMainViewport->value(tmp);
 
         video.get("blit_secondary_viewport", tmp, 0);
-        uiPrefs->uiPrefsBlitSecondaryViewport->value(tmp);
+        uiPrefs->BlitSecondaryViewport->value(tmp);
 
         video.get("blit_timeline", tmp, 0);
-        uiPrefs->uiPrefsBlitTimeline->value(tmp);
+        uiPrefs->BlitTimeline->value(tmp);
 
         //
         // Vulkan
         //
         Fl_Preferences vulkan(base, "vulkan");
         vulkan.get("gpu_main_viewport", tmp, 0);
-        uiPrefs->uiPrefsMainViewportGPU->value(tmp);
+        uiPrefs->MainViewportGPU->value(tmp);
 
         vulkan.get("gpu_secondary_viewport", tmp, 0);
-        uiPrefs->uiPrefsSecondaryViewportGPU->value(tmp);
+        uiPrefs->SecondaryViewportGPU->value(tmp);
 
         vulkan.get("gpu_timeline", tmp, 0);
-        uiPrefs->uiPrefsTimelineGPU->value(tmp);
+        uiPrefs->TimelineGPU->value(tmp);
 
         //
         // Audio
@@ -984,10 +984,10 @@ namespace mrv
         Fl_Preferences audio(base, "audio");
 
         audio.get("API", tmp, 0);
-        uiPrefs->uiPrefsAudioAPI->value(tmp);
+        uiPrefs->AudioAPI->value(tmp);
 
         audio.get("output_device", tmp, 0);
-        uiPrefs->uiPrefsAudioOutputDevice->value(tmp);
+        uiPrefs->AudioOutputDevice->value(tmp);
 
         //
         // Voice Overs
@@ -995,16 +995,16 @@ namespace mrv
         Fl_Preferences voice(base, "voice");
 
         voice.get("path", tmpS, tmppath().c_str(), 4096);
-        uiPrefs->uiPrefsVoiceOverPath->value(tmpS);
+        uiPrefs->VoiceOverPath->value(tmpS);
 
         voice.get("speed", tmp, 0);
-        uiPrefs->uiPrefsVoiceOverSpeed->value(tmp);
+        uiPrefs->VoiceOverSpeed->value(tmp);
 
         voice.get("microphone", tmp, 0);
-        uiPrefs->uiPrefsVoiceOverMicrophone->value(tmp);
+        uiPrefs->VoiceOverMicrophone->value(tmp);
 
         voice.get("volume", tmpF, 100.F);
-        uiPrefs->uiPrefsVoiceOverSpeed->value(tmpF);
+        uiPrefs->VoiceOverSpeed->value(tmpF);
 
         //
         // ComfyUI
@@ -1012,7 +1012,7 @@ namespace mrv
         Fl_Preferences ComfyUI(base, "comfyUI");
 
         ComfyUI.get("input_pipe", tmp, 0);
-        uiPrefs->uiPrefsUseComfyUIPipe->value((bool)tmp);
+        uiPrefs->UseComfyUIPipe->value((bool)tmp);
 
         //
         // WebRTC
@@ -1020,37 +1020,37 @@ namespace mrv
         Fl_Preferences WebRTC(base, "WebRTC") ;
 
         WebRTC.get("stun_server", tmpS, "stun:stun.l.google.com:19302", 4096);
-        uiPrefs->uiPrefsWebRTCStunServer->value(tmpS);
+        uiPrefs->WebRTCStunServer->value(tmpS);
 
         WebRTC.get("turn_server", tmpS, "", 4096);
-        uiPrefs->uiPrefsWebRTCTurnServer->value(tmpS);
+        uiPrefs->WebRTCTurnServer->value(tmpS);
 
         std::string webrtc_signaling = "wss://sync.filmaura.cloud/sync";
         WebRTC.get("webrtc_signaling", tmpS, webrtc_signaling.c_str(), 4096);
         if (strlen(tmpS) != 0)
             webrtc_signaling = tmpS;
-        uiPrefs->uiPrefsWebRTCSignalingServer->value(webrtc_signaling.c_str());
+        uiPrefs->WebRTCSignalingServer->value(webrtc_signaling.c_str());
 
 
 
         WebRTC.get("webrtc_studio", tmpS, "", 4096);
-        uiPrefs->uiPrefsWebRTCStudio->value(tmpS);
+        uiPrefs->WebRTCStudio->value(tmpS);
 
 
         WebRTC.get("clean_directory", tmp, 1);
-        uiPrefs->uiPrefsWebRTCCleanDirectory->value(tmp);
+        uiPrefs->WebRTCCleanDirectory->value(tmp);
 
         WebRTC.get("choice", tmp, 0);
-        uiPrefs->uiPrefsWebRTCCacheSetting->value(tmp);
+        uiPrefs->WebRTCCacheSetting->value(tmp);
 
         std::string defaultValue = mrv::homepath() +
                                    "/.config/mrv2/cache/remote";
         WebRTC.get("cache_directory", tmpS, defaultValue.c_str(), 4096);
-        uiPrefs->uiPrefsWebRTCCacheDirectory->value(tmpS);
+        uiPrefs->WebRTCCacheDirectory->value(tmpS);
 
-        if (uiPrefs->uiPrefsWebRTCCleanDirectory->value())
+        if (uiPrefs->WebRTCCleanDirectory->value())
         {
-            std::string dir = uiPrefs->uiPrefsWebRTCCacheDirectory->value();
+            std::string dir = uiPrefs->WebRTCCacheDirectory->value();
             // Make sure path is > 5 letters long for safety.
             if (dir.size() > 5)
             {
@@ -1083,10 +1083,10 @@ namespace mrv
         Fl_Preferences behavior(base, "behavior");
 
         behavior.get("check_for_updates", tmp, 0);
-        uiPrefs->uiPrefsCheckForUpdates->value(tmp);
+        uiPrefs->CheckForUpdates->value(tmp);
 
         behavior.get("allow_screen_saver", tmp, 0);
-        uiPrefs->uiPrefsAllowScreenSaver->value(tmp);
+        uiPrefs->AllowScreenSaver->value(tmp);
 
 
         //
@@ -1187,7 +1187,7 @@ namespace mrv
         // Handle Shader Options
         timeline::ShaderOptions shaderOptions;
         shaderOptions.debanding =
-            static_cast<timeline::Debanding>(uiPrefs->uiPrefsDebanding->value());
+            static_cast<timeline::Debanding>(uiPrefs->Debanding->value());
         ui->uiView->setShaderOptions(shaderOptions);
 
         // Handle Dockgroup size (based on percentage)
@@ -1436,16 +1436,16 @@ namespace mrv
         {
             Fl_Preferences win(gui, "window");
             win.set(
-                "auto_fit_image", (int)uiPrefs->uiPrefsAutoFitImage->value());
-            win.set("always_on_top", (int)uiPrefs->uiPrefsAlwaysOnTop->value());
+                "auto_fit_image", (int)uiPrefs->AutoFitImage->value());
+            win.set("always_on_top", (int)uiPrefs->AlwaysOnTop->value());
             win.set(
                 "secondary_on_top",
-                (int)uiPrefs->uiPrefsSecondaryOnTop->value());
+                (int)uiPrefs->SecondaryOnTop->value());
             int tmp = 0;
-            for (i = 0; i < uiPrefs->uiPrefsOpenMode->children(); ++i)
+            for (i = 0; i < uiPrefs->OpenMode->children(); ++i)
             {
                 Fl_Round_Button* r =
-                    (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(i);
+                    (Fl_Round_Button*)uiPrefs->OpenMode->child(i);
                 if (r->value())
                 {
                     tmp = i;
@@ -1464,102 +1464,102 @@ namespace mrv
             gui.set("language_code", language);
         }
 
-        gui.set("tooltips", (int)uiPrefs->uiPrefsTooltips->value());
-        gui.set("menubar", (int)uiPrefs->uiPrefsMenuBar->value());
-        gui.set("topbar", (int)uiPrefs->uiPrefsTopbar->value());
+        gui.set("tooltips", (int)uiPrefs->Tooltips->value());
+        gui.set("menubar", (int)uiPrefs->MenuBar->value());
+        gui.set("topbar", (int)uiPrefs->Topbar->value());
         gui.set(
-            "single_instance", (int)uiPrefs->uiPrefsSingleInstance->value());
-        gui.set("pixel_toolbar", (int)uiPrefs->uiPrefsPixelToolbar->value());
-        gui.set("timeline_toolbar", (int)uiPrefs->uiPrefsTimeline->value());
-        gui.set("status_toolbar", (int)uiPrefs->uiPrefsStatusBar->value());
-        gui.set("action_toolbar", (int)uiPrefs->uiPrefsToolBar->value());
-        gui.set("one_panel_only", (int)uiPrefs->uiPrefsOnePanelOnly->value());
-        gui.set("macOS_menus", (int)uiPrefs->uiPrefsMacOSMenus->value());
-        gui.set("raise_on_enter", (int)uiPrefs->uiPrefsRaiseOnEnter->value());
+            "single_instance", (int)uiPrefs->SingleInstance->value());
+        gui.set("pixel_toolbar", (int)uiPrefs->PixelToolbar->value());
+        gui.set("timeline_toolbar", (int)uiPrefs->Timeline->value());
+        gui.set("status_toolbar", (int)uiPrefs->StatusBar->value());
+        gui.set("action_toolbar", (int)uiPrefs->ToolBar->value());
+        gui.set("one_panel_only", (int)uiPrefs->OnePanelOnly->value());
+        gui.set("macOS_menus", (int)uiPrefs->MacOSMenus->value());
+        gui.set("raise_on_enter", (int)uiPrefs->RaiseOnEnter->value());
 
-        gui.set("timeline_display", uiPrefs->uiPrefsTimelineDisplay->value());
+        gui.set("timeline_display", uiPrefs->TimelineDisplay->value());
         gui.set("timeline_video_offset", uiPrefs->uiStartTimeOffset->value());
         gui.set(
-            "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
+            "timeline_thumbnails", uiPrefs->TimelineThumbnails->value());
 
         // Thumbnails sizes on all panels
         gui.set("files_panel_thumbnails_size",
-                uiPrefs->uiPrefsFilesPanelThumbnails->value());
+                uiPrefs->FilesPanelThumbnails->value());
         gui.set("compare_panel_thumbnails_size",
-                uiPrefs->uiPrefsComparePanelThumbnails->value());
+                uiPrefs->ComparePanelThumbnails->value());
         gui.set("stereo3D_panel_thumbnails_size",
-                uiPrefs->uiPrefsStereo3DPanelThumbnails->value());
+                uiPrefs->Stereo3DPanelThumbnails->value());
 
         gui.set("panel_thumbnails_manually",
-                uiPrefs->uiPrefsManualPanelThumbnails->value());
-        gui.set("remove_edls", uiPrefs->uiPrefsRemoveEDLs->value());
-        gui.set("timeline_edit_mode", uiPrefs->uiPrefsEditMode->value());
-        gui.set("timeline_edit_view", uiPrefs->uiPrefsEditView->value());
+                uiPrefs->ManualPanelThumbnails->value());
+        gui.set("remove_edls", uiPrefs->RemoveEDLs->value());
+        gui.set("timeline_edit_mode", uiPrefs->EditMode->value());
+        gui.set("timeline_edit_view", uiPrefs->EditView->value());
         gui.set(
             "timeline_edit_thumbnails",
-            uiPrefs->uiPrefsEditThumbnails->value());
+            uiPrefs->EditThumbnails->value());
         gui.set(
             "timeline_edit_transitions",
-            uiPrefs->uiPrefsShowTransitions->value());
-        gui.set("timeline_edit_markers", uiPrefs->uiPrefsShowMarkers->value());
-        gui.set("timeline_editable", uiPrefs->uiPrefsTimelineEditable->value());
+            uiPrefs->ShowTransitions->value());
+        gui.set("timeline_edit_markers", uiPrefs->ShowMarkers->value());
+        gui.set("timeline_editable", uiPrefs->TimelineEditable->value());
         gui.set(
             "timeline_edit_associated_clips",
-            uiPrefs->uiPrefsEditAssociatedClips->value());
+            uiPrefs->EditAssociatedClips->value());
 
         //
         // ui/view prefs
         //
         Fl_Preferences view(gui, "view");
-        view.set("gain", uiPrefs->uiPrefsViewGain->value());
-        view.set("gamma", uiPrefs->uiPrefsViewGamma->value());
+        view.set("gain", uiPrefs->ViewGain->value());
+        view.set("gamma", uiPrefs->ViewGamma->value());
 
-        view.set("auto_frame", uiPrefs->uiPrefsAutoFrame->value());
-        view.set("safe_areas", uiPrefs->uiPrefsSafeAreas->value());
-        view.set("ocio_in_top_bar", uiPrefs->uiPrefsOCIOInTopBar->value());
-        view.set("video_levels", uiPrefs->uiPrefsVideoLevels->value());
-        view.set("debanding", uiPrefs->uiPrefsDebanding->value());
+        view.set("auto_frame", uiPrefs->AutoFrame->value());
+        view.set("safe_areas", uiPrefs->SafeAreas->value());
+        view.set("ocio_in_top_bar", uiPrefs->OCIOInTopBar->value());
+        view.set("video_levels", uiPrefs->VideoLevels->value());
+        view.set("debanding", uiPrefs->Debanding->value());
 
-        view.set("alpha_blend", uiPrefs->uiPrefsAlphaBlend->value());
-        view.set("minify_filter", uiPrefs->uiPrefsMinifyFilter->value());
-        view.set("magnify_filter", uiPrefs->uiPrefsMagnifyFilter->value());
-        view.set("crop_area", uiPrefs->uiPrefsCropArea->value());
-        view.set("zoom_speed", (int)uiPrefs->uiPrefsZoomSpeed->value());
+        view.set("alpha_blend", uiPrefs->AlphaBlend->value());
+        view.set("minify_filter", uiPrefs->MinifyFilter->value());
+        view.set("magnify_filter", uiPrefs->MagnifyFilter->value());
+        view.set("crop_area", uiPrefs->CropArea->value());
+        view.set("zoom_speed", (int)uiPrefs->ZoomSpeed->value());
 
         Fl_Preferences hdr(gui, "hdr");
-        hdr.set("vulkan_use_rgb", uiPrefs->uiPrefsVulkanUseRGB->value());
-        hdr.set("chromaticities", uiPrefs->uiPrefsChromaticities->value());
+        hdr.set("vulkan_use_rgb", uiPrefs->VulkanUseRGB->value());
+        hdr.set("chromaticities", uiPrefs->Chromaticities->value());
 
         // HDR Peak detection
-        hdr.set("peak_detection", uiPrefs->uiPrefsHDRPeakDetection->value());
+        hdr.set("peak_detection", uiPrefs->HDRPeakDetection->value());
 
 
         hdr.set("peak_detection_percentile",
-                uiPrefs->uiPrefsHDRPeakPercentile->value());
+                uiPrefs->HDRPeakPercentile->value());
         hdr.set("peak_detection_smoothing_period",
-                uiPrefs->uiPrefsHDRPeakSmoothingPeriod->value());
+                uiPrefs->HDRPeakSmoothingPeriod->value());
         hdr.set("peak_detection_low_limit",
-                uiPrefs->uiPrefsHDRPeakLowLimit->value());
+                uiPrefs->HDRPeakLowLimit->value());
         hdr.set("peak_detection_high_limit",
-                uiPrefs->uiPrefsHDRPeakHighLimit->value());
+                uiPrefs->HDRPeakHighLimit->value());
 
-        hdr.set("hdr_data", uiPrefs->uiPrefsHDRInfo->value());
+        hdr.set("hdr_data", uiPrefs->HDRInfo->value());
         hdr.set("tonemap_algorithm",
-                uiPrefs->uiPrefsTonemapAlgorithm->value());
-        hdr.set("gamut_mapping", uiPrefs->uiPrefsGamutMapping->value());
+                uiPrefs->TonemapAlgorithm->value());
+        hdr.set("gamut_mapping", uiPrefs->GamutMapping->value());
 
         //
         // view/colors prefs
         //
         {
             Fl_Preferences colors(view, "colors");
-            int tmp = uiPrefs->uiPrefsViewBG->color();
+            int tmp = uiPrefs->ViewBG->color();
             colors.set("background_color", tmp);
-            tmp = uiPrefs->uiPrefsViewTextOverlay->color();
+            tmp = uiPrefs->ViewTextOverlay->color();
             colors.set("text_overlay_color", tmp);
-            tmp = uiPrefs->uiPrefsViewSelection->color();
+            tmp = uiPrefs->ViewSelection->color();
             colors.set("selection_color", tmp);
-            tmp = uiPrefs->uiPrefsViewHud->color();
+            tmp = uiPrefs->ViewHud->color();
             colors.set("hud_color", tmp);
         }
 
@@ -1575,7 +1575,7 @@ namespace mrv
         {
             Fl_Preferences ocio(view, "ocio");
 
-            ocio.set("config", uiPrefs->uiPrefsOCIOConfig->value());
+            ocio.set("config", uiPrefs->OCIOConfig->value());
             ocio.set("use_ocio_auto_ics",
                      uiPrefs->uiOCIOUseAutoICS->value());
             ocio.set(
@@ -1607,18 +1607,18 @@ namespace mrv
         // view/hud prefs
         //
         Fl_Preferences hud(view, "hud");
-        hud.set("directory", uiPrefs->uiPrefsHudDirectory->value());
-        hud.set("filename", uiPrefs->uiPrefsHudFilename->value());
-        hud.set("fps", uiPrefs->uiPrefsHudFPS->value());
-        hud.set("non_drop_timecode", uiPrefs->uiPrefsHudTimecode->value());
-        hud.set("frame", uiPrefs->uiPrefsHudFrame->value());
-        hud.set("resolution", uiPrefs->uiPrefsHudResolution->value());
-        hud.set("frame_range", uiPrefs->uiPrefsHudFrameRange->value());
-        hud.set("frame_count", uiPrefs->uiPrefsHudFrameCount->value());
-        hud.set("cache", uiPrefs->uiPrefsHudCache->value());
-        hud.set("memory", uiPrefs->uiPrefsHudMemory->value());
-        hud.set("attributes", uiPrefs->uiPrefsHudAttributes->value());
-        hud.set("font_size", uiPrefs->uiPrefsHudFontSize->value());
+        hud.set("directory", uiPrefs->HudDirectory->value());
+        hud.set("filename", uiPrefs->HudFilename->value());
+        hud.set("fps", uiPrefs->HudFPS->value());
+        hud.set("non_drop_timecode", uiPrefs->HudTimecode->value());
+        hud.set("frame", uiPrefs->HudFrame->value());
+        hud.set("resolution", uiPrefs->HudResolution->value());
+        hud.set("frame_range", uiPrefs->HudFrameRange->value());
+        hud.set("frame_count", uiPrefs->HudFrameCount->value());
+        hud.set("cache", uiPrefs->HudCache->value());
+        hud.set("memory", uiPrefs->HudMemory->value());
+        hud.set("attributes", uiPrefs->HudAttributes->value());
+        hud.set("font_size", uiPrefs->HudFontSize->value());
 
         {
             Fl_Preferences win(view, "window");
@@ -1661,64 +1661,64 @@ namespace mrv
         colors.set("theme", uiPrefs->uiColorTheme->text());
 
         Fl_Preferences flu(gui, "file_requester");
-        flu.set("quick_folder_travel", uiPrefs->uiPrefsFileReqFolder->value());
-        flu.set("thumbnails", uiPrefs->uiPrefsFileReqThumbnails->value());
-        flu.set("usd_thumbnails", uiPrefs->uiPrefsUSDThumbnails->value());
+        flu.set("quick_folder_travel", uiPrefs->FileReqFolder->value());
+        flu.set("thumbnails", uiPrefs->FileReqThumbnails->value());
+        flu.set("usd_thumbnails", uiPrefs->USDThumbnails->value());
 
         //
         Flu_File_Chooser::singleButtonTravelDrawer =
-            uiPrefs->uiPrefsFileReqFolder->value();
+            uiPrefs->FileReqFolder->value();
         Flu_File_Chooser::thumbnailsFileReq =
-            uiPrefs->uiPrefsFileReqThumbnails->value();
+            uiPrefs->FileReqThumbnails->value();
         Flu_File_Chooser::thumbnailsUSD =
-            uiPrefs->uiPrefsUSDThumbnails->value();
+            uiPrefs->USDThumbnails->value();
 
         //
         // playback prefs
         //
         Fl_Preferences playback(base, "playback");
         playback.set(
-            "auto_playback", (int)uiPrefs->uiPrefsAutoPlayback->value());
+            "auto_playback", (int)uiPrefs->AutoPlayback->value());
         playback.set(
             "single_click_playback",
-            (int)uiPrefs->uiPrefsSingleClickPlayback->value());
+            (int)uiPrefs->SingleClickPlayback->value());
         playback.set(
             "auto_hide_pixel_bar",
-            (int)uiPrefs->uiPrefsAutoHidePixelBar->value());
-        playback.set("fps", uiPrefs->uiPrefsFPS->value());
+            (int)uiPrefs->AutoHidePixelBar->value());
+        playback.set("fps", uiPrefs->FPS->value());
         playback.delete_entry("loop_mode"); // legacy preference
-        playback.set("loop", uiPrefs->uiPrefsLoopMode->value());
+        playback.set("loop", uiPrefs->LoopMode->value());
         playback.set(
             "scrubbing_sensitivity",
-            uiPrefs->uiPrefsScrubbingSensitivity->value());
+            uiPrefs->ScrubbingSensitivity->value());
         playback.set(
-            "scrub_auto_playback", uiPrefs->uiPrefsScrubAutoPlay->value());
+            "scrub_auto_playback", uiPrefs->ScrubAutoPlay->value());
 
         playback.set("scrubbing_loop_mode",
-                     uiPrefs->uiPrefsScrubbingLoopMode->value());
+                     uiPrefs->ScrubbingLoopMode->value());
 
         Fl_Preferences pixel_toolbar(base, "pixel_toolbar");
-        pixel_toolbar.set("RGBA_pixel", uiPrefs->uiPrefsPixelRGBA->value());
-        pixel_toolbar.set("pixel_values", uiPrefs->uiPrefsPixelValues->value());
-        pixel_toolbar.set("HSV_pixel", uiPrefs->uiPrefsPixelHSV->value());
-        pixel_toolbar.set("Lumma_pixel", uiPrefs->uiPrefsPixelLumma->value());
+        pixel_toolbar.set("RGBA_pixel", uiPrefs->PixelRGBA->value());
+        pixel_toolbar.set("pixel_values", uiPrefs->PixelValues->value());
+        pixel_toolbar.set("HSV_pixel", uiPrefs->PixelHSV->value());
+        pixel_toolbar.set("Lumma_pixel", uiPrefs->PixelLumma->value());
 
         Fl_Preferences loading(base, "loading");
 
         loading.set(
             "native_file_chooser",
-            (int)uiPrefs->uiPrefsNativeFileChooser->value());
+            (int)uiPrefs->NativeFileChooser->value());
 
         loading.set("missing_frame_type", uiPrefs->uiMissingFrameType->value());
 
-        loading.set("scratch_frame", uiPrefs->uiPrefsScratchFrame->value());
+        loading.set("scratch_frame", uiPrefs->ScratchFrame->value());
         loading.set("scratch_color",
-                    (int)uiPrefs->uiPrefsScratchColor->color());
-        loading.set("scratch_width", uiPrefs->uiPrefsScratchWidth->value());
+                    (int)uiPrefs->ScratchColor->color());
+        loading.set("scratch_width", uiPrefs->ScratchWidth->value());
 
-        loading.set("version_regex", uiPrefs->uiPrefsVersionRegex->value());
+        loading.set("version_regex", uiPrefs->VersionRegex->value());
         loading.set(
-            "max_images_apart", (int)uiPrefs->uiPrefsMaxImagesApart->value());
+            "max_images_apart", (int)uiPrefs->MaxImagesApart->value());
 
         char key[256];
 
@@ -1775,74 +1775,74 @@ namespace mrv
 
         Fl_Preferences errors(base, "errors");
         errors.set(
-            "log_display", (int)uiPrefs->uiPrefsRaiseLogWindowOnError->value());
+            "log_display", (int)uiPrefs->RaiseLogWindowOnError->value());
         errors.set(
             "ffmpeg_log_display",
-            (int)uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value());
+            (int)uiPrefs->RaiseLogWindowOnFFmpegError->value());
 
         Fl_Preferences video(base, "opengl");
-        video.set("vsync", (int)uiPrefs->uiPrefsOpenGLVsync->value());
+        video.set("vsync", (int)uiPrefs->OpenGLVsync->value());
         video.set(
             "color_buffers_accuracy",
-            (int)uiPrefs->uiPrefsColorAccuracy->value());
+            (int)uiPrefs->ColorAccuracy->value());
         video.set(
-            "blit_main_viewport", (int)uiPrefs->uiPrefsBlitMainViewport->value());
+            "blit_main_viewport", (int)uiPrefs->BlitMainViewport->value());
         video.set(
-            "blit_secondary_viewport", (int)uiPrefs->uiPrefsBlitSecondaryViewport->value());
-        video.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
+            "blit_secondary_viewport", (int)uiPrefs->BlitSecondaryViewport->value());
+        video.set("blit_timeline", (int)uiPrefs->BlitTimeline->value());
 
         Fl_Preferences vulkan(base, "vulkan");
         vulkan.set(
             "gpu_main_viewport",
-            (int)uiPrefs->uiPrefsMainViewportGPU->value());
+            (int)uiPrefs->MainViewportGPU->value());
         vulkan.set(
             "gpu_secondary_viewport",
-            (int)uiPrefs->uiPrefsSecondaryViewportGPU->value());
+            (int)uiPrefs->SecondaryViewportGPU->value());
         vulkan.set("gpu_timeline",
-                   (int)uiPrefs->uiPrefsTimelineGPU->value());
+                   (int)uiPrefs->TimelineGPU->value());
 
         //
         // Voice Overs
         //
         Fl_Preferences voice(base, "voice");
 
-        voice.set("path", uiPrefs->uiPrefsVoiceOverPath->value());
-        voice.set("speed", uiPrefs->uiPrefsVoiceOverSpeed->value());
-        voice.set("microphone", uiPrefs->uiPrefsVoiceOverMicrophone->value());
-        voice.set("volume", uiPrefs->uiPrefsVoiceOverSpeed->value());
+        voice.set("path", uiPrefs->VoiceOverPath->value());
+        voice.set("speed", uiPrefs->VoiceOverSpeed->value());
+        voice.set("microphone", uiPrefs->VoiceOverMicrophone->value());
+        voice.set("volume", uiPrefs->VoiceOverSpeed->value());
 
 
         Fl_Preferences ComfyUI(base, "comfyUI");
-        ComfyUI.set("input_pipe", (int)uiPrefs->uiPrefsUseComfyUIPipe->value());
+        ComfyUI.set("input_pipe", (int)uiPrefs->UseComfyUIPipe->value());
 
         Fl_Preferences WebRTC(base, "WebRTC");
 
-        WebRTC.set("stun_server", uiPrefs->uiPrefsWebRTCStunServer->value());
-        WebRTC.set("turn_server", uiPrefs->uiPrefsWebRTCTurnServer->value());
+        WebRTC.set("stun_server", uiPrefs->WebRTCStunServer->value());
+        WebRTC.set("turn_server", uiPrefs->WebRTCTurnServer->value());
 
-        WebRTC.set("webrtc_signaling", uiPrefs->uiPrefsWebRTCSignalingServer->value());
+        WebRTC.set("webrtc_signaling", uiPrefs->WebRTCSignalingServer->value());
 
-        WebRTC.set("webrtc_studio", uiPrefs->uiPrefsWebRTCStudio->value());
+        WebRTC.set("webrtc_studio", uiPrefs->WebRTCStudio->value());
 
         WebRTC.set("choice",
-                   (int)uiPrefs->uiPrefsWebRTCCacheSetting->value());
+                   (int)uiPrefs->WebRTCCacheSetting->value());
         WebRTC.set("clean_directory",
-                   (int)uiPrefs->uiPrefsWebRTCCleanDirectory->value());
+                   (int)uiPrefs->WebRTCCleanDirectory->value());
         WebRTC.set("cache_directory",
-                   uiPrefs->uiPrefsWebRTCCacheDirectory->value());
+                   uiPrefs->WebRTCCacheDirectory->value());
 
         Fl_Preferences audio(base, "audio");
 
-        audio.set("API", (int)uiPrefs->uiPrefsAudioAPI->value());
+        audio.set("API", (int)uiPrefs->AudioAPI->value());
         audio.set(
-            "output_device", (int)uiPrefs->uiPrefsAudioOutputDevice->value());
+            "output_device", (int)uiPrefs->AudioOutputDevice->value());
 
         Fl_Preferences behavior(base, "behavior");
         behavior.set(
-            "check_for_updates", (int)uiPrefs->uiPrefsCheckForUpdates->value());
+            "check_for_updates", (int)uiPrefs->CheckForUpdates->value());
 
         behavior.set("allow_screen_saver",
-                     (int)uiPrefs->uiPrefsAllowScreenSaver->value());
+                     (int)uiPrefs->AllowScreenSaver->value());
 
         {
             userprefspath = prefspath();
@@ -1898,7 +1898,7 @@ namespace mrv
         check_language(uiPrefs, language_index, app);
 
 #ifdef __APPLE__
-        if (uiPrefs->uiPrefsMacOSMenus->value())
+        if (uiPrefs->MacOSMenus->value())
         {
             ui->uiMenuBar->clear();
             ui->uiMenuGroup->redraw();
@@ -1941,7 +1941,7 @@ namespace mrv
         // Mode. (User changed Preferences while on Presentation mode).
         if (!view->getPresentationMode())
         {
-            if (uiPrefs->uiPrefsMenuBar->value())
+            if (uiPrefs->MenuBar->value())
             {
                 ui->uiMenuGroup->show();
             }
@@ -1950,7 +1950,7 @@ namespace mrv
                 ui->uiMenuGroup->hide();
             }
 
-            if (uiPrefs->uiPrefsTopbar->value())
+            if (uiPrefs->Topbar->value())
             {
                 ui->uiTopBar->show();
             }
@@ -1959,11 +1959,11 @@ namespace mrv
                 ui->uiTopBar->hide();
             }
 
-            const bool showPixelBar = uiPrefs->uiPrefsPixelToolbar->value();
+            const bool showPixelBar = uiPrefs->PixelToolbar->value();
             if (showPixelBar)
             {
                 const auto player = ui->uiView->getTimelinePlayer();
-                const int autoHide = uiPrefs->uiPrefsAutoHidePixelBar->value();
+                const int autoHide = uiPrefs->AutoHidePixelBar->value();
 #ifdef OPENGL_BACKEND
                 if (!autoHide || !player ||
                     player->playback() == timeline::Playback::Stop)
@@ -1997,11 +1997,11 @@ namespace mrv
             // Edit mode options
             //
             auto options = ui->uiTimeline->getDisplayOptions();
-            options.transitions = uiPrefs->uiPrefsShowTransitions->value();
-            options.markers = uiPrefs->uiPrefsShowMarkers->value();
+            options.transitions = uiPrefs->ShowTransitions->value();
+            options.markers = uiPrefs->ShowMarkers->value();
             ui->uiTimeline->setEditable(
-                uiPrefs->uiPrefsTimelineEditable->value());
-            int thumbnails = uiPrefs->uiPrefsEditThumbnails->value();
+                uiPrefs->TimelineEditable->value());
+            int thumbnails = uiPrefs->EditThumbnails->value();
             options.thumbnails = true;
             switch (thumbnails)
             {
@@ -2023,7 +2023,7 @@ namespace mrv
             options.clipInfo = settings->getValue<int>("Timeline/ClipInfo");
             ui->uiTimeline->setDisplayOptions(options);
 
-            if (uiPrefs->uiPrefsTimeline->value())
+            if (uiPrefs->Timeline->value())
             {
                 ui->uiBottomBar->show();
             }
@@ -2033,7 +2033,7 @@ namespace mrv
                 set_edit_mode_cb(EditMode::kNone, ui);
             }
 
-            if (uiPrefs->uiPrefsStatusBar->value())
+            if (uiPrefs->StatusBar->value())
             {
                 ui->uiStatusGroup->show();
             }
@@ -2042,7 +2042,7 @@ namespace mrv
                 ui->uiStatusGroup->hide();
             }
 
-            if (uiPrefs->uiPrefsToolBar->value())
+            if (uiPrefs->ToolBar->value())
             {
                 ui->uiToolsGroup->show();
                 ui->uiToolsGroup->size(45, 433);
@@ -2058,7 +2058,7 @@ namespace mrv
             ui->uiRegion->layout();
         }
 
-        panel::onlyOne((bool)uiPrefs->uiPrefsOnePanelOnly->value());
+        panel::onlyOne((bool)uiPrefs->OnePanelOnly->value());
 
         //
         // Widget/Viewer settings
@@ -2079,14 +2079,14 @@ namespace mrv
         }
 
         TimelineClass* t = ui->uiTimeWindow;
-        t->uiLoopMode->value(uiPrefs->uiPrefsLoopMode->value());
+        t->uiLoopMode->value(uiPrefs->LoopMode->value());
         t->uiLoopMode->do_callback();
 
-        t->uiTimecodeSwitch->value(uiPrefs->uiPrefsTimelineDisplay->value());
+        t->uiTimecodeSwitch->value(uiPrefs->TimelineDisplay->value());
         t->uiTimecodeSwitch->do_callback();
 
-        ui->uiGain->value(uiPrefs->uiPrefsViewGain->value());
-        ui->uiGamma->value(uiPrefs->uiPrefsViewGamma->value());
+        ui->uiGain->value(uiPrefs->ViewGain->value());
+        ui->uiGamma->value(uiPrefs->ViewGamma->value());
 
         // OCIO
         ocio::setup();
@@ -2096,34 +2096,34 @@ namespace mrv
         //
 
         Flu_File_Chooser::thumbnailsFileReq =
-            (bool)uiPrefs->uiPrefsFileReqThumbnails->value();
+            (bool)uiPrefs->FileReqThumbnails->value();
 
         Flu_File_Chooser::singleButtonTravelDrawer =
-            (bool)uiPrefs->uiPrefsFileReqFolder->value();
+            (bool)uiPrefs->FileReqFolder->value();
 
-        native_file_chooser = uiPrefs->uiPrefsNativeFileChooser->value();
+        native_file_chooser = uiPrefs->NativeFileChooser->value();
 
         //
         // Handle pixel values
         //
         PixelToolBarClass* c = ui->uiPixelWindow;
-        c->uiAColorType->value(uiPrefs->uiPrefsPixelRGBA->value());
+        c->uiAColorType->value(uiPrefs->PixelRGBA->value());
         c->uiAColorType->do_callback();
         c->uiAColorType->redraw();
 
-        c->uiPixelValue->value(uiPrefs->uiPrefsPixelValues->value());
+        c->uiPixelValue->value(uiPrefs->PixelValues->value());
         c->uiPixelValue->do_callback();
         c->uiPixelValue->redraw();
 
-        c->uiBColorType->value(uiPrefs->uiPrefsPixelHSV->value());
+        c->uiBColorType->value(uiPrefs->PixelHSV->value());
         c->uiBColorType->do_callback();
         c->uiBColorType->redraw();
 
-        c->uiLType->value(uiPrefs->uiPrefsPixelLumma->value());
+        c->uiLType->value(uiPrefs->PixelLumma->value());
         c->uiLType->do_callback();
         c->uiLType->redraw();
 
-        if (uiPrefs->uiPrefsTooltips->value())
+        if (uiPrefs->Tooltips->value())
         {
             Fl::option(Fl::OPTION_SHOW_TOOLTIPS, true);
         }
@@ -2136,15 +2136,15 @@ namespace mrv
         // Handle crop area (masking)
         //
 
-        int crop = uiPrefs->uiPrefsCropArea->value();
+        int crop = uiPrefs->CropArea->value();
         float mask = kCrops[crop];
         view->setMask(mask);
 
         // Handle Safe areas
-        bool safeAreas = (bool)uiPrefs->uiPrefsSafeAreas->value();
+        bool safeAreas = (bool)uiPrefs->SafeAreas->value();
         view->setSafeAreas(safeAreas);
 
-        bool ocioInTopBar = uiPrefs->uiPrefsOCIOInTopBar->value();
+        bool ocioInTopBar = uiPrefs->OCIOInTopBar->value();
         if (ocioInTopBar)
         {
             ui->uiOCIO->show();
@@ -2168,10 +2168,10 @@ namespace mrv
 
         // Handle image options
         auto imageOptions = app->imageOptions();
-        int alphaBlend = uiPrefs->uiPrefsAlphaBlend->value();
-        int videoLevels = uiPrefs->uiPrefsVideoLevels->value();
-        int minifyFilter = uiPrefs->uiPrefsMinifyFilter->value();
-        int magnifyFilter = uiPrefs->uiPrefsMagnifyFilter->value();
+        int alphaBlend = uiPrefs->AlphaBlend->value();
+        int videoLevels = uiPrefs->VideoLevels->value();
+        int minifyFilter = uiPrefs->MinifyFilter->value();
+        int magnifyFilter = uiPrefs->MagnifyFilter->value();
         imageOptions.alphaBlend = static_cast<timeline::AlphaBlend>(alphaBlend);
         imageOptions.videoLevels =
             static_cast<timeline::InputVideoLevels>(videoLevels);
@@ -2183,80 +2183,80 @@ namespace mrv
         displayOptions.imageFilters.magnify =
             static_cast<timeline::ImageFilter>(magnifyFilter);
         displayOptions.ignoreChromaticities =
-            !uiPrefs->uiPrefsChromaticities->value();
+            !uiPrefs->Chromaticities->value();
         displayOptions.hdrInfo =
             static_cast<timeline::HDRInformation>(
-                uiPrefs->uiPrefsHDRInfo->value());
+                uiPrefs->HDRInfo->value());
         app->setDisplayOptions(displayOptions);
 
         timeline::HDROptions hdrOptions = ui->uiView->getHDROptions();
         hdrOptions.algorithm =
-            static_cast<timeline::HDRTonemapAlgorithm>(uiPrefs->uiPrefsTonemapAlgorithm->value());
+            static_cast<timeline::HDRTonemapAlgorithm>(uiPrefs->TonemapAlgorithm->value());
         hdrOptions.gamutMapping =
-            static_cast<timeline::HDRGamutMapping>(uiPrefs->uiPrefsGamutMapping->value());
-        hdrOptions.peak_detection = uiPrefs->uiPrefsHDRPeakDetection->value();
-        hdrOptions.peak_percentile = uiPrefs->uiPrefsHDRPeakPercentile->value();
-        hdrOptions.peak_smoothing_period = uiPrefs->uiPrefsHDRPeakSmoothingPeriod->value();
-        hdrOptions.peak_scene_high_limit = uiPrefs->uiPrefsHDRPeakHighLimit->value();
-        hdrOptions.peak_scene_low_limit = uiPrefs->uiPrefsHDRPeakLowLimit->value();
+            static_cast<timeline::HDRGamutMapping>(uiPrefs->GamutMapping->value());
+        hdrOptions.peak_detection = uiPrefs->HDRPeakDetection->value();
+        hdrOptions.peak_percentile = uiPrefs->HDRPeakPercentile->value();
+        hdrOptions.peak_smoothing_period = uiPrefs->HDRPeakSmoothingPeriod->value();
+        hdrOptions.peak_scene_high_limit = uiPrefs->HDRPeakHighLimit->value();
+        hdrOptions.peak_scene_low_limit = uiPrefs->HDRPeakLowLimit->value();
         ui->uiView->setHDROptions(hdrOptions);
 
         //
         // Handle HUD
         //
         int hud = HudDisplay::kNone;
-        if (uiPrefs->uiPrefsHudDirectory->value())
+        if (uiPrefs->HudDirectory->value())
             hud |= HudDisplay::kDirectory;
 
-        if (uiPrefs->uiPrefsHudFilename->value())
+        if (uiPrefs->HudFilename->value())
             hud |= HudDisplay::kFilename;
 
-        if (uiPrefs->uiPrefsHudFPS->value())
+        if (uiPrefs->HudFPS->value())
             hud |= HudDisplay::kFPS;
 
-        if (uiPrefs->uiPrefsHudTimecode->value())
+        if (uiPrefs->HudTimecode->value())
             hud |= HudDisplay::kTimecode;
 
-        if (uiPrefs->uiPrefsHudFrame->value())
+        if (uiPrefs->HudFrame->value())
             hud |= HudDisplay::kFrame;
 
-        if (uiPrefs->uiPrefsHudResolution->value())
+        if (uiPrefs->HudResolution->value())
             hud |= HudDisplay::kResolution;
 
-        if (uiPrefs->uiPrefsHudFrameRange->value())
+        if (uiPrefs->HudFrameRange->value())
             hud |= HudDisplay::kFrameRange;
 
-        if (uiPrefs->uiPrefsHudFrameCount->value())
+        if (uiPrefs->HudFrameCount->value())
             hud |= HudDisplay::kFrameCount;
 
-        if (uiPrefs->uiPrefsHudAttributes->value())
+        if (uiPrefs->HudAttributes->value())
             hud |= HudDisplay::kAttributes;
 
-        if (uiPrefs->uiPrefsHudCache->value())
+        if (uiPrefs->HudCache->value())
             hud |= HudDisplay::kCache;
 
-        if (uiPrefs->uiPrefsHudMemory->value())
+        if (uiPrefs->HudMemory->value())
             hud |= HudDisplay::kMemory;
 
         view->setHudDisplay((HudDisplay)hud);
 
-        bool frameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
+        bool frameView = (bool)uiPrefs->AutoFitImage->value();
         view->setFrameView(frameView);
 
         LogDisplay::prefs = (LogDisplay::ShowPreferences)
-                                uiPrefs->uiPrefsRaiseLogWindowOnError->value();
+                                uiPrefs->RaiseLogWindowOnError->value();
         LogDisplay::ffmpegPrefs =
             (LogDisplay::ShowPreferences)
-                uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value();
+                uiPrefs->RaiseLogWindowOnFFmpegError->value();
 
         bool hasPresentation = view->getPresentationMode();
 
         Fl_Round_Button* r;
 
-        r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(0);
+        r = (Fl_Round_Button*)uiPrefs->OpenMode->child(0);
         int normal = r->value();
 
-        r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(1);
+        r = (Fl_Round_Button*)uiPrefs->OpenMode->child(1);
         int fullscreen = r->value();
         if (fullscreen)
         {
@@ -2264,7 +2264,7 @@ namespace mrv
             view->setFullScreenMode(true);
         }
 
-        r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(2);
+        r = (Fl_Round_Button*)uiPrefs->OpenMode->child(2);
         int presentation = r->value();
         if (presentation)
         {
@@ -2284,7 +2284,7 @@ namespace mrv
             }
         }
 
-        r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(3);
+        r = (Fl_Round_Button*)uiPrefs->OpenMode->child(3);
         int maximized = r->value();
         if (maximized)
         {
@@ -2292,7 +2292,7 @@ namespace mrv
             view->setMaximized();
         }
 
-        bool value = uiPrefs->uiPrefsAlwaysOnTop->value();
+        bool value = uiPrefs->AlwaysOnTop->value();
         int fullscreen_active = ui->uiMain->fullscreen_active();
         if (!fullscreen_active)
         {
@@ -2305,12 +2305,12 @@ namespace mrv
             auto window = secondary->window();
             if (window->visible() && !window->fullscreen_active())
             {
-                bool value = uiPrefs->uiPrefsSecondaryOnTop->value();
+                bool value = uiPrefs->SecondaryOnTop->value();
                 window->always_on_top(value);
             }
         }
 
-        int vsync = ui->uiPrefs->uiPrefsOpenGLVsync->value();
+        int vsync = ui->uiPrefs->OpenGLVsync->value();
         if (vsync == MonitorVSync::kVSyncPresentationOnly ||
             vsync == MonitorVSync::kVSyncNone)
         {
@@ -2344,15 +2344,15 @@ namespace mrv
         auto audioSystem = context->getSystem<audio::System>();
         if (audioSystem)
         {
-            int api = uiPrefs->uiPrefsAudioAPI->value();
-            const Fl_Menu_Item* item = uiPrefs->uiPrefsAudioAPI->child(api);
+            int api = uiPrefs->AudioAPI->value();
+            const Fl_Menu_Item* item = uiPrefs->AudioAPI->child(api);
             if (item && item->label())
             {
                 audioSystem->setAPI(item->label());
             }
 
-            size_t outputDevice = uiPrefs->uiPrefsAudioOutputDevice->value();
-            item = uiPrefs->uiPrefsAudioOutputDevice->child(outputDevice);
+            size_t outputDevice = uiPrefs->AudioOutputDevice->value();
+            item = uiPrefs->AudioOutputDevice->child(outputDevice);
             if (item && item->label())
             {
                 audioSystem->setOutputDevice(item->label());
@@ -2363,7 +2363,7 @@ namespace mrv
         view->refreshWindows();
 
 #ifdef MRV2_NETWORK
-        if (uiPrefs->uiPrefsSingleInstance->value())
+        if (uiPrefs->SingleInstance->value())
         {
             ImageSender sender;
             if (!sender.isRunning())
@@ -2376,13 +2376,13 @@ namespace mrv
             app->removeListener();
         }
 
-        if (uiPrefs->uiPrefsUseComfyUIPipe->value())
+        if (uiPrefs->UseComfyUIPipe->value())
         {
             app->createComfyUIListener();
         }
 #endif
 
-        ui->uiMain->allow_screen_saver((bool)uiPrefs->uiPrefsAllowScreenSaver->value());
+        ui->uiMain->allow_screen_saver((bool)uiPrefs->AllowScreenSaver->value());
 
         std::string userprefspath = studiopath();
         if (!file::isReadable(userprefspath + "/mrv2.prefs"))
@@ -2391,9 +2391,9 @@ namespace mrv
         Fl_Preferences base(
             userprefspath.c_str(), "filmaura", "mrv2", (Fl_Preferences::Root)0);
         Fl_Preferences gui(base, "ui");
-        gui.set("single_instance", uiPrefs->uiPrefsSingleInstance->value());
+        gui.set("single_instance", uiPrefs->SingleInstance->value());
         gui.set(
-            "single_instance", (int)uiPrefs->uiPrefsSingleInstance->value());
+            "single_instance", (int)uiPrefs->SingleInstance->value());
         base.flush();
 
         panel::refreshThumbnails();
@@ -2442,7 +2442,7 @@ namespace mrv
         }
 
         LOG_STATUS("\t" << configName);
-        uiPrefs->uiPrefsOCIOConfig->value(configName.c_str());
+        uiPrefs->OCIOConfig->value(configName.c_str());
         oldConfigName = configName;
     }
 

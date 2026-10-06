@@ -1213,10 +1213,10 @@ namespace mrv
             mode |= FL_MENU_INACTIVE;
 
         const char* tmp;
-        size_t num = ui->uiPrefs->uiPrefsCropArea->children();
+        size_t num = ui->uiPrefs->CropArea->children();
         for (size_t i = 0; i < num; ++i)
         {
-            tmp = ui->uiPrefs->uiPrefsCropArea->child(i)->label();
+            tmp = ui->uiPrefs->CropArea->child(i)->label();
             if (!tmp)
                 continue;
             /* xgettext:c-format */

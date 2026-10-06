@@ -3818,7 +3818,7 @@ namespace mrv
 #endif
 
         // This specifies whether to show Video Only or Video and Audio.
-        const int editView = ui->uiPrefs->uiPrefsEditView->value();
+        const int editView = ui->uiPrefs->EditView->value();
 
         // Timeline's pixels_per_unit would get reset to 1 when timeline was
         // hidden.
