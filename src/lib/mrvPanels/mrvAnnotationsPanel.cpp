@@ -204,7 +204,7 @@ namespace mrv
             auto sV =
                 new Widget< HorSlider >(X, Y + 50, g->w(), 20, _("Size:"));
             s = sV;
-            s->range(12, 100);
+            s->range(8, 100);
             s->step(1);
             s->tooltip(_("Selects the current font size."));
             s->default_value(settings->getValue<int>(kFontSize));
@@ -228,7 +228,8 @@ namespace mrv
 
 #ifdef VULKAN_BACKEND
                     if (pct < 1.F) pct = 1.F;
-                    int fontSize = o->value() * pct * pixels_per_unit;
+                    int fontSize = o->value() * pct * p.ui->uiView->viewZoom()
+                                   * pixels_per_unit;
                     w->fontSize = fontSize;
 #endif
 

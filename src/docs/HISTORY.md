@@ -4,6 +4,7 @@ v1.8.2
 - UI: URL Movies are now added to the File->Recent Files list.
 - UI: Notes in the Note Panel now show the time in the selected units (Frames, Seconds or Timecode).
 - UI: Notes in the Note Panel are now edited by clicking on its title or double clicking on the text box.
+- UI: Text drawing annotations' font size can now be changed by using + or - in the Vulkan backend.
 - UI/Core: Saving of movies now automatically tries to detect the color space to use (ie. SDR vs HDR), without having to manually set the override.
 - UI/Core: Saving of movies for most codecs defaults to "TV (Legal Range)" instead of "PC (Full Range)", unless you use **Advanced Settings** Override.
 

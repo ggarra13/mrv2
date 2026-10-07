@@ -1167,6 +1167,40 @@ namespace mrv
                     }
                 }
 
+                const math::Vector2i pos = _getRaster();
+                if (!math::contains(p.multilineText->box, pos))
+                {
+                    auto settings = p.ui->app->settings();
+                    const auto& renderSize = getRenderSize();
+                    float pct = renderSize.h / 1024.F;
+                    if (pct < 1.F) pct = 1.F;
+
+                    bool got_key = false;
+                    int fontSize = settings->getValue<int>(kFontSize);
+                    if (kPenSizeMore.match(rawkey))
+                    {
+                        ++fontSize;
+                        got_key = true;
+                    }
+                    else if (kPenSizeLess.match(rawkey))
+                    {
+                        --fontSize;
+                        got_key = true;
+                    }
+
+                    if (got_key)
+                    {
+                        fontSize = std::clamp(fontSize, 8, 120);
+                        settings->setValue(kFontSize, fontSize);
+
+                        p.multilineText->fontSize = fontSize * pct * pixels_per_unit();
+                        if (panel::annotationsPanel)
+                            panel::annotationsPanel->refresh();
+                        redrawWindows();
+                        return 1;
+                    }
+                }
+
                 ret = p.multilineText->handle(event);
                 if (ret)
                 {
