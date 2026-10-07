@@ -8,6 +8,14 @@ v1.8.2
 - UI/Core: Saving of movies now automatically tries to detect the color space to use (ie. SDR vs HDR), without having to manually set the override.
 - UI/Core: Saving of movies for most codecs defaults to "TV (Legal Range)" instead of "PC (Full Range)", unless you use **Advanced Settings** Override.
 
+- Core: Added exporting of animated .webp.  Note that ffmpeg does not know how to read them, but they work in Chrome.
+- Core: Added exporting of animated .gif.
+
+Libraries
+---------
+
+- libwebp v1.5.0
+
 Fixes
 -----
 
