@@ -686,9 +686,9 @@ namespace mrv
                 {
                     writer->setHDR(*hdrData);
                 }
-                writer->writeHeader();
             }
 
+            writer->writeHeader();
 
             // Turn off hud so it does not get captured by readPixels.
             view->setHudActive(false);

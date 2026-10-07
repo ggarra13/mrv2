@@ -700,8 +700,9 @@ namespace mrv
                 {
                     writer->setHDR(*hdrData);
                 }
-                writer->writeHeader();
             }
+
+            writer->writeHeader();
 
             int64_t startFrame = startTime.to_frames();
             int64_t endFrame = endTime.to_frames();

@@ -48,6 +48,8 @@ namespace tl
             AV1_AOM,
             HEVC,
             OAPV,
+            GIF,
+            WEBP,
 
             Count
         };

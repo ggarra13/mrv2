@@ -3,6 +3,7 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
+#include <cstring>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -14,6 +15,7 @@
 #include <tlCore/StringFormat.h>
 #include <tlCore/AudioResample.h>
 #include <tlCore/LogSystem.h>
+#include <tlCore/Quantize.h>
 
 #include <tlIO/FFmpeg.h>
 #include <tlIO/IOMacros.h>
@@ -751,6 +753,17 @@ namespace tl
             bool hasHDR = false;
             image::HDRData hdr;
 
+            // GIF: frames are scaled to RGB24 (avFrame), quantized to a
+            // palette, and encoded as PAL8 (avGifFrame).
+            bool gif = false;
+            bool gifDither = true;
+            Quantizer quantizer;
+            QuantizePalette gifPalette;
+            AVFrame* avGifFrame = nullptr;
+
+            // WEBP
+            bool webp = false;
+
             // Hardware Video Encoding
             bool useVAAPI = false;
             bool useD3D12VA = false;
@@ -809,6 +822,34 @@ namespace tl
                 throw std::runtime_error(
                     string::Format("{0}: Could not allocate output context")
                         .arg(p.fileName));
+
+            // A .gif file is always written with the GIF encoder, whatever
+            // profile was asked for.
+            {
+                Profile profile = Profile::kNone;
+                auto i = p.options.find("FFmpeg/WriteProfile");
+                if (i != p.options.end())
+                {
+                    std::stringstream ss(i->second);
+                    ss >> profile;
+                }
+                p.gif = Profile::GIF == profile ||
+                        ".gif" == string::toLower(p.path.getExtension());
+                p.webp = Profile::WEBP == profile ||
+                        ".webp" == string::toLower(p.path.getExtension());
+                if (p.gif && p.info.video.empty())
+                {
+                    throw std::runtime_error(
+                        string::Format("{0}: A GIF needs video")
+                            .arg(p.fileName));
+                }
+                i = p.options.find("FFmpeg/GIFDither");
+                if (i != p.options.end())
+                {
+                    std::stringstream ss(i->second);
+                    ss >> p.gifDither;
+                }
+            }
 
             AVCodec* avCodec = nullptr;
             AVCodecID avAudioCodecID = AV_CODEC_ID_AAC;
@@ -946,6 +987,11 @@ namespace tl
             }
 
             std::string msg;
+            if (p.gif || p.webp)
+            {
+                // GIF has no audio.
+                avAudioCodecID = AV_CODEC_ID_NONE;
+            }
             if (p.info.audio.isValid() && avAudioCodecID != AV_CODEC_ID_NONE)
             {
                 if (!avCodec)
@@ -1248,6 +1294,16 @@ namespace tl
                     std::stringstream ss(option->second);
                     ss >> hardwareEncode;
                 }
+                if (p.gif)
+                {
+                    profile = Profile::GIF;
+                    hardwareEncode = false;
+                }
+                if (p.webp)
+                {
+                    profile = Profile::WEBP;
+                    hardwareEncode = false;
+                }
                 std::string avBitrate;
                 std::string profileString;
                 switch (profile)
@@ -1360,6 +1416,13 @@ namespace tl
                     avCodecID = AV_CODEC_ID_APV;
                     avProfile = AV_PROFILE_UNKNOWN;
                     break;
+                case Profile::GIF:
+                    avCodecID = AV_CODEC_ID_GIF;
+                    avProfile = AV_PROFILE_UNKNOWN;
+                    break;
+                case Profile::WEBP:
+                    avCodecID = AV_CODEC_ID_WEBP;
+                    avProfile = AV_PROFILE_UNKNOWN;
                 default:
                     break;
                 }
@@ -1439,6 +1502,10 @@ namespace tl
                 else if (!avCodec && avCodecID == AV_CODEC_ID_APV)
                 {
                     avCodec = avcodec_find_encoder_by_name("libaopv");
+                }
+                else if (!avCodec && avCodecID == AV_CODEC_ID_WEBP)
+                {
+                    avCodec = avcodec_find_encoder_by_name("libwebp");
                 }
 
                 if (!avCodec)
@@ -1608,8 +1675,10 @@ namespace tl
                 }
 
                 // Parse the pixel format and check that it is a valid one.
-                AVPixelFormat pix_fmt = parsePixelFormat(pixelFormat);
-                if (!useVAAPI && !useD3D12VA)
+                AVPixelFormat pix_fmt = AV_PIX_FMT_PAL8;
+                if (!p.gif)
+                    pix_fmt = parsePixelFormat(pixelFormat);
+                if (!p.gif && !useVAAPI && !useD3D12VA)
                 {
                     // avcodec_get_supported_config() for a *_vaapi or
                     // *_d3d12va encoder only ever reports its own hw
@@ -1626,7 +1695,13 @@ namespace tl
                 // Starts out equal to pix_fmt, but real hw surfaces
                 // require remapping below.
                 AVPixelFormat swFormat = pix_fmt;
-                if (useVAAPI || useD3D12VA)
+                if (p.gif)
+                {
+                    // The encoder takes palettized frames; they are made
+                    // from RGB by the quantizer.
+                    swFormat = AV_PIX_FMT_RGB24;
+                }
+                else if (useVAAPI || useD3D12VA)
                 {
                     // Real VAAPI / D3D12 hardware surfaces only accept a
                     // handful of packed sw_formats that map onto an
@@ -2032,6 +2107,29 @@ namespace tl
                             .arg(getErrorLabel(r)));
                 }
 
+                if (p.gif)
+                {
+                    p.hasHDR = false;
+                    p.avGifFrame = av_frame_alloc();
+                    if (!p.avGifFrame)
+                    {
+                        throw std::runtime_error(
+                            string::Format("{0}: Cannot allocate GIF frame")
+                                .arg(p.fileName));
+                    }
+                    p.avGifFrame->format = AV_PIX_FMT_PAL8;
+                    p.avGifFrame->width = p.avVideoStream->codecpar->width;
+                    p.avGifFrame->height = p.avVideoStream->codecpar->height;
+                    r = av_frame_get_buffer(p.avGifFrame, 0);
+                    if (r < 0 || !p.avGifFrame->data[1])
+                    {
+                        throw std::runtime_error(
+                            string::Format("{0}: av_frame_get_buffer - {1}")
+                                .arg(p.fileName)
+                                .arg(getErrorLabel(r)));
+                    }
+                }
+
                 if (p.useVAAPI || p.useD3D12VA)
                 {
                     // Real hardware surface handed to the encoder; filled
@@ -2243,6 +2341,11 @@ namespace tl
                 av_buffer_unref(&p.avHWDeviceCtx);
                 p.avHWDeviceCtx = nullptr;
             }
+            if (p.avGifFrame)
+            {
+                av_frame_free(&p.avGifFrame);
+                p.avGifFrame = nullptr;
+            }
             if (p.avFrame2)
             {
                 av_frame_free(&p.avFrame2);
@@ -2312,84 +2415,120 @@ namespace tl
         {
             TLRENDER_P();
 
-            const auto& info = image->getInfo();
-            av_image_fill_arrays(
-                p.avFrame2->data, p.avFrame2->linesize, image->getData(),
-                p.avPixelFormatIn, info.size.w, info.size.h,
-                info.layout.alignment);
+            int r;
 
-            // Flip the image vertically.
-            switch (info.pixelType)
+            const auto& info = image->getInfo();
+            if (p.avFrame2)
             {
-            case image::PixelType::L_U8:
-            case image::PixelType::L_U16:
-            case image::PixelType::RGB_U8:
-            case image::PixelType::RGB_U16:
-            case image::PixelType::RGBA_U8:
-            case image::PixelType::RGBA_U16:
-            {
-                // Every type the plugin accepts is packed -- GRAY8, GRAY16,
-                // RGB24, RGB48, RGBA, RGBA64 -- so the pixels are all in the
-                // first plane whatever the depth, and that is the only one
-                // there is to turn over.
-                p.avFrame2->data[0] +=
-                    p.avFrame2->linesize[0] * (info.size.h - 1);
-                p.avFrame2->linesize[0] = -p.avFrame2->linesize[0];
-                break;
-            }
-            case image::PixelType::YUV_420P_U8:
-            case image::PixelType::YUV_422P_U8:
-            case image::PixelType::YUV_444P_U8:
-            case image::PixelType::YUV_420P_U16:
-            case image::PixelType::YUV_422P_U16:
-            case image::PixelType::YUV_444P_U16:
-            {
-                //! \bug How do we flip YUV data?
-                // subsampled (half height) only for 4:2:0; full height
-                // otherwise.
-                const bool halfChromaH =
-                    image::PixelType::YUV_420P_U8  == info.pixelType ||
-                    image::PixelType::YUV_420P_U16 == info.pixelType;
-                const int planeH[3] = {
-                    static_cast<int>(info.size.h),
-                    static_cast<int>(halfChromaH ? info.size.h / 2 : info.size.h),
-                    static_cast<int>(halfChromaH ? info.size.h / 2 : info.size.h) };
-                for (int i = 0; i < 3; ++i)
+                av_image_fill_arrays(
+                    p.avFrame2->data, p.avFrame2->linesize, image->getData(),
+                    p.avPixelFormatIn, info.size.w, info.size.h,
+                    info.layout.alignment);
+
+                // Flip the image vertically.
+                switch (info.pixelType)
                 {
-                    if (p.avFrame2->data[i] && p.avFrame2->linesize[i])
+                case image::PixelType::L_U8:
+                case image::PixelType::L_U16:
+                case image::PixelType::RGB_U8:
+                case image::PixelType::RGB_U16:
+                case image::PixelType::RGBA_U8:
+                case image::PixelType::RGBA_U16:
+                {
+                    // Every type the plugin accepts is packed -- GRAY8, GRAY16,
+                    // RGB24, RGB48, RGBA, RGBA64 -- so the pixels are all in the
+                    // first plane whatever the depth, and that is the only one
+                    // there is to turn over.
+                    p.avFrame2->data[0] +=
+                        p.avFrame2->linesize[0] * (info.size.h - 1);
+                    p.avFrame2->linesize[0] = -p.avFrame2->linesize[0];
+                    break;
+                }
+                case image::PixelType::YUV_420P_U8:
+                case image::PixelType::YUV_422P_U8:
+                case image::PixelType::YUV_444P_U8:
+                case image::PixelType::YUV_420P_U16:
+                case image::PixelType::YUV_422P_U16:
+                case image::PixelType::YUV_444P_U16:
+                {
+                    //! \bug How do we flip YUV data?
+                    // subsampled (half height) only for 4:2:0; full height
+                    // otherwise.
+                    const bool halfChromaH =
+                        image::PixelType::YUV_420P_U8  == info.pixelType ||
+                        image::PixelType::YUV_420P_U16 == info.pixelType;
+                    const int planeH[3] = {
+                        static_cast<int>(info.size.h),
+                        static_cast<int>(halfChromaH ? info.size.h / 2 : info.size.h),
+                        static_cast<int>(halfChromaH ? info.size.h / 2 : info.size.h) };
+                    for (int i = 0; i < 3; ++i)
                     {
-                        p.avFrame2->data[i] += p.avFrame2->linesize[i] * (planeH[i] - 1);
-                        p.avFrame2->linesize[i] = -p.avFrame2->linesize[i];
+                        if (p.avFrame2->data[i] && p.avFrame2->linesize[i])
+                        {
+                            p.avFrame2->data[i] += p.avFrame2->linesize[i] * (planeH[i] - 1);
+                            p.avFrame2->linesize[i] = -p.avFrame2->linesize[i];
+                        }
                     }
                 }
-            }
-            break;
-            default:
-                throw std::runtime_error(
-                    string::Format("{0}: Incompatible pixel type")
-                        .arg(p.fileName));
                 break;
-            }
+                default:
+                    throw std::runtime_error(
+                        string::Format("{0}: Incompatible pixel type")
+                        .arg(p.fileName));
+                    break;
+                }
 
-            int r = av_frame_make_writable(p.avFrame);
-            if (r < 0)
-            {
-                throw std::runtime_error(
-                    string::Format(
-                        "Could not make video frame writable at time {0}.")
+                r = av_frame_make_writable(p.avFrame);
+                if (r < 0)
+                {
+                    throw std::runtime_error(
+                        string::Format(
+                            "Could not make video frame writable at time {0}.")
                         .arg(time));
+                }
+
+                sws_scale(
+                    p.swsContext, (uint8_t const* const*)p.avFrame2->data,
+                    p.avFrame2->linesize, 0, p.avVideoStream->codecpar->height,
+                    p.avFrame->data, p.avFrame->linesize);
             }
 
-            sws_scale(
-                p.swsContext, (uint8_t const* const*)p.avFrame2->data,
-                p.avFrame2->linesize, 0, p.avVideoStream->codecpar->height,
-                p.avFrame->data, p.avFrame->linesize);
+
 
             const auto timeRational = time::toRational(p.avSpeed);
             p.avFrame->pts = av_rescale_q(
                 time.value() - p.videoStartTime.value(),
                 {timeRational.second, timeRational.first},
                 p.avVideoStream->time_base);
+
+            if (p.gif)
+            {
+                // avFrame holds the (already flipped) RGB24 image: reduce
+                // it to a palette and indices, and encode those.
+                r = av_frame_make_writable(p.avGifFrame);
+                if (r < 0)
+                {
+                    throw std::runtime_error(
+                        string::Format(
+                            "Could not make GIF frame writable at time {0}.")
+                            .arg(time));
+                }
+                p.quantizer.quantize(
+                    p.avFrame->data[0], p.avFrame->linesize[0],
+                    p.avFrame->width, p.avFrame->height,
+                    p.avGifFrame->data[0], p.avGifFrame->linesize[0],
+                    p.gifPalette, p.gifDither);
+                // PAL8 palettes are native-endian 0xAARRGGBB, which is
+                // what the quantizer makes.
+                std::memcpy(
+                    p.avGifFrame->data[1], p.gifPalette.data(),
+                    sizeof(uint32_t) * quantizeColorsMax);
+                p.avGifFrame->pts = p.avFrame->pts;
+                _encode(
+                    p.avCodecContext, p.avVideoStream, p.avGifFrame,
+                    p.avPacket);
+                return;
+            }
 
             auto hdrData = image->getHDR();
             if (hdrData)

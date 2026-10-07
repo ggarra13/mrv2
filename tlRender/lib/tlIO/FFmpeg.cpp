@@ -67,7 +67,7 @@ namespace tl
             Profile, "None", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT",
             "ProRes_HQ", "ProRes_4444", "ProRes_XQ", "DNxHD", "DNxHR_LB",
             "DNxHR_SQ", "DNxHR_HQ", "DNxHR_HQX", "DNxHR_444", "VP9", "Cineform",
-            "AV1", "HAP", "AV1_AOM", "HEVC", "OAPV");
+            "AV1", "HAP", "AV1_AOM", "HEVC", "OAPV", "GIF", "WebP");
         TLRENDER_ENUM_SERIALIZE_IMPL(Profile);
 
         TLRENDER_ENUM_IMPL(

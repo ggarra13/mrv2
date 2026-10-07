@@ -582,6 +582,8 @@ namespace mrv
                 }
             }
 
+            writer->writeHeader();
+
             if (saveEXR)
             {
                 const std::string id = ocio::getInteropID(false);
