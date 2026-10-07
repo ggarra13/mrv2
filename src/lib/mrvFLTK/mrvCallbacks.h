@@ -141,7 +141,8 @@ namespace mrv
     //! Panel callbacks
     void toggle_one_panel_only_cb(Fl_Menu_* w, ViewerUI* ui);
 
-    void window_cb(Fl_Menu_* w, ViewerUI* ui);
+    // Common callback for all panels
+    void window_cb(Fl_Menu_* w, void*);
     void show_window_cb(const std::string& label, ViewerUI* ui);
 
     //! Auto Frame view callback

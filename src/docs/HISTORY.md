@@ -15,6 +15,8 @@ Fixes
 - UI: Fixed Timeline Viewport (Editing) getting activated when closing the Preference Window.
 - UI: Fixed Timeline Viewport's thumbnails on first starting the players.
 - UI/Core: Fixed refresh_media_cb starting playback due to **Preferences->Playback->Auto Playback**.
+- UI: Added missing tooltips in the status bar for Panels and Windows.
+- UI: Added missing toggle element in Panels.
 
 
 Libraries

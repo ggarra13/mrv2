@@ -422,62 +422,130 @@ namespace mrv
             std::string menu_root = menu_panel_root;
 
             mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
+            Fl_Callback* callback_function = (Fl_Callback*)window_cb;
             unsigned hotkey = 0;
             if (tmp == "Files")
+            {
                 hotkey = kToggleReel.hotkey();
+                callback_function = (Fl_Callback*)files_panel_cb;
+            }
             else if (tmp == "Media Information")
+            {
                 hotkey = kToggleMediaInfo.hotkey();
+                callback_function = (Fl_Callback*)image_info_panel_cb;
+            }
             else if (tmp == "Color Info")
+            {
                 hotkey = kToggleColorInfo.hotkey();
+            }
             else if (tmp == "Color")
+            {
                 hotkey = kToggleColorControls.hotkey();
+                callback_function = (Fl_Callback*)color_panel_cb;
+            }
             else if (tmp == "Color Area")
+            {
                 hotkey = kToggleColorInfo.hotkey();
+                callback_function = (Fl_Callback*)color_area_panel_cb;
+            }
             else if (tmp == "Compare")
+            {
                 hotkey = kToggleCompare.hotkey();
+                callback_function = (Fl_Callback*)compare_panel_cb;
+            }
             else if (tmp == "Devices")
+            {
                 hotkey = kToggleDevices.hotkey();
+                // callback_function = (Fl_Callback*)devices_panel_cb;
+            }
             else if (tmp == "Settings")
+            {
                 hotkey = kToggleSettings.hotkey();
+                callback_function = (Fl_Callback*)settings_panel_cb;
+            }
             else if (tmp == "Annotations")
+            {
                 hotkey = kToggleAnnotation.hotkey();
+                callback_function = (Fl_Callback*)annotations_panel_cb;
+            }
             else if (tmp == "Histogram")
+            {
                 hotkey = kToggleHistogram.hotkey();
+                callback_function = (Fl_Callback*)histogram_panel_cb;
+            }
             else if (tmp == "Vectorscope")
+            {
                 hotkey = kToggleVectorscope.hotkey();
+                callback_function = (Fl_Callback*)vectorscope_panel_cb;
+            }
             else if (tmp == "Environment Map")
+            {
                 hotkey = kToggleEnvironmentMap.hotkey();
+                callback_function = (Fl_Callback*)environment_map_panel_cb;
+            }
             else if (tmp == "Waveform")
+            {
                 hotkey = kToggleWaveform.hotkey();
+                callback_function = (Fl_Callback*)waveform_panel_cb;
+            }
             else if (tmp == "NDI")
+            {
                 hotkey = kToggleNDI.hotkey();
+                callback_function = (Fl_Callback*)ndi_panel_cb;
+            }
             else if (tmp == "Notes")
+            {
                 hotkey = kToggleNotes.hotkey();
+                callback_function = (Fl_Callback*)notes_panel_cb;
+            }
             else if (tmp == "WebRTC")
+            {
                 hotkey = kToggleWebRTC.hotkey();
+                callback_function = (Fl_Callback*)webrtc_panel_cb;
+            }
             else if (tmp == "USD")
+            {
                 hotkey = kToggleUSD.hotkey();
+                callback_function = (Fl_Callback*)usd_panel_cb;
+            }
             else if (tmp == "Statistics")
+            {
                 hotkey = 0; //kToggleStats.hotkey();
+                callback_function = (Fl_Callback*)stats_panel_cb;
+            }
             else if (tmp == "Stereo 3D")
+            {
                 hotkey = kToggleStereo3D.hotkey();
+                callback_function = (Fl_Callback*)stereo3D_panel_cb;
+            }
             else if (tmp == "Background")
+            {
                 hotkey = kToggleBackground.hotkey();
+                callback_function = (Fl_Callback*)background_panel_cb;
+            }
             else if (tmp == "Python")
+            {
                 hotkey = kTogglePythonConsole.hotkey();
+                callback_function = (Fl_Callback*)python_panel_cb;
+            }
             else if (tmp == "Logs")
+            {
                 hotkey = kToggleLogs.hotkey();
+                callback_function = (Fl_Callback*)logs_panel_cb;
+            }
             else if (tmp == "Hotkeys")
             {
                 menu_root = menu_window_root;
                 hotkey = kToggleHotkeys.hotkey();
-                mode = 0;
+                callback_function = (Fl_Callback*)hotkeys_window_cb;
+                mode = FL_MENU_CHATTY;
             }
             else if (tmp == "Preferences")
             {
                 menu_root = menu_window_root;
                 hotkey = kTogglePreferences.hotkey();
-                mode = 0;
+                callback_function = (Fl_Callback*)preferences_window_cb;
+                mode = FL_MENU_CHATTY;
             }
             else if (tmp == "About")
             {
@@ -491,8 +559,8 @@ namespace mrv
 
             tmp = pair.first;
             std::string menu_name = menu_root + tmp + "\t";
-            int idx = menu->add(
-                menu_name.c_str(), hotkey, (Fl_Callback*)window_cb, ui);
+            idx = menu->add(
+                menu_name.c_str(), hotkey, (Fl_Callback*)callback_function, ui, mode);
             item = const_cast<Fl_Menu_Item*>(&menu->menu()[idx]);
             if (tmp == _("Files"))
             {
@@ -1939,7 +2007,7 @@ namespace mrv
                 if (pathname[0] != '/')
                     colorSpace += '/';
                 colorSpace += pathname;
-                int idx = menu->add(
+                idx = menu->add(
                     colorSpace.c_str(), 0,
                     (Fl_Callback*)all_monitors_ocio_view_cb, ui,
                     FL_MENU_TOGGLE);
@@ -1978,7 +2046,7 @@ namespace mrv
                 if (pathname[0] != '/')
                     colorSpace += '/';
                 colorSpace += pathname;
-                int idx = menu->add(
+                idx = menu->add(
                     colorSpace.c_str(), 0, (Fl_Callback*)monitor_ocio_view_cb,
                     ui, FL_MENU_TOGGLE);
                 {

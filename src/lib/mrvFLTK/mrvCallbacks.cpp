@@ -2675,28 +2675,22 @@ namespace mrv
             ui);
     }
 
-    void window_cb(Fl_Menu_* m, ViewerUI* ui)
+    void window_cb(Fl_Menu_* m, void* data)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+        case FL_REASON_LOST_FOCUS:
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         std::string label_with_tab = item->text;
         auto label = label_with_tab;
         if (label_with_tab[label_with_tab.size() - 1] == '\t')
             label = label_with_tab.substr(0, label_with_tab.size() - 1);
-        switch(Fl::callback_reason())
-        {
-        case FL_REASON_GOT_FOCUS:
-        {
-            std::string msg = tl::string::Format(_("Show {0} Window.")).arg(label);
-            ui->uiStatusBar->message(msg.c_str());
-            return;
-        }
-        case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->message("");
-            return;
-        default:
-            break;
-        }
-        show_window_cb(label, ui);
+        show_window_cb(label, App::ui);
     }
 
     void about_cb(Fl_Widget* w, ViewerUI* ui)
@@ -2704,10 +2698,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->message(_("Show About Window."));
+            App::ui->uiStatusBar->message(_("Show About Window."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->message("");
+            App::ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2815,10 +2809,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->message(_("Toggle Action Dock (Annotations/Edit tools)."));
+            App::ui->uiStatusBar->message(_("Toggle Action Dock (Annotations/Edit tools)."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->message("");
+            App::ui->uiStatusBar->message("");
             return;
         default:
             break;

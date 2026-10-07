@@ -126,6 +126,9 @@ namespace mrv
         void webrtc_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void stats_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui);
+
+        void hotkeys_window_cb(Fl_Menu_* w, ViewerUI* ui);
+        void preferences_window_cb(Fl_Menu_* w, ViewerUI* ui);
         ///@}
     } // namespace panel
 
