@@ -203,7 +203,8 @@ if(MRV2_PYBIND11)
 endif()
 
 if (TLRENDER_LIBWEBP)
-    list(APPEND LIBRARIES PRIVATE libwebp libsharpyuv)
+    find_package(WebP CONFIG REQUIRED)
+    list(APPEND LIBRARIES WebP::webp)
 endif()
 
 files_to_absolute_paths()
