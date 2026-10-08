@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
+# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.8.0\n"
+"Project-Id-Version: mrv2 v1.8.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:28-0300\n"
+"POT-Creation-Date: 2026-10-08 07:07-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1632,6 +1632,75 @@ msgstr ""
 msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
+msgstr ""
+
+msgid "Toggle Color Controls Panel"
+msgstr ""
+
+msgid "Toggle Files Panel"
+msgstr ""
+
+msgid "Toggle Compare Panel"
+msgstr ""
+
+msgid "Toggle Settings Panel"
+msgstr ""
+
+msgid "Toggle Python Panel"
+msgstr ""
+
+msgid "Toggle Logs Panel"
+msgstr ""
+
+msgid "Toggle Devices Panel"
+msgstr ""
+
+msgid "Toggle Color Area Panel"
+msgstr ""
+
+msgid "Toggle Notes Panel"
+msgstr ""
+
+msgid "Toggle Annotations Panel"
+msgstr ""
+
+msgid "Toggle Background Panel"
+msgstr ""
+
+msgid "Toggle Image Info Panel"
+msgstr ""
+
+msgid "Toggle Histogram Panel"
+msgstr ""
+
+msgid "Toggle Vectorscope Panel"
+msgstr ""
+
+msgid "Toggle Waveform Panel"
+msgstr ""
+
+msgid "Toggle Environment Map Panel"
+msgstr ""
+
+msgid "Toggle NDI Panel"
+msgstr ""
+
+msgid "Toggle WebRTC Panel"
+msgstr ""
+
+msgid "Toggle USD Panel"
+msgstr ""
+
+msgid "Toggle Statistics Panel"
+msgstr ""
+
+msgid "Toggle Stereo3D Panel"
+msgstr ""
+
+msgid "Show Hotkeys Window"
+msgstr ""
+
+msgid "Show Preferences Window"
 msgstr ""
 
 msgid "Notes"
@@ -3576,10 +3645,6 @@ msgstr ""
 msgid "Only allow one side panel at a time."
 msgstr ""
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr ""
-
 msgid "Show About Window."
 msgstr ""
 
@@ -4563,33 +4628,6 @@ msgid "View/Mask/%s"
 msgstr ""
 
 msgid "View/Hud"
-msgstr ""
-
-msgid "View/Compare/None"
-msgstr ""
-
-msgid "View/Compare/Overlay"
-msgstr ""
-
-msgid "View/Compare/Wipe"
-msgstr ""
-
-msgid "View/Compare/Difference"
-msgstr ""
-
-msgid "View/Compare/Add"
-msgstr ""
-
-msgid "View/Compare/Multiply"
-msgstr ""
-
-msgid "View/Compare/Horizontal"
-msgstr ""
-
-msgid "View/Compare/Vertical"
-msgstr ""
-
-msgid "View/Compare/Tile"
 msgstr ""
 
 msgid "Timeline/Cache/Clear"
@@ -5613,6 +5651,9 @@ msgstr ""
 msgid "Presets"
 msgstr ""
 
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr ""
+
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr ""
 
@@ -6585,9 +6626,6 @@ msgstr ""
 msgid "Hold Frame"
 msgstr ""
 
-msgid "Scratched Frame"
-msgstr ""
-
 msgid "Black  Frame"
 msgstr ""
 
@@ -6595,6 +6633,9 @@ msgid "Skip Frame"
 msgstr ""
 
 msgid "Gap Frame"
+msgstr ""
+
+msgid "Pick Scratch Color"
 msgstr ""
 
 msgid "Always"
@@ -7326,8 +7367,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -7354,6 +7395,24 @@ msgid ""
 "\t* Black Frame\t   - Replaces current frame with black.\n"
 "\t* Skip Frame\t   - Skips the current frame.\n"
 "\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+
+msgid "Scratch Frame"
+msgstr ""
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr ""
+
+msgid "Scratch Color"
+msgstr ""
+
+msgid "Scratch Lines Color."
+msgstr ""
+
+msgid "Scratch Width"
+msgstr ""
+
+msgid "Scratch Lines Width."
 msgstr ""
 
 msgid "Path Mappings"
@@ -8474,49 +8533,16 @@ msgstr ""
 msgid "Toggle One Panel Only"
 msgstr ""
 
-msgid "Toggle Files Panel"
-msgstr ""
-
 msgid "Toggle Media Info Panel"
 msgstr ""
 
 msgid "Toggle Color Area Info Panel"
 msgstr ""
 
-msgid "Toggle Color Controls Panel"
-msgstr ""
-
-msgid "Toggle Compare Panel"
-msgstr ""
-
-msgid "Toggle Devices Panel"
-msgstr ""
-
 msgid "Toggle Annotation Panel"
 msgstr ""
 
-msgid "Toggle Background Panel"
-msgstr ""
-
-msgid "Toggle Settings Panel"
-msgstr ""
-
-msgid "Toggle Histogram Panel"
-msgstr ""
-
-msgid "Toggle Vectorscope Panel"
-msgstr ""
-
-msgid "Toggle Waveform Panel"
-msgstr ""
-
-msgid "Toggle Environment Map Panel"
-msgstr ""
-
 msgid "Toggle Preferences Window"
-msgstr ""
-
-msgid "Toggle Python Panel"
 msgstr ""
 
 msgid "Toggle Log Panel"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-08 07:02-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: fr\n"
@@ -1762,6 +1762,75 @@ msgid ""
 msgstr ""
 "Cela réinitialisera tous vos paramètres à leur valeur par défaut. Voulez-"
 "vous vraiment continuer?"
+
+msgid "Toggle Color Controls Panel"
+msgstr "Activer le panneau de contrôle des couleurs"
+
+msgid "Toggle Files Panel"
+msgstr "Commutation du panneau Fichiers"
+
+msgid "Toggle Compare Panel"
+msgstr "Commutation du panneau Comparer"
+
+msgid "Toggle Settings Panel"
+msgstr "Commutation du panneau de paramètres"
+
+msgid "Toggle Python Panel"
+msgstr "Commutation du panneau Python"
+
+msgid "Toggle Logs Panel"
+msgstr "Afficher/masquer le panneau des journaux"
+
+msgid "Toggle Devices Panel"
+msgstr "Panneau de commutation des périphériques"
+
+msgid "Toggle Color Area Panel"
+msgstr "Afficher/masquer le panneau d’informations sur la zone de couleur"
+
+msgid "Toggle Notes Panel"
+msgstr "Afficher/masquer le panneau des notes"
+
+msgid "Toggle Annotations Panel"
+msgstr "Afficher/masquer le panneau des annotations"
+
+msgid "Toggle Background Panel"
+msgstr "Commutation du panneau d'arrière-plan"
+
+msgid "Toggle Image Info Panel"
+msgstr "Afficher/masquer le panneau d’informations de l’image"
+
+msgid "Toggle Histogram Panel"
+msgstr "Activer le panneau d'histogramme"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "Commutation du panneau Vectorscope"
+
+msgid "Toggle Waveform Panel"
+msgstr "Commutation du panneau de forme d'onde"
+
+msgid "Toggle Environment Map Panel"
+msgstr "Commutation du panneau de carte de l'environnement"
+
+msgid "Toggle NDI Panel"
+msgstr "Afficher/masquer le panneau NDI"
+
+msgid "Toggle WebRTC Panel"
+msgstr "Afficher/masquer le panneau WebRTC"
+
+msgid "Toggle USD Panel"
+msgstr "Afficher/masquer le panneau USD"
+
+msgid "Toggle Statistics Panel"
+msgstr "Afficher/masquer le panneau des statistiques"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "Afficher/masquer le panneau Stereo 3D"
+
+msgid "Show Hotkeys Window"
+msgstr "Afficher la fenêtre des raccourcis clavier"
+
+msgid "Show Preferences Window"
+msgstr "Afficher la fenêtre des préférences"
 
 msgid "Notes"
 msgstr "Notes"
@@ -3817,10 +3886,6 @@ msgstr "Rendre l'interface utilisateur moins transparente."
 msgid "Only allow one side panel at a time."
 msgstr "N'autoriser qu'un seul panneau latéral à la fois."
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "Afficher la fenêtre {0}."
-
 msgid "Show About Window."
 msgstr "Afficher la fenêtre À propos."
 
@@ -4323,14 +4388,16 @@ msgid "Saving pictures to {0}."
 msgstr "Enregistrement des images en {0}."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "Les profils ProRes nécessitent une extension de fichier vidéo .mov.  Modification en .mov."
+msgstr ""
+"Les profils ProRes nécessitent une extension de fichier vidéo .mov.  "
+"Modification en .mov."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
 ".mkv"
 msgstr ""
-"Le profil VP9 nécessite une extension de fichier vidéo .mp4, .mkv ou .webm.  "
-"Modification en .mkv"
+"Le profil VP9 nécessite une extension de fichier vidéo .mp4, .mkv ou .webm."
+"  Modification en .mkv"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
@@ -4344,10 +4411,13 @@ msgstr ""
 "Modification en .mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr "Le profil HAP nécessite une extension de fichier .mov.  Modification en .mov"
+msgstr ""
+"Le profil HAP nécessite une extension de fichier .mov.  Modification en .mov"
 
 msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
-msgstr "Le profil OAPV nécessite une extension de fichier .mp4.  Modification en .mp4"
+msgstr ""
+"Le profil OAPV nécessite une extension de fichier .mp4.  Modification en "
+".mp4"
 
 #, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
@@ -4858,33 +4928,6 @@ msgstr "Vue/Masque/%s"
 
 msgid "View/Hud"
 msgstr "Vue/Hud"
-
-msgid "View/Compare/None"
-msgstr "Vue/Comparer/Aucune"
-
-msgid "View/Compare/Overlay"
-msgstr "Vue/Comparer/Superposition"
-
-msgid "View/Compare/Wipe"
-msgstr "Vue/Comparer/Essuyer "
-
-msgid "View/Compare/Difference"
-msgstr "Vue/Comparer/Différence"
-
-msgid "View/Compare/Add"
-msgstr "Vue/Comparer/Ajouter"
-
-msgid "View/Compare/Multiply"
-msgstr "Vue/Comparer/Multiplier"
-
-msgid "View/Compare/Horizontal"
-msgstr "Vue/Comparer/Horizontal"
-
-msgid "View/Compare/Vertical"
-msgstr "Vue/Comparer/Vertical"
-
-msgid "View/Compare/Tile"
-msgstr "Vue/Comparer/Tile"
 
 msgid "Timeline/Cache/Clear"
 msgstr "Timeline/Cache/Effacer"
@@ -5930,6 +5973,11 @@ msgstr "Gamme de couleurs de FFMpeg pour le codec sélectionné"
 
 msgid "Presets"
 msgstr "Préréglages"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr ""
+"Préréglage FFMpeg pour l’enregistrement de films (SDR / HDR) avec le codec "
+"sélectionné."
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "Espace couleur de FFMpeg pour le codec sélectionné"
@@ -7047,9 +7095,6 @@ msgstr "Image d'erreur"
 msgid "Hold Frame"
 msgstr "Maintenir l'image"
 
-msgid "Scratched Frame"
-msgstr "Image rayée"
-
 msgid "Black  Frame"
 msgstr "Image noire"
 
@@ -7058,6 +7103,9 @@ msgstr "Ignorer l'image"
 
 msgid "Gap Frame"
 msgstr "Image vide"
+
+msgid "Pick Scratch Color"
+msgstr "Choisir la couleur des images manquantes"
 
 msgid "Always"
 msgstr "Toujours"
@@ -7942,6 +7990,26 @@ msgstr ""
 "\t* Image noire\t   - Remplace l'image actuelle par du noir.\n"
 "\t* Ignorer l'image\t   - Ignore l'image actuelle.\n"
 "\t* Image vide\t   - Ajoute un espace .otio pour les images manquantes."
+
+msgid "Scratch Frame"
+msgstr "Image manquante"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr ""
+"Lorsque cette option est activée, les images manquantes sont marquées d’une "
+"croix."
+
+msgid "Scratch Color"
+msgstr "Couleur des images manquantes"
+
+msgid "Scratch Lines Color."
+msgstr "Couleur des lignes des images manquantes."
+
+msgid "Scratch Width"
+msgstr "Largeur des lignes des images manquantes"
+
+msgid "Scratch Lines Width."
+msgstr "Largeur des lignes des images manquantes."
 
 msgid "Path Mappings"
 msgstr "Cartographie des chemins"
@@ -9109,50 +9177,17 @@ msgstr "Fenêtre d'encombrement"
 msgid "Toggle One Panel Only"
 msgstr "Commutation d'un seul panneau"
 
-msgid "Toggle Files Panel"
-msgstr "Commutation du panneau Fichiers"
-
 msgid "Toggle Media Info Panel"
 msgstr "Activer le panneau d'information multimédia"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "Commutation du panneau d'information de la zone de couleur"
 
-msgid "Toggle Color Controls Panel"
-msgstr "Activer le panneau de contrôle des couleurs"
-
-msgid "Toggle Compare Panel"
-msgstr "Commutation du panneau Comparer"
-
-msgid "Toggle Devices Panel"
-msgstr "Panneau de commutation des périphériques"
-
 msgid "Toggle Annotation Panel"
 msgstr "Commutation du panneau d'annotation"
 
-msgid "Toggle Background Panel"
-msgstr "Commutation du panneau d'arrière-plan"
-
-msgid "Toggle Settings Panel"
-msgstr "Commutation du panneau de paramètres"
-
-msgid "Toggle Histogram Panel"
-msgstr "Activer le panneau d'histogramme"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "Commutation du panneau Vectorscope"
-
-msgid "Toggle Waveform Panel"
-msgstr "Commutation du panneau de forme d'onde"
-
-msgid "Toggle Environment Map Panel"
-msgstr "Commutation du panneau de carte de l'environnement"
-
 msgid "Toggle Preferences Window"
 msgstr "Activer la fenêtre de préférences"
-
-msgid "Toggle Python Panel"
-msgstr "Commutation du panneau Python"
 
 msgid "Toggle Log Panel"
 msgstr "Commutation du panneau de journal"
@@ -9171,6 +9206,37 @@ msgstr "host_statistics64 a échoué"
 
 msgid "task info failed"
 msgstr "l'information de la tâche a échoué"
+
+#, c++-format
+#~ msgid "Show {0} Window."
+#~ msgstr "Afficher la fenêtre {0}."
+
+#~ msgid "View/Compare/None"
+#~ msgstr "Vue/Comparer/Aucune"
+
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "Vue/Comparer/Superposition"
+
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "Vue/Comparer/Essuyer "
+
+#~ msgid "View/Compare/Difference"
+#~ msgstr "Vue/Comparer/Différence"
+
+#~ msgid "View/Compare/Add"
+#~ msgstr "Vue/Comparer/Ajouter"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "Vue/Comparer/Multiplier"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "Vue/Comparer/Horizontal"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "Vue/Comparer/Vertical"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "Vue/Comparer/Tile"
 
 #~ msgid "Complexity"
 #~ msgstr "Complexité"

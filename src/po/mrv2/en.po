@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-08 07:02-0300\n"
 "PO-Revision-Date: 2024-05-09 12:13-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1770,6 +1770,75 @@ msgid ""
 msgstr ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
+
+msgid "Toggle Color Controls Panel"
+msgstr "Toggle Color Controls Panel"
+
+msgid "Toggle Files Panel"
+msgstr "Toggle Files Panel"
+
+msgid "Toggle Compare Panel"
+msgstr "Toggle Compare Panel"
+
+msgid "Toggle Settings Panel"
+msgstr "Toggle Settings Panel"
+
+msgid "Toggle Python Panel"
+msgstr "Toggle Python Panel"
+
+msgid "Toggle Logs Panel"
+msgstr "Toggle Logs Panel"
+
+msgid "Toggle Devices Panel"
+msgstr "Toggle Devices Panel"
+
+msgid "Toggle Color Area Panel"
+msgstr "Toggle Color Area Panel"
+
+msgid "Toggle Notes Panel"
+msgstr "Toggle Notes Panel"
+
+msgid "Toggle Annotations Panel"
+msgstr "Toggle Annotations Panel"
+
+msgid "Toggle Background Panel"
+msgstr "Toggle Background Panel"
+
+msgid "Toggle Image Info Panel"
+msgstr "Toggle Image Info Panel"
+
+msgid "Toggle Histogram Panel"
+msgstr "Toggle Histogram Panel"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "Toggle Vectorscope Panel"
+
+msgid "Toggle Waveform Panel"
+msgstr "Toggle Waveform Panel"
+
+msgid "Toggle Environment Map Panel"
+msgstr "Toggle Environment Map Panel"
+
+msgid "Toggle NDI Panel"
+msgstr "Toggle NDI Panel"
+
+msgid "Toggle WebRTC Panel"
+msgstr "Toggle WebRTC Panel"
+
+msgid "Toggle USD Panel"
+msgstr "Toggle USD Panel"
+
+msgid "Toggle Statistics Panel"
+msgstr "Toggle Statistics Panel"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "Toggle Stereo3D Panel"
+
+msgid "Show Hotkeys Window"
+msgstr "Show Hotkeys Window"
+
+msgid "Show Preferences Window"
+msgstr "Show Preferences Window"
 
 msgid "Notes"
 msgstr "Notes"
@@ -3780,10 +3849,6 @@ msgstr "Make UI less transparent."
 msgid "Only allow one side panel at a time."
 msgstr "Only allow one side panel at a time."
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "Show {0} Window."
-
 msgid "Show About Window."
 msgstr "Show About Window."
 
@@ -4267,10 +4332,10 @@ msgstr "ProRes profiles need a .mov movie extension.  Changing it to .mov."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
+".mkv"
 msgstr ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
+".mkv"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
@@ -4793,33 +4858,6 @@ msgstr "View/Mask/%s"
 
 msgid "View/Hud"
 msgstr "View/Hud"
-
-msgid "View/Compare/None"
-msgstr "View/Compare/None"
-
-msgid "View/Compare/Overlay"
-msgstr "View/Compare/Overlay"
-
-msgid "View/Compare/Wipe"
-msgstr "View/Compare/Wipe"
-
-msgid "View/Compare/Difference"
-msgstr "View/Compare/Difference"
-
-msgid "View/Compare/Add"
-msgstr "View/Compare/Add"
-
-msgid "View/Compare/Multiply"
-msgstr "View/Compare/Multiply"
-
-msgid "View/Compare/Horizontal"
-msgstr "View/Compare/Horizontal"
-
-msgid "View/Compare/Vertical"
-msgstr "View/Compare/Vertical"
-
-msgid "View/Compare/Tile"
-msgstr "View/Compare/Tile"
 
 msgid "Timeline/Cache/Clear"
 msgstr "Timeline/Cache/Clear"
@@ -5860,6 +5898,9 @@ msgstr "FFMpeg's Color Range for the codec selected"
 
 msgid "Presets"
 msgstr "Presets"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "FFMpeg's Color Space for the codec selected"
@@ -6978,9 +7019,6 @@ msgstr "Error Frame"
 msgid "Hold Frame"
 msgstr "Hold Frame"
 
-msgid "Scratched Frame"
-msgstr "Scratched Frame"
-
 msgid "Black  Frame"
 msgstr "Black  Frame"
 
@@ -6989,6 +7027,9 @@ msgstr "Skip Frame"
 
 msgid "Gap Frame"
 msgstr "Gap Frame"
+
+msgid "Pick Scratch Color"
+msgstr "Pick Scratch Color"
 
 msgid "Always"
 msgstr "Always"
@@ -7837,6 +7878,24 @@ msgstr ""
 "\t* Black Frame\t   - Replaces current frame with black.\n"
 "\t* Skip Frame\t   - Skips the current frame.\n"
 "\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+
+msgid "Scratch Frame"
+msgstr "Scratch Frame"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr "When this is on, missing frames will have a cross on them."
+
+msgid "Scratch Color"
+msgstr "Scratch Color"
+
+msgid "Scratch Lines Color."
+msgstr "Scratch Lines Color."
+
+msgid "Scratch Width"
+msgstr "Scratch Width"
+
+msgid "Scratch Lines Width."
+msgstr "Scratch Lines Width."
 
 msgid "Path Mappings"
 msgstr "Path Mappings"
@@ -8983,50 +9042,17 @@ msgstr "Hud Window"
 msgid "Toggle One Panel Only"
 msgstr "Toggle One Panel Only"
 
-msgid "Toggle Files Panel"
-msgstr "Toggle Files Panel"
-
 msgid "Toggle Media Info Panel"
 msgstr "Toggle Media Info Panel"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "Toggle Color Area Info Panel"
 
-msgid "Toggle Color Controls Panel"
-msgstr "Toggle Color Controls Panel"
-
-msgid "Toggle Compare Panel"
-msgstr "Toggle Compare Panel"
-
-msgid "Toggle Devices Panel"
-msgstr "Toggle Devices Panel"
-
 msgid "Toggle Annotation Panel"
 msgstr "Toggle Annotation Panel"
 
-msgid "Toggle Background Panel"
-msgstr "Toggle Background Panel"
-
-msgid "Toggle Settings Panel"
-msgstr "Toggle Settings Panel"
-
-msgid "Toggle Histogram Panel"
-msgstr "Toggle Histogram Panel"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "Toggle Vectorscope Panel"
-
-msgid "Toggle Waveform Panel"
-msgstr "Toggle Waveform Panel"
-
-msgid "Toggle Environment Map Panel"
-msgstr "Toggle Environment Map Panel"
-
 msgid "Toggle Preferences Window"
 msgstr "Toggle Preferences Window"
-
-msgid "Toggle Python Panel"
-msgstr "Toggle Python Panel"
 
 msgid "Toggle Log Panel"
 msgstr "Toggle Log Panel"
@@ -9045,6 +9071,37 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "task info failed"
+
+#, c++-format
+#~ msgid "Show {0} Window."
+#~ msgstr "Show {0} Window."
+
+#~ msgid "View/Compare/None"
+#~ msgstr "View/Compare/None"
+
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "View/Compare/Overlay"
+
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "View/Compare/Wipe"
+
+#~ msgid "View/Compare/Difference"
+#~ msgstr "View/Compare/Difference"
+
+#~ msgid "View/Compare/Add"
+#~ msgstr "View/Compare/Add"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "View/Compare/Multiply"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "View/Compare/Horizontal"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "View/Compare/Vertical"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "View/Compare/Tile"
 
 #~ msgid "Complexity"
 #~ msgstr "Complexity"

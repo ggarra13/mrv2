@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-08 07:02-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1793,6 +1793,75 @@ msgid ""
 msgstr ""
 "Esto reseteará todos sus seteos a su configuración estándar.  ¿Está seguro "
 "que quiere continuar?"
+
+msgid "Toggle Color Controls Panel"
+msgstr "Alternar Panel de Controles de Color"
+
+msgid "Toggle Files Panel"
+msgstr "Alternar Panel de Archivos"
+
+msgid "Toggle Compare Panel"
+msgstr "Alternar Panel de Comparación"
+
+msgid "Toggle Settings Panel"
+msgstr "Alternar Panel de Seteos"
+
+msgid "Toggle Python Panel"
+msgstr "Alternar Panel de Python"
+
+msgid "Toggle Logs Panel"
+msgstr "Alternar panel de registros"
+
+msgid "Toggle Devices Panel"
+msgstr "Alternar Panel de Dispositivos"
+
+msgid "Toggle Color Area Panel"
+msgstr "Alternar panel de información del área de color"
+
+msgid "Toggle Notes Panel"
+msgstr "Alternar panel de notas"
+
+msgid "Toggle Annotations Panel"
+msgstr "Alternar panel de anotaciones"
+
+msgid "Toggle Background Panel"
+msgstr "Alternar Panel de Fondo"
+
+msgid "Toggle Image Info Panel"
+msgstr "Alternar panel de información de imagen"
+
+msgid "Toggle Histogram Panel"
+msgstr "Alternar Panel de Histograma"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "Alternar Vectorscopio"
+
+msgid "Toggle Waveform Panel"
+msgstr "Alternalr Forma de Onda"
+
+msgid "Toggle Environment Map Panel"
+msgstr "Alternar Panel de Mapa de Entorno"
+
+msgid "Toggle NDI Panel"
+msgstr "Alternar panel NDI"
+
+msgid "Toggle WebRTC Panel"
+msgstr "Alternar panel WebRTC"
+
+msgid "Toggle USD Panel"
+msgstr "Alternar panel USD"
+
+msgid "Toggle Statistics Panel"
+msgstr "Alternar panel de estadísticas"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "Alternar panel Stereo 3D"
+
+msgid "Show Hotkeys Window"
+msgstr "Mostrar ventana de teclas de acceso rápido"
+
+msgid "Show Preferences Window"
+msgstr "Mostrar ventana de preferencias"
 
 msgid "Notes"
 msgstr "Notas"
@@ -3848,10 +3917,6 @@ msgstr "Más transparencia de la interfaz de usuario"
 msgid "Only allow one side panel at a time."
 msgstr "Sólo permitir un panel lateral al mismo tiempo."
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "Mostrar la Ventana {0}."
-
 msgid "Show About Window."
 msgstr "Mostrar Ventana de Acerca de mrv2"
 
@@ -4869,33 +4934,6 @@ msgstr "Vista/Máscara/%s"
 
 msgid "View/Hud"
 msgstr "Vista/Hud"
-
-msgid "View/Compare/None"
-msgstr "Vista/Comparar/Nada"
-
-msgid "View/Compare/Overlay"
-msgstr "Vista/Comparar/Sobreponer"
-
-msgid "View/Compare/Wipe"
-msgstr "Vista/Comparar/Limpiaparabrisas"
-
-msgid "View/Compare/Difference"
-msgstr "Vista/Comparar/Diferencia"
-
-msgid "View/Compare/Add"
-msgstr "Vista/Comparar/Añadir"
-
-msgid "View/Compare/Multiply"
-msgstr "Vista/Comparar/Multiplicar"
-
-msgid "View/Compare/Horizontal"
-msgstr "Vista/Comparar/Horizontal"
-
-msgid "View/Compare/Vertical"
-msgstr "Vista/Comparar/Vertical"
-
-msgid "View/Compare/Tile"
-msgstr "Vista/Comparar/Mosaico"
 
 msgid "Timeline/Cache/Clear"
 msgstr "Línea de Tiempo/Cache/Borrar"
@@ -5938,6 +5976,11 @@ msgstr "Gama de colores de FFMpeg para el códec seleccionado"
 
 msgid "Presets"
 msgstr "Preseteos"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr ""
+"Preajuste de FFMpeg para guardar películas (SDR / HDR) con el códec "
+"seleccionado."
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "Espacio de color de FFMpeg para el códec seleccionado"
@@ -7052,9 +7095,6 @@ msgstr "Cuadro de error"
 msgid "Hold Frame"
 msgstr "Mantener cuadro"
 
-msgid "Scratched Frame"
-msgstr "Cuadro rayado"
-
 msgid "Black  Frame"
 msgstr "Cuadro negro"
 
@@ -7063,6 +7103,9 @@ msgstr "Omitir cuadro"
 
 msgid "Gap Frame"
 msgstr "Cuadro de espacio"
+
+msgid "Pick Scratch Color"
+msgstr "Seleccionar color para fotogramas faltantes"
 
 msgid "Always"
 msgstr "Siempre"
@@ -7927,6 +7970,25 @@ msgstr ""
 "\t* Cuadro negro\t   - Reemplaza el cuadro actual por negro.\n"
 "\t* Omitir cuadro\t   - Omite el cuadro actual.\n"
 "\t* Cuadro de espacio\t   - Añade un espacio .otio para los cuadros que faltan."
+
+msgid "Scratch Frame"
+msgstr "Fotograma faltante"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr ""
+"Cuando está activado, los fotogramas faltantes se marcarán con una cruz."
+
+msgid "Scratch Color"
+msgstr "Color de los fotogramas faltantes"
+
+msgid "Scratch Lines Color."
+msgstr "Color de las líneas de los fotogramas faltantes."
+
+msgid "Scratch Width"
+msgstr "Ancho de las líneas de los fotogramas faltantes"
+
+msgid "Scratch Lines Width."
+msgstr "Ancho de las líneas de los fotogramas faltantes."
 
 msgid "Path Mappings"
 msgstr "Mapeo de Carpetas"
@@ -9079,50 +9141,17 @@ msgstr "Ventana de Hud"
 msgid "Toggle One Panel Only"
 msgstr "Alternar Un Solo Panel"
 
-msgid "Toggle Files Panel"
-msgstr "Alternar Panel de Archivos"
-
 msgid "Toggle Media Info Panel"
 msgstr "Alternar Panel de Información del Medio"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "Alternar Panel de Área de Color"
 
-msgid "Toggle Color Controls Panel"
-msgstr "Alternar Panel de Controles de Color"
-
-msgid "Toggle Compare Panel"
-msgstr "Alternar Panel de Comparación"
-
-msgid "Toggle Devices Panel"
-msgstr "Alternar Panel de Dispositivos"
-
 msgid "Toggle Annotation Panel"
 msgstr "Alternar Panel de Anotación"
 
-msgid "Toggle Background Panel"
-msgstr "Alternar Panel de Fondo"
-
-msgid "Toggle Settings Panel"
-msgstr "Alternar Panel de Seteos"
-
-msgid "Toggle Histogram Panel"
-msgstr "Alternar Panel de Histograma"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "Alternar Vectorscopio"
-
-msgid "Toggle Waveform Panel"
-msgstr "Alternalr Forma de Onda"
-
-msgid "Toggle Environment Map Panel"
-msgstr "Alternar Panel de Mapa de Entorno"
-
 msgid "Toggle Preferences Window"
 msgstr "Alternar Ventana de Preferencias"
-
-msgid "Toggle Python Panel"
-msgstr "Alternar Panel de Python"
 
 msgid "Toggle Log Panel"
 msgstr "Alternar Panel de Bitácora"
@@ -9141,6 +9170,37 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "task info falló"
+
+#, c++-format
+#~ msgid "Show {0} Window."
+#~ msgstr "Mostrar la Ventana {0}."
+
+#~ msgid "View/Compare/None"
+#~ msgstr "Vista/Comparar/Nada"
+
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "Vista/Comparar/Sobreponer"
+
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "Vista/Comparar/Limpiaparabrisas"
+
+#~ msgid "View/Compare/Difference"
+#~ msgstr "Vista/Comparar/Diferencia"
+
+#~ msgid "View/Compare/Add"
+#~ msgstr "Vista/Comparar/Añadir"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "Vista/Comparar/Multiplicar"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "Vista/Comparar/Horizontal"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "Vista/Comparar/Vertical"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "Vista/Comparar/Mosaico"
 
 #~ msgid "Complexity"
 #~ msgstr "Complejidad"

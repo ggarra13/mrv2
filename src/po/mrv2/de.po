@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-08 07:02-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -1753,6 +1753,75 @@ msgid ""
 msgstr ""
 "Dies setzt alle Ihre Einstellungen auf ihre Standardeinstellung zurck. Sind "
 "Sie sicher, dass Sie fortfahren mchten?"
+
+msgid "Toggle Color Controls Panel"
+msgstr "Farbsteuerungs-Panel umschalten"
+
+msgid "Toggle Files Panel"
+msgstr "Fenster Dateien umschalten"
+
+msgid "Toggle Compare Panel"
+msgstr "Schaltet Panel vergleichen um"
+
+msgid "Toggle Settings Panel"
+msgstr "Einstellungsfeld umschalten"
+
+msgid "Toggle Python Panel"
+msgstr "Python-Panel umschalten"
+
+msgid "Toggle Logs Panel"
+msgstr "Log-Panel umschalten"
+
+msgid "Toggle Devices Panel"
+msgstr "Schalttafel fr Gerte umschalten"
+
+msgid "Toggle Color Area Panel"
+msgstr "Farbbereich-Info-Panel umschalten"
+
+msgid "Toggle Notes Panel"
+msgstr "Notizen-Panel umschalten"
+
+msgid "Toggle Annotations Panel"
+msgstr "Annotationsfeld umschalten"
+
+msgid "Toggle Background Panel"
+msgstr "Hintergrund-Panel umschalten"
+
+msgid "Toggle Image Info Panel"
+msgstr "Medien-Info-Panel umschalten"
+
+msgid "Toggle Histogram Panel"
+msgstr "Histogramm-Panel umschalten"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "Vectorscope-Panel umschalten"
+
+msgid "Toggle Waveform Panel"
+msgstr "Waveform-Panel umschalten"
+
+msgid "Toggle Environment Map Panel"
+msgstr "Umgebungskarten-Panel umschalten"
+
+msgid "Toggle NDI Panel"
+msgstr "NDI-Panel umschalten"
+
+msgid "Toggle WebRTC Panel"
+msgstr "WebRTC-Panel umschalten"
+
+msgid "Toggle USD Panel"
+msgstr "USD-Panel umschalten"
+
+msgid "Toggle Statistics Panel"
+msgstr "Statistik-Panel umschalten"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "Stereo-3D-Panel umschalten"
+
+msgid "Show Hotkeys Window"
+msgstr "Hotkeys-Fenster anzeigen"
+
+msgid "Show Preferences Window"
+msgstr "Einstellungsfenster anzeigen"
 
 msgid "Notes"
 msgstr "Anmerkungen"
@@ -3809,10 +3878,6 @@ msgstr "Benutzeroberfläche weniger transparent machen."
 msgid "Only allow one side panel at a time."
 msgstr "Nur ein Seitenpanel gleichzeitig zulassen."
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "Fenster {0} anzeigen."
-
 msgid "Show About Window."
 msgstr "Infofenster anzeigen."
 
@@ -4303,7 +4368,8 @@ msgid "Saving pictures to {0}."
 msgstr "Bilder auf {0} speichern."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "ProRes-Profile benötigen die Dateierweiterung .mov.  Änderung in .mov."
+msgstr ""
+"ProRes-Profile benötigen die Dateierweiterung .mov.  Änderung in .mov."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
@@ -4838,33 +4904,6 @@ msgstr "Sicht/Maske/%s"
 
 msgid "View/Hud"
 msgstr "Sicht/Hud"
-
-msgid "View/Compare/None"
-msgstr "Sicht/Vergleichen Sie/Keine"
-
-msgid "View/Compare/Overlay"
-msgstr "Sicht/Vergleichen Sie/Ineinanderkopieren"
-
-msgid "View/Compare/Wipe"
-msgstr "Sicht/Vergleichen Sie/Reinigungstuch"
-
-msgid "View/Compare/Difference"
-msgstr "Sicht/Vergleichen Sie/Unterschied"
-
-msgid "View/Compare/Add"
-msgstr "Sicht/Vergleichen Sie/Keine"
-
-msgid "View/Compare/Multiply"
-msgstr "Sicht/Vergleichen Sie/Reinigungstuch"
-
-msgid "View/Compare/Horizontal"
-msgstr "Sicht/Vergleichen Sie/Horizontal"
-
-msgid "View/Compare/Vertical"
-msgstr "Sicht/Vergleichen Sie/Vertikal"
-
-msgid "View/Compare/Tile"
-msgstr "Sicht/Vergleichen Sie/Kachel"
 
 msgid "Timeline/Cache/Clear"
 msgstr "Zeitleiste/Zwischenspeicher/Lschen"
@@ -5908,6 +5947,11 @@ msgstr "Farbbereich von FFMpeg für den ausgewählten Codec"
 
 msgid "Presets"
 msgstr "Voreinstellungen"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr ""
+"FFMpeg-Voreinstellung zum Speichern von Filmen (SDR / HDR) für den "
+"ausgewählten Codec."
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "Farbraum von FFMpeg für den ausgewählten Codec"
@@ -7023,9 +7067,6 @@ msgstr "Fehler-Frame"
 msgid "Hold Frame"
 msgstr "Letzten Frame halten"
 
-msgid "Scratched Frame"
-msgstr "Zerkratztes Einzelbild"
-
 msgid "Black  Frame"
 msgstr "Schwarzer Frame"
 
@@ -7034,6 +7075,9 @@ msgstr "Frame überspringen"
 
 msgid "Gap Frame"
 msgstr "Lücken-Frame"
+
+msgid "Pick Scratch Color"
+msgstr "Farbe für fehlende Einzelbilder auswählen"
 
 msgid "Always"
 msgstr "Immer"
@@ -7904,6 +7948,26 @@ msgstr ""
 "\t* Schwarzer Frame\t   - Ersetzt den aktuellen Frame durch Schwarz.\n"
 "\t* Frame überspringen\t   - Überspringt den aktuellen Frame.\n"
 "\t* Lücken-Frame\t   - Fügt für die fehlenden Frames eine .otio-Lücke hinzu."
+
+msgid "Scratch Frame"
+msgstr "Fehlendes Einzelbild"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr ""
+"Wenn dies aktiviert ist, werden fehlende Einzelbilder mit einem Kreuz "
+"markiert."
+
+msgid "Scratch Color"
+msgstr "Farbe für fehlende Einzelbilder"
+
+msgid "Scratch Lines Color."
+msgstr "Farbe der Linien für fehlende Einzelbilder."
+
+msgid "Scratch Width"
+msgstr "Breite der Linien für fehlende Einzelbilder"
+
+msgid "Scratch Lines Width."
+msgstr "Breite der Linien für fehlende Einzelbilder."
 
 msgid "Path Mappings"
 msgstr "Pfad-Mappings"
@@ -9059,50 +9123,17 @@ msgstr "Hud-Fenster"
 msgid "Toggle One Panel Only"
 msgstr "Nur ein Panel einschalten"
 
-msgid "Toggle Files Panel"
-msgstr "Fenster Dateien umschalten"
-
 msgid "Toggle Media Info Panel"
 msgstr "Medien-Info-Panel umschalten"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "Farbbereich-Info-Panel umschalten"
 
-msgid "Toggle Color Controls Panel"
-msgstr "Farbsteuerungs-Panel umschalten"
-
-msgid "Toggle Compare Panel"
-msgstr "Schaltet Panel vergleichen um"
-
-msgid "Toggle Devices Panel"
-msgstr "Schalttafel fr Gerte umschalten"
-
 msgid "Toggle Annotation Panel"
 msgstr "Annotationsfeld umschalten"
 
-msgid "Toggle Background Panel"
-msgstr "Hintergrund-Panel umschalten"
-
-msgid "Toggle Settings Panel"
-msgstr "Einstellungsfeld umschalten"
-
-msgid "Toggle Histogram Panel"
-msgstr "Histogramm-Panel umschalten"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "Vectorscope-Panel umschalten"
-
-msgid "Toggle Waveform Panel"
-msgstr "Waveform-Panel umschalten"
-
-msgid "Toggle Environment Map Panel"
-msgstr "Umgebungskarten-Panel umschalten"
-
 msgid "Toggle Preferences Window"
 msgstr "Fenster Einstellungen umschalten"
-
-msgid "Toggle Python Panel"
-msgstr "Python-Panel umschalten"
 
 msgid "Toggle Log Panel"
 msgstr "Log-Panel umschalten"
@@ -9121,6 +9152,37 @@ msgstr "host_statistik64 fehlgeschlagen"
 
 msgid "task info failed"
 msgstr "Task-Info fehlgeschlagen"
+
+#, c++-format
+#~ msgid "Show {0} Window."
+#~ msgstr "Fenster {0} anzeigen."
+
+#~ msgid "View/Compare/None"
+#~ msgstr "Sicht/Vergleichen Sie/Keine"
+
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "Sicht/Vergleichen Sie/Ineinanderkopieren"
+
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "Sicht/Vergleichen Sie/Reinigungstuch"
+
+#~ msgid "View/Compare/Difference"
+#~ msgstr "Sicht/Vergleichen Sie/Unterschied"
+
+#~ msgid "View/Compare/Add"
+#~ msgstr "Sicht/Vergleichen Sie/Keine"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "Sicht/Vergleichen Sie/Reinigungstuch"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "Sicht/Vergleichen Sie/Horizontal"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "Sicht/Vergleichen Sie/Vertikal"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "Sicht/Vergleichen Sie/Kachel"
 
 #~ msgid "Complexity"
 #~ msgstr "Komplexität"

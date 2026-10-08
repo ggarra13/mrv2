@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-08 07:02-0300\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1753,6 +1753,75 @@ msgid ""
 msgstr ""
 "यह आपकी सभी सेटिंग को डिफ़ॉल्ट रूप में रीसेट करेगा. क्या आप सुनिश्चित हैं कि"
 " आप जारी रखना चाहते हैं?"
+
+msgid "Toggle Color Controls Panel"
+msgstr "रंग नियंत्रण फलक टॉगल करें"
+
+msgid "Toggle Files Panel"
+msgstr "फ़ाइलें फलक टॉगल करें"
+
+msgid "Toggle Compare Panel"
+msgstr "फलक से तुलना करें"
+
+msgid "Toggle Settings Panel"
+msgstr "विन्यास फलक टॉगल करें"
+
+msgid "Toggle Python Panel"
+msgstr "पायथन फलक टॉगल करें"
+
+msgid "Toggle Logs Panel"
+msgstr "लॉग पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Devices Panel"
+msgstr "औज़ार फलक टॉगल करें"
+
+msgid "Toggle Color Area Panel"
+msgstr "रंग क्षेत्र जानकारी पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Notes Panel"
+msgstr "नोट्स पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Annotations Panel"
+msgstr "एनोटेशन पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Background Panel"
+msgstr "पृष्ठभूमि फलक टॉगल करें"
+
+msgid "Toggle Image Info Panel"
+msgstr "छवि जानकारी पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Histogram Panel"
+msgstr "हिस्टोग्राम फलक टॉगल करें"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "वेक्टर ग्राफ फलक टॉगल करें"
+
+msgid "Toggle Waveform Panel"
+msgstr "वेवफ़ॉर्मेशन फलक टॉगल करें"
+
+msgid "Toggle Environment Map Panel"
+msgstr "एनवायरनमेंट नक्शा फलक टॉगल करें"
+
+msgid "Toggle NDI Panel"
+msgstr "NDI पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle WebRTC Panel"
+msgstr "WebRTC पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle USD Panel"
+msgstr "USD पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Statistics Panel"
+msgstr "सांख्यिकी पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "Stereo 3D पैनल दिखाएँ/छिपाएँ"
+
+msgid "Show Hotkeys Window"
+msgstr "हॉटकी विंडो दिखाएँ"
+
+msgid "Show Preferences Window"
+msgstr "प्राथमिकताएँ विंडो दिखाएँ"
 
 msgid "Notes"
 msgstr "टिप्पणी"
@@ -3776,10 +3845,6 @@ msgstr "UI को कम पारदर्शी बनाएँ।"
 msgid "Only allow one side panel at a time."
 msgstr "एक समय में केवल एक साइड पैनल की अनुमति दें।"
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "{0} विंडो दिखाएँ।"
-
 msgid "Show About Window."
 msgstr "अबाउट विंडो दिखाएँ।"
 
@@ -4260,31 +4325,36 @@ msgid "Saving pictures to {0}."
 msgstr "{0} में छवि सहेज रहा है"
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "ProRes प्रोफ़ाइल के लिए .mov फ़िल्म एक्सटेंशन आवश्यक है।  इसे .mov में बदला जा रहा है।"
+msgstr ""
+"ProRes प्रोफ़ाइल के लिए .mov फ़िल्म एक्सटेंशन आवश्यक है।  इसे .mov में बदला "
+"जा रहा है।"
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
 ".mkv"
 msgstr ""
-"VP9 प्रोफ़ाइल के लिए .mp4, .mkv या .webm फ़िल्म एक्सटेंशन आवश्यक है।  "
-"इसे .mkv में बदला जा रहा है।"
+"VP9 प्रोफ़ाइल के लिए .mp4, .mkv या .webm फ़िल्म एक्सटेंशन आवश्यक है।  इसे "
+".mkv में बदला जा रहा है।"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
-"AV1 प्रोफ़ाइल के लिए .mp4 या .mkv फ़िल्म एक्सटेंशन आवश्यक है।  "
-"इसे .mp4 में बदला जा रहा है।"
+"AV1 प्रोफ़ाइल के लिए .mp4 या .mkv फ़िल्म एक्सटेंशन आवश्यक है।  इसे .mp4 में "
+"बदला जा रहा है।"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 msgstr ""
-"GoPro CineForm प्रोफ़ाइल के लिए .mkv फ़िल्म एक्सटेंशन आवश्यक है।  "
-"इसे .mkv में बदला जा रहा है।"
+"GoPro CineForm प्रोफ़ाइल के लिए .mkv फ़िल्म एक्सटेंशन आवश्यक है।  इसे .mkv "
+"में बदला जा रहा है।"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr "HAP प्रोफ़ाइल के लिए .mov एक्सटेंशन आवश्यक है।  इसे .mov में बदला जा रहा है।"
+msgstr ""
+"HAP प्रोफ़ाइल के लिए .mov एक्सटेंशन आवश्यक है।  इसे .mov में बदला जा रहा है।"
 
 msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
-msgstr "OAPV प्रोफ़ाइल के लिए .mp4 एक्सटेंशन आवश्यक है।  इसे .mp4 में बदला जा रहा है।"
+msgstr ""
+"OAPV प्रोफ़ाइल के लिए .mp4 एक्सटेंशन आवश्यक है।  इसे .mp4 में बदला जा रहा "
+"है।"
 
 #, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
@@ -4792,33 +4862,6 @@ msgstr "दृश्य/मास्क/%s"
 
 msgid "View/Hud"
 msgstr "दृश्य/Hud"
-
-msgid "View/Compare/None"
-msgstr "दृश्य/तुलना/कोई नहीं"
-
-msgid "View/Compare/Overlay"
-msgstr "दृश्य/तुलना/ओवरले"
-
-msgid "View/Compare/Wipe"
-msgstr "दृश्य/तुलना/वाइप"
-
-msgid "View/Compare/Difference"
-msgstr "दृश्य/तुलना/अंतर"
-
-msgid "View/Compare/Add"
-msgstr "दृश्य/तुलना/जोड़ें"
-
-msgid "View/Compare/Multiply"
-msgstr "दृश्य/तुलना/गुणा"
-
-msgid "View/Compare/Horizontal"
-msgstr "दृश्य/तुलना/क्षैतिज"
-
-msgid "View/Compare/Vertical"
-msgstr "दृश्य/तुलना/ऊर्ध्वाधर"
-
-msgid "View/Compare/Tile"
-msgstr "दृश्य/तुलना/टाइल"
 
 msgid "Timeline/Cache/Clear"
 msgstr "टाइम-लाइन/कैश/साफ करें"
@@ -5862,6 +5905,9 @@ msgstr "चुने गए कोडेकों के लिए FFMOGE का
 
 msgid "Presets"
 msgstr "प्रीसेट"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr "चयनित कोडेक के लिए FFMpeg की फ़िल्म सहेजने की प्रीसेट (SDR / HDR)।"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "चुने गए कोडेकों के लिए FFMOGE का रंग जगह"
@@ -6962,9 +7008,6 @@ msgstr "त्रुटि फ़्रेम"
 msgid "Hold Frame"
 msgstr "फ़्रेम रोकें"
 
-msgid "Scratched Frame"
-msgstr "खरोंच वाला फ़्रेम"
-
 msgid "Black  Frame"
 msgstr "काला फ़्रेम"
 
@@ -6973,6 +7016,9 @@ msgstr "फ़्रेम छोड़ें"
 
 msgid "Gap Frame"
 msgstr "गैप फ़्रेम"
+
+msgid "Pick Scratch Color"
+msgstr "गायब फ़्रेम का रंग चुनें"
 
 msgid "Always"
 msgstr "हमेशा"
@@ -7817,6 +7863,24 @@ msgstr ""
 "\t* काला फ़्रेम\t   - वर्तमान फ़्रेम को काले फ़्रेम से बदल देता है।\n"
 "\t* फ़्रेम छोड़ें\t   - वर्तमान फ़्रेम को छोड़ देता है।\n"
 "\t* गैप फ़्रेम\t   - अनुपलब्ध फ़्रेम के लिए एक .otio गैप जोड़ता है।"
+
+msgid "Scratch Frame"
+msgstr "गायब फ़्रेम"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr "इसके सक्षम होने पर, गायब फ़्रेम पर एक क्रॉस दिखाई देगा।"
+
+msgid "Scratch Color"
+msgstr "गायब फ़्रेम का रंग"
+
+msgid "Scratch Lines Color."
+msgstr "गायब फ़्रेम की रेखाओं का रंग।"
+
+msgid "Scratch Width"
+msgstr "गायब फ़्रेम की रेखाओं की चौड़ाई"
+
+msgid "Scratch Lines Width."
+msgstr "गायब फ़्रेम की रेखाओं की चौड़ाई।"
 
 msgid "Path Mappings"
 msgstr "हटाएँ (R)"
@@ -8970,50 +9034,17 @@ msgstr "हूद विंडोComment"
 msgid "Toggle One Panel Only"
 msgstr "सिर्फ एक पैनल टॉगल करें"
 
-msgid "Toggle Files Panel"
-msgstr "फ़ाइलें फलक टॉगल करें"
-
 msgid "Toggle Media Info Panel"
 msgstr "मीडिया जानकारी फलक टॉगल करें"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "रंग क्षेत्र जानकारी फलक टॉगल करें"
 
-msgid "Toggle Color Controls Panel"
-msgstr "रंग नियंत्रण फलक टॉगल करें"
-
-msgid "Toggle Compare Panel"
-msgstr "फलक से तुलना करें"
-
-msgid "Toggle Devices Panel"
-msgstr "औज़ार फलक टॉगल करें"
-
 msgid "Toggle Annotation Panel"
 msgstr "व्याख्या फलक टॉगल करें"
 
-msgid "Toggle Background Panel"
-msgstr "पृष्ठभूमि फलक टॉगल करें"
-
-msgid "Toggle Settings Panel"
-msgstr "विन्यास फलक टॉगल करें"
-
-msgid "Toggle Histogram Panel"
-msgstr "हिस्टोग्राम फलक टॉगल करें"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "वेक्टर ग्राफ फलक टॉगल करें"
-
-msgid "Toggle Waveform Panel"
-msgstr "वेवफ़ॉर्मेशन फलक टॉगल करें"
-
-msgid "Toggle Environment Map Panel"
-msgstr "एनवायरनमेंट नक्शा फलक टॉगल करें"
-
 msgid "Toggle Preferences Window"
 msgstr "विकल्प टॉगल करें"
-
-msgid "Toggle Python Panel"
-msgstr "पायथन फलक टॉगल करें"
 
 msgid "Toggle Log Panel"
 msgstr "लॉग पैनल टॉगल करें"
@@ -9032,6 +9063,37 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
+
+#, c++-format
+#~ msgid "Show {0} Window."
+#~ msgstr "{0} विंडो दिखाएँ।"
+
+#~ msgid "View/Compare/None"
+#~ msgstr "दृश्य/तुलना/कोई नहीं"
+
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "दृश्य/तुलना/ओवरले"
+
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "दृश्य/तुलना/वाइप"
+
+#~ msgid "View/Compare/Difference"
+#~ msgstr "दृश्य/तुलना/अंतर"
+
+#~ msgid "View/Compare/Add"
+#~ msgstr "दृश्य/तुलना/जोड़ें"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "दृश्य/तुलना/गुणा"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "दृश्य/तुलना/क्षैतिज"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "दृश्य/तुलना/ऊर्ध्वाधर"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "दृश्य/तुलना/टाइल"
 
 #~ msgid "Complexity"
 #~ msgstr "जटिलता"

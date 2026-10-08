@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-08 07:02-0300\n"
 "PO-Revision-Date: 2026-09-29 22:48+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -1745,6 +1745,75 @@ msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
 msgstr "これにより、すべての設定がデフォルト値にリセットされます。 本当に続行しますか？"
+
+msgid "Toggle Color Controls Panel"
+msgstr "カラーコントロールパネルを切り替え"
+
+msgid "Toggle Files Panel"
+msgstr "ファイルパネルを切り替え"
+
+msgid "Toggle Compare Panel"
+msgstr "比較パネルを切り替え"
+
+msgid "Toggle Settings Panel"
+msgstr "設定パネルを切り替え"
+
+msgid "Toggle Python Panel"
+msgstr "Pythonパネルを切り替え"
+
+msgid "Toggle Logs Panel"
+msgstr "ログパネルの表示/非表示"
+
+msgid "Toggle Devices Panel"
+msgstr "デバイスパネルを切り替え"
+
+msgid "Toggle Color Area Panel"
+msgstr "色域情報パネルの表示/非表示"
+
+msgid "Toggle Notes Panel"
+msgstr "メモパネルの表示/非表示"
+
+msgid "Toggle Annotations Panel"
+msgstr "注釈パネルの表示/非表示"
+
+msgid "Toggle Background Panel"
+msgstr "背景パネルを切り替え"
+
+msgid "Toggle Image Info Panel"
+msgstr "画像情報パネルの表示/非表示"
+
+msgid "Toggle Histogram Panel"
+msgstr "ヒストグラムパネルを切り替え"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "ベクトルスコープパネルを切り替え"
+
+msgid "Toggle Waveform Panel"
+msgstr "波形パネルを切り替え"
+
+msgid "Toggle Environment Map Panel"
+msgstr "環境マップパネルを切り替え"
+
+msgid "Toggle NDI Panel"
+msgstr "NDIパネルの表示/非表示"
+
+msgid "Toggle WebRTC Panel"
+msgstr "WebRTCパネルの表示/非表示"
+
+msgid "Toggle USD Panel"
+msgstr "USDパネルの表示/非表示"
+
+msgid "Toggle Statistics Panel"
+msgstr "統計パネルの表示/非表示"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "ステレオ3Dパネルの表示/非表示"
+
+msgid "Show Hotkeys Window"
+msgstr "ホットキーウィンドウを表示"
+
+msgid "Show Preferences Window"
+msgstr "環境設定ウィンドウを表示"
 
 msgid "Notes"
 msgstr "ノート"
@@ -3735,10 +3804,6 @@ msgstr "UI の透明度を下げます。"
 msgid "Only allow one side panel at a time."
 msgstr "一度に 1 つのサイドパネルのみを表示します。"
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "{0} ウィンドウを表示します。"
-
 msgid "Show About Window."
 msgstr "バージョン情報ウィンドウを表示します。"
 
@@ -4738,33 +4803,6 @@ msgstr "表示/マスク/%s"
 
 msgid "View/Hud"
 msgstr "表示/Hud"
-
-msgid "View/Compare/None"
-msgstr "表示/比較/なし"
-
-msgid "View/Compare/Overlay"
-msgstr "表示/比較/なし"
-
-msgid "View/Compare/Wipe"
-msgstr "表示/比較/ワイプ"
-
-msgid "View/Compare/Difference"
-msgstr "表示/比較/差分"
-
-msgid "View/Compare/Add"
-msgstr "表示/比較/追加"
-
-msgid "View/Compare/Multiply"
-msgstr "表示/比較/乗算"
-
-msgid "View/Compare/Horizontal"
-msgstr "表示/比較/水平"
-
-msgid "View/Compare/Vertical"
-msgstr "表示/比較/垂直"
-
-msgid "View/Compare/Tile"
-msgstr "表示/比較/タイル"
 
 msgid "Timeline/Cache/Clear"
 msgstr "タイムライン/キャッシュ/クリア"
@@ -5796,6 +5834,9 @@ msgstr "選択したコーデックの FFmpeg カラーレンジ"
 
 msgid "Presets"
 msgstr "プリセット"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr "選択したコーデック用のFFMpeg動画保存プリセット（SDR / HDR）。"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "選択したコーデックの FFmpeg カラースペース"
@@ -6894,9 +6935,6 @@ msgstr "エラーフレーム"
 msgid "Hold Frame"
 msgstr "フレームを保持"
 
-msgid "Scratched Frame"
-msgstr "傷付きフレーム"
-
 msgid "Black  Frame"
 msgstr "黒フレーム"
 
@@ -6905,6 +6943,9 @@ msgstr "フレームをスキップ"
 
 msgid "Gap Frame"
 msgstr "ギャップフレーム"
+
+msgid "Pick Scratch Color"
+msgstr "欠落フレームの色を選択"
 
 msgid "Always"
 msgstr "常に"
@@ -7692,6 +7733,24 @@ msgstr ""
 "\t* 黒フレーム\t   - 現在のフレームを黒で置き換えます。\n"
 "\t* フレームをスキップ\t   - 現在のフレームをスキップします。\n"
 "\t* ギャップフレーム\t   - 欠落したフレームに対して .otio Gap を追加します。"
+
+msgid "Scratch Frame"
+msgstr "欠落フレーム"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr "これを有効にすると、欠落フレームに×印が表示されます。"
+
+msgid "Scratch Color"
+msgstr "欠落フレームの色"
+
+msgid "Scratch Lines Color."
+msgstr "欠落フレームの線の色。"
+
+msgid "Scratch Width"
+msgstr "欠落フレームの線の幅"
+
+msgid "Scratch Lines Width."
+msgstr "欠落フレームの線の幅。"
 
 msgid "Path Mappings"
 msgstr "パスマッピング"
@@ -8822,50 +8881,17 @@ msgstr "HUD ウィンドウ"
 msgid "Toggle One Panel Only"
 msgstr "パネルを 1つだけ表示を切り替え"
 
-msgid "Toggle Files Panel"
-msgstr "ファイルパネルを切り替え"
-
 msgid "Toggle Media Info Panel"
 msgstr "メディア情報パネルを切り替え"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "カラーエリア情報パネルを切り替え"
 
-msgid "Toggle Color Controls Panel"
-msgstr "カラーコントロールパネルを切り替え"
-
-msgid "Toggle Compare Panel"
-msgstr "比較パネルを切り替え"
-
-msgid "Toggle Devices Panel"
-msgstr "デバイスパネルを切り替え"
-
 msgid "Toggle Annotation Panel"
 msgstr "注釈パネルを切り替え"
 
-msgid "Toggle Background Panel"
-msgstr "背景パネルを切り替え"
-
-msgid "Toggle Settings Panel"
-msgstr "設定パネルを切り替え"
-
-msgid "Toggle Histogram Panel"
-msgstr "ヒストグラムパネルを切り替え"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "ベクトルスコープパネルを切り替え"
-
-msgid "Toggle Waveform Panel"
-msgstr "波形パネルを切り替え"
-
-msgid "Toggle Environment Map Panel"
-msgstr "環境マップパネルを切り替え"
-
 msgid "Toggle Preferences Window"
 msgstr "環境設定ウィンドウを切り替え"
-
-msgid "Toggle Python Panel"
-msgstr "Pythonパネルを切り替え"
 
 msgid "Toggle Log Panel"
 msgstr "ログパネルを切り替え"
@@ -8884,6 +8910,37 @@ msgstr "host_statistics64 に失敗しました"
 
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました"
+
+#, c++-format
+#~ msgid "Show {0} Window."
+#~ msgstr "{0} ウィンドウを表示します。"
+
+#~ msgid "View/Compare/None"
+#~ msgstr "表示/比較/なし"
+
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "表示/比較/なし"
+
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "表示/比較/ワイプ"
+
+#~ msgid "View/Compare/Difference"
+#~ msgstr "表示/比較/差分"
+
+#~ msgid "View/Compare/Add"
+#~ msgstr "表示/比較/追加"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "表示/比較/乗算"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "表示/比較/水平"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "表示/比較/垂直"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "表示/比較/タイル"
 
 #~ msgid "Complexity"
 #~ msgstr "複雑さ"

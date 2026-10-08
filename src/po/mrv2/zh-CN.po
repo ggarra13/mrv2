@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-08 07:02-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Insecty <insecty_l@163.com>\n"
 "Language: zh-CN\n"
@@ -1742,6 +1742,75 @@ msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
 msgstr "这将您的所有设置重置为默认值。 您确定要继续吗?"
+
+msgid "Toggle Color Controls Panel"
+msgstr "开关色彩控制面板"
+
+msgid "Toggle Files Panel"
+msgstr "开关文件面板"
+
+msgid "Toggle Compare Panel"
+msgstr "开关比较面板"
+
+msgid "Toggle Settings Panel"
+msgstr "开关设置面板"
+
+msgid "Toggle Python Panel"
+msgstr "开关 Python 面板"
+
+msgid "Toggle Logs Panel"
+msgstr "显示/隐藏日志面板"
+
+msgid "Toggle Devices Panel"
+msgstr "开关设备面板"
+
+msgid "Toggle Color Area Panel"
+msgstr "显示/隐藏色彩区域信息面板"
+
+msgid "Toggle Notes Panel"
+msgstr "显示/隐藏备注面板"
+
+msgid "Toggle Annotations Panel"
+msgstr "显示/隐藏注释面板"
+
+msgid "Toggle Background Panel"
+msgstr "开关背景面板"
+
+msgid "Toggle Image Info Panel"
+msgstr "显示/隐藏图像信息面板"
+
+msgid "Toggle Histogram Panel"
+msgstr "开关直方图面板"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "开关矢量域面板"
+
+msgid "Toggle Waveform Panel"
+msgstr "开关波形面板"
+
+msgid "Toggle Environment Map Panel"
+msgstr "开关环境贴图面板"
+
+msgid "Toggle NDI Panel"
+msgstr "显示/隐藏 NDI 面板"
+
+msgid "Toggle WebRTC Panel"
+msgstr "显示/隐藏 WebRTC 面板"
+
+msgid "Toggle USD Panel"
+msgstr "显示/隐藏 USD 面板"
+
+msgid "Toggle Statistics Panel"
+msgstr "显示/隐藏统计信息面板"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "显示/隐藏立体 3D 面板"
+
+msgid "Show Hotkeys Window"
+msgstr "显示快捷键窗口"
+
+msgid "Show Preferences Window"
+msgstr "显示首选项窗口"
 
 msgid "Notes"
 msgstr "Notes"
@@ -3717,10 +3786,6 @@ msgstr "使界面更加不透明。"
 msgid "Only allow one side panel at a time."
 msgstr "一次只允许一个侧面板。"
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "显示 {0} 窗口。"
-
 msgid "Show About Window."
 msgstr "显示“关于”窗口。"
 
@@ -4199,20 +4264,14 @@ msgstr "ProRes 配置文件需要使用 .mov 视频文件扩展名。  正在将
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
 ".mkv"
-msgstr ""
-"VP9 配置文件需要使用 .mp4、.mkv 或 .webm 视频文件扩展名。  "
-"正在将其更改为 .mkv。"
+msgstr "VP9 配置文件需要使用 .mp4、.mkv 或 .webm 视频文件扩展名。  正在将其更改为 .mkv。"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
-msgstr ""
-"AV1 配置文件需要使用 .mp4 或 .mkv 视频文件扩展名。  "
-"正在将其更改为 .mp4。"
+msgstr "AV1 配置文件需要使用 .mp4 或 .mkv 视频文件扩展名。  正在将其更改为 .mp4。"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
-msgstr ""
-"GoPro CineForm 配置文件需要使用 .mkv 视频文件扩展名。  "
-"正在将其更改为 .mkv。"
+msgstr "GoPro CineForm 配置文件需要使用 .mkv 视频文件扩展名。  正在将其更改为 .mkv。"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "HAP 配置文件需要使用 .mov 扩展名。  正在将其更改为 .mov。"
@@ -4726,33 +4785,6 @@ msgstr "视图/遮罩/%s"
 
 msgid "View/Hud"
 msgstr "视图/Hud"
-
-msgid "View/Compare/None"
-msgstr "视图/比较/无"
-
-msgid "View/Compare/Overlay"
-msgstr "视图/比较/叠加层"
-
-msgid "View/Compare/Wipe"
-msgstr "视图/比较/删除"
-
-msgid "View/Compare/Difference"
-msgstr "视图/比较/差异"
-
-msgid "View/Compare/Add"
-msgstr "视图/比较/添加"
-
-msgid "View/Compare/Multiply"
-msgstr "视图/比较/相乘"
-
-msgid "View/Compare/Horizontal"
-msgstr "视图/比较/水平"
-
-msgid "View/Compare/Vertical"
-msgstr "视图/比较/垂直"
-
-msgid "View/Compare/Tile"
-msgstr "视图/比较/平铺"
 
 msgid "Timeline/Cache/Clear"
 msgstr "时间线/缓存/清除"
@@ -5789,6 +5821,9 @@ msgstr "所选编码器的 higpeg 颜色范围"
 
 msgid "Presets"
 msgstr "预设"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr "所选编解码器的 FFMpeg 电影保存预设（SDR / HDR）。"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "所选编码器的 higpeg 颜色空间"
@@ -6890,9 +6925,6 @@ msgstr "错误帧"
 msgid "Hold Frame"
 msgstr "保持帧"
 
-msgid "Scratched Frame"
-msgstr "划痕帧"
-
 msgid "Black  Frame"
 msgstr "黑帧"
 
@@ -6901,6 +6933,9 @@ msgstr "跳过帧"
 
 msgid "Gap Frame"
 msgstr "间隔帧"
+
+msgid "Pick Scratch Color"
+msgstr "选择缺失帧的颜色"
 
 msgid "Always"
 msgstr "总是"
@@ -7673,6 +7708,24 @@ msgstr ""
 "\t* 黑帧\t   - 将当前帧替换为黑色。\n"
 "\t* 跳过帧\t   - 跳过当前帧。\n"
 "\t* 间隔帧\t   - 为缺失的帧添加一个 .otio Gap。"
+
+msgid "Scratch Frame"
+msgstr "缺失帧"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr "启用此选项后，缺失帧上会显示一个叉号。"
+
+msgid "Scratch Color"
+msgstr "缺失帧颜色"
+
+msgid "Scratch Lines Color."
+msgstr "缺失帧线条颜色。"
+
+msgid "Scratch Width"
+msgstr "缺失帧线条宽度"
+
+msgid "Scratch Lines Width."
+msgstr "缺失帧线条宽度。"
 
 msgid "Path Mappings"
 msgstr "路径映射"
@@ -8797,50 +8850,17 @@ msgstr "Hud 窗口"
 msgid "Toggle One Panel Only"
 msgstr "开关仅显示一个面板"
 
-msgid "Toggle Files Panel"
-msgstr "开关文件面板"
-
 msgid "Toggle Media Info Panel"
 msgstr "开关媒体信息面板"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "开关颜色区域信息面板"
 
-msgid "Toggle Color Controls Panel"
-msgstr "开关色彩控制面板"
-
-msgid "Toggle Compare Panel"
-msgstr "开关比较面板"
-
-msgid "Toggle Devices Panel"
-msgstr "开关设备面板"
-
 msgid "Toggle Annotation Panel"
 msgstr "开关注释面板"
 
-msgid "Toggle Background Panel"
-msgstr "开关背景面板"
-
-msgid "Toggle Settings Panel"
-msgstr "开关设置面板"
-
-msgid "Toggle Histogram Panel"
-msgstr "开关直方图面板"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "开关矢量域面板"
-
-msgid "Toggle Waveform Panel"
-msgstr "开关波形面板"
-
-msgid "Toggle Environment Map Panel"
-msgstr "开关环境贴图面板"
-
 msgid "Toggle Preferences Window"
 msgstr "开关首选项窗口"
-
-msgid "Toggle Python Panel"
-msgstr "开关 Python 面板"
 
 msgid "Toggle Log Panel"
 msgstr "开关日志面板"
@@ -8859,6 +8879,37 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "任务信息失败"
+
+#, c++-format
+#~ msgid "Show {0} Window."
+#~ msgstr "显示 {0} 窗口。"
+
+#~ msgid "View/Compare/None"
+#~ msgstr "视图/比较/无"
+
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "视图/比较/叠加层"
+
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "视图/比较/删除"
+
+#~ msgid "View/Compare/Difference"
+#~ msgstr "视图/比较/差异"
+
+#~ msgid "View/Compare/Add"
+#~ msgstr "视图/比较/添加"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "视图/比较/相乘"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "视图/比较/水平"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "视图/比较/垂直"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "视图/比较/平铺"
 
 #~ msgid "Complexity"
 #~ msgstr "复杂程度"

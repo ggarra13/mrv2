@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-08 07:02-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: ru\n"
@@ -1777,6 +1777,75 @@ msgid ""
 msgstr ""
 "Это перезагрузит все ваши настройки к их по умолчанию. Вы уверены, что "
 "хотите продолжить?"
+
+msgid "Toggle Color Controls Panel"
+msgstr "Переключить панель управления цветом"
+
+msgid "Toggle Files Panel"
+msgstr "Переключить панель файлов"
+
+msgid "Toggle Compare Panel"
+msgstr "Переключить панель сравнения"
+
+msgid "Toggle Settings Panel"
+msgstr "Переключить панель настроек"
+
+msgid "Toggle Python Panel"
+msgstr "Переключить панель Python"
+
+msgid "Toggle Logs Panel"
+msgstr "Показать/скрыть панель журналов"
+
+msgid "Toggle Devices Panel"
+msgstr "Переключить панель устройств"
+
+msgid "Toggle Color Area Panel"
+msgstr "Показать/скрыть панель информации о цветовом пространстве"
+
+msgid "Toggle Notes Panel"
+msgstr "Показать/скрыть панель заметок"
+
+msgid "Toggle Annotations Panel"
+msgstr "Показать/скрыть панель аннотаций"
+
+msgid "Toggle Background Panel"
+msgstr "Переключить панель фона"
+
+msgid "Toggle Image Info Panel"
+msgstr "Показать/скрыть панель информации об изображении"
+
+msgid "Toggle Histogram Panel"
+msgstr "Переключить панель гистограммы"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "Переключить панель вектороскопа"
+
+msgid "Toggle Waveform Panel"
+msgstr "Панель инструментов Waveform"
+
+msgid "Toggle Environment Map Panel"
+msgstr "Группа по составлению карты состояния окружающей среды"
+
+msgid "Toggle NDI Panel"
+msgstr "Показать/скрыть панель NDI"
+
+msgid "Toggle WebRTC Panel"
+msgstr "Показать/скрыть панель WebRTC"
+
+msgid "Toggle USD Panel"
+msgstr "Показать/скрыть панель USD"
+
+msgid "Toggle Statistics Panel"
+msgstr "Показать/скрыть панель статистики"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "Показать/скрыть панель Stereo 3D"
+
+msgid "Show Hotkeys Window"
+msgstr "Показать окно горячих клавиш"
+
+msgid "Show Preferences Window"
+msgstr "Показать окно настроек"
 
 msgid "Notes"
 msgstr "Примечания"
@@ -3818,10 +3887,6 @@ msgstr "Сделать интерфейс менее прозрачным."
 msgid "Only allow one side panel at a time."
 msgstr "Разрешить только одну боковую панель одновременно."
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "Показать окно {0}."
-
 msgid "Show About Window."
 msgstr "Показать окно «О программе»."
 
@@ -4305,25 +4370,25 @@ msgid "Saving pictures to {0}."
 msgstr "Сохранение фотографий до {0}."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "Профили ProRes требуют расширения видеофайла .mov.  Изменение на .mov."
+msgstr ""
+"Профили ProRes требуют расширения видеофайла .mov.  Изменение на .mov."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
 ".mkv"
 msgstr ""
-"Профиль VP9 требует расширения видеофайла .mp4, .mkv или .webm.  "
-"Изменение на .mkv"
+"Профиль VP9 требует расширения видеофайла .mp4, .mkv или .webm.  Изменение "
+"на .mkv"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
-"Профиль AV1 требует расширения видеофайла .mp4 или .mkv.  "
-"Изменение на .mp4"
+"Профиль AV1 требует расширения видеофайла .mp4 или .mkv.  Изменение на .mp4"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 msgstr ""
-"Профиль GoPro CineForm требует расширения видеофайла .mkv.  "
-"Изменение на .mkv"
+"Профиль GoPro CineForm требует расширения видеофайла .mkv.  Изменение на "
+".mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "Профиль HAP требует расширения файла .mov.  Изменение на .mov"
@@ -4838,33 +4903,6 @@ msgstr "Вид/Маска/%s"
 
 msgid "View/Hud"
 msgstr "Вид/Hud"
-
-msgid "View/Compare/None"
-msgstr "Вид/Сравнение/Нет"
-
-msgid "View/Compare/Overlay"
-msgstr "Вид/Сравнение/Оверлей"
-
-msgid "View/Compare/Wipe"
-msgstr "Вид/Сравнение/Протирка"
-
-msgid "View/Compare/Difference"
-msgstr "Вид/Сравнение/Разница"
-
-msgid "View/Compare/Add"
-msgstr "Вид/Сравнение/Добавить"
-
-msgid "View/Compare/Multiply"
-msgstr "Вид/Сравнение/Умножить"
-
-msgid "View/Compare/Horizontal"
-msgstr "Вид/Сравнение/По горизонтали"
-
-msgid "View/Compare/Vertical"
-msgstr "Вид/Сравнение/Вертикальная передача"
-
-msgid "View/Compare/Tile"
-msgstr "Вид/Сравнение/Плитка"
 
 msgid "Timeline/Cache/Clear"
 msgstr "Таймлайн/Кэш/Очистить"
@@ -5908,6 +5946,10 @@ msgstr "Цветовой диапазон FFMpeg для выбранного к�
 
 msgid "Presets"
 msgstr "Предустановки"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr ""
+"Предустановка FFMpeg для сохранения видео (SDR / HDR) для выбранного кодека."
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "Цветовое пространство FFMpeg для выбранного кодаc"
@@ -7029,9 +7071,6 @@ msgstr "Кадр с ошибкой"
 msgid "Hold Frame"
 msgstr "Удерживать кадр"
 
-msgid "Scratched Frame"
-msgstr "Поцарапанный кадр"
-
 msgid "Black  Frame"
 msgstr "Чёрный кадр"
 
@@ -7040,6 +7079,9 @@ msgstr "Пропустить кадр"
 
 msgid "Gap Frame"
 msgstr "Кадр с пропуском"
+
+msgid "Pick Scratch Color"
+msgstr "Выбрать цвет отсутствующих кадров"
 
 msgid "Always"
 msgstr "Всегда"
@@ -7894,6 +7936,25 @@ msgstr ""
 "\t* Чёрный кадр\t   - Заменяет текущий кадр чёрным.\n"
 "\t* Пропустить кадр\t   - Пропускает текущий кадр.\n"
 "\t* Кадр с пропуском\t   - Добавляет .otio Gap для отсутствующих кадров."
+
+msgid "Scratch Frame"
+msgstr "Отсутствующий кадр"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr ""
+"Если эта опция включена, отсутствующие кадры будут отмечены крестиком."
+
+msgid "Scratch Color"
+msgstr "Цвет отсутствующих кадров"
+
+msgid "Scratch Lines Color."
+msgstr "Цвет линий отсутствующих кадров."
+
+msgid "Scratch Width"
+msgstr "Ширина линий отсутствующих кадров"
+
+msgid "Scratch Lines Width."
+msgstr "Ширина линий отсутствующих кадров."
 
 msgid "Path Mappings"
 msgstr "Пути картирования"
@@ -9048,50 +9109,17 @@ msgstr "Окно Хад"
 msgid "Toggle One Panel Only"
 msgstr "Переключить только одну панель"
 
-msgid "Toggle Files Panel"
-msgstr "Переключить панель файлов"
-
 msgid "Toggle Media Info Panel"
 msgstr "Переключить панель информации о медиа"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "Переключить панель информации о цветовой области"
 
-msgid "Toggle Color Controls Panel"
-msgstr "Переключить панель управления цветом"
-
-msgid "Toggle Compare Panel"
-msgstr "Переключить панель сравнения"
-
-msgid "Toggle Devices Panel"
-msgstr "Переключить панель устройств"
-
 msgid "Toggle Annotation Panel"
 msgstr "Переключить панель аннотаций"
 
-msgid "Toggle Background Panel"
-msgstr "Переключить панель фона"
-
-msgid "Toggle Settings Panel"
-msgstr "Переключить панель настроек"
-
-msgid "Toggle Histogram Panel"
-msgstr "Переключить панель гистограммы"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "Переключить панель вектороскопа"
-
-msgid "Toggle Waveform Panel"
-msgstr "Панель инструментов Waveform"
-
-msgid "Toggle Environment Map Panel"
-msgstr "Группа по составлению карты состояния окружающей среды"
-
 msgid "Toggle Preferences Window"
 msgstr "Переключить окно настроек"
-
-msgid "Toggle Python Panel"
-msgstr "Переключить панель Python"
 
 msgid "Toggle Log Panel"
 msgstr "Переключить панель журналов"
@@ -9110,6 +9138,37 @@ msgstr "shop_statistics64 не сработал"
 
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
+
+#, c++-format
+#~ msgid "Show {0} Window."
+#~ msgstr "Показать окно {0}."
+
+#~ msgid "View/Compare/None"
+#~ msgstr "Вид/Сравнение/Нет"
+
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "Вид/Сравнение/Оверлей"
+
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "Вид/Сравнение/Протирка"
+
+#~ msgid "View/Compare/Difference"
+#~ msgstr "Вид/Сравнение/Разница"
+
+#~ msgid "View/Compare/Add"
+#~ msgstr "Вид/Сравнение/Добавить"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "Вид/Сравнение/Умножить"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "Вид/Сравнение/По горизонтали"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "Вид/Сравнение/Вертикальная передача"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "Вид/Сравнение/Плитка"
 
 #~ msgid "Complexity"
 #~ msgstr "Сложность"
