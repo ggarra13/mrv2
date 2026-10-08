@@ -9,69 +9,70 @@
 #include <tlCore/StringFormat.h>
 
 #include <mutex>
+#include <string>
 
 namespace tl
 {
     namespace io
     {
+        namespace
+        {
+            //! Append ";key:value" for each option. Produces the same text as
+            //! joining "key:value" strings with ';', without a temporary
+            //! string and vector per option.
+            void appendOptions(
+                std::string& out, const Options& options,
+                const char* skip = nullptr)
+            {
+                for (const auto& i : options)
+                {
+                    if (skip && i.first == skip)
+                        continue;
+                    out += ';';
+                    out += i.first;
+                    out += ':';
+                    out += i.second;
+                }
+            }
+        } // namespace
+
         std::string
         getInfoCacheKey(const file::Path& path, const Options& options)
         {
-            std::vector<std::string> s;
-            s.push_back(path.get());
-            s.push_back(path.getNumber());
-            for (const auto& i : options)
-            {
-                s.push_back(
-                    string::Format("{0}:{1}").arg(i.first).arg(i.second));
-            }
-            return string::join(s, ';');
+            std::string out = path.get();
+            out += ';';
+            out += path.getNumber();
+            appendOptions(out, options);
+            return out;
         }
 
         std::string getVideoCacheKey(
             const file::Path& path, const OTIO_NS::RationalTime& time,
             const Options& initOptions, const Options& frameOptions)
         {
-            std::vector<std::string> s;
-            s.push_back(path.get());
-            s.push_back(path.getNumber());
-            s.push_back(string::Format("{0}").arg(time));
-            for (const auto& i : initOptions)
-            {
-                s.push_back(
-                    string::Format("{0}:{1}").arg(i.first).arg(i.second));
-            }
-            for (const auto& i : frameOptions)
-            {
-                // Do not add ClearFrame frame option if present
-                if (i.first == "ClearFrame")
-                    continue;
-
-                s.push_back(
-                    string::Format("{0}:{1}").arg(i.first).arg(i.second));
-            }
-            return string::join(s, ';');
+            std::string out = path.get();
+            out += ';';
+            out += path.getNumber();
+            out += ';';
+            out += string::Format("{0}").arg(time);
+            appendOptions(out, initOptions);
+            // Do not add ClearFrame frame option if present
+            appendOptions(out, frameOptions, "ClearFrame");
+            return out;
         }
 
         std::string getAudioCacheKey(
             const file::Path& path, const OTIO_NS::TimeRange& timeRange,
             const Options& initOptions, const Options& frameOptions)
         {
-            std::vector<std::string> s;
-            s.push_back(path.get());
-            s.push_back(path.getNumber());
-            s.push_back(string::Format("{0}").arg(timeRange));
-            for (const auto& i : initOptions)
-            {
-                s.push_back(
-                    string::Format("{0}:{1}").arg(i.first).arg(i.second));
-            }
-            for (const auto& i : frameOptions)
-            {
-                s.push_back(
-                    string::Format("{0}:{1}").arg(i.first).arg(i.second));
-            }
-            return string::join(s, ';');
+            std::string out = path.get();
+            out += ';';
+            out += path.getNumber();
+            out += ';';
+            out += string::Format("{0}").arg(timeRange);
+            appendOptions(out, initOptions);
+            appendOptions(out, frameOptions);
+            return out;
         }
 
         struct Cache::Private
@@ -103,16 +104,21 @@ namespace tl
 
         size_t Cache::getMax() const
         {
-            return _p->max;
+            TLRENDER_P();
+            std::unique_lock<std::mutex> lock(p.mutex);
+            return p.max;
         }
 
         void Cache::setMax(size_t value)
         {
             TLRENDER_P();
-            if (value == p.max)
-                return;
-            p.max = value;
-            _maxUpdate();
+            {
+                std::unique_lock<std::mutex> lock(p.mutex);
+                if (value == p.max)
+                    return;
+                p.max = value;
+            }
+            _maxUpdate(); // Takes the lock itself.
         }
 
         size_t Cache::getSize() const
@@ -126,9 +132,10 @@ namespace tl
         {
             TLRENDER_P();
             std::unique_lock<std::mutex> lock(p.mutex);
-            return (p.video.getSize() + p.audio.getSize()) /
-                   static_cast<float>(p.video.getMax() + p.audio.getMax()) *
-                   100.F;
+            const size_t max = p.video.getMax() + p.audio.getMax();
+            return max ? (p.video.getSize() + p.audio.getSize()) /
+                             static_cast<float>(max) * 100.F
+                       : 0.F;
         }
 
         void Cache::addVideo(const std::string& key, const VideoData& videoData)

@@ -11,6 +11,7 @@ v1.8.2
 
 - Core: Added exporting of animated .webp.  They can be played in Chrome.
 - Core: Added exporting of animated .gif.
+- Core: Improvements in playback performance.
 
 Libraries
 ---------

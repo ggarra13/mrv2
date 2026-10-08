@@ -78,6 +78,8 @@ namespace tl
             const image::Tags& getTags() const;
 
             void start();
+            bool canDecodeForward(const OTIO_NS::RationalTime& target,
+                                  const OTIO_NS::RationalTime& current) const;
             void seek(const OTIO_NS::RationalTime&);
             bool process(
                 const bool backwards, const OTIO_NS::RationalTime& targetTime,

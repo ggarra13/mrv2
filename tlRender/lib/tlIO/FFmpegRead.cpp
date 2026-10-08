@@ -421,11 +421,13 @@ namespace tl
                     request->promise.set_value(p.info);
                 }
 
-                // Check the cache.
+                // Check the cache. The key is built once and reused when the
+                // decoded frame is added below.
+                std::string cacheKey;
                 io::VideoData videoData;
                 if (videoRequest && p.cache)
                 {
-                    const std::string cacheKey = io::getVideoCacheKey(
+                    cacheKey = io::getVideoCacheKey(
                         _path, videoRequest->time, _options,
                         videoRequest->options);
                     if (p.cache->getVideo(cacheKey, videoData))
@@ -453,9 +455,23 @@ namespace tl
                         p.videoThread.currentTime.rescaled_to(rate)).value();
                    if (delta != 0.F)
                    {
-                       if (p.cache && delta < 0) backwards = true;
-                       else p.videoThread.currentTime = videoRequest->time;
-                       p.readVideo->seek(videoRequest->time);
+                       if (delta > 0 &&
+                           p.readVideo->canDecodeForward(
+                               videoRequest->time, p.videoThread.currentTime))
+                       {
+                           // A short hop forward (typically over frames that
+                           // were served from the cache): keep decoding
+                           // from where we are. _decode() discards the
+                           // frames before the target. Seeking would flush
+                           // the decoder (and its frame threads) and restart
+                           // from the previous keyframe.
+                       }
+                       else
+                       {
+                           if (p.cache && delta < 0) backwards = true;
+                           else p.videoThread.currentTime = videoRequest->time;
+                           p.readVideo->seek(videoRequest->time);
+                       }
                    }
                }
 
@@ -492,7 +508,14 @@ namespace tl
                         data.image = p.readVideo->popBuffer();
                     }
                     videoRequest->promise.set_value(data);
-                    _addToCache(data, videoRequest->options);
+                    if (p.cache)
+                    {
+                        if (cacheKey.empty())
+                            cacheKey = io::getVideoCacheKey(
+                                _path, data.time, _options,
+                                videoRequest->options);
+                        p.cache->addVideo(cacheKey, data);
+                    }
 
                     p.videoThread.currentTime +=
                         OTIO_NS::RationalTime(1.0,
