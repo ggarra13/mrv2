@@ -116,6 +116,7 @@ find_package(nlohmann_json REQUIRED)
 find_package(minizip REQUIRED)
 find_package(OpenGL REQUIRED)
 
+
 if (WIN32 OR APPLE)
     if (MRV2_BACKEND STREQUAL "VK")
 	find_package(harfbuzz REQUIRED)

@@ -202,6 +202,9 @@ if(MRV2_PYBIND11)
     endif()
 endif()
 
+if (TLRENDER_LIBWEBP)
+    list(APPEND LIBRARIES PRIVATE libwebp libsharpyuv)
+endif()
 
 files_to_absolute_paths()
 
