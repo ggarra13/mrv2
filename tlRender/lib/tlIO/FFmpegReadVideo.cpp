@@ -459,7 +459,8 @@ namespace tl
                             .arg(getErrorLabel(r)));
                     }
                     _avCodecContext[_avStream]->thread_count = options.threadCount;
-                    _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME;
+                    _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME |
+                                                              FF_THREAD_SLICE;
 
                     if (options.hwAccel)
                     {

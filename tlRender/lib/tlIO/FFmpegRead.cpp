@@ -431,30 +431,33 @@ namespace tl
                     if (p.cache->getVideo(cacheKey, videoData))
                     {
                         videoRequest->promise.set_value(videoData);
-                        videoRequest.reset();
+                        continue;
                     }
                 }
 
-                // Seek.
-                //
-                // \@note: Seeking on some large movies with inter-frame
-                //         compression can be slow, as FFmpeg returns the
-                //         closest 'F' frame.
-                //         When playing backwards, while we look for the
-                //         actual request time, we cache all previous 'F' and
-                //         'I' frames which allows us to play 4K movies
-                //         backwards with no issues.
-                bool backwards = false;
-                if (videoRequest && !videoRequest->time.strictly_equal(
-                        p.videoThread.currentTime))
-                {
-                    if (p.cache &&
-                        videoRequest->time < p.videoThread.currentTime)
-                        backwards = true;
-                    else
-                        p.videoThread.currentTime = videoRequest->time;
-                    p.readVideo->seek(videoRequest->time);
-                }
+               // Seek.
+               //
+               // \@note: Seeking on some large movies with inter-frame
+               //         compression can be slow, as FFmpeg returns the
+               //         closest 'F' frame.
+               //         When playing backwards, while we look for the
+               //         actual request time, we cache all previous 'F' and
+               //         'I' frames which allows us to play 4K movies
+               //         backwards with no issues.
+               bool backwards = false;
+               if (videoRequest)
+               {
+                   const double rate = p.info.videoTime->duration().rate();
+                   const double delta =
+                       (videoRequest->time.rescaled_to(rate) -
+                        p.videoThread.currentTime.rescaled_to(rate)).value();
+                   if (delta != 0.F)
+                   {
+                       if (p.cache && delta < 0) backwards = true;
+                       else p.videoThread.currentTime = videoRequest->time;
+                       p.readVideo->seek(videoRequest->time);
+                   }
+               }
 
                 // Process.
                 while (videoRequest && p.readVideo->isBufferEmpty() &&
@@ -465,8 +468,8 @@ namespace tl
                 {
                     if (backwards)
                     {
-                        if (videoRequest->time.strictly_equal(
-                                p.videoThread.currentTime))
+                        if (videoRequest->time.value() ==
+                            p.videoThread.currentTime.value())
                             break;
                         io::VideoData data;
                         data.time = p.videoThread.currentTime;
@@ -524,8 +527,8 @@ namespace tl
                                         .arg(requestsSize));
                         }
                     }
-                }
-            }
+                } // Logging.
+            }  // whle runnig
         }
 
         void AudioRead::_init(
@@ -731,6 +734,7 @@ namespace tl
             p.audioThread.currentTime = p.info.audioTime->start_time();
             p.readAudio->start();
             p.audioThread.logTimer = std::chrono::steady_clock::now();
+            bool stale = false;
             while (p.audioThread.running)
             {
                 // Check requests.
@@ -745,26 +749,28 @@ namespace tl
                             { return (!_p->audioMutex.infoRequests.empty() ||
                                       !_p->audioMutex.requests.empty() ||
                                       !_p->audioThread.running); });
+
+                    // Check if we woke up to stop
+                    if (!p.audioThread.running)
+                        return;
+
+
+                    infoRequests = std::move(p.audioMutex.infoRequests);
+                    for (auto& request : infoRequests)
+                        request->promise.set_value(p.info);
+
+                    if (p.audioMutex.requests.empty())
+                        continue;
+
+                    request = p.audioMutex.requests.front();
+                    p.audioMutex.requests.pop_front();
                 }
-
-                // Check if we woke up to stop
-                if (!p.audioThread.running)
-                    return;
-
-
-                infoRequests = std::move(p.audioMutex.infoRequests);
-                for (auto& request : infoRequests)
-                    request->promise.set_value(p.info);
-
-                if (p.audioMutex.requests.empty())
-                    continue;
-
-                request = p.audioMutex.requests.front();
-                p.audioMutex.requests.pop_front();
+                
                 requestSampleCount =
                     request->timeRange.duration()
                     .rescaled_to(p.info.audio.sampleRate)
                     .value();
+                    
                 if (!request->timeRange.start_time().strictly_equal(
                         p.audioThread.currentTime))
                 {
@@ -781,13 +787,15 @@ namespace tl
                         _path, request->timeRange, _options, request->options);
                     if (p.cache->getAudio(cacheKey, audioData))
                     {
+                        p.audioThread.currentTime += request->timeRange.duration();
                         request->promise.set_value(audioData);
-                        request.reset();
+                        stale = true;
+                        continue;
                     }
                 }
 
                 // Seek.
-                if (seek)
+                if (seek || stale)
                 {
                     p.readAudio->seek(p.audioThread.currentTime);
                 }

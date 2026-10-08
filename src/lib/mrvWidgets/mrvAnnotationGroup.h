@@ -43,7 +43,7 @@ namespace mrv
         void add(Fl_Widget& w) { add(&w); }
         void clear();
         void spacing(int x);
-        void resize(int X, int Y, int W, int H);
+        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
         Pack* contents() { return contents_; }
         Fl_Button* button() { return button_; }
         void layout();
