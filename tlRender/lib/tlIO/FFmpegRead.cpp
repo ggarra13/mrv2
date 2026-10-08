@@ -765,12 +765,12 @@ namespace tl
                     request = p.audioMutex.requests.front();
                     p.audioMutex.requests.pop_front();
                 }
-                
+
                 requestSampleCount =
                     request->timeRange.duration()
                     .rescaled_to(p.info.audio.sampleRate)
                     .value();
-                    
+
                 if (!request->timeRange.start_time().strictly_equal(
                         p.audioThread.currentTime))
                 {
@@ -798,6 +798,7 @@ namespace tl
                 if (seek || stale)
                 {
                     p.readAudio->seek(p.audioThread.currentTime);
+                    stale = false;
                 }
 
                 // Process.

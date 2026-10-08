@@ -194,6 +194,18 @@ namespace tl
                 // av_dump_format(_avFormatContext, _avStream, fileName.c_str(),
                 // 0);
 
+                // Only the video stream is read: the demuxer then skips the
+                // others' data rather than handing it over to be thrown away.
+                // The timecode and the other streams' parameters are
+                // metadata, found already.
+                for (unsigned int i = 0; i < _avFormatContext->nb_streams; ++i)
+                {
+                    if (static_cast<int>(i) != _avStream)
+                    {
+                        _avFormatContext->streams[i]->discard = AVDISCARD_ALL;
+                    }
+                }
+
                 auto avAudioStream = _avFormatContext->streams[_avStream];
                 auto avAudioCodecParameters = avAudioStream->codecpar;
                 auto avAudioCodec =

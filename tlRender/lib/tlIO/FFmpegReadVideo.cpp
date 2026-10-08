@@ -342,9 +342,20 @@ namespace tl
                 std::string timecode = getTimecodeFromDataStream(_avFormatContext);
                 if (_avStream != -1)
                 {
+                    // Only the video stream is read: the demuxer then skips the
+                    // others' data rather than handing it over to be thrown away.
+                    // The timecode and the other streams' parameters are
+                    // metadata, found already.
+                    for (unsigned int i = 0; i < _avFormatContext->nb_streams; ++i)
+                    {
+                        if (static_cast<int>(i) != _avStream)
+                        {
+                            _avFormatContext->streams[i]->discard = AVDISCARD_ALL;
+                        }
+                    }
+
                     // av_dump_format(_avFormatContext, _avStream, fileName.c_str(),
                     // 0);
-
                     auto avVideoStream = _avFormatContext->streams[_avStream];
                     auto avVideoCodecParameters = avVideoStream->codecpar;
                     auto avVideoCodec =
@@ -459,9 +470,12 @@ namespace tl
                             .arg(getErrorLabel(r)));
                     }
                     _avCodecContext[_avStream]->thread_count = options.threadCount;
-                    _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME |
-                                                              FF_THREAD_SLICE;
-
+                    const AVCodecDescriptor* descriptor = avcodec_descriptor_get(avVideoCodec->id);
+                    const bool intraOnly = descriptor && (descriptor->props & AV_CODEC_PROP_INTRA_ONLY);
+                    const bool sliceThreads = avVideoCodec->capabilities & AV_CODEC_CAP_SLICE_THREADS;
+                    _avCodecContext[_avStream]->thread_type = intraOnly && sliceThreads ?
+                                                              FF_THREAD_SLICE :
+                                                              FF_THREAD_FRAME;
                     if (options.hwAccel)
                     {
                         // Attempt hardware decode. On any failure this is a no-op
