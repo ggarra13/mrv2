@@ -29,6 +29,7 @@ set(TLRENDER_AV1 FALSE CACHE BOOL "Enable support for dav1d decoder through FFmp
 set(TLRENDER_SVTAV1 FALSE CACHE BOOL "Enable support for SvtAV1 codec through FFmpeg")
 set(TLRENDER_LIBDOVI TRUE CACHE BOOL "Enable support for libdoviI through FFmpeg")
 set(TLRENDER_LIBPLACEBO FALSE CACHE BOOL "Enable support for libplacebo through FFmpeg")
+set(TLRENDER_LIBWEBP TRUE CACHE BOOL "Enable support for libwebp")
 set(TLRENDER_OAPV TRUE CACHE BOOL "Enable support for OpenAPV encoder")
 set(TLRENDER_VK  FALSE CACHE BOOL "Enable support for Vulkan")
 set(TLRENDER_VPX FALSE CACHE BOOL "Enable support for VPX codec through FFmpeg")
