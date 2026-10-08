@@ -236,6 +236,8 @@ namespace tl
 
                 _avFormatContext->interrupt_callback.callback = interruptCb;
                 _avFormatContext->interrupt_callback.opaque   = this;
+                _avFormatContext->probesize = 512 * 1024;
+                _avFormatContext->max_analyze_duration = 1 * AV_TIME_BASE;
 
                 //
                 // If we are potentially reading a .webp sequence, add a format
