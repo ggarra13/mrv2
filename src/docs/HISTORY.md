@@ -5,6 +5,7 @@ v1.8.2
 - UI: Notes in the Note Panel now show the time in the selected units (Frames, Seconds or Timecode).
 - UI: Notes in the Note Panel are now edited by clicking on its title or double clicking on the text box.
 - UI: Text drawing annotations' font size can now be changed by using + or - in the Vulkan backend.
+- UI: File requesters now show the correct filters for writing and reading.
 - UI/Core: Saving of movies now automatically tries to detect the color space to use (ie. SDR vs HDR), without having to manually set the override.
 - UI/Core: Saving of movies for most codecs defaults to "TV (Legal Range)" instead of "PC (Full Range)", unless you use **Advanced Settings** Override.
 
@@ -26,6 +27,8 @@ Fixes
 - UI/Core: Fixed refresh_media_cb starting playback due to **Preferences->Playback->Auto Playback**.
 - UI: Added missing tooltips in the status bar for Panels and Windows.
 - UI: Added missing toggle element in Panels.
+- Core: Fixed saving of audio on movie files.
+- Core: Fixed audio saving only.
 
 
 Libraries

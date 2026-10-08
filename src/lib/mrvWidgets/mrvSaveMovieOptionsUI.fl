@@ -209,7 +209,7 @@ o->textcolor(FL_BLACK);}
       }
     }
     Fl_Window uiAdvancedSettings {
-      label {Advanced Settings} open
+      label {Advanced Settings}
       xywh {0 0 416 355} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
@@ -225,7 +225,7 @@ settings->setValue("SaveMovie/Override", value);}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color Range", value);} open
+settings->setValue("SaveMovie/Color Range", value);}
         tooltip {FFMpeg's Color Range for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
         code2 {auto settings = mrv::App::app->settings();
 int value = settings->getValue<int>("SaveMovie/Color Range");
@@ -290,7 +290,7 @@ else if (value == 1)  // HDR
       ColorTRC->value(i);
       ColorTRC->do_callback();
   }
-}} open selected
+}}
         tooltip {FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected.} xywh {129 105 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
@@ -933,6 +933,16 @@ else if (codec == "OAPV")
    v->add("YUVA_444P_10LE");
    v->add("YUVA_444P_12LE");
 }
+else if (codec == "GIF")
+{
+   v->add("PAL8");
+}
+else if (codec == "WebP")
+{
+   v->add("RGB");
+   v->add("YUV_420P");
+   v->add("YUVA_420P");
+}
 
 if (v->size() > 0)
 {
@@ -952,7 +962,8 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {}
+}} {selected
+    }
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
   } {

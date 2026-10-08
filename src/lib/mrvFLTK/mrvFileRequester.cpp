@@ -45,7 +45,7 @@ namespace
     static const std::string kReelPattern = "otio,otioz";
 
     std::string
-    getMoviePattern(const std::shared_ptr<tl::system::Context>& context)
+    getMovieReadPattern(const std::shared_ptr<tl::system::Context>& context)
     {
         std::string result;
         const auto ioSystem = context->getSystem<io::ReadSystem>();
@@ -65,7 +65,7 @@ namespace
     }
 
     std::string
-    getImagePattern(const std::shared_ptr<tl::system::Context>& context)
+    getImageReadPattern(const std::shared_ptr<tl::system::Context>& context)
     {
         std::string result;
         const auto ioSystem = context->getSystem<io::ReadSystem>();
@@ -85,7 +85,7 @@ namespace
     }
 
     std::string
-    getAudioPattern(const std::shared_ptr<tl::system::Context>& context)
+    getAudioReadPattern(const std::shared_ptr<tl::system::Context>& context)
     {
         std::string result;
         const auto ioSystem = context->getSystem<io::ReadSystem>();
@@ -105,10 +105,50 @@ namespace
     }
 
     std::string
-    getSaveAudioPattern(const std::shared_ptr<tl::system::Context>& context)
+    getImageWritePattern(const std::shared_ptr<tl::system::Context>& context)
     {
         std::string result;
-        const auto ioSystem = context->getSystem<io::ReadSystem>();
+        const auto ioSystem = context->getSystem<io::WriteSystem>();
+        const auto plugins = ioSystem->getPlugins();
+        for (auto plugin : plugins)
+        {
+            auto extensions =
+                plugin->getExts(static_cast<int>(io::FileType::Sequence));
+            for (auto& extension : extensions)
+            {
+                if (!result.empty())
+                    result += ',';
+                result += extension.substr(1, extension.size());
+            }
+        }
+        return result;
+    }
+
+    std::string
+    getMovieWritePattern(const std::shared_ptr<tl::system::Context>& context)
+    {
+        std::string result;
+        const auto ioSystem = context->getSystem<io::WriteSystem>();
+        const auto plugins = ioSystem->getPlugins();
+        for (auto plugin : plugins)
+        {
+            auto extensions =
+                plugin->getExts(static_cast<int>(io::FileType::Movie));
+            for (auto& extension : extensions)
+            {
+                if (!result.empty())
+                    result += ',';
+                result += extension.substr(1, extension.size());
+            }
+        }
+        return result;
+    }
+
+    std::string
+    getAudioWritePattern(const std::shared_ptr<tl::system::Context>& context)
+    {
+        std::string result;
+        const auto ioSystem = context->getSystem<io::WriteSystem>();
         const auto plugins = ioSystem->getPlugins();
         for (auto plugin : plugins)
         {
@@ -116,11 +156,6 @@ namespace
                 plugin->getExts(static_cast<int>(io::FileType::Audio));
             for (auto& extension : extensions)
             {
-                if (extension == ".ac3" || extension == ".m4a" ||
-                    extension == ".mka" || extension == ".mp3" ||
-                    extension == ".ogg" || extension == ".opus" ||
-                    extension == ".vorbis")
-                    continue;
                 if (!result.empty())
                     result += ',';
                 result += extension.substr(1, extension.size());
@@ -377,17 +412,17 @@ namespace mrv
         const std::string kREEL_PATTERN =
             _("Reels (*.{") + kReelPattern + "})\t";
         const std::string kAUDIO_PATTERN =
-            ("Audios (*.{") + getAudioPattern(context) + "})\t";
+            ("Audios (*.{") + getAudioReadPattern(context) + "})\t";
         const std::string kIMAGE_PATTERN =
-            _("Images (*.{") + getImagePattern(context) + "})\t";
+            _("Images (*.{") + getImageReadPattern(context) + "})\t";
         const std::string kSESSIONS_PATTERN =
             _("Sessions (*.") + kSessionPattern + "})\t";
         const std::string kALL_PATTERN =
-            _("All (*.{") + getImagePattern(context) + "," +
-            getMoviePattern(context) + "," + kReelPattern + "," +
-            getAudioPattern(context) + "," + kSessionPattern + "})\t" +
+            _("All (*.{") + getImageReadPattern(context) + "," +
+            getMovieReadPattern(context) + "," + kReelPattern + "," +
+            getAudioReadPattern(context) + "," + kSessionPattern + "})\t" +
             kIMAGE_PATTERN + kAUDIO_PATTERN + _("Movies (*.{") +
-            getMoviePattern(context) + "})\t" + kREEL_PATTERN +
+            getMovieReadPattern(context) + "})\t" + kREEL_PATTERN +
             kSESSIONS_PATTERN;
 
         std::string pattern = kIMAGE_PATTERN + kAUDIO_PATTERN;
@@ -506,7 +541,7 @@ namespace mrv
     {
         auto context = App::app->getContext();
         std::string kAUDIO_PATTERN =
-            _("Audios (*.{") + getAudioPattern(context) + "})";
+            _("Audios (*.{") + getAudioReadPattern(context) + "})";
 
         std::string title = _("Load Audio");
 
@@ -518,7 +553,7 @@ namespace mrv
     {
         auto context = App::app->getContext();
         const std::string kIMAGE_PATTERN =
-            _("Images (*.{") + getImagePattern(context) + "})";
+            _("Images (*.{") + getImageWritePattern(context) + "})";
         const std::string kALL_PATTERN = kIMAGE_PATTERN;
 
         std::string title = _("Save Single Frame");
@@ -536,9 +571,9 @@ namespace mrv
     {
         auto context = App::app->getContext();
         const std::string kAUDIO_PATTERN =
-            _("Audios (*.{") + getSaveAudioPattern(context) + "})";
+            _("Audios (*.{") + getAudioWritePattern(context) + "})";
         const std::string kALL_PATTERN = _("All (*.{") +
-                                         getSaveAudioPattern(context) + "})\t" +
+                                         getAudioWritePattern(context) + "})\t" +
                                          kAUDIO_PATTERN;
 
         if (!startdir)
@@ -556,14 +591,14 @@ namespace mrv
     {
         auto context = App::app->getContext();
         const std::string kIMAGE_PATTERN =
-            _("Images (*.{") + getImagePattern(context) + "})\t";
+            _("Images (*.{") + getImageWritePattern(context) + "})\t";
         const std::string kMOVIE_PATTERN =
-            _("Movies (*.{") + getMoviePattern(context) + "})\t";
+            _("Movies (*.{") + getMovieWritePattern(context) + "})\t";
         const std::string kAUDIO_PATTERN =
-            _("Audios (*.{") + getAudioPattern(context) + "})";
+            _("Audios (*.{") + getAudioWritePattern(context) + "})";
         const std::string kALL_PATTERN =
-            _("All (*.{") + getImagePattern(context) + "," +
-            getMoviePattern(context) + "," + getAudioPattern(context) + "})\t" +
+            _("All (*.{") + getImageWritePattern(context) + "," +
+            getMovieWritePattern(context) + "," + getAudioWritePattern(context) + "})\t" +
             kIMAGE_PATTERN + kMOVIE_PATTERN + kAUDIO_PATTERN;
 
         if (!startdir)

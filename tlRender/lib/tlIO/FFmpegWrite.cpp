@@ -83,6 +83,9 @@ namespace tl
                     o = AV_PIX_FMT_RGB24;
                 else if (s == "RGBA_U8")
                     o = AV_PIX_FMT_RGBA;
+                else if (s == "RGB")
+                    o = AV_PIX_FMT_RGB32;
+
 
                 // 10-bits pixel formats
 
@@ -203,6 +206,9 @@ namespace tl
                     o = AV_PIX_FMT_AYUV64LE;
                 else if (s == "AYUV_64_LE")
                     o = AV_PIX_FMT_AYUV64LE;
+
+                else if (s == "PAL8")
+                    o = AV_PIX_FMT_PAL8;
 
                 else
                     throw std::runtime_error(
@@ -1197,7 +1203,7 @@ namespace tl
                 }
 
                 const std::string codecName = avCodec->name;
-                msg = string::Format("Tring to save audio with '{0}' codec.")
+                msg = string::Format("Trying to save audio with '{0}' codec.")
                           .arg(codecName);
                 LOG_STATUS(msg);
 
@@ -1244,7 +1250,7 @@ namespace tl
                 }
 
                 int workSize = p.avAudioCodecContext->frame_size;
-                if (workSize <= 0 && avAudioCodecID != AV_CODEC_ID_PCM_S16LE)
+                if (workSize <= 0)
                 {
                     workSize = 1024;
                 }
@@ -2680,7 +2686,9 @@ namespace tl
 
             const AVRational ratio = {1, p.avAudioCodecContext->sample_rate};
 
-            const int frameSize = p.avAudioCodecContext->frame_size;
+            const int frameSize = p.avAudioCodecContext->frame_size > 0
+                          ? p.avAudioCodecContext->frame_size
+                          : p.avAudioFrame->nb_samples;   // 1024, set at init
             while (fifoSize >= frameSize)
             {
                 r = av_frame_make_writable(p.avAudioFrame);
@@ -2726,8 +2734,7 @@ namespace tl
 
             // If FIFO still has some data, send it
             const AVRational ratio = {1, p.avAudioCodecContext->sample_rate};
-            int fifoSize = av_audio_fifo_size(p.avAudioFifo);
-            if (fifoSize > 0)
+            if (av_audio_fifo_size(p.avAudioFifo) > 0)
             {
                 int r = av_frame_make_writable(p.avAudioFrame);
                 if (r < 0)
@@ -2736,17 +2743,15 @@ namespace tl
                     return;
                 }
 
-                int frameSize = fifoSize;
-                if (p.avAudioCodecContext->codec_id != AV_CODEC_ID_PCM_S16LE &&
-                    p.avAudioCodecContext->frame_size > 0)
-                {
-                    frameSize = std::min(fifoSize, p.avAudioCodecContext->frame_size);
-                }
-                p.avAudioFrame->nb_samples = frameSize;
-                        r = av_audio_fifo_read(
+                const int cap = p.avAudioCodecContext->frame_size > 0
+                                ? p.avAudioCodecContext->frame_size
+                                : 1024;
+                const int n = std::min(av_audio_fifo_size(p.avAudioFifo), cap);
+
+                p.avAudioFrame->nb_samples = n;
+                r = av_audio_fifo_read(
                     p.avAudioFifo,
-                    reinterpret_cast<void**>(p.avAudioFrame->extended_data),
-                    fifoSize);
+                    reinterpret_cast<void**>(p.avAudioFrame->extended_data), n);
                 if (r < 0)
                 {
                     LOG_ERROR("Could not read from fifo at end");
@@ -2755,11 +2760,14 @@ namespace tl
 
                 p.avAudioFrame->pts = av_rescale_q(
                     p.totalSamples, ratio, p.avAudioCodecContext->time_base);
+                p.avAudioFrame->duration = av_rescale_q(n, ratio,
+                                                        p.avAudioCodecContext->time_base);
 
                 _encode(
                     p.avAudioCodecContext, p.avAudioStream, p.avAudioFrame,
                     p.avAudioPacket);
 
+                p.totalSamples += n;
             }
         }
 

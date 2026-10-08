@@ -755,6 +755,11 @@ namespace tl
                     formatLog.push_back(string::Format("{0} ({1})").arg(avOutputFormat->name).arg(avOutputFormat->extensions));
                 }
             }
+
+            // Audio Formats
+            extensions[".aiff"] = io::FileType::Audio;
+            extensions[".wav"] = io::FileType::Audio;
+
             IWritePlugin::_init("FFmpeg", extensions, logSystem);
 
             logSystem->print(
