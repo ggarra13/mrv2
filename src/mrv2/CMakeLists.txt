@@ -48,10 +48,12 @@ if( APPLE )
 		"Use: brew install libidn2")
 	endif()
 	list(APPEND LIBRARIES ${IDN2_LIBRARY})
-	list(APPEND OSXFRAMEWORKS
-	    "-framework SystemConfiguration"
-	    "-framework CoreFoundation")
     endif()
+    list(APPEND OSX_FRAMEWORKS
+	"-framework VideoToolBox"
+	"-framework CoreMedia"
+	"-framework SystemConfiguration"
+	"-framework CoreFoundation")
     list(APPEND LIBRARIES ${OSX_FRAMEWORKS})
 endif()
 
