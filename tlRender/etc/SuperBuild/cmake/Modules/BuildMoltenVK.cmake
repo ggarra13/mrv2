@@ -13,4 +13,7 @@ ExternalProject_Add(
     INSTALL_COMMAND cp Package/Latest/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib ${CMAKE_INSTALL_PREFIX}/lib
     COMMAND cp -rf Package/Latest/MoltenVK/include/MoltenVk ${CMAKE_INSTALL_PREFIX}/include
     BUILD_IN_SOURCE 1
-    )
+)
+
+set(MoltenVK_DEP MoltenVK)
+    

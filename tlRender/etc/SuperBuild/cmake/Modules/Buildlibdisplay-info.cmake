@@ -44,3 +44,4 @@ ExternalProject_Add(
     BUILD_IN_SOURCE 1
 )
 
+set(libdisplay-info_DEP libdisplay-info)
