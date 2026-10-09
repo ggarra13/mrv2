@@ -1,6 +1,9 @@
 include(ExternalProject)
 
-message(STATUS "tlRender DEPENDENCIES=${TLRENDER_EXTERNAL_DEPS}")
+set(TLRENDER_DEPENDENCIES ${TLRENDER_EXTERNAL_DEPS} nlohmann-json)
+    
+message(STATUS "tlRender DEPENDENCIES=${TLRENDER_DEPENDENCIES}")
+
 
 set(tlRender_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
@@ -37,7 +40,7 @@ set(tlRender_ARGS
 ExternalProject_Add(
     tlRender
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/tlRender
-    DEPENDS ${TLRENDER_EXTERNAL_DEPS}
+    DEPENDS ${TLRENDER_DEPENDENCIES} 
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..
     LIST_SEPARATOR |
     CMAKE_ARGS ${tlRender_ARGS})
