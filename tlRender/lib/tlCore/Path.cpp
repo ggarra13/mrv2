@@ -280,7 +280,6 @@ namespace tl
             }
         }
 
-
         void addFrame(std::vector<FrameSeq>& seqs, int64_t frame)
         {
             // Find the first sequence starting after the frame.
@@ -445,9 +444,10 @@ namespace tl
         void Path::setNumber(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + getBaseName() + value + getSuffix() + getExtension() + getRequest();
-            const std::vector<FrameSeq> tmp = _seq;
+            // Re-parse without preserving the old frame range: for a numeric value
+            // _parse derives the matching range, and for a "####" placeholder (or an
+            // empty value) _parse leaves _frames untouched, keeping an existing range.
             _parse(_options);
-            _setSeq(tmp);
         }
 
         void Path::setPadding(int value)
@@ -504,18 +504,25 @@ namespace tl
             bool out = sequence(other);
             if (out)
             {
-                const std::optional<math::Int64Range> frames = _frames.has_value() && other._frames.has_value() ?
-                                                               math::expand(_frames.value(), other._frames.value()) :
-                                                       other._frames;
-                const int pad = std::max(_pad, other._pad);
-                if (frames != _frames || pad != _pad || hasSeqWildcard())
+            std::vector<FrameSeq> seq = _seq;
+            for (const auto& i : other._seq)
+            {
+                for (int64_t frame : toFrames(i))
                 {
-                    _frames = frames;
+                    addFrame(seq, frame);
+                }
+            }
+                const int pad = std::max(_pad, other._pad);
+            if (seq != _seq || pad != _pad || hasSeqWildcard())
+                {
                     _pad = pad;
-                    if (_frames.has_value())
+                    if (!seq.empty())
                     {
-                        setNumber(toString(_frames.value().min(), _pad));
+                        // setNumber() re-derives the sequence from the (single-frame)
+                        // number string, so restore the merged sequence afterwards.
+                        setNumber(toString(seq.front().range.min(), _pad));
                     }
+                    _setSeq(seq);
                 }
             }
             return out;
@@ -540,8 +547,8 @@ namespace tl
                     out = true;
                 }
                 else if (dir.size() > 1 &&
-                         dir[0] >= 'A' &&
-                         dir[0] <= 'Z' &&
+                ((dir[0] >= 'A' && dir[0] <= 'Z') ||
+                 (dir[0] >= 'a' && dir[0] <= 'z')) &&
                          ':' == dir[1])
                 {
                     out = true;
@@ -568,7 +575,7 @@ namespace tl
             size_t requestPos = std::string::npos;
             if (size > 0)
             {
-                for (int i = 0; i < size; ++i)
+                for (int i = 0; i < static_cast<int>(size); ++i)
                 {
                     if ('?' == _path[i])
                     {
@@ -589,7 +596,7 @@ namespace tl
             size_t protocolSize = 0;
             if (size > 2)
             {
-                for (int i = 0; i < size - 3; ++i)
+                for (int i = 0; i < static_cast<int>(size) - 3; ++i)
                 {
                     if (':' == _path[i] &&
                         '/' == _path[i + 1] &&
@@ -611,7 +618,7 @@ namespace tl
             size_t dirSize = 0;
             if (size > 0)
             {
-                for (int i = size - 1; i >= static_cast<int>(protocolSize); --i)
+            for (int i = static_cast<int>(size) - 1; i >= static_cast<int>(protocolSize); --i)
                 {
                     if (pathSeparators.find(_path[i]) != std::string::npos)
                     {
@@ -623,7 +630,8 @@ namespace tl
             }
             if (std::string::npos == dirEnd &&
                 size > 1 &&
-                _path[0] >= 'A' && _path[0] <= 'Z' &&
+               ((_path[0] >= 'A' && _path[0] <= 'Z') ||
+                (_path[0] >= 'a' && _path[0] <= 'z')) &&
                 ':' == _path[1])
             {
                 dirEnd = 1;
@@ -640,7 +648,7 @@ namespace tl
             size_t extPos = std::string::npos;
             if (size > 0)
             {
-                for (int i = size - 1; i >= static_cast<int>(protocolDirSize); --i)
+                for (int i = static_cast<int>(size) - 1; i >= static_cast<int>(protocolDirSize); --i)
                 {
                     if ('.' == _path[i])
                     {
@@ -773,7 +781,8 @@ namespace tl
                 }
                 if (_path[numPos] != '#')
                 {
-                    const int64_t frame = std::atoi(getNumber().c_str());
+                    const int64_t frame = std::atoll(getNumber().c_str());
+                    _seq = { FrameSeq(frame) };
                     _frames = math::Int64Range(frame, frame);
                 }
                 size -= sizeTmp;
