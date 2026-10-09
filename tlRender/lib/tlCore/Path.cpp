@@ -118,6 +118,22 @@ namespace tl
             return ss.str();
         }
 
+        FrameSeq::FrameSeq(const math::Int64Range& range, int inc) :
+            range(range),
+            inc(inc)
+        {}
+
+        FrameSeq::FrameSeq(int64_t min, int64_t max, int inc) :
+            range(min, max),
+            inc(inc)
+        {}
+
+        FrameSeq::FrameSeq(int64_t frame) :
+            range(frame, frame),
+            inc(1)
+        {}
+
+
         bool PathOptions::operator == (const PathOptions& other) const
         {
             return
@@ -178,6 +194,17 @@ namespace tl
                  frame <= value.range.max(); frame += inc)
             {
                 out.push_back(frame);
+            }
+            return out;
+        }
+
+        std::vector<int64_t> toFrames(const std::vector<FrameSeq>& value)
+        {
+            std::vector<int64_t> out;
+            for (const auto& i : value)
+            {
+                const auto frames = toFrames(i);
+                out.insert(out.end(), frames.begin(), frames.end());
             }
             return out;
         }
@@ -386,41 +413,41 @@ namespace tl
         void Path::setProtocol(const std::string& value)
         {
             _path = value + getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setDirectory(const std::string& value)
         {
             _path = getProtocol() + value + getBaseName() + getNumber() + getSuffix() + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setBaseName(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + value + getNumber() + getSuffix() + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setSuffix(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + value + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setNumber(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + getBaseName() + value + getSuffix() + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setPadding(int value)
@@ -432,38 +459,44 @@ namespace tl
                 num = toString(std::atoi(num.c_str()), _pad);
             }
             _path = getProtocol() + getDirectory() + getBaseName() + num + getSuffix() + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setExtension(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + getSuffix() + value + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setRequest(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() + value;
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setFileName(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + value + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setFrames(const math::Int64Range& value)
         {
+            _seq = { FrameSeq(value) };
             _frames = value;
+        }
+
+        void Path::setSeq(const std::vector<FrameSeq>& value)
+        {
+            _setSeq(value);
         }
 
         bool Path::addSeq(const Path& other)
@@ -753,6 +786,12 @@ namespace tl
                     protocolDirSize,
                     size - protocolDirSize);
             }
+        }
+
+        void Path::_setSeq(const std::vector<FrameSeq>& value)
+        {
+            _seq = value;
+            _frames = getRange(_seq);
         }
 
         const std::pair<size_t, size_t> Path:: _invalid(std::string::npos, std::string::npos);

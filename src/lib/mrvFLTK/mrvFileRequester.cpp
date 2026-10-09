@@ -395,7 +395,7 @@ namespace mrv
                 dir = d;
         }
         fs::path path = dir;
-        return path.u8string();
+        return tl::file::fromFileSystem(path);
     }
 
     /**

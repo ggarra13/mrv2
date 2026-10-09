@@ -119,7 +119,7 @@ namespace mrv
             s->default_value(totalPhysMem / 3);
             s->value(Gbytes);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     settings->setValue("Cache/GBytes", (int)w->value());
                     App::app->cacheUpdate();
@@ -134,7 +134,7 @@ namespace mrv
             s->default_value(timeline::PlayerCacheOptions().readAhead.value());
             s->value(settings->getValue<double>("Cache/ReadAhead"));
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     settings->setValue("Cache/ReadAhead", (double)w->value());
                     App::app->cacheUpdate();
@@ -149,7 +149,7 @@ namespace mrv
             s->default_value(timeline::PlayerCacheOptions().readBehind.value());
             s->value(settings->getValue<double>("Cache/ReadBehind"));
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     settings->setValue("Cache/ReadBehind", (double)w->value());
                     App::app->cacheUpdate();
@@ -203,7 +203,7 @@ namespace mrv
             }
             m->value(settings->getValue<int>("FileSequence/Audio"));
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = o->value();
                     settings->setValue("FileSequence/Audio", v);
@@ -221,7 +221,7 @@ namespace mrv
 
             i->value(file.c_str());
             iW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     std::string file = o->value();
                     settings->setValue("FileSequence/AudioFileName", file);
@@ -237,7 +237,7 @@ namespace mrv
             std::string text = string::Format("{0}").arg(digits);
             i->value(text.c_str());
             inW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int digits = atoi(o->value());
                     settings->setValue("Misc/MaxFileSequenceDigits", digits);
@@ -302,7 +302,7 @@ namespace mrv
             m->value(settings->getValue<int>("OTIO/Spatial"));
 
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = o->value();
                     settings->setValue("OTIO/Spatial", v);
@@ -318,7 +318,7 @@ namespace mrv
             c->labelsize(12);
             c->value(settings->getValue<bool>("OTIO/Compatibility"));
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     int v = w->value();
                     settings->setValue("OTIO/Compatibility", v);
@@ -384,7 +384,7 @@ namespace mrv
             m->value(settings->getValue<int>("Performance/TimerMode"));
 
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = o->value();
                     settings->setValue("Performance/TimerMode", v);
@@ -402,7 +402,7 @@ namespace mrv
             sp->value(v);
 
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = static_cast<int>(o->value());
                     settings->setValue("Performance/AudioBufferFrameCount", v);
@@ -417,7 +417,7 @@ namespace mrv
             sp->value(digits);
 
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     TLRENDER_P();
                     int requests = static_cast<int>(o->value());
@@ -433,7 +433,7 @@ namespace mrv
             digits = settings->getValue<int>("Performance/AudioRequestCount");
             sp->value(digits);
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
@@ -448,7 +448,7 @@ namespace mrv
             digits = settings->getValue<int>("SequenceIO/ThreadCount");
             sp->value(digits);
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int requests = static_cast<int>(o->value());
                     settings->setValue("SequenceIO/ThreadCount", requests);
@@ -465,7 +465,7 @@ namespace mrv
             c->value(settings->getValue<bool>(
                 "Performance/FFmpegYUVToRGBConversion"));
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     int v = w->value();
                     settings->setValue(
@@ -484,7 +484,7 @@ namespace mrv
                          "Color Space as 'unknown', at the cost of some "
                          "performance."));
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     int v = w->value();
                     settings->setValue("Performance/FFmpegColorAccuracy", v);
@@ -499,7 +499,7 @@ namespace mrv
                 settings->getValue<bool>("Performance/FFmpegHWAccel"));
             c->tooltip(_("When this setting is on, the player will try to decode the movie in the GPU if possible."));
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     int v = w->value();
                     settings->setValue("Performance/FFmpegHWAccel", v);
@@ -529,7 +529,7 @@ namespace mrv
             pm->value(selection);
             pm->tooltip(_("Select what driver to use for your GPU."));
             pV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
                     if (!item || !item->label())
@@ -562,7 +562,7 @@ namespace mrv
                 "black frames.  For any like that, you should set them to 1, "
                 "press Enter and reload the movie file."));
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
@@ -585,7 +585,7 @@ namespace mrv
             b = bW;
             b->box(FL_UP_BOX);
             bW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int ok = fl_choice(
                         _("This will reset all your settings to their "

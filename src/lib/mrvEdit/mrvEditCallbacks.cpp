@@ -977,7 +977,7 @@ namespace mrv
         // Make file absolute, then remove it, leaving directory
         fs::path directory = fs::absolute(fileName).parent_path();
         fs::path relative = fs::relative(filePath, directory);
-        std::string file = relative.u8string();
+        std::string file = tl::file::fromFileSystem(relative);
         if (file.empty())
             return path;
         return file::Path(file);

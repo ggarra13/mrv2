@@ -35,6 +35,7 @@
 
 #include <tlTimelineUI/IItem.h>
 
+#include <tlCore/Path.h>
 #include <tlCore/StringFormat.h>
 
 #include <fstream>
@@ -463,7 +464,7 @@ namespace mrv
                 fs::path currentDir = fileName;
                 currentDir = fs::absolute(currentDir);
                 currentDir = currentDir.parent_path();
-                fl_chdir(currentDir.u8string().c_str());
+                fl_chdir(tl::file::fromFileSystem(currentDir).c_str());
 
                 // Get session version
                 int version = session["version"];

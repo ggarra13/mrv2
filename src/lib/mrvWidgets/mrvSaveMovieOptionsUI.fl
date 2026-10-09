@@ -20,6 +20,9 @@ decl {namespace fs = std::filesystem;} {public global
 decl {\#include "tlIO/FFmpeg.h"} {public global
 }
 
+decl {\#include "tlCore/Path.h"} {selected public global
+}
+
 decl {\#include "tlCore/String.h"} {public global
 }
 
@@ -794,8 +797,7 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -962,8 +964,7 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {selected
-    }
+}} {}
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
   } {
@@ -981,7 +982,7 @@ fs::directory_iterator dirIter(directoryPath);
 for (const auto& entry : dirIter)
 {
    // Check if the entry is a regular file, starts with "codec-", and ends with ".pst"
-   std::string filename = entry.path().filename().u8string();
+   std::string filename = tl::file::fromFileSystem(entry.path().filename());
         
    // Check if the entry is a regular file and starts with say "vp9-"
    if (fs::is_regular_file(entry) && 
