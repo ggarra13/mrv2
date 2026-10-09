@@ -522,35 +522,35 @@ namespace tl
                                             p.info.videoTime->duration().rate());
                 }
 
-                // Logging.
-                {
-                    const auto now = std::chrono::steady_clock::now();
-                    const std::chrono::duration<float> diff =
-                        now - p.videoThread.logTimer;
-                    if (diff.count() > 10.F)
-                    {
-                        p.videoThread.logTimer = now;
-                        if (auto logSystem = _logSystem.lock())
-                        {
-                            const std::string id =
-                                string::Format("tl::io::ffmpeg::Read {0}")
-                                    .arg(this);
-                            size_t requestsSize = 0;
-                            {
-                                std::unique_lock<std::mutex> lock(
-                                    p.videoMutex.mutex);
-                                requestsSize =
-                                    p.videoMutex.videoRequests.size();
-                            }
-                            logSystem->print(
-                                id, string::Format("\n"
-                                                   "    Path: {0}\n"
-                                                   "    Video requests: {1}")
-                                        .arg(_path.get())
-                                        .arg(requestsSize));
-                        }
-                    }
-                } // Logging.
+                // // Logging.
+                // {
+                //     const auto now = std::chrono::steady_clock::now();
+                //     const std::chrono::duration<float> diff =
+                //         now - p.videoThread.logTimer;
+                //     if (diff.count() > 10.F)
+                //     {
+                //         p.videoThread.logTimer = now;
+                //         if (auto logSystem = _logSystem.lock())
+                //         {
+                //             const std::string id =
+                //                 string::Format("tl::io::ffmpeg::Read {0}")
+                //                     .arg(this);
+                //             size_t requestsSize = 0;
+                //             {
+                //                 std::unique_lock<std::mutex> lock(
+                //                     p.videoMutex.mutex);
+                //                 requestsSize =
+                //                     p.videoMutex.videoRequests.size();
+                //             }
+                //             logSystem->print(
+                //                 id, string::Format("\n"
+                //                                    "    Path: {0}\n"
+                //                                    "    Video requests: {1}")
+                //                         .arg(_path.get())
+                //                         .arg(requestsSize));
+                //         }
+                //     }
+                // } // Logging.
             }  // whle runnig
         }
 
@@ -878,34 +878,34 @@ namespace tl
                     p.audioThread.currentTime += request->timeRange.duration();
                 }
 
-                // Logging.
-                {
-                    const auto now = std::chrono::steady_clock::now();
-                    const std::chrono::duration<float> diff =
-                        now - p.audioThread.logTimer;
-                    if (diff.count() > 10.F)
-                    {
-                        p.audioThread.logTimer = now;
-                        if (auto logSystem = _logSystem.lock())
-                        {
-                            const std::string id =
-                                string::Format("tl::io::ffmpeg::Read {0}")
-                                    .arg(this);
-                            size_t requestsSize = 0;
-                            {
-                                std::unique_lock<std::mutex> lock(
-                                    p.audioMutex.mutex);
-                                requestsSize = p.audioMutex.requests.size();
-                            }
-                            logSystem->print(
-                                id, string::Format("\n"
-                                                   "    Path: {0}\n"
-                                                   "    Audio requests: {1}")
-                                        .arg(_path.get())
-                                        .arg(requestsSize));
-                        }
-                    }
-                }
+                // // Logging.
+                // {
+                //     const auto now = std::chrono::steady_clock::now();
+                //     const std::chrono::duration<float> diff =
+                //         now - p.audioThread.logTimer;
+                //     if (diff.count() > 10.F)
+                //     {
+                //         p.audioThread.logTimer = now;
+                //         if (auto logSystem = _logSystem.lock())
+                //         {
+                //             const std::string id =
+                //                 string::Format("tl::io::ffmpeg::Read {0}")
+                //                     .arg(this);
+                //             size_t requestsSize = 0;
+                //             {
+                //                 std::unique_lock<std::mutex> lock(
+                //                     p.audioMutex.mutex);
+                //                 requestsSize = p.audioMutex.requests.size();
+                //             }
+                //             logSystem->print(
+                //                 id, string::Format("\n"
+                //                                    "    Path: {0}\n"
+                //                                    "    Audio requests: {1}")
+                //                         .arg(_path.get())
+                //                         .arg(requestsSize));
+                //         }
+                //     }
+                // }
             }
         }
 
