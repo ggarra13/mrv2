@@ -29,8 +29,8 @@ namespace tl
             _options = options;
 
             // Where the sequence starts and ends. Memory comes from a bundle,
-            // which holds exactly the frames it holds; otherwise the path carries
-            // the range it was found with.
+            // which holds exactly the frames it holds; otherwise the path
+            // carries the range it was found with.
             const std::string& num = path.getNumber();
             if (!num.empty())
             {
@@ -59,10 +59,11 @@ namespace tl
             _info = _probeInfo();
             const double speed = _decode->getSpeed(_info, defaultSpeed);
 
-            // The range the sequence covers, whether or not every frame in it is
-            // there. A policy that leaves frames out is settled by the timeline
-            // that is built over this, which is the only thing that can shorten a
-            // sequence or move its frames; here a frame number is a frame number.
+            // The range the sequence covers, whether or not every frame in it
+            // is there. A policy that leaves frames out is settled by the
+            // timeline that is built over this, which is the only thing that
+            // can shorten a sequence or move its frames; here a frame number
+            // is a frame number.
             _info.videoTime = OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                 OTIO_NS::RationalTime(_startFrame, speed),
                 OTIO_NS::RationalTime(_endFrame, speed));
@@ -106,9 +107,9 @@ namespace tl
             }
 
             // The first frame that is actually there. Usually that is the frame
-            // the path names, but it need not be: a bundle can be missing frames,
-            // and a sequence can be opened over a range that begins before the
-            // frames rendered so far.
+            // the path names, but it need not be: a bundle can be missing
+            // frames, and a sequence can be opened over a range that begins
+            // before the frames rendered so far.
             std::exception_ptr error;
             for (int64_t frame = _startFrame; frame <= _endFrame; ++frame)
             {
@@ -122,8 +123,7 @@ namespace tl
                         continue;
                     }
                 }
-                else if (!std::filesystem::exists(
-                             std::filesystem::u8path(fileName)))
+                else if (!std::filesystem::exists(file::toFileSystem(fileName)))
                 {
                     continue;
                 }
