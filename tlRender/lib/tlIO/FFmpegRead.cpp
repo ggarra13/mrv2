@@ -208,6 +208,7 @@ namespace tl
                             p.info.videoTime = p.readVideo ->getTimeRange();
                             p.info.tags = p.readVideo->getTags();
                         }
+                        p.infoReady.store(true, std::memory_order_release);
 
                         _run();
                     }
@@ -300,6 +301,17 @@ namespace tl
         std::future<io::Info> VideoRead::getInfo()
         {
             TLRENDER_P();
+            // The timeline asks for this on every frame it requests. Going
+            // through the video thread meant the timeline thread sat waiting
+            // for the decoder to finish whatever frame it was on (or a whole
+            // seek) before it could queue the next request or hand back a
+            // finished one.
+            if (p.infoReady.load(std::memory_order_acquire))
+            {
+                std::promise<io::Info> promise;
+                promise.set_value(p.info);
+                return promise.get_future();
+            }
             auto request = std::make_shared<Private::InfoRequest>();
             auto future = request->promise.get_future();
             bool valid = false;
@@ -521,36 +533,6 @@ namespace tl
                         OTIO_NS::RationalTime(1.0,
                                             p.info.videoTime->duration().rate());
                 }
-
-                // Logging.
-                {
-                    const auto now = std::chrono::steady_clock::now();
-                    const std::chrono::duration<float> diff =
-                        now - p.videoThread.logTimer;
-                    if (diff.count() > 10.F)
-                    {
-                        p.videoThread.logTimer = now;
-                        if (auto logSystem = _logSystem.lock())
-                        {
-                            const std::string id =
-                                string::Format("tl::io::ffmpeg::Read {0}")
-                                    .arg(this);
-                            size_t requestsSize = 0;
-                            {
-                                std::unique_lock<std::mutex> lock(
-                                    p.videoMutex.mutex);
-                                requestsSize =
-                                    p.videoMutex.videoRequests.size();
-                            }
-                            logSystem->print(
-                                id, string::Format("\n"
-                                                   "    Path: {0}\n"
-                                                   "    Video requests: {1}")
-                                        .arg(_path.get())
-                                        .arg(requestsSize));
-                        }
-                    }
-                } // Logging.
             }  // whle runnig
         }
 
@@ -577,6 +559,7 @@ namespace tl
                         p.info.audio = p.readAudio->getInfo();
                         p.info.audioTime = p.readAudio->getTimeRange();
                         p.info.tags = p.readAudio->getTags();
+                        p.infoReady.store(true, std::memory_order_release);
 
                         _run();
                     }
@@ -733,6 +716,17 @@ namespace tl
         std::future<io::Info> AudioRead::getInfo()
         {
             TLRENDER_P();
+            // The timeline asks for this on every frame it requests. Going
+            // through the video thread meant the timeline thread sat waiting
+            // for the decoder to finish whatever frame it was on (or a whole
+            // seek) before it could queue the next request or hand back a
+            // finished one.
+            if (p.infoReady.load(std::memory_order_acquire))
+            {
+                std::promise<io::Info> promise;
+                promise.set_value(p.info);
+                return promise.get_future();
+            }
             auto request = std::make_shared<Private::InfoRequest>();
             auto future = request->promise.get_future();
             bool valid = false;
