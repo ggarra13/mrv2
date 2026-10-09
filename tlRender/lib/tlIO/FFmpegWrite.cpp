@@ -2212,7 +2212,7 @@ namespace tl
                     p.swsContext, "dst_format", p.avSwPixelFormat,
                     AV_OPT_SEARCH_CHILDREN);
                 r = av_opt_set_int(
-                    p.swsContext, "sws_flags", swsScaleFlags,
+                    p.swsContext, "sws_flags", swsWriteFlags,
                     AV_OPT_SEARCH_CHILDREN);
                 r = av_opt_set_int(
                     p.swsContext, "threads", 0, AV_OPT_SEARCH_CHILDREN);
