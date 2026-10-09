@@ -3,6 +3,7 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
+#include <algorithm>
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
@@ -22,6 +23,10 @@ extern "C"
 namespace
 {
     const char* kModule = "ffmpeg";
+
+    //! How far ahead of the decoder (in seconds of video) a request can be
+    //! before seeking is cheaper than decoding and discarding frames.
+    constexpr double kMaxForwardSkipSeconds = 0.5;
 
     static constexpr std::array<double, 16> valid_timecode_rates{
         { 1.0,
@@ -231,6 +236,8 @@ namespace tl
 
                 _avFormatContext->interrupt_callback.callback = interruptCb;
                 _avFormatContext->interrupt_callback.opaque   = this;
+                _avFormatContext->probesize = 512 * 1024;
+                _avFormatContext->max_analyze_duration = 1 * AV_TIME_BASE;
 
                 //
                 // If we are potentially reading a .webp sequence, add a format
@@ -1406,6 +1413,40 @@ namespace tl
                     }
                 }
             }
+        }
+
+        bool ReadVideo::canDecodeForward(
+            const OTIO_NS::RationalTime& target,
+            const OTIO_NS::RationalTime& current) const
+        {
+            // Nothing sensible to continue from.
+            if (-1 == _avStream || _useAudioOnly || _singleImage || _eof ||
+                !_buffer.empty())
+            {
+                return false;
+            }
+
+            const auto context = _avCodecContext.find(_avStream);
+            if (context == _avCodecContext.end() || !context->second)
+            {
+                return false;
+            }
+
+            // Intra-only codecs: every frame is a keyframe, so a seek lands
+            // exactly on the target, while decoding forward would fully
+            // decode every frame being skipped.
+            const AVCodecDescriptor* descriptor =
+                avcodec_descriptor_get(context->second->codec_id);
+            if (descriptor && (descriptor->props & AV_CODEC_PROP_INTRA_ONLY))
+            {
+                return false;
+            }
+
+            const double rate = _timeRange.duration().rate();
+            const double delta =
+                (target.rescaled_to(rate) - current.rescaled_to(rate)).value();
+            return delta > 0.0 &&
+                   delta <= std::max(2.0, rate * kMaxForwardSkipSeconds);
         }
 
         void ReadVideo::seek(const OTIO_NS::RationalTime& time)

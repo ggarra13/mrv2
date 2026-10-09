@@ -570,8 +570,8 @@ namespace tl
 
             _logSystemWeak = logSystem;
             // av_log_set_level(AV_LOG_QUIET);
-            // av_log_set_level(AV_LOG_WARNING);
-            av_log_set_level(AV_LOG_DEBUG);
+            av_log_set_level(AV_LOG_WARNING);
+            // av_log_set_level(AV_LOG_DEBUG);
             av_log_set_callback(_logCallback);
 
             logSystem->print(

@@ -202,6 +202,10 @@ if(MRV2_PYBIND11)
     endif()
 endif()
 
+if (TLRENDER_LIBWEBP)
+    find_package(WebP CONFIG REQUIRED)
+    list(APPEND LIBRARIES WebP::webp)
+endif()
 
 files_to_absolute_paths()
 
