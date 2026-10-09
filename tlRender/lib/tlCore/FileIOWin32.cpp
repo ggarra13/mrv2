@@ -22,6 +22,10 @@
 #include <sys/stat.h>
 #include <windows.h>
 
+#include <algorithm>
+#include <cstring>
+#include <limits>
+
 namespace tl
 {
     namespace file
@@ -215,7 +219,7 @@ namespace tl
             if (!p.memoryStart && !p.f)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Read, p.path.u8string()));
+                    getErrorMessage(ErrorType::Read, fromFileSystem(p.path)));
             }
 
             switch (p.mode)
@@ -229,7 +233,7 @@ namespace tl
                     {
                         throw std::runtime_error(
                             getErrorMessage(
-                                ErrorType::ReadMemoryMap, p.path.u8string()));
+                                ErrorType::ReadMemoryMap, fromFileSystem(p.path)));
                     }
                     if (p.endianConversion && wordSize > 1)
                     {
@@ -250,7 +254,7 @@ namespace tl
                     {
                         throw std::runtime_error(
                             getErrorMessage(
-                                ErrorType::Read, p.path.u8string(),
+                                ErrorType::Read, fromFileSystem(p.path),
                                 error::getLastError()));
                     }
                     if (p.endianConversion && wordSize > 1)
@@ -268,7 +272,7 @@ namespace tl
                 {
                     throw std::runtime_error(
                         getErrorMessage(
-                            ErrorType::Read, p.path.u8string(),
+                            ErrorType::Read, fromFileSystem(p.path),
                             error::getLastError()));
                 }
                 if (p.endianConversion && wordSize > 1)
@@ -290,7 +294,7 @@ namespace tl
             if (p.mode != Mode::Read && p.mode != Mode::ReadWrite)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Read, p.path.u8string()));
+                    getErrorMessage(ErrorType::Read, fromFileSystem(p.path)));
             }
 
             const size_t byteCount = size * wordSize;
@@ -338,13 +342,13 @@ namespace tl
                     if (!::ReadFile(p.f, out, request, &n, &overlapped))
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::Read, p.path.u8string(),
+                            getErrorMessage(ErrorType::Read, fromFileSystem(p.path),
                                             error::getLastError()));
                     }
                     if (0 == n)
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::Read, p.path.u8string()));
+                            getErrorMessage(ErrorType::Read, fromFileSystem(p.path)()));
                     }
                     out       += n;
                     offset    += n;
@@ -355,7 +359,7 @@ namespace tl
                 if (!::SetFilePointerEx(p.f, v, 0, FILE_BEGIN))
                 {
                     throw std::runtime_error(
-                        getErrorMessage(ErrorType::Seek, p.path.u8string(),
+                        getErrorMessage(ErrorType::Seek, fromFileSystem(p.path)(),
                                         error::getLastError()));
                 }
                 if (p.endianConversion && wordSize > 1)
@@ -366,7 +370,7 @@ namespace tl
             else
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Read, p.path.u8string()));
+                    getErrorMessage(ErrorType::Read, fromFileSystem(p.path)()));
             }
         }
 
@@ -377,7 +381,7 @@ namespace tl
             if (!p.f)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Write, p.path.u8string()));
+                    getErrorMessage(ErrorType::Write, fromFileSystem(p.path)()));
             }
 
             const uint8_t* inP = reinterpret_cast<const uint8_t*>(in);
@@ -394,7 +398,7 @@ namespace tl
                     p.f, inP, static_cast<DWORD>(size * wordSize), &n, 0))
             {
                 throw std::runtime_error(getErrorMessage(
-                    ErrorType::Write, p.path.u8string(), error::getLastError()));
+                    ErrorType::Write, fromFileSystem(p.path)(), error::getLastError()));
             }
             p.pos += size * wordSize;
             p.size = std::max(p.pos, p.size);
@@ -509,7 +513,7 @@ namespace tl
                         if (error)
                         {
                             *error = getErrorMessage(
-                                ErrorType::CloseMemoryMap, p.path.u8string(),
+                                ErrorType::CloseMemoryMap, fromFileSystem(p.path)(),
                                 error::getLastError());
                         }
                     }
@@ -522,7 +526,7 @@ namespace tl
                     if (error)
                     {
                         *error = getErrorMessage(
-                            ErrorType::Close, p.path.u8string(),
+                            ErrorType::Close, fromFileSystem(p.path)(),
                             error::getLastError());
                     }
                 }
@@ -628,7 +632,25 @@ namespace tl
             }
         }
 
-        void truncate(const std::filesystem::path& path, size_t size)
+        void release(const void* p, size_t size)
+        {
+            // Windows does trim a process's mapped pages from its working set
+            // when memory runs low, but only once it is low: a bundle of 4K
+            // frames played through added a couple of gigabytes of mapped pages
+            // a second, and with the cache's own tens of gigabytes the machine
+            // ran out and stopped responding before it trimmed.
+            //
+            // Unlocking pages that are not locked takes them out of the working
+            // set; that it fails with ERROR_NOT_LOCKED is expected. Pages of a
+            // file mapping go to the standby list, still the file's cache and
+            // counted as available, and reading them again maps them back.
+            if (p && size > 0)
+            {
+                VirtualUnlock(const_cast<void*>(p), size);
+            }
+        }
+
+        void truncateFile(const std::filesystem::path& path, size_t size)
         {
             HANDLE h = INVALID_HANDLE_VALUE;
             try
@@ -649,8 +671,7 @@ namespace tl
             if (INVALID_HANDLE_VALUE == h)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Open, path.u8string(),
-                                    error::getLastError()));
+                    getErrorMessage(ErrorType::Open, fromFileSystem(path), getLastError()));
             }
             LARGE_INTEGER v;
             v.QuadPart = size;
@@ -662,15 +683,13 @@ namespace tl
             {
                 CloseHandle(h);
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Seek, path.u8string(),
-                                    error::getLastError()));
+                    getErrorMessage(ErrorType::Seek, fromFileSystem(path), getLastError()));
             }
             if (!::SetEndOfFile(h))
             {
                 CloseHandle(h);
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Write, path.u8string(),
-                                    error::getLastError()));
+                    getErrorMessage(ErrorType::Write, fromFileSystem(path), getLastError()));
             }
             CloseHandle(h);
         }

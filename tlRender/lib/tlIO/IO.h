@@ -26,17 +26,49 @@ namespace tl
             First = Unknown
         };
 
+        //! The video format of the file itself, which is not always the format
+        //! it is decoded to: a ProRes file is read as YUV 4:2:2 10 bit and
+        //! handed over as something the renderer can take. Empty for the
+        //! formats that have nothing to say beyond the decoded information.
+        struct VideoSourceInfo
+        {
+            std::string codec;
+            std::string pixelFormat;
+
+            bool operator == (const VideoSourceInfo&) const = default;
+        };
+
+        //! The audio format of the file itself, which is not always the
+        //! format it is decoded to.
+        struct AudioSourceInfo
+        {
+            std::string codec;
+            audio::DataType type = audio::DataType::kNone;
+            size_t channelCount = 0;
+            size_t sampleRate = 0;
+
+            bool operator == (const AudioSourceInfo&) const = default;
+        };
+
         //! I/O information.
         struct Info
         {
             //! Video layer information.
             std::vector<image::Info> video;
 
+            //! The video format of the file, as opposed to the decoded one
+            //! above.
+            VideoSourceInfo videoSource;
+
             //! Video time range.
             std::optional<OTIO_NS::TimeRange> videoTime;
 
             //! Audio information.
             audio::Info audio;
+
+            //! The audio format of the file, as opposed to the decoded one
+            //! above.
+            AudioSourceInfo audioSource;
 
             //! Audio time range.
             std::optional<OTIO_NS::TimeRange> audioTime;

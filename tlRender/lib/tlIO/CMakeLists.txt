@@ -20,8 +20,6 @@ set(HEADERS
     Write.h)
 set(HEADERS_PRIVATE
     IOMacros.h
-    FFmpegPrivate.h
-    RequestQueuePrivate.h
     SequenceIOReadPrivate.h)
 
 set(SOURCE

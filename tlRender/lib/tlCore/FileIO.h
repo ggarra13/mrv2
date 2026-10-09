@@ -252,20 +252,26 @@ namespace tl
             const std::shared_ptr<FileIO>&);
 
         //! Read all the lines from a file.
+        std::vector<std::string> readLines(const std::filesystem::path&);
+
+        //! Read all the lines from a file.
         std::vector<std::string> readLines(const std::string& fileName);
 
         //! Read all the lines from a file.
         std::vector<std::string> readLines(const std::string&);
 
         //! Write lines to a file.
+        void writeLines(const std::filesystem::path&, const std::vector<std::string>&);
+
+        //! Write lines to a file.
         void writeLines(
             const std::string& fileName, const std::vector<std::string>&);
 
         //! Truncate a file.
-        void truncate(const std::filesystem::path&, size_t);
+        void truncateFile(const std::filesystem::path&, size_t);
 
         //! Truncate a file.
-        void truncate(const std::string& fileName, size_t);
+        void truncateFile(const std::string& fileName, size_t);
 
     } // namespace file
 } // namespace tl

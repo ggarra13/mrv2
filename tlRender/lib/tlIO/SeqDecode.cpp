@@ -175,8 +175,7 @@ namespace tl
                                     // the file system each time rather than caching what was
                                     // there at open is deliberate: a render in progress gains
                                     // frames while it is being watched.
-                                    std::filesystem::exists(
-                                        std::filesystem::u8path(_path.getFrame(i, true)));
+                                    std::filesystem::exists(file::toFileSystem(_path.getFrame(i, true)));
                 if (exists)
                 {
                     return i;

@@ -87,6 +87,39 @@ namespace tl
         //! Number of threads.
         const size_t threadCount = 0;
 
+        //! \name Software Scaler Flags
+        //! The reader and the writer only ever convert the pixel format,
+        //! never the size: the reader hands on the frame at the size it was
+        //! decoded, and an export renders at the size it writes. The fast
+        //! bilinear path both used does not treat a conversion at the same
+        //! size as one -- it interpolates the chroma even for 4:4:4 -- so a
+        //! one pixel red line in a 4:4:4 file came back as 164, 66, 21
+        //! across three pixels, once for writing it and again for reading
+        //! it on the CPU (DJV #876). Measured losslessly with FFV1.
+        ///@{
+
+        //! For writing. Area averaging is exact at the same size and the
+        //! right filter if a size ever does change, and accurate rounding
+        //! keeps ten bit values to the level: 4:4:4 color error down from
+        //! 95 levels in 255 to 7, 4:2:2 and 4:2:0 unchanged, black and white
+        //! edges exact in all three. Bicubic and Lanczos were no better for
+        //! 4:4:4 and slightly worse for 4:2:0.
+        const int swsWriteFlags = SWS_AREA | SWS_ACCURATE_RND;
+
+        //! For reading, when the conversion to RGB is asked for rather than
+        //! left to the GPU. Nearest sampling is exact for 4:4:4 and gives
+        //! 4:2:2 and 4:2:0 byte for byte what the fast bilinear path did,
+        //! so it mends the one case that was wrong and changes no other.
+        const int swsReadFlags = SWS_POINT;
+
+        ///@}
+
+        //! Swap the numerator and denominator.
+        inline AVRational swap(AVRational value)
+        {
+            return AVRational({value.den, value.num});
+        }
+
         //! Retrieve packet side data.
         inline const uint8_t *get_stream_side_data(const AVStream* st,
                                                    enum AVPacketSideDataType type)
@@ -114,8 +147,23 @@ namespace tl
         //! Convert to HDR data.
         bool toHDRData(AVFrame*, image::HDRData&);
 
+        //! Convert from FFmpeg.
+        audio::DataType toAudioType(AVSampleFormat);
+
+        //! Convert to FFmpeg.
+        AVSampleFormat fromAudioType(audio::DataType);
+
         //! Get the timecode from a data stream if it exists.
         std::string getTimecodeFromDataStream(AVFormatContext*);
+
+        //! RAII class for FFmpeg packets.
+        class Packet
+        {
+        public:
+            Packet();
+            ~Packet();
+            AVPacket* p = nullptr;
+        };
 
         //! Get a label for a FFmpeg error code.
         std::string getErrorLabel(int);
