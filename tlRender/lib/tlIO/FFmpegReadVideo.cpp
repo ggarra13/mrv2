@@ -20,6 +20,10 @@ extern "C"
 #include <libavutil/opt.h>
 } // extern "C"
 
+#if defined(__APPLE__)
+#include <VideoToolbox/VideoToolbox.h>
+#endif // __APPLE__
+
 namespace
 {
     const char* kModule = "ffmpeg";
@@ -1197,6 +1201,36 @@ namespace tl
             // and _copy() builds the scaler from whatever format actually arrives.
             return formats[0];
         }
+        
+        namespace
+        {
+#if defined(__APPLE__)
+            //! Whether this machine has a hardware decoder for a codec.
+            //!
+            //! VideoToolbox does not refuse a codec it has no hardware for:
+            //! it decodes in software and hands the frames back the same
+            //! way, which is slower than FFmpeg's own decoder on every core
+            //! -- an Intel Mac without an HEVC decoder played 1080p at two
+            //! thirds speed through it. A codec not listed here is not
+            //! asked about, and is left to VideoToolbox as before.
+            bool hasVideoToolboxDecoder(AVCodecID id)
+            {
+                CMVideoCodecType type = 0;
+                switch (id)
+                {
+                case AV_CODEC_ID_H264: type = kCMVideoCodecType_H264; break;
+                case AV_CODEC_ID_HEVC: type = kCMVideoCodecType_HEVC; break;
+                // The four character codes themselves, since the names for
+                // these are newer than the oldest system supported.
+                case AV_CODEC_ID_VP9: type = 'vp09'; break;
+                case AV_CODEC_ID_AV1: type = 'av01'; break;
+                default: return true;
+                }
+                return VTIsHardwareDecodeSupported(type);
+            }
+#endif // __APPLE__
+        }
+
 
         void ReadVideo::_initHwAccel(const AVCodec* codec)
         {
@@ -1234,6 +1268,15 @@ namespace tl
                 LOG_WARNING(msg);
                 return;
             }
+#if defined(__APPLE__)
+            if (!hasVideoToolboxDecoder(codec->id))
+            {
+                std::string msg = string::Format("This machine has no hardware decoder for the codec \"{0}\"; using software decoding").
+                                  arg(codec->name ? codec->name : "?");
+                LOG_WARNING(msg);
+                return;
+            }
+#endif // __APPLE__
             if (hasAlpha)
             {
                 // e.g. ProRes 4444/4444 XQ (YUVA444P*). Vulkan hwaccel decode

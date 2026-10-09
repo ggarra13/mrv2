@@ -208,6 +208,7 @@ namespace tl
                             p.info.videoTime = p.readVideo ->getTimeRange();
                             p.info.tags = p.readVideo->getTags();
                         }
+                        p.infoReady.store(true, std::memory_order_release);
 
                         _run();
                     }
@@ -300,6 +301,17 @@ namespace tl
         std::future<io::Info> VideoRead::getInfo()
         {
             TLRENDER_P();
+            // The timeline asks for this on every frame it requests. Going
+            // through the video thread meant the timeline thread sat waiting
+            // for the decoder to finish whatever frame it was on (or a whole
+            // seek) before it could queue the next request or hand back a
+            // finished one.
+            if (p.infoReady.load(std::memory_order_acquire))
+            {
+                std::promise<io::Info> promise;
+                promise.set_value(p.info);
+                return promise.get_future();
+            }
             auto request = std::make_shared<Private::InfoRequest>();
             auto future = request->promise.get_future();
             bool valid = false;
@@ -577,6 +589,7 @@ namespace tl
                         p.info.audio = p.readAudio->getInfo();
                         p.info.audioTime = p.readAudio->getTimeRange();
                         p.info.tags = p.readAudio->getTags();
+                        p.infoReady.store(true, std::memory_order_release);
 
                         _run();
                     }
@@ -733,6 +746,17 @@ namespace tl
         std::future<io::Info> AudioRead::getInfo()
         {
             TLRENDER_P();
+            // The timeline asks for this on every frame it requests. Going
+            // through the video thread meant the timeline thread sat waiting
+            // for the decoder to finish whatever frame it was on (or a whole
+            // seek) before it could queue the next request or hand back a
+            // finished one.
+            if (p.infoReady.load(std::memory_order_acquire))
+            {
+                std::promise<io::Info> promise;
+                promise.set_value(p.info);
+                return promise.get_future();
+            }
             auto request = std::make_shared<Private::InfoRequest>();
             auto future = request->promise.get_future();
             bool valid = false;
