@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
+# Copyright (C) YEAR Contributors to the mrv2 Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.8.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-10 03:53-0300\n"
+"POT-Creation-Date: 2026-10-10 08:24-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3833,6 +3833,9 @@ msgid ""
 "right after. Do you want to continue?"
 msgstr ""
 
+msgid "Toggle Waveforms in Timeline Viewport."
+msgstr ""
+
 msgid "No Thumbnails in Timeline Viewport."
 msgstr ""
 
@@ -3852,6 +3855,9 @@ msgid "Toggle Track Information in Timeline Viewport."
 msgstr ""
 
 msgid "Toggle Clip Information in Timeline Viewport."
+msgstr ""
+
+msgid "Toggle Effects in Timeline Viewport."
 msgstr ""
 
 msgid "Toggle Markers in Timeline Viewport."
@@ -4653,22 +4659,28 @@ msgstr ""
 msgid "Timeline/Clip Info"
 msgstr ""
 
-msgid "Timeline/Thumbnails/None"
+msgid "Timeline/Thumbnails"
 msgstr ""
 
-msgid "Timeline/Thumbnails/Small"
-msgstr ""
-
-msgid "Timeline/Thumbnails/Medium"
-msgstr ""
-
-msgid "Timeline/Thumbnails/Large"
+msgid "Timeline/Waveforms"
 msgstr ""
 
 msgid "Timeline/Transitions"
 msgstr ""
 
+msgid "Timeline/Effects"
+msgstr ""
+
 msgid "Timeline/Markers"
+msgstr ""
+
+msgid "Timeline/Thumbnails Size/Small"
+msgstr ""
+
+msgid "Timeline/Thumbnails Size/Medium"
+msgstr ""
+
+msgid "Timeline/Thumbnails Size/Large"
 msgstr ""
 
 #, c++-format
@@ -7369,8 +7381,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -8436,10 +8448,16 @@ msgstr ""
 msgid "Toggle Timeline Clip Info"
 msgstr ""
 
+msgid "Toggle Timeline Effects"
+msgstr ""
+
 msgid "Toggle Timeline Thumbnails"
 msgstr ""
 
 msgid "Toggle Timeline Transitions"
+msgstr ""
+
+msgid "Toggle Timeline Waveforms"
 msgstr ""
 
 msgid "Toggle Timeline Markers"
