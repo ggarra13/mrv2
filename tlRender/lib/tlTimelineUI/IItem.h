@@ -73,7 +73,7 @@ namespace tl
             int waveformHeight = 50;
             WaveformPrim waveformPrim = WaveformPrim::Mesh;
 
-            bool effects = true;
+            bool effects = false;
             bool markers = false;
             bool transitions = false;
 
