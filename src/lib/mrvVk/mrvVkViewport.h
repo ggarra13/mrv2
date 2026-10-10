@@ -68,6 +68,8 @@ namespace mrv
 
             std::shared_ptr<image::FontSystem > getFontSystem();
 
+            void _retryHDR();
+
         protected:
             void _updateHDRMetadata();
 

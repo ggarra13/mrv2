@@ -213,6 +213,10 @@ namespace mrv
             int screen_index = 0;
             monitor::Capabilities monitor;
 
+            // Windows HDR change screen Vulkan bug.
+            int hdrRetries = 0;
+            monitor::Capabilities pendingMonitor;
+
             //! libplacebo toggle.
             bool tonemap = true;
 
