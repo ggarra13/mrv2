@@ -199,7 +199,8 @@ namespace mrv
         fs::path parent = rootdir.parent_path(); // Skip executable
         rootdir = parent.parent_path();          // Skip bin/ directory
 
-        g_root_path = string::normalizePath(rootdir.u8string());
+        std::string rootpath = tl::file::fromFileSystem(rootdir);
+        g_root_path = string::normalizePath(rootpath);
 
         std::wstring root_str = rootdir.wstring();
         if (setenv(L"MRV2_ROOT", root_str.c_str(), 1) != 0)
