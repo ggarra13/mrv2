@@ -58,7 +58,7 @@ namespace mrv
         resizable(uiSlider);
 
         uiSliderW->callback(
-            [=](auto s)
+            [=, this](auto s)
             {
                 double v = s->value();
                 format_value(v);
@@ -66,7 +66,7 @@ namespace mrv
             });
 
         uiValueW->callback(
-            [=](auto o)
+            [=, this](auto o)
             {
                 double v = atof(o->value());
                 uiSlider->value(v);
@@ -74,7 +74,7 @@ namespace mrv
             });
 
         uiResetW->callback(
-            [=](auto o)
+            [=, this](auto o)
             {
                 uiSlider->value(default_value_);
                 uiSlider->do_callback();

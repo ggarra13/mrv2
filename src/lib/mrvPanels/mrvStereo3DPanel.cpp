@@ -116,7 +116,7 @@ namespace mrv
             if (player)
                 time = player->currentTime();
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsStereo3DPanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->Stereo3DPanelThumbnails->value();
             size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
@@ -163,7 +163,7 @@ namespace mrv
                     b->value(0);
                 }
                 bW->callback(
-                    [=](auto b)
+                    [=, this](auto b)
                     {
                         WidgetIndices::const_iterator it = _r->indices.find(b);
                         if (it == _r->indices.end())
@@ -247,7 +247,7 @@ namespace mrv
             // m->add(_("Horizontal"));
             // m->add(_("Vertical"));
             pW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     Stereo3DOptions o = model->observeStereo3DOptions()->get();
                     o.input = static_cast<Stereo3DInput>(w->value());
@@ -275,7 +275,7 @@ namespace mrv
                 m->add(_("Graphics Card"));
 
             pW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     Stereo3DOptions o = model->observeStereo3DOptions()->get();
                     o.output = static_cast<Stereo3DOutput>(w->value());
@@ -327,7 +327,7 @@ namespace mrv
             s->default_value(0.0f);
             s->value(o.eyeSeparation);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto model = App::app->filesModel();
                     Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -346,7 +346,7 @@ namespace mrv
             c->align(FL_ALIGN_LEFT);
             c->value(o.swapEyes);
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto model = App::app->filesModel();
                     Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -378,7 +378,7 @@ namespace mrv
             if (!player)
                 return;
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsStereo3DPanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->Stereo3DPanelThumbnails->value();
             image::Size size = panel::calculateImageSize(thumbnailType);
 
             const auto& model = App::app->filesModel();

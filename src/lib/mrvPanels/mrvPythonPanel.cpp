@@ -304,7 +304,7 @@ namespace mrv
         {
 #ifdef __APPLE__
             TLRENDER_P();
-            if (!p.ui->uiPrefs->uiPrefsMacOSMenus->value())
+            if (!p.ui->uiPrefs->MacOSMenus->value())
             {
                 if (_r->menu)
                     g->remove(_r->menu);
@@ -324,7 +324,7 @@ namespace mrv
             TLRENDER_P();
 
 #ifdef __APPLE__
-            if (p.ui->uiPrefs->uiPrefsMacOSMenus->value())
+            if (p.ui->uiPrefs->MacOSMenus->value())
             {
                 _r->menu = p.ui->uiMenuBar;
             }

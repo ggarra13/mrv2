@@ -191,7 +191,7 @@ namespace mrv
                 }
             }
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsFilesPanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->FilesPanelThumbnails->value();
             size = panel::calculateImageSize(thumbnailType);
 
 
@@ -220,7 +220,7 @@ namespace mrv
                 r.indices[b] = i;
                 b->tooltip(_("Select main A image."));
                 bW->callback(
-                    [=](auto b)
+                    [=, this](auto b)
                     {
                         WidgetIndices::const_iterator it = r.indices.find(b);
                         if (it == r.indices.end())
@@ -282,37 +282,37 @@ namespace mrv
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(FileOpen));
             b->tooltip(_("Open a filename"));
-            bW->callback([=](auto w) { open_cb(w, p.ui); });
+            bW->callback([=, this](auto w) { open_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 30, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(FileOpenSeparateAudio));
             b->tooltip(_("Open a filename with audio"));
-            bW->callback([=](auto w) { open_separate_audio_cb(w, p.ui); });
+            bW->callback([=, this](auto w) { open_separate_audio_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 60, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(FileClose));
             b->tooltip(_("Close current filename"));
-            bW->callback([=](auto w) { close_current_cb(w, p.ui); });
+            bW->callback([=, this](auto w) { close_current_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 90, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(FileCloseAll));
             b->tooltip(_("Close all filenames"));
-            bW->callback([=](auto w) { close_all_cb(w, p.ui); });
+            bW->callback([=, this](auto w) { close_all_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 120, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(Prev));
             b->tooltip(_("Previous filename"));
-            bW->callback([=](auto w) { App::app->filesModel()->prev(); });
+            bW->callback([=, this](auto w) { App::app->filesModel()->prev(); });
 
             bW = new Widget< Button >(g->x() + 150, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(Next));
             b->tooltip(_("Next filename"));
-            bW->callback([=](auto w) { App::app->filesModel()->next(); });
+            bW->callback([=, this](auto w) { App::app->filesModel()->next(); });
 
             bg->end();
 
@@ -334,7 +334,7 @@ namespace mrv
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsFilesPanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->FilesPanelThumbnails->value();
             image::Size size = panel::calculateImageSize(thumbnailType);
 
             for (auto& m : r.map)

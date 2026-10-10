@@ -42,7 +42,7 @@ namespace mrv
         }
 
         const image::Size size = panel::calculateImageSize(
-            App::ui->uiPrefs->uiPrefsFilesPanelThumbnails->value()
+            App::ui->uiPrefs->FilesPanelThumbnails->value()
             );
 
         p.window = new MainWindow(X, Y, size.w, size.h);

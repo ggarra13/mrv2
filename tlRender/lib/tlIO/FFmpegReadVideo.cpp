@@ -3,6 +3,7 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
+#include <algorithm>
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
@@ -19,9 +20,17 @@ extern "C"
 #include <libavutil/opt.h>
 } // extern "C"
 
+#if defined(__APPLE__)
+#include <VideoToolbox/VideoToolbox.h>
+#endif // __APPLE__
+
 namespace
 {
     const char* kModule = "ffmpeg";
+
+    //! How far ahead of the decoder (in seconds of video) a request can be
+    //! before seeking is cheaper than decoding and discarding frames.
+    constexpr double kMaxForwardSkipSeconds = 0.5;
 
     static constexpr std::array<double, 16> valid_timecode_rates{
         { 1.0,
@@ -342,9 +351,20 @@ namespace tl
                 std::string timecode = getTimecodeFromDataStream(_avFormatContext);
                 if (_avStream != -1)
                 {
+                    // Only the video stream is read: the demuxer then skips the
+                    // others' data rather than handing it over to be thrown away.
+                    // The timecode and the other streams' parameters are
+                    // metadata, found already.
+                    for (unsigned int i = 0; i < _avFormatContext->nb_streams; ++i)
+                    {
+                        if (static_cast<int>(i) != _avStream)
+                        {
+                            _avFormatContext->streams[i]->discard = AVDISCARD_ALL;
+                        }
+                    }
+
                     // av_dump_format(_avFormatContext, _avStream, fileName.c_str(),
                     // 0);
-
                     auto avVideoStream = _avFormatContext->streams[_avStream];
                     auto avVideoCodecParameters = avVideoStream->codecpar;
                     auto avVideoCodec =
@@ -459,8 +479,12 @@ namespace tl
                             .arg(getErrorLabel(r)));
                     }
                     _avCodecContext[_avStream]->thread_count = options.threadCount;
-                    _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME;
-
+                    const AVCodecDescriptor* descriptor = avcodec_descriptor_get(avVideoCodec->id);
+                    const bool intraOnly = descriptor && (descriptor->props & AV_CODEC_PROP_INTRA_ONLY);
+                    const bool sliceThreads = avVideoCodec->capabilities & AV_CODEC_CAP_SLICE_THREADS;
+                    _avCodecContext[_avStream]->thread_type = intraOnly && sliceThreads ?
+                                                              FF_THREAD_SLICE :
+                                                              FF_THREAD_FRAME;
                     if (options.hwAccel)
                     {
                         // Attempt hardware decode. On any failure this is a no-op
@@ -1176,6 +1200,36 @@ namespace tl
             return formats[0];
         }
 
+        namespace
+        {
+#if defined(__APPLE__)
+            //! Whether this machine has a hardware decoder for a codec.
+            //!
+            //! VideoToolbox does not refuse a codec it has no hardware for:
+            //! it decodes in software and hands the frames back the same
+            //! way, which is slower than FFmpeg's own decoder on every core
+            //! -- an Intel Mac without an HEVC decoder played 1080p at two
+            //! thirds speed through it. A codec not listed here is not
+            //! asked about, and is left to VideoToolbox as before.
+            bool hasVideoToolboxDecoder(AVCodecID id)
+            {
+                CMVideoCodecType type = 0;
+                switch (id)
+                {
+                case AV_CODEC_ID_H264: type = kCMVideoCodecType_H264; break;
+                case AV_CODEC_ID_HEVC: type = kCMVideoCodecType_HEVC; break;
+                // The four character codes themselves, since the names for
+                // these are newer than the oldest system supported.
+                case AV_CODEC_ID_VP9: type = 'vp09'; break;
+                case AV_CODEC_ID_AV1: type = 'av01'; break;
+                default: return true;
+                }
+                return VTIsHardwareDecodeSupported(type);
+            }
+#endif // __APPLE__
+        }
+
+
         void ReadVideo::_initHwAccel(const AVCodec* codec)
         {
             // The hardware path outputs 4:2:0/4:2:2/4:4:4 NV12/NV16/NV24/P010/
@@ -1212,6 +1266,15 @@ namespace tl
                 LOG_WARNING(msg);
                 return;
             }
+#if defined(__APPLE__)
+            if (!hasVideoToolboxDecoder(codec->id))
+            {
+                std::string msg = string::Format("This machine has no hardware decoder for the codec \"{0}\"; using software decoding").
+                                  arg(codec->name ? codec->name : "?");
+                LOG_WARNING(msg);
+                return;
+            }
+#endif // __APPLE__
             if (hasAlpha)
             {
                 // e.g. ProRes 4444/4444 XQ (YUVA444P*). Vulkan hwaccel decode
@@ -1391,6 +1454,40 @@ namespace tl
                     }
                 }
             }
+        }
+
+        bool ReadVideo::canDecodeForward(
+            const OTIO_NS::RationalTime& target,
+            const OTIO_NS::RationalTime& current) const
+        {
+            // Nothing sensible to continue from.
+            if (-1 == _avStream || _useAudioOnly || _singleImage || _eof ||
+                !_buffer.empty())
+            {
+                return false;
+            }
+
+            const auto context = _avCodecContext.find(_avStream);
+            if (context == _avCodecContext.end() || !context->second)
+            {
+                return false;
+            }
+
+            // Intra-only codecs: every frame is a keyframe, so a seek lands
+            // exactly on the target, while decoding forward would fully
+            // decode every frame being skipped.
+            const AVCodecDescriptor* descriptor =
+                avcodec_descriptor_get(context->second->codec_id);
+            if (descriptor && (descriptor->props & AV_CODEC_PROP_INTRA_ONLY))
+            {
+                return false;
+            }
+
+            const double rate = _timeRange.duration().rate();
+            const double delta =
+                (target.rescaled_to(rate) - current.rescaled_to(rate)).value();
+            return delta > 0.0 &&
+                   delta <= std::max(2.0, rate * kMaxForwardSkipSeconds);
         }
 
         void ReadVideo::seek(const OTIO_NS::RationalTime& time)
@@ -1794,7 +1891,7 @@ namespace tl
             r = av_opt_set_int(_swsContext, "dstw", width, AV_OPT_SEARCH_CHILDREN);
             r = av_opt_set_int(_swsContext, "dsth", height, AV_OPT_SEARCH_CHILDREN);
             r = av_opt_set_int(_swsContext, "dst_format", _avOutputPixelFormat, AV_OPT_SEARCH_CHILDREN);
-            r = av_opt_set_int(_swsContext, "sws_flags", swsScaleFlags, AV_OPT_SEARCH_CHILDREN);
+            r = av_opt_set_int(_swsContext, "sws_flags", swsReadFlags, AV_OPT_SEARCH_CHILDREN);
             r = av_opt_set_int(_swsContext, "threads", _options.threadCount, AV_OPT_SEARCH_CHILDREN);
             r = sws_init_context(_swsContext, nullptr, nullptr);
             if (r < 0)

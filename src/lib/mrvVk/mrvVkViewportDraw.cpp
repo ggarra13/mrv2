@@ -152,8 +152,7 @@ namespace mrv
                 vk.render->setLUTOptions(p.lutOptions);
                 if (p.missingFrame)
                 {
-                    if (p.missingFrameType != tl::io::MissingFrames::Black)
-                        _drawMissingFrame(renderSize);
+                    _drawMissingFrame(renderSize);
                 }
                 else
                 {
@@ -237,24 +236,37 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-            vk.render->drawVideo(
-                {p.lastVideoFrame},
-                timeline::getBoxes(p.compareOptions,
-                                   p.displayOptions,
-                                   {p.lastVideoFrame}),
-                p.imageOptions, p.displayOptions, p.compareOptions,
-                getBackgroundOptions());
-
-            if (p.missingFrameType == io::MissingFrames::Scratch)
+            if (p.missingFrameType != tl::io::MissingFrames::Black)
             {
-                image::Color4f color(1, 0, 0, 0.8);
+                vk.render->drawVideo(
+                    {p.lastVideoFrame},
+                    timeline::getBoxes(p.compareOptions,
+                                       p.displayOptions,
+                                       {p.lastVideoFrame}),
+                    p.imageOptions, p.displayOptions, p.compareOptions,
+                    getBackgroundOptions());
+            }
+
+            if (p.ui->uiPrefs->ScratchFrame->value())
+            {
+                Fl_Color c = p.ui->uiPrefs->ScratchColor->color();
+                int width = p.ui->uiPrefs->ScratchWidth->value();
+
+                uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
+                Fl::get_color(c, ur, ug, ub, ua);
+
+                image::Color4f color(ur / 255.F,
+                                     ug / 255.F,
+                                     ub / 255.F,
+                                     0.8);
                 vk.lines->drawLine(vk.render,
                                    math::Vector2i(0, 0),
                                    math::Vector2i(renderSize.w, renderSize.h),
-                                   color, 4);
+                                   color, width);
                 vk.lines->drawLine(vk.render,
                                    math::Vector2i(0, renderSize.h),
-                                   math::Vector2i(renderSize.w, 0), color, 4);
+                                   math::Vector2i(renderSize.w, 0), color,
+                                   width);
             }
         }
 
@@ -625,7 +637,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
+            Fl_Color c = p.ui->uiPrefs->ViewSelection->color();
             uint8_t r, g, b;
             Fl::get_color(c, r, g, b);
 
@@ -757,7 +769,7 @@ namespace mrv
             const math::Vector2i shadowPos1{ 1, 1 };
             const math::Vector2i shadowPos2{ -1, -1 };
 
-            Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
+            Fl_Color c = p.ui->uiPrefs->ViewHud->color();
             uint8_t r, g, b;
             Fl::get_color(c, r, g, b);
             const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
@@ -781,7 +793,7 @@ namespace mrv
             const math::Size2i& viewportSize = getViewportSize();
 
             // Calculate resolution multiplier.
-            uint16_t fontSize = p.ui->uiPrefs->uiPrefsHudFontSize->value() *
+            uint16_t fontSize = p.ui->uiPrefs->HudFontSize->value() *
                                 self->pixels_per_unit();
             const image::FontInfo fontInfo(kFontFamily, fontSize);
 

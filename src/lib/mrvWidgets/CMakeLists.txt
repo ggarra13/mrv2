@@ -26,6 +26,7 @@ FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
 
 set(HEADERS
     mrvAnnotationGroup.h
+    mrvAnnotationInput.h
     mrvAnnotationWidget.h
     mrvAudioButton.h
     mrvButton.h
@@ -86,6 +87,7 @@ set(SOURCES
     ${mrvWidgets_FLTK_UI_SRCS}
 
     mrvAnnotationGroup.cpp
+    mrvAnnotationInput.cpp
     mrvAnnotationWidget.cpp
     mrvAudioButton.cpp
     mrvBrowser.cpp
@@ -200,6 +202,10 @@ if(MRV2_PYBIND11)
     endif()
 endif()
 
+if (TLRENDER_LIBWEBP)
+    find_package(WebP CONFIG REQUIRED)
+    list(APPEND LIBRARIES WebP::webp)
+endif()
 
 files_to_absolute_paths()
 

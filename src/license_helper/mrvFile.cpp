@@ -10,9 +10,18 @@ namespace mrv
 {
     namespace file
     {
+        std::string fromFileSystem(const std::filesystem::path& value)
+        {
+            // Under C++17 u8string() is a std::string and this is a copy;
+            // under C++20 it is a std::u8string and the iterators convert
+            // the characters.
+            const auto u8 = value.u8string();
+            return std::string(u8.begin(), u8.end());
+        }
+
         bool isReadable(const fs::path& p)
         {
-            const std::string& filePath = p.u8string();
+            const std::string& filePath = fromFileSystem(p);
             if (filePath.empty())
                 return false;
 

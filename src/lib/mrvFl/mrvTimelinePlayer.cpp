@@ -110,7 +110,7 @@ namespace mrv
         p.player = player;
 
         timeline::Loop loop = static_cast<timeline::Loop>(
-            App::ui->uiPrefs->uiPrefsLoopMode->value());
+            App::ui->uiPrefs->LoopMode->value());
         p.player->setLoop(loop);
 
         p.speedObserver = observer::ValueObserver<double>::create(

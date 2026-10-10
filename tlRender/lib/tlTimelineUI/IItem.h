@@ -63,14 +63,20 @@ namespace tl
             std::vector<int> tracks;
             bool trackInfo = true;
             bool clipInfo = true;
+
             bool thumbnails = true;
             int thumbnailHeight = 100;
+            float thumbnailFade = .2F;
+
+            bool waveforms  = true;
             int waveformWidth = 200;
             int waveformHeight = 50;
             WaveformPrim waveformPrim = WaveformPrim::Mesh;
-            float thumbnailFade = .2F;
-            bool transitions = false;
+
+            bool effects = false;
             bool markers = false;
+            bool transitions = false;
+
             std::string regularFont = "NotoSans-Regular";
             std::string monoFont = "NotoSans-Bold";
             int fontSize = 12;

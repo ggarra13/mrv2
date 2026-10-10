@@ -116,6 +116,9 @@ find_package(nlohmann_json REQUIRED)
 find_package(minizip REQUIRED)
 find_package(OpenGL REQUIRED)
 
+# For .pc packages (currently libwebp)
+find_package(PkgConfig REQUIRED)
+
 if (WIN32 OR APPLE)
     if (MRV2_BACKEND STREQUAL "VK")
 	find_package(harfbuzz REQUIRED)
@@ -200,6 +203,10 @@ endif()
 
 if(TLRENDER_LIBPLACEBO)
     add_definitions(-DTLRENDER_LIBPLACEBO)
+endif()
+
+if(TLRENDER_LIBWEBP)
+    add_definitions(-DTLRENDER_LIBWEBP)
 endif()
 
 if(TLRENDER_NDI)

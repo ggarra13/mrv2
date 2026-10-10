@@ -46,5 +46,5 @@ if (NOT WebP_FOUND AND NOT FFmpeg_FOUND)
 	LIST_SEPARATOR |
 	CMAKE_ARGS ${LibWebP_ARGS})
 
-    set(LibWebP_DEP )
+    set(LibWebP_DEP LibWebP)
 endif()

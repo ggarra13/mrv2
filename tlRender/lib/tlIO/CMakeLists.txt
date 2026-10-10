@@ -150,6 +150,12 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 	target_compile_definitions(tlIO PRIVATE VULKAN_BACKEND)
     endif()
 endif()
+
+if (APPLE)
+    target_link_libraries(tlIO PRIVATE 
+	"-framework VideoToolBox"
+	"-framework CoreMedia")
+endif()
     
 install(TARGETS tlIO
     ARCHIVE DESTINATION lib

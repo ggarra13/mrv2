@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-10 08:24-0300\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1564,6 +1564,18 @@ msgstr "{0} स्ट्रीम कर रहा है {1}"
 msgid "Stop streaming"
 msgstr "स्ट्रीम जारी करना बन्द करें"
 
+msgid "Complexity"
+msgstr "जटिलता"
+
+msgid "Draw Mode"
+msgstr "मोड आरेखित करें"
+
+msgid "Stage Cache"
+msgstr "चरण कैश"
+
+msgid "Disk Cache in GB"
+msgstr "GB में डिस्क कैश"
+
 msgid "Type"
 msgstr "क़िस्म"
 
@@ -1753,6 +1765,75 @@ msgid ""
 msgstr ""
 "यह आपकी सभी सेटिंग को डिफ़ॉल्ट रूप में रीसेट करेगा. क्या आप सुनिश्चित हैं कि"
 " आप जारी रखना चाहते हैं?"
+
+msgid "Toggle Color Controls Panel"
+msgstr "रंग नियंत्रण फलक टॉगल करें"
+
+msgid "Toggle Files Panel"
+msgstr "फ़ाइलें फलक टॉगल करें"
+
+msgid "Toggle Compare Panel"
+msgstr "फलक से तुलना करें"
+
+msgid "Toggle Settings Panel"
+msgstr "विन्यास फलक टॉगल करें"
+
+msgid "Toggle Python Panel"
+msgstr "पायथन फलक टॉगल करें"
+
+msgid "Toggle Logs Panel"
+msgstr "लॉग पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Devices Panel"
+msgstr "औज़ार फलक टॉगल करें"
+
+msgid "Toggle Color Area Panel"
+msgstr "रंग क्षेत्र जानकारी पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Notes Panel"
+msgstr "नोट्स पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Annotations Panel"
+msgstr "एनोटेशन पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Background Panel"
+msgstr "पृष्ठभूमि फलक टॉगल करें"
+
+msgid "Toggle Image Info Panel"
+msgstr "छवि जानकारी पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Histogram Panel"
+msgstr "हिस्टोग्राम फलक टॉगल करें"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "वेक्टर ग्राफ फलक टॉगल करें"
+
+msgid "Toggle Waveform Panel"
+msgstr "वेवफ़ॉर्मेशन फलक टॉगल करें"
+
+msgid "Toggle Environment Map Panel"
+msgstr "एनवायरनमेंट नक्शा फलक टॉगल करें"
+
+msgid "Toggle NDI Panel"
+msgstr "NDI पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle WebRTC Panel"
+msgstr "WebRTC पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle USD Panel"
+msgstr "USD पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Statistics Panel"
+msgstr "सांख्यिकी पैनल दिखाएँ/छिपाएँ"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "Stereo 3D पैनल दिखाएँ/छिपाएँ"
+
+msgid "Show Hotkeys Window"
+msgstr "हॉटकी विंडो दिखाएँ"
+
+msgid "Show Preferences Window"
+msgstr "प्राथमिकताएँ विंडो दिखाएँ"
 
 msgid "Notes"
 msgstr "टिप्पणी"
@@ -3776,10 +3857,6 @@ msgstr "UI को कम पारदर्शी बनाएँ।"
 msgid "Only allow one side panel at a time."
 msgstr "एक समय में केवल एक साइड पैनल की अनुमति दें।"
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "{0} विंडो दिखाएँ।"
-
 msgid "Show About Window."
 msgstr "अबाउट विंडो दिखाएँ।"
 
@@ -3958,6 +4035,9 @@ msgstr ""
 "आप सभी एनोटेशन साफ़ करने वाले हैं। आप तुरंत बाद इस क्रिया को पूर्ववत कर सकते"
 " हैं। क्या आप जारी रखना चाहते हैं?"
 
+msgid "Toggle Waveforms in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में वेवफॉर्म दिखाएँ/छिपाएँ।"
+
 msgid "No Thumbnails in Timeline Viewport."
 msgstr "टाइमलाइन व्यूपोर्ट में कोई थंबनेल नहीं।"
 
@@ -3979,6 +4059,9 @@ msgstr "टाइमलाइन व्यूपोर्ट में ट्र
 
 msgid "Toggle Clip Information in Timeline Viewport."
 msgstr "टाइमलाइन व्यूपोर्ट में क्लिप जानकारी को चालू/बंद करें।"
+
+msgid "Toggle Effects in Timeline Viewport."
+msgstr "टाइमलाइन व्यूपोर्ट में इफ़ेक्ट दिखाएँ/छिपाएँ।"
 
 msgid "Toggle Markers in Timeline Viewport."
 msgstr "टाइमलाइन व्यूपोर्ट में मार्कर को चालू/बंद करें।"
@@ -4261,55 +4344,66 @@ msgstr "{0} में छवि सहेज रहा है"
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
 msgstr ""
-"प्रोग्रेसिव प्रोफ़ाइल को एक एम्व फिल्म विस्तार की आवश्यकता है. इसे परिवर्तित"
-" करने के लिए इसे परिवर्तित करें."
+"ProRes प्रोफ़ाइल के लिए .mov फ़िल्म एक्सटेंशन आवश्यक है।  इसे .mov में बदला "
+"जा रहा है।"
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
+".mkv"
 msgstr ""
-"VP9 प्रोफ़ाइल को एक.एमपी4, mkv या. webmm फिल्म विस्तार की जरूरत है. इसे "
-"बदलने के लिए बदलें"
+"VP9 प्रोफ़ाइल के लिए .mp4, .mkv या .webm फ़िल्म एक्सटेंशन आवश्यक है।  इसे "
+".mkv में बदला जा रहा है।"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
-"AV1 प्रोफ़ाइल को एक _BAR_एमपी4 या.mkv फिल्म विस्तार की जरूरत है _BAR_ इसे "
-"बदलने के लिए बदलें"
+"AV1 प्रोफ़ाइल के लिए .mp4 या .mkv फ़िल्म एक्सटेंशन आवश्यक है।  इसे .mp4 में "
+"बदला जा रहा है।"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 msgstr ""
-"जाओप्रोफ़ॉर्मेशन प्रोफ़ाइल को एक.mkv फिल्म विस्तार की जरूरत है. इसे.mkv पर "
-"परिवर्तित करने के लिए"
+"GoPro CineForm प्रोफ़ाइल के लिए .mkv फ़िल्म एक्सटेंशन आवश्यक है।  इसे .mkv "
+"में बदला जा रहा है।"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr ""
-"HAP प्रोफाइल एक.mov विस्तार की जरूरत है. इसे में परिवर्तित करने के लिए इसे "
-"परिवर्तित करें."
+"HAP प्रोफ़ाइल के लिए .mov एक्सटेंशन आवश्यक है।  इसे .mov में बदला जा रहा है।"
 
 msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
 msgstr ""
-"OAPV प्रोफ़ाइल के लिए .mp4 एक्सटेंशन आवश्यक है। इसे .mp4 में बदला जा रहा है"
+"OAPV प्रोफ़ाइल के लिए .mp4 एक्सटेंशन आवश्यक है।  इसे .mp4 में बदला जा रहा "
+"है।"
 
 #, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "नया फ़ाइल {0} पहले से मौजूद है! इसपर लिख नहीं सकता"
 
 #, c++-format
-msgid "HDR Export mode {0}"
-msgstr "HDR निर्यात मोड {0}"
-
-#, c++-format
-msgid "{0}: Cannot open writer plugin."
-msgstr "{0}: लेखक प्लगइन खोल नहीं सका."
+msgid "Rotated image info: {0}"
+msgstr "छवि जानकारी घुमाएँ: {0}"
 
 #, c++-format
 msgid "Scaled image info: {0}"
 msgstr "स्केल्ड छवि सूचना: {0}"
 
 #, c++-format
+msgid "{0}: Cannot open writer plugin."
+msgstr "{0}: लेखक प्लगइन खोल नहीं सका."
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr "छवि जानकारी: {0} {1}"
+
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr "सहेजने के लिए छवि बहुत बड़ा. व्यूपोर्ट आकार में स्केल किया जाएगा."
+
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "राइटर प्लगइन आउटपुट जानकारी नहीं पा सका. {0} को डिफ़ॉल्ट रूप में"
+
+#, c++-format
+msgid "Output info: {0} {1}"
+msgstr "आउटपुट जानकारी: {0} {1}"
 
 #, c++-format
 msgid "Using profile {0}, pixel format {1}."
@@ -4318,18 +4412,6 @@ msgstr "प्रोफाइल {0} का उपयोग कर रहा ह
 #, c++-format
 msgid "Using preset {0}."
 msgstr "{0} का उपयोग कर रहा है"
-
-#, c++-format
-msgid "Offscreen Buffer info: {0}"
-msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
-
-#, c++-format
-msgid "Image info: {0} {1}"
-msgstr "छवि जानकारी: {0} {1}"
-
-#, c++-format
-msgid "Output info: {0} {1}"
-msgstr "आउटपुट जानकारी: {0} {1}"
 
 #, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -4351,16 +4433,38 @@ msgid "Audio only in timeline, but not trying to save audio."
 msgstr "केवल समय में ऑडियो, लेकिन ऑडियो सहेजने की कोशिश नहीं कर रहा है."
 
 #, c++-format
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: अवैध OpenGL प्रारूप और प्रकार"
+
+#, c++-format
+msgid "OpenGL info: {0}"
+msgstr "ओपन- जीएल जानकारी: {0}"
+
+#, c++-format
 msgid "Saving... {0}"
 msgstr "सहेजा जा रहा है... {0}"
+
+msgid "Unsupported output format"
+msgstr "असमर्थित आउटपुट प्रारूप"
+
+#, c++-format
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "{0} समय पर वीडियो आँकड़ा खाली करें"
 
 #, c++-format
 msgid "Render size: {0}"
 msgstr "रेंडर आकार: {0}"
 
 #, c++-format
-msgid "Saved '{0}'."
-msgstr "'{0}' सहेजा गया।"
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
+
+msgid "Unsupported output format: "
+msgstr "असमर्थित आउटपुट प्रारूप: "
 
 msgid "2.35"
 msgstr "2.35"
@@ -4378,46 +4482,15 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "कैश: "
 
-#, c++-format
-msgid "HDR monitor min. nits = {0}"
-msgstr "HDR मॉनिटर की न्यूनतम ब्राइटनेस (निट्स) = {0}"
-
-#, c++-format
-msgid "HDR monitor max. nits = {0}"
-msgstr "HDR मॉनिटर की अधिकतम ब्राइटनेस (निट्स) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr "Vulkan या विंडो मैनेजर द्वारा HDR मॉनिटर का पता नहीं चला।"
-
-#, c++-format
-msgid "Vulkan color space is {0}"
-msgstr "Vulkan रंग स्थान {0} है"
-
-#, c++-format
-msgid "Vulkan format is {0}"
-msgstr "Vulkan फ़ॉर्मेट {0} है"
-
-#, c++-format
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "इंडेक्स {0} पर सक्रिय HDR मॉनिटर पर बदला गया"
-
-#, c++-format
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr "इंडेक्स {0} पर HDR समर्थित लेकिन निष्क्रिय मॉनिटर पर बदला गया"
-
-#, c++-format
-msgid "Changed to SDR monitor at index {0}"
-msgstr "इंडेक्स {0} पर SDR मॉनिटर में बदला गया"
-
 msgid "Edit Text"
 msgstr "पाठ संपादित करें"
 
 #, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' कोई फ़ाइल, निर्देशिका या URL नहीं है।"
+
+msgid "Invalid font for text drawing"
+msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
 
 msgid "Could not convert message to shape: "
 msgstr "संदेश को आकार में परिवर्तित नहीं कर सका:"
@@ -4798,33 +4871,6 @@ msgstr "दृश्य/मास्क/%s"
 msgid "View/Hud"
 msgstr "दृश्य/Hud"
 
-msgid "View/Compare/None"
-msgstr "दृश्य/तुलना/कोई नहीं"
-
-msgid "View/Compare/Overlay"
-msgstr "दृश्य/तुलना/ओवरले"
-
-msgid "View/Compare/Wipe"
-msgstr "दृश्य/तुलना/वाइप"
-
-msgid "View/Compare/Difference"
-msgstr "दृश्य/तुलना/अंतर"
-
-msgid "View/Compare/Add"
-msgstr "दृश्य/तुलना/जोड़ें"
-
-msgid "View/Compare/Multiply"
-msgstr "दृश्य/तुलना/गुणा"
-
-msgid "View/Compare/Horizontal"
-msgstr "दृश्य/तुलना/क्षैतिज"
-
-msgid "View/Compare/Vertical"
-msgstr "दृश्य/तुलना/ऊर्ध्वाधर"
-
-msgid "View/Compare/Tile"
-msgstr "दृश्य/तुलना/टाइल"
-
 msgid "Timeline/Cache/Clear"
 msgstr "टाइम-लाइन/कैश/साफ करें"
 
@@ -4846,23 +4892,29 @@ msgstr "टाइम-लाइन/ट्रैक सूचना"
 msgid "Timeline/Clip Info"
 msgstr "टाइम-लाइन/सूचना काटें"
 
-msgid "Timeline/Thumbnails/None"
-msgstr "टाइम-लाइन/लघु छवि/कुछ नहीं"
+msgid "Timeline/Thumbnails"
+msgstr "टाइमलाइन/थंबनेल"
 
-msgid "Timeline/Thumbnails/Small"
-msgstr "टाइम-लाइन/लघु छवि/छोटा"
-
-msgid "Timeline/Thumbnails/Medium"
-msgstr "टाइम-लाइन/लघु छवि/मध्यम"
-
-msgid "Timeline/Thumbnails/Large"
-msgstr "टाइम-लाइन/लघु छवि/बड़ा"
+msgid "Timeline/Waveforms"
+msgstr "टाइमलाइन/वेवफॉर्म"
 
 msgid "Timeline/Transitions"
 msgstr "टाइम-लाइन/स्लाइड संक्रमण:"
 
+msgid "Timeline/Effects"
+msgstr "टाइमलाइन/इफ़ेक्ट"
+
 msgid "Timeline/Markers"
 msgstr "टाइम-लाइन/मार्कर्स"
+
+msgid "Timeline/Thumbnails Size/Small"
+msgstr "टाइमलाइन/थंबनेल का आकार/छोटा"
+
+msgid "Timeline/Thumbnails Size/Medium"
+msgstr "टाइमलाइन/थंबनेल का आकार/मध्यम"
+
+msgid "Timeline/Thumbnails Size/Large"
+msgstr "टाइमलाइन/थंबनेल का आकार/बड़ा"
 
 #, c++-format
 msgid "Timeline/Visible Tracks/{0}"
@@ -5867,6 +5919,9 @@ msgstr "चुने गए कोडेकों के लिए FFMOGE का
 
 msgid "Presets"
 msgstr "प्रीसेट"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr "चयनित कोडेक के लिए FFMpeg की फ़िल्म सहेजने की प्रीसेट (SDR / HDR)।"
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "चुने गए कोडेकों के लिए FFMOGE का रंग जगह"
@@ -6967,9 +7022,6 @@ msgstr "त्रुटि फ़्रेम"
 msgid "Hold Frame"
 msgstr "फ़्रेम रोकें"
 
-msgid "Scratched Frame"
-msgstr "खरोंच वाला फ़्रेम"
-
 msgid "Black  Frame"
 msgstr "काला फ़्रेम"
 
@@ -6978,6 +7030,9 @@ msgstr "फ़्रेम छोड़ें"
 
 msgid "Gap Frame"
 msgstr "गैप फ़्रेम"
+
+msgid "Pick Scratch Color"
+msgstr "गायब फ़्रेम का रंग चुनें"
 
 msgid "Always"
 msgstr "हमेशा"
@@ -7822,6 +7877,24 @@ msgstr ""
 "\t* काला फ़्रेम\t   - वर्तमान फ़्रेम को काले फ़्रेम से बदल देता है।\n"
 "\t* फ़्रेम छोड़ें\t   - वर्तमान फ़्रेम को छोड़ देता है।\n"
 "\t* गैप फ़्रेम\t   - अनुपलब्ध फ़्रेम के लिए एक .otio गैप जोड़ता है।"
+
+msgid "Scratch Frame"
+msgstr "गायब फ़्रेम"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr "इसके सक्षम होने पर, गायब फ़्रेम पर एक क्रॉस दिखाई देगा।"
+
+msgid "Scratch Color"
+msgstr "गायब फ़्रेम का रंग"
+
+msgid "Scratch Lines Color."
+msgstr "गायब फ़्रेम की रेखाओं का रंग।"
+
+msgid "Scratch Width"
+msgstr "गायब फ़्रेम की रेखाओं की चौड़ाई"
+
+msgid "Scratch Lines Width."
+msgstr "गायब फ़्रेम की रेखाओं की चौड़ाई।"
 
 msgid "Path Mappings"
 msgstr "हटाएँ (R)"
@@ -8876,11 +8949,17 @@ msgstr "टाइम-लाइन ट्रैक जानकारी टॉ�
 msgid "Toggle Timeline Clip Info"
 msgstr "टाइम-लाइन क्लिप जानकारी टॉगल करें"
 
+msgid "Toggle Timeline Effects"
+msgstr "टाइमलाइन इफ़ेक्ट दिखाएँ/छिपाएँ"
+
 msgid "Toggle Timeline Thumbnails"
 msgstr "टाइम-लाइन लघु छवि टॉगल करें"
 
 msgid "Toggle Timeline Transitions"
 msgstr "टाइम- लाइन संक्रमण टॉगल करें"
+
+msgid "Toggle Timeline Waveforms"
+msgstr "टाइमलाइन वेवफॉर्म दिखाएँ/छिपाएँ"
 
 msgid "Toggle Timeline Markers"
 msgstr "टाइम-लाइन मार्कर्स टॉगल करें"
@@ -8927,9 +9006,6 @@ msgstr "स्क्रैप मोड"
 msgid "Area Selection Mode"
 msgstr "क्षेत्र चयन विधि"
 
-msgid "Draw Mode"
-msgstr "मोड आरेखित करें"
-
 msgid "Erase Mode"
 msgstr "मिटाने का मोड"
 
@@ -8975,50 +9051,17 @@ msgstr "हूद विंडोComment"
 msgid "Toggle One Panel Only"
 msgstr "सिर्फ एक पैनल टॉगल करें"
 
-msgid "Toggle Files Panel"
-msgstr "फ़ाइलें फलक टॉगल करें"
-
 msgid "Toggle Media Info Panel"
 msgstr "मीडिया जानकारी फलक टॉगल करें"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "रंग क्षेत्र जानकारी फलक टॉगल करें"
 
-msgid "Toggle Color Controls Panel"
-msgstr "रंग नियंत्रण फलक टॉगल करें"
-
-msgid "Toggle Compare Panel"
-msgstr "फलक से तुलना करें"
-
-msgid "Toggle Devices Panel"
-msgstr "औज़ार फलक टॉगल करें"
-
 msgid "Toggle Annotation Panel"
 msgstr "व्याख्या फलक टॉगल करें"
 
-msgid "Toggle Background Panel"
-msgstr "पृष्ठभूमि फलक टॉगल करें"
-
-msgid "Toggle Settings Panel"
-msgstr "विन्यास फलक टॉगल करें"
-
-msgid "Toggle Histogram Panel"
-msgstr "हिस्टोग्राम फलक टॉगल करें"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "वेक्टर ग्राफ फलक टॉगल करें"
-
-msgid "Toggle Waveform Panel"
-msgstr "वेवफ़ॉर्मेशन फलक टॉगल करें"
-
-msgid "Toggle Environment Map Panel"
-msgstr "एनवायरनमेंट नक्शा फलक टॉगल करें"
-
 msgid "Toggle Preferences Window"
 msgstr "विकल्प टॉगल करें"
-
-msgid "Toggle Python Panel"
-msgstr "पायथन फलक टॉगल करें"
 
 msgid "Toggle Log Panel"
 msgstr "लॉग पैनल टॉगल करें"
@@ -9038,46 +9081,78 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
 
-#~ msgid "Complexity"
-#~ msgstr "जटिलता"
-
-#~ msgid "Stage Cache"
-#~ msgstr "चरण कैश"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "GB में डिस्क कैश"
+#, c++-format
+#~ msgid "HDR Export mode {0}"
+#~ msgstr "HDR निर्यात मोड {0}"
 
 #, c++-format
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "छवि जानकारी घुमाएँ: {0}"
-
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr "सहेजने के लिए छवि बहुत बड़ा. व्यूपोर्ट आकार में स्केल किया जाएगा."
+#~ msgid "Saved '{0}'."
+#~ msgstr "'{0}' सहेजा गया।"
 
 #, c++-format
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: अवैध OpenGL प्रारूप और प्रकार"
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "HDR मॉनिटर की न्यूनतम ब्राइटनेस (निट्स) = {0}"
 
 #, c++-format
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "ओपन- जीएल जानकारी: {0}"
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "HDR मॉनिटर की अधिकतम ब्राइटनेस (निट्स) = {0}"
 
-#~ msgid "Unsupported output format"
-#~ msgstr "असमर्थित आउटपुट प्रारूप"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
+
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
+#~ msgstr "Vulkan या विंडो मैनेजर द्वारा HDR मॉनिटर का पता नहीं चला।"
 
 #, c++-format
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "{0} समय पर वीडियो आँकड़ा खाली करें"
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Vulkan रंग स्थान {0} है"
 
 #, c++-format
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Vulkan फ़ॉर्मेट {0} है"
 
-#~ msgid "Unsupported output format: "
-#~ msgstr "असमर्थित आउटपुट प्रारूप: "
+#, c++-format
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "इंडेक्स {0} पर सक्रिय HDR मॉनिटर पर बदला गया"
 
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
+#, c++-format
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
+#~ msgstr "इंडेक्स {0} पर HDR समर्थित लेकिन निष्क्रिय मॉनिटर पर बदला गया"
+
+#, c++-format
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "इंडेक्स {0} पर SDR मॉनिटर में बदला गया"
+
+#, c++-format
+#~ msgid "Show {0} Window."
+#~ msgstr "{0} विंडो दिखाएँ।"
+
+#~ msgid "View/Compare/None"
+#~ msgstr "दृश्य/तुलना/कोई नहीं"
+
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "दृश्य/तुलना/ओवरले"
+
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "दृश्य/तुलना/वाइप"
+
+#~ msgid "View/Compare/Difference"
+#~ msgstr "दृश्य/तुलना/अंतर"
+
+#~ msgid "View/Compare/Add"
+#~ msgstr "दृश्य/तुलना/जोड़ें"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "दृश्य/तुलना/गुणा"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "दृश्य/तुलना/क्षैतिज"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "दृश्य/तुलना/ऊर्ध्वाधर"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "दृश्य/तुलना/टाइल"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "वर्तमान समय पर ऑडियो गैप हटाएँ।"

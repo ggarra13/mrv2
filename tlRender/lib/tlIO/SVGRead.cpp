@@ -36,7 +36,7 @@ namespace tl
                 const std::string& fileName,
                 const file::MemoryRead* memory)
             {
-                const auto path = std::filesystem::u8path(fileName);
+                const auto path = file::toFileSystem(fileName);
                 auto fileIO = memory ?
                     file::FileIO::create(path, *memory) :
                     file::FileIO::create(path, file::Mode::Read);

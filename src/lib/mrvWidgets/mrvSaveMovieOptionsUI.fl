@@ -20,6 +20,9 @@ decl {namespace fs = std::filesystem;} {public global
 decl {\#include "tlIO/FFmpeg.h"} {public global
 }
 
+decl {\#include "tlCore/Path.h"} {selected public global
+}
+
 decl {\#include "tlCore/String.h"} {public global
 }
 
@@ -225,7 +228,7 @@ settings->setValue("SaveMovie/Override", value);}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color Range", value);} open
+settings->setValue("SaveMovie/Color Range", value);}
         tooltip {FFMpeg's Color Range for the codec selected} xywh {130 60 170 29} down_box BORDER_BOX
         code2 {auto settings = mrv::App::app->settings();
 int value = settings->getValue<int>("SaveMovie/Color Range");
@@ -290,8 +293,8 @@ else if (value == 1)  // HDR
       ColorTRC->value(i);
       ColorTRC->do_callback();
   }
-}} open
-        tooltip {FFMpeg's Color Range for the codec selected} xywh {129 105 170 29} down_box BORDER_BOX
+}}
+        tooltip {FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected.} xywh {129 105 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
           label bt709
@@ -310,8 +313,11 @@ else if (value == 1)  // HDR
           callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color Space", value);}
+settings->setValue("SaveMovie/Color Space", value);} open
           tooltip {FFMpeg's Color Space for the codec selected} xywh {168 195 170 29} down_box BORDER_BOX
+          code2 {auto settings = mrv::App::app->settings();
+int value = settings->getValue<int>("SaveMovie/Color Space");
+o->value(value);}
         } {
           MenuItem {} {
             label bt709
@@ -393,6 +399,9 @@ settings->setValue("SaveMovie/Color Space", value);}
 auto settings = mrv::App::app->settings();
 settings->setValue("SaveMovie/Color Primaries", value);}
           tooltip {FFMpeg's Color Primaries setting for the codec selected.} xywh {169 152 170 29} down_box BORDER_BOX
+          code2 {auto settings = mrv::App::app->settings();
+int value = settings->getValue<int>("SaveMovie/Color Primaries");
+o->value(value);}
         } {
           MenuItem {} {
             label bt709
@@ -449,8 +458,11 @@ settings->setValue("SaveMovie/Color Primaries", value);}
           callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color TRC", value);} open
+settings->setValue("SaveMovie/Color TRC", value);}
           tooltip {FFMpeg's Color Transfer Function settings for the codec selected.} xywh {168 236 170 26} down_box BORDER_BOX
+          code2 {auto settings = mrv::App::app->settings();
+int value = settings->getValue<int>("SaveMovie/Color TRC");
+o->value(value);}
         } {
           MenuItem {} {
             label bt709
@@ -785,8 +797,7 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
-  } {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -924,6 +935,16 @@ else if (codec == "OAPV")
    v->add("YUVA_444P_10LE");
    v->add("YUVA_444P_12LE");
 }
+else if (codec == "GIF")
+{
+   v->add("PAL8");
+}
+else if (codec == "WebP")
+{
+   v->add("RGB");
+   v->add("YUV_420P");
+   v->add("YUVA_420P");
+}
 
 if (v->size() > 0)
 {
@@ -943,8 +964,7 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {selected
-    }
+}} {}
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {open
   } {
@@ -962,7 +982,7 @@ fs::directory_iterator dirIter(directoryPath);
 for (const auto& entry : dirIter)
 {
    // Check if the entry is a regular file, starts with "codec-", and ends with ".pst"
-   std::string filename = entry.path().filename().u8string();
+   std::string filename = tl::file::fromFileSystem(entry.path().filename());
         
    // Check if the entry is a regular file and starts with say "vp9-"
    if (fs::is_regular_file(entry) && 

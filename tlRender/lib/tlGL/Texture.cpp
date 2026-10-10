@@ -482,6 +482,10 @@ namespace tl
             if (p.pbo)
             {
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, p.pbo);
+                
+                // Orphan the buffer to prevent GPU stalls
+                glBufferData(GL_PIXEL_UNPACK_BUFFER, data->getDataByteCount(),
+                             NULL, GL_STREAM_DRAW);
                 if (void* buffer =
                         glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY))
                 {

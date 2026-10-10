@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.8.0\n"
+"Project-Id-Version: mrv2 v1.8.2\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:28-0300\n"
+"POT-Creation-Date: 2026-10-10 08:24-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1458,6 +1458,18 @@ msgstr ""
 msgid "Stop streaming"
 msgstr ""
 
+msgid "Complexity"
+msgstr ""
+
+msgid "Draw Mode"
+msgstr ""
+
+msgid "Stage Cache"
+msgstr ""
+
+msgid "Disk Cache in GB"
+msgstr ""
+
 msgid "Type"
 msgstr ""
 
@@ -1632,6 +1644,75 @@ msgstr ""
 msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
+msgstr ""
+
+msgid "Toggle Color Controls Panel"
+msgstr ""
+
+msgid "Toggle Files Panel"
+msgstr ""
+
+msgid "Toggle Compare Panel"
+msgstr ""
+
+msgid "Toggle Settings Panel"
+msgstr ""
+
+msgid "Toggle Python Panel"
+msgstr ""
+
+msgid "Toggle Logs Panel"
+msgstr ""
+
+msgid "Toggle Devices Panel"
+msgstr ""
+
+msgid "Toggle Color Area Panel"
+msgstr ""
+
+msgid "Toggle Notes Panel"
+msgstr ""
+
+msgid "Toggle Annotations Panel"
+msgstr ""
+
+msgid "Toggle Background Panel"
+msgstr ""
+
+msgid "Toggle Image Info Panel"
+msgstr ""
+
+msgid "Toggle Histogram Panel"
+msgstr ""
+
+msgid "Toggle Vectorscope Panel"
+msgstr ""
+
+msgid "Toggle Waveform Panel"
+msgstr ""
+
+msgid "Toggle Environment Map Panel"
+msgstr ""
+
+msgid "Toggle NDI Panel"
+msgstr ""
+
+msgid "Toggle WebRTC Panel"
+msgstr ""
+
+msgid "Toggle USD Panel"
+msgstr ""
+
+msgid "Toggle Statistics Panel"
+msgstr ""
+
+msgid "Toggle Stereo3D Panel"
+msgstr ""
+
+msgid "Show Hotkeys Window"
+msgstr ""
+
+msgid "Show Preferences Window"
 msgstr ""
 
 msgid "Notes"
@@ -3576,10 +3657,6 @@ msgstr ""
 msgid "Only allow one side panel at a time."
 msgstr ""
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr ""
-
 msgid "Show About Window."
 msgstr ""
 
@@ -3756,6 +3833,9 @@ msgid ""
 "right after. Do you want to continue?"
 msgstr ""
 
+msgid "Toggle Waveforms in Timeline Viewport."
+msgstr ""
+
 msgid "No Thumbnails in Timeline Viewport."
 msgstr ""
 
@@ -3775,6 +3855,9 @@ msgid "Toggle Track Information in Timeline Viewport."
 msgstr ""
 
 msgid "Toggle Clip Information in Timeline Viewport."
+msgstr ""
+
+msgid "Toggle Effects in Timeline Viewport."
 msgstr ""
 
 msgid "Toggle Markers in Timeline Viewport."
@@ -4054,7 +4137,7 @@ msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
 msgstr ""
 
 msgid ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mp4"
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mkv"
 msgstr ""
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
@@ -4075,11 +4158,7 @@ msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
 #, c++-format
-msgid "HDR Export mode {0}"
-msgstr ""
-
-#, c++-format
-msgid "{0}: Cannot open writer plugin."
+msgid "Rotated image info: {0}"
 msgstr ""
 
 #, c++-format
@@ -4087,7 +4166,22 @@ msgid "Scaled image info: {0}"
 msgstr ""
 
 #, c++-format
+msgid "{0}: Cannot open writer plugin."
+msgstr ""
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr ""
+
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
+msgstr ""
+
+#, c++-format
+msgid "Output info: {0} {1}"
 msgstr ""
 
 #, c++-format
@@ -4096,18 +4190,6 @@ msgstr ""
 
 #, c++-format
 msgid "Using preset {0}."
-msgstr ""
-
-#, c++-format
-msgid "Offscreen Buffer info: {0}"
-msgstr ""
-
-#, c++-format
-msgid "Image info: {0} {1}"
-msgstr ""
-
-#, c++-format
-msgid "Output info: {0} {1}"
 msgstr ""
 
 #, c-format
@@ -4130,7 +4212,22 @@ msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
 #, c++-format
+msgid "{0}: Invalid OpenGL format and type"
+msgstr ""
+
+#, c++-format
+msgid "OpenGL info: {0}"
+msgstr ""
+
+#, c++-format
 msgid "Saving... {0}"
+msgstr ""
+
+msgid "Unsupported output format"
+msgstr ""
+
+#, c++-format
+msgid "Empty video data at time {0}.  Repeating frame."
 msgstr ""
 
 #, c++-format
@@ -4138,7 +4235,14 @@ msgid "Render size: {0}"
 msgstr ""
 
 #, c++-format
-msgid "Saved '{0}'."
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr ""
+
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+msgid "Unsupported output format: "
 msgstr ""
 
 msgid "2.35"
@@ -4157,45 +4261,14 @@ msgstr ""
 msgid "Cache: "
 msgstr ""
 
-#, c++-format
-msgid "HDR monitor min. nits = {0}"
-msgstr ""
-
-#, c++-format
-msgid "HDR monitor max. nits = {0}"
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr ""
-
-#, c++-format
-msgid "Vulkan color space is {0}"
-msgstr ""
-
-#, c++-format
-msgid "Vulkan format is {0}"
-msgstr ""
-
-#, c++-format
-msgid "Changed to HDR active monitor at index {0}"
-msgstr ""
-
-#, c++-format
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr ""
-
-#, c++-format
-msgid "Changed to SDR monitor at index {0}"
-msgstr ""
-
 msgid "Edit Text"
 msgstr ""
 
 #, c++-format
 msgid "'{0}' is not a file, directory or url."
+msgstr ""
+
+msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -4565,33 +4638,6 @@ msgstr ""
 msgid "View/Hud"
 msgstr ""
 
-msgid "View/Compare/None"
-msgstr ""
-
-msgid "View/Compare/Overlay"
-msgstr ""
-
-msgid "View/Compare/Wipe"
-msgstr ""
-
-msgid "View/Compare/Difference"
-msgstr ""
-
-msgid "View/Compare/Add"
-msgstr ""
-
-msgid "View/Compare/Multiply"
-msgstr ""
-
-msgid "View/Compare/Horizontal"
-msgstr ""
-
-msgid "View/Compare/Vertical"
-msgstr ""
-
-msgid "View/Compare/Tile"
-msgstr ""
-
 msgid "Timeline/Cache/Clear"
 msgstr ""
 
@@ -4613,22 +4659,28 @@ msgstr ""
 msgid "Timeline/Clip Info"
 msgstr ""
 
-msgid "Timeline/Thumbnails/None"
+msgid "Timeline/Thumbnails"
 msgstr ""
 
-msgid "Timeline/Thumbnails/Small"
-msgstr ""
-
-msgid "Timeline/Thumbnails/Medium"
-msgstr ""
-
-msgid "Timeline/Thumbnails/Large"
+msgid "Timeline/Waveforms"
 msgstr ""
 
 msgid "Timeline/Transitions"
 msgstr ""
 
+msgid "Timeline/Effects"
+msgstr ""
+
 msgid "Timeline/Markers"
+msgstr ""
+
+msgid "Timeline/Thumbnails Size/Small"
+msgstr ""
+
+msgid "Timeline/Thumbnails Size/Medium"
+msgstr ""
+
+msgid "Timeline/Thumbnails Size/Large"
 msgstr ""
 
 #, c++-format
@@ -5613,6 +5665,9 @@ msgstr ""
 msgid "Presets"
 msgstr ""
 
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr ""
+
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr ""
 
@@ -6585,9 +6640,6 @@ msgstr ""
 msgid "Hold Frame"
 msgstr ""
 
-msgid "Scratched Frame"
-msgstr ""
-
 msgid "Black  Frame"
 msgstr ""
 
@@ -6595,6 +6647,9 @@ msgid "Skip Frame"
 msgstr ""
 
 msgid "Gap Frame"
+msgstr ""
+
+msgid "Pick Scratch Color"
 msgstr ""
 
 msgid "Always"
@@ -7354,6 +7409,24 @@ msgid ""
 "\t* Black Frame\t   - Replaces current frame with black.\n"
 "\t* Skip Frame\t   - Skips the current frame.\n"
 "\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+
+msgid "Scratch Frame"
+msgstr ""
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr ""
+
+msgid "Scratch Color"
+msgstr ""
+
+msgid "Scratch Lines Color."
+msgstr ""
+
+msgid "Scratch Width"
+msgstr ""
+
+msgid "Scratch Lines Width."
 msgstr ""
 
 msgid "Path Mappings"
@@ -8375,10 +8448,16 @@ msgstr ""
 msgid "Toggle Timeline Clip Info"
 msgstr ""
 
+msgid "Toggle Timeline Effects"
+msgstr ""
+
 msgid "Toggle Timeline Thumbnails"
 msgstr ""
 
 msgid "Toggle Timeline Transitions"
+msgstr ""
+
+msgid "Toggle Timeline Waveforms"
 msgstr ""
 
 msgid "Toggle Timeline Markers"
@@ -8426,9 +8505,6 @@ msgstr ""
 msgid "Area Selection Mode"
 msgstr ""
 
-msgid "Draw Mode"
-msgstr ""
-
 msgid "Erase Mode"
 msgstr ""
 
@@ -8474,49 +8550,16 @@ msgstr ""
 msgid "Toggle One Panel Only"
 msgstr ""
 
-msgid "Toggle Files Panel"
-msgstr ""
-
 msgid "Toggle Media Info Panel"
 msgstr ""
 
 msgid "Toggle Color Area Info Panel"
 msgstr ""
 
-msgid "Toggle Color Controls Panel"
-msgstr ""
-
-msgid "Toggle Compare Panel"
-msgstr ""
-
-msgid "Toggle Devices Panel"
-msgstr ""
-
 msgid "Toggle Annotation Panel"
 msgstr ""
 
-msgid "Toggle Background Panel"
-msgstr ""
-
-msgid "Toggle Settings Panel"
-msgstr ""
-
-msgid "Toggle Histogram Panel"
-msgstr ""
-
-msgid "Toggle Vectorscope Panel"
-msgstr ""
-
-msgid "Toggle Waveform Panel"
-msgstr ""
-
-msgid "Toggle Environment Map Panel"
-msgstr ""
-
 msgid "Toggle Preferences Window"
-msgstr ""
-
-msgid "Toggle Python Panel"
 msgstr ""
 
 msgid "Toggle Log Panel"

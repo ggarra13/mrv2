@@ -129,10 +129,27 @@ namespace tl
             return _frames;
         }
 
+        inline const std::vector<FrameSeq>& Path::getSeq() const
+        {
+            return _seq;
+        }
+
+        inline size_t Path::getSeqSize() const
+        {
+            return getFrameCount(_seq);
+        }
+
         inline bool Path::isSequence() const
         {
             return hasNumber() && _frames.has_value() &&
                 !_frames.value().equal();
+        }
+
+        inline bool Path::isPartialSeq() const
+        {
+            return
+                _seq.size() > 1 ||
+                (1 == _seq.size() && _seq[0].inc > 1 && !_seq[0].range.equal());
         }
 
         inline bool Path::hasSuffix() const

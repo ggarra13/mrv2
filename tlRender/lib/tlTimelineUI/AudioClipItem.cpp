@@ -3,6 +3,7 @@
 // All rights reserved.
 
 #include "AudioClipItem.h"
+#include "EffectItem.h"
 #include "ThumbnailSystem.h"
 
 #include <tlUI/DrawUtil.h>
@@ -26,9 +27,17 @@ namespace tl
 
             std::shared_ptr<ThumbnailSystem> thumbnailSystem;
 
+            //! Effect items.  These are children of the clip so they move,
+            //! hide and show together with it.
+            std::vector<std::shared_ptr<EffectItem> > effects;
+
             struct SizeData
             {
                 int dragLength = 0;
+
+                //! Total height taken by the effects (0 if hidden).
+                int effectsHeight = 0;
+
                 math::Box2i clipRect;
             };
             SizeData size;
@@ -69,6 +78,17 @@ namespace tl
             if (i != itemData->info.end())
             {
                 p.ioInfo = i->second;
+            }
+
+            // Create one item per effect.  They are laid out by
+            // AudioClipItem::setGeometry() between the clip info and the
+            // waveforms.
+            p.effects.reserve(clip->effects().size());
+            for (const auto& effect : clip->effects())
+            {
+                p.effects.push_back(EffectItem::create(
+                    effect, clip.value, scale, options, displayOptions,
+                    itemData, context, shared_from_this()));
             }
         }
 
@@ -115,7 +135,7 @@ namespace tl
         void AudioClipItem::setDisplayOptions(const DisplayOptions& value)
         {
             const bool thumbnailsChanged =
-                value.thumbnails != _displayOptions.thumbnails ||
+                value.waveforms != _displayOptions.waveforms ||
                 value.waveformWidth != _displayOptions.waveformWidth ||
                 value.waveformHeight != _displayOptions.waveformHeight ||
                 value.waveformPrim != _displayOptions.waveformPrim;
@@ -125,6 +145,34 @@ namespace tl
             {
                 _cancelRequests();
                 _updates |= ui::Update::Draw;
+            }
+        }
+
+        void AudioClipItem::setGeometry(const math::Box2i& value)
+        {
+            IBasicItem::setGeometry(value);
+            TLRENDER_P();
+
+            // Vertical layout of a clip:
+            //
+            //   clip info (name / duration)
+            //   effect 1
+            //   effect 2
+            //   ...
+            //   waveforms
+            //   markers
+            const math::Box2i g = _getInsideGeometry();
+            int y = g.min.y;
+            if (_displayOptions.clipInfo)
+            {
+                y += _getLineHeight() + _getMargin() * 2;
+            }
+            for (const auto& effect : p.effects)
+            {
+                const int h =
+                    _displayOptions.effects ? effect->getSizeHint().h : 0;
+                effect->setGeometry(math::Box2i(g.min.x, y, g.w(), h));
+                y += h;
             }
         }
 
@@ -186,7 +234,20 @@ namespace tl
             TLRENDER_P();
             p.size.dragLength = event.style->getSizeRole(
                 ui::SizeRole::DragLength, _displayScale);
-            if (_displayOptions.thumbnails)
+
+            // The effect items are children, so their size hints have
+            // already been calculated at this point.
+            p.size.effectsHeight = 0;
+            if (_displayOptions.effects)
+            {
+                for (const auto& effect : p.effects)
+                {
+                    p.size.effectsHeight += effect->getSizeHint().h;
+                }
+            }
+            _sizeHint.h += p.size.effectsHeight;
+
+            if (_displayOptions.waveforms)
             {
                 _sizeHint.h += _displayOptions.waveformHeight;
             }
@@ -210,7 +271,7 @@ namespace tl
             const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
             IBasicItem::drawEvent(drawRect, event);
-            if (_displayOptions.thumbnails)
+            if (_displayOptions.waveforms)
             {
                 _drawWaveforms(drawRect, event);
             }
@@ -225,10 +286,13 @@ namespace tl
             const int m = _getMargin();
             const int lineHeight = _getLineHeight();
 
+            // Waveforms go below the clip info and the effects.
+            const int waveformY =
+                g.min.y + (_displayOptions.clipInfo ? (lineHeight + m * 2) : 0) +
+                p.size.effectsHeight;
+
             const math::Box2i box(
-                g.min.x,
-                g.min.y + (_displayOptions.clipInfo ? (lineHeight + m * 2) : 0),
-                g.w(), _displayOptions.waveformHeight);
+                g.min.x, waveformY, g.w(), _displayOptions.waveformHeight);
             event.render->drawRect(box, image::Color4f(0.F, 0.F, 0.F));
             const timeline::ClipRectEnabledState clipRectEnabledState(
                 event.render);
@@ -254,11 +318,7 @@ namespace tl
                 for (int x = 0; x < w; x += _displayOptions.waveformWidth)
                 {
                     const math::Box2i box(
-                        g.min.x + x,
-                        g.min.y + (_displayOptions.clipInfo
-                                       ? (lineHeight + m * 2)
-                                       : 0),
-                        _displayOptions.waveformWidth,
+                        g.min.x + x, waveformY, _displayOptions.waveformWidth,
                         _displayOptions.waveformHeight);
                     if (math::intersects(box, clipRect))
                     {

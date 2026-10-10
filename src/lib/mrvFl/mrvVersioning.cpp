@@ -46,7 +46,7 @@ namespace mrv
         std::string suffix;
         std::string regex_string;
         static std::string short_prefix = "_v";
-        std::string orig = ui->uiPrefs->uiPrefsVersionRegex->value();
+        std::string orig = ui->uiPrefs->VersionRegex->value();
         if (orig.empty())
             orig = short_prefix;
 
@@ -96,7 +96,7 @@ namespace mrv
         bool found = false;
         int64_t start = std::numeric_limits<int>::max();
         std::string newfile, loadfile, suffix;
-        unsigned max_tries = ui->uiPrefs->uiPrefsMaxImagesApart->value();
+        unsigned max_tries = ui->uiPrefs->MaxImagesApart->value();
 
         std::string msg;
         std::string file = string::normalizePath(path.get());

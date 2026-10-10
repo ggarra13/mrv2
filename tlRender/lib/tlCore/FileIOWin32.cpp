@@ -6,6 +6,7 @@
 
 #include <tlCore/Error.h>
 #include <tlCore/Memory.h>
+#include <tlCore/Path.h>
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 
@@ -21,6 +22,10 @@
 #endif // NOMINMAX
 #include <sys/stat.h>
 #include <windows.h>
+
+#include <algorithm>
+#include <cstring>
+#include <limits>
 
 namespace tl
 {
@@ -69,7 +74,7 @@ namespace tl
                     break;
                 case ErrorType::ReadMemoryMap:
                     out = string::Format("{0}: Cannot read memory map")
-                              .arg(path);
+                          .arg(path);
                     break;
                 case ErrorType::Write:
                     out = string::Format("{0}: Cannot write").arg(path);
@@ -79,7 +84,7 @@ namespace tl
                     break;
                 case ErrorType::SeekMemoryMap:
                     out = string::Format("{0}: Cannot seek memory map")
-                              .arg(path);
+                          .arg(path);
                     break;
                 default:
                     break;
@@ -215,7 +220,8 @@ namespace tl
             if (!p.memoryStart && !p.f)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Read, p.path.u8string()));
+                    getErrorMessage(ErrorType::Read,
+                                    file::fromFileSystem(p.path)));
             }
 
             switch (p.mode)
@@ -229,7 +235,8 @@ namespace tl
                     {
                         throw std::runtime_error(
                             getErrorMessage(
-                                ErrorType::ReadMemoryMap, p.path.u8string()));
+                                ErrorType::ReadMemoryMap,
+                                file::fromFileSystem(p.path)));
                     }
                     if (p.endianConversion && wordSize > 1)
                     {
@@ -250,7 +257,8 @@ namespace tl
                     {
                         throw std::runtime_error(
                             getErrorMessage(
-                                ErrorType::Read, p.path.u8string(),
+                                ErrorType::Read,
+                                file::fromFileSystem(p.path),
                                 error::getLastError()));
                     }
                     if (p.endianConversion && wordSize > 1)
@@ -268,7 +276,7 @@ namespace tl
                 {
                     throw std::runtime_error(
                         getErrorMessage(
-                            ErrorType::Read, p.path.u8string(),
+                            ErrorType::Read, file::fromFileSystem(p.path),
                             error::getLastError()));
                 }
                 if (p.endianConversion && wordSize > 1)
@@ -290,7 +298,8 @@ namespace tl
             if (p.mode != Mode::Read && p.mode != Mode::ReadWrite)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Read, p.path.u8string()));
+                    getErrorMessage(ErrorType::Read,
+                                    file::fromFileSystem(p.path)));
             }
 
             const size_t byteCount = size * wordSize;
@@ -301,7 +310,7 @@ namespace tl
                         p.memoryStart ?
                         ErrorType::ReadMemoryMap :
                         ErrorType::Read,
-                        p.path.u8string()));
+                        file::fromFileSystem(p.path)));
             }
 
             if (p.memoryStart)
@@ -338,13 +347,16 @@ namespace tl
                     if (!::ReadFile(p.f, out, request, &n, &overlapped))
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::Read, p.path.u8string(),
+                            getErrorMessage(ErrorType::Read,
+                                            file::fromFileSystem(p.path),
                                             error::getLastError()));
                     }
                     if (0 == n)
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::Read, p.path.u8string()));
+                            getErrorMessage(ErrorType::Read,
+                                            file::fromFileSystem(p.path),
+                                            error::getLastError()));
                     }
                     out       += n;
                     offset    += n;
@@ -355,7 +367,8 @@ namespace tl
                 if (!::SetFilePointerEx(p.f, v, 0, FILE_BEGIN))
                 {
                     throw std::runtime_error(
-                        getErrorMessage(ErrorType::Seek, p.path.u8string(),
+                        getErrorMessage(ErrorType::Seek,
+                                        file::fromFileSystem(p.path),
                                         error::getLastError()));
                 }
                 if (p.endianConversion && wordSize > 1)
@@ -366,7 +379,8 @@ namespace tl
             else
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Read, p.path.u8string()));
+                    getErrorMessage(ErrorType::Read,
+                                    file::fromFileSystem(p.path)));
             }
         }
 
@@ -377,7 +391,8 @@ namespace tl
             if (!p.f)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Write, p.path.u8string()));
+                    getErrorMessage(ErrorType::Write,
+                                    file::fromFileSystem(p.path)));
             }
 
             const uint8_t* inP = reinterpret_cast<const uint8_t*>(in);
@@ -394,7 +409,8 @@ namespace tl
                     p.f, inP, static_cast<DWORD>(size * wordSize), &n, 0))
             {
                 throw std::runtime_error(getErrorMessage(
-                    ErrorType::Write, p.path.u8string(), error::getLastError()));
+                                             ErrorType::Write,
+                                             file::fromFileSystem(p.path), error::getLastError()));
             }
             p.pos += size * wordSize;
             p.size = std::max(p.pos, p.size);
@@ -454,7 +470,8 @@ namespace tl
             {
                 throw std::runtime_error(
                     getErrorMessage(
-                        ErrorType::Open, path.u8string(), error::getLastError()));
+                        ErrorType::Open, file::fromFileSystem(path),
+                        error::getLastError()));
             }
             p.path = path;
             p.mode = mode;
@@ -471,7 +488,8 @@ namespace tl
                 if (!p.memoryMap)
                 {
                     throw std::runtime_error(
-                        getErrorMessage(ErrorType::MemoryMap, path.u8string(),
+                        getErrorMessage(ErrorType::MemoryMap,
+                                        file::fromFileSystem(path),
                                         error::getLastError()));
                 }
 
@@ -479,7 +497,8 @@ namespace tl
                 if (!p.memoryStart)
                 {
                     throw std::runtime_error(
-                        getErrorMessage(ErrorType::MemoryMap, path.u8string()));
+                        getErrorMessage(ErrorType::MemoryMap,
+                                        file::fromFileSystem(path)));
                 }
 
                 p.memoryEnd = p.memoryStart + p.size;
@@ -509,7 +528,8 @@ namespace tl
                         if (error)
                         {
                             *error = getErrorMessage(
-                                ErrorType::CloseMemoryMap, p.path.u8string(),
+                                ErrorType::CloseMemoryMap,
+                                file::fromFileSystem(p.path),
                                 error::getLastError());
                         }
                     }
@@ -522,7 +542,8 @@ namespace tl
                     if (error)
                     {
                         *error = getErrorMessage(
-                            ErrorType::Close, p.path.u8string(),
+                            ErrorType::Close,
+                            file::fromFileSystem(p.path),
                             error::getLastError());
                     }
                 }
@@ -559,7 +580,8 @@ namespace tl
                     {
                         throw std::runtime_error(
                             getErrorMessage(
-                                ErrorType::SeekMemoryMap, path.u8string()));
+                                ErrorType::SeekMemoryMap,
+                                file::fromFileSystem(path)));
                     }
                     break;
                 case SeekMode::Forward:
@@ -568,7 +590,7 @@ namespace tl
                     {
                         throw std::runtime_error(
                             getErrorMessage(ErrorType::SeekMemoryMap,
-                                            path.u8string()));
+                                            file::fromFileSystem(path)));
                     }
                     break;
                 case SeekMode::Reverse:
@@ -577,7 +599,7 @@ namespace tl
                     {
                         throw std::runtime_error(
                             getErrorMessage(ErrorType::SeekMemoryMap,
-                                            path.u8string()));
+                                            file::fromFileSystem(path)));
                     }
                     break;
                 default: break;
@@ -603,7 +625,8 @@ namespace tl
                 {
                     throw std::runtime_error(
                         getErrorMessage(
-                            ErrorType::Seek, path.u8string(),
+                            ErrorType::Seek,
+                            file::fromFileSystem(path),
                             error::getLastError()));
                 }
             }
@@ -628,7 +651,25 @@ namespace tl
             }
         }
 
-        void truncate(const std::filesystem::path& path, size_t size)
+        void release(const void* p, size_t size)
+        {
+            // Windows does trim a process's mapped pages from its working set
+            // when memory runs low, but only once it is low: a bundle of 4K
+            // frames played through added a couple of gigabytes of mapped pages
+            // a second, and with the cache's own tens of gigabytes the machine
+            // ran out and stopped responding before it trimmed.
+            //
+            // Unlocking pages that are not locked takes them out of the working
+            // set; that it fails with ERROR_NOT_LOCKED is expected. Pages of a
+            // file mapping go to the standby list, still the file's cache and
+            // counted as available, and reading them again maps them back.
+            if (p && size > 0)
+            {
+                VirtualUnlock(const_cast<void*>(p), size);
+            }
+        }
+
+        void truncateFile(const std::filesystem::path& path, size_t size)
         {
             HANDLE h = INVALID_HANDLE_VALUE;
             try
@@ -649,7 +690,8 @@ namespace tl
             if (INVALID_HANDLE_VALUE == h)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Open, path.u8string(),
+                    getErrorMessage(ErrorType::Open,
+                                    file::fromFileSystem(path),
                                     error::getLastError()));
             }
             LARGE_INTEGER v;
@@ -662,14 +704,16 @@ namespace tl
             {
                 CloseHandle(h);
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Seek, path.u8string(),
+                    getErrorMessage(ErrorType::Seek,
+                                    file::fromFileSystem(path),
                                     error::getLastError()));
             }
             if (!::SetEndOfFile(h))
             {
                 CloseHandle(h);
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Write, path.u8string(),
+                    getErrorMessage(ErrorType::Write,
+                                    file::fromFileSystem(path),
                                     error::getLastError()));
             }
             CloseHandle(h);

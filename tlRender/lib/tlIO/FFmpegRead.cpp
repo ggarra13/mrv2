@@ -208,6 +208,7 @@ namespace tl
                             p.info.videoTime = p.readVideo ->getTimeRange();
                             p.info.tags = p.readVideo->getTags();
                         }
+                        p.infoReady.store(true, std::memory_order_release);
 
                         _run();
                     }
@@ -300,6 +301,17 @@ namespace tl
         std::future<io::Info> VideoRead::getInfo()
         {
             TLRENDER_P();
+            // The timeline asks for this on every frame it requests. Going
+            // through the video thread meant the timeline thread sat waiting
+            // for the decoder to finish whatever frame it was on (or a whole
+            // seek) before it could queue the next request or hand back a
+            // finished one.
+            if (p.infoReady.load(std::memory_order_acquire))
+            {
+                std::promise<io::Info> promise;
+                promise.set_value(p.info);
+                return promise.get_future();
+            }
             auto request = std::make_shared<Private::InfoRequest>();
             auto future = request->promise.get_future();
             bool valid = false;
@@ -421,40 +433,59 @@ namespace tl
                     request->promise.set_value(p.info);
                 }
 
-                // Check the cache.
+                // Check the cache. The key is built once and reused when the
+                // decoded frame is added below.
+                std::string cacheKey;
                 io::VideoData videoData;
                 if (videoRequest && p.cache)
                 {
-                    const std::string cacheKey = io::getVideoCacheKey(
+                    cacheKey = io::getVideoCacheKey(
                         _path, videoRequest->time, _options,
                         videoRequest->options);
                     if (p.cache->getVideo(cacheKey, videoData))
                     {
                         videoRequest->promise.set_value(videoData);
-                        videoRequest.reset();
+                        continue;
                     }
                 }
 
-                // Seek.
-                //
-                // \@note: Seeking on some large movies with inter-frame
-                //         compression can be slow, as FFmpeg returns the
-                //         closest 'F' frame.
-                //         When playing backwards, while we look for the
-                //         actual request time, we cache all previous 'F' and
-                //         'I' frames which allows us to play 4K movies
-                //         backwards with no issues.
-                bool backwards = false;
-                if (videoRequest && !videoRequest->time.strictly_equal(
-                        p.videoThread.currentTime))
-                {
-                    if (p.cache &&
-                        videoRequest->time < p.videoThread.currentTime)
-                        backwards = true;
-                    else
-                        p.videoThread.currentTime = videoRequest->time;
-                    p.readVideo->seek(videoRequest->time);
-                }
+               // Seek.
+               //
+               // \@note: Seeking on some large movies with inter-frame
+               //         compression can be slow, as FFmpeg returns the
+               //         closest 'F' frame.
+               //         When playing backwards, while we look for the
+               //         actual request time, we cache all previous 'F' and
+               //         'I' frames which allows us to play 4K movies
+               //         backwards with no issues.
+               bool backwards = false;
+               if (videoRequest)
+               {
+                   const double rate = p.info.videoTime->duration().rate();
+                   const double delta =
+                       (videoRequest->time.rescaled_to(rate) -
+                        p.videoThread.currentTime.rescaled_to(rate)).value();
+                   if (delta != 0.F)
+                   {
+                       if (delta > 0 &&
+                           p.readVideo->canDecodeForward(
+                               videoRequest->time, p.videoThread.currentTime))
+                       {
+                           // A short hop forward (typically over frames that
+                           // were served from the cache): keep decoding
+                           // from where we are. _decode() discards the
+                           // frames before the target. Seeking would flush
+                           // the decoder (and its frame threads) and restart
+                           // from the previous keyframe.
+                       }
+                       else
+                       {
+                           if (p.cache && delta < 0) backwards = true;
+                           else p.videoThread.currentTime = videoRequest->time;
+                           p.readVideo->seek(videoRequest->time);
+                       }
+                   }
+               }
 
                 // Process.
                 while (videoRequest && p.readVideo->isBufferEmpty() &&
@@ -465,8 +496,8 @@ namespace tl
                 {
                     if (backwards)
                     {
-                        if (videoRequest->time.strictly_equal(
-                                p.videoThread.currentTime))
+                        if (videoRequest->time.value() ==
+                            p.videoThread.currentTime.value())
                             break;
                         io::VideoData data;
                         data.time = p.videoThread.currentTime;
@@ -489,43 +520,50 @@ namespace tl
                         data.image = p.readVideo->popBuffer();
                     }
                     videoRequest->promise.set_value(data);
-                    _addToCache(data, videoRequest->options);
+                    if (p.cache)
+                    {
+                        if (cacheKey.empty())
+                            cacheKey = io::getVideoCacheKey(
+                                _path, data.time, _options,
+                                videoRequest->options);
+                        p.cache->addVideo(cacheKey, data);
+                    }
 
                     p.videoThread.currentTime +=
                         OTIO_NS::RationalTime(1.0,
                                             p.info.videoTime->duration().rate());
                 }
 
-                // Logging.
-                {
-                    const auto now = std::chrono::steady_clock::now();
-                    const std::chrono::duration<float> diff =
-                        now - p.videoThread.logTimer;
-                    if (diff.count() > 10.F)
-                    {
-                        p.videoThread.logTimer = now;
-                        if (auto logSystem = _logSystem.lock())
-                        {
-                            const std::string id =
-                                string::Format("tl::io::ffmpeg::Read {0}")
-                                    .arg(this);
-                            size_t requestsSize = 0;
-                            {
-                                std::unique_lock<std::mutex> lock(
-                                    p.videoMutex.mutex);
-                                requestsSize =
-                                    p.videoMutex.videoRequests.size();
-                            }
-                            logSystem->print(
-                                id, string::Format("\n"
-                                                   "    Path: {0}\n"
-                                                   "    Video requests: {1}")
-                                        .arg(_path.get())
-                                        .arg(requestsSize));
-                        }
-                    }
-                }
-            }
+                // // Logging.
+                // {
+                //     const auto now = std::chrono::steady_clock::now();
+                //     const std::chrono::duration<float> diff =
+                //         now - p.videoThread.logTimer;
+                //     if (diff.count() > 10.F)
+                //     {
+                //         p.videoThread.logTimer = now;
+                //         if (auto logSystem = _logSystem.lock())
+                //         {
+                //             const std::string id =
+                //                 string::Format("tl::io::ffmpeg::Read {0}")
+                //                     .arg(this);
+                //             size_t requestsSize = 0;
+                //             {
+                //                 std::unique_lock<std::mutex> lock(
+                //                     p.videoMutex.mutex);
+                //                 requestsSize =
+                //                     p.videoMutex.videoRequests.size();
+                //             }
+                //             logSystem->print(
+                //                 id, string::Format("\n"
+                //                                    "    Path: {0}\n"
+                //                                    "    Video requests: {1}")
+                //                         .arg(_path.get())
+                //                         .arg(requestsSize));
+                //         }
+                //     }
+                // } // Logging.
+            }  // whle runnig
         }
 
         void AudioRead::_init(
@@ -551,6 +589,7 @@ namespace tl
                         p.info.audio = p.readAudio->getInfo();
                         p.info.audioTime = p.readAudio->getTimeRange();
                         p.info.tags = p.readAudio->getTags();
+                        p.infoReady.store(true, std::memory_order_release);
 
                         _run();
                     }
@@ -707,6 +746,17 @@ namespace tl
         std::future<io::Info> AudioRead::getInfo()
         {
             TLRENDER_P();
+            // The timeline asks for this on every frame it requests. Going
+            // through the video thread meant the timeline thread sat waiting
+            // for the decoder to finish whatever frame it was on (or a whole
+            // seek) before it could queue the next request or hand back a
+            // finished one.
+            if (p.infoReady.load(std::memory_order_acquire))
+            {
+                std::promise<io::Info> promise;
+                promise.set_value(p.info);
+                return promise.get_future();
+            }
             auto request = std::make_shared<Private::InfoRequest>();
             auto future = request->promise.get_future();
             bool valid = false;
@@ -731,6 +781,7 @@ namespace tl
             p.audioThread.currentTime = p.info.audioTime->start_time();
             p.readAudio->start();
             p.audioThread.logTimer = std::chrono::steady_clock::now();
+            bool stale = false;
             while (p.audioThread.running)
             {
                 // Check requests.
@@ -745,26 +796,28 @@ namespace tl
                             { return (!_p->audioMutex.infoRequests.empty() ||
                                       !_p->audioMutex.requests.empty() ||
                                       !_p->audioThread.running); });
+
+                    // Check if we woke up to stop
+                    if (!p.audioThread.running)
+                        return;
+
+
+                    infoRequests = std::move(p.audioMutex.infoRequests);
+                    for (auto& request : infoRequests)
+                        request->promise.set_value(p.info);
+
+                    if (p.audioMutex.requests.empty())
+                        continue;
+
+                    request = p.audioMutex.requests.front();
+                    p.audioMutex.requests.pop_front();
                 }
 
-                // Check if we woke up to stop
-                if (!p.audioThread.running)
-                    return;
-
-
-                infoRequests = std::move(p.audioMutex.infoRequests);
-                for (auto& request : infoRequests)
-                    request->promise.set_value(p.info);
-
-                if (p.audioMutex.requests.empty())
-                    continue;
-
-                request = p.audioMutex.requests.front();
-                p.audioMutex.requests.pop_front();
                 requestSampleCount =
                     request->timeRange.duration()
                     .rescaled_to(p.info.audio.sampleRate)
                     .value();
+
                 if (!request->timeRange.start_time().strictly_equal(
                         p.audioThread.currentTime))
                 {
@@ -781,15 +834,18 @@ namespace tl
                         _path, request->timeRange, _options, request->options);
                     if (p.cache->getAudio(cacheKey, audioData))
                     {
+                        p.audioThread.currentTime += request->timeRange.duration();
                         request->promise.set_value(audioData);
-                        request.reset();
+                        stale = true;
+                        continue;
                     }
                 }
 
                 // Seek.
-                if (seek)
+                if (seek || stale)
                 {
                     p.readAudio->seek(p.audioThread.currentTime);
+                    stale = false;
                 }
 
                 // Process.
@@ -846,34 +902,34 @@ namespace tl
                     p.audioThread.currentTime += request->timeRange.duration();
                 }
 
-                // Logging.
-                {
-                    const auto now = std::chrono::steady_clock::now();
-                    const std::chrono::duration<float> diff =
-                        now - p.audioThread.logTimer;
-                    if (diff.count() > 10.F)
-                    {
-                        p.audioThread.logTimer = now;
-                        if (auto logSystem = _logSystem.lock())
-                        {
-                            const std::string id =
-                                string::Format("tl::io::ffmpeg::Read {0}")
-                                    .arg(this);
-                            size_t requestsSize = 0;
-                            {
-                                std::unique_lock<std::mutex> lock(
-                                    p.audioMutex.mutex);
-                                requestsSize = p.audioMutex.requests.size();
-                            }
-                            logSystem->print(
-                                id, string::Format("\n"
-                                                   "    Path: {0}\n"
-                                                   "    Audio requests: {1}")
-                                        .arg(_path.get())
-                                        .arg(requestsSize));
-                        }
-                    }
-                }
+                // // Logging.
+                // {
+                //     const auto now = std::chrono::steady_clock::now();
+                //     const std::chrono::duration<float> diff =
+                //         now - p.audioThread.logTimer;
+                //     if (diff.count() > 10.F)
+                //     {
+                //         p.audioThread.logTimer = now;
+                //         if (auto logSystem = _logSystem.lock())
+                //         {
+                //             const std::string id =
+                //                 string::Format("tl::io::ffmpeg::Read {0}")
+                //                     .arg(this);
+                //             size_t requestsSize = 0;
+                //             {
+                //                 std::unique_lock<std::mutex> lock(
+                //                     p.audioMutex.mutex);
+                //                 requestsSize = p.audioMutex.requests.size();
+                //             }
+                //             logSystem->print(
+                //                 id, string::Format("\n"
+                //                                    "    Path: {0}\n"
+                //                                    "    Audio requests: {1}")
+                //                         .arg(_path.get())
+                //                         .arg(requestsSize));
+                //         }
+                //     }
+                // }
             }
         }
 

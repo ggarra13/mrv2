@@ -31,3 +31,5 @@ ExternalProject_Add(
      LIST_SEPARATOR |
      CMAKE_ARGS ${jasper_ARGS}
 )
+
+set(jasper_DEP jasper)

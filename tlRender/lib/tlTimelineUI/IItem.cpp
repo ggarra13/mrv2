@@ -32,6 +32,8 @@ namespace tl
                    tracks == other.tracks && trackInfo == other.trackInfo &&
                    clipInfo == other.clipInfo &&
                    thumbnails == other.thumbnails &&
+                   waveforms == other.waveforms &&
+                   effects   == other.effects &&
                    thumbnailHeight == other.thumbnailHeight &&
                    waveformWidth == other.waveformWidth &&
                    waveformHeight == other.waveformHeight &&
@@ -65,20 +67,6 @@ namespace tl
         image::Color4f getMarkerColor(const std::string& value)
         {
             const std::map<std::string, image::Color4f> colors = {
-                //! \bug The OTIO marker variables are causing undefined
-                //! symbol errors on Linux and macOS.
-                /*{OTIO_NS::Marker::Color::pink, image::Color4f(1.F, .752F,
-                .796F)}, { OTIO_NS::Marker::Color::red, image::Color4f(1.F, 0.F,
-                0.F) }, { OTIO_NS::Marker::Color::orange, image::Color4f(1.F, .75F,
-                0.F) }, { OTIO_NS::Marker::Color::yellow, image::Color4f(1.F, 1.F,
-                0.F) }, { OTIO_NS::Marker::Color::green, image::Color4f(0.F, 1.F,
-                0.F) }, { OTIO_NS::Marker::Color::cyan,
-                image::Color4f(0.F, 1.F, 1.F) }, { OTIO_NS::Marker::Color::blue,
-                image::Color4f(0.F, 0.F, 1.F) }, { OTIO_NS::Marker::Color::purple,
-                image::Color4f(0.5F, 0.F, .5F) }, {
-                OTIO_NS::Marker::Color::magenta, image::Color4f(1.F, 0.F, 1.F) },
-                { OTIO_NS::Marker::Color::black, image::Color4f(0.F, 0.F, 0.F) },
-                { OTIO_NS::Marker::Color::white, image::Color4f(1.F, 1.F, 1.F) }*/
                 {"PINK", image::Color4f(1.F, .752F, .796F)},
                 {"RED", image::Color4f(1.F, 0.F, 0.F)},
                 {"ORANGE", image::Color4f(1.F, .75F, 0.F)},
@@ -276,6 +264,8 @@ namespace tl
             j["trackInfo"] = value.trackInfo;
             j["clipInfo"] = value.clipInfo;
             j["thumbnails"] = value.thumbnails;
+            j["waveforms"] = value.waveforms;
+            j["effects"] = value.effects;
             j["thumbnailHeight"] = value.thumbnailHeight;
             j["waveformWidth"] = value.waveformHeight;
             j["waveformHeight"] = value.waveformHeight;
@@ -288,6 +278,11 @@ namespace tl
             j.at("trackInfo").get_to(value.trackInfo);
             j.at("clipInfo").get_to(value.clipInfo);
             j.at("thumbnails").get_to(value.thumbnails);
+            value.waveforms = true;
+            if (j.contains("waveforms"))
+                j.at("waveforms").get_to(value.waveforms);
+            if (j.contains("effects"))
+                j.at("effects").get_to(value.effects);
             j.at("thumbnailHeight").get_to(value.thumbnailHeight);
             j.at("waveformWidth").get_to(value.waveformWidth);
             j.at("waveformHeight").get_to(value.waveformHeight);

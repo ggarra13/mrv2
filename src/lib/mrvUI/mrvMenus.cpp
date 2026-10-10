@@ -422,62 +422,130 @@ namespace mrv
             std::string menu_root = menu_panel_root;
 
             mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
+            Fl_Callback* callback_function = (Fl_Callback*)window_cb;
             unsigned hotkey = 0;
             if (tmp == "Files")
+            {
                 hotkey = kToggleReel.hotkey();
+                callback_function = (Fl_Callback*)files_panel_cb;
+            }
             else if (tmp == "Media Information")
+            {
                 hotkey = kToggleMediaInfo.hotkey();
+                callback_function = (Fl_Callback*)image_info_panel_cb;
+            }
             else if (tmp == "Color Info")
+            {
                 hotkey = kToggleColorInfo.hotkey();
+            }
             else if (tmp == "Color")
+            {
                 hotkey = kToggleColorControls.hotkey();
+                callback_function = (Fl_Callback*)color_panel_cb;
+            }
             else if (tmp == "Color Area")
+            {
                 hotkey = kToggleColorInfo.hotkey();
+                callback_function = (Fl_Callback*)color_area_panel_cb;
+            }
             else if (tmp == "Compare")
+            {
                 hotkey = kToggleCompare.hotkey();
+                callback_function = (Fl_Callback*)compare_panel_cb;
+            }
             else if (tmp == "Devices")
+            {
                 hotkey = kToggleDevices.hotkey();
+                // callback_function = (Fl_Callback*)devices_panel_cb;
+            }
             else if (tmp == "Settings")
+            {
                 hotkey = kToggleSettings.hotkey();
+                callback_function = (Fl_Callback*)settings_panel_cb;
+            }
             else if (tmp == "Annotations")
+            {
                 hotkey = kToggleAnnotation.hotkey();
+                callback_function = (Fl_Callback*)annotations_panel_cb;
+            }
             else if (tmp == "Histogram")
+            {
                 hotkey = kToggleHistogram.hotkey();
+                callback_function = (Fl_Callback*)histogram_panel_cb;
+            }
             else if (tmp == "Vectorscope")
+            {
                 hotkey = kToggleVectorscope.hotkey();
+                callback_function = (Fl_Callback*)vectorscope_panel_cb;
+            }
             else if (tmp == "Environment Map")
+            {
                 hotkey = kToggleEnvironmentMap.hotkey();
+                callback_function = (Fl_Callback*)environment_map_panel_cb;
+            }
             else if (tmp == "Waveform")
+            {
                 hotkey = kToggleWaveform.hotkey();
+                callback_function = (Fl_Callback*)waveform_panel_cb;
+            }
             else if (tmp == "NDI")
+            {
                 hotkey = kToggleNDI.hotkey();
+                callback_function = (Fl_Callback*)ndi_panel_cb;
+            }
             else if (tmp == "Notes")
+            {
                 hotkey = kToggleNotes.hotkey();
+                callback_function = (Fl_Callback*)notes_panel_cb;
+            }
             else if (tmp == "WebRTC")
+            {
                 hotkey = kToggleWebRTC.hotkey();
+                callback_function = (Fl_Callback*)webrtc_panel_cb;
+            }
             else if (tmp == "USD")
+            {
                 hotkey = kToggleUSD.hotkey();
+                callback_function = (Fl_Callback*)usd_panel_cb;
+            }
             else if (tmp == "Statistics")
+            {
                 hotkey = 0; //kToggleStats.hotkey();
+                callback_function = (Fl_Callback*)stats_panel_cb;
+            }
             else if (tmp == "Stereo 3D")
+            {
                 hotkey = kToggleStereo3D.hotkey();
+                callback_function = (Fl_Callback*)stereo3D_panel_cb;
+            }
             else if (tmp == "Background")
+            {
                 hotkey = kToggleBackground.hotkey();
+                callback_function = (Fl_Callback*)background_panel_cb;
+            }
             else if (tmp == "Python")
+            {
                 hotkey = kTogglePythonConsole.hotkey();
+                callback_function = (Fl_Callback*)python_panel_cb;
+            }
             else if (tmp == "Logs")
+            {
                 hotkey = kToggleLogs.hotkey();
+                callback_function = (Fl_Callback*)logs_panel_cb;
+            }
             else if (tmp == "Hotkeys")
             {
                 menu_root = menu_window_root;
                 hotkey = kToggleHotkeys.hotkey();
-                mode = 0;
+                callback_function = (Fl_Callback*)hotkeys_window_cb;
+                mode = FL_MENU_CHATTY;
             }
             else if (tmp == "Preferences")
             {
                 menu_root = menu_window_root;
                 hotkey = kTogglePreferences.hotkey();
-                mode = 0;
+                callback_function = (Fl_Callback*)preferences_window_cb;
+                mode = FL_MENU_CHATTY;
             }
             else if (tmp == "About")
             {
@@ -491,8 +559,8 @@ namespace mrv
 
             tmp = pair.first;
             std::string menu_name = menu_root + tmp + "\t";
-            int idx = menu->add(
-                menu_name.c_str(), hotkey, (Fl_Callback*)window_cb, ui);
+            idx = menu->add(
+                menu_name.c_str(), hotkey, (Fl_Callback*)callback_function, ui, mode);
             item = const_cast<Fl_Menu_Item*>(&menu->menu()[idx]);
             if (tmp == _("Files"))
             {
@@ -1213,10 +1281,10 @@ namespace mrv
             mode |= FL_MENU_INACTIVE;
 
         const char* tmp;
-        size_t num = ui->uiPrefs->uiPrefsCropArea->children();
+        size_t num = ui->uiPrefs->CropArea->children();
         for (size_t i = 0; i < num; ++i)
         {
-            tmp = ui->uiPrefs->uiPrefsCropArea->child(i)->label();
+            tmp = ui->uiPrefs->CropArea->child(i)->label();
             if (!tmp)
                 continue;
             /* xgettext:c-format */
@@ -1309,16 +1377,48 @@ namespace mrv
         if (displayOptions.clipInfo)
             item->set();
 
-        mode = FL_MENU_CHATTY | FL_MENU_RADIO;
+        mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
-        int thumbnails_none = 0;
-        int thumbnails_small = 0;
+        idx = menu->add(
+            _("Timeline/Thumbnails"), kToggleTimelineThumbnails.hotkey(),
+            (Fl_Callback*)toggle_timeline_thumbnails_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (displayOptions.thumbnails)
-            thumbnails_none = kToggleTimelineThumbnails.hotkey();
-        else
-            thumbnails_small = kToggleTimelineThumbnails.hotkey();
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Waveforms"), kToggleTimelineWaveforms.hotkey(),
+            (Fl_Callback*)toggle_timeline_waveforms_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.waveforms)
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Transitions"), kToggleTimelineTransitions.hotkey(),
+            (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.transitions)
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Effects"), kToggleTimelineEffects.hotkey(),
+            (Fl_Callback*)toggle_timeline_effects_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.effects)
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Markers"), kToggleTimelineMarkers.hotkey(),
+            (Fl_Callback*)toggle_timeline_markers_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.markers)
+            item->set();
+
+        mode = FL_MENU_CHATTY | FL_MENU_RADIO;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
 
         const float kPixels_per_unit = ui->uiView->pixels_per_unit();
         const int kSmall = 50 * kPixels_per_unit;
@@ -1326,44 +1426,22 @@ namespace mrv
         const int kLarge = 100 * kPixels_per_unit;
 
         idx = menu->add(
-            _("Timeline/Thumbnails/None"), thumbnails_none,
-            (Fl_Callback*)timeline_thumbnails_none_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (!displayOptions.thumbnails)
-            item->set();
-        idx = menu->add(
-            _("Timeline/Thumbnails/Small"), thumbnails_small,
+            _("Timeline/Thumbnails Size/Small"), 0,
             (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kSmall)
+        if (displayOptions.thumbnailHeight == kSmall)
             item->set();
         idx = menu->add(
-            _("Timeline/Thumbnails/Medium"), 0,
+            _("Timeline/Thumbnails Size/Medium"), 0,
             (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kMedium)
+        if (displayOptions.thumbnailHeight == kMedium)
             item->set();
         idx = menu->add(
-            _("Timeline/Thumbnails/Large"), 0,
+            _("Timeline/Thumbnails Size/Large"), 0,
             (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kLarge)
-            item->set();
-
-        mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-        idx = menu->add(
-            _("Timeline/Transitions"), kToggleTimelineTransitions.hotkey(),
-            (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.transitions)
-            item->set();
-        idx = menu->add(
-            _("Timeline/Markers"), kToggleTimelineMarkers.hotkey(),
-            (Fl_Callback*)toggle_timeline_markers_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.markers)
             item->set();
 
         std::vector<std::string> tracks;
@@ -1939,7 +2017,7 @@ namespace mrv
                 if (pathname[0] != '/')
                     colorSpace += '/';
                 colorSpace += pathname;
-                int idx = menu->add(
+                idx = menu->add(
                     colorSpace.c_str(), 0,
                     (Fl_Callback*)all_monitors_ocio_view_cb, ui,
                     FL_MENU_TOGGLE);
@@ -1978,7 +2056,7 @@ namespace mrv
                 if (pathname[0] != '/')
                     colorSpace += '/';
                 colorSpace += pathname;
-                int idx = menu->add(
+                idx = menu->add(
                     colorSpace.c_str(), 0, (Fl_Callback*)monitor_ocio_view_cb,
                     ui, FL_MENU_TOGGLE);
                 {

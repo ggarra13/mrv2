@@ -11,6 +11,7 @@
 
 #include "mrvFLTK/mrvCallbacks.h"
 
+#include "mrvWidgets/mrvAnnotationInput.h"
 #include "mrvWidgets/mrvAnnotationGroup.h"
 #include "mrvWidgets/mrvAnnotationWidget.h"
 #include "mrvWidgets/mrvLayoutUtil.h"
@@ -128,21 +129,30 @@ namespace mrv
         button_->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
         button_->labelsize(16);
         button_->box(FL_FLAT_BOX);
-        button_->labelcolor(Fl_Color(254));
-        button_->color(Fl_Color(255)); //
+        button_->labelcolor(ann_colors::text());
+        button_->color(ann_colors::header_bg()); //
         button_->callback((Fl_Callback*)toggle_tab_cb, this);
 
         add_btn_ = new Fl_Button(x + w - (GROUP_MARGIN + TOOLS_MARGIN * 2),
                                  y + GROUP_MARGIN,
                                  TOOLS_MARGIN, BUTTON_H, "+");
-        add_btn_->copy_tooltip(_("Add a new note at the current time."));
-        add_btn_->callback(add_button_cb, this);
-
         remove_btn_ = new Fl_Button(x + w - (GROUP_MARGIN + TOOLS_MARGIN),
                                     y + GROUP_MARGIN,
                                     TOOLS_MARGIN, BUTTON_H, "-");
+
+        add_btn_->copy_tooltip(_("Add a new note at the current time."));
+        add_btn_->callback(add_button_cb, this);
+
         remove_btn_->copy_tooltip(_("Remove the current note."));
         remove_btn_->callback(remove_button_cb, this);
+
+        for (Fl_Button* b : {add_btn_, remove_btn_})
+        {
+            b->box(FL_UP_BOX);
+            b->color(ann_colors::header_bg());
+            b->labelcolor(ann_colors::text());
+            b->labelsize(16);
+        }
 
         contents_ = new Pack(
             button_->x(),                    // lines up with button on x
@@ -153,10 +163,11 @@ namespace mrv
         empty_box_ = new Fl_Box(
             contents_->x(), contents_->y(), contents_->w(), 32,
             _("No annotations added yet."));
+
         empty_box_->box(FL_NO_BOX);
         empty_box_->labelfont(FL_HELVETICA_ITALIC);
         empty_box_->labelsize(12);
-        empty_box_->labelcolor(fl_gray_ramp(10));
+        empty_box_->labelcolor(ann_colors::date_text());
         empty_box_->align(FL_ALIGN_CENTER);
 
         // end() contents_; we don't want it to begin() sucking up child widgets
@@ -312,14 +323,12 @@ namespace mrv
         for (AnnotationWidget *w : annotations_) {
             if (time.almost_equal(w->time(), 1e-5))
             {
-                w->color(FL_CYAN);
-                w->redraw();
+                w->at_current_time(true);
             }
             else
             {
                 w->set_collapsed(true);
-                w->color(FL_BACKGROUND_COLOR);
-                w->redraw();
+                w->at_current_time(false);
             }
         }
     }
@@ -359,6 +368,24 @@ namespace mrv
 
         relabel_button(); // relabel button once pack created
         redraw();
+    }
+
+    void AnnotationGroup::draw()
+    {
+#if 0
+        fl_push_clip(x(), y(), w(), h());
+
+        fl_color(ann_colors::panel_bg());
+        fl_rectf(x(), y(), w(), h());
+
+        fl_color(ann_colors::header_bg());
+        fl_rectf(x(), y(), w(), button_->h() + GROUP_MARGIN * 2);
+
+        draw_children();
+        fl_pop_clip();
+#else
+        Fl_Group::draw();
+#endif
     }
 
     void AnnotationGroup::enforce_single_active(AnnotationWidget *keep_active)

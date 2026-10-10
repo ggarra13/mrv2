@@ -51,6 +51,7 @@ set(HEADERS
     Path.h
     PathInline.h
     PathMapping.h
+    Quantize.h
     Random.h
     RandomInline.h
     Range.h
@@ -100,6 +101,7 @@ set(SOURCE
     OS.cpp
     Path.cpp
     PathMapping.cpp
+    Quantize.cpp
     Random.cpp
     Range.cpp
     Size.cpp

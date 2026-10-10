@@ -178,7 +178,7 @@ namespace mrv
             m->align(FL_ALIGN_CENTER | FL_ALIGN_CLIP);
 
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     if (o->size() < 3)
                         return;
@@ -220,7 +220,7 @@ namespace mrv
             m->add(_("Best Format"));
             val = settings->getValue<int>("NDI/Input/Format");
             m->value(val);
-            mW->callback([=](auto b)
+            mW->callback([=, this](auto b)
                 {
                     int value = b->value();
                     settings->setValue("NDI/Input/Format", value);
@@ -236,7 +236,7 @@ namespace mrv
             m->add(_("Without Audio"));
             val = settings->getValue<int>("NDI/Input/Audio");
             m->value(val);
-            mW->callback([=](auto b)
+            mW->callback([=, this](auto b)
                 {
                     int value = b->value();
                     settings->setValue("NDI/Input/Audio", value);
@@ -282,7 +282,7 @@ namespace mrv
             bW->labelsize(12);
             bW->selection_color(FL_YELLOW);
             bW->callback(
-                [=](auto b)
+                [=, this](auto b)
                     {
                         _ndi_output(b);
                     });
@@ -317,7 +317,7 @@ namespace mrv
             }
             val = settings->getValue<int>("NDI/Output/Format");
             m->value(val);
-            mW->callback([=](auto b)
+            mW->callback([=, this](auto b)
                 {
                     int value = b->value();
                     settings->setValue("NDI/Output/Format", value);
@@ -343,7 +343,7 @@ namespace mrv
             m->add(_("Without Audio"));
             val = settings->getValue<int>("NDI/Output/Audio");
             m->value(val);
-            mW->callback([=](auto b)
+            mW->callback([=, this](auto b)
                 {
                     int value = b->value();
                     settings->setValue("NDI/Output/Audio", value);
@@ -367,7 +367,7 @@ namespace mrv
             m->add(_("Without Metadata"));
             val = settings->getValue<int>("NDI/Output/Metadata");
             m->value(val);
-            mW->callback([=](auto b)
+            mW->callback([=, this](auto b)
                 {
                     int value = b->value();
                     settings->setValue("NDI/Output/Metadata", value);

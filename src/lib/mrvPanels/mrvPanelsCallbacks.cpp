@@ -61,7 +61,7 @@ namespace mrv
         {
             using namespace panel;
             if (!force &&
-                App::ui->uiPrefs->uiPrefsManualPanelThumbnails->value())
+                App::ui->uiPrefs->ManualPanelThumbnails->value())
                 return;
             if (filesPanel)
             {
@@ -203,6 +203,18 @@ namespace mrv
 
         void color_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Color Controls Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -222,6 +234,18 @@ namespace mrv
 
         void files_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Files Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -241,6 +265,18 @@ namespace mrv
 
         void compare_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Compare Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -260,6 +296,18 @@ namespace mrv
 
         void settings_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Settings Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -281,6 +329,17 @@ namespace mrv
         void python_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
 #ifdef MRV2_PYBIND11
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Python Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -297,7 +356,7 @@ namespace mrv
             }
             pythonPanel = new PythonPanel(ui);
 #    ifdef __APPLE__
-            if (!ui->uiPrefs->uiPrefsMacOSMenus->value())
+            if (!ui->uiPrefs->MacOSMenus->value())
 #    endif
                 ui->uiMain->fill_menu(ui->uiMenuBar);
 #endif
@@ -305,6 +364,17 @@ namespace mrv
 
         void logs_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Logs Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
             // Logs panel is not sent nor received.
             if (logsPanel)
             {
@@ -319,6 +389,18 @@ namespace mrv
 
         void devices_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Devices Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -339,6 +421,18 @@ namespace mrv
 
         void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Color Area Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -359,6 +453,18 @@ namespace mrv
 
         void notes_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Notes Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -379,6 +485,18 @@ namespace mrv
 
         void annotations_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Annotations Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -399,6 +517,18 @@ namespace mrv
 
         void background_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Background Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -418,6 +548,18 @@ namespace mrv
 
         void image_info_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Image Info Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -438,6 +580,18 @@ namespace mrv
 
         void histogram_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Histogram Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -458,6 +612,18 @@ namespace mrv
 
         void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Vectorscope Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -478,6 +644,18 @@ namespace mrv
 
         void waveform_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Waveform Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -498,6 +676,18 @@ namespace mrv
 
         void environment_map_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Environment Map Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -519,6 +709,18 @@ namespace mrv
         void ndi_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
 #ifdef TLRENDER_NDI
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle NDI Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -539,6 +741,18 @@ namespace mrv
         void webrtc_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
 #ifdef MRV2_NETWORK
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle WebRTC Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -561,6 +775,18 @@ namespace mrv
         void usd_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
 #ifdef TLRENDER_USD
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle USD Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -580,6 +806,18 @@ namespace mrv
 
         void stats_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Statistics Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -599,6 +837,18 @@ namespace mrv
 
         void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Toggle Stereo3D Panel"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -614,6 +864,38 @@ namespace mrv
             }
             stereo3DPanel = new Stereo3DPanel(ui);
             ui->uiMain->fill_menu(ui->uiMenuBar);
+        }
+
+        void hotkeys_window_cb(Fl_Menu_* w, ViewerUI* ui)
+        {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Show Hotkeys Window"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+            window_cb(w, ui);
+        }
+
+        void preferences_window_cb(Fl_Menu_* w, ViewerUI* ui)
+        {
+            switch(Fl::callback_reason())
+            {
+            case FL_REASON_GOT_FOCUS:
+                App::ui->uiStatusBar->message(_("Show Preferences Window"));
+                return;
+            case FL_REASON_LOST_FOCUS:
+                App::ui->uiStatusBar->message("");
+                return;
+            default:
+                break;
+            }
+            window_cb(w, ui);
         }
 
         void syncPanels(const std::string& peerId)

@@ -1700,7 +1700,7 @@ namespace mrv
         release_license();
 
         // Remove any temporary EDLs in tmppath
-        if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
+        if (ui->uiPrefs->RemoveEDLs->value())
             removeTemporaryEDLs(ui);
 
         // Remove thumbnail system.
@@ -2522,7 +2522,7 @@ namespace mrv
             view->setTimelinePlayer(ui->uiView->getTimelinePlayer());
             window->show();
 
-            bool value = ui->uiPrefs->uiPrefsSecondaryOnTop->value();
+            bool value = ui->uiPrefs->SecondaryOnTop->value();
             window->always_on_top(value);
 
             view->frameView();
@@ -2675,28 +2675,22 @@ namespace mrv
             ui);
     }
 
-    void window_cb(Fl_Menu_* m, ViewerUI* ui)
+    void window_cb(Fl_Menu_* m, void* data)
     {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+        case FL_REASON_LOST_FOCUS:
+            return;
+        default:
+            break;
+        }
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         std::string label_with_tab = item->text;
         auto label = label_with_tab;
         if (label_with_tab[label_with_tab.size() - 1] == '\t')
             label = label_with_tab.substr(0, label_with_tab.size() - 1);
-        switch(Fl::callback_reason())
-        {
-        case FL_REASON_GOT_FOCUS:
-        {
-            std::string msg = tl::string::Format(_("Show {0} Window.")).arg(label);
-            ui->uiStatusBar->message(msg.c_str());
-            return;
-        }
-        case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->message("");
-            return;
-        default:
-            break;
-        }
-        show_window_cb(label, ui);
+        show_window_cb(label, App::ui);
     }
 
     void about_cb(Fl_Widget* w, ViewerUI* ui)
@@ -2704,10 +2698,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->message(_("Show About Window."));
+            App::ui->uiStatusBar->message(_("Show About Window."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->message("");
+            App::ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -2815,10 +2809,10 @@ namespace mrv
         switch(Fl::callback_reason())
         {
         case FL_REASON_GOT_FOCUS:
-            ui->uiStatusBar->message(_("Toggle Action Dock (Annotations/Edit tools)."));
+            App::ui->uiStatusBar->message(_("Toggle Action Dock (Annotations/Edit tools)."));
             return;
         case FL_REASON_LOST_FOCUS:
-            ui->uiStatusBar->message("");
+            App::ui->uiStatusBar->message("");
             return;
         default:
             break;
@@ -4216,7 +4210,61 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void timeline_thumbnails_none_cb(Fl_Menu_* m, ViewerUI* ui)
+    void timeline_waveforms_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Toggle Waveforms in Timeline "
+                                          "Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        auto options = ui->uiTimeline->getDisplayOptions();
+        options.waveforms = false;
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setDisplayOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_waveforms_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Toggle Waveforms in Timeline "
+                                          "Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        auto options = ui->uiTimeline->getDisplayOptions();
+        options.waveforms ^= true;
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setDisplayOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_thumbnails_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         switch(Fl::callback_reason())
         {
@@ -4231,7 +4279,7 @@ namespace mrv
             break;
         }
         auto options = ui->uiTimeline->getDisplayOptions();
-        options.thumbnails = false;
+        options.thumbnails ^= true;
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
@@ -4389,6 +4437,33 @@ namespace mrv
         options.clipInfo = item->value();
         auto settings = ui->app->settings();
         settings->setValue("Timeline/ClipInfo", options.clipInfo);
+        Message msg;
+        msg["command"] = "setTimelineDisplayOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setDisplayOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_effects_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Toggle Effects in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        auto options = ui->uiTimeline->getDisplayOptions();
+        options.effects = item->value();
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
@@ -5303,7 +5378,8 @@ namespace mrv
         if (files.size() < 1)
             return;
 
-        auto player = app->ui->uiView->getTimelinePlayer();
+        ViewerUI* ui = app->ui;
+        auto player = ui->uiView->getTimelinePlayer();
         const auto& time = player->currentTime();
 
         auto origIndex = model->observeAIndex()->get();
@@ -5314,7 +5390,8 @@ namespace mrv
 
         // If a sequence, make sure to reinit it as it
         // may have changed length due to Loading->Gap Frames
-        if (file::isSequence(media->path))
+        bool isSequence = file::isSequence(media->path);
+        if (isSequence)
             item->init = false;
 
         // Paths
@@ -5348,14 +5425,23 @@ namespace mrv
         item->ocioLook = media->ocioLook;
         item->lutOptions = media->lutOptions;
 
+        int autoPlayback = ui->uiPrefs->AutoPlayback->value();
+        ui->uiPrefs->AutoPlayback->value(0);
         model->replace(origIndex, item);
 
         auto newIndex = model->observeAIndex()->get();
         model->setA(newIndex);
 
+        ui->uiPrefs->AutoPlayback->value(autoPlayback);
+
         if (item->playback != timeline::Playback::Stop)
         {
             App::app->startPlayback();
+        }
+        else
+        {
+            player = ui->uiView->getTimelinePlayer();
+            player->seek(time);
         }
     }
 

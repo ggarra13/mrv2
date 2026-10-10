@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.4.3)  # was v2.4.1
+set(FLTK_GIT_TAG v2.4.4)  # was v2.4.3
 
 if(MRV2_VK)
     message(STATUS "Using ggarra13's private FLTK branch")
@@ -146,7 +146,7 @@ ExternalProject_Add(
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH_TMP}
     -DCMAKE_C_FLAGS=${FLTK_C_FLAGS}
     -DCMAKE_CXX_FLAGS=${FLTK_CXX_FLAGS}
-    -DCMAKE_CXX_STANDARD=17  # 17 needed for VMA
+    -DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}  # 17 needed for VMA
     -DCMAKE_INSTALL_MESSAGE=${CMAKE_INSTALL_MESSAGE}
 
     -DFLTK_BACKEND_WAYLAND=${TLRENDER_WAYLAND}

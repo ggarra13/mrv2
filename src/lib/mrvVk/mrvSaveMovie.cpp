@@ -119,9 +119,6 @@ namespace mrv
 
         // Get I/O cache and store its size.
         auto ioSystem = context->getSystem<io::WriteSystem>();
-        // auto cache = ioSystem->getCache();
-
-        // size_t oldCacheSize = cache->getMax();
 
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
@@ -178,6 +175,17 @@ namespace mrv
                 ioOptions["FFmpeg/ColorPrimaries"] =
                     options.ffmpegColorPrimaries;
                 ioOptions["FFmpeg/ColorTRC"] = options.ffmpegColorTRC;
+            }
+            else
+            {
+                auto hdrOptions = view->getHDROptions();
+                if (tl::image::isHDR(hdrOptions.hdrData))
+                {
+                    ioOptions["FFmpeg/ColorRange"] = "TV (Legal Range)";
+                    ioOptions["FFmpeg/ColorSpace"] = "bt2020nc";
+                    ioOptions["FFmpeg/ColorPrimaries"] = "bt2020";
+                    ioOptions["FFmpeg/ColorTRC"] = "bt2100 (smpte2084)";
+                }
             }
 #endif
 
@@ -303,8 +311,8 @@ namespace mrv
                 {
                     LOG_WARNING(
                         _("VP9 profile needs a .mp4, .mkv or .webm movie "
-                          "extension.  Changing it to .mp4"));
-                    newExtension = ".mp4";
+                          "extension.  Changing it to .mkv"));
+                    newExtension = ".mkv";
                 }
             }
             else if (profile == "AV1")
@@ -678,9 +686,9 @@ namespace mrv
                 {
                     writer->setHDR(*hdrData);
                 }
-                writer->writeHeader();
             }
 
+            writer->writeHeader();
 
             // Turn off hud so it does not get captured by readPixels.
             view->setHudActive(false);
@@ -1107,7 +1115,7 @@ namespace mrv
             view->setOCIOOptions(savedOCIOOptions);
         }
 
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setPresentationMode(presentation);
         view->setShowVideo(true);

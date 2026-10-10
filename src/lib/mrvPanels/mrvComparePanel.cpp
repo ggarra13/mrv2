@@ -144,7 +144,7 @@ namespace mrv
             if (player)
                 time = player->currentTime();
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsComparePanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->ComparePanelThumbnails->value();
             size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
@@ -194,7 +194,7 @@ namespace mrv
                     }
                 }
                 bW->callback(
-                    [=](auto b)
+                    [=, this](auto b)
                     {
                         WidgetIndices::const_iterator it = _r->indices.find(b);
                         if (it == _r->indices.end())
@@ -246,7 +246,7 @@ namespace mrv
             pm->value(v);
             pm->tooltip(_("Select between Relative or Absolute Compare Time Mode"));
             cMode->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto o = static_cast<timeline::CompareTimeMode>(w->value());
                     model->setCompareTime(o);
@@ -263,7 +263,7 @@ namespace mrv
             cB->value(o.fitToA);
             cB->tooltip(_("Fit All clips to the size of the first clip."));
             cFitA->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto o = model->observeCompareOptions()->get();
                     o.fitToA = w->value();
@@ -281,7 +281,7 @@ namespace mrv
             b->bind_image(MRV2_LOAD_SVG(CompareA));
             b->tooltip(_("Compare A"));
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_a_cb(nullptr, p.ui);
                 });
@@ -292,7 +292,7 @@ namespace mrv
             b->tooltip(_("Compare B"));
 
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_b_cb(nullptr, p.ui);
                 });
@@ -315,7 +315,7 @@ namespace mrv
             );
 
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_wipe_cb(nullptr, p.ui);
                 });
@@ -327,7 +327,7 @@ namespace mrv
                 _("Overlay the A and B files with optional transparencyy"));
 
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_overlay_cb(nullptr, p.ui);
                 });
@@ -338,7 +338,7 @@ namespace mrv
             b->tooltip(_("Difference the A and B files"));
 
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_difference_cb(nullptr, p.ui);
                 });
@@ -349,7 +349,7 @@ namespace mrv
             b->tooltip(_("Compare the A and B files side by side"));
 
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_horizontal_cb(nullptr, p.ui);
                 });
@@ -360,7 +360,7 @@ namespace mrv
             b->tooltip(_("Show the A file above the B file"));
 
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_vertical_cb(nullptr, p.ui);
                 });
@@ -371,7 +371,7 @@ namespace mrv
             b->tooltip(_("Tile the A and B files"));
 
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_tile_cb(nullptr, p.ui);
                 });
@@ -383,7 +383,7 @@ namespace mrv
             b->bind_image(MRV2_LOAD_SVG(CompareAdd));
             b->tooltip(_("Add the A and B files"));
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_add_cb(nullptr, p.ui);
                 });
@@ -394,7 +394,7 @@ namespace mrv
             b->tooltip(_("Multiply the A and B files"));
 
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_multiply_cb(nullptr, p.ui);
                 });
@@ -406,7 +406,7 @@ namespace mrv
                          "one of them mirrored"));
 
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     compare_butterfly_cb(nullptr, p.ui);
                 });
@@ -416,7 +416,7 @@ namespace mrv
             b->bind_image(MRV2_LOAD_SVG(Prev));
             b->tooltip(_("Previous filename"));
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     if (p.ui->app->filesModel()->observeFiles()->getSize() > 0)
                         p.ui->app->filesModel()->prevB();
@@ -427,7 +427,7 @@ namespace mrv
             b->bind_image(MRV2_LOAD_SVG(Next));
             b->tooltip(_("Next filename"));
             bW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     if (p.ui->app->filesModel()->observeFiles()->getSize() > 0)
                         p.ui->app->filesModel()->nextB();
@@ -479,7 +479,7 @@ namespace mrv
             s->default_value(0.5f);
             s->value(o.wipeCenter.x);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto o = model->observeCompareOptions()->get();
                     o.wipeCenter.x = w->value();
@@ -501,7 +501,7 @@ namespace mrv
             s->default_value(0.5f);
             s->value(o.wipeCenter.y);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto o = model->observeCompareOptions()->get();
                     o.wipeCenter.y = w->value();
@@ -518,7 +518,7 @@ namespace mrv
             s->default_value(0.0f);
             s->value(o.wipeRotation);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto o = model->observeCompareOptions()->get();
                     o.wipeRotation = w->value();
@@ -574,7 +574,7 @@ namespace mrv
 #endif
             );
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto o = model->observeCompareOptions()->get();
                     o.overlay = w->value();
@@ -609,7 +609,7 @@ namespace mrv
             auto Bindices = model->observeBIndexes()->get();
             auto o = model->observeCompareOptions()->get();
 
-            int thumbnailType = p.ui->uiPrefs->uiPrefsComparePanelThumbnails->value();
+            int thumbnailType = p.ui->uiPrefs->ComparePanelThumbnails->value();
 
             for (int i = 0; i < numFiles; ++i)
             {

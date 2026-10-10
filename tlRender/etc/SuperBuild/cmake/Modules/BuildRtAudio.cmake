@@ -6,6 +6,7 @@ set(RtAudio_GIT_TAG "5.2.0") # Nov. 16, 2021
 set(RtAudio_PATCH )
 
 set(RtAudio_DEPENDENCIES )
+message(STATUS "RtAudio DEPENDENCIES=${RtAudio_DEPENDENCIES}")
 
 #
 # \bug: this is needed to have Linux not hang when switching clips quickly.
@@ -48,3 +49,5 @@ ExternalProject_Add(
     LIST_SEPARATOR |
 
     CMAKE_ARGS ${RtAudio_ARGS})
+
+set(RtAudio_DEP RtAudio)

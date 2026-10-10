@@ -737,7 +737,7 @@ namespace mrv
         }
 
 #ifdef MRV2_NETWORK
-        if (ui->uiPrefs->uiPrefsSingleInstance->value())
+        if (ui->uiPrefs->SingleInstance->value())
         {
             ImageSender sender;
             if (sender.isRunning())
@@ -1069,7 +1069,7 @@ namespace mrv
             ui->uiView->take_focus();
 
             // Fix for always on top on Linux
-            bool value = ui->uiPrefs->uiPrefsAlwaysOnTop->value();
+            bool value = ui->uiPrefs->AlwaysOnTop->value();
             int fullscreen_active = ui->uiMain->fullscreen_active();
             if (!fullscreen_active)
             {
@@ -1168,7 +1168,7 @@ namespace mrv
 
             std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
             if (studio.empty())
-                studio = ui->uiPrefs->uiPrefsWebRTCStudio->value();
+                studio = ui->uiPrefs->WebRTCStudio->value();
 
             tcp = new WebRTCClient(studio, sessionId);
         }
@@ -1733,7 +1733,7 @@ namespace mrv
         if (p.player)
         {
             const auto& timeRange = p.player->inOutRange();
-            const bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
+            const bool autoPlayback = ui->uiPrefs->AutoPlayback->value();
             const bool playbackFlag =
                 p.options.playback != timeline::Playback::Count &&
                 p.options.playback != timeline::Playback::Stop;
@@ -2092,7 +2092,7 @@ namespace mrv
         out["SequenceIO/ThreadCount"] = string::Format("{0}").arg(
             p.settings->getValue<int>("SequenceIO/ThreadCount"));
         out["SequenceIO/DefaultSpeed"] =
-            string::Format("{0}").arg(ui->uiPrefs->uiPrefsFPS->value());
+            string::Format("{0}").arg(ui->uiPrefs->FPS->value());
         io::MissingFrames missing;
         missing = static_cast<io::MissingFrames>(ui->uiPrefs->uiMissingFrameType->value());
         out["SequenceIO/MissingFrames"] = to_string(missing);
@@ -2103,7 +2103,7 @@ namespace mrv
         out["IgnoreChromaticities"] =
             string::Format("{0}").arg(p.displayOptions.ignoreChromaticities);
         out["OpenEXR/UseRGBOnly"] =
-            string::Format("{0}").arg(ui->uiPrefs->uiPrefsVulkanUseRGB->value());
+            string::Format("{0}").arg(ui->uiPrefs->VulkanUseRGB->value());
 #endif
 #if defined(TLRENDER_EXR) || defined(TLRENDER_STB)
         out["AutoNormalize"] =
@@ -2381,7 +2381,7 @@ namespace mrv
                             item->lutOptions = p.lutOptions;
 
                             bool autoPlayback =
-                                ui->uiPrefs->uiPrefsAutoPlayback->value();
+                                ui->uiPrefs->AutoPlayback->value();
                             if (item->inOutRange.duration().value() <= 1)
                                 autoPlayback = false;
                             if (autoPlayback)
@@ -2396,7 +2396,7 @@ namespace mrv
                                 // If we have autoplayback on and auto hide
                                 // pixel bar, do so here.
                                 const int autoHide =
-                                    ui->uiPrefs->uiPrefsAutoHidePixelBar
+                                    ui->uiPrefs->AutoHidePixelBar
                                     ->value();
                                 const bool pixelToolbar =
                                     ui->uiPixelBar->visible();
@@ -2422,9 +2422,14 @@ namespace mrv
                             if (!file::isTemporaryEDL(item->path) &&
                                 !file::isTemporaryNDI(item->path))
                             {
-                                std::string file = item->path.get();
+                                bool listdir = true;
+                                std::string file = item->path.getFileName(listdir);
+
+                                // If it is a sequence and not a protocol movie, store
+                                // the first frame not the frame the sequence the user
+                                // loaded it with.
                                 auto frames = item->path.getFrames();
-                                if (frames.has_value())
+                                if (!item->path.hasProtocol() && frames.has_value())
                                 {
                                     const math::Int64Range& range = frames.value();
                                     const bool listdir = true;
@@ -2503,7 +2508,7 @@ namespace mrv
                     if (!ui->uiView->getPresentationMode())
                     {
                         if (p.options.otioEditMode || ui->uiEdit->value() ||
-                            ui->uiPrefs->uiPrefsEditMode->value())
+                            ui->uiPrefs->EditMode->value())
                         {
                             // We need to call it explicitally to handle
                             // audio tracks that don't send a resizeWindow.
@@ -2591,15 +2596,15 @@ namespace mrv
         if (audioSystem)
         {
             PreferencesUI* uiPrefs = ui->uiPrefs;
-            int api = uiPrefs->uiPrefsAudioAPI->value();
-            const Fl_Menu_Item* item = uiPrefs->uiPrefsAudioAPI->child(api);
+            int api = uiPrefs->AudioAPI->value();
+            const Fl_Menu_Item* item = uiPrefs->AudioAPI->child(api);
             if (item && item->label())
             {
                 audioSystem->setAPI(item->label());
             }
 
-            size_t outputDevice = uiPrefs->uiPrefsAudioOutputDevice->value();
-            item = uiPrefs->uiPrefsAudioOutputDevice->child(outputDevice);
+            size_t outputDevice = uiPrefs->AudioOutputDevice->value();
+            item = uiPrefs->AudioOutputDevice->child(outputDevice);
             if (item && item->label())
             {
                 audioSystem->setOutputDevice(item->label());
