@@ -697,9 +697,10 @@
                 fs::exists(filePath))
             {
                 auto path = fs::absolute(filePath);
-                if (set.find(path.u8string()) == set.end())
+                std::string filePath = tl::file::fromFileSystem(path);
+                if (set.find(filePath) == set.end())
                 {
-                    set.insert(path.u8string());
+                    set.insert(filePath);
                     result.push_back(str);
                 }
             }

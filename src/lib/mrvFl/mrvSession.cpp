@@ -35,6 +35,7 @@
 
 #include <tlTimelineUI/IItem.h>
 
+#include <tlCore/Path.h>
 #include <tlCore/StringFormat.h>
 
 #include <fstream>
@@ -236,7 +237,7 @@ namespace mrv
             if (webrtcPanel)
                 webrtcPanel->save();
 
-            std::string config = ui->uiPrefs->uiPrefsOCIOConfig->value();
+            std::string config = ui->uiPrefs->OCIOConfig->value();
 
             if (config.substr(0, 7) != "ocio://")
             {
@@ -463,7 +464,7 @@ namespace mrv
                 fs::path currentDir = fileName;
                 currentDir = fs::absolute(currentDir);
                 currentDir = currentDir.parent_path();
-                fl_chdir(currentDir.u8string().c_str());
+                fl_chdir(tl::file::fromFileSystem(currentDir).c_str());
 
                 // Get session version
                 int version = session["version"];
@@ -472,8 +473,8 @@ namespace mrv
                 close_all_cb(nullptr, ui);
 
                 // Turn off auto-playback temporarily
-                bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
-                ui->uiPrefs->uiPrefsAutoPlayback->value(false);
+                bool autoPlayback = ui->uiPrefs->AutoPlayback->value();
+                ui->uiPrefs->AutoPlayback->value(false);
 
                 for (const auto& j : session["files"])
                 {
@@ -577,7 +578,7 @@ namespace mrv
                     }
                 }
 
-                ui->uiPrefs->uiPrefsAutoPlayback->value(autoPlayback);
+                ui->uiPrefs->AutoPlayback->value(autoPlayback);
 
                 Message j = session["ui"];
 
@@ -621,12 +622,12 @@ namespace mrv
                         replace_path(config);
 
                         if (file::isReadable(config))
-                            ui->uiPrefs->uiPrefsOCIOConfig->value(
+                            ui->uiPrefs->OCIOConfig->value(
                                 config.c_str());
                     }
                     else
                     {
-                        ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+                        ui->uiPrefs->OCIOConfig->value(config.c_str());
                     }
 
                     ocio::setup();

@@ -2,10 +2,6 @@
 # mrv2 
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-set( CMAKE_CXX_STANDARD 17 )
-set( CMAKE_CXX_STANDARD_REQUIRED ON )
-set( CMAKE_CXX_EXTENSIONS OFF )
-
 set(BUILD_ZLIB FALSE CACHE BOOL "Enable ZLIB building")
 set(BUILD_VCPKG FALSE CACHE BOOL "Build vckg from source")
 set(BUILD_FLTK TRUE CACHE BOOL "Enable FLTK building (needed)")

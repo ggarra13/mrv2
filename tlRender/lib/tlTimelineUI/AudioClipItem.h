@@ -48,6 +48,7 @@ namespace tl
             void setScale(double) override;
             void setDisplayOptions(const DisplayOptions&) override;
 
+            void setGeometry(const math::Box2i&) override;
             void tickEvent(bool, bool, const ui::TickEvent&) override;
             void sizeHintEvent(const ui::SizeHintEvent&) override;
             void clipEvent(const math::Box2i&, bool) override;

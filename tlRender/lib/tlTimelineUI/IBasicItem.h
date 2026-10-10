@@ -43,6 +43,7 @@ namespace tl
         protected:
             int _getMargin() const;
             int _getLineHeight() const;
+            int _getEffectsHeight() const;
             math::Box2i _getInsideGeometry() const;
 
             void _timeUnitsUpdate() override;

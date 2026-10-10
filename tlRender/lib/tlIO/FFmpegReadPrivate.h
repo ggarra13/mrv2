@@ -78,6 +78,8 @@ namespace tl
             const image::Tags& getTags() const;
 
             void start();
+            bool canDecodeForward(const OTIO_NS::RationalTime& target,
+                                  const OTIO_NS::RationalTime& current) const;
             void seek(const OTIO_NS::RationalTime&);
             bool process(
                 const bool backwards, const OTIO_NS::RationalTime& targetTime,
@@ -220,6 +222,12 @@ namespace tl
 
             io::Info info;
 
+            // Set by the video thread once info is filled in, just before it
+            // starts serving requests. info is never written after that, so
+            // getInfo() can answer from any thread without waiting for the
+            // decoder to come back to its request loop.
+            std::atomic<bool> infoReady{ false };
+
             struct InfoRequest
             {
                 std::promise<io::Info> promise;
@@ -263,6 +271,13 @@ namespace tl
             std::shared_ptr<ReadAudio> readAudio;
 
             io::Info info;
+
+            // Set by the audio thread once info is filled in, just before it
+            // starts serving requests. info is never written after that, so
+            // getInfo() can answer from any thread without waiting for the
+            // decoder to come back to its request loop.
+            std::atomic<bool> infoReady{ false };
+
             struct InfoRequest
             {
                 std::promise<io::Info> promise;

@@ -67,7 +67,7 @@ namespace tl
             Profile, "None", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT",
             "ProRes_HQ", "ProRes_4444", "ProRes_XQ", "DNxHD", "DNxHR_LB",
             "DNxHR_SQ", "DNxHR_HQ", "DNxHR_HQX", "DNxHR_444", "VP9", "Cineform",
-            "AV1", "HAP", "AV1_AOM", "HEVC", "OAPV");
+            "AV1", "HAP", "AV1_AOM", "HEVC", "OAPV", "GIF", "WebP");
         TLRENDER_ENUM_SERIALIZE_IMPL(Profile);
 
         TLRENDER_ENUM_IMPL(
@@ -570,8 +570,8 @@ namespace tl
 
             _logSystemWeak = logSystem;
             // av_log_set_level(AV_LOG_QUIET);
-            // av_log_set_level(AV_LOG_WARNING);
-            av_log_set_level(AV_LOG_DEBUG);
+            av_log_set_level(AV_LOG_WARNING);
+            // av_log_set_level(AV_LOG_DEBUG);
             av_log_set_callback(_logCallback);
 
             logSystem->print(
@@ -755,6 +755,11 @@ namespace tl
                     formatLog.push_back(string::Format("{0} ({1})").arg(avOutputFormat->name).arg(avOutputFormat->extensions));
                 }
             }
+
+            // Audio Formats
+            extensions[".aiff"] = io::FileType::Audio;
+            extensions[".wav"] = io::FileType::Audio;
+
             IWritePlugin::_init("FFmpeg", extensions, logSystem);
 
             logSystem->print(

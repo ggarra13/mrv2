@@ -733,7 +733,8 @@ namespace mrv
                 shape = p.multilineText;
 
                 shape->fontSystem = p.fontSystem;
-                shape->fontPath = fontList[(unsigned)font].u8string();
+                fs::path fontPath = fontList[(unsigned)font];
+                shape->fontPath = tl::file::fromFileSystem(fontPath);
                 shape->fontSize = fontSize;
 
                 shape->pts.push_back(pos);

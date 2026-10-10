@@ -1,7 +1,57 @@
+v1.8.2
+======
+
+- UI: URL Movies are now added to the File->Recent Files list.
+- UI: Notes in the Note Panel now show the time in the selected units (Frames, Seconds or Timecode).
+- UI: Notes in the Note Panel are now edited by clicking on its title or double clicking on the text box.
+- UI: Text drawing annotations' font size can now be changed by using + or - in the Vulkan backend.
+- UI: File requesters now show the correct filters for writing and reading.
+- UI: Thumbnails, Waveforms and Effects in the Timeline Viewport can be toggled independently.
+- UI: Effects are shown below the clip's name in Timeline Viewport.
+
+- UI/Core: Saving of movies now automatically tries to detect the color space to use (ie. SDR vs HDR), without having to manually set the override.
+- UI/Core: Saving of movies for most codecs defaults to "TV (Legal Range)" instead of "PC (Full Range)", unless you use **Advanced Settings** Override.
+
+- Core: Added exporting of animated .webp.  They can be played in Chrome.
+- Core: Added exporting of animated .gif.
+- Core: Improvements in playback performance.
+
+Libraries
+---------
+
+- libwebp v1.5.0
+
+Fixes
+-----
+
+- UI: Fixed Save Movie's **Advanced Settings**, Presets' tooltip.
+- UI: Fixed default values of Save Movie's **Advance Settings**.
+- UI: Fixed Timeline Viewport (Editing) getting activated when closing the Preference Window.
+- UI: Fixed Timeline Viewport's thumbnails on first starting the players.
+- UI/Core: Fixed refresh_media_cb starting playback due to **Preferences->Playback->Auto Playback**.
+- UI: Added missing tooltips in the status bar for Panels and Windows.
+- UI: Added missing toggle element in Panels.
+- Core: Fixed saving of audio on movie files.
+- Core: Fixed audio saving only.
+
+
+Libraries
+---------
+
+	- FLTK v2.4.4 with new Clipboard Selection protocol. 
+
+
 v1.8.1
 ======
 
-- Added a dependency on lunasvg as it provides better rasterization of SVG images.
+- Core/Vulkan: Improved performance of the Vulkan backend.
+- Core/Vulkan: Improved memory footprint of the Vulkan backend.
+- Core/Vulkan: Made Text Tool Annotations be created on demand for faster annotations.
+
+- Core: Made the SVG reader be thread safe.
+- Core: Made the SVG reader support <text> tags.
+- Core: Made the SVG reader support gradients.
+- Core: Made the SVG reader support embedded .pngs.
 
 Fixes
 -----

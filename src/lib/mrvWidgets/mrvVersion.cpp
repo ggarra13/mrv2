@@ -126,6 +126,13 @@ extern "C"
 }
 #endif
 
+#ifdef TLRENDER_LIBWEBP
+#    include <webp/encode.h>
+#define WebDecodeVersionMajor(v)    (((v) >> 16) & 0xFF)
+#define WebDecodeVersionMinor(v)    (((v) >>  8) & 0xFF)
+#define WebDecodeVersionRevision(v) ((v)        & 0xFF)
+#endif
+
 #ifdef TLRENDER_OPENJPH
 #    include <openjph/ojph_version.h>
 #endif
@@ -940,6 +947,16 @@ namespace mrv
 #ifdef TLRENDER_LIBPLACEBO
         o << "libplacebo v" << pl_version() << std::endl
           << "Copyright Niklas Haas et al." << std::endl
+          << std::endl;
+#endif
+#ifdef TLRENDER_LIBWEBP
+        int webp_version = WebPGetEncoderVersion();
+        o << "libwebp v"
+          << WebDecodeVersionMajor(webp_version) << "."
+          << WebDecodeVersionMinor(webp_version) << "."
+          << WebDecodeVersionRevision(webp_version) << std::endl
+          << "Copyright (c) 2010, Google Inc. All rights reserved."
+          << std::endl
           << std::endl;
 #endif
 #ifdef TLRENDER_PNG

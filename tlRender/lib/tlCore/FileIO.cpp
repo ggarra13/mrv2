@@ -6,6 +6,7 @@
 
 #include <tlCore/Assert.h>
 #include <tlCore/Error.h>
+#include <tlCore/Path.h>
 
 #include <algorithm>
 #include <array>
@@ -45,7 +46,7 @@ namespace tl
             Access access)
         {
             auto out = std::shared_ptr<FileIO>(new FileIO);
-            out->_open(fileName, mode, read, access);
+            return create(file::toFileSystem(fileName), mode, read, access);
             return out;
         }
 
@@ -53,7 +54,7 @@ namespace tl
             const std::string& path,
             const file::MemoryRead& memFile)
         {
-            return create(std::filesystem::u8path(path), memFile);
+            return create(toFileSystem(path), memFile);
         }
 
         void FileIO::read8(int8_t* value, size_t size)
@@ -253,10 +254,11 @@ namespace tl
             return out;
         }
 
-        std::vector<std::string> readLines(const std::string& fileName)
+
+        std::vector<std::string> readLines(const std::filesystem::path& path)
         {
             std::vector<std::string> out;
-            auto io = FileIO::create(fileName, Mode::Read);
+            auto io = FileIO::create(path, Mode::Read);
             while (!io->isEOF())
             {
                 out.push_back(readLine(io));
@@ -264,15 +266,29 @@ namespace tl
             return out;
         }
 
-        void writeLines(
-            const std::string& fileName, const std::vector<std::string>& lines)
+        std::vector<std::string> readLines(const std::string& fileName)
         {
-            auto io = FileIO::create(fileName, Mode::Write);
+            return readLines(toFileSystem(fileName));
+        }
+
+        void writeLines(const std::filesystem::path& path, const std::vector<std::string>& lines)
+        {
+            auto io = FileIO::create(path, Mode::Write);
             for (const auto& line : lines)
             {
                 io->write(line);
                 io->write8('\n');
             }
+        }
+
+        void writeLines(const std::string& path, const std::vector<std::string>& lines)
+        {
+            writeLines(toFileSystem(path), lines);
+        }
+
+        void truncateFile(const std::string& path, size_t size)
+        {
+            truncateFile(toFileSystem(path), size);
         }
     } // namespace file
 } // namespace tl

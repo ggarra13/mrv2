@@ -68,7 +68,7 @@ namespace tl
                         {
                             const file::Path audioPath(baseName + ext,
                                                        pathOptions);
-                            if (std::filesystem::exists(std::filesystem::u8path(audioPath.get())))
+                            if (std::filesystem::exists(file::toFileSystem(audioPath.get())))
                             {
                                 out = audioPath;
                                 break;
@@ -81,7 +81,9 @@ namespace tl
                     {
                         file::DirListOptions listOptions;
                         listOptions.filterExt = imageSeqAudioExts;
-                        const auto entries = file::dirList(path.getDirectory(), listOptions);
+                        const auto entries =
+                            file::dirList(path.getDirectory().empty() ? "." :
+                                          path.getDirectory(), listOptions);
                         if (!entries.empty())
                         {
                             out = entries.front().path;
@@ -99,11 +101,11 @@ namespace tl
                 return out;
             }
 
-            //! An absolute, normalized form of a media path, used only to
-            //! compare paths that name the same file in different ways.
-            std::string normalMediaPath(const file::Path& path)
+            //! An absolute form of a file name, or the name unchanged when the
+            //! working directory cannot be had.
+            std::string absoluteFileName(const std::string& fileName)
             {
-                std::filesystem::path out = std::filesystem::u8path(path.get());
+                std::filesystem::path out = file::toFileSystem(fileName);
                 if (!out.is_absolute())
                 {
                     std::error_code ec;
@@ -113,7 +115,16 @@ namespace tl
                         out = abs;
                     }
                 }
-                return out.lexically_normal().u8string();
+                return file::fromFileSystem(out);
+            }
+
+            //! An absolute, normalized form of a media path, used only to
+            //! compare paths that name the same file in different ways.
+            std::string normalMediaPath(const file::Path& path)
+            {
+                return file::fromFileSystem(
+                    file::toFileSystem(absoluteFileName(path.get())).
+                    lexically_normal());
             }
         }
 

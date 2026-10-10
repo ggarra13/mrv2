@@ -47,7 +47,7 @@ namespace mrv
         else
             playerId = player;
 
-        std::string server = App::ui->uiPrefs->uiPrefsWebRTCSignalingServer->value();
+        std::string server = App::ui->uiPrefs->WebRTCSignalingServer->value();
 
         if (server.empty())
         {

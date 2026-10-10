@@ -16,15 +16,29 @@ namespace tl
 {
     namespace file
     {
-
-        namespace
+        std::filesystem::path toFileSystem(const std::string& value)
         {
-            std::string toUtf8(const std::filesystem::path& p)
-            {
-                // generic_string always uses '/'
-                auto u8 = p.generic_u8string();
-                return std::string(u8.begin(), u8.end());
-            }
+#if defined(__cpp_char8_t)
+            return std::filesystem::path(
+                std::u8string(value.begin(), value.end()));
+#else
+            return std::filesystem::u8path(value);
+#endif // __cpp_char8_t
+        }
+
+        std::string fromFileSystem(const std::filesystem::path& value)
+        {
+            // Under C++17 u8string() is a std::string and this is a copy;
+            // under C++20 it is a std::u8string and the iterators convert
+            // the characters.
+            const auto u8 = value.u8string();
+            return std::string(u8.begin(), u8.end());
+        }
+
+        std::string fromFileSystemGeneric(const std::filesystem::path& value)
+        {
+            const auto u8 = value.generic_u8string();
+            return std::string(u8.begin(), u8.end());
         }
 
         std::vector<std::string> split(std::filesystem::path path)
@@ -35,21 +49,27 @@ namespace tl
             {
                 if (!path.filename().empty())
                 {
-                    out.push_front(toUtf8(path.filename()));
+                    out.push_front(fromFileSystem(path.filename()));
                 }
                 path = path.parent_path();
             }
             if (!path.empty())
             {
-                out.push_front(toUtf8(path));
+                out.push_front(fromFileSystem(path));
             }
             return std::vector<std::string>(out.begin(), out.end());
         }
 
         std::string appendSeparator(const std::string& value)
         {
+            // An empty directory means the current one. There is no separator to
+            // find, so the search below would fall through and add one, turning
+            // "" + "render.tif" into the absolute "/render.tif".
+            if (value.empty())
+            {
+                return value;
+            }
             std::string out = value;
-
             auto pos = out.find_first_of('/');
             if (pos != std::string::npos)
             {
@@ -70,8 +90,7 @@ namespace tl
                 }
                 else
                 {
-                    if (!out.empty() && out.back() != '/')
-                        out.push_back('/');
+                    out.push_back('/');
                 }
             }
             return out;
@@ -89,23 +108,14 @@ namespace tl
             std::stringstream ss;
             if (pad > 0)
             {
-                ss << std::setfill('0');
-                ss << std::setw(pad);
+                // The padding is the number of digits, and the sign goes in
+                // front of it rather than being padded around: four digits of
+                // minus one is "-0001", not "00-1".
+                ss << std::internal << std::setfill('0');
+                ss << std::setw(frame < 0 ? pad + 1 : pad);
             }
             ss << frame;
             return ss.str();
-        }
-
-        bool PathOptions::operator == (const PathOptions& other) const
-        {
-            return
-                seqNegative == other.seqNegative &&
-                seqMaxDigits == other.seqMaxDigits;
-        }
-
-        bool PathOptions::operator != (const PathOptions& other) const
-        {
-            return !(*this == other);
         }
 
         FrameSeq::FrameSeq(const math::Int64Range& range, int inc) :
@@ -123,12 +133,15 @@ namespace tl
             inc(1)
         {}
 
-        bool FrameSeq::operator == (const FrameSeq& other) const
+
+        bool PathOptions::operator == (const PathOptions& other) const
         {
-            return range == other.range && inc == other.inc;
+            return
+                seqNegative == other.seqNegative &&
+                seqMaxDigits == other.seqMaxDigits;
         }
 
-        bool FrameSeq::operator != (const FrameSeq& other) const
+        bool PathOptions::operator != (const PathOptions& other) const
         {
             return !(*this == other);
         }
@@ -196,16 +209,17 @@ namespace tl
             return out;
         }
 
-        std::string getLabel(const FrameSeq& value)
+        std::string getLabel(const FrameSeq& value, int pad)
         {
             std::stringstream ss;
             if (value.range.equal())
             {
-                ss << value.range.min();
+                ss << toString(value.range.min(), pad);
             }
             else
             {
-                ss << value.range.min() << "-" << value.range.max();
+                ss << toString(value.range.min(), pad) << "-" <<
+                    toString(value.range.max(), pad);
                 if (value.inc > 1)
                 {
                     ss << ":" << value.inc;
@@ -214,16 +228,161 @@ namespace tl
             return ss.str();
         }
 
-        std::string getLabel(const std::vector<FrameSeq>& value)
+        std::string getLabel(const std::vector<FrameSeq>& value, int pad)
         {
             std::vector<std::string> tmp;
             for (const auto& i : value)
             {
-                tmp.push_back(getLabel(i));
+                tmp.push_back(getLabel(i, pad));
             }
             return string::join(tmp, ',');
         }
 
+        namespace
+        {
+            int64_t seqInc(const FrameSeq& value)
+            {
+                return value.inc > 0 ? value.inc : 1;
+            }
+
+            bool seqContains(const FrameSeq& value, int64_t frame)
+            {
+                return
+                    frame >= value.range.min() &&
+                    frame <= value.range.max() &&
+                    0 == (frame - value.range.min()) % seqInc(value);
+            }
+
+            // Merge a sequence with the one that follows it when together they
+            // form a single sequence with a constant increment. A sequence holding
+            // one frame has no increment of its own, so it takes the increment of
+            // whichever neighbor it is merged with.
+            void mergeSeq(std::vector<FrameSeq>& seqs, size_t i)
+            {
+                if (i + 1 >= seqs.size())
+                {
+                    return;
+                }
+                FrameSeq& a = seqs[i];
+                const FrameSeq& b = seqs[i + 1];
+                const int64_t inc = a.range.equal() ?
+                                    b.range.min() - a.range.min() :
+                                    seqInc(a);
+                if (inc <= 0 ||
+                    b.range.min() != a.range.max() + inc ||
+                    (!b.range.equal() && seqInc(b) != inc))
+                {
+                    return;
+                }
+                a.range = math::Int64Range(a.range.min(), b.range.max());
+                a.inc = static_cast<int>(inc);
+                seqs.erase(seqs.begin() + i + 1);
+            }
+        }
+
+        void addFrame(std::vector<FrameSeq>& seqs, int64_t frame)
+        {
+            // Find the first sequence starting after the frame.
+            const size_t i = std::upper_bound(
+                seqs.begin(),
+                seqs.end(),
+                frame,
+                [](int64_t frame, const FrameSeq& seq)
+                    {
+                        return frame < seq.range.min();
+                    }) - seqs.begin();
+
+            // Try extending the preceding sequence.
+            if (i > 0)
+            {
+                FrameSeq& prev = seqs[i - 1];
+                if (seqContains(prev, frame))
+                {
+                    return;
+                }
+                if (frame > prev.range.max())
+                {
+                    const int64_t inc = prev.range.equal() ?
+                                        frame - prev.range.min() :
+                                        seqInc(prev);
+                    if (frame == prev.range.max() + inc)
+                    {
+                        prev.range = math::Int64Range(prev.range.min(), frame);
+                        prev.inc = static_cast<int>(inc);
+                        mergeSeq(seqs, i - 1);
+                        return;
+                    }
+                }
+                else
+                {
+                    // The frame falls within the preceding sequence but off its
+                    // increment, so that sequence has to be split. Rebuild it
+                    // along with its neighbors, since splitting it can leave
+                    // pieces that belong with them.
+                    const size_t begin = i >= 2 ? i - 2 : 0;
+                    const size_t end = std::min(i + 1, seqs.size());
+                    std::vector<int64_t> frames;
+                    frames.push_back(frame);
+                    for (size_t j = begin; j < end; ++j)
+                    {
+                        const std::vector<int64_t> tmp = toFrames(seqs[j]);
+                        frames.insert(frames.end(), tmp.begin(), tmp.end());
+                    }
+                    const std::vector<FrameSeq> split = toFrameSeq(frames);
+                    seqs.erase(seqs.begin() + begin, seqs.begin() + end);
+                    seqs.insert(seqs.begin() + begin, split.begin(), split.end());
+                    return;
+                }
+            }
+
+            // Try extending the following sequence backwards.
+            if (i < seqs.size())
+            {
+                FrameSeq& next = seqs[i];
+                const int64_t inc = next.range.equal() ?
+                                    next.range.min() - frame :
+                                    seqInc(next);
+                if (inc > 0 && frame == next.range.min() - inc)
+                {
+                    next.range = math::Int64Range(frame, next.range.max());
+                    next.inc = static_cast<int>(inc);
+                    if (i > 0)
+                    {
+                        mergeSeq(seqs, i - 1);
+                    }
+                    return;
+                }
+            }
+
+            seqs.insert(seqs.begin() + i, FrameSeq(frame));
+        }
+
+        size_t getFrameCount(const FrameSeq& value)
+        {
+            const int64_t inc = seqInc(value);
+            return static_cast<size_t>(
+                (value.range.max() - value.range.min()) / inc + 1);
+        }
+
+        size_t getFrameCount(const std::vector<FrameSeq>& value)
+        {
+            size_t out = 0;
+            for (const auto& i : value)
+            {
+                out += getFrameCount(i);
+            }
+            return out;
+        }
+
+        std::optional<math::Int64Range> getRange(const std::vector<FrameSeq>& value)
+        {
+            std::optional<math::Int64Range> out;
+            for (const auto& i : value)
+            {
+                out = out.has_value() ? expand(out.value(), i.range) : i.range;
+            }
+            return out;
+        }
 
         Path::Path(
             const std::string& value,
@@ -253,41 +412,42 @@ namespace tl
         void Path::setProtocol(const std::string& value)
         {
             _path = value + getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setDirectory(const std::string& value)
         {
             _path = getProtocol() + value + getBaseName() + getNumber() + getSuffix() + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setBaseName(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + value + getNumber() + getSuffix() + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setSuffix(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + value + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setNumber(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + getBaseName() + value + getSuffix() + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            // Re-parse without preserving the old frame range: for a numeric value
+            // _parse derives the matching range, and for a "####" placeholder (or an
+            // empty value) _parse leaves _frames untouched, keeping an existing range.
             _parse(_options);
-            _frames = tmp;
         }
 
         void Path::setPadding(int value)
@@ -299,38 +459,44 @@ namespace tl
                 num = toString(std::atoi(num.c_str()), _pad);
             }
             _path = getProtocol() + getDirectory() + getBaseName() + num + getSuffix() + getExtension() + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setExtension(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + getSuffix() + value + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setRequest(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() + value;
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setFileName(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + value + getRequest();
-            const std::optional<math::Int64Range> tmp = _frames;
+            const std::vector<FrameSeq> tmp = _seq;
             _parse(_options);
-            _frames = tmp;
+            _setSeq(tmp);
         }
 
         void Path::setFrames(const math::Int64Range& value)
         {
+            _seq = { FrameSeq(value) };
             _frames = value;
+        }
+
+        void Path::setSeq(const std::vector<FrameSeq>& value)
+        {
+            _setSeq(value);
         }
 
         bool Path::addSeq(const Path& other)
@@ -338,21 +504,36 @@ namespace tl
             bool out = sequence(other);
             if (out)
             {
-                const std::optional<math::Int64Range> frames = _frames.has_value() && other._frames.has_value() ?
-                                                               math::expand(_frames.value(), other._frames.value()) :
-                                                       other._frames;
-                const int pad = std::max(_pad, other._pad);
-                if (frames != _frames || pad != _pad || hasSeqWildcard())
+            std::vector<FrameSeq> seq = _seq;
+            for (const auto& i : other._seq)
+            {
+                for (int64_t frame : toFrames(i))
                 {
-                    _frames = frames;
+                    addFrame(seq, frame);
+                }
+            }
+                const int pad = std::max(_pad, other._pad);
+            if (seq != _seq || pad != _pad || hasSeqWildcard())
+                {
                     _pad = pad;
-                    if (_frames.has_value())
+                    if (!seq.empty())
                     {
-                        setNumber(toString(_frames.value().min(), _pad));
+                        // setNumber() re-derives the sequence from the (single-frame)
+                        // number string, so restore the merged sequence afterwards.
+                        setNumber(toString(seq.front().range.min(), _pad));
                     }
+                    _setSeq(seq);
                 }
             }
             return out;
+        }
+
+        void Path::normalizeSeq()
+        {
+            if (_seq.size() > 1)
+            {
+                _setSeq(toFrameSeq(toFrames(_seq)));
+            }
         }
 
         bool Path::isAbsolute() const
@@ -366,8 +547,8 @@ namespace tl
                     out = true;
                 }
                 else if (dir.size() > 1 &&
-                         dir[0] >= 'A' &&
-                         dir[0] <= 'Z' &&
+                ((dir[0] >= 'A' && dir[0] <= 'Z') ||
+                 (dir[0] >= 'a' && dir[0] <= 'z')) &&
                          ':' == dir[1])
                 {
                     out = true;
@@ -394,7 +575,7 @@ namespace tl
             size_t requestPos = std::string::npos;
             if (size > 0)
             {
-                for (int i = 0; i < size; ++i)
+                for (int i = 0; i < static_cast<int>(size); ++i)
                 {
                     if ('?' == _path[i])
                     {
@@ -415,7 +596,7 @@ namespace tl
             size_t protocolSize = 0;
             if (size > 2)
             {
-                for (int i = 0; i < size - 3; ++i)
+                for (int i = 0; i < static_cast<int>(size) - 3; ++i)
                 {
                     if (':' == _path[i] &&
                         '/' == _path[i + 1] &&
@@ -437,7 +618,7 @@ namespace tl
             size_t dirSize = 0;
             if (size > 0)
             {
-                for (int i = size - 1; i >= static_cast<int>(protocolSize); --i)
+            for (int i = static_cast<int>(size) - 1; i >= static_cast<int>(protocolSize); --i)
                 {
                     if (pathSeparators.find(_path[i]) != std::string::npos)
                     {
@@ -449,7 +630,8 @@ namespace tl
             }
             if (std::string::npos == dirEnd &&
                 size > 1 &&
-                _path[0] >= 'A' && _path[0] <= 'Z' &&
+               ((_path[0] >= 'A' && _path[0] <= 'Z') ||
+                (_path[0] >= 'a' && _path[0] <= 'z')) &&
                 ':' == _path[1])
             {
                 dirEnd = 1;
@@ -466,7 +648,7 @@ namespace tl
             size_t extPos = std::string::npos;
             if (size > 0)
             {
-                for (int i = size - 1; i >= static_cast<int>(protocolDirSize); --i)
+                for (int i = static_cast<int>(size) - 1; i >= static_cast<int>(protocolDirSize); --i)
                 {
                     if ('.' == _path[i])
                     {
@@ -494,17 +676,40 @@ namespace tl
             //   render_v003_cap2_0001 → suffix="",        number = "0001"
             if (size > protocolDirSize)
             {
-                int i = static_cast<int>(size) - 1;
-                while (i >= static_cast<int>(protocolDirSize) &&
-                       numbers.find(_path[i]) == std::string::npos)
+                // A printf pattern such as "%04d" ends in a letter, which the
+                // scan below would take for a suffix and so split the pattern.
+                bool printfEnd = false;
+                if ('d' == _path[size - 1])
                 {
-                    --i;
+                    int k = static_cast<int>(size) - 2;
+                    while (k >= static_cast<int>(protocolDirSize) &&
+                           isdigit(static_cast<unsigned char>(_path[k])))
+                    {
+                        --k;
+                    }
+                    printfEnd = k >= static_cast<int>(protocolDirSize) &&
+                                '%' == _path[k];
                 }
-                const size_t sufPos = static_cast<size_t>(i) + 1;
-                if (sufPos < size)
+                if (!printfEnd)
                 {
-                    _suf = std::pair<size_t, size_t>(sufPos, size - sufPos);
-                    size = sufPos;   // strip suffix so number detection sees a clean stem
+                    int i = static_cast<int>(size) - 1;
+                    while (i >= static_cast<int>(protocolDirSize) &&
+                           numbers.find(_path[i]) == std::string::npos)
+                    {
+                        --i;
+                    }
+                    // Text is only a suffix when a number comes before it. If
+                    // the scan ran off the front there is no number, and the
+                    // whole stem is the base name.
+                    if (i >= static_cast<int>(protocolDirSize))
+                    {
+                        const size_t sufPos = static_cast<size_t>(i) + 1;
+                        if (sufPos < size)
+                        {
+                            _suf = std::pair<size_t, size_t>(sufPos, size - sufPos);
+                            size = sufPos;   // strip suffix so number detection sees a clean stem
+                        }
+                    }
                 }
             }
 
@@ -599,7 +804,8 @@ namespace tl
                 }
                 if (_path[numPos] != '#')
                 {
-                    const int64_t frame = std::atoi(getNumber().c_str());
+                    const int64_t frame = std::atoll(getNumber().c_str());
+                    _seq = { FrameSeq(frame) };
                     _frames = math::Int64Range(frame, frame);
                 }
                 size -= sizeTmp;
@@ -612,6 +818,12 @@ namespace tl
                     protocolDirSize,
                     size - protocolDirSize);
             }
+        }
+
+        void Path::_setSeq(const std::vector<FrameSeq>& value)
+        {
+            _seq = value;
+            _frames = getRange(_seq);
         }
 
         const std::pair<size_t, size_t> Path:: _invalid(std::string::npos, std::string::npos);
@@ -669,8 +881,8 @@ namespace tl
             {
                 for (const auto& i : std::filesystem::directory_iterator(path))
                 {
-                    const Path path(toUtf8(i.path()), pathOptions);
-                    const std::string fileName = toUtf8(i.path().filename());
+                    const Path path(fromFileSystem(i.path()), pathOptions);
+                    const std::string fileName = fromFileSystem(i.path().filename());
 
                     // Apply filters.
                     bool keep = true;
@@ -796,22 +1008,33 @@ namespace tl
             if (path.hasNumber() || path.hasSeqWildcard())
             {
                 const auto abs = std::filesystem::absolute(
-                    std::filesystem::u8path(path.get()));
+                    toFileSystem(path.get()));
                 const auto parent = abs.parent_path();
-                if (std::filesystem::exists(parent))
+                // Entries are built from the directory as it was given, not from
+                // the absolute one that is listed: Path::sequence() compares
+                // directories, so "render.0001.tif" would never match
+                // "/abs/dir/render.0002.tif".
+                const std::string prefix =
+                    path.getProtocol() + path.getDirectory();
+                // A directory that cannot be listed (permissions, a sandbox
+                // that granted the one file) has no sequence to find.
+                std::error_code ec;
+                if (std::filesystem::exists(parent, ec))
                 {
-                    for (const auto& i : std::filesystem::directory_iterator(parent))
+                    for (std::filesystem::directory_iterator i(parent, ec), end;
+                         !ec && i != end;
+                         i.increment(ec))
                     {
-                        if (std::filesystem::is_directory(i.path()))
+                        if (std::filesystem::is_directory(i->path(), ec))
                         {
                             continue;
                         }
-                        const Path entry(i.path().generic_u8string(), pathOptions);
-                        if (path.sequence(entry) &&
-                            entry.getFrames().has_value())
+                        const Path entry(
+                            prefix + fromFileSystem(i->path().filename()),
+                            pathOptions);
+                        if (path.sequence(entry) && entry.getFrames().has_value())
                         {
-                            frames.push_back(
-                                entry.getFrames().value().min());
+                            frames.push_back(entry.getFrames().value().min());
                         }
                     }
                 }
@@ -824,49 +1047,29 @@ namespace tl
             const PathOptions& pathOptions)
         {
             Path out = path;
-            if (out.hasNumber() && !out.isSequence() || out.hasSeqWildcard())
+            if ((out.hasNumber() && !out.isSequence()) || out.hasSeqWildcard())
             {
                 // Find matching sequence files.
-                bool init = true;
-                std::string fileName(out.get());
-
-#if defined(__cpp_lib_char8_t)
-                // C++20: u8path is deprecated. We cast the string data to char8_t.
-                const std::filesystem::path stdpath{reinterpret_cast<const char8_t*>(fileName.data())};
-#else
-                // C++17: u8path is the standard way to handle UTF-8 strings.
-                const std::filesystem::path stdpath = std::filesystem::u8path(fileName);
-#endif
-                // Resolve to an absolute path first (as findSeq() does). Otherwise,
-                // for a path with no directory component (a file in the current
-                // directory), parent_path() is empty and falls back to ".", which
-                // makes directory_iterator() yield entries prefixed with "./".
-                // Those entries then parse to a non-empty directory ("./") that
-                // never equals the original path's empty directory, so
-                // out.sequence(entry) never matches and only the single original
-                // frame is ever returned.
-                const auto abs = std::filesystem::absolute(stdpath);
-                auto parent = abs.parent_path();
-                if (parent.empty())
+                const auto abs = std::filesystem::absolute(toFileSystem(out.get()));
+                const auto parent = abs.parent_path();
+                // Entries are built from the directory as it was given (see
+                // findSeq()). This comes from the argument, not from out, which
+                // is replaced by an entry part way through the loop.
+                const std::string prefix =
+                    path.getProtocol() + path.getDirectory();
+                // A directory that cannot be listed leaves the one file.
+                std::error_code ec;
+                if (std::filesystem::exists(parent, ec))
                 {
-                    parent = ".";
-                }
-
-                // Rebuild 'out' from the absolute path too, so its directory
-                // field lines up with the directory field of the entries
-                // produced by directory_iterator() below. If 'out' kept the
-                // original (possibly directory-less) string, its directory
-                // would still be "" while every entry's directory is now a
-                // real absolute path, and the comparisons below would fail
-                // just the same.
-                out = Path(toUtf8(abs), pathOptions);
-
-                try
-                {
-                    for (const auto& i : std::filesystem::directory_iterator(parent))
+                    bool init = true;
+                    for (std::filesystem::directory_iterator i(parent, ec), end;
+                         !ec && i != end;
+                         i.increment(ec))
                     {
-                        const Path entry(toUtf8(i.path()), pathOptions);
-                        const bool isDir = std::filesystem::is_directory(i.path());
+                        const Path entry(
+                            prefix + fromFileSystem(i->path().filename()),
+                            pathOptions);
+                        const bool isDir = std::filesystem::is_directory(i->path(), ec);
                         if (init && !isDir)
                         {
                             if (out.sequence(entry))
@@ -880,9 +1083,7 @@ namespace tl
                             out.addSeq(entry);
                         }
                     }
-                }
-                catch(const std::exception&)
-                {
+                    out.normalizeSeq();
                 }
             }
             return out;

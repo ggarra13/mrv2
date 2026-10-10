@@ -94,6 +94,25 @@ namespace mrv
 
     namespace vulkan
     {
+        static void hdrRetryCB(void* d)
+        {
+            static_cast<Viewport*>(d)->_retryHDR();
+        }
+
+        void Viewport::_retryHDR()
+        {
+            TLRENDER_P();
+            // The window moved again meanwhile; the new move will handle it.
+            if (p.screen_index != this->screen_num())
+            {
+                p.hdrRetries = 0;
+                return;
+            }
+            p.monitor = p.pendingMonitor;          // restore DXGI's answer
+            m_swapchain_needs_recreation = true;   // may also nudge the driver
+            init_colorspace();                     // success, or re-arms the timer
+            redraw();
+        }
 
         Viewport::Viewport(int X, int Y, int W, int H, const char* L) :
             TimelineViewport(X, Y, W, H, L),
@@ -468,8 +487,20 @@ namespace mrv
                     format() = VK_FORMAT_B8G8R8A8_UNORM;
                 }
 
-                if (p.monitor.hdr_enabled)
-                    LOG_STATUS(_("HDR monitor not detected by Vulkan or Window Manager."));
+                if (p.monitor.hdr_enabled && p.hdrRetries < 8)
+                {
+                    // DXGI says HDR, driver hasn't caught up yet. Stay SDR
+                    // for now but remember the real state and try again
+                    // shortly.
+                    p.pendingMonitor = p.monitor;
+                    ++p.hdrRetries;
+                    Fl::remove_timeout(hdrRetryCB, this);
+                    Fl::add_timeout(0.25, hdrRetryCB, this);
+                }
+                else if (p.monitor.hdr_enabled)
+                {
+                    LOG_STATUS(_("HDR monitor not detected by Vulkan or Window Manager.  Screen=") << p.screen_index);
+                }
 
                 p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
                 p.monitor.min_nits = 0.001F;
@@ -797,7 +828,7 @@ namespace mrv
             {
                 vk.colorBufferType = image::PixelType::RGBA_U8;
 
-                int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
+                int accuracy = p.ui->uiPrefs->ColorAccuracy->value();
                 switch (accuracy)
                 {
                 case kAccuracyFloat32:
@@ -936,7 +967,8 @@ namespace mrv
 
             if (!p.presentation)
             {
-                Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
+                Fl_Color c = p.ui->uiPrefs->ViewBG->color();
+
 
                 uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
                 Fl::get_color(c, ur, ug, ub, ua);
@@ -1034,10 +1066,7 @@ namespace mrv
                     vk.render->setMonitorCapabilities(p.monitor);
                     if (p.missingFrame)
                     {
-                        if (p.missingFrameType != io::MissingFrames::Black)
-                        {
-                            _drawMissingFrame(renderSize);
-                        }
+                        _drawMissingFrame(renderSize);
                     }
                     else
                     {
@@ -1214,9 +1243,9 @@ namespace mrv
             const float rotation = _getRotation();
             bool blitViewport = false;
             if (this == p.ui->uiView)
-                blitViewport = p.ui->uiPrefs->uiPrefsBlitMainViewport->value();
+                blitViewport = p.ui->uiPrefs->BlitMainViewport->value();
             else
-                blitViewport = p.ui->uiPrefs->uiPrefsBlitSecondaryViewport->value();
+                blitViewport = p.ui->uiPrefs->BlitSecondaryViewport->value();
             if (p.presentation ||
                 blitViewport == kNoBlit ||
                 p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||

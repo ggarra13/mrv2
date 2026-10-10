@@ -93,7 +93,7 @@ namespace mrv
             i->value(settings->getValue<std::string>("WebRTC/Project").c_str());
             i->tooltip(_("Project you are working on."));
             iW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     settings->setValue("WebRTC/Project",
                                        std::string(o->value()));
@@ -107,7 +107,7 @@ namespace mrv
             i->value(settings->getValue<std::string>("WebRTC/Room").c_str());
             i->tooltip(_("Room name to enter."));
             iW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     settings->setValue("WebRTC/Room", std::string(o->value()));
                 });
@@ -118,7 +118,7 @@ namespace mrv
             auto bW = new Widget<Fl_Button>(g->x(), Y, 30, 20, kButtonLabel);
             b = _r->createButton = bW;
             bW->callback(
-                [=](auto t)
+                [=, this](auto t)
                 {
                     if (dynamic_cast< DummyClient* >(tcp) == nullptr)
                     {
@@ -159,7 +159,7 @@ namespace mrv
                     // "secret".
                     std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
                     if (studio.empty())
-                        studio = p.ui->uiPrefs->uiPrefsWebRTCStudio->value();
+                        studio = p.ui->uiPrefs->WebRTCStudio->value();
 
                     if (!mrv::app::soporta_voice)
                     {

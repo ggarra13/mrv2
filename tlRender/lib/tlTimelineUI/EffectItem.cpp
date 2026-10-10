@@ -76,7 +76,7 @@ namespace tl
         }
 
         EffectItem::~EffectItem() {}
-        
+
         std::shared_ptr<EffectItem> EffectItem::create(
             const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Effect>&
                 effect,
@@ -100,11 +100,19 @@ namespace tl
             _p->durationLabel = value;
             _p->draw.durationGlyphs.clear();
         }
-        
+
         void EffectItem::sizeHintEvent(const ui::SizeHintEvent& event)
         {
             IItem::sizeHintEvent(event);
             TLRENDER_P();
+
+            if (!_displayOptions.effects)
+            {
+                // Don't leave a stale size hint behind, the parent clip
+                // sums the heights of its effects to reserve space.
+                _sizeHint = math::Size2i();
+                return;
+            }
 
             p.size.margin = event.style->getSizeRole(
                 ui::SizeRole::MarginSmall, event.displayScale);
@@ -121,6 +129,7 @@ namespace tl
                 p.size.fontMetrics = event.fontSystem->getMetrics(fontInfo);
                 p.size.lineHeight = p.size.fontMetrics.lineHeight;
                 p.size.labelSize = event.fontSystem->getSize(p.label, fontInfo);
+                p.draw.labelGlyphs.clear();
             }
             fontInfo = event.style->getFontRole(
                 p.durationFontRole, event.displayScale);
@@ -129,6 +138,7 @@ namespace tl
                 p.size.durationFontInfo = fontInfo;
                 p.size.durationSize =
                     event.fontSystem->getSize(p.durationLabel, fontInfo);
+                p.draw.durationGlyphs.clear();
             }
             p.size.textUpdate = false;
 
@@ -155,8 +165,12 @@ namespace tl
             const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
             IItem::drawEvent(drawRect, event);
-            TLRENDER_P();
+            if (!_displayOptions.effects)
+            {
+                return;
+            }
 
+            TLRENDER_P();
             const math::Box2i& g = _geometry;
             ui::ColorRole colorRole = getSelectRole();
             if (colorRole != ui::ColorRole::kNone)
@@ -182,7 +196,7 @@ namespace tl
             const bool durationVisible =
                 math::intersects(drawRect, durationGeometry) &&
                 !math::intersects(durationGeometry, labelGeometry);
-            
+
             std::vector<timeline::TextInfo> textInfos;
 
             if (labelVisible)
@@ -214,7 +228,7 @@ namespace tl
                         durationGeometry.min.x,
                         durationGeometry.min.y + p.size.fontMetrics.ascender));
             }
-            
+
             for (const auto& textInfo : textInfos)
             {
                 event.render->drawText(textInfo, math::Vector2i(),

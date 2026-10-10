@@ -9,6 +9,7 @@
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 
+#include <tlCore/Path.h>
 
 #include <FL/Fl.H>
 
@@ -167,7 +168,7 @@ namespace mrv
 
         bool isReadable(const fs::path& p)
         {
-            const std::string& filePath = p.u8string();
+            const std::string& filePath = tl::file::fromFileSystem(p);
             if (filePath.empty())
                 return false;
 

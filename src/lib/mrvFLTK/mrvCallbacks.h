@@ -141,7 +141,8 @@ namespace mrv
     //! Panel callbacks
     void toggle_one_panel_only_cb(Fl_Menu_* w, ViewerUI* ui);
 
-    void window_cb(Fl_Menu_* w, ViewerUI* ui);
+    // Common callback for all panels
+    void window_cb(Fl_Menu_* w, void*);
     void show_window_cb(const std::string& label, ViewerUI* ui);
 
     //! Auto Frame view callback
@@ -218,9 +219,11 @@ namespace mrv
     void previous_clip_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Timeline view
+    void toggle_timeline_effects_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_timeline_markers_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_timeline_transitions_cb(Fl_Menu_*, ViewerUI* ui);
-    void timeline_thumbnails_none_cb(Fl_Menu_*, ViewerUI* ui);
+    void toggle_timeline_thumbnails_cb(Fl_Menu_*, ViewerUI* ui);
+    void toggle_timeline_waveforms_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_thumbnails_small_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_thumbnails_medium_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_thumbnails_large_cb(Fl_Menu_*, ViewerUI* ui);

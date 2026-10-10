@@ -429,7 +429,7 @@ namespace mrv
                             p.isScrubbing = true;
                             if (Fl::event_alt())
                             {
-                                float multiplier = p.ui->uiPrefs->uiPrefsAltScrubbingSensitivity->value();
+                                float multiplier = p.ui->uiPrefs->AltScrubbingSensitivity->value();
                                 scrub(multiplier);
                             }
                             else
@@ -476,7 +476,7 @@ namespace mrv
                                 return 0;
 
                             const int X = Fl::event_x() * pixels_per_unit();
-                            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * 20;
+                            const float scale = p.ui->uiPrefs->ScrubbingSensitivity->value() * 20;
                             float dx = (X - p.mousePress.x) / scale;
 
                             if (std::abs(dx) >= 1.0F)
@@ -1167,6 +1167,40 @@ namespace mrv
                     }
                 }
 
+                const math::Vector2i pos = _getRaster();
+                if (!math::contains(p.multilineText->box, pos))
+                {
+                    auto settings = p.ui->app->settings();
+                    const auto& renderSize = getRenderSize();
+                    float pct = renderSize.h / 1024.F;
+                    if (pct < 1.F) pct = 1.F;
+
+                    bool got_key = false;
+                    int fontSize = settings->getValue<int>(kFontSize);
+                    if (kPenSizeMore.match(rawkey))
+                    {
+                        ++fontSize;
+                        got_key = true;
+                    }
+                    else if (kPenSizeLess.match(rawkey))
+                    {
+                        --fontSize;
+                        got_key = true;
+                    }
+
+                    if (got_key)
+                    {
+                        fontSize = std::clamp(fontSize, 8, 120);
+                        settings->setValue(kFontSize, fontSize);
+
+                        p.multilineText->fontSize = fontSize * pct * pixels_per_unit();
+                        if (panel::annotationsPanel)
+                            panel::annotationsPanel->refresh();
+                        redrawWindows();
+                        return 1;
+                    }
+                }
+
                 ret = p.multilineText->handle(event);
                 if (ret)
                 {
@@ -1234,14 +1268,14 @@ namespace mrv
                 if (!children())
                 {
                     Fl_Widget* oldFocus = Fl::focus();
-                    if (p.ui->uiPrefs->uiPrefsRaiseOnEnter->value())
+                    if (p.ui->uiPrefs->RaiseOnEnter->value())
                         Fl::focus(this);
                     if (oldFocus)
                         oldFocus->redraw();
                 }
 
 #ifdef __APPLE__
-                if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
+                if (p.ui->uiMenuBar && p.ui->uiPrefs->MacOSMenus->value())
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
 #endif
                 _updateCursor();
@@ -1473,7 +1507,7 @@ namespace mrv
                             Fl::event_button() == FL_LEFT_MOUSE &&
                             p.actionMode == ActionMode::kScrub)
                         {
-                            if (p.ui->uiPrefs->uiPrefsSingleClickPlayback->value())
+                            if (p.ui->uiPrefs->SingleClickPlayback->value())
                             {
                                 p.lastEvent = 0;
                                 if (!p.player)

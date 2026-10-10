@@ -526,7 +526,7 @@ namespace mrv
         {
             TLRENDER_P();
             if (p.thumbnailWindow && Fl::belowmouse() == this && p.player &&
-                p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                p.ui->uiPrefs->TimelineThumbnails->value())
             {
                 int X, Y, W, H;
                 _getThumbnailPosition(X, Y, W, H);
@@ -556,7 +556,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            if (!p.player || !p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+            if (!p.player || !p.ui->uiPrefs->TimelineThumbnails->value())
             {
                 hideThumbnail();
                 return 0;
@@ -958,7 +958,7 @@ namespace mrv
 
             const float alpha = p.ui->uiMain->get_alpha() / 255.F;
 
-            if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit ||
+            if (p.ui->uiPrefs->BlitTimeline->value() == kNoBlit ||
                 alpha < 1.0F)
             {
                 p.buffer->transitionToShaderRead(cmd);
@@ -1880,14 +1880,14 @@ namespace mrv
                 requestThumbnail(true);
                 return enterEvent();
             case FL_LEAVE:
-                if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                if (p.ui->uiPrefs->TimelineThumbnails->value())
                 {
                     _cancelThumbnailRequests();
                     hideThumbnail();
                 }
                 return leaveEvent();
             case FL_PUSH:
-                if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                if (p.ui->uiPrefs->TimelineThumbnails->value())
                     requestThumbnail(true);
                 return mousePressEvent();
             case FL_DRAG:
@@ -1910,7 +1910,7 @@ namespace mrv
                 return keyReleaseEvent();
             case FL_HIDE:
             {
-                if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                if (p.ui->uiPrefs->TimelineThumbnails->value())
                 {
                     _cancelThumbnailRequests();
                     hideThumbnail();

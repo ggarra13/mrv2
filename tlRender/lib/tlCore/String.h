@@ -13,7 +13,7 @@ namespace tl
     namespace string
     {
         //! Arbitrary C string size.
-        const std::size_t cBufferSize = 4096;
+        constexpr std::size_t cBufferSize = 4096;
 
         //! \name Splitting and Joining
         ///@{

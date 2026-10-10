@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-10 08:24-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: pt\n"
@@ -1571,6 +1571,18 @@ msgstr "Fluxo {0} {1}..."
 msgid "Stop streaming"
 msgstr "Pára de transmitir"
 
+msgid "Complexity"
+msgstr "Complexidade"
+
+msgid "Draw Mode"
+msgstr "Modo de desenho"
+
+msgid "Stage Cache"
+msgstr "Cache em estgio"
+
+msgid "Disk Cache in GB"
+msgstr "Cache de disco em GB"
+
 msgid "Type"
 msgstr "Tipo"
 
@@ -1760,6 +1772,75 @@ msgid ""
 msgstr ""
 "Isto ir redefinir todas as suas configuraes para o seu padro. Tem certeza de"
 " que deseja continuar?"
+
+msgid "Toggle Color Controls Panel"
+msgstr "Comuta o Painel de Controles de Cores"
+
+msgid "Toggle Files Panel"
+msgstr "Activar o Painel de Ficheiros"
+
+msgid "Toggle Compare Panel"
+msgstr "Comutar o Painel de Comparao"
+
+msgid "Toggle Settings Panel"
+msgstr "Activar o Painel de Configuraes"
+
+msgid "Toggle Python Panel"
+msgstr "Comuta o Painel Python"
+
+msgid "Toggle Logs Panel"
+msgstr "Alternar painel de registros"
+
+msgid "Toggle Devices Panel"
+msgstr "Activar o Painel de Dispositivos"
+
+msgid "Toggle Color Area Panel"
+msgstr "Alternar painel de informações da área de cor"
+
+msgid "Toggle Notes Panel"
+msgstr "Alternar painel de notas"
+
+msgid "Toggle Annotations Panel"
+msgstr "Alternar painel de anotações"
+
+msgid "Toggle Background Panel"
+msgstr "Alterar o Painel de Fundo"
+
+msgid "Toggle Image Info Panel"
+msgstr "Alternar painel de informações da imagem"
+
+msgid "Toggle Histogram Panel"
+msgstr "Activar o Painel de Histograma"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "Comutar o Painel Vectorscope"
+
+msgid "Toggle Waveform Panel"
+msgstr "Comutar o Painel de Forma de Onda"
+
+msgid "Toggle Environment Map Panel"
+msgstr "Comutar o Painel de Mapas do Ambiente"
+
+msgid "Toggle NDI Panel"
+msgstr "Alternar painel NDI"
+
+msgid "Toggle WebRTC Panel"
+msgstr "Alternar painel WebRTC"
+
+msgid "Toggle USD Panel"
+msgstr "Alternar painel USD"
+
+msgid "Toggle Statistics Panel"
+msgstr "Alternar painel de estatísticas"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "Alternar painel Stereo 3D"
+
+msgid "Show Hotkeys Window"
+msgstr "Mostrar janela de atalhos de teclado"
+
+msgid "Show Preferences Window"
+msgstr "Mostrar janela de preferências"
 
 msgid "Notes"
 msgstr "Notas"
@@ -3791,10 +3872,6 @@ msgstr "Tornar a IU menos transparente."
 msgid "Only allow one side panel at a time."
 msgstr "Permitir apenas um painel lateral por vez."
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "Mostrar a janela {0}."
-
 msgid "Show About Window."
 msgstr "Mostrar a janela Sobre."
 
@@ -3973,6 +4050,10 @@ msgstr ""
 "Você está prestes a apagar todas as anotações. Ainda pode desfazer a "
 "operação logo depois. Deseja continuar?"
 
+msgid "Toggle Waveforms in Timeline Viewport."
+msgstr ""
+"Mostrar/ocultar formas de onda na área de visualização da linha do tempo."
+
 msgid "No Thumbnails in Timeline Viewport."
 msgstr "Sem miniaturas na área de visualização da linha do tempo."
 
@@ -3999,6 +4080,9 @@ msgid "Toggle Clip Information in Timeline Viewport."
 msgstr ""
 "Alternar as informações dos clipes na área de visualização da linha do "
 "tempo."
+
+msgid "Toggle Effects in Timeline Viewport."
+msgstr "Mostrar/ocultar efeitos na área de visualização da linha do tempo."
 
 msgid "Toggle Markers in Timeline Viewport."
 msgstr "Alternar os marcadores na área de visualização da linha do tempo."
@@ -4286,50 +4370,66 @@ msgstr "Salvar imagens para {0}."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
 msgstr ""
-"Perfis ProRes precisam de uma extensão de filme.mov. Mudá-lo para.mov."
+"Os perfis ProRes exigem a extensão de arquivo de vídeo .mov.  Alterando para"
+" .mov."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
+".mkv"
 msgstr ""
-"O perfil VP9 precisa de uma extenso de filme.mp4,.mkv ou.webm. Mud-lo "
-"para.mp4"
+"O perfil VP9 exige uma extensão de arquivo de vídeo .mp4, .mkv ou .webm.  "
+"Alterando para .mkv"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
 msgstr ""
-"O perfil AV1 precisa de uma extenso de filme.mp4 ou.mkv. Mud-lo para.mp4"
+"O perfil AV1 exige uma extensão de arquivo de vídeo .mp4 ou .mkv.  Alterando"
+" para .mp4"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 msgstr ""
-"O perfil do Cineform GoPro precisa de uma extenso do filme.mkv. Mud-lo "
-"para.mkv"
+"O perfil GoPro CineForm exige uma extensão de arquivo de vídeo .mkv.  "
+"Alterando para .mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr "O perfil HAP precisa de uma extenso.mov. Mud-lo para.mov"
+msgstr "O perfil HAP exige uma extensão de arquivo .mov.  Alterando para .mov"
 
 msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
-msgstr "O perfil OAPV requer uma extensão .mp4. Alterando para .mp4"
+msgstr ""
+"O perfil OAPV exige uma extensão de arquivo .mp4.  Alterando para .mp4"
 
 #, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "O novo ficheiro {0} j existe! No  possvel sobrescrev- lo."
 
 #, c++-format
-msgid "HDR Export mode {0}"
-msgstr "Modo de exportação HDR {0}"
-
-#, c++-format
-msgid "{0}: Cannot open writer plugin."
-msgstr "{0}: No foi possvel abrir o plugin do gravador."
+msgid "Rotated image info: {0}"
+msgstr "Informaes sobre a imagem rotativa: {0}"
 
 #, c++-format
 msgid "Scaled image info: {0}"
 msgstr "Informao da imagem escalada: {0}"
 
 #, c++-format
+msgid "{0}: Cannot open writer plugin."
+msgstr "{0}: No foi possvel abrir o plugin do gravador."
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr "Informao da imagem: {0} {1}"
+
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Imagem muito grande para salvar anotações. Irá escalar para o tamanho do "
+"viewport."
+
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "O plugin do Writer no obteve informaes de sada. Por omisso para {0}"
+
+#, c++-format
+msgid "Output info: {0} {1}"
+msgstr "Informaes sobre a sada: {0} {1}"
 
 #, c++-format
 msgid "Using profile {0}, pixel format {1}."
@@ -4338,18 +4438,6 @@ msgstr "Usando o perfil {0}, o formato de pixel {1}."
 #, c++-format
 msgid "Using preset {0}."
 msgstr "Usando o predefinido {0}."
-
-#, c++-format
-msgid "Offscreen Buffer info: {0}"
-msgstr "Informações do buffer offscreen: {0}"
-
-#, c++-format
-msgid "Image info: {0} {1}"
-msgstr "Informao da imagem: {0} {1}"
-
-#, c++-format
-msgid "Output info: {0} {1}"
-msgstr "Informaes sobre a sada: {0} {1}"
 
 #, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -4371,16 +4459,38 @@ msgid "Audio only in timeline, but not trying to save audio."
 msgstr "udio apenas na linha do tempo, mas no tentando salvar udio."
 
 #, c++-format
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Formato e tipo OpenGL invlidos"
+
+#, c++-format
+msgid "OpenGL info: {0}"
+msgstr "Informaes do OpenGL: {0}"
+
+#, c++-format
 msgid "Saving... {0}"
 msgstr "Salvar... {0}"
+
+msgid "Unsupported output format"
+msgstr "Formato de saída não suportado"
+
+#, c++-format
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Dados de vídeo vazios no tempo {0}. Repetir o quadro."
 
 #, c++-format
 msgid "Render size: {0}"
 msgstr "Tamanho de renderização: {0}"
 
 #, c++-format
-msgid "Saved '{0}'."
-msgstr "'{0}' salvo."
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Informações da Camada de Imagem '{0}': {1} {2}"
+
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr "Informações do buffer offscreen: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Formato de saída não suportado: "
 
 msgid "2.35"
 msgstr "2.35"
@@ -4398,46 +4508,15 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "Cache: "
 
-#, c++-format
-msgid "HDR monitor min. nits = {0}"
-msgstr "Brilho mínimo do monitor HDR (nits) = {0}"
-
-#, c++-format
-msgid "HDR monitor max. nits = {0}"
-msgstr "Brilho máximo do monitor HDR (nits) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR não encontrado ou não configurado."
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr "Monitor HDR não detectado pelo Vulkan ou pelo gerenciador de janelas."
-
-#, c++-format
-msgid "Vulkan color space is {0}"
-msgstr "O espaço de cor Vulkan é {0}"
-
-#, c++-format
-msgid "Vulkan format is {0}"
-msgstr "O formato Vulkan é {0}"
-
-#, c++-format
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "Alterado para o monitor HDR ativo no índice {0}"
-
-#, c++-format
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr "Alterado para o monitor com suporte a HDR, mas inativo, no índice {0}"
-
-#, c++-format
-msgid "Changed to SDR monitor at index {0}"
-msgstr "Alterado para monitor SDR no índice {0}"
-
 msgid "Edit Text"
 msgstr "Editar o Texto"
 
 #, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' não é um arquivo, diretório ou URL."
+
+msgid "Invalid font for text drawing"
+msgstr "Fonte invlida para desenho de texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No foi possvel converter a mensagem para forma:"
@@ -4818,33 +4897,6 @@ msgstr "Visualizar/Mscara/%s"
 msgid "View/Hud"
 msgstr "Visualizar/Hud"
 
-msgid "View/Compare/None"
-msgstr "Visualizar/Comparar/Nenhum"
-
-msgid "View/Compare/Overlay"
-msgstr "Visualizar/Comparar/Sobreposição"
-
-msgid "View/Compare/Wipe"
-msgstr "Visualizar/Comparar/Apagar"
-
-msgid "View/Compare/Difference"
-msgstr "Visualizar/Comparar/Diferença"
-
-msgid "View/Compare/Add"
-msgstr "Visualizar/Comparar/Adicionar"
-
-msgid "View/Compare/Multiply"
-msgstr "Visualizar/Comparar/Multiplicar"
-
-msgid "View/Compare/Horizontal"
-msgstr "Visualizar/Comparar/Horizontal"
-
-msgid "View/Compare/Vertical"
-msgstr "Visualizar/Comparar/Vertical"
-
-msgid "View/Compare/Tile"
-msgstr "Visualizar/Comparar/Azulejo"
-
 msgid "Timeline/Cache/Clear"
 msgstr "Linha Do Tempo/Cache/Limpar"
 
@@ -4866,23 +4918,29 @@ msgstr "Linha Do Tempo/Informaes da Faixa"
 msgid "Timeline/Clip Info"
 msgstr "Linha Do Tempo/Informaes do clipe"
 
-msgid "Timeline/Thumbnails/None"
-msgstr "Linha Do Tempo/Thumbnails/Nenhuma"
+msgid "Timeline/Thumbnails"
+msgstr "Linha do tempo/Miniaturas"
 
-msgid "Timeline/Thumbnails/Small"
-msgstr "Linha Do Tempo/Thumbnails/Pequeno"
-
-msgid "Timeline/Thumbnails/Medium"
-msgstr "Linha Do Tempo/Thumbnails/Mdia"
-
-msgid "Timeline/Thumbnails/Large"
-msgstr "Linha Do Tempo/Thumbnails/Grandes"
+msgid "Timeline/Waveforms"
+msgstr "Linha do tempo/Formas de onda"
 
 msgid "Timeline/Transitions"
 msgstr "Linha Do Tempo/Transies"
 
+msgid "Timeline/Effects"
+msgstr "Linha do tempo/Efeitos"
+
 msgid "Timeline/Markers"
 msgstr "Linha Do Tempo/Marcadores"
+
+msgid "Timeline/Thumbnails Size/Small"
+msgstr "Linha do tempo/Tamanho das miniaturas/Pequeno"
+
+msgid "Timeline/Thumbnails Size/Medium"
+msgstr "Linha do tempo/Tamanho das miniaturas/Médio"
+
+msgid "Timeline/Thumbnails Size/Large"
+msgstr "Linha do tempo/Tamanho das miniaturas/Grande"
 
 #, c++-format
 msgid "Timeline/Visible Tracks/{0}"
@@ -5887,6 +5945,11 @@ msgstr "Gama de cores do FFMpeg para o códec seleccionado"
 
 msgid "Presets"
 msgstr "Predefinições"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr ""
+"Predefinição do FFMpeg para salvar filmes (SDR / HDR) com o codec "
+"selecionado."
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "Espaço de cores do FFMpeg para o códec selecionado"
@@ -7005,9 +7068,6 @@ msgstr "Quadro de erro"
 msgid "Hold Frame"
 msgstr "Manter quadro"
 
-msgid "Scratched Frame"
-msgstr "Quadro riscado"
-
 msgid "Black  Frame"
 msgstr "Quadro preto"
 
@@ -7016,6 +7076,9 @@ msgstr "Pular quadro"
 
 msgid "Gap Frame"
 msgstr "Quadro de lacuna"
+
+msgid "Pick Scratch Color"
+msgstr "Escolher a cor dos quadros ausentes"
 
 msgid "Always"
 msgstr "Sempre"
@@ -7878,6 +7941,24 @@ msgstr ""
 "\t* Quadro preto\t   - Substitui o quadro atual por preto.\n"
 "\t* Pular quadro\t   - Pula o quadro atual.\n"
 "\t* Quadro de lacuna\t   - Adiciona uma lacuna .otio para os quadros ausentes."
+
+msgid "Scratch Frame"
+msgstr "Quadro ausente"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr "Quando ativado, os quadros ausentes serão marcados com uma cruz."
+
+msgid "Scratch Color"
+msgstr "Cor dos quadros ausentes"
+
+msgid "Scratch Lines Color."
+msgstr "Cor das linhas dos quadros ausentes."
+
+msgid "Scratch Width"
+msgstr "Largura das linhas dos quadros ausentes"
+
+msgid "Scratch Lines Width."
+msgstr "Largura das linhas dos quadros ausentes."
 
 msgid "Path Mappings"
 msgstr "Mapas do Caminho"
@@ -8933,11 +9014,17 @@ msgstr "Alternar a informao da faixa da linha de tempo"
 msgid "Toggle Timeline Clip Info"
 msgstr "Comutar a informao do clipe da linha de tempo"
 
+msgid "Toggle Timeline Effects"
+msgstr "Mostrar/ocultar efeitos da linha do tempo"
+
 msgid "Toggle Timeline Thumbnails"
 msgstr "Comutar as miniaturas da linha de tempo"
 
 msgid "Toggle Timeline Transitions"
 msgstr "Alternar Transies da Linha de Tempo"
+
+msgid "Toggle Timeline Waveforms"
+msgstr "Mostrar/ocultar formas de onda da linha do tempo"
 
 msgid "Toggle Timeline Markers"
 msgstr "Alternar Marcadores da Linha de Tempo"
@@ -8984,9 +9071,6 @@ msgstr "Modo de arranque"
 msgid "Area Selection Mode"
 msgstr "Modo de Seleco de reas"
 
-msgid "Draw Mode"
-msgstr "Modo de desenho"
-
 msgid "Erase Mode"
 msgstr "Modo de eliminao"
 
@@ -9032,50 +9116,17 @@ msgstr "Janela do HudName"
 msgid "Toggle One Panel Only"
 msgstr "Comutar apenas um painel"
 
-msgid "Toggle Files Panel"
-msgstr "Activar o Painel de Ficheiros"
-
 msgid "Toggle Media Info Panel"
 msgstr "Comutar o Painel de Informao dos Mdias"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "Alterna o Painel de Informao da rea de Cores"
 
-msgid "Toggle Color Controls Panel"
-msgstr "Comuta o Painel de Controles de Cores"
-
-msgid "Toggle Compare Panel"
-msgstr "Comutar o Painel de Comparao"
-
-msgid "Toggle Devices Panel"
-msgstr "Activar o Painel de Dispositivos"
-
 msgid "Toggle Annotation Panel"
 msgstr "Comutar o Painel de Anotao"
 
-msgid "Toggle Background Panel"
-msgstr "Alterar o Painel de Fundo"
-
-msgid "Toggle Settings Panel"
-msgstr "Activar o Painel de Configuraes"
-
-msgid "Toggle Histogram Panel"
-msgstr "Activar o Painel de Histograma"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "Comutar o Painel Vectorscope"
-
-msgid "Toggle Waveform Panel"
-msgstr "Comutar o Painel de Forma de Onda"
-
-msgid "Toggle Environment Map Panel"
-msgstr "Comutar o Painel de Mapas do Ambiente"
-
 msgid "Toggle Preferences Window"
 msgstr "Activar a Janela de Preferncias"
-
-msgid "Toggle Python Panel"
-msgstr "Comuta o Painel Python"
 
 msgid "Toggle Log Panel"
 msgstr "Activar o Painel de LogName"
@@ -9095,48 +9146,78 @@ msgstr "falhou o host_statistics64"
 msgid "task info failed"
 msgstr "Falhou a informao da tarefa"
 
-#~ msgid "Complexity"
-#~ msgstr "Complexidade"
-
-#~ msgid "Stage Cache"
-#~ msgstr "Cache em estgio"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache de disco em GB"
+#, c++-format
+#~ msgid "HDR Export mode {0}"
+#~ msgstr "Modo de exportação HDR {0}"
 
 #, c++-format
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Informaes sobre a imagem rotativa: {0}"
-
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr ""
-#~ "Imagem muito grande para salvar anotações. Irá escalar para o tamanho do "
-#~ "viewport."
+#~ msgid "Saved '{0}'."
+#~ msgstr "'{0}' salvo."
 
 #, c++-format
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Formato e tipo OpenGL invlidos"
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "Brilho mínimo do monitor HDR (nits) = {0}"
 
 #, c++-format
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Informaes do OpenGL: {0}"
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "Brilho máximo do monitor HDR (nits) = {0}"
 
-#~ msgid "Unsupported output format"
-#~ msgstr "Formato de saída não suportado"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "Monitor HDR não encontrado ou não configurado."
+
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
+#~ msgstr "Monitor HDR não detectado pelo Vulkan ou pelo gerenciador de janelas."
 
 #, c++-format
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "Dados de vídeo vazios no tempo {0}. Repetir o quadro."
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "O espaço de cor Vulkan é {0}"
 
 #, c++-format
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "Informações da Camada de Imagem '{0}': {1} {2}"
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "O formato Vulkan é {0}"
 
-#~ msgid "Unsupported output format: "
-#~ msgstr "Formato de saída não suportado: "
+#, c++-format
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "Alterado para o monitor HDR ativo no índice {0}"
 
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Fonte invlida para desenho de texto"
+#, c++-format
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
+#~ msgstr "Alterado para o monitor com suporte a HDR, mas inativo, no índice {0}"
+
+#, c++-format
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "Alterado para monitor SDR no índice {0}"
+
+#, c++-format
+#~ msgid "Show {0} Window."
+#~ msgstr "Mostrar a janela {0}."
+
+#~ msgid "View/Compare/None"
+#~ msgstr "Visualizar/Comparar/Nenhum"
+
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "Visualizar/Comparar/Sobreposição"
+
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "Visualizar/Comparar/Apagar"
+
+#~ msgid "View/Compare/Difference"
+#~ msgstr "Visualizar/Comparar/Diferença"
+
+#~ msgid "View/Compare/Add"
+#~ msgstr "Visualizar/Comparar/Adicionar"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "Visualizar/Comparar/Multiplicar"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "Visualizar/Comparar/Horizontal"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "Visualizar/Comparar/Vertical"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "Visualizar/Comparar/Azulejo"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "Remover intervalo(s) de áudio no tempo atual."

@@ -43,10 +43,12 @@ namespace mrv
         void add(Fl_Widget& w) { add(&w); }
         void clear();
         void spacing(int x);
-        void resize(int X, int Y, int W, int H);
+        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
         Pack* contents() { return contents_; }
         Fl_Button* button() { return button_; }
         void layout();
+
+        void draw() override;
 
 
         // Whole-group collapse state (hides/shows the entire note list).
@@ -68,6 +70,10 @@ namespace mrv
 
         // Removes a specific annotation belonging to this group.
         void remove_annotation(AnnotationWidget *note);
+
+        // Collapses every annotation in the group except keep_active.
+        void enforce_single_active(AnnotationWidget *keep_active);
+
     protected:
         std::string title_;
         bool collapsed_;
@@ -92,9 +98,6 @@ namespace mrv
         // Shows empty_box_ inside contents_ when annotations_ is empty,
         // removes it otherwise. Safe to call any time annotations_ changes.
         void update_empty_state();
-
-        // Collapses every annotation in the group except keep_active.
-        void enforce_single_active(AnnotationWidget *keep_active);
 
         // Removes active annotation.
         void remove_annotation();

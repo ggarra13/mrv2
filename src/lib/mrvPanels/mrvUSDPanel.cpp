@@ -116,7 +116,7 @@ namespace mrv
             sp->value(v);
 
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = static_cast<int>(o->value());
                     settings->setValue("USD/renderWidth", v);
@@ -139,7 +139,7 @@ namespace mrv
             sp->value(complexity);
 
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     float v = static_cast<float>(o->value());
                     settings->setValue("USD/complexity", v);
@@ -159,7 +159,7 @@ namespace mrv
             }
             m->value(settings->getValue<int>("USD/drawMode"));
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = o->value();
                     settings->setValue("USD/drawMode", v);
@@ -174,7 +174,7 @@ namespace mrv
             c->value(settings->getValue<bool>("USD/enableLighting"));
 
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     int v = w->value();
                     settings->setValue("USD/enableLighting", (bool)v);
@@ -190,7 +190,7 @@ namespace mrv
             c->value(settings->getValue<bool>("USD/enableSceneLights"));
 
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     int v = w->value();
                     settings->setValue("USD/enableSceneLights", (bool)v);
@@ -206,7 +206,7 @@ namespace mrv
             c->value(settings->getValue<bool>("USD/enableSceneMaterials"));
 
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     int v = w->value();
                     settings->setValue("USD/enableSceneMaterials", (bool)v);
@@ -222,7 +222,7 @@ namespace mrv
             c->value(settings->getValue<bool>("USD/sRGB"));
 
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     int v = w->value();
                     settings->setValue("USD/sRGB", v);
@@ -230,7 +230,7 @@ namespace mrv
                 });
 
             Y += 22;
-            
+
             spW = new Widget< Fl_Spinner >(
                 g->x() + 160, Y, g->w() - 160, 20, _("Stage Cache"));
             sp = spW;
@@ -244,7 +244,7 @@ namespace mrv
             sp->value(v);
 
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = static_cast<int>(o->value());
                     settings->setValue("USD/stageCacheByteCount", v);
@@ -265,7 +265,7 @@ namespace mrv
             sp->value(v);
 
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = static_cast<int>(o->value());
                     settings->setValue("USD/diskCacheByteCount", v);

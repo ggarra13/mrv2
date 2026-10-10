@@ -25,7 +25,7 @@ namespace mrv2
 
         bool checkForUpdates()
         {
-            return (bool)App::ui->uiPrefs->uiPrefsCheckForUpdates->value();
+            return (bool)App::ui->uiPrefs->CheckForUpdates->value();
         }
 
         /**

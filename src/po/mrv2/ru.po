@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-04 14:27-0300\n"
+"POT-Creation-Date: 2026-10-10 08:24-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: ru\n"
@@ -1588,6 +1588,18 @@ msgstr "Сверкает {0} {1}..."
 msgid "Stop streaming"
 msgstr "Прекратить поток"
 
+msgid "Complexity"
+msgstr "Сложность"
+
+msgid "Draw Mode"
+msgstr "Режим рисования"
+
+msgid "Stage Cache"
+msgstr "Сценический кэш"
+
+msgid "Disk Cache in GB"
+msgstr "Дисковый кэш в GB"
+
 msgid "Type"
 msgstr "Тип"
 
@@ -1777,6 +1789,75 @@ msgid ""
 msgstr ""
 "Это перезагрузит все ваши настройки к их по умолчанию. Вы уверены, что "
 "хотите продолжить?"
+
+msgid "Toggle Color Controls Panel"
+msgstr "Переключить панель управления цветом"
+
+msgid "Toggle Files Panel"
+msgstr "Переключить панель файлов"
+
+msgid "Toggle Compare Panel"
+msgstr "Переключить панель сравнения"
+
+msgid "Toggle Settings Panel"
+msgstr "Переключить панель настроек"
+
+msgid "Toggle Python Panel"
+msgstr "Переключить панель Python"
+
+msgid "Toggle Logs Panel"
+msgstr "Показать/скрыть панель журналов"
+
+msgid "Toggle Devices Panel"
+msgstr "Переключить панель устройств"
+
+msgid "Toggle Color Area Panel"
+msgstr "Показать/скрыть панель информации о цветовом пространстве"
+
+msgid "Toggle Notes Panel"
+msgstr "Показать/скрыть панель заметок"
+
+msgid "Toggle Annotations Panel"
+msgstr "Показать/скрыть панель аннотаций"
+
+msgid "Toggle Background Panel"
+msgstr "Переключить панель фона"
+
+msgid "Toggle Image Info Panel"
+msgstr "Показать/скрыть панель информации об изображении"
+
+msgid "Toggle Histogram Panel"
+msgstr "Переключить панель гистограммы"
+
+msgid "Toggle Vectorscope Panel"
+msgstr "Переключить панель вектороскопа"
+
+msgid "Toggle Waveform Panel"
+msgstr "Панель инструментов Waveform"
+
+msgid "Toggle Environment Map Panel"
+msgstr "Группа по составлению карты состояния окружающей среды"
+
+msgid "Toggle NDI Panel"
+msgstr "Показать/скрыть панель NDI"
+
+msgid "Toggle WebRTC Panel"
+msgstr "Показать/скрыть панель WebRTC"
+
+msgid "Toggle USD Panel"
+msgstr "Показать/скрыть панель USD"
+
+msgid "Toggle Statistics Panel"
+msgstr "Показать/скрыть панель статистики"
+
+msgid "Toggle Stereo3D Panel"
+msgstr "Показать/скрыть панель Stereo 3D"
+
+msgid "Show Hotkeys Window"
+msgstr "Показать окно горячих клавиш"
+
+msgid "Show Preferences Window"
+msgstr "Показать окно настроек"
 
 msgid "Notes"
 msgstr "Примечания"
@@ -3818,10 +3899,6 @@ msgstr "Сделать интерфейс менее прозрачным."
 msgid "Only allow one side panel at a time."
 msgstr "Разрешить только одну боковую панель одновременно."
 
-#, c++-format
-msgid "Show {0} Window."
-msgstr "Показать окно {0}."
-
 msgid "Show About Window."
 msgstr "Показать окно «О программе»."
 
@@ -4000,6 +4077,10 @@ msgstr ""
 "Вы собираетесь удалить все аннотации. После этого вы можете сразу отменить "
 "действие. Желаете продолжить?"
 
+msgid "Toggle Waveforms in Timeline Viewport."
+msgstr ""
+"Включить/выключить отображение звуковых волн в области просмотра таймлайна."
+
 msgid "No Thumbnails in Timeline Viewport."
 msgstr "Не показывать миниатюры в области просмотра таймлайна."
 
@@ -4022,6 +4103,10 @@ msgstr "Переключить информацию о дорожках в об�
 
 msgid "Toggle Clip Information in Timeline Viewport."
 msgstr "Переключить информацию о клипах в области просмотра таймлайна."
+
+msgid "Toggle Effects in Timeline Viewport."
+msgstr ""
+"Включить/выключить отображение эффектов в области просмотра таймлайна."
 
 msgid "Toggle Markers in Timeline Viewport."
 msgstr "Переключить маркеры в области просмотра таймлайна."
@@ -4305,45 +4390,64 @@ msgid "Saving pictures to {0}."
 msgstr "Сохранение фотографий до {0}."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "Прорецензии должны быть дополнены фильмом.mov, изменить его на.mov."
+msgstr ""
+"Профили ProRes требуют расширения видеофайла .mov.  Изменение на .mov."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
-msgstr "Профиль VP9 нуждается в.mp4,.mkv или.webm расширения фильма."
+".mkv"
+msgstr ""
+"Профиль VP9 требует расширения видеофайла .mp4, .mkv или .webm.  Изменение "
+"на .mkv"
 
 msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
-msgstr "Профиль AV1 требует расширения фильма.mp4 или.mkv."
+msgstr ""
+"Профиль AV1 требует расширения видеофайла .mp4 или .mkv.  Изменение на .mp4"
 
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
-msgstr "Профиль GoPro Cineform требует расширения фильма.mkv."
+msgstr ""
+"Профиль GoPro CineForm требует расширения видеофайла .mkv.  Изменение на "
+".mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr "Профиль HAP требует расширения.mov."
+msgstr "Профиль HAP требует расширения файла .mov.  Изменение на .mov"
 
 msgid "OAPV profile needs a .mp4 extension.  Changing it to .mp4"
-msgstr "Для профиля OAPV требуется расширение .mp4. Изменение на .mp4"
+msgstr "Профиль OAPV требует расширения файла .mp4.  Изменение на .mp4"
 
 #, c++-format
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "Новый файл {0} уже существует! Не может переписать его."
 
 #, c++-format
-msgid "HDR Export mode {0}"
-msgstr "Режим экспорта HDR {0}"
-
-#, c++-format
-msgid "{0}: Cannot open writer plugin."
-msgstr "{0}: Не удаётся открыть пиджак."
+msgid "Rotated image info: {0}"
+msgstr "Информация о поворачиваемых изображениях: {0}"
 
 #, c++-format
 msgid "Scaled image info: {0}"
 msgstr "Расширенная информация об изображениях: {0}"
 
 #, c++-format
+msgid "{0}: Cannot open writer plugin."
+msgstr "{0}: Не удаётся открыть пиджак."
+
+#, c++-format
+msgid "Image info: {0} {1}"
+msgstr "Фотография: {0} {1}"
+
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Фотография слишком большая, чтобы сохранить аннотации. Расширится до размера"
+" смотрового портала."
+
+#, c++-format
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Писатель не получил информацию о выходе. По умолчанию {0}"
+
+#, c++-format
+msgid "Output info: {0} {1}"
+msgstr "Результаты: {0} {1}"
 
 #, c++-format
 msgid "Using profile {0}, pixel format {1}."
@@ -4352,18 +4456,6 @@ msgstr "Используя профиль {0}, пиксельный формат
 #, c++-format
 msgid "Using preset {0}."
 msgstr "Использование предварительного оборудования {0}."
-
-#, c++-format
-msgid "Offscreen Buffer info: {0}"
-msgstr "Информация о буфере вне экрана: {0}"
-
-#, c++-format
-msgid "Image info: {0} {1}"
-msgstr "Фотография: {0} {1}"
-
-#, c++-format
-msgid "Output info: {0} {1}"
-msgstr "Результаты: {0} {1}"
 
 #, c-format
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -4385,16 +4477,38 @@ msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Звук только в хронологии, но не в попытке сохранить звук."
 
 #, c++-format
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Неверный формат и тип OpenGL"
+
+#, c++-format
+msgid "OpenGL info: {0}"
+msgstr "Информация OpenGL: {0}"
+
+#, c++-format
 msgid "Saving... {0}"
 msgstr "Спасаю... {0}"
+
+msgid "Unsupported output format"
+msgstr "Неподдерживаемый формат вывода"
+
+#, c++-format
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
 
 #, c++-format
 msgid "Render size: {0}"
 msgstr "Размер рендеринга: {0}"
 
 #, c++-format
-msgid "Saved '{0}'."
-msgstr "'{0}' сохранено."
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Информация о слое изображения '{0}': {1} {2}"
+
+#, c++-format
+msgid "Offscreen Buffer info: {0}"
+msgstr "Информация о буфере вне экрана: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Неподдерживаемый формат вывода: "
 
 msgid "2.35"
 msgstr "2.35"
@@ -4412,47 +4526,15 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "Кэш: "
 
-#, c++-format
-msgid "HDR monitor min. nits = {0}"
-msgstr "Минимальная яркость HDR-монитора (нит) = {0}"
-
-#, c++-format
-msgid "HDR monitor max. nits = {0}"
-msgstr "Максимальная яркость HDR-монитора (нит) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR-монитор не найден или не настроен."
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr "HDR-монитор не обнаружен Vulkan или оконным менеджером."
-
-#, c++-format
-msgid "Vulkan color space is {0}"
-msgstr "Цветовое пространство Vulkan: {0}"
-
-#, c++-format
-msgid "Vulkan format is {0}"
-msgstr "Формат Vulkan: {0}"
-
-#, c++-format
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "Переключено на активный HDR-монитор с индексом {0}"
-
-#, c++-format
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr ""
-"Переключено на монитор с поддержкой HDR, но неактивный, с индексом {0}"
-
-#, c++-format
-msgid "Changed to SDR monitor at index {0}"
-msgstr "Переключено на SDR-монитор с индексом {0}"
-
 msgid "Edit Text"
 msgstr "Изменить текст"
 
 #, c++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' не является файлом, каталогом или URL."
+
+msgid "Invalid font for text drawing"
+msgstr "Неверный шрифт для текстового рисунка"
 
 msgid "Could not convert message to shape: "
 msgstr "Невозможно преобразовать сообщение в форму:"
@@ -4833,33 +4915,6 @@ msgstr "Вид/Маска/%s"
 msgid "View/Hud"
 msgstr "Вид/Hud"
 
-msgid "View/Compare/None"
-msgstr "Вид/Сравнение/Нет"
-
-msgid "View/Compare/Overlay"
-msgstr "Вид/Сравнение/Оверлей"
-
-msgid "View/Compare/Wipe"
-msgstr "Вид/Сравнение/Протирка"
-
-msgid "View/Compare/Difference"
-msgstr "Вид/Сравнение/Разница"
-
-msgid "View/Compare/Add"
-msgstr "Вид/Сравнение/Добавить"
-
-msgid "View/Compare/Multiply"
-msgstr "Вид/Сравнение/Умножить"
-
-msgid "View/Compare/Horizontal"
-msgstr "Вид/Сравнение/По горизонтали"
-
-msgid "View/Compare/Vertical"
-msgstr "Вид/Сравнение/Вертикальная передача"
-
-msgid "View/Compare/Tile"
-msgstr "Вид/Сравнение/Плитка"
-
 msgid "Timeline/Cache/Clear"
 msgstr "Таймлайн/Кэш/Очистить"
 
@@ -4881,23 +4936,29 @@ msgstr "Таймлайн/Информация о дорожке"
 msgid "Timeline/Clip Info"
 msgstr "Таймлайн/Информация о клипе"
 
-msgid "Timeline/Thumbnails/None"
-msgstr "Таймлайн/Миниатюры/Нет"
+msgid "Timeline/Thumbnails"
+msgstr "Таймлайн/Миниатюры"
 
-msgid "Timeline/Thumbnails/Small"
-msgstr "Таймлайн/Миниатюры/Маленькие"
-
-msgid "Timeline/Thumbnails/Medium"
-msgstr "Таймлайн/Миниатюры/Средние"
-
-msgid "Timeline/Thumbnails/Large"
-msgstr "Таймлайн/Миниатюры/Большие"
+msgid "Timeline/Waveforms"
+msgstr "Таймлайн/Звуковые волны"
 
 msgid "Timeline/Transitions"
 msgstr "Таймлайн/Переходы"
 
+msgid "Timeline/Effects"
+msgstr "Таймлайн/Эффекты"
+
 msgid "Timeline/Markers"
 msgstr "Таймлайн/Маркеры"
+
+msgid "Timeline/Thumbnails Size/Small"
+msgstr "Таймлайн/Размер миниатюр/Маленький"
+
+msgid "Timeline/Thumbnails Size/Medium"
+msgstr "Таймлайн/Размер миниатюр/Средний"
+
+msgid "Timeline/Thumbnails Size/Large"
+msgstr "Таймлайн/Размер миниатюр/Большой"
 
 #, c++-format
 msgid "Timeline/Visible Tracks/{0}"
@@ -5902,6 +5963,10 @@ msgstr "Цветовой диапазон FFMpeg для выбранного к�
 
 msgid "Presets"
 msgstr "Предустановки"
+
+msgid "FFMpeg's Movie Saving preset (SDR / HDR) for the codec selected."
+msgstr ""
+"Предустановка FFMpeg для сохранения видео (SDR / HDR) для выбранного кодека."
 
 msgid "FFMpeg's Color Space for the codec selected"
 msgstr "Цветовое пространство FFMpeg для выбранного кодаc"
@@ -7023,9 +7088,6 @@ msgstr "Кадр с ошибкой"
 msgid "Hold Frame"
 msgstr "Удерживать кадр"
 
-msgid "Scratched Frame"
-msgstr "Поцарапанный кадр"
-
 msgid "Black  Frame"
 msgstr "Чёрный кадр"
 
@@ -7034,6 +7096,9 @@ msgstr "Пропустить кадр"
 
 msgid "Gap Frame"
 msgstr "Кадр с пропуском"
+
+msgid "Pick Scratch Color"
+msgstr "Выбрать цвет отсутствующих кадров"
 
 msgid "Always"
 msgstr "Всегда"
@@ -7888,6 +7953,25 @@ msgstr ""
 "\t* Чёрный кадр\t   - Заменяет текущий кадр чёрным.\n"
 "\t* Пропустить кадр\t   - Пропускает текущий кадр.\n"
 "\t* Кадр с пропуском\t   - Добавляет .otio Gap для отсутствующих кадров."
+
+msgid "Scratch Frame"
+msgstr "Отсутствующий кадр"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr ""
+"Если эта опция включена, отсутствующие кадры будут отмечены крестиком."
+
+msgid "Scratch Color"
+msgstr "Цвет отсутствующих кадров"
+
+msgid "Scratch Lines Color."
+msgstr "Цвет линий отсутствующих кадров."
+
+msgid "Scratch Width"
+msgstr "Ширина линий отсутствующих кадров"
+
+msgid "Scratch Lines Width."
+msgstr "Ширина линий отсутствующих кадров."
 
 msgid "Path Mappings"
 msgstr "Пути картирования"
@@ -8943,11 +9027,17 @@ msgstr "Переключить информацию о дорожке време
 msgid "Toggle Timeline Clip Info"
 msgstr "Переключить информацию о клипе временной шкалы"
 
+msgid "Toggle Timeline Effects"
+msgstr "Включить/выключить эффекты таймлайна"
+
 msgid "Toggle Timeline Thumbnails"
 msgstr "Переключить миниатюры временной шкалы"
 
 msgid "Toggle Timeline Transitions"
 msgstr "Переключить переходы временной шкалы"
+
+msgid "Toggle Timeline Waveforms"
+msgstr "Включить/выключить отображение звуковых волн на таймлайне"
 
 msgid "Toggle Timeline Markers"
 msgstr "Переключить маркеры временной шкалы"
@@ -8994,9 +9084,6 @@ msgstr "Режим скруба"
 msgid "Area Selection Mode"
 msgstr "Режим выделения области"
 
-msgid "Draw Mode"
-msgstr "Режим рисования"
-
 msgid "Erase Mode"
 msgstr "Стереть режим"
 
@@ -9042,50 +9129,17 @@ msgstr "Окно Хад"
 msgid "Toggle One Panel Only"
 msgstr "Переключить только одну панель"
 
-msgid "Toggle Files Panel"
-msgstr "Переключить панель файлов"
-
 msgid "Toggle Media Info Panel"
 msgstr "Переключить панель информации о медиа"
 
 msgid "Toggle Color Area Info Panel"
 msgstr "Переключить панель информации о цветовой области"
 
-msgid "Toggle Color Controls Panel"
-msgstr "Переключить панель управления цветом"
-
-msgid "Toggle Compare Panel"
-msgstr "Переключить панель сравнения"
-
-msgid "Toggle Devices Panel"
-msgstr "Переключить панель устройств"
-
 msgid "Toggle Annotation Panel"
 msgstr "Переключить панель аннотаций"
 
-msgid "Toggle Background Panel"
-msgstr "Переключить панель фона"
-
-msgid "Toggle Settings Panel"
-msgstr "Переключить панель настроек"
-
-msgid "Toggle Histogram Panel"
-msgstr "Переключить панель гистограммы"
-
-msgid "Toggle Vectorscope Panel"
-msgstr "Переключить панель вектороскопа"
-
-msgid "Toggle Waveform Panel"
-msgstr "Панель инструментов Waveform"
-
-msgid "Toggle Environment Map Panel"
-msgstr "Группа по составлению карты состояния окружающей среды"
-
 msgid "Toggle Preferences Window"
 msgstr "Переключить окно настроек"
-
-msgid "Toggle Python Panel"
-msgstr "Переключить панель Python"
 
 msgid "Toggle Log Panel"
 msgstr "Переключить панель журналов"
@@ -9105,48 +9159,79 @@ msgstr "shop_statistics64 не сработал"
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
 
-#~ msgid "Complexity"
-#~ msgstr "Сложность"
-
-#~ msgid "Stage Cache"
-#~ msgstr "Сценический кэш"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Дисковый кэш в GB"
+#, c++-format
+#~ msgid "HDR Export mode {0}"
+#~ msgstr "Режим экспорта HDR {0}"
 
 #, c++-format
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Информация о поворачиваемых изображениях: {0}"
+#~ msgid "Saved '{0}'."
+#~ msgstr "'{0}' сохранено."
 
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#, c++-format
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "Минимальная яркость HDR-монитора (нит) = {0}"
+
+#, c++-format
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "Максимальная яркость HDR-монитора (нит) = {0}"
+
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR-монитор не найден или не настроен."
+
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
+#~ msgstr "HDR-монитор не обнаружен Vulkan или оконным менеджером."
+
+#, c++-format
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Цветовое пространство Vulkan: {0}"
+
+#, c++-format
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Формат Vulkan: {0}"
+
+#, c++-format
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "Переключено на активный HDR-монитор с индексом {0}"
+
+#, c++-format
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
 #~ msgstr ""
-#~ "Фотография слишком большая, чтобы сохранить аннотации. Расширится до размера"
-#~ " смотрового портала."
+#~ "Переключено на монитор с поддержкой HDR, но неактивный, с индексом {0}"
 
 #, c++-format
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Неверный формат и тип OpenGL"
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "Переключено на SDR-монитор с индексом {0}"
 
 #, c++-format
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Информация OpenGL: {0}"
+#~ msgid "Show {0} Window."
+#~ msgstr "Показать окно {0}."
 
-#~ msgid "Unsupported output format"
-#~ msgstr "Неподдерживаемый формат вывода"
+#~ msgid "View/Compare/None"
+#~ msgstr "Вид/Сравнение/Нет"
 
-#, c++-format
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
+#~ msgid "View/Compare/Overlay"
+#~ msgstr "Вид/Сравнение/Оверлей"
 
-#, c++-format
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "Информация о слое изображения '{0}': {1} {2}"
+#~ msgid "View/Compare/Wipe"
+#~ msgstr "Вид/Сравнение/Протирка"
 
-#~ msgid "Unsupported output format: "
-#~ msgstr "Неподдерживаемый формат вывода: "
+#~ msgid "View/Compare/Difference"
+#~ msgstr "Вид/Сравнение/Разница"
 
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Неверный шрифт для текстового рисунка"
+#~ msgid "View/Compare/Add"
+#~ msgstr "Вид/Сравнение/Добавить"
+
+#~ msgid "View/Compare/Multiply"
+#~ msgstr "Вид/Сравнение/Умножить"
+
+#~ msgid "View/Compare/Horizontal"
+#~ msgstr "Вид/Сравнение/По горизонтали"
+
+#~ msgid "View/Compare/Vertical"
+#~ msgstr "Вид/Сравнение/Вертикальная передача"
+
+#~ msgid "View/Compare/Tile"
+#~ msgstr "Вид/Сравнение/Плитка"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "Удалить аудиоразрыв(ы) в текущий момент времени."

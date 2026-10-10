@@ -623,7 +623,7 @@ namespace mrv
             auto time = t + OTIO_NS::RationalTime(dx, t.rate());
 
             // Stop at end/beginning if not looping.
-            int behavior = p.ui->uiPrefs->uiPrefsScrubbingLoopMode->value();
+            int behavior = p.ui->uiPrefs->ScrubbingLoopMode->value();
             const auto& range = player->inOutRange();
             const auto loop = player->loop();
             if ((behavior == kScrubLoopButton &&
@@ -642,7 +642,7 @@ namespace mrv
             bool isMuted = player->isMuted();
             if (!info.audio.isValid())
                 isMuted = true;
-            if (!isMuted && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
+            if (!isMuted && p.ui->uiPrefs->ScrubAutoPlay->value())
             {
                 if (player->playback() == timeline::Playback::Stop)
                 {
@@ -674,7 +674,7 @@ namespace mrv
                 return;
 
             const int X = Fl::event_x() * pixels_per_unit();
-            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * multiplier;
+            const float scale = p.ui->uiPrefs->ScrubbingSensitivity->value() * multiplier;
             float dx = (X - p.mousePress.x) / scale;
 
             if (std::abs(dx) >= 1.0F)
@@ -1814,7 +1814,7 @@ namespace mrv
             maxW -= dW;
             maxH -= dH;
 
-            bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
+            bool alwaysFrameView = (bool)uiPrefs->AutoFitImage->value();
             p.frameView = alwaysFrameView;
             bool frameView = alwaysFrameView;
 
@@ -1956,7 +1956,7 @@ namespace mrv
                 // Otherwise when hiding the timeline, it would appear
                 // floating in space.
                 if (use_maximize ||
-                    (!uiPrefs->uiPrefsTimeline->value() &&
+                    (!uiPrefs->Timeline->value() &&
                      (W > minW || H > minH)))
                 {
                     wait::milliseconds(500);
@@ -2291,7 +2291,7 @@ namespace mrv
 
             int screen = this->screen_num();
             timeline::OCIOOptions o = getOCIOOptions(screen);
-            o.fileName = p.ui->uiPrefs->uiPrefsOCIOConfig->value();
+            o.fileName = p.ui->uiPrefs->OCIOConfig->value();
 
             std::string input = ocio::ics(); //p.ui->uiICS->label();
             if (p.ui->uiICS->value() <= 0)
@@ -2564,7 +2564,7 @@ namespace mrv
 
             if (!active)
             {
-                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                int vsync = p.ui->uiPrefs->OpenGLVsync->value();
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncNone)
                 {
@@ -2587,7 +2587,7 @@ namespace mrv
             }
             else
             {
-                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                int vsync = p.ui->uiPrefs->OpenGLVsync->value();
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncAlways)
                 {
@@ -2628,7 +2628,7 @@ namespace mrv
 
             if (!active)
             {
-                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                int vsync = p.ui->uiPrefs->OpenGLVsync->value();
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncNone)
                 {
@@ -2653,7 +2653,7 @@ namespace mrv
             }
             else
             {
-                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                int vsync = p.ui->uiPrefs->OpenGLVsync->value();
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncAlways)
                 {
@@ -3918,7 +3918,7 @@ namespace mrv
 
         float TimelineViewport::_getZoomSpeedValue() const noexcept
         {
-            int idx = _p->ui->uiPrefs->uiPrefsZoomSpeed->value();
+            int idx = _p->ui->uiPrefs->ZoomSpeed->value();
             const float speedValues[] = {0.1F, 0.25F, 0.5F};
             return speedValues[idx];
         }

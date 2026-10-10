@@ -19,6 +19,22 @@ namespace tl
         //! \name File Paths
         ///@{
 
+        //! Convert a UTF-8 string to a file system path.
+        //!
+        //! tlRender strings are UTF-8, and the standard's way of saying so
+        //! changed underfoot: C++20 deprecated u8path() and made u8string()
+        //! return a char8_t string. These two cross the boundary the same way
+        //! under either standard, and they are the only place the difference
+        //! lives.
+        std::filesystem::path toFileSystem(const std::string&);
+
+        //! Convert a file system path to a UTF-8 string.
+        std::string fromFileSystem(const std::filesystem::path&);
+
+        //! Convert a file system path to a UTF-8 string with generic
+        //! (forward slash) separators.
+        std::string fromFileSystemGeneric(const std::filesystem::path&);
+
         //! Does the file name start with a dot?
         bool isDotFile(const std::string&);
 
@@ -59,6 +75,52 @@ namespace tl
             bool operator == (const PathOptions&) const;
             bool operator != (const PathOptions&) const;
         };
+
+        //! Frame sequence.
+        struct FrameSeq
+        {
+            FrameSeq() = default;
+            explicit FrameSeq(const math::Int64Range&, int inc = 1);
+            FrameSeq(int64_t, int64_t, int inc = 1);
+            explicit FrameSeq(int64_t);
+
+            math::Int64Range range;
+            int      inc = 1;
+
+            bool operator == (const FrameSeq&) const = default;
+        };
+
+        //! Convert frames to frame sequences.
+        std::vector<FrameSeq> toFrameSeq(const std::vector<int64_t>&);
+
+        //! Convert a frame sequence to frames.
+        std::vector<int64_t> toFrames(const FrameSeq&);
+
+        //! Convert frame sequences to frames.
+        std::vector<int64_t> toFrames(const std::vector<FrameSeq>&);
+
+        //! Add a frame to a list of frame sequences, which is kept sorted and
+        //! merged. Frames already in the list are ignored.
+        //!
+        //! Adding frames in order gives the same result as toFrameSeq(); frames
+        //! added out of order may be split into a different set of sequences that
+        //! covers the same frames.
+        void addFrame(std::vector<FrameSeq>&, int64_t);
+
+        //! Get the number of frames in a frame sequence.
+        size_t getFrameCount(const FrameSeq&);
+
+        //! Get the number of frames in a list of frame sequences.
+        size_t getFrameCount(const std::vector<FrameSeq>&);
+
+        //! Get the range spanned by a list of frame sequences.
+        std::optional<math::Int64Range> getRange(const std::vector<FrameSeq>&);
+
+        //! Convert a frame sequence to a label.
+        std::string getLabel(const FrameSeq&, int pad = 0);
+
+        //! Convert frame sequences to a label.
+        std::string getLabel(const std::vector<FrameSeq>&, int pad = 0);
 
         //! File path.
         //!
@@ -137,8 +199,21 @@ namespace tl
             const std::optional<math::Int64Range>& getFrames() const;
             void setFrames(const math::Int64Range&);
 
+            //! Get the frames in the sequence.
+            const std::vector<FrameSeq>& getSeq() const;
+
+            //! Set the frames in the sequence. The list should be sorted and
+            //! merged, as returned by toFrameSeq().
+            void setSeq(const std::vector<FrameSeq>&);
+
+            //! Get the number of frames in the sequence.
+            size_t getSeqSize() const;
+
             //! Get whether this is a sequence.
             bool isSequence() const;
+
+            //! Get whether this sequence is missing frames within its range.
+            bool isPartialSeq() const;
 
             //! Get whether this has a sequence wildcard ('#').
             bool hasSeqWildcard() const;
@@ -154,6 +229,11 @@ namespace tl
 
             //! Add a path to this sequence.
             bool addSeq(const Path&);
+
+            //! Group the sequence the way toFrameSeq() would. Paths built up with
+            //! addSeq() hold the right frames whatever order they arrive in, but
+            //! only reach the canonical grouping if they arrive in order.
+            void normalizeSeq();
 
             ///@}
 
@@ -181,6 +261,7 @@ namespace tl
 
         private:
             void _parse(const PathOptions&);
+            void _setSeq(const std::vector<FrameSeq>&);
 
             std::string _path;
             PathOptions _options;
@@ -193,6 +274,9 @@ namespace tl
             int _pad = 0;
             std::pair<size_t, size_t> _ext = _invalid;
             std::pair<size_t, size_t> _request = _invalid;
+            std::vector<FrameSeq> _seq;
+            // The range spanned by _seq, cached so getFrames() can return a
+            // reference.
             std::optional<math::Int64Range> _frames;
         };
 
@@ -226,36 +310,6 @@ namespace tl
             bool operator == (const DirListOptions&) const;
             bool operator != (const DirListOptions&) const;
         };
-
-        //! Frame sequence.
-        struct FrameSeq
-        {
-            FrameSeq() = default;
-            explicit FrameSeq(const math::Int64Range&, int inc = 1);
-            FrameSeq(int64_t, int64_t, int inc = 1);
-            explicit FrameSeq(int64_t);
-
-            math::Int64Range range;
-            int      inc = 1;
-
-            bool operator == (const FrameSeq&) const;
-            bool operator != (const FrameSeq&) const;
-        };
-
-        //! Convert frames to frame sequences.
-         std::vector<FrameSeq> toFrameSeq(const std::vector<int64_t>&);
-
-        //! Convert a frame sequence to frames.
-         std::vector<int64_t> toFrames(const FrameSeq&);
-
-        //! Convert frame sequences to frames.
-         std::vector<int64_t> toFrames(const std::vector<FrameSeq>&);
-
-        //! Convert a frame sequence to a label.
-         std::string getLabel(const FrameSeq&);
-
-        //! Convert frame sequences to a label.
-         std::string getLabel(const std::vector<FrameSeq>&);
 
         //! Directory list entry.
         struct DirEntry

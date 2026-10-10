@@ -2,21 +2,27 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
+// Request a 64-bit off_t on 32-bit Linux/BSD targets. This must come before
+// any system header. (macOS is always 64-bit, so nothing is needed there.)
+#if !defined(__APPLE__) && !defined(_FILE_OFFSET_BITS)
+#    define _FILE_OFFSET_BITS 64
+#endif
+
 #include <tlCore/FileIO.h>
 
-#include <tlCore/File.h>
-#include <tlCore/Memory.h>
+#include <tlCore/FileInfoPrivate.h>
 #include <tlCore/StringFormat.h>
+#include <tlCore/Memory.h>
+#include <tlCore/Path.h>
 
+#include <algorithm>
 #include <atomic>
+#include <cstdint>
+#include <filesystem>
 
-#if defined(__linux__)
-#    include <linux/limits.h>
-#endif // __linux__
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <errno.h>
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
@@ -27,17 +33,17 @@ namespace tl
     {
         namespace
         {
-            enum class ErrorType {
+            enum class ErrorType
+            {
                 Open,
-                Stat,
-                MemoryMap,
+                MMap,
                 Close,
-                CloseMemoryMap,
+                CloseMMap,
                 Read,
-                ReadMemoryMap,
+                ReadMMap,
                 Write,
                 Seek,
-                SeekMemoryMap
+                SeekMMap
             };
 
             std::string getErrorString()
@@ -46,7 +52,7 @@ namespace tl
                 char buf[string::cBufferSize] = "";
 #if defined(_GNU_SOURCE)
                 out = strerror_r(errno, buf, string::cBufferSize);
-#else  // _GNU_SOURCE
+#else // _GNU_SOURCE
                 strerror_r(errno, buf, string::cBufferSize);
                 out = buf;
 #endif // _GNU_SOURCE
@@ -54,48 +60,41 @@ namespace tl
             }
 
             std::string getErrorMessage(
-                ErrorType type,
+                ErrorType          type,
                 const std::string& path,
-                const std::string& message = std::string())
+                const std::string& message  = std::string())
             {
                 std::string out;
                 switch (type)
                 {
                 case ErrorType::Open:
-                    out = string::Format("{0}: Cannot open file").arg(path);
+                    out = string::Format("Cannot open file \"{0}\"").arg(path);
                     break;
-                case ErrorType::Stat:
-                    out = string::Format("{0}: Cannot stat file").arg(path);
-                    break;
-                case ErrorType::MemoryMap:
-                    out =
-                        string::Format("{0}: Cannot memory map").arg(path);
+                case ErrorType::MMap:
+                    out = string::Format("Cannot memory map file \"{0}\"").arg(path);
                     break;
                 case ErrorType::Close:
-                    out = string::Format("{0}: Cannot close").arg(path);
+                    out = string::Format("Cannot close file \"{0}\"").arg(path);
                     break;
-                case ErrorType::CloseMemoryMap:
-                    out = string::Format("{0}: Cannot unmap").arg(path);
+                case ErrorType::CloseMMap:
+                    out = string::Format("Cannot unmap file \"{0}\"").arg(path);
                     break;
                 case ErrorType::Read:
-                    out = string::Format("{0}: Cannot read").arg(path);
+                    out = string::Format("Cannot read file \"{0}\"").arg(path);
                     break;
-                case ErrorType::ReadMemoryMap:
-                    out = string::Format("{0}: Cannot read memory map")
-                              .arg(path);
+                case ErrorType::ReadMMap:
+                    out = string::Format("Cannot read memory mapped file \"{0}\"").arg(path);
                     break;
                 case ErrorType::Write:
-                    out = string::Format("{0}: Cannot write").arg(path);
+                    out = string::Format("Cannot write file \"{0}\"").arg(path);
                     break;
                 case ErrorType::Seek:
-                    out = string::Format("{0}: Cannot seek").arg(path);
+                    out = string::Format("Cannot seek file \"{0}\"").arg(path);
                     break;
-                case ErrorType::SeekMemoryMap:
-                    out = string::Format("{0}: Cannot seek memory map")
-                              .arg(path);
+                case ErrorType::SeekMMap:
+                    out = string::Format("Cannot seek memory mapped file \"{0}\"").arg(path);
                     break;
-                default:
-                    break;
+                default: break;
                 }
                 if (!message.empty())
                 {
@@ -111,16 +110,16 @@ namespace tl
             void seek(size_t, SeekMode);
 
             std::filesystem::path path;
-            Mode mode = Mode::First;
-            Read read = Read::First;
-            size_t pos = 0;
-            size_t size = 0;
-            bool endianConversion = false;
-            int f = -1;
-            void* mMap = reinterpret_cast<void*>(-1);
-            const uint8_t* memoryStart = nullptr;
-            const uint8_t* memoryEnd = nullptr;
-            const uint8_t* memoryP = nullptr;
+            Mode                  mode = Mode::First;
+            Read                  readType = Read::First;
+            size_t                pos = 0;
+            size_t                size = 0;
+            bool                  endianConversion = false;
+            int                   f = -1;
+            void*                 mMap = reinterpret_cast<void*>(-1);
+            const uint8_t*        memStart = nullptr;
+            const uint8_t*        memEnd = nullptr;
+            const uint8_t*        memP = nullptr;
         };
 
         namespace
@@ -140,28 +139,24 @@ namespace tl
             --objectCount;
         }
 
-        size_t FileIO::getObjectCount()
-        {
-            return objectCount;
-        }
-
-        std::shared_ptr<FileIO>
-        FileIO::create(const std::filesystem::path& path, const MemoryRead& memory)
+        std::shared_ptr<FileIO> FileIO::create(
+            const std::filesystem::path& path,
+            const MemoryRead& memFile)
         {
             auto out = std::shared_ptr<FileIO>(new FileIO);
             out->_p->path = path;
             out->_p->mode = Mode::Read;
-            out->_p->read = Read::Normal;
-            out->_p->size = memory.size;
-            out->_p->memoryStart = memory.p;
-            out->_p->memoryEnd = memory.p + memory.size;
-            out->_p->memoryP = memory.p;
+            out->_p->readType = Read::Normal;
+            out->_p->size = memFile.size;
+            out->_p->memStart = memFile.p;
+            out->_p->memEnd = memFile.p + memFile.size;
+            out->_p->memP = memFile.p;
             return out;
         }
 
         bool FileIO::isOpen() const
         {
-            return _p->f != -1 || _p->memoryStart;
+            return _p->f != -1 || _p->memStart;
         }
 
         const std::filesystem::path& FileIO::getPath() const
@@ -186,17 +181,17 @@ namespace tl
 
         const uint8_t* FileIO::getMemoryStart() const
         {
-            return _p->memoryStart;
+            return _p->memStart;
         }
 
         const uint8_t* FileIO::getMemoryEnd() const
         {
-            return _p->memoryEnd;
+            return _p->memEnd;
         }
 
         const uint8_t* FileIO::getMemoryP() const
         {
-            return _p->memoryP;
+            return _p->memP;
         }
 
         bool FileIO::hasEndianConversion() const
@@ -213,7 +208,7 @@ namespace tl
         {
             TLRENDER_P();
             bool out = false;
-            if (!p.memoryStart)
+            if (!p.memStart)
             {
                 out |= -1 == p.f;
             }
@@ -225,46 +220,46 @@ namespace tl
         {
             TLRENDER_P();
 
-            if (!p.memoryStart && -1 == p.f)
+            if (!p.memStart && -1 == p.f)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Read, p.path));
+                    getErrorMessage(ErrorType::Read, fromFileSystem(p.path)));
             }
 
             switch (p.mode)
             {
             case Mode::Read:
             {
-                if (p.memoryStart)
+                if (p.memStart)
                 {
-                    const uint8_t* memoryP = p.memoryP + size * wordSize;
-                    if (memoryP > p.memoryEnd)
+                    const uint8_t* memP = p.memP + size * wordSize;
+                    if (memP > p.memEnd)
                     {
-                        throw std::runtime_error(getErrorMessage(
-                            ErrorType::ReadMemoryMap, p.path));
+                        throw std::runtime_error(
+                            getErrorMessage(ErrorType::ReadMMap, fromFileSystem(p.path)));
                     }
                     if (p.endianConversion && wordSize > 1)
                     {
-                        memory::swapEndian(p.memoryP, in, size, wordSize);
+                        memory::swapEndian(p.memP, in, size, wordSize);
                     }
                     else
                     {
-                        memcpy(in, p.memoryP, size * wordSize);
+                        memcpy(in, p.memP, size * wordSize);
                     }
-                    p.memoryP = memoryP;
+                    p.memP = memP;
                 }
                 else
                 {
                     const ssize_t r = ::read(p.f, in, size * wordSize);
-                    if (-1 == r)
-                    {
-                        throw std::runtime_error(getErrorMessage(
-                            ErrorType::Read, p.path, getErrorString()));
-                    }
-                    else if (r != size * wordSize)
+                    if (r < 0)
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::Read, p.path));
+                            getErrorMessage(ErrorType::Read, fromFileSystem(p.path), getErrorString()));
+                    }
+                    else if (static_cast<size_t>(r) != size * wordSize)
+                    {
+                        throw std::runtime_error(
+                            getErrorMessage(ErrorType::Read, fromFileSystem(p.path)));
                     }
                     if (p.endianConversion && wordSize > 1)
                     {
@@ -276,15 +271,15 @@ namespace tl
             case Mode::ReadWrite:
             {
                 const ssize_t r = ::read(p.f, in, size * wordSize);
-                if (-1 == r)
-                {
-                    throw std::runtime_error(getErrorMessage(
-                        ErrorType::Read, p.path, getErrorString()));
-                }
-                else if (r != size * wordSize)
+                if (r < 0)
                 {
                     throw std::runtime_error(
-                        getErrorMessage(ErrorType::Read, p.path));
+                        getErrorMessage(ErrorType::Read, fromFileSystem(p.path), getErrorString()));
+                }
+                else if (static_cast<size_t>(r) != size * wordSize)
+                {
+                    throw std::runtime_error(
+                        getErrorMessage(ErrorType::Read, fromFileSystem(p.path)));
                 }
                 if (p.endianConversion && wordSize > 1)
                 {
@@ -292,8 +287,7 @@ namespace tl
                 }
                 break;
             }
-            default:
-                break;
+            default: break;
             }
             p.pos += size * wordSize;
         }
@@ -305,7 +299,7 @@ namespace tl
             if (p.mode != Mode::Read && p.mode != Mode::ReadWrite)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Read, p.path.u8string()));
+                    getErrorMessage(ErrorType::Read, fromFileSystem(p.path)));
             }
 
             const size_t byteCount = size * wordSize;
@@ -313,19 +307,19 @@ namespace tl
             {
                 throw std::runtime_error(
                     getErrorMessage(
-                        p.memoryStart ? ErrorType::ReadMemoryMap : ErrorType::Read,
-                        p.path.u8string()));
+                        p.memStart ? ErrorType::ReadMMap : ErrorType::Read,
+                        fromFileSystem(p.path)));
             }
 
-            if (p.memoryStart)
+            if (p.memStart)
             {
                 if (p.endianConversion && wordSize > 1)
                 {
-                    memory::swapEndian(p.memoryStart + pos, in, size, wordSize);
+                    memory::swapEndian(p.memStart + pos, in, size, wordSize);
                 }
                 else
                 {
-                    memcpy(in, p.memoryStart + pos, byteCount);
+                    memcpy(in, p.memStart + pos, byteCount);
                 }
             }
             else if (p.f != -1)
@@ -340,12 +334,12 @@ namespace tl
                     if (r < 0)
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::Read, p.path.u8string(), getErrorString()));
+                            getErrorMessage(ErrorType::Read, fromFileSystem(p.path), getErrorString()));
                     }
                     else if (0 == r)
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::Read, p.path.u8string()));
+                            getErrorMessage(ErrorType::Read, fromFileSystem(p.path)));
                     }
                     out       += r;
                     offset    += r;
@@ -359,7 +353,7 @@ namespace tl
             else
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Read, p.path.u8string()));
+                    getErrorMessage(ErrorType::Read, fromFileSystem(p.path)));
             }
         }
 
@@ -370,7 +364,7 @@ namespace tl
             if (-1 == p.f)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Write, p.path));
+                    getErrorMessage(ErrorType::Write, fromFileSystem(p.path)));
             }
 
             const uint8_t* inP = reinterpret_cast<const uint8_t*>(in);
@@ -383,16 +377,23 @@ namespace tl
             }
             if (::write(p.f, inP, size * wordSize) == -1)
             {
-                throw std::runtime_error(getErrorMessage(
-                    ErrorType::Write, p.path, getErrorString()));
+                throw std::runtime_error(
+                    getErrorMessage(ErrorType::Write, fromFileSystem(p.path), getErrorString()));
             }
             p.pos += size * wordSize;
             p.size = std::max(p.pos, p.size);
         }
 
-        void
-        FileIO::_open(const std::filesystem::path& path, Mode mode, Read read,
-                      Access access)
+        size_t FileIO::getObjectCount()
+        {
+            return objectCount;
+        }
+
+        void FileIO::_open(
+            const std::filesystem::path& path,
+            Mode mode,
+            Read readType,
+            Access access)
         {
             TLRENDER_P();
 
@@ -400,7 +401,7 @@ namespace tl
 
             // Open the file.
             int openFlags = 0;
-            int openMode = 0;
+            int openMode  = 0;
             switch (mode)
             {
             case Mode::Read:
@@ -408,46 +409,50 @@ namespace tl
                 break;
             case Mode::Write:
                 openFlags = O_WRONLY | O_CREAT | O_TRUNC;
-                openMode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+                openMode  = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
                 break;
             case Mode::ReadWrite:
                 openFlags = O_RDWR | O_CREAT;
-                openMode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+                openMode  = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
                 break;
             case Mode::Append:
                 openFlags = O_WRONLY | O_CREAT | O_APPEND;
-                openMode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+                openMode  = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
                 break;
-            default:
-                break;
+            default: break;
             }
-            p.f = ::open(path.u8string().c_str(), openFlags, openMode);
+            p.f = ::open(fromFileSystem(path).c_str(), openFlags, openMode);
             if (-1 == p.f)
             {
-                throw std::runtime_error(getErrorMessage(
-                    ErrorType::Open, path, getErrorString()));
+                throw std::runtime_error(
+                    getErrorMessage(ErrorType::Open, fromFileSystem(path), getErrorString()));
             }
 
-            p.path = path;
-            p.mode = mode;
-            p.read = read;
-            p.pos = 0;
-            p.size = std::filesystem::file_size(path);
+            // File information.
+            p.path     = path;
+            p.mode     = mode;
+            p.readType = readType;
+            p.pos      = 0;
+            p.size     = std::filesystem::file_size(path);
 
             // Memory mapping.
-            if (Read::MemoryMapped == p.read && Mode::Read == p.mode &&
+            if (Read::MemoryMapped == p.readType &&
+                Mode::Read == p.mode &&
                 p.size > 0)
             {
                 p.mMap = mmap(0, p.size, PROT_READ, MAP_SHARED, p.f, 0);
-                madvise(p.mMap, p.size, MADV_SEQUENTIAL | MADV_SEQUENTIAL);
+                madvise(
+                    p.mMap,
+                    p.size,
+                    Access::Random == access ? MADV_RANDOM : MADV_SEQUENTIAL);
                 if (p.mMap == (void*)-1)
                 {
-                    throw std::runtime_error(getErrorMessage(
-                        ErrorType::MemoryMap, path, getErrorString()));
+                    throw std::runtime_error(
+                        getErrorMessage(ErrorType::MMap, fromFileSystem(path), getErrorString()));
                 }
-                p.memoryStart = reinterpret_cast<const uint8_t*>(p.mMap);
-                p.memoryEnd = p.memoryStart + p.size;
-                p.memoryP = p.memoryStart;
+                p.memStart = reinterpret_cast<const uint8_t*>(p.mMap);
+                p.memEnd   = p.memStart + p.size;
+                p.memP        = p.memStart;
             }
         }
 
@@ -457,8 +462,6 @@ namespace tl
 
             bool out = true;
 
-            p.path = std::string();
-
             if (p.mMap != (void*)-1)
             {
                 int r = munmap(p.mMap, p.size);
@@ -467,15 +470,13 @@ namespace tl
                     out = false;
                     if (error)
                     {
-                        *error = getErrorMessage(
-                            ErrorType::CloseMemoryMap, p.path,
-                            getErrorString());
+                        *error = getErrorMessage(ErrorType::CloseMMap, fromFileSystem(p.path), getErrorString());
                     }
                 }
                 p.mMap = (void*)-1;
             }
-            p.memoryStart = nullptr;
-            p.memoryEnd = nullptr;
+            p.memStart = nullptr;
+            p.memEnd   = nullptr;
 
             if (p.f != -1)
             {
@@ -485,15 +486,15 @@ namespace tl
                     out = false;
                     if (error)
                     {
-                        *error = getErrorMessage(
-                            ErrorType::Close, p.path, getErrorString());
+                        *error = getErrorMessage(ErrorType::Close, fromFileSystem(p.path), getErrorString());
                     }
                 }
                 p.f = -1;
             }
 
+            p.path = std::filesystem::path();
             p.mode = Mode::First;
-            p.pos = 0;
+            p.pos  = 0;
             p.size = 0;
 
             return out;
@@ -501,32 +502,32 @@ namespace tl
 
         void FileIO::Private::seek(size_t value, SeekMode seekMode)
         {
-            if (Mode::Read == mode && memoryStart)
+            if (Mode::Read == mode && memStart)
             {
                 switch (seekMode)
                 {
                 case SeekMode::Set:
-                    memoryP = reinterpret_cast<const uint8_t*>(memoryStart) + value;
-                    if (memoryP > memoryEnd)
+                    memP = reinterpret_cast<const uint8_t*>(memStart) + value;
+                    if (memP > memEnd)
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::SeekMemoryMap, path.u8string()));
+                            getErrorMessage(ErrorType::SeekMMap, fromFileSystem(path)));
                     }
                     break;
                 case SeekMode::Forward:
-                    memoryP += value;
-                    if (memoryP > memoryEnd)
+                    memP += value;
+                    if (memP > memEnd)
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::SeekMemoryMap, path.u8string()));
+                            getErrorMessage(ErrorType::SeekMMap, fromFileSystem(path)));
                     }
                     break;
                 case SeekMode::Reverse:
-                    memoryP -= value;
-                    if (memoryP < memoryStart)
+                    memP -= value;
+                    if (memP < memStart)
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::SeekMemoryMap, path.u8string()));
+                            getErrorMessage(ErrorType::SeekMMap, fromFileSystem(path)));
                     }
                     break;
                 default: break;
@@ -550,7 +551,7 @@ namespace tl
                 if (::lseek(f, offset, whence) == (off_t)-1)
                 {
                     throw std::runtime_error(
-                        getErrorMessage(ErrorType::Seek, path.u8string(), getErrorString()));
+                        getErrorMessage(ErrorType::Seek, fromFileSystem(path), getErrorString()));
                 }
             }
             switch (seekMode)
@@ -564,28 +565,60 @@ namespace tl
 
         void prefetch(const void* p, size_t size)
         {
-            if (p && size > 0)
+            if (!p || 0 == size)
+                return;
+#if defined(__linux__)
+            // From the start of the page: madvise() fails on an address that is
+            // not page aligned, and data inside a file -- a frame inside a
+            // bundle above all -- rarely starts on a page. The prefetch failed
+            // for nearly every frame, and with read ahead off for the bundle
+            // each frame came in as thousands of synchronous four kilobyte
+            // reads: a 7 GB/s drive read about 200 MB/s with the cores idle.
+            //
+            // And a window at a time: Linux reads no more than about its read
+            // ahead window for each request, 128 KB unless the device says
+            // otherwise, so a frame asked for in one request comes in only at
+            // its start.
+            static const uintptr_t pageSize = static_cast<uintptr_t>(sysconf(_SC_PAGESIZE));
+            const uintptr_t start = reinterpret_cast<uintptr_t>(p) & ~(pageSize - 1);
+            const uintptr_t end = reinterpret_cast<uintptr_t>(p) + size;
+            const uintptr_t chunk = 128 * 1024;
+            for (uintptr_t i = start; i < end; i += chunk)
             {
-                madvise(const_cast<void*>(p), size, MADV_WILLNEED);
+                madvise(
+                    reinterpret_cast<void*>(i),
+                    std::min(chunk, end - i),
+                    MADV_WILLNEED);
             }
+#else // __linux__
+            // Left as it was on macOS, where the kernel's own read ahead keeps
+            // up with the bundle; an aligned prefetch there made no difference
+            // that stood out from the run to run noise.
+            madvise(const_cast<void*>(p), size, MADV_WILLNEED);
+#endif // __linux__
         }
 
-        void truncate(const std::filesystem::path& path, size_t size)
+        void release(const void* p, size_t size)
         {
-            if (::truncate(path.u8string().c_str(), size) != 0)
+            if (!p || 0 == size)
+                return;
+            // The whole pages the range touches: a page shared with the next
+            // frame is only unmapped, not discarded, and reading it again faults
+            // it back in from the file cache.
+            static const uintptr_t pageSize = static_cast<uintptr_t>(sysconf(_SC_PAGESIZE));
+            const uintptr_t start = reinterpret_cast<uintptr_t>(p) & ~(pageSize - 1);
+            const uintptr_t end = reinterpret_cast<uintptr_t>(p) + size;
+            madvise(reinterpret_cast<void*>(start), end - start, MADV_DONTNEED);
+        }
+
+        void truncateFile(const std::filesystem::path& path, size_t size)
+        {
+            if (::truncate(fromFileSystem(path).c_str(), size) != 0)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Write, path.u8string(), getErrorString()));
+                    getErrorMessage(ErrorType::Write, fromFileSystem(path), getErrorString()));
             }
         }
 
-        void truncate(const std::string& path, size_t size)
-        {
-            if (::truncate(path.c_str(), size) != 0)
-            {
-                throw std::runtime_error(getErrorMessage(
-                    ErrorType::Write, path, getErrorString()));
-            }
-        }
     } // namespace file
 } // namespace tl
