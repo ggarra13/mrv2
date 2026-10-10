@@ -74,7 +74,7 @@ namespace tl
                     break;
                 case ErrorType::ReadMemoryMap:
                     out = string::Format("{0}: Cannot read memory map")
-                              .arg(path);
+                          .arg(path);
                     break;
                 case ErrorType::Write:
                     out = string::Format("{0}: Cannot write").arg(path);
@@ -84,7 +84,7 @@ namespace tl
                     break;
                 case ErrorType::SeekMemoryMap:
                     out = string::Format("{0}: Cannot seek memory map")
-                              .arg(path);
+                          .arg(path);
                     break;
                 default:
                     break;
@@ -310,7 +310,7 @@ namespace tl
                         p.memoryStart ?
                         ErrorType::ReadMemoryMap :
                         ErrorType::Read,
-                        p.path.u8string()));
+                        file::fromFileSystem(p.path)));
             }
 
             if (p.memoryStart)
@@ -380,7 +380,7 @@ namespace tl
             {
                 throw std::runtime_error(
                     getErrorMessage(ErrorType::Read,
-                                    file::fromFileSystem(p.path)()));
+                                    file::fromFileSystem(p.path)));
             }
         }
 
@@ -409,8 +409,8 @@ namespace tl
                     p.f, inP, static_cast<DWORD>(size * wordSize), &n, 0))
             {
                 throw std::runtime_error(getErrorMessage(
-                    ErrorType::Write,
-                    file::fromFileSystem(p.path), error::getLastError()));
+                                             ErrorType::Write,
+                                             file::fromFileSystem(p.path), error::getLastError()));
             }
             p.pos += size * wordSize;
             p.size = std::max(p.pos, p.size);
@@ -470,7 +470,8 @@ namespace tl
             {
                 throw std::runtime_error(
                     getErrorMessage(
-                        ErrorType::Open, path.u8string(), error::getLastError()));
+                        ErrorType::Open, file::fromFileSystem(path),
+                        error::getLastError()));
             }
             p.path = path;
             p.mode = mode;
@@ -487,7 +488,8 @@ namespace tl
                 if (!p.memoryMap)
                 {
                     throw std::runtime_error(
-                        getErrorMessage(ErrorType::MemoryMap, path.u8string(),
+                        getErrorMessage(ErrorType::MemoryMap,
+                                        file::fromFileSystem(path),
                                         error::getLastError()));
                 }
 
@@ -495,7 +497,8 @@ namespace tl
                 if (!p.memoryStart)
                 {
                     throw std::runtime_error(
-                        getErrorMessage(ErrorType::MemoryMap, path.u8string()));
+                        getErrorMessage(ErrorType::MemoryMap,
+                                        file::fromFileSystem(path)));
                 }
 
                 p.memoryEnd = p.memoryStart + p.size;
@@ -577,7 +580,8 @@ namespace tl
                     {
                         throw std::runtime_error(
                             getErrorMessage(
-                                ErrorType::SeekMemoryMap, path.u8string()));
+                                ErrorType::SeekMemoryMap,
+                                file::fromFileSystem(path)));
                     }
                     break;
                 case SeekMode::Forward:
@@ -586,7 +590,7 @@ namespace tl
                     {
                         throw std::runtime_error(
                             getErrorMessage(ErrorType::SeekMemoryMap,
-                                            path.u8string()));
+                                            file::fromFileSystem(path)));
                     }
                     break;
                 case SeekMode::Reverse:
@@ -595,7 +599,7 @@ namespace tl
                     {
                         throw std::runtime_error(
                             getErrorMessage(ErrorType::SeekMemoryMap,
-                                            path.u8string()));
+                                            file::fromFileSystem(path)));
                     }
                     break;
                 default: break;
@@ -621,7 +625,8 @@ namespace tl
                 {
                     throw std::runtime_error(
                         getErrorMessage(
-                            ErrorType::Seek, path.u8string(),
+                            ErrorType::Seek,
+                            file::fromFileSystem(path),
                             error::getLastError()));
                 }
             }
@@ -687,7 +692,7 @@ namespace tl
                 throw std::runtime_error(
                     getErrorMessage(ErrorType::Open,
                                     file::fromFileSystem(path),
-                                    getLastError()));
+                                    error::getLastError()));
             }
             LARGE_INTEGER v;
             v.QuadPart = size;
@@ -701,7 +706,7 @@ namespace tl
                 throw std::runtime_error(
                     getErrorMessage(ErrorType::Seek,
                                     file::fromFileSystem(path),
-                                    getLastError()));
+                                    error::getLastError()));
             }
             if (!::SetEndOfFile(h))
             {
@@ -709,7 +714,7 @@ namespace tl
                 throw std::runtime_error(
                     getErrorMessage(ErrorType::Write,
                                     file::fromFileSystem(path),
-                                    getLastError()));
+                                    error::getLastError()));
             }
             CloseHandle(h);
         }
