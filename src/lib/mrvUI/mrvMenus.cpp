@@ -1377,16 +1377,48 @@ namespace mrv
         if (displayOptions.clipInfo)
             item->set();
 
-        mode = FL_MENU_CHATTY | FL_MENU_RADIO;
+        mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
-        int thumbnails_none = 0;
-        int thumbnails_small = 0;
+        idx = menu->add(
+            _("Timeline/Thumbnails"), kToggleTimelineThumbnails.hotkey(),
+            (Fl_Callback*)toggle_timeline_thumbnails_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (displayOptions.thumbnails)
-            thumbnails_none = kToggleTimelineThumbnails.hotkey();
-        else
-            thumbnails_small = kToggleTimelineThumbnails.hotkey();
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Waveforms"), kToggleTimelineWaveforms.hotkey(),
+            (Fl_Callback*)toggle_timeline_waveforms_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.waveforms)
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Transitions"), kToggleTimelineTransitions.hotkey(),
+            (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.transitions)
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Effects"), kToggleTimelineEffects.hotkey(),
+            (Fl_Callback*)toggle_timeline_effects_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.effects)
+            item->set();
+
+        idx = menu->add(
+            _("Timeline/Markers"), kToggleTimelineMarkers.hotkey(),
+            (Fl_Callback*)toggle_timeline_markers_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.markers)
+            item->set();
+
+        mode = FL_MENU_CHATTY | FL_MENU_RADIO;
+        if (numFiles == 0)
+            mode |= FL_MENU_INACTIVE;
 
         const float kPixels_per_unit = ui->uiView->pixels_per_unit();
         const int kSmall = 50 * kPixels_per_unit;
@@ -1394,44 +1426,22 @@ namespace mrv
         const int kLarge = 100 * kPixels_per_unit;
 
         idx = menu->add(
-            _("Timeline/Thumbnails/None"), thumbnails_none,
-            (Fl_Callback*)timeline_thumbnails_none_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (!displayOptions.thumbnails)
-            item->set();
-        idx = menu->add(
-            _("Timeline/Thumbnails/Small"), thumbnails_small,
+            _("Timeline/Thumbnails Size/Small"), 0,
             (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kSmall)
+        if (displayOptions.thumbnailHeight == kSmall)
             item->set();
         idx = menu->add(
-            _("Timeline/Thumbnails/Medium"), 0,
+            _("Timeline/Thumbnails Size/Medium"), 0,
             (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kMedium)
+        if (displayOptions.thumbnailHeight == kMedium)
             item->set();
         idx = menu->add(
-            _("Timeline/Thumbnails/Large"), 0,
+            _("Timeline/Thumbnails Size/Large"), 0,
             (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kLarge)
-            item->set();
-
-        mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
-        if (numFiles == 0)
-            mode |= FL_MENU_INACTIVE;
-        idx = menu->add(
-            _("Timeline/Transitions"), kToggleTimelineTransitions.hotkey(),
-            (Fl_Callback*)toggle_timeline_transitions_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.transitions)
-            item->set();
-        idx = menu->add(
-            _("Timeline/Markers"), kToggleTimelineMarkers.hotkey(),
-            (Fl_Callback*)toggle_timeline_markers_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.markers)
             item->set();
 
         std::vector<std::string> tracks;

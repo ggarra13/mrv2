@@ -4210,7 +4210,61 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void timeline_thumbnails_none_cb(Fl_Menu_* m, ViewerUI* ui)
+    void timeline_waveforms_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Toggle Waveforms in Timeline "
+                                          "Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        auto options = ui->uiTimeline->getDisplayOptions();
+        options.waveforms = false;
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setDisplayOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_waveforms_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Toggle Waveforms in Timeline "
+                                          "Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        auto options = ui->uiTimeline->getDisplayOptions();
+        options.waveforms ^= true;
+        Message msg;
+        msg["command"] = "setTimelineItemOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setDisplayOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_thumbnails_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         switch(Fl::callback_reason())
         {
@@ -4225,7 +4279,7 @@ namespace mrv
             break;
         }
         auto options = ui->uiTimeline->getDisplayOptions();
-        options.thumbnails = false;
+        options.thumbnails ^= true;
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
@@ -4383,6 +4437,33 @@ namespace mrv
         options.clipInfo = item->value();
         auto settings = ui->app->settings();
         settings->setValue("Timeline/ClipInfo", options.clipInfo);
+        Message msg;
+        msg["command"] = "setTimelineDisplayOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setDisplayOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void toggle_timeline_effects_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Toggle Effects in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        auto options = ui->uiTimeline->getDisplayOptions();
+        options.effects = item->value();
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;

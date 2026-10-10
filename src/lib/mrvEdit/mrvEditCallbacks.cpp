@@ -3832,6 +3832,7 @@ namespace mrv
         const int kTransitionsHeight = 30;
         const int kAudioGapOnlyHeight = 20;
         const int kMarkerHeight = 24;
+        const int kEffectsHeight = 26;
 
         const int kVideoHeight = displayOptions.thumbnailHeight;
         const int kAudioHeight = displayOptions.waveformHeight + kMargin;
@@ -3850,6 +3851,7 @@ namespace mrv
         int videoHeight = 0;
         int audioHeight = 0;
         int markersHeight = 0;
+        int effectsHeight = 0;
         int transitionsHeight = 0;
 
         auto timeline = player->getTimeline();
@@ -3898,7 +3900,7 @@ namespace mrv
                             audioHeight += kTrackInfoHeight;
                         if (displayOptions.clipInfo)
                             audioHeight += kClipInfoHeight;
-                        if (displayOptions.thumbnails)
+                        if (displayOptions.waveforms)
                         {
                             bool hasWaveform = false;
                             for (const auto& trackChild : track->children())
@@ -3941,6 +3943,26 @@ namespace mrv
                     }
                     markersHeight += markerSizeForTrack;
                 }
+                // Handle Effects
+                if (displayOptions.effects && visibleTrack)
+                {
+                    int effectsSizeForTrack = 0;
+                    for (const auto& child : track->children())
+                    {
+                        auto item = OTIO_NS::dynamic_retainer_cast<Item>(child);
+                        if (!item)
+                            continue;
+
+                        int effectsSizeForItem = 0;
+                        for (const auto& effect : item->effects())
+                        {
+                            effectsSizeForItem += kEffectsHeight;
+                        }
+                        if (effectsSizeForItem > effectsSizeForTrack)
+                            effectsSizeForTrack = effectsSizeForItem;
+                    }
+                    effectsHeight += effectsSizeForTrack;
+                }
                 // Handle transitions
                 if (displayOptions.transitions && visibleTrack)
                 {
@@ -3980,16 +4002,8 @@ namespace mrv
         }
 
         // Now add up all heights divided by the pixels unit.
-        H += videoHeight + audioHeight + markersHeight + transitionsHeight;
-
-#if 0
-        std::cerr << "    kMargin=" << kMargin << std::endl;
-        std::cerr << "videoHeight=" << videoHeight << std::endl;
-        std::cerr << "audioHeight=" << audioHeight << std::endl;
-        std::cerr << "transitionsHeight=" << transitionsHeight << std::endl;
-        std::cerr << "markersHeight=" << markersHeight << std::endl;
-        std::cerr << "FINAL H=" << H << std::endl;
-#endif
+        H += videoHeight + audioHeight + markersHeight + effectsHeight +
+             transitionsHeight;
 
         // Sanity check... make sure we don't go bigger than the max.
         const Fl_Tile* tile = ui->uiTileGroup;
@@ -4121,32 +4135,10 @@ namespace mrv
         }
 
 
-#if 0
-        std::cerr << "1 TimelineGroup->visible()="
-                  << TimelineGroup->visible() << std::endl;
-        std::cerr << "1    editMode=" << editMode << std::endl;
-        std::cerr << "1  tileGroupY=" << tileGroupY << std::endl;
-        std::cerr << "1        oldY=" << oldY - tileGroupY << std::endl;
-        std::cerr << "1        newY=" << newY - tileGroupY << std::endl;
-        std::cerr << "1  tileGroupH=" << tileGroupH << std::endl;
-        std::cerr << "1  viewGroupH=" << viewGroupH << std::endl;
-        std::cerr << "1   timelineH=" << H << std::endl;
-#endif
-
         // \@bug:
         // This mess is to work around macOS issues.  Unhiding TimelineGroup
         // should be enough to also unhide the timeline, but it seemed not
         // to work on macOS.
-#if 0
-        if (ui->uiBottomBar->visible())
-        {
-            TimelineGroup->show();
-        }
-        else if (ui->uiMain->visible())
-        {
-            TimelineGroup->hide();
-        }
-#else
         if (ui->uiMain->visible())
         {
             if (ui->uiBottomBar->visible())
@@ -4170,7 +4162,6 @@ namespace mrv
                     TimelineGroup->hide();
             }
         }
-#endif
 
         // \@note: We do a resize instead of a move_intersection as:
         //         it is faster and we must avoid collapsing the timeline group
@@ -4180,37 +4171,11 @@ namespace mrv
             viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
         TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
 
-#if 0
-        std::cerr << "3 TimelineGroup->visible()="
-                  << TimelineGroup->visible() << std::endl;
-        std::cerr << "3 TimelineGroup->x()="
-                  << TimelineGroup->x() << std::endl;
-        std::cerr << "3 TimelineGroup->y()="
-                  << TimelineGroup->y() << std::endl;
-        std::cerr << "3 TimelineGroup->w()="
-                  << TimelineGroup->w() << std::endl;
-        std::cerr << "3 TimelineGroup->h()="
-                  << TimelineGroup->h() << std::endl;
-#endif
-
         viewGroup->layout();
 
         tileGroup->init_sizes();
 
         ui->uiRegion->layout();
-
-#if 0
-        std::cerr << "6 TimelineGroup->visible()="
-                  << TimelineGroup->visible() << std::endl;
-        std::cerr << "6 TimelineGroup->x()="
-                  << TimelineGroup->x() << std::endl;
-        std::cerr << "6 TimelineGroup->y()="
-                  << TimelineGroup->y() << std::endl;
-        std::cerr << "6 TimelineGroup->w()="
-                  << TimelineGroup->w() << std::endl;
-        std::cerr << "6 TimelineGroup->h()="
-                  << TimelineGroup->h() << std::endl;
-#endif
 
         ui->uiView->valid(0);
         ui->uiView->refresh();

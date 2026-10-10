@@ -3,6 +3,7 @@
 // All rights reserved.
 
 #include "VideoClipItem.h"
+#include "EffectItem.h"
 #include "ThumbnailSystem.h"
 
 #include <tlUI/DrawUtil.h>
@@ -30,10 +31,17 @@ namespace tl
             file::Path path;
             std::shared_ptr<ThumbnailSystem> thumbnailSystem;
 
+            //! Effect items.  These are children of the clip so they move,
+            //! hide and show together with it.
+            std::vector<std::shared_ptr<EffectItem> > effects;
+
             struct SizeData
             {
                 bool sizeInit = true;
                 int dragLength = 0;
+
+                //! Total height taken by the effects (0 if hidden).
+                int effectsHeight = 0;
 
                 math::Box2i clipRect;
             };
@@ -81,6 +89,17 @@ namespace tl
             if (i != itemData->info.end())
             {
                 p.ioInfo = i->second;
+            }
+
+            // Create one item per effect.  They are laid out by
+            // VideoClipItem::setGeometry() between the clip info and the
+            // thumbnails.
+            p.effects.reserve(clip->effects().size());
+            for (const auto& effect : clip->effects())
+            {
+                p.effects.push_back(EffectItem::create(
+                    effect, clip.value, scale, options, displayOptions,
+                    itemData, context, shared_from_this()));
             }
         }
 
@@ -135,6 +154,34 @@ namespace tl
             {
                 _cancelRequests();
                 _updates |= ui::Update::Draw;
+            }
+        }
+
+        void VideoClipItem::setGeometry(const math::Box2i& value)
+        {
+            IBasicItem::setGeometry(value);
+            TLRENDER_P();
+
+            // Vertical layout of a clip:
+            //
+            //   clip info (name / duration)
+            //   effect 1
+            //   effect 2
+            //   ...
+            //   thumbnails
+            //   markers
+            const math::Box2i g = _getInsideGeometry();
+            int y = g.min.y;
+            if (_displayOptions.clipInfo)
+            {
+                y += _getLineHeight() + _getMargin() * 2;
+            }
+            for (const auto& effect : p.effects)
+            {
+                const int h =
+                    _displayOptions.effects ? effect->getSizeHint().h : 0;
+                effect->setGeometry(math::Box2i(g.min.x, y, g.w(), h));
+                y += h;
             }
         }
 
@@ -208,6 +255,18 @@ namespace tl
             }
             p.size.sizeInit = false;
 
+            // The effect items are children, so their size hints have
+            // already been calculated at this point.
+            p.size.effectsHeight = 0;
+            if (_displayOptions.effects)
+            {
+                for (const auto& effect : p.effects)
+                {
+                    p.size.effectsHeight += effect->getSizeHint().h;
+                }
+            }
+            _sizeHint.h += p.size.effectsHeight;
+
             if (_displayOptions.thumbnails)
             {
                 _sizeHint.h += _displayOptions.thumbnailHeight;
@@ -231,7 +290,14 @@ namespace tl
         void VideoClipItem::drawEvent(
             const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
+            TLRENDER_P();
+
             IBasicItem::drawEvent(drawRect, event);
+
+            for (auto& effect : p.effects)
+            {
+                effect->drawEvent(drawRect, event);
+            }
 
             if (_displayOptions.thumbnails)
             {
@@ -248,10 +314,13 @@ namespace tl
             const int m = _getMargin();
             const int lineHeight = _getLineHeight();
 
+            // Thumbnails go below the clip info and the effects.
+            const int thumbnailY =
+                g.min.y + (_displayOptions.clipInfo ? (lineHeight + m * 2) : 0) +
+                p.size.effectsHeight;
+
             const math::Box2i box(
-                g.min.x,
-                g.min.y + (_displayOptions.clipInfo ? (lineHeight + m * 2) : 0),
-                g.w(), _displayOptions.thumbnailHeight);
+                g.min.x, thumbnailY, g.w(), _displayOptions.thumbnailHeight);
             event.render->drawRect(box, image::Color4f(0.F, 0.F, 0.F));
             const timeline::ClipRectEnabledState clipRectEnabledState(
                 event.render);
@@ -291,11 +360,8 @@ namespace tl
                 for (int x = 0; x < w; x += thumbnailWidth)
                 {
                     const math::Box2i box(
-                        g.min.x + x,
-                        g.min.y + (_displayOptions.clipInfo
-                                   ? (lineHeight + m * 2)
-                                   : 0),
-                        thumbnailWidth, _displayOptions.thumbnailHeight);
+                        g.min.x + x, thumbnailY, thumbnailWidth,
+                        _displayOptions.thumbnailHeight);
                     if (math::intersects(box, clipRect))
                     {
                         const OTIO_NS::RationalTime time =
