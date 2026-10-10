@@ -676,17 +676,40 @@ namespace tl
             //   render_v003_cap2_0001 → suffix="",        number = "0001"
             if (size > protocolDirSize)
             {
-                int i = static_cast<int>(size) - 1;
-                while (i >= static_cast<int>(protocolDirSize) &&
-                       numbers.find(_path[i]) == std::string::npos)
+                // A printf pattern such as "%04d" ends in a letter, which the
+                // scan below would take for a suffix and so split the pattern.
+                bool printfEnd = false;
+                if ('d' == _path[size - 1])
                 {
-                    --i;
+                    int k = static_cast<int>(size) - 2;
+                    while (k >= static_cast<int>(protocolDirSize) &&
+                           isdigit(static_cast<unsigned char>(_path[k])))
+                    {
+                        --k;
+                    }
+                    printfEnd = k >= static_cast<int>(protocolDirSize) &&
+                                '%' == _path[k];
                 }
-                const size_t sufPos = static_cast<size_t>(i) + 1;
-                if (sufPos < size)
+                if (!printfEnd)
                 {
-                    _suf = std::pair<size_t, size_t>(sufPos, size - sufPos);
-                    size = sufPos;   // strip suffix so number detection sees a clean stem
+                    int i = static_cast<int>(size) - 1;
+                    while (i >= static_cast<int>(protocolDirSize) &&
+                           numbers.find(_path[i]) == std::string::npos)
+                    {
+                        --i;
+                    }
+                    // Text is only a suffix when a number comes before it. If
+                    // the scan ran off the front there is no number, and the
+                    // whole stem is the base name.
+                    if (i >= static_cast<int>(protocolDirSize))
+                    {
+                        const size_t sufPos = static_cast<size_t>(i) + 1;
+                        if (sufPos < size)
+                        {
+                            _suf = std::pair<size_t, size_t>(sufPos, size - sufPos);
+                            size = sufPos;   // strip suffix so number detection sees a clean stem
+                        }
+                    }
                 }
             }
 
@@ -987,20 +1010,31 @@ namespace tl
                 const auto abs = std::filesystem::absolute(
                     toFileSystem(path.get()));
                 const auto parent = abs.parent_path();
-                if (std::filesystem::exists(parent))
+                // Entries are built from the directory as it was given, not from
+                // the absolute one that is listed: Path::sequence() compares
+                // directories, so "render.0001.tif" would never match
+                // "/abs/dir/render.0002.tif".
+                const std::string prefix =
+                    path.getProtocol() + path.getDirectory();
+                // A directory that cannot be listed (permissions, a sandbox
+                // that granted the one file) has no sequence to find.
+                std::error_code ec;
+                if (std::filesystem::exists(parent, ec))
                 {
-                    for (const auto& i : std::filesystem::directory_iterator(parent))
+                    for (std::filesystem::directory_iterator i(parent, ec), end;
+                         !ec && i != end;
+                         i.increment(ec))
                     {
-                        if (std::filesystem::is_directory(i.path()))
+                        if (std::filesystem::is_directory(i->path(), ec))
                         {
                             continue;
                         }
-                        const Path entry(fromFileSystem(i.path()), pathOptions);
-                        if (path.sequence(entry) &&
-                            entry.getFrames().has_value())
+                        const Path entry(
+                            prefix + fromFileSystem(i->path().filename()),
+                            pathOptions);
+                        if (path.sequence(entry) && entry.getFrames().has_value())
                         {
-                            frames.push_back(
-                                entry.getFrames().value().min());
+                            frames.push_back(entry.getFrames().value().min());
                         }
                     }
                 }
@@ -1018,13 +1052,24 @@ namespace tl
                 // Find matching sequence files.
                 const auto abs = std::filesystem::absolute(toFileSystem(out.get()));
                 const auto parent = abs.parent_path();
-                if (std::filesystem::exists(parent))
+                // Entries are built from the directory as it was given (see
+                // findSeq()). This comes from the argument, not from out, which
+                // is replaced by an entry part way through the loop.
+                const std::string prefix =
+                    path.getProtocol() + path.getDirectory();
+                // A directory that cannot be listed leaves the one file.
+                std::error_code ec;
+                if (std::filesystem::exists(parent, ec))
                 {
                     bool init = true;
-                    for (const auto& i : std::filesystem::directory_iterator(parent))
+                    for (std::filesystem::directory_iterator i(parent, ec), end;
+                         !ec && i != end;
+                         i.increment(ec))
                     {
-                        const Path entry(fromFileSystem(i.path()), pathOptions);
-                        const bool isDir = std::filesystem::is_directory(i.path());
+                        const Path entry(
+                            prefix + fromFileSystem(i->path().filename()),
+                            pathOptions);
+                        const bool isDir = std::filesystem::is_directory(i->path(), ec);
                         if (init && !isDir)
                         {
                             if (out.sequence(entry))

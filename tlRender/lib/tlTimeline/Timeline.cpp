@@ -81,7 +81,9 @@ namespace tl
                     {
                         file::DirListOptions listOptions;
                         listOptions.filterExt = imageSeqAudioExts;
-                        const auto entries = file::dirList(path.getDirectory(), listOptions);
+                        const auto entries =
+                            file::dirList(path.getDirectory().empty() ? "." :
+                                          path.getDirectory(), listOptions);
                         if (!entries.empty())
                         {
                             out = entries.front().path;
