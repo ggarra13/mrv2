@@ -49,7 +49,7 @@ namespace fs = std::filesystem;
 namespace
 {
     const char* kModule = "pref";
-    const int kPreferencesVersion = 10;
+    const int kPreferencesVersion = 13;
 } // namespace
 
 extern float kCrops[];
@@ -115,6 +115,15 @@ namespace mrv
             (Fl_Preferences::Root)0);
 
         base.get("version", version, kPreferencesVersion);
+
+        // Use this if we are desperate for money :D!
+        // if (version < kPreferencesVersion &&
+        //     (app::demo_mode || app::force_demo))
+        // {
+        //     // \@note: On first start up of a demo for the current
+        //                preferences version, we present the donation window.
+        //     unlock_features_cb(nullptr, ui);
+        // }
 
         SettingsObject* settings = ViewerUI::app->settings();
 
@@ -331,8 +340,17 @@ namespace mrv
         gui.get("timeline_edit_transitions", tmp, 1);
         uiPrefs->ShowTransitions->value(tmp);
 
+        gui.get("timeline_edit_thumbnails", tmp, 1);
+        uiPrefs->ShowThumbnails->value(tmp);
+
+        gui.get("timeline_edit_waveforms", tmp, 1);
+        uiPrefs->ShowWaveforms->value(tmp);
+
         gui.get("timeline_edit_markers", tmp, 0);
         uiPrefs->ShowMarkers->value(tmp);
+
+        gui.get("timeline_edit_effects", tmp, 0);
+        uiPrefs->ShowEffects->value(tmp);
 
         gui.get("timeline_editable", tmp, 1);
         uiPrefs->TimelineEditable->value(tmp);
@@ -1501,7 +1519,10 @@ namespace mrv
         gui.set(
             "timeline_edit_transitions",
             uiPrefs->ShowTransitions->value());
+        gui.set("timeline_edit_effects", uiPrefs->ShowEffects->value());
         gui.set("timeline_edit_markers", uiPrefs->ShowMarkers->value());
+        gui.set("timeline_edit_waveforms", uiPrefs->ShowWaveforms->value());
+        gui.set("timeline_edit_thunbnails", uiPrefs->ShowThumbnails->value());
         gui.set("timeline_editable", uiPrefs->TimelineEditable->value());
         gui.set(
             "timeline_edit_associated_clips",
@@ -1999,10 +2020,13 @@ namespace mrv
             auto options = ui->uiTimeline->getDisplayOptions();
             options.transitions = uiPrefs->ShowTransitions->value();
             options.markers = uiPrefs->ShowMarkers->value();
+            options.effects = uiPrefs->ShowEffects->value();
+            options.waveforms = uiPrefs->ShowWaveforms->value();
             ui->uiTimeline->setEditable(
                 uiPrefs->TimelineEditable->value());
+            options.thumbnails = uiPrefs->ShowThumbnails->value();
+
             int thumbnails = uiPrefs->EditThumbnails->value();
-            options.thumbnails = true;
             switch (thumbnails)
             {
             case 0:

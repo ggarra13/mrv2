@@ -36,14 +36,14 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvOptions/mrvSaveOptions.h"
 #include "mrvFl/mrvVersioning.h"
-#include "mrvFLTK/mrvFileRequester.h"
 #include "mrvFl/mrvOCIO.h"
-#include "mrvFLTK/mrvSave.h"
 #include "mrvFl/mrvSession.h"
 #include "mrvFl/mrvStereo3DAux.h"
+
 #include "mrvFLTK/mrvCallbacks.h"
+#include "mrvFLTK/mrvFileRequester.h"
+#include "mrvFLTK/mrvSave.h"
 
 #include "mrvEdit/mrvEditUtil.h"
 
@@ -58,6 +58,7 @@
 #include "mrvWidgets/mrvPanelGroup.h"
 #include "mrvWidgets/mrvSecondaryWindow.h"
 
+#include "mrvOptions/mrvSaveOptions.h"
 
 #include "mrvFl/mrvIO.h"
 

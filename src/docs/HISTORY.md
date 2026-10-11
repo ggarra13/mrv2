@@ -1,3 +1,9 @@
+v1.8.3
+======
+
+- UI: Added options to **Preferences->Edit** to hide or show effects, waveforms and thumbnails.
+
+
 v1.8.2
 ======
 
@@ -16,10 +22,6 @@ v1.8.2
 - Core: Added exporting of animated .gif.
 - Core: Improvements in playback performance.
 
-Libraries
----------
-
-- libwebp v1.5.0
 
 Fixes
 -----
@@ -38,6 +40,7 @@ Fixes
 Libraries
 ---------
 
+	- libwebp v1.5.0
 	- FLTK v2.4.4 with new Clipboard Selection protocol. 
 
 
