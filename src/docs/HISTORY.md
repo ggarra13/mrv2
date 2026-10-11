@@ -2,6 +2,8 @@ v1.8.3
 ======
 
 - UI: Added options to **Preferences->Edit** to hide or show effects, waveforms and thumbnails.
+- UI: Fixed tooltips for AutoICS now showing with color space was selected and why.
+- UI/Core: Fixed moving the primary display window between an HDR and SDR monitor on Windows, which could sometimes not update the HDR Display properly.
 
 
 v1.8.2

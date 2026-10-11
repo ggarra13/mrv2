@@ -606,7 +606,7 @@ namespace mrv
                     const char* configName =
                         uiPrefs->OCIOConfig->value();
                     OCIOconfig = OCIO::Config::CreateFromFile(configName);
-                    uiPrefs->OCIOConfig->tooltip(
+                    uiPrefs->OCIOConfig->copy_tooltip(
                         OCIOconfig->getDescription());
 
                     defaultDisplay = OCIOconfig->getDefaultDisplay();
