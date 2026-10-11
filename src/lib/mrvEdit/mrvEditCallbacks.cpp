@@ -100,7 +100,6 @@ namespace mrv
         static std::vector<UndoRedo> undoBuffer;
         static std::vector<UndoRedo> redoBuffer;
 
-
         std::vector<Composition*> getTracks(OTIO_NS::Timeline* timeline)
         {
             std::vector<Composition*> out;
@@ -214,10 +213,41 @@ namespace mrv
             return parent->index_of_child(composable);
         }
 
+        std::vector<std::shared_ptr<draw::Annotation> > deepCopyAnnotations(
+            const std::vector<std::shared_ptr<draw::Annotation> >&
+                originalAnnotations);
+
         void updateTimeline(
             OTIO_NS::Timeline* timeline, const RationalTime& time, ViewerUI* ui)
         {
             auto player = ui->uiView->getTimelinePlayer();
+
+            // The global start time (an .otio timecode start time) is reset
+            // below, so the timeline will start at 0.  The annotations are
+            // stored in the player's time (start time included), so make them
+            // relative to the start of the timeline at the same time.
+            // Otherwise, they would not follow the clips when editing.
+            const auto startTimeOpt = timeline->global_start_time();
+            if (startTimeOpt.has_value() && startTimeOpt.value().value() != 0.0)
+            {
+                const OTIO_NS::RationalTime startTime = startTimeOpt.value();
+
+                // Work on a deep copy, as the undo buffer shares the
+                // original annotations (edit_store_undo does not copy them).
+                auto annotations =
+                    deepCopyAnnotations(player->getAllAnnotations());
+                for (auto& annotation : annotations)
+                {
+                    if (annotation->allFrames)
+                        continue;
+                    const auto offset =
+                        startTime.rescaled_to(annotation->time.rate());
+                    if (annotation->time >= offset)
+                        annotation->time -= offset;
+                }
+                player->setAllAnnotations(annotations);
+            }
+
             timeline->set_global_start_time(std::nullopt);
             player->setTimeline(timeline);
             const double rate = player->defaultSpeed();
@@ -3419,42 +3449,12 @@ namespace mrv
             return;
 
         // Perform the actual move in the new player (if it was an .otioz file)
-        // timecode start time).  The ranges used when moving clips and
-        // shifting annotations are relative to the start of the tracks, so
-        // the edited timeline must not keep its global start time, and the
-        // annotations must be made relative to the start of the timeline
-        // too.  This has to happen exactly once, at the same time the start
-        // time is reset.  Otherwise, a second edit would subtract the start
-        // time from the annotations again.
-        const bool isClipMove = moves[0].type == tl::timeline::MoveType::Clip;
-        const auto startTimeOpt = timeline->global_start_time();
-        if (isClipMove && startTimeOpt.has_value())
-        {
-            const OTIO_NS::RationalTime startTime = startTimeOpt.value();
-
-            // Work on a deep copy, as the undo buffer shares the original
-            // annotations (edit_store_undo does not copy them).
-            auto annotations = deepCopyAnnotations(player->getAllAnnotations());
-            for (auto& annotation : annotations)
-            {
-                if (annotation->allFrames)
-                    continue;
-                annotation->time -=
-                    startTime.rescaled_to(annotation->time.rate());
-            }
-            player->setAllAnnotations(annotations);
-
-            timeline->set_global_start_time(std::nullopt);
-        }
-
-        // Perform the actual move in the new player (if it was an .otioz file)
         auto innerPlayer = player->player();
-        if (isClipMove)
+        if (moves[0].type == tl::timeline::MoveType::Clip)
         {
             auto timeline = innerPlayer->getTimeline();
             auto otioTimeline = timeline::move(timeline->getTimeline().value,
                                                moves);
-            otioTimeline->set_global_start_time(std::nullopt);
             innerPlayer->getTimeline()->setTimeline(otioTimeline);
         }
 
