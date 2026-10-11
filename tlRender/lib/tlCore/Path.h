@@ -230,9 +230,10 @@ namespace tl
             //! Add a path to this sequence.
             bool addSeq(const Path&);
 
-            //! Group the sequence the way toFrameSeq() would. Paths built up with
-            //! addSeq() hold the right frames whatever order they arrive in, but
-            //! only reach the canonical grouping if they arrive in order.
+            //! Group the sequence the way toFrameSeq() would. Paths built up
+            //! with addSeq() hold the right frames whatever order they arrive
+            //! in, but only reach the canonical grouping if they arrive in
+            //! order.
             void normalizeSeq();
 
             ///@}

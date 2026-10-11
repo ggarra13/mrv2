@@ -129,9 +129,15 @@ namespace tl
             std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
                 cacheInfoObserver;
 
-            std::shared_ptr<IItem> getAssociated(
-                const std::shared_ptr<IItem>&, int& index,
-                int& trackIndex) const;
+            struct Associated
+            {
+                std::shared_ptr<IItem> item;
+                int index = 0;
+                int track = 0;
+            };
+
+            std::vector<Associated> getAssociated(
+                const std::shared_ptr<IItem>& item, int trackIndex) const;
 
             std::vector<MouseItemDropTarget>
             getDropTargets(const math::Box2i& geometry, int index, int track);

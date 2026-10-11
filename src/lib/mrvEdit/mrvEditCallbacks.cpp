@@ -1434,6 +1434,7 @@ namespace mrv
             return;
 
         const OTIO_NS::RationalTime time = getTime(player);
+        auto itemIndices = ui->uiTimeline->getSelectedItems();
 
         edit_store_undo(player, ui);
 
@@ -1445,12 +1446,28 @@ namespace mrv
 
         bool remove_undo = true;
         OTIO_NS::ErrorStatus errorStatus;
+        auto selected = getSelectedItems(timeline, itemIndices);
+
         for (auto track : tracks)
         {
             auto item = OTIO_NS::dynamic_retainer_cast<Item>(
                 track->child_at_time(time, &errorStatus));
             if (!item)
                 continue;
+            if (!selected.empty())
+            {
+                bool found = false;
+                for (auto& sel : selected)
+                {
+                    if (item == sel)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                    continue;
+            }
             auto cut_range =
                 item->trimmed_range_in_parent(&errorStatus).value();
 

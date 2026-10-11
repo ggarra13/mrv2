@@ -18,6 +18,9 @@
 
 #include <tlCore/StringFormat.h>
 
+#include <algorithm>
+#include <cmath>
+
 namespace tl
 {
     namespace TIMELINEUI
@@ -604,14 +607,19 @@ namespace tl
                                     moveToFront(item);
                                     if (_options.editAssociatedClips)
                                     {
-                                        if (auto associated =
-                                                p.getAssociated(item, j, i))
+                                        // Note: j and i are passed by value
+                                        // so the enclosing loops are not
+                                        // disturbed.
+                                        for (const auto& associated :
+                                             p.getAssociated(item, i))
                                         {
                                             p.mouse.items.push_back(
                                                 std::make_shared<
                                                     Private::MouseItemData>(
-                                                    associated, j, i));
-                                            moveToFront(associated);
+                                                    associated.item,
+                                                    associated.index,
+                                                    associated.track));
+                                            moveToFront(associated.item);
                                         }
                                     }
                                     break;
@@ -1352,75 +1360,82 @@ namespace tl
             }
         }
 
-        std::shared_ptr<IItem> TimelineItem::Private::getAssociated(
-            const std::shared_ptr<IItem>& item, int& index,
-            int& trackIndex) const
+        std::vector<TimelineItem::Private::Associated>
+        TimelineItem::Private::getAssociated(
+            const std::shared_ptr<IItem>& item, int trackIndex) const
         {
-            std::shared_ptr<IItem> out;
-            if (trackIndex >= 0 && trackIndex < tracks.size() &&
-                tracks.size() > 1)
+            std::vector<Associated> out;
+            const int tracksSize = static_cast<int>(tracks.size());
+            if (!item || trackIndex < 0 || trackIndex >= tracksSize)
+                return out;
+
+            // Look for items on tracks of the opposite type.
+            const TrackType otherType =
+                TrackType::Video == tracks[trackIndex].type ?
+                    TrackType::Audio :
+                    TrackType::Video;
+
+            const OTIO_NS::TimeRange& timeRange = item->getTimeRange();
+            const double start = timeRange.start_time().to_seconds();
+            const double end = timeRange.end_time_exclusive().to_seconds();
+            const double rate = timeRange.start_time().rate();
+
+            // Scored candidates (lower is better).
+            struct Candidate
             {
-                const OTIO_NS::TimeRange& timeRange = item->getTimeRange();
-                if (TrackType::Video == tracks[trackIndex].type &&
-                    trackIndex < tracks.size() - 1 &&
-                    TrackType::Audio == tracks[trackIndex + 1].type)
+                Associated associated;
+                double score = 0.0;
+            };
+            std::vector<Candidate> candidates;
+
+            for (int t = 0; t < tracksSize; ++t)
+            {
+                if (t == trackIndex || tracks[t].type != otherType)
+                    continue;
+
+                const auto& items = tracks[t].items;
+                for (int i = 0; i < static_cast<int>(items.size()); ++i)
                 {
-                    for (size_t i = 0; i < tracks[trackIndex + 1].items.size();
-                         ++i)
+                    const auto& other = items[i];
+                    if (!other || std::dynamic_pointer_cast<GapItem>(other))
+                        continue;
+
+                    const OTIO_NS::TimeRange& otherRange =
+                        other->getTimeRange();
+
+                    // Tolerance is half a frame at the slowest of the two
+                    // rates (so a 48kHz audio range does not make it
+                    // vanishingly small).
+                    double minRate = rate;
+                    const double otherRate = otherRange.start_time().rate();
+                    if (otherRate > 0.0 && (minRate <= 0.0 || otherRate < minRate))
+                        minRate = otherRate;
+                    const double tolerance =
+                        0.5 / (minRate > 0.0 ? minRate : 24.0);
+
+                    const double ds = std::abs(
+                        otherRange.start_time().to_seconds() - start);
+                    const double de = std::abs(
+                        otherRange.end_time_exclusive().to_seconds() - end);
+                    if (ds <= tolerance && de <= tolerance)
                     {
-                        const OTIO_NS::TimeRange& audioTimeRange =
-                            tracks[trackIndex + 1].items[i]->getTimeRange();
-                        const OTIO_NS::RationalTime audioStartTime =
-                            audioTimeRange.start_time().rescaled_to(
-                                timeRange.start_time().rate());
-                        const OTIO_NS::RationalTime audioDuration =
-                            audioTimeRange.duration().rescaled_to(
-                                timeRange.duration().rate());
-                        if (math::fuzzyCompare(
-                                audioStartTime.value(),
-                                timeRange.start_time().value()) &&
-                            math::fuzzyCompare(
-                                audioDuration.value(),
-                                timeRange.duration().value()))
-                        {
-                            out = tracks[trackIndex + 1].items[i];
-                            index = i;
-                            trackIndex = trackIndex + 1;
-                            break;
-                        }
-                    }
-                }
-                else if (
-                    TrackType::Audio == tracks[trackIndex].type &&
-                    trackIndex > 0 &&
-                    TrackType::Video == tracks[trackIndex - 1].type)
-                {
-                    for (size_t i = 0; i < tracks[trackIndex - 1].items.size();
-                         ++i)
-                    {
-                        const OTIO_NS::TimeRange& videoTimeRange =
-                            tracks[trackIndex - 1].items[i]->getTimeRange();
-                        const OTIO_NS::RationalTime videoStartTime =
-                            videoTimeRange.start_time().rescaled_to(
-                                timeRange.start_time().rate());
-                        const OTIO_NS::RationalTime videoDuration =
-                            videoTimeRange.duration().rescaled_to(
-                                timeRange.duration().rate());
-                        if (math::fuzzyCompare(
-                                videoStartTime.value(),
-                                timeRange.start_time().value()) &&
-                            math::fuzzyCompare(
-                                videoDuration.value(),
-                                timeRange.duration().value()))
-                        {
-                            out = tracks[trackIndex - 1].items[i];
-                            index = i;
-                            trackIndex = trackIndex - 1;
-                            break;
-                        }
+                        Candidate c;
+                        c.associated = {other, i, t};
+                        // Closest match first; ties go to the nearest track.
+                        c.score = ds + de + 1e-9 * std::abs(t - trackIndex);
+                        candidates.push_back(c);
                     }
                 }
             }
+
+            std::stable_sort(
+                candidates.begin(), candidates.end(),
+                [](const Candidate& a, const Candidate& b)
+                { return a.score < b.score; });
+
+            out.reserve(candidates.size());
+            for (const auto& c : candidates)
+                out.push_back(c.associated);
             return out;
         }
 
