@@ -470,7 +470,7 @@ widget_class TimelineClass {open
     Fl_Group {} {open
       xywh {5 0 928 29}
     } {
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {5 3 127 26}
       } {
         Fl_Menu_Button uiTimecodeSwitch {
@@ -480,7 +480,7 @@ widget_class TimelineClass {open
 mrv::TimeUnits units = (mrv::TimeUnits) o->value();
 ui->uiTimeline->setUnits( units );
 if (mrv::panel::notesPanel)
-     mrv::panel::notesPanel->refresh();} open selected
+     mrv::panel::notesPanel->refresh();}
           tooltip {Switch between Frame, Seconds and Timecode display} xywh {9 3 27 24}
           code3 {o->disable_label(); o->enable_character();}
           class {mrv::PopupMenu}
@@ -517,7 +517,7 @@ ui->uiView->take_focus();}
           class {mrv::Timecode}
         }
       }
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {133 1 544 28}
       } {
         Fl_Group {} {open
@@ -768,7 +768,7 @@ if (value < 0.01F)
           }
         }
       }
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {677 3 256 26}
       } {
         Fl_Button uiStartButton {
@@ -889,7 +889,7 @@ uiSecondary = nullptr;} {}
       user_data this user_data_type {ViewerUI*}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
-    exit_cb( o, v );}
+    exit_cb( o, v );} open
       xywh {0 0 934 674} type Double color 1 align 80 hide resizable
       class {mrv::MainWindow} size_range {934 674 0 0}
     } {
@@ -946,7 +946,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar
+          label TopBar open
           xywh {0 30 934 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -1126,7 +1126,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             }
           }
           Fl_Group uiOCIO {
-            label {ICS, View, Look}
+            label {ICS, View, Look} open
             xywh {247 30 686 29} labeltype NO_LABEL
           } {
             Fl_Group {} {open
@@ -1149,7 +1149,7 @@ else
   o->labelcolor(FL_FOREGROUND_COLOR);
   o->color(FL_BACKGROUND_COLOR);
 }
-o->redraw();}
+o->redraw();} selected
                 tooltip {Automatically select Input Color Space from file and OpenEXR metadata.} xywh {247 30 38 29} type Toggle down_box DOWN_BOX selection_color 14 labelsize 10 align 144
               }
               Fl_Menu_Button uiICS {

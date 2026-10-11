@@ -4005,13 +4005,13 @@ namespace mrv
                     // Make sure ocio is enabled.
                     p.ocio_disabled = false;
 
+                    const std::string help =
+                        _("Automatically select Input Color Space\n"
+                          "from file and OpenEXR metadata.  ");
+
                     // Handle OCIO Auto ICS
                     if (p.ui->uiAutoICS->value())
                     {
-                        const std::string help =
-                            _("Automatically select Input Color Space\n"
-                              "from file and OpenEXR metadata.  ");
-
                         bool autoUnmatched;
                         std::string autoName;
                         std::string autoSource;
@@ -4022,16 +4022,17 @@ namespace mrv
                         if (!name.empty() && name != p.ocioOptions.input)
                         {
                             ocio::setIcs(name);
-                            std::string tooltip = string::Format("{0}Currently: {1} from {2}")
-                                                  .arg(help)
-                                                  .arg(autoName)
-                                                  .arg(autoSource);
+                            const std::string tooltip =
+                                string::Format(_("{0}Currently: {1} from {2}"))
+                                .arg(help)
+                                .arg(autoName)
+                                .arg(autoSource);
                             p.ui->uiAutoICS->copy_tooltip(tooltip.c_str());
                         }
-                        else
-                        {
-                            p.ui->uiAutoICS->copy_tooltip(help.c_str());
-                        }
+                    }
+                    else
+                    {
+                        p.ui->uiAutoICS->copy_tooltip(help.c_str());
                     }
 
                     // We pass BT709 metadata unless OCIO changes it in
