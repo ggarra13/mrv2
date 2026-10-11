@@ -5,7 +5,7 @@ v1.8.3
 - UI: Fixed tooltips for AutoICS now showing with color space was selected and why.
 - UI/Core: Fixed moving the primary display window between an HDR and SDR monitor on Windows, which could sometimes not update the HDR Display properly.
 - UI/Edit: **Edit->Time->Slice** now supports selected items to only slice on the selection.
-- UI/Edit: **Edit->Associated Clips** is now more reliable when moving a video and audio clip in the timeline.
+- UI/Edit: **Edit->Associated Clips** is now more reliable when moving a video and audio clip in the timeline.  It will move **ALL** video and audio clips with similar start/end points.
 
 
 v1.8.2

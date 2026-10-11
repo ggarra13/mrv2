@@ -17,20 +17,93 @@ namespace tl
             {
                 const auto& dropTarget =
                     p.mouse.dropTargets[p.mouse.currentDropTarget];
+                const int tracksSize = static_cast<int>(p.tracks.size());
+
+                // Time in the timeline where the dragged item is dropped: the
+                // start of the item it is dropped in front of, or the end of
+                // the last item when dropped at the end of the track.  The
+                // associated items (like the audio of a video clip) live in
+                // other tracks, whose items do not necessarily have the same
+                // indexes (gaps, different clip splits), so they are placed
+                // by time instead of by index.
+                OTIO_NS::RationalTime dropTime(0.0, 24.0);
+                bool hasDropTime = false;
+                if (dropTarget.track >= 0 && dropTarget.track < tracksSize)
+                {
+                    const auto& items = p.tracks[dropTarget.track].items;
+                    if (dropTarget.index >= 0 &&
+                        dropTarget.index < static_cast<int>(items.size()))
+                    {
+                        dropTime =
+                            items[dropTarget.index]->getTimeRange().start_time();
+                        hasDropTime = true;
+                    }
+                    else if (!items.empty())
+                    {
+                        dropTime =
+                            items.back()->getTimeRange().end_time_exclusive();
+                        hasDropTime = true;
+                    }
+                }
+
+                // Index of the first item in the track starting at or after
+                // the drop time (the item count if there is none).
+                auto findDropIndex = [&](int track)
+                {
+                    const auto& items = p.tracks[track].items;
+                    const double rate =
+                        dropTime.rate() > 0.0 ? dropTime.rate() : 24.0;
+                    const double tolerance = 0.5 / rate;
+                    const double time = dropTime.to_seconds();
+                    for (int i = 0; i < static_cast<int>(items.size()); ++i)
+                    {
+                        if (!items[i])
+                            continue;
+                        const double start =
+                            items[i]->getTimeRange().start_time().to_seconds();
+                        if (start >= time - tolerance)
+                            return i;
+                    }
+                    return static_cast<int>(items.size());
+                };
+
                 std::vector<timeline::MoveData> moveData;
                 for (const auto& item : p.mouse.items)
                 {
                     const int fromTrack = item->track;
                     const int fromIndex = item->index;
-                    const int fromOtioIndex =
-                        p.tracks[fromTrack].otioIndexes[fromIndex];
                     const int toTrack = dropTarget.track +
                                         (item->track - p.mouse.items[0]->track);
-                    const int toIndex = dropTarget.index;
-                    int toOtioIndex = toIndex;
-                    if (toOtioIndex < p.tracks[toTrack].otioIndexes.size())
+                    if (fromTrack < 0 || fromTrack >= tracksSize ||
+                        toTrack < 0 || toTrack >= tracksSize)
+                        continue;
+
+                    const auto& fromOtioIndexes =
+                        p.tracks[fromTrack].otioIndexes;
+                    if (fromIndex < 0 ||
+                        fromIndex >= static_cast<int>(fromOtioIndexes.size()))
+                        continue;
+                    const int fromOtioIndex = fromOtioIndexes[fromIndex];
+
+                    // The clicked item uses the drop target index as is.
+                    int toIndex = dropTarget.index;
+                    if (hasDropTime && toTrack != dropTarget.track)
+                        toIndex = findDropIndex(toTrack);
+
+                    const auto& toOtioIndexes = p.tracks[toTrack].otioIndexes;
+                    int toOtioIndex;
+                    if (toIndex >= 0 &&
+                        toIndex < static_cast<int>(toOtioIndexes.size()))
                     {
-                        toOtioIndex = p.tracks[toTrack].otioIndexes[toIndex];
+                        toOtioIndex = toOtioIndexes[toIndex];
+                    }
+                    else
+                    {
+                        // Dropped past the last item: the otio index must be
+                        // past the last item's otio index (transitions
+                        // included), not just the item count.
+                        toOtioIndex =
+                            toOtioIndexes.empty() ? 0 : toOtioIndexes.back() + 1;
                     }
                     moveData.push_back(
                         {

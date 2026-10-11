@@ -3373,9 +3373,34 @@ namespace mrv
         tcp->unlock();
     }
 
-    void edit_move_clip_annotations(
-        const std::vector<tl::timeline::MoveData>& moves, ViewerUI* ui)
+    //! Associated items (like the audio of a video clip) are sent along with
+    //! the clicked item.  An item can be both selected and associated with
+    //! another selected item, so remove any duplicates.
+    static std::vector<tl::timeline::MoveData>
+    removeDuplicateMoves(const std::vector<tl::timeline::MoveData>& moves)
     {
+        std::vector<tl::timeline::MoveData> out;
+        for (const auto& move : moves)
+        {
+            const auto i = std::find_if(
+                out.begin(), out.end(),
+                [&move](const tl::timeline::MoveData& other)
+                {
+                    return other.type == move.type &&
+                           other.fromTrack == move.fromTrack &&
+                           other.fromOtioIndex == move.fromOtioIndex;
+                });
+            if (i == out.end())
+                out.push_back(move);
+        }
+        return out;
+    }
+
+    void edit_move_clip_annotations(
+        const std::vector<tl::timeline::MoveData>& allMoves, ViewerUI* ui)
+    {
+        const auto moves = removeDuplicateMoves(allMoves);
+
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -3415,6 +3440,10 @@ namespace mrv
         const auto& stack = timeline->tracks();
         const auto& tracks = stack->children();
 
+        // Annotations are only shifted once per distinct move, no matter how
+        // many (associated) video items travel together.
+        std::vector<std::pair<OTIO_NS::TimeRange, OTIO_NS::RationalTime> >
+            shiftedAnnotations;
 
         for (const auto& move : moves)
         {
@@ -3478,6 +3507,12 @@ namespace mrv
             if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
                     tracks[move.fromTrack]))
             {
+                if (move.fromOtioIndex < 0 ||
+                    move.fromOtioIndex >= track->children().size())
+                {
+                    LOG_ERROR("Invalid FROM otio index");
+                    continue;
+                }
                 auto child = track->children()[move.fromOtioIndex];
                 auto item = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(child);
                 if (!item)
@@ -3501,6 +3536,11 @@ namespace mrv
                 if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
                         tracks[move.toTrack]))
                 {
+                    if (toIndex < 0 || toIndex >= track->children().size())
+                    {
+                        LOG_ERROR("Invalid TO otio index");
+                        continue;
+                    }
                     auto child = track->children()[toIndex];
                     auto item = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(child);
                     if (!item)
@@ -3516,7 +3556,9 @@ namespace mrv
                     auto insertRange = item->trimmed_range_in_parent().value();
 
                     OTIO_NS::RationalTime insertTime;
-                    bool previous = toIndex > move.fromIndex;
+                    // toIndex is an otio index, so compare it with the
+                    // otio index of the item being moved.
+                    bool previous = toIndex > move.fromOtioIndex;
                     if (previous)
                     {
                         insertTime = insertRange.end_time_exclusive();
@@ -3531,86 +3573,71 @@ namespace mrv
                     //
                     // Shift annotations
                     //
-                    shiftAnnotations(oldRange, insertTime, previous, ui);
+                    const auto shifted =
+                        std::make_pair(oldRange, insertTime);
+                    if (std::find(
+                            shiftedAnnotations.begin(),
+                            shiftedAnnotations.end(),
+                            shifted) == shiftedAnnotations.end())
+                    {
+                        shiftedAnnotations.push_back(shifted);
+                        shiftAnnotations(oldRange, insertTime, previous, ui);
+                    }
                 }
             }
         }
 
-        // Finally, remove transitions from both from and to clips
+        // Finally, remove transitions from both from and to clips.
+        //
+        // All the transitions are collected before removing any of them, as
+        // removing a transition changes the otio indexes of the rest of the
+        // children (and several moved items can live on the same track).
         OTIO_NS::ErrorStatus errorStatus;
+        std::vector<OTIO_NS::Transition*> transitionsToRemove;
+        auto collectTransitions = [&](int trackIndex, int otioIndex)
+        {
+            if (trackIndex < 0 || trackIndex >= tracks.size())
+                return;
+            auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
+                tracks[trackIndex]);
+            if (!track)
+                return;
+            if (otioIndex < 0 || otioIndex >= track->children().size())
+                return;
+            auto item = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(
+                track->children()[otioIndex]);
+            if (!item)
+                return;
+
+            const auto neighbors = track->neighbors_of(item, &errorStatus);
+            for (auto neighbor : {neighbors.first.value, neighbors.second.value})
+            {
+                auto transition = dynamic_cast<OTIO_NS::Transition*>(neighbor);
+                if (transition &&
+                    std::find(
+                        transitionsToRemove.begin(), transitionsToRemove.end(),
+                        transition) == transitionsToRemove.end())
+                {
+                    transitionsToRemove.push_back(transition);
+                }
+            }
+        };
+
         for (const auto& move : moves)
         {
             if (move.type == tl::timeline::MoveType::Transition)
                 continue;
-            std::vector<int> fromOtioIndexes;
-            std::vector<int> toOtioIndexes;
-            if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
-                    tracks[move.fromTrack]))
+            collectTransitions(move.fromTrack, move.fromOtioIndex);
+            collectTransitions(move.toTrack, move.toOtioIndex);
+        }
+
+        for (auto transition : transitionsToRemove)
+        {
+            if (auto parent = transition->parent())
             {
-                auto child = track->children()[move.fromOtioIndex];
-
-                auto item = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(child);
-                if (item)
-                {
-                    const auto neighbors =
-                        track->neighbors_of(item, &errorStatus);
-                    if (auto transition = dynamic_cast<OTIO_NS::Transition*>(
-                            neighbors.second.value))
-                    {
-                        const int index = track->index_of_child(transition);
-                        fromOtioIndexes.push_back(index);
-                    }
-
-                    if (auto transition = dynamic_cast<OTIO_NS::Transition*>(
-                            neighbors.first.value))
-                    {
-                        const int index = track->index_of_child(transition);
-                        fromOtioIndexes.push_back(index);
-                    }
-                }
-
-                std::sort(
-                    fromOtioIndexes.begin(), fromOtioIndexes.end(),
-                    std::greater<int>());
-                for (const auto index : fromOtioIndexes)
-                {
-                    track->remove_child(index);
-                }
-            }
-            if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
-                    tracks[move.toTrack]))
-            {
-                if (move.toOtioIndex >= track->children().size())
-                    continue;
-
-                auto child = track->children()[move.toOtioIndex];
-
-                auto item = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(child);
-                if (!item)
-                    continue;
-
-                const auto neighbors = track->neighbors_of(item, &errorStatus);
-                if (auto transition =
-                        dynamic_cast<OTIO_NS::Transition*>(neighbors.second.value))
-                {
-                    const int index = track->index_of_child(transition);
-                    toOtioIndexes.push_back(index);
-                }
-
-                if (auto transition =
-                        dynamic_cast<OTIO_NS::Transition*>(neighbors.first.value))
-                {
-                    const int index = track->index_of_child(transition);
-                    toOtioIndexes.push_back(index);
-                }
-
-                std::sort(
-                    toOtioIndexes.begin(), toOtioIndexes.end(),
-                    std::greater<int>());
-                for (const auto index : toOtioIndexes)
-                {
-                    track->remove_child(index);
-                }
+                const int index = parent->index_of_child(transition);
+                if (index >= 0)
+                    parent->remove_child(index);
             }
         }
 

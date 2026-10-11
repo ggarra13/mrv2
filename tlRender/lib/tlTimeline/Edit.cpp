@@ -351,33 +351,99 @@ namespace tl
             const std::vector<MoveData>& moves)
         {
             auto out = copy(timeline);
+            const auto& tracks = out->tracks()->children();
+
+            auto getTrack = [&tracks](int index) -> OTIO_NS::Track*
+            {
+                if (index < 0 || index >= static_cast<int>(tracks.size()))
+                    return nullptr;
+                return OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
+                    tracks[index]);
+            };
+
+            // All the moves (the clicked item plus its associated items) are
+            // expressed as indexes into the ORIGINAL timeline.  Applying them
+            // one by one would invalidate the indexes of the later moves
+            // (for example, when several items live on the same track), so we
+            // first resolve every move to the items themselves, and then
+            // apply them by pointer.
+            struct ResolvedMove
+            {
+                OTIO_NS::SerializableObject::Retainer<OTIO_NS::Composable> item;
+                OTIO_NS::Track* fromTrack = nullptr;
+                OTIO_NS::Track* toTrack = nullptr;
+                int toIndex = 0;
+                //! Item the moved item is inserted in front of.  A nullptr
+                //! means append to the end of the destination track.
+                OTIO_NS::Composable* anchor = nullptr;
+            };
+            std::vector<ResolvedMove> resolved;
+            std::vector<OTIO_NS::Composable*> moving;
+
+            // Pass 1: resolve the items being moved (skipping duplicates, as
+            // an item can be both selected and associated with another one).
             for (const auto& move : moves)
             {
-                if (move.fromTrack >= 0 &&
-                    move.fromTrack < out->tracks()->children().size() &&
-                    move.toTrack >= 0 &&
-                    move.toTrack < out->tracks()->children().size())
-                {
-                    int toIndex = move.toIndex;
-                    if (move.fromTrack == move.toTrack &&
-                        move.fromIndex < toIndex)
-                    {
-                        --toIndex;
-                    }
-                    if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
-                            out->tracks()->children()[move.fromTrack]))
-                    {
-                        auto child = track->children()[move.fromIndex];
-                        track->remove_child(move.fromIndex);
+                auto fromTrack = getTrack(move.fromTrack);
+                auto toTrack = getTrack(move.toTrack);
+                if (!fromTrack || !toTrack)
+                    continue;
+                if (move.fromOtioIndex < 0 ||
+                    move.fromOtioIndex >=
+                        static_cast<int>(fromTrack->children().size()))
+                    continue;
 
-                        if (auto track =
-                                OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
-                                    out->tracks()->children()[move.toTrack]))
-                        {
-                            track->insert_child(toIndex, child);
-                        }
+                auto child = fromTrack->children()[move.fromOtioIndex];
+                if (!child.value ||
+                    std::find(moving.begin(), moving.end(), child.value) !=
+                        moving.end())
+                    continue;
+
+                ResolvedMove r;
+                r.item = child;
+                r.fromTrack = fromTrack;
+                r.toTrack = toTrack;
+                r.toIndex = move.toOtioIndex;
+                resolved.push_back(r);
+                moving.push_back(child.value);
+            }
+
+            // Pass 2: resolve the anchor each item is inserted in front of:
+            // the first child at or after the destination index that is not
+            // itself being moved.
+            for (auto& r : resolved)
+            {
+                const auto& children = r.toTrack->children();
+                for (int i = std::max(r.toIndex, 0);
+                     i < static_cast<int>(children.size()); ++i)
+                {
+                    if (std::find(
+                            moving.begin(), moving.end(), children[i].value) ==
+                        moving.end())
+                    {
+                        r.anchor = children[i].value;
+                        break;
                     }
                 }
+            }
+
+            // Pass 3: apply the moves.  Items moved to the same anchor keep
+            // the order in which they were given.
+            for (auto& r : resolved)
+            {
+                const int fromIndex = r.fromTrack->index_of_child(r.item.value);
+                if (fromIndex < 0)
+                    continue;
+                r.fromTrack->remove_child(fromIndex);
+
+                int toIndex = static_cast<int>(r.toTrack->children().size());
+                if (r.anchor)
+                {
+                    const int anchorIndex = r.toTrack->index_of_child(r.anchor);
+                    if (anchorIndex >= 0)
+                        toIndex = anchorIndex;
+                }
+                r.toTrack->insert_child(toIndex, r.item);
             }
             return out;
         }
