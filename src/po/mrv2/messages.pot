@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.8.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-10 21:48-0300\n"
+"POT-Creation-Date: 2026-10-10 21:55-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4243,7 +4243,7 @@ msgstr ""
 msgid "HDR monitor not found or not configured."
 msgstr ""
 
-msgid "HDR monitor not detected by Vulkan or Window Manager.  Screen="
+msgid "HDR monitor not detected by Vulkan or Window Manager."
 msgstr ""
 
 #, c++-format

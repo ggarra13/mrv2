@@ -499,7 +499,7 @@ namespace mrv
                 }
                 else if (p.monitor.hdr_enabled)
                 {
-                    LOG_STATUS(_("HDR monitor not detected by Vulkan or Window Manager.  Screen=") << p.screen_index);
+                    LOG_STATUS(_("HDR monitor not detected by Vulkan or Window Manager."));
                 }
 
                 p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
