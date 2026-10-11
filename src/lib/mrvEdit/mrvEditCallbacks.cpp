@@ -3419,22 +3419,43 @@ namespace mrv
             return;
 
         // Perform the actual move in the new player (if it was an .otioz file)
+        // timecode start time).  The ranges used when moving clips and
+        // shifting annotations are relative to the start of the tracks, so
+        // the edited timeline must not keep its global start time, and the
+        // annotations must be made relative to the start of the timeline
+        // too.  This has to happen exactly once, at the same time the start
+        // time is reset.  Otherwise, a second edit would subtract the start
+        // time from the annotations again.
+        const bool isClipMove = moves[0].type == tl::timeline::MoveType::Clip;
+        const auto startTimeOpt = timeline->global_start_time();
+        if (isClipMove && startTimeOpt.has_value())
+        {
+            const OTIO_NS::RationalTime startTime = startTimeOpt.value();
+
+            // Work on a deep copy, as the undo buffer shares the original
+            // annotations (edit_store_undo does not copy them).
+            auto annotations = deepCopyAnnotations(player->getAllAnnotations());
+            for (auto& annotation : annotations)
+            {
+                if (annotation->allFrames)
+                    continue;
+                annotation->time -=
+                    startTime.rescaled_to(annotation->time.rate());
+            }
+            player->setAllAnnotations(annotations);
+
+            timeline->set_global_start_time(std::nullopt);
+        }
+
+        // Perform the actual move in the new player (if it was an .otioz file)
         auto innerPlayer = player->player();
-        if (moves[0].type == tl::timeline::MoveType::Clip)
+        if (isClipMove)
         {
             auto timeline = innerPlayer->getTimeline();
             auto otioTimeline = timeline::move(timeline->getTimeline().value,
                                                moves);
+            otioTimeline->set_global_start_time(std::nullopt);
             innerPlayer->getTimeline()->setTimeline(otioTimeline);
-        }
-
-        const auto& startTimeOpt = timeline->global_start_time();
-        OTIO_NS::RationalTime startTime(0.0, timeline->duration().rate());
-        if (startTimeOpt.has_value())
-        {
-            startTime = startTimeOpt.value();
-            offsetAnnotations(
-                startTime, -startTime, player->getAllAnnotations());
         }
 
         const auto& stack = timeline->tracks();
