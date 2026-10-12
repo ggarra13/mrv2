@@ -4,6 +4,7 @@ set(HEADERS
     Mesh.h
     OffscreenBuffer.h
     Shader.h
+    ShaderBindingSet.h
     Texture.h
     TextureAtlas.h
     Util.h
