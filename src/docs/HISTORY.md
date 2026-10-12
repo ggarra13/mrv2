@@ -4,9 +4,11 @@ v1.8.3
 - UI: Added options to **Preferences->Edit** to hide or show effects, waveforms and thumbnails.
 - UI: Fixed tooltips for AutoICS now showing with color space was selected and why.
 - UI/Core: Fixed moving the primary display window between an HDR and SDR monitor on Windows, which could sometimes not update the HDR Display properly.
+
 - UI/Edit: **Edit->Time->Slice** now supports selected items to only slice on the selection.
 - UI/Edit: **Edit->Associated Clips** is now more reliable when moving a video and audio clip in the timeline.  It will move **ALL** video and audio clips with similar start/end points.
-- UI/Thumbnails: Thumbnails in the Files / Compare / Stereo 3D Panels are now properly tone-mapped when they show an HDR video in both the OpenGL and Vulkan backends.
+
+- UI/Thumbnails: They now support HDR and OpenColorIO in both Panels and the Timeline Viewport, on both backends.
 
 
 Fixes
