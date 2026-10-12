@@ -120,6 +120,7 @@ namespace mrv
             size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
+            _ocioProcessors.clear();
 
             const std::string tmpdir = tmppath() + "/";
 
@@ -463,6 +464,7 @@ namespace mrv
             _cancelRequests();
             clearCache();
             add_controls();
+            _clearCache = false;
             end_group();
         }
 

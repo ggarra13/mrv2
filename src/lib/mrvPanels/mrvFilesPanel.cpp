@@ -140,6 +140,7 @@ namespace mrv
                 time = player->currentTime();
 
             file::Path lastPath;
+            _ocioProcessors.clear();
 
             std::vector<int> ordered;
             if (r.sort == Sort::Loaded)
@@ -411,6 +412,7 @@ namespace mrv
             _cancelRequests();
             clearCache();
             add_controls();
+            _clearCache = false;
             end_group();
         }
 

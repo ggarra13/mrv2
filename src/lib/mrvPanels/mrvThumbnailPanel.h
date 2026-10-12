@@ -68,10 +68,11 @@ namespace mrv
             //! Default Thumbnail Size.
             image::Size size = image::Size(128, 64);
 
-        private:
+        protected:
             //! Whether to clear the cache for the thumbnails.
             bool _clearCache = false;
-            TIMELINEUI::OCIOCPUProcessor _ocioProcessor;
+            std::map<Fl_Widget*, TIMELINEUI::OCIOCPUProcessor > _ocioProcessors;
+            std::map<Fl_Widget*, bool > _ocioSDR;
 #ifdef OPENGL_BACKEND
             std::map<Fl_Widget*, timelineui::ThumbnailRequest> thumbnailRequests;
 #endif

@@ -101,7 +101,11 @@ namespace mrv
 
                             // Apply OCIO (always SDR, FLTK is an sRGB
                             // surface) on the CPU.
-                            _ocioProcessor.apply(pixelData, w, h);
+                            auto j = _ocioProcessors.find(i->first);
+                            if (j != _ocioProcessors.end())
+                            {
+                                j->second.apply(pixelData, w, h);
+                            }
 
                             i->first->bind_image(rgbImage);
                             i->first->redraw();
@@ -162,10 +166,15 @@ namespace mrv
 
             try
             {
+
                 // Same OCIO as the viewport; HDR display / views are
                 // converted to SDR inside the processor.
-                // NOTE: adapt this getter if yours is named differently.
-                _ocioProcessor.setOptions(p.ui->uiView->getOCIOOptions());
+                if (!file::isMovie(path) && !file::isOTIO(path) &&
+                    !file::isOTIOZ(path))
+                {
+                    _ocioProcessors[widget] = TIMELINEUI::OCIOCPUProcessor();
+                    _ocioProcessors[widget].setOptions(p.ui->uiView->getOCIOOptions());
+                }
 
                 const auto context = App::app->getContext();
                 auto thumbnailSystem =
@@ -213,7 +222,6 @@ namespace mrv
                 {
                     std::random_device rd;
                     options["ClearCache"] = string::Format("{0}").arg(rd());
-                    _clearCache = false;
                 }
 
                 options["Layer"] = string::Format("{0}").arg(layerId);

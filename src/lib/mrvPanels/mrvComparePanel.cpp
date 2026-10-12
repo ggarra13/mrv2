@@ -148,6 +148,8 @@ namespace mrv
             size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
+            _ocioProcessors.clear();
+
             int Y = g->y();
             Fl_Check_Button* cB;
 
@@ -696,6 +698,7 @@ namespace mrv
             _cancelRequests();
             clearCache();
             add_controls();
+            _clearCache = false;
             end_group();
         }
 
