@@ -8,6 +8,7 @@ v1.8.3
 - UI/Edit: **Edit->Associated Clips** is now more reliable when moving a video and audio clip in the timeline.  It will move **ALL** video and audio clips with similar start/end points.
 - UI/Thumbnails: Thumbnails in the Files / Compare / Stereo 3D Panels are now properly tone-mapped when they show an HDR video in both the OpenGL and Vulkan backends.
 
+
 Fixes
 -----
 
