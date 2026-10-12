@@ -1771,10 +1771,10 @@ namespace tl
         {
             TLRENDER_P();
 
-            if (_sdrOutput == value)
+            if (p.sdrOutput == value)
                 return;
 
-            _sdrOutput = value;
+            p.sdrOutput = value;
 
             p.shaders["display"].reset();
             _displayShader();
@@ -3100,7 +3100,7 @@ namespace tl
                 // of HDR logic.
                 // Offscreen SDR targets (thumbnails) must not inherit the
                 // main window's swapchain color space.
-                auto vkColorSpace = _sdrOutput ?
+                auto vkColorSpace = p.sdrOutput ?
                                     VK_COLOR_SPACE_SRGB_NONLINEAR_KHR :
                                     ctx.colorSpace;
 

@@ -450,8 +450,6 @@ namespace tl
 #endif
             Fl_Vk_Context& ctx;
 
-            bool _sdrOutput = false;
-
             TLRENDER_PRIVATE();
         };
     } // namespace timeline_vlk

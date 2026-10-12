@@ -257,6 +257,9 @@ namespace tl
             std::unordered_map<std::string, std::shared_ptr<vlk::VBO> > vbos;
             std::shared_ptr<vlk::VAOPool> vaoPool;
 
+            //! Flag for using display shader on SDR.
+            bool sdrOutput = false;
+
             std::chrono::steady_clock::time_point timer;
             struct Stats
             {
