@@ -127,7 +127,7 @@ namespace tl
             void createPipeline(const std::string& pipelineName,
                                 const std::string& pipelineLayoutName,
                                 const VkRenderPass renderPass,
-                                const std::shared_ptr<vlk::Shader>& shader,
+                                const std::shared_ptr<vlk::Shader> shader,
                                 const std::shared_ptr<vlk::VBO>& mesh,
                                 const vlk::ColorBlendStateInfo& cb = vlk::ColorBlendStateInfo(),
                                 const vlk::DepthStencilStateInfo& ds = vlk::DepthStencilStateInfo(),
@@ -413,16 +413,16 @@ namespace tl
                 const std::string& meshName, const geom::TriangleMesh2& mesh);
             void _create3DMesh(
                 const std::string& meshName, const geom::TriangleMesh3& mesh);
-            void _createBindingSet(const std::shared_ptr<vlk::Shader>& shaderName);
+            void _createBindingSet(const std::shared_ptr<vlk::Shader> shaderName);
             VkPipelineLayout _createPipelineLayout(
                 const std::string& pipelineLayoutName,
                 const std::shared_ptr<vlk::Shader> shader);
             void _bindDescriptorSets(
                 const std::string& pipelineLayoutName,
-                const std::shared_ptr<vlk::Shader> shaderName);
+                const std::shared_ptr<vlk::Shader> shader);
             void _bindComputeDescriptorSets(
                 const std::string& pipelineLayoutName,
-                const std::shared_ptr<vlk::Shader> shaderName);
+                const std::shared_ptr<vlk::Shader> shader);
             void _vkDraw(const std::string& meshName);
 
 

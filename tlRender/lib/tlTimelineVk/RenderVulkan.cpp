@@ -36,7 +36,7 @@ namespace tl
             }
         }
 
-        void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
+        void Render::_createBindingSet(const std::shared_ptr<vlk::Shader> shader)
         {
             TLRENDER_P();
 
@@ -85,7 +85,7 @@ namespace tl
         void Render::createPipeline(const std::string& pipelineName,
                                     const std::string& pipelineLayoutName,
                                     const VkRenderPass renderPass,
-                                    const std::shared_ptr<vlk::Shader>& shader,
+                                    const std::shared_ptr<vlk::Shader> shader,
                                     const std::shared_ptr<vlk::VBO>& mesh,
                                     const vlk::ColorBlendStateInfo& cb,
                                     const vlk::DepthStencilStateInfo& ds,
