@@ -7,6 +7,7 @@ set(HEADERS
     Init.h
     Namespace.h
     MarkerItem.h
+    OCIOSDR.h
     # StackItem.h
     ThumbnailSystem.h
     TimelineItem.h
@@ -25,6 +26,7 @@ set(SOURCE
     Init.cpp
     MarkerItem.cpp
     # StackItem.cpp
+    OCIOSDR.cpp
     ThumbnailSystem.cpp
     TimelineItem.cpp
     TimelineItemFill.cpp

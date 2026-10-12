@@ -10,6 +10,7 @@
 
 #include "mrvPanelWidget.h"
 
+#include <tlTimelineUI/OCIOSDR.h>
 #include <tlTimelineUI/ThumbnailSystem.h>
 
 #include <tlCore/Time.h>
@@ -70,7 +71,7 @@ namespace mrv
         private:
             //! Whether to clear the cache for the thumbnails.
             bool _clearCache = false;
-
+            TIMELINEUI::OCIOCPUProcessor _ocioProcessor;
 #ifdef OPENGL_BACKEND
             std::map<Fl_Widget*, timelineui::ThumbnailRequest> thumbnailRequests;
 #endif

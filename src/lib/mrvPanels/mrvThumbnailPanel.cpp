@@ -12,6 +12,7 @@
 #include "mrvFLTK/mrvWait.h"
 
 #include <tlTimeline/Timeline.h>
+#include <tlTimelineUI/OCIOSDR.h>
 
 #include <tlCore/StringFormat.h>
 
@@ -98,6 +99,10 @@ namespace mrv
                                 std::memset(d, 255, w * h * depth);
                             }
 
+                            // Apply OCIO (always SDR, FLTK is an sRGB
+                            // surface) on the CPU.
+                            _ocioProcessor.apply(pixelData, w, h);
+
                             i->first->bind_image(rgbImage);
                             i->first->redraw();
                         }
@@ -157,6 +162,11 @@ namespace mrv
 
             try
             {
+                // Same OCIO as the viewport; HDR display / views are
+                // converted to SDR inside the processor.
+                // NOTE: adapt this getter if yours is named differently.
+                _ocioProcessor.setOptions(p.ui->uiView->getOCIOOptions());
+
                 const auto context = App::app->getContext();
                 auto thumbnailSystem =
                     context->getSystem<TIMELINEUI::ThumbnailSystem>();

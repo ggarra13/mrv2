@@ -22,6 +22,7 @@
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvTimeObject.h"
 
+#include <tlTimelineUI/OCIOSDR.h>
 #include <tlTimelineUI/TimelineWidget.h>
 
 #include <tlTimelineVk/Render.h>
@@ -929,7 +930,10 @@ namespace mrv
                             -1.F, 1.F);
                         p.render->setTransform(ortho);
 
-                        const auto& ocioOptions = p.ui->uiView->getOCIOOptions();
+                        auto ocioOptions = p.ui->uiView->getOCIOOptions();
+#ifdef VULKAN_BACKEND
+                        ocioOptions = TIMELINEUI::toSDR(ocioOptions);
+#endif
                         p.render->setOCIOOptions(ocioOptions);
 
                         const auto& lutOptions = p.ui->uiView->lutOptions();

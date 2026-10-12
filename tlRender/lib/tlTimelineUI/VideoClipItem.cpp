@@ -5,6 +5,7 @@
 #include "VideoClipItem.h"
 #include "EffectItem.h"
 #include "ThumbnailSystem.h"
+#include "OCIOSDR.h"
 
 #include <tlUI/DrawUtil.h>
 
@@ -19,6 +20,8 @@
 
 #include <tlCore/Assert.h>
 #include <tlCore/StringFormat.h>
+
+#include <cstring>
 
 namespace tl
 {
@@ -52,6 +55,19 @@ namespace tl
             std::shared_ptr<io::Info> ioInfo;
             std::map<OTIO_NS::RationalTime, ThumbnailRequest>
                 thumbnailRequests;
+
+            //! Thumbnails with OCIO already applied (on the CPU), so we
+            //! can draw them with a plain drawImage() instead of running
+            //! the OCIO shader on every redraw.  Keyed like
+            //! _data->thumbnails; "source" is the image the result was
+            //! made from, to detect re-rendered thumbnails.
+            struct OCIOThumbnail
+            {
+                std::shared_ptr<image::Image> source;
+                std::shared_ptr<image::Image> converted; // null = unusable
+            };
+            std::map<std::string, OCIOThumbnail> ocioThumbnails;
+            timeline::OCIOOptions ocioThumbnailOptions;
         };
 
         void VideoClipItem::_init(
@@ -328,7 +344,14 @@ namespace tl
             event.render->setClipRectEnabled(true);
             event.render->setClipRect(
                 math::intersect(box, clipRectState.getClipRect()));
-            event.render->setOCIOOptions(_displayOptions.ocio);
+            // The thumbnails are drawn in an sRGB window, so an HDR OCIO
+            // display / view (ST2084, ACES 2.0 HDR, ...) would wash them
+            // out.  Use the closest SDR display / view instead.
+            timeline::OCIOOptions thumbnailOCIO = _displayOptions.ocio;
+#ifdef VULKAN_BACKEND
+            thumbnailOCIO = toSDR(thumbnailOCIO);
+#endif
+            event.render->setOCIOOptions(thumbnailOCIO);
             event.render->setLUTOptions(_displayOptions.lut);
 
             // The thumbnails from the ThumbnailSystem are already
@@ -342,6 +365,57 @@ namespace tl
             thumbnailHDR.hdrData.eotf = image::EOTFType::EOTF_BT709;
             thumbnailHDR.peak_detection = false;
             event.render->setHDROptions(thumbnailHDR);
+
+            // Returns the thumbnail with OCIO applied, converting and
+            // caching it on first use.  Returns null if the CPU path cannot
+            // be used (the caller then falls back to drawVideo()).
+            auto getOCIOThumbnail =
+                [&p](const std::string& key,
+                     const std::shared_ptr<image::Image>& source,
+                     const timeline::OCIOOptions& ocio)
+                -> std::shared_ptr<image::Image>
+            {
+                // New display / view / look: everything is stale.
+                if (ocio != p.ocioThumbnailOptions)
+                {
+                    p.ocioThumbnails.clear();
+                    p.ocioThumbnailOptions = ocio;
+                }
+
+                const auto i = p.ocioThumbnails.find(key);
+                if (i != p.ocioThumbnails.end() && i->second.source == source)
+                {
+                    return i->second.converted;
+                }
+
+                // Bound the memory used when scrolling a long timeline.
+                if (p.ocioThumbnails.size() > 512)
+                {
+                    p.ocioThumbnails.clear();
+                }
+
+                Private::OCIOThumbnail entry;
+                entry.source = source;
+
+                // The display / view was already converted to SDR above
+                // (under Vulkan), so do not do it again.
+                const auto processor = getOCIOCPUProcessor(ocio, false);
+                const int w = source->getWidth();
+                const int h = source->getHeight();
+                if (processor->isValid() && w > 0 && h > 0 &&
+                    source->getDataByteCount() ==
+                        static_cast<size_t>(w) * h * 4)
+                {
+                    auto out = image::Image::create(source->getInfo());
+                    std::memcpy(
+                        out->getData(), source->getData(),
+                        source->getDataByteCount());
+                    processor->apply(out->getData(), w, h);
+                    entry.converted = out;
+                }
+                p.ocioThumbnails[key] = entry;
+                return entry.converted;
+            };
 
             const math::Box2i clipRect =
                 _getClipRect(drawRect, _displayOptions.clipRectScale);
@@ -419,20 +493,42 @@ namespace tl
 
                                 const timeline::VideoLayer& layer = videoData.layers[0];
 
-                                if ((_displayOptions.ocio == timeline::OCIOOptions() ||
-                                     !_displayOptions.ocio.enabled) &&
-                                    (_displayOptions.lut == timeline::LUTOptions() ||
-                                     !_displayOptions.lut.enabled) &&
-                                    (!thumbnailHDR.tonemap ||
-                                     thumbnailHDR == timeline::HDROptions()))
+                                const bool ocioOff =
+                                    thumbnailOCIO == timeline::OCIOOptions() ||
+                                    !thumbnailOCIO.enabled;
+                                const bool lutOff =
+                                    _displayOptions.lut == timeline::LUTOptions() ||
+                                    !_displayOptions.lut.enabled;
+                                const bool hdrOff =
+                                    !thumbnailHDR.tonemap ||
+                                    thumbnailHDR == timeline::HDROptions();
+                                const bool singleU8 =
+                                    !layer.imageB && layer.image &&
+                                    layer.image->getInfo().pixelType ==
+                                        image::PixelType::RGBA_U8;
+
+                                // OCIO only (no LUT, no tone mapping): apply
+                                // it once on the CPU and cache the result.
+                                std::shared_ptr<image::Image> ocioImage;
+                                if (!ocioOff && lutOff && hdrOff && singleU8)
                                 {
-                                    if (!layer.imageB && layer.image &&
-                                        layer.image->getInfo().pixelType == image::PixelType::RGBA_U8)
+                                    ocioImage = getOCIOThumbnail(
+                                        cacheKey, layer.image, thumbnailOCIO);
+                                }
+
+                                if (ocioImage)
+                                {
+                                    event.render->drawImage(ocioImage, box);
+                                }
+                                else if (ocioOff && lutOff && hdrOff)
+                                {
+                                    if (singleU8)
                                     {
                                         event.render->drawImage(layer.image, box);
                                     }
                                     else if (!layer.image && layer.imageB &&
-                                             layer.imageB->getInfo().pixelType == image::PixelType::RGBA_U8)
+                                             layer.imageB->getInfo().pixelType ==
+                                                 image::PixelType::RGBA_U8)
                                     {
                                         event.render->drawImage(layer.imageB, box);
                                     }
@@ -445,6 +541,8 @@ namespace tl
                                 }
                                 else
                                 {
+                                    // LUT / tone mapping / float images:
+                                    // GPU path.
                                     event.render->drawVideo({videoData}, {box},
                                                             {}, {}, {},
                                                             background);
