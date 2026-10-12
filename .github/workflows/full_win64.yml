@@ -61,13 +61,14 @@ jobs:
       #           }
       #       }
       #     }
-          
+
       - name: Setup MSYS
         uses: msys2/setup-msys2@v2
         with:
+          msystem: UCRT64
           update: true
           path-type: inherit
-            
+
       - name: Fix linker shadowing
         run: mv /usr/bin/link.exe /usr/bin/link_msys.exe
         

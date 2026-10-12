@@ -65,6 +65,7 @@ jobs:
       - name: Setup MSYS
         uses: msys2/setup-msys2@v2
         with:
+          msystem: UCRT64
           update: true
           path-type: inherit
           
