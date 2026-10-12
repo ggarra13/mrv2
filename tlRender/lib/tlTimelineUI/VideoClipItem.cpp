@@ -330,7 +330,18 @@ namespace tl
                 math::intersect(box, clipRectState.getClipRect()));
             event.render->setOCIOOptions(_displayOptions.ocio);
             event.render->setLUTOptions(_displayOptions.lut);
-            event.render->setHDROptions(_displayOptions.hdr);
+
+            // The thumbnails from the ThumbnailSystem are already
+            // tone-mapped to 8-bit SDR (BT.709), so they must not be
+            // interpreted with the HDR metadata of the clip being viewed
+            // (PQ/HLG, mastering luminance, etc.), nor go through a second
+            // tone mapping or peak detection.  Describe them as SDR; with
+            // an HDR monitor libplacebo still maps SDR to the display.
+            timeline::HDROptions thumbnailHDR = _displayOptions.hdr;
+            thumbnailHDR.hdrData = image::HDRData();
+            thumbnailHDR.hdrData.eotf = image::EOTFType::EOTF_BT709;
+            thumbnailHDR.peak_detection = false;
+            event.render->setHDROptions(thumbnailHDR);
 
             const math::Box2i clipRect =
                 _getClipRect(drawRect, _displayOptions.clipRectScale);
@@ -412,8 +423,8 @@ namespace tl
                                      !_displayOptions.ocio.enabled) &&
                                     (_displayOptions.lut == timeline::LUTOptions() ||
                                      !_displayOptions.lut.enabled) &&
-                                    (!_displayOptions.hdr.tonemap ||
-                                     _displayOptions.hdr == timeline::HDROptions()))
+                                    (!thumbnailHDR.tonemap ||
+                                     thumbnailHDR == timeline::HDROptions()))
                                 {
                                     if (!layer.imageB && layer.image &&
                                         layer.image->getInfo().pixelType == image::PixelType::RGBA_U8)

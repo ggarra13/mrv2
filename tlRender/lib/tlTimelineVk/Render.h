@@ -117,6 +117,12 @@ namespace tl
             // HDR functions
             void setMonitorCapabilities(const monitor::Capabilities&);
 
+            //! Force an SDR (sRGB / BT.709) destination, ignoring the
+            //! swapchain's color space.  Used by offscreen renderers whose
+            //! target is 8-bit SDR (like thumbnails), so HDR sources get
+            //! tone-mapped instead of PQ-encoded.
+            void setSDROutput(bool);
+
             // Main entry pipeline creation function
             void createPipeline(const std::string& pipelineName,
                                 const std::string& pipelineLayoutName,
@@ -443,6 +449,8 @@ namespace tl
                 const OCIO::GpuShaderDescRcPtr& shaderDesc);
 #endif
             Fl_Vk_Context& ctx;
+
+            bool _sdrOutput = false;
 
             TLRENDER_PRIVATE();
         };

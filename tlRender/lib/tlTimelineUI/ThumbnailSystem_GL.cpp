@@ -6,7 +6,14 @@
 #include "ThumbnailSystem.h"
 #include "ThumbnailSystemPrivate.h"
 
+#include <tlTimeline/Timeline.h>
+
+#include <tlIO/System.h>
+
+#include <tlCore/AudioResample.h>
+#include <tlCore/LRUCache.h>
 #include <tlCore/StringFormat.h>
+#include <tlCore/Timer.h>
 
 #include <sstream>
 
@@ -37,6 +44,33 @@ namespace tl
                     ss << i.first << ":" << i.second << ";";
                 }
                 return ss.str();
+            }
+
+            //! Configure the thumbnail renderer for an image: HDR sources
+            //! are tone-mapped to SDR using their static metadata, SDR
+            //! sources go through untouched.  Must be called on the
+            //! thumbnail thread, after Render::begin() and before drawing.
+            void setThumbnailHDR(
+                const std::shared_ptr<timeline_gl::Render>& render,
+                const std::shared_ptr<image::Image>& image)
+            {
+                timeline::HDROptions hdr;
+                if (image && image->getHDR())
+                {
+                    const auto data = *(image->getHDR());
+                    const bool isHDR =
+                        data.eotf == image::EOTFType::EOTF_BT2100_PQ ||
+                        data.eotf == image::EOTFType::EOTF_BT2020 ||
+                        data.eotf == image::EOTFType::EOTF_BT2100_HLG;
+                    hdr.hdrData = data;
+                    hdr.tonemap = isHDR;
+                }
+                // Static metadata only: no per thumbnail peak detection
+                // compute pass, and no state carried between unrelated
+                // frames.
+                hdr.peak_detection = false;
+                hdr.algorithm = timeline::HDRTonemapAlgorithm::Spline;
+                render->setHDROptions(hdr);
             }
         }
 
@@ -253,12 +287,12 @@ namespace tl
                 {
                     std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
                     if (p.thumbnailThread.cv.wait_for(
-                            lock,
-                            std::chrono::milliseconds(5),
-                            [this]
-                                {
-                                    return !_p->thumbnailMutex.requests.empty();
-                                }))
+                        lock,
+                        std::chrono::milliseconds(5),
+                        [this]
+                        {
+                            return !_p->thumbnailMutex.requests.empty();
+                        }))
                     {
                         request = p.thumbnailMutex.requests.front();
                         p.thumbnailMutex.requests.pop_front();
@@ -342,8 +376,19 @@ namespace tl
                                                 static_cast<float>(size.h), 0.F,
                                                 -1.F, 1.F);
                                             p.thumbnailThread.render->setTransform(ortho);
-                                            p.thumbnailThread.render->drawImage(
-                                                videoData.image,
+
+                                        // Go through the display shader
+                                        // (drawVideo), as drawImage skips
+                                        // tone mapping.
+                                        setThumbnailHDR(
+                                            p.thumbnailThread.render,
+                                            videoData.image);
+                                        timeline::VideoLayer layer;
+                                        layer.image = videoData.image;
+                                        timeline::VideoFrame frame;
+                                        frame.layers.push_back(layer);
+                                        p.thumbnailThread.render->drawVideo(
+                                            {frame},
                                                 {math::Box2i(0, 0, size.w, size.h)});
                                             p.thumbnailThread.render->end();
                                             image = image::Image::create(
@@ -373,7 +418,7 @@ namespace tl
                             {
                                 logSystem->print("tl::ui::ThumbnailSystem",
                                                  string::Format("Media not found in timeline, "
-                                                                "using the timeline itself \"{0}\" in "
+                                                                "using \"{0}\" in timeline "
                                                                 "in \"{1}\"").
                                                  arg(request->mediaPath.get()).
                                                  arg(request->path.get()),
@@ -381,18 +426,17 @@ namespace tl
                             }
 
                             const auto info = timeline->getIOInfo();
-
-                            auto future = timeline->getVideo(
+                            auto videoFuture = timeline->getVideo(
                                 request->time.value_or(
                                     timeline->getTimeRange().start_time())).future;
                             timeline::VideoFrame videoFrame;
                             while (p.thumbnailThread.running)
                             {
-                                std::future_status status = future.wait_for(std::chrono::milliseconds(5));
+                                std::future_status status = videoFuture.wait_for(std::chrono::milliseconds(5));
 
                                 if (status == std::future_status::ready)
                                 {
-                                    videoFrame = future.get();
+                                    videoFrame = videoFuture.get();
                                     break;
                                 }
                             }
@@ -429,6 +473,11 @@ namespace tl
                                         static_cast<float>(size.h), 0.F,
                                         -1.F, 1.F);
                                     p.thumbnailThread.render->setTransform(ortho);
+                                    std::shared_ptr<image::Image> hdrImage;
+                                    if (!videoFrame.layers.empty())
+                                        hdrImage = videoFrame.layers[0].image;
+                                    setThumbnailHDR(
+                                        p.thumbnailThread.render, hdrImage);
                                     p.thumbnailThread.render->drawVideo(
                                         { videoFrame },
                                         { math::Box2i(0, 0, size.w, size.h) });

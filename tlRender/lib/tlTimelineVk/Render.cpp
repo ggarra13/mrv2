@@ -1767,6 +1767,19 @@ namespace tl
             _displayShader();
         }
 
+        void Render::setSDROutput(bool value)
+        {
+            TLRENDER_P();
+
+            if (_sdrOutput == value)
+                return;
+
+            _sdrOutput = value;
+
+            p.shaders["display"].reset();
+            _displayShader();
+        }
+
         Fl_Vk_Context& Render::getContext() const
         {
             return ctx;
@@ -3085,7 +3098,11 @@ namespace tl
 
                 // Resolve dst color space from swapchain FIRST, independent
                 // of HDR logic.
-                auto vkColorSpace = ctx.colorSpace;
+                // Offscreen SDR targets (thumbnails) must not inherit the
+                // main window's swapchain color space.
+                auto vkColorSpace = _sdrOutput ?
+                                    VK_COLOR_SPACE_SRGB_NONLINEAR_KHR :
+                                    ctx.colorSpace;
 
                 if (vkColorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
                 {

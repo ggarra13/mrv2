@@ -45,6 +45,33 @@ namespace tl
                 }
                 return ss.str();
             }
+
+            //! Configure the thumbnail renderer for an image: HDR sources
+            //! are tone-mapped to SDR using their static metadata, SDR
+            //! sources go through untouched.  Must be called on the
+            //! thumbnail thread, after Render::begin() and before drawing.
+            void setThumbnailHDR(
+                const std::shared_ptr<timeline_vlk::Render>& render,
+                const std::shared_ptr<image::Image>& image)
+            {
+                timeline::HDROptions hdr;
+                if (image && image->getHDR())
+                {
+                    const auto data = *(image->getHDR());
+                    const bool isHDR =
+                        data.eotf == image::EOTFType::EOTF_BT2100_PQ ||
+                        data.eotf == image::EOTFType::EOTF_BT2020 ||
+                        data.eotf == image::EOTFType::EOTF_BT2100_HLG;
+                    hdr.hdrData = data;
+                    hdr.tonemap = isHDR;
+                }
+                // Static metadata only: no per thumbnail peak detection
+                // compute pass, and no state carried between unrelated
+                // frames.
+                hdr.peak_detection = false;
+                hdr.algorithm = timeline::HDRTonemapAlgorithm::Spline;
+                render->setHDROptions(hdr);
+            }
         }
 
         ThumbnailSystem::ThumbnailSystem(
@@ -182,6 +209,9 @@ namespace tl
 
                         p.thumbnailThread.render =
                             timeline_vlk::Render::create(ctx, context);
+                        // The thumbnail target is 8-bit SDR whatever the
+                        // main window's swapchain is.
+                        p.thumbnailThread.render->setSDROutput(true);
                     }
                     if (p.thumbnailThread.render)
                     {
@@ -401,6 +431,11 @@ namespace tl
 
                                         timeline::RenderOptions renderOptions;
                                         renderOptions.clear = true;
+                                        // Float intermediate buffer so HDR
+                                        // highlights survive until tone
+                                        // mapping.
+                                        renderOptions.colorBuffer =
+                                            image::PixelType::RGBA_F16;
                                         p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
                                                                         p.thumbnailThread.frameIndex, size,
                                                                         renderOptions);
@@ -411,10 +446,19 @@ namespace tl
                                             -1.F, 1.F);
                                         p.thumbnailThread.render->setTransform(ortho);
 
-                                        p.thumbnailThread.render->drawImage(
-                                            videoData.image,
+                                        // Go through the display shader
+                                        // (drawVideo), as drawImage skips
+                                        // tone mapping.
+                                        setThumbnailHDR(
+                                            p.thumbnailThread.render,
+                                            videoData.image);
+                                        timeline::VideoLayer layer;
+                                        layer.image = videoData.image;
+                                        timeline::VideoFrame frame;
+                                        frame.layers.push_back(layer);
+                                        p.thumbnailThread.render->drawVideo(
+                                            {frame},
                                             {math::Box2i(0, 0, size.w, size.h)});
-
                                         p.thumbnailThread.render->end();
 
                                         p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w, size.h);
@@ -467,6 +511,7 @@ namespace tl
                                                  arg(request->path.get()),
                                                  log::Type::Warning);
                             }
+
                             const auto info = timeline->getIOInfo();
                             auto videoFuture = timeline->getVideo(
                                 request->time.value_or(
@@ -482,6 +527,7 @@ namespace tl
                                     break;
                                 }
                             }
+
                             math::Size2i size;
                             if (!info.video.empty())
                             {
@@ -527,6 +573,10 @@ namespace tl
 
                                     timeline::RenderOptions renderOptions;
                                     renderOptions.clear = true;
+                                    // Float intermediate buffer so HDR
+                                    // highlights survive until tone mapping.
+                                    renderOptions.colorBuffer =
+                                        image::PixelType::RGBA_F16;
                                     p.thumbnailThread.render->begin(cmd,
                                                                     p.thumbnailThread.buffer,
                                                                     p.thumbnailThread.frameIndex,
@@ -537,6 +587,11 @@ namespace tl
                                         0.F, static_cast<float>(size.h),
                                         -1.F, 1.F);
                                     p.thumbnailThread.render->setTransform(ortho);
+                                    std::shared_ptr<image::Image> hdrImage;
+                                    if (!videoFrame.layers.empty())
+                                        hdrImage = videoFrame.layers[0].image;
+                                    setThumbnailHDR(
+                                        p.thumbnailThread.render, hdrImage);
                                     p.thumbnailThread.render->drawVideo(
                                         {videoFrame},
                                         {math::Box2i(
