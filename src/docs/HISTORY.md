@@ -15,6 +15,7 @@ Fixes
 -----
 
 - Edit/Core: Moving a clip with annotations in an .otio timeline with a global_start_time() > 0 would not offset the annotation correctly.
+- UI/Thumbnails: Refreshing the thumbnails would only refresh the first thumbnail in the Panels.
 
 
 v1.8.2
