@@ -41,11 +41,8 @@ namespace tl
         {
             TLRENDER_P();
 
-            {
-                std::lock_guard lock(ctx.queue_mutex());
-                auto bindingSet = shader->createBindingSet();
-                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
-            }
+            auto bindingSet = shader->createBindingSet();
+            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
         }
 
 
