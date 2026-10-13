@@ -1773,11 +1773,13 @@ namespace tl
 
             if (p.sdrOutput == value)
                 return;
-
+            
             p.sdrOutput = value;
 
             p.shaders["display"].reset();
-            _displayShader();
+
+            if (p.fbo)
+                _displayShader();
         }
 
         Fl_Vk_Context& Render::getContext() const

@@ -209,6 +209,7 @@ namespace tl
 
                         p.thumbnailThread.render =
                             timeline_vlk::Render::create(ctx, context);
+                        
                         // The thumbnail target is 8-bit SDR whatever the
                         // main window's swapchain is.
                         p.thumbnailThread.render->setSDROutput(true);
