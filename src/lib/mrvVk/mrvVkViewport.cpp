@@ -1290,6 +1290,7 @@ namespace mrv
 
                 if (vk.vao && vk.vbo)
                 {
+#if USE_DYNAMIC_RGBA_WRITE_MASKS
                     if (ctx.vkCmdSetColorWriteMaskEXT)
                     {
                         const VkColorComponentFlags allMask[] =
@@ -1297,7 +1298,25 @@ namespace mrv
                               VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
                         ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
                     }
+#endif
 
+#if USE_DYNAMIC_STENCILS
+                    if (ctx.vkCmdSetStencilTestEnableEXT)
+                    {
+                        ctx.vkCmdSetStencilTestEnableEXT(cmd, VK_FALSE);
+                        ctx.vkCmdSetStencilOpEXT(cmd,
+                                                 VK_STENCIL_FACE_FRONT_AND_BACK,
+                                                 VK_STENCIL_OP_KEEP,
+                                                 VK_STENCIL_OP_KEEP,
+                                                 VK_STENCIL_OP_KEEP,
+                                                 VK_COMPARE_OP_ALWAYS);
+                        vkCmdSetStencilCompareMask(cmd,
+                                                   VK_STENCIL_FACE_FRONT_AND_BACK,
+                                                   0xFFFFFFFF);
+                        vkCmdSetStencilWriteMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
+                                                 0xFFFFFFFF);
+                    }
+#endif
                     vk.vao->bind(frameIndex);
                     vk.vao->draw(cmd, vk.vbo);
                 }
