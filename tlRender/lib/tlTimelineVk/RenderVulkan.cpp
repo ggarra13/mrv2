@@ -5,6 +5,7 @@
 #include <tlTimelineVk/RenderPrivate.h>
 
 #include <iostream>
+#include <mutex>
 #include <string>
 
 
@@ -40,8 +41,11 @@ namespace tl
         {
             TLRENDER_P();
 
-            auto bindingSet = shader->createBindingSet();
-            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+            {
+                std::lock_guard lock(ctx.queue_mutex());
+                auto bindingSet = shader->createBindingSet();
+                p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+            }
         }
 
 

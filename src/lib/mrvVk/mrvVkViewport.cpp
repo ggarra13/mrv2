@@ -263,7 +263,9 @@ namespace mrv
             dynamicState.dynamicStates = {
                 VK_DYNAMIC_STATE_VIEWPORT,
                 VK_DYNAMIC_STATE_SCISSOR,
+#if USE_DYNAMIC_RGBA_WRITE_MASKS
                 VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT,
+#endif
             };
 
             // Defaults are fine
