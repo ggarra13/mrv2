@@ -174,9 +174,11 @@ Enjoy!
 Donation Prices
 ---------------
 
-Donationware prices to unlock features with a Paypal donation:
+Donationware prices are available to unlock features with a Paypal donation and support the development.  To do so, from the viewer, go to:
 
+```
 Help->Unlock Features
+```
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PSYEULZG24QHY)
 
@@ -284,6 +286,7 @@ Notes about vmrv2/mrv2 on macOS Silicon
 ---------------------------------------
 
 - The application is now notarized and code-signed.
+- For MacOS Intel, a MacBook Pro is recommended.
 - MacBook Pro Silicon should work with any M1+.
 
 
