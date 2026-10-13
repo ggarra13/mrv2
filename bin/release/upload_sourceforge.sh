@@ -266,7 +266,7 @@ an HDR monitor.
 Notes about Vulkan on NVidia Linux
 ----------------------------------
 
-In order to get HDR, you currently need to have the KWin6 or GNOME49+ (Ubuntu 26.04 LTS) compositors and an HDR monitor.  The recommended compo.
+In order to get HDR, you currently need to have the KWin6 or GNOME50+ (Ubuntu 26.04 LTS) compositors and an HDR monitor. 
 
 It will likely work with any NVidia RTX 3080+, but it will require you to choose and test your hardware carefully.
 
@@ -275,6 +275,7 @@ The preferred NVidia driver tested for best performance is nvidia-driver-595+.
 Notes about Vulkan on macOS Intel
 ---------------------------------
 
+- The application is now notarized and code-signed.
 - Only up to Vulkan 1.3 is currently supported.
 - HDR on macOS needs a MacBook Pro.
   MacBook Pro Intel will give you up to 200 Nits of HDR.
@@ -282,8 +283,8 @@ Notes about Vulkan on macOS Intel
 Notes about vmrv2/mrv2 on macOS Silicon
 ---------------------------------------
 
+- The application is now notarized and code-signed.
 - MacBook Pro Silicon should work with any M1+.
-- Note that Apple has hardened the security on non-nontarized applications, so you will need to follow the bundled instructions in the .dmg package after dragging the vmrv2 icon.  That means, type four sudo commands.
 
 
 EOF
