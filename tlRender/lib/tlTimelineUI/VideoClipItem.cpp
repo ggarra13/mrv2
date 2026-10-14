@@ -23,6 +23,7 @@
 #include <tlCore/StringFormat.h>
 
 #include <cstring>
+#include <unordered_set>
 
 namespace tl
 {
