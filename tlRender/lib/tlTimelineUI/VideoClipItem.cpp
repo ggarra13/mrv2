@@ -391,10 +391,7 @@ namespace tl
                 }
             }
 #ifdef VULKAN_BACKEND
-            else
-            {
-                thumbnailOCIO = toSDR(thumbnailOCIO);
-            }
+            thumbnailOCIO = toSDR(thumbnailOCIO);
 #endif
 
             event.render->setOCIOOptions(thumbnailOCIO);

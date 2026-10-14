@@ -939,13 +939,19 @@ namespace mrv
                         auto ocioOptions = p.ui->uiView->getOCIOOptions();
                         if (p.displayOptions.ocioNotOnVideos)
                         {
-                            ocioOptions = timeline::OCIOOptions();
+                            if (p.player)
+                            {
+                                auto path = p.player->path();
+                                auto ext = path.getExtension();
+                                if (file::isMovie(ext) ||
+                                    file::isSRGB(ext))
+                                {
+                                    ocioOptions = timeline::OCIOOptions();
+                                }
+                            }
                         }
 #ifdef VULKAN_BACKEND
-                        else
-                        {
-                            ocioOptions = TIMELINEUI::toSDR(ocioOptions);
-                        }
+                        ocioOptions = TIMELINEUI::toSDR(ocioOptions);
 #endif
                         p.render->setOCIOOptions(ocioOptions);
 
