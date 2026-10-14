@@ -139,6 +139,7 @@ namespace mrv
             //! Set the auto Input Color Space.
             void setAutoICS();
 
+            //! Get the OCIO options.
             const timeline::OCIOOptions&
             getOCIOOptions(unsigned monitorId) const noexcept;
 

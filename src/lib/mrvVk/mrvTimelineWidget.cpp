@@ -694,7 +694,13 @@ namespace mrv
         void TimelineWidget::setDisplayOptions(
             const timelineui_vk::DisplayOptions& value)
         {
-            _p->timelineWidget->setDisplayOptions(value);
+            TLRENDER_P();
+
+            if (p.displayOptions == value)
+                return;
+
+            p.displayOptions = value;
+            p.timelineWidget->setDisplayOptions(value);
         }
 
         void TimelineWidget::prepare_shaders()
@@ -931,8 +937,15 @@ namespace mrv
                         p.render->setTransform(ortho);
 
                         auto ocioOptions = p.ui->uiView->getOCIOOptions();
+                        if (p.displayOptions.ocioNotOnVideos)
+                        {
+                            ocioOptions = timeline::OCIOOptions();
+                        }
 #ifdef VULKAN_BACKEND
-                        ocioOptions = TIMELINEUI::toSDR(ocioOptions);
+                        else
+                        {
+                            ocioOptions = TIMELINEUI::toSDR(ocioOptions);
+                        }
 #endif
                         p.render->setOCIOOptions(ocioOptions);
 
