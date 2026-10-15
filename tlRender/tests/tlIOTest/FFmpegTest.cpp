@@ -59,19 +59,20 @@ namespace tl
                 const std::shared_ptr<io::IWritePlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, const image::Info& imageInfo,
-                const image::Tags& tags, const otime::RationalTime& duration,
+                const image::Tags& tags, const OTIO_NS::RationalTime& duration,
                 const Options& options)
             {
                 Info info;
                 info.video.push_back(imageInfo);
                 info.videoTime =
-                    otime::TimeRange(otime::RationalTime(0.0, 24.0), duration);
+                    OTIO_NS::TimeRange(OTIO_NS::RationalTime(0.0, 24.0), duration);
                 info.tags = tags;
                 auto write = plugin->write(path, info, options);
+                write->writeHeader();
                 for (size_t i = 0; i < static_cast<size_t>(duration.value());
                      ++i)
                 {
-                    write->writeVideo(otime::RationalTime(i, 24.0), image);
+                    write->writeVideo(OTIO_NS::RationalTime(i, 24.0), image);
                 }
             }
 
@@ -79,7 +80,7 @@ namespace tl
                 const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, bool memoryIO, const image::Tags& tags,
-                const otime::RationalTime& duration, const Options& options)
+                const OTIO_NS::RationalTime& duration, const Options& options)
             {
                 std::vector<uint8_t> memoryData;
                 std::vector<file::MemoryRead> memory;
@@ -96,12 +97,13 @@ namespace tl
                 read = plugin->videoRead(path, options);
                 TLRENDER_ASSERT(read);
                 const auto ioInfo = read->getInfo().get();
-                TLRENDER_ASSERT(!ioInfo.video.empty());
+                if (ioInfo.video.empty())
+                    return;
                 for (size_t i = 0; i < static_cast<size_t>(duration.value());
                      ++i)
                 {
                     const auto videoData =
-                        read->readVideo(otime::RationalTime(i, 24.0)).get();
+                        read->readVideo(OTIO_NS::RationalTime(i, 24.0)).get();
                     TLRENDER_ASSERT(videoData.image);
                     TLRENDER_ASSERT(
                         videoData.image->getSize() == image->getSize());
@@ -224,7 +226,7 @@ namespace tl
                                         image::Image::create(imageInfo);
                                     image->zero();
                                     image->setTags(tags);
-                                    const otime::RationalTime duration(
+                                    const OTIO_NS::RationalTime duration(
                                         24.0, 24.0);
                                     try
                                     {
@@ -232,8 +234,8 @@ namespace tl
                                             writePlugin, image, path, imageInfo,
                                             tags, duration, options);
                                         read(
-                                            readPlugin, image, path, memoryIO, tags,
-                                            duration, options);
+                                            readPlugin, image, path, memoryIO,
+                                            tags, duration, options);
                                         readError(
                                             readPlugin, image, path, memoryIO,
                                             options);
