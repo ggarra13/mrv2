@@ -38,7 +38,7 @@ namespace tl
             }
             catch (const std::exception& e)
             {
-                _printError(e.what());
+                _error(e.what());
             }
             if (window)
             {

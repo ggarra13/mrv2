@@ -53,7 +53,7 @@ namespace tl
             }
             {
                 uint8_t u8 = 1;
-                endian(&u8, 1, 1);
+                swapEndian(&u8, 1, 1);
                 TLRENDER_ASSERT(1 == u8);
             }
             {
@@ -61,7 +61,7 @@ namespace tl
                 uint8_t* p = reinterpret_cast<uint8_t*>(&u16);
                 p[0] = 0;
                 p[1] = 1;
-                endian(&u16, 1, 2);
+                swapEndian(&u16, 1, 2);
                 TLRENDER_ASSERT(1 == p[0]);
                 TLRENDER_ASSERT(0 == p[1]);
             }
@@ -72,7 +72,7 @@ namespace tl
                 p[1] = 1;
                 p[2] = 2;
                 p[3] = 3;
-                endian(&u32, 1, 4);
+                swapEndian(&u32, 1, 4);
                 TLRENDER_ASSERT(3 == p[0]);
                 TLRENDER_ASSERT(2 == p[1]);
                 TLRENDER_ASSERT(1 == p[2]);
@@ -89,7 +89,7 @@ namespace tl
                 p[5] = 5;
                 p[6] = 6;
                 p[7] = 7;
-                endian(&u64, 1, 8);
+                swapEndian(&u64, 1, 8);
                 TLRENDER_ASSERT(7 == p[0]);
                 TLRENDER_ASSERT(6 == p[1]);
                 TLRENDER_ASSERT(5 == p[2]);
@@ -102,7 +102,7 @@ namespace tl
             {
                 uint8_t u8 = 0;
                 uint8_t _u8 = 0;
-                endian(&u8, &_u8, 1, 1);
+                swapEndian(&u8, &_u8, 1, 1);
                 TLRENDER_ASSERT(u8 == _u8);
             }
             {
@@ -112,7 +112,7 @@ namespace tl
                 uint8_t* p2 = reinterpret_cast<uint8_t*>(&_u16);
                 p[0] = 0;
                 p[1] = 1;
-                endian(&u16, &_u16, 1, 2);
+                swapEndian(&u16, &_u16, 1, 2);
                 TLRENDER_ASSERT(p[0] == p2[1]);
                 TLRENDER_ASSERT(p[1] == p2[0]);
             }
@@ -125,7 +125,7 @@ namespace tl
                 p[1] = 1;
                 p[2] = 2;
                 p[3] = 3;
-                endian(&u32, &_u32, 1, 4);
+                swapEndian(&u32, &_u32, 1, 4);
                 TLRENDER_ASSERT(p[0] == p2[3]);
                 TLRENDER_ASSERT(p[1] == p2[2]);
                 TLRENDER_ASSERT(p[2] == p2[1]);
@@ -144,7 +144,7 @@ namespace tl
                 p[5] = 5;
                 p[6] = 6;
                 p[7] = 7;
-                endian(&u64, &_u64, 1, 8);
+                swapEndian(&u64, &_u64, 1, 8);
                 TLRENDER_ASSERT(p[0] == p2[7]);
                 TLRENDER_ASSERT(p[1] == p2[6]);
                 TLRENDER_ASSERT(p[2] == p2[5]);

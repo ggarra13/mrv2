@@ -183,13 +183,42 @@ namespace tl
 
         inline bool Path::sequence(const Path& other) const
         {
-            return
-                (hasNumber() || hasSeqWildcard()) &&
-                other.hasNumber() &&
-                getDirectory() == other.getDirectory() &&
-                getBaseName() == other.getBaseName() &&
-                getSuffix() == other.getSuffix() &&
-                getExtension() == other.getExtension();
+            if (!((hasNumber() || hasSeqWildcard()) &&
+                  other.hasNumber() &&
+                  getDirectory() == other.getDirectory() &&
+                  getBaseName() == other.getBaseName() &&
+                  getSuffix() == other.getSuffix() &&
+                  getExtension() == other.getExtension()))
+            {
+                return false;
+            }
+
+            // A wildcard ("#", "%d") matches any padding.
+            if (hasSeqWildcard())
+            {
+                return true;
+            }
+
+            // Padding must agree. A number without a leading zero has
+            // padding 0, but it still fits a padded sequence if it is at
+            // least as wide as the padding (0999 -> 1000).
+            if (_pad == other._pad)
+            {
+                return true;
+            }
+            const auto digits = [](const std::string& s)
+                {
+                    return s.size() - (!s.empty() && '-' == s[0] ? 1 : 0);
+                };
+            if (0 == _pad)
+            {
+                return digits(getNumber()) >= static_cast<size_t>(other._pad);
+            }
+            if (0 == other._pad)
+            {
+                return digits(other.getNumber()) >= static_cast<size_t>(_pad);
+            }
+            return false;
         }
 
         inline bool Path::operator == (const Path& other) const
@@ -201,6 +230,5 @@ namespace tl
         {
             return !(*this == other);
         }
-
     }
 }

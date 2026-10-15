@@ -28,24 +28,24 @@ namespace tl
         {
             {
                 const auto r = IntRange();
-                TLRENDER_ASSERT(0 == r.getMin());
-                TLRENDER_ASSERT(0 == r.getMax());
+                TLRENDER_ASSERT(0 == r.min());
+                TLRENDER_ASSERT(0 == r.max());
             }
             {
                 const auto r = IntRange(1);
-                TLRENDER_ASSERT(1 == r.getMin());
-                TLRENDER_ASSERT(1 == r.getMax());
+                TLRENDER_ASSERT(1 == r.min());
+                TLRENDER_ASSERT(1 == r.max());
             }
             {
                 const auto r = IntRange(1, 10);
-                TLRENDER_ASSERT(1 == r.getMin());
-                TLRENDER_ASSERT(10 == r.getMax());
+                TLRENDER_ASSERT(1 == r.min());
+                TLRENDER_ASSERT(10 == r.max());
             }
             {
                 auto r = IntRange(1, 10);
                 r.zero();
-                TLRENDER_ASSERT(0 == r.getMin());
-                TLRENDER_ASSERT(0 == r.getMax());
+                TLRENDER_ASSERT(0 == r.min());
+                TLRENDER_ASSERT(0 == r.max());
             }
             {
                 const auto r = IntRange(1, 10);

@@ -63,6 +63,31 @@ namespace tl
         //! Get a user path.
         std::string getUserPath(UserPath);
 
+        //! Create a unique temporary directory.
+        std::filesystem::path createTmpDir();
+
+        //! Create a temporary directory that will automatically be removed when
+        //! finished.
+        class TmpDir
+        {
+            TLRENDER_NON_COPYABLE(TmpDir);
+
+        public:
+            TmpDir();
+
+            ~TmpDir();
+
+            //! Get the path to the temporary directory.
+            const std::filesystem::path& getPath() const;
+
+            //! Remove the temporary directory (this will also be called
+            //! automatically in the destructor).
+            void remove();
+
+        private:
+            std::filesystem::path _path;
+        };
+
         //! Convert a frame number to a string.
         std::string toString(int64_t frame, int pad = 0);
 

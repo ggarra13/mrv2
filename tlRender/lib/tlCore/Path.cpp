@@ -103,6 +103,29 @@ namespace tl
             "Documents",
             "Downloads");
 
+        TmpDir::TmpDir() :
+            _path(createTmpDir())
+        {}
+
+        TmpDir::~TmpDir()
+        {
+            remove();
+        }
+
+        const std::filesystem::path& TmpDir::getPath() const
+        {
+            return _path;
+        }
+
+        void TmpDir::remove()
+        {
+            if (!_path.empty())
+            {
+                std::filesystem::remove_all(_path);
+                _path = std::filesystem::path();
+            }
+        }
+
         std::string toString(int64_t frame, int pad)
         {
             std::stringstream ss;
@@ -596,7 +619,7 @@ namespace tl
             size_t protocolSize = 0;
             if (size > 2)
             {
-                for (int i = 0; i < static_cast<int>(size) - 3; ++i)
+                for (int i = 0; i + 2 < static_cast<int>(size); ++i)
                 {
                     if (':' == _path[i] &&
                         '/' == _path[i + 1] &&

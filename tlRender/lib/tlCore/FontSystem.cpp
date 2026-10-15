@@ -548,8 +548,9 @@ namespace tl
             int pos_y = 0;
             int max_w = 0;
 
-            for (const auto& line : lines)
+            for (size_t lineIndex = 0; lineIndex < lines.size(); ++lineIndex)
             {
+                const auto& line = lines[lineIndex];
                 pos_y += h;
 
                 auto shaped = shapeText(line, fontInfo, face);
@@ -617,6 +618,15 @@ namespace tl
                     }
 
                     ++j;
+                }
+
+                // Emit a blank (zero width) box for the newline character that
+                // terminated this line, so the boxes stay 1:1 with the input
+                // characters.
+                if (glyphGeom && lineIndex + 1 < lines.size())
+                {
+                    glyphGeom->push_back(math::Box2i(
+                        static_cast<int>(pos_x), pos_y - h, 0, h));
                 }
 
                 current_line_w = std::max(current_line_w, pos_x);

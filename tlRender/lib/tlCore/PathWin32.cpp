@@ -11,7 +11,7 @@
 #    define NOMINMAX
 #endif // NOMINMAX
 #include <windows.h>
-#include <direct.h>
+#include <combaseapi.h>
 #include <Shlobj.h>
 #include <shellapi.h>
 
@@ -19,6 +19,7 @@
 #include <FL/fl_utf8.h>
 
 #include <locale>
+#include <string>
 
 namespace tl
 {
@@ -73,7 +74,7 @@ namespace tl
 
         std::vector<std::string> getDrives() {
             std::vector<std::string> out;
-    
+
             // 1. Get the required buffer size for the wide strings
             DWORD result = GetLogicalDriveStringsW(0, NULL);
             if (result > 0) {
@@ -86,22 +87,22 @@ namespace tl
                     // We loop until we hit the double-null terminator
                     while (*p) {
                         size_t wlen = wcslen(p);
-                
+
                         // Determine UTF-8 size for this specific drive string
                         int utf8_sz = fl_utf8fromwc(nullptr, 0, p, (int)wlen);
                         if (utf8_sz > 0) {
                             std::string drive;
                             drive.resize(utf8_sz);
                             fl_utf8fromwc(&drive[0], utf8_sz + 1, p, (int)wlen);
-                    
+
                             // Optional: remove trailing backslash if your app prefers "C:"
                             if (!drive.empty() && drive.back() == '\\') {
                                 drive.pop_back();
                             }
-                    
+
                             out.push_back(drive);
                         }
-                
+
                         // Move to the next string in the multi-string buffer
                         p += wlen + 1;
                     }
@@ -110,5 +111,33 @@ namespace tl
             return out;
         }
 
+        std::filesystem::path createTmpDir()
+        {
+            // The narrow GetTempPath() would give the temporary directory in
+            // the ANSI code page, which u8path() then read as UTF-8; a user
+            // whose account name is not ASCII got a name that was neither.
+            std::filesystem::path out;
+            WCHAR path[MAX_PATH];
+            const DWORD r = GetTempPathW(MAX_PATH, path);
+            if (r)
+            {
+                GUID guid;
+                CoCreateGuid(&guid);
+                const uint8_t* guidP = reinterpret_cast<const uint8_t*>(&guid);
+                std::wstring name;
+                for (int i = 0; i < 16; ++i)
+                {
+                    WCHAR buf[3] = L"";
+                    swprintf_s(buf, 3, L"%02x", guidP[i]);
+                    name += buf;
+                }
+
+                // The returned length excludes the terminator, and the path
+                // already ends with a separator.
+                out = std::filesystem::path(std::wstring(path, r) + name);
+                CreateDirectoryW(out.c_str(), NULL);
+            }
+            return out;
+        }
     } // namespace file
 } // namespace tl

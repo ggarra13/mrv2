@@ -8,6 +8,7 @@
 #include <tlGL/GL.h>
 #include <tlGL/Mesh.h>
 
+#include <tlCore/Assert.h>
 #include <tlCore/StringFormat.h>
 
 using namespace tl::gl;
@@ -38,7 +39,7 @@ namespace tl
             }
             catch (const std::exception& e)
             {
-                _printError(e.what());
+                _error(e.what());
             }
             if (window)
             {
