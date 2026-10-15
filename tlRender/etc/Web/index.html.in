@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>@tl_WEB_APP@</title>
+<style>
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #181818;
+    /* Dragging in the canvas is the application's own selection, not
+       the page's. */
+    user-select: none;
+    -webkit-user-select: none;
+}
+canvas { display: block; width: 100%; height: 100%; -webkit-user-drag: none; }
+/* Errors are shown on the page: on a phone or a tablet there is no
+   console to read, and the alternative is a silent black page. */
+#error {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    max-height: 50%;
+    overflow: auto;
+    margin: 0;
+    padding: 1em;
+    background: #401818;
+    color: #f0d0d0;
+    font: 12px monospace;
+    white-space: pre-wrap;
+    user-select: text;
+    -webkit-user-select: text;
+}
+</style>
+</head>
+<body>
+<canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+<pre id="error"></pre>
+<!-- A host that cannot send the COOP/COEP headers, like GitHub
+     Pages, gets them from a service worker that re-serves every
+     response with the headers added; the first visit reloads once
+     for the worker to take over. -->
+<script src="coi-serviceworker.js"></script>
+<script>
+function tlError(text) {
+    var el = document.getElementById('error');
+    el.style.display = 'block';
+    el.textContent += text + '\n';
+}
+window.onerror = function(message, source, line, column, error) {
+    tlError(message +
+        (error && error.stack ? '\n' + error.stack : ''));
+};
+window.onunhandledrejection = function(event) {
+    tlError(String(event.reason));
+};
+if (!crossOriginIsolated) {
+    /* The coi service worker reloads the page once on its first
+       visit; the error waits out that reload. */
+    setTimeout(function() {
+        if (!crossOriginIsolated) {
+            tlError('The page is not cross-origin isolated; wasm ' +
+                'threads need the COOP/COEP headers from the server.');
+        }
+    }, 3000);
+}
+/* The browser keeps the audio device suspended until a user gesture,
+   and the resume has to happen inside the gesture's own handler. The
+   application waits for the gesture before it starts playback, so the
+   audio clock never runs against a suspended device. */
+(function() {
+    function gesture() {
+        try {
+            var sdl = Module['SDL2'];
+            if (sdl && sdl.audioContext &&
+                'suspended' === sdl.audioContext.state) {
+                sdl.audioContext.resume();
+            }
+        } catch (e) {}
+        globalThis.__tlGesture = 1;
+    }
+    ['click', 'keydown', 'touchstart'].forEach(function(type) {
+        document.addEventListener(type, gesture, true);
+    });
+})();
+var Module = {
+    canvas: document.getElementById('canvas'),
+    print: function(text) {
+        console.log(text);
+        if (/^(ERROR:|Unhandled exception)/.test(text)) {
+            tlError(text);
+        }
+    },
+    printErr: function(text) {
+        console.error(text);
+        tlError(text);
+    },
+    onAbort: function(what) {
+        tlError('Aborted: ' + what);
+    },
+    /* The build id keeps the page and its binary together: a cached
+       page fetches the .js and .wasm it was built with, not whatever a
+       newer deployment left behind. */
+    locateFile: function(path) {
+        return path + '?v=@tl_WEB_ID@';
+    },
+    /* The query string is the command line: "?url=clip.mp4" becomes
+       "-url clip.mp4". */
+    arguments: (function() {
+        var out = [];
+        new URLSearchParams(location.search).forEach(function(value, key) {
+            out.push('-' + key);
+            if (value)
+            {
+                out.push(value);
+            }
+        });
+        return out;
+    })()
+};
+</script>
+<script>
+globalThis.__tlWCWorkerUrl = 'WebCodecsWorker.js?v=@tl_WEB_ID@';
+</script>
+<script src="mp4box.all.min.js?v=@tl_WEB_ID@"></script>
+<script src="@tl_WEB_APP@.js?v=@tl_WEB_ID@"></script>
+</body>
+</html>
