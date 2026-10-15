@@ -44,6 +44,11 @@ namespace tl
             otime::RationalTime startTime = time::invalidTime;
             bool yuvToRGBConversion = false;
             bool fastYUV420PConversion = true;
+#if defined(__APPLE__)
+            bool hardwareDecode = true;
+#else
+            bool hardwareDecode = false;
+#endif
             audio::Info audioConvertInfo;
             int audioTrack = -1;
             size_t threadCount = ffmpeg::threadCount;
@@ -78,6 +83,11 @@ namespace tl
             std::shared_ptr<image::Image> popBuffer();
 
         private:
+            int _openVideoCodec(const AVCodec*, bool hardware);
+            static AVPixelFormat _getDecodeFormat(
+                AVCodecContext*, const AVPixelFormat*);
+            bool _fallbackToSoftware(int error, const otime::RationalTime&);
+            void _createSwsContext(const AVFrame*);
             int _decode(
                 const bool backwards, const otime::RationalTime& targetTime,
                 otime::RationalTime& currentTime);
@@ -107,6 +117,8 @@ namespace tl
             int _avAudioStream = -1;
             std::map<int, AVCodecParameters*> _avCodecParameters;
             std::map<int, AVCodecContext*> _avCodecContext;
+            const AVCodec* _avVideoCodec = nullptr;
+            bool _hardwareDecodeEnabled = false;
             AVFrame* _avFrame = nullptr;
             AVFrame* _avFrame2 = nullptr;
             AVColorTransferCharacteristic _avColorTRC;
@@ -114,6 +126,10 @@ namespace tl
             AVPixelFormat _avOutputPixelFormat = AV_PIX_FMT_NONE;
             bool _fastYUV420PConversion = true;
             SwsContext* _swsContext = nullptr;
+            int _swsWidth = 0;
+            int _swsHeight = 0;
+            AVColorSpace _swsColorSpace = AVCOL_SPC_UNSPECIFIED;
+            AVColorRange _swsColorRange = AVCOL_RANGE_UNSPECIFIED;
             std::list<std::shared_ptr<image::Image> > _buffer;
             bool _eof = false;
         };

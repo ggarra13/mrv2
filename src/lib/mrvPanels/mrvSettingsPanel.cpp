@@ -453,6 +453,26 @@ namespace mrv
 
             bg->end();
 
+#if defined(__APPLE__)
+            cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, 462, g->w(), 20,
+                _("FFmpeg hardware decoding"));
+            c = cV;
+            c->labelsize(12);
+            c->value(settings->getValue<int>(
+                "Performance/FFmpegHardwareDecode"));
+            c->tooltip(_(
+                "Use VideoToolbox for ProRes, H.264 and H.265 when supported. "
+                "Automatically fall back to software decoding if unavailable."));
+            cV->callback(
+                [=](auto w)
+                {
+                    settings->setValue(
+                        "Performance/FFmpegHardwareDecode", int(w->value()));
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+#endif
+
             cg->end();
 
             key = prefix + "Performance";

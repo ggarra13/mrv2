@@ -2043,6 +2043,8 @@ namespace mrv
 #endif
 
 #if defined(TLRENDER_FFMPEG)
+        out["FFmpeg/HardwareDecode"] = string::Format("{0}").arg(
+            p.settings->getValue<int>("Performance/FFmpegHardwareDecode"));
         out["FFmpeg/YUVToRGBConversion"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegYUVToRGBConversion"));
         int fastYUV420PConversion =

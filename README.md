@@ -21,6 +21,9 @@ mrv2
 mrv2 is an open source professional player and review tool for VFX, animation and computer graphics.
 vmrv2 is a port of mrv2 to the Vulkan API for more performance on newer machines.
 
+macOS playback supports optional [VideoToolbox hardware decoding](docs/hardware-decoding.md)
+for ProRes, H.264, and H.265, with automatic software fallback.
+
 ![banner](https://github.com/ggarra13/mrv2/blob/main/docs/www/files/Main_UI.png)
 
 Contents:

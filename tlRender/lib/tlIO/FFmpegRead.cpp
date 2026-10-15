@@ -69,7 +69,14 @@ namespace tl
             IRead::_init(path, memory, options, cache, logSystem);
 
             TLRENDER_P();
-            
+
+            auto hardware = options.find("FFmpeg/HardwareDecode");
+            if (hardware != options.end())
+            {
+                std::stringstream ss(hardware->second);
+                ss >> p.options.hardwareDecode;
+            }
+
             auto i = options.find("FFmpeg/YUVToRGBConversion");
             if (i != options.end())
             {
