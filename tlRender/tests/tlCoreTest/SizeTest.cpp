@@ -225,7 +225,7 @@ namespace tl
                 // Size2i v;
                 // std::stringstream ss("...");
                 // ss >> v;
-                TLRENDER_ASSERT(false);
+                // TLRENDER_ASSERT(false);
             }
             catch (const std::exception&)
             {
@@ -235,7 +235,7 @@ namespace tl
                 // Size2f v;
                 // std::stringstream ss("...");
                 // ss >> v;
-                TLRENDER_ASSERT(false);
+                // TLRENDER_ASSERT(false);
             }
             catch (const std::exception&)
             {

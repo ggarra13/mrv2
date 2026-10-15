@@ -619,7 +619,7 @@ namespace tl
             size_t protocolSize = 0;
             if (size > 2)
             {
-                for (int i = 0; i < static_cast<int>(size) - 3; ++i)
+                for (int i = 0; i + 2 < static_cast<int>(size); ++i)
                 {
                     if (':' == _path[i] &&
                         '/' == _path[i + 1] &&

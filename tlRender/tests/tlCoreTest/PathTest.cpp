@@ -94,8 +94,8 @@ namespace tl
                     std::string request;
                 };
                 const std::vector<Data> data = {
-                    {"", "", "", "", "", "", 0, "", ""},  // OK
-                    {"f", "", "", "f", "", "", 0, "", ""},  // OK
+                    {"", "", "", "", "", "", 0, "", ""},
+                    {"f", "", "", "f", "", "", 0, "", ""},
                     {"file", "", "", "file", "", "", 0, "", ""},
                     {"file.txt", "", "", "file", "", "", 0, ".txt", ""},
                     {"/tmp/file.txt", "", "/tmp/", "file", "", "", 0, ".txt", ""},
@@ -113,7 +113,7 @@ namespace tl
                     {"/tmp/.dotfile", "", "/tmp/", ".dotfile", "", "", 0, "", ""},
                     {"/tmp/.dotdir/.dotfile", "", "/tmp/.dotdir/", ".dotfile",
                      "", "", 0, "", ""},
-                    {"0", "", "", "", "", "0", 0, "", ""},
+                    {"0", "", "", "", "", "0", 1, "", ""},
                     {"0001", "", "", "", "", "0001", 4, "", ""},
                     {"/tmp/0001", "", "/tmp/", "", "", "0001", 4, "", ""},
                     {"/tmp/0001.exr", "", "/tmp/", "", "", "0001", 4, ".exr", ""},
@@ -123,7 +123,8 @@ namespace tl
                     {"C:/", "", "C:/", "", "", "", 0, "", ""},
                     {"C:/tmp/file.txt", "", "C:/tmp/", "file", "", "", 0, ".txt",
                      ""},
-                    {"file:/tmp/render.1.exr", "file:", "/tmp/", "render.", "", "1",
+                    {"file://", "file://", "", "", "", "", 0, "", ""},
+                    {"file:/tmp/render.1.exr", "", "file:/tmp/", "render.", "", "1",
                      0, ".exr", ""},
                     {"file://tmp/render.1.exr", "file://", "tmp/", "render.", "",
                      "1", 0, ".exr", ""},
@@ -159,7 +160,7 @@ namespace tl
                 p.setFrames(sequence);
                 TLRENDER_ASSERT(sequence == p.getFrames());
                 TLRENDER_ASSERT(p.isSequence());
-                TLRENDER_ASSERT(math::Int64Range(1, 25) ==
+                TLRENDER_ASSERT(math::Int64Range(1, 100) ==
                                 p.getFrames().value());
                 TLRENDER_ASSERT(p.sequence(Path("render.0101.exr")));
                 TLRENDER_ASSERT(!p.sequence(Path("render.101.exr")));

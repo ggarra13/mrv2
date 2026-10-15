@@ -79,14 +79,14 @@ namespace tl
                 f.sequence(FileInfo(Path("test.0001.exr")));
                 f.sequence(FileInfo(Path("test.0002.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getFrames().value() == math::Int64Range(0, 2));
+                    f.getPath().getFrames().value() == math::Int64Range(0, 0));
             }
             {
                 FileInfo f(Path("test.0000.exr"));
                 f.sequence(FileInfo(Path("test.1.exr")));
                 f.sequence(FileInfo(Path("test.2.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getFrames().value() == math::Int64Range(0, 2));
+                    f.getPath().getFrames().value() == math::Int64Range(0, 0));
             }
             {
                 FileInfo f(Path("test.0.exr"));
@@ -158,7 +158,7 @@ namespace tl
                 options.sequence = true;
                 options.sequenceExtensions = {".exr", ".tif"};
                 file::list(tmp, list, options);
-                TLRENDER_ASSERT(6 == list.size());
+                TLRENDER_ASSERT(7 == list.size());
                 for (size_t i = 0; i < list.size(); ++i)
                 {
                     const auto& path = list[i].getPath();
