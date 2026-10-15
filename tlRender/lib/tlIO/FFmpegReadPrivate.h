@@ -44,7 +44,11 @@ namespace tl
         {
             OTIO_NS::RationalTime startTime = time::invalidTime;
             bool yuvToRGBConversion = false;
+#if defined(__APPLE__)
+            bool hwAccel = true;
+#else
             bool hwAccel = false;
+#endif
             std::string hwDriver = "";
             bool fastYUV420PConversion = true;
             audio::Info audioConvertInfo;
@@ -93,6 +97,8 @@ namespace tl
 
         private:
             void _close();
+            int _openVideoCodec(bool hardware);
+            bool _fallbackToSoftware(int error, const OTIO_NS::RationalTime&);
             int _decode(
                 const bool backwards, const OTIO_NS::RationalTime& targetTime,
                 OTIO_NS::RationalTime& currentTime);
@@ -100,7 +106,7 @@ namespace tl
                        std::shared_ptr<AVFrame>);
             float _getRotation(const AVStream*);
             void _initHwAccel(const AVCodec*);
-            void _initSws(AVPixelFormat srcFormat);
+            void _initSws(const AVFrame*);
             static AVPixelFormat _getHwFormat(AVCodecContext*,
                                               const AVPixelFormat*);
 
@@ -132,12 +138,17 @@ namespace tl
             bool _fastYUV420PConversion = true;
             std::map<int, AVCodecParameters*> _avCodecParameters;
             std::map<int, AVCodecContext*> _avCodecContext;
+            const AVCodec* _avVideoCodec = nullptr;
             AVFrame* _avFrame = nullptr;
             AVFrame* _avFrame2 = nullptr;
             AVColorTransferCharacteristic _avColorTRC;
             AVPixelFormat _avInputPixelFormat = AV_PIX_FMT_NONE;
             AVPixelFormat _avOutputPixelFormat = AV_PIX_FMT_NONE;
             SwsContext* _swsContext = nullptr;
+            int _swsWidth = 0;
+            int _swsHeight = 0;
+            AVColorSpace _swsColorSpace = AVCOL_SPC_UNSPECIFIED;
+            AVColorRange _swsColorRange = AVCOL_RANGE_UNSPECIFIED;
             std::list<std::shared_ptr<image::Image> > _buffer;
             bool _eof = false;
 

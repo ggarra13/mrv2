@@ -84,6 +84,13 @@ namespace tl
         ReadOptions getReadOptions(const io::Options& options)
         {
             ReadOptions out;
+            // Keep the original PR option as an alias. The upstream HWAccel
+            // option wins when both are explicitly provided.
+            if (auto i = options.find("FFmpeg/HardwareDecode"); i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.hwAccel;
+            }
             if (auto i = options.find("FFmpeg/YUVToRGBConversion"); i != options.end())
             {
                 std::stringstream ss(i->second);
@@ -98,6 +105,10 @@ namespace tl
             {
                 std::stringstream ss(i->second);
                 ss >> out.hwAccel;
+            }
+            if (auto i = options.find("FFmpeg/HWDriver"); i != options.end())
+            {
+                out.hwDriver = i->second;
             }
             if (auto i = options.find("FFmpeg/AudioChannelCount");
                 i != options.end())
