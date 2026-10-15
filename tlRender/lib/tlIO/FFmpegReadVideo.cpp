@@ -1639,8 +1639,7 @@ namespace tl
                 {
                     const auto device = reinterpret_cast<AVHWDeviceContext*>(_hwDeviceContext->data);
                     backend = device->type == AV_HWDEVICE_TYPE_VIDEOTOOLBOX ?
-                        "VideoToolbox" : av_hwdevice_get_type_name(device->type);
-                }
+                              "VideoToolbox" : av_hwdevice_get_type_name(device->type);
                     av_frame_copy_props(_swFrame, _avFrame);
                     frame = _swFrame;
                     if (!_hwLogged)
@@ -1652,15 +1651,15 @@ namespace tl
                         LOG_STATUS(msg);
                         _hwLogged = true;
                     }
+                    if (_tags["Video Decode Backend"] != backend)
+                    {
+                        _tags["Video Decode Backend"] = backend;
+                        LOG_STATUS(string::Format("{0}: {1} decoding ({2}).")
+                                   .arg(_fileName).arg(backend).arg(avcodec_get_name(_avVideoCodec->id)));
+                    }
+                    const auto format = av_get_pix_fmt_name(static_cast<AVPixelFormat>(frame->format));
+                    _tags["FFmpeg Pixel Format"] = format ? format : "Unknown";
                 }
-                if (_tags["Video Decode Backend"] != backend)
-                {
-                    _tags["Video Decode Backend"] = backend;
-                    LOG_STATUS(string::Format("{0}: {1} decoding ({2}).")
-                        .arg(_fileName).arg(backend).arg(avcodec_get_name(_avVideoCodec->id)));
-                }
-                const auto format = av_get_pix_fmt_name(static_cast<AVPixelFormat>(frame->format));
-                _tags["FFmpeg Pixel Format"] = format ? format : "Unknown";
                 const int64_t timestamp = _avFrame->pts != AV_NOPTS_VALUE
                                           ? _avFrame->pts
                                           : _avFrame->pkt_dts;
