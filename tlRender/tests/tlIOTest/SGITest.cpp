@@ -36,7 +36,7 @@ namespace tl
         namespace
         {
             void write(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IWritePlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, const image::Info& imageInfo)
             {
@@ -50,7 +50,7 @@ namespace tl
             }
 
             void read(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, bool memoryIO)
             {
@@ -85,7 +85,7 @@ namespace tl
             }
 
             void readError(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, bool memoryIO)
             {

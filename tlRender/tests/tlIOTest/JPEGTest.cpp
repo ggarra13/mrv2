@@ -32,7 +32,7 @@ namespace tl
         namespace
         {
             void write(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IWritePlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, const image::Info& imageInfo,
                 const image::Tags& tags, const Options& options)
@@ -48,7 +48,7 @@ namespace tl
             }
 
             void read(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, bool memoryIO, const image::Tags& tags,
                 const Options& options)
@@ -63,17 +63,14 @@ namespace tl
                     memoryData.resize(fileIO->getSize());
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
-                        file::MemoryRead(memoryData.data(), memoryData.size()));
-                    read = plugin->read(path, memory, options);
+                        file::MemoryRead(fileIO, memoryData.data(), memoryData.size()));
                 }
-                else
-                {
-                    read = plugin->read(path, options);
-                }
+                auto decode = plugin->decode(options);
+                TLRENDER_ASSERT(decode);
                 const auto ioInfo = read->getInfo().get();
                 TLRENDER_ASSERT(!ioInfo.video.empty());
                 const auto videoData =
-                    read->readVideo(otime::RationalTime(0.0, 24.0)).get();
+                    decode->readVideo(otime::RationalTime(0.0, 24.0)).get();
                 TLRENDER_ASSERT(videoData.image);
                 TLRENDER_ASSERT(videoData.image->getSize() == image->getSize());
                 const auto frameTags = videoData.image->getTags();
@@ -106,11 +103,22 @@ namespace tl
                     memoryData.resize(fileIO->getSize());
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
-                        file::MemoryRead(memoryData.data(), memoryData.size()));
+                        file::MemoryRead(fileIO,
+                                         memoryData.data(), memoryData.size()));
                 }
-                auto read = plugin->read(path, memory, options);
-                const auto videoData =
-                    read->readVideo(otime::RationalTime(0.0, 24.0)).get();
+                // The file has been truncated, so this is expected to fail;
+                // a reader swallowed that, a decoder reports it.
+                try
+                {
+                    auto decode = plugin->decode(options);
+                    decode->readVideo(
+                        path.get(),
+                        !memory.empty() ? &memory[0] : nullptr,
+                        OTIO_NS::RationalTime(0.0, 24.0),
+                        options);
+                }
+                catch (const std::exception&)
+                {}
             }
         } // namespace
 

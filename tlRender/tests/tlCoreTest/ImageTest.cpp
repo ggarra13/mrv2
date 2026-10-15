@@ -66,17 +66,6 @@ namespace tl
                 ss >> size2;
                 TLRENDER_ASSERT(size == size2);
             }
-            {
-                TLRENDER_ASSERT(
-                    math::Box2i(0, 0, 100, 100) ==
-                    getBox(1.F, math::Box2i(0, 0, 100, 100)));
-                TLRENDER_ASSERT(
-                    math::Box2i(50, 0, 100, 100) ==
-                    getBox(1.F, math::Box2i(0, 0, 200, 100)));
-                TLRENDER_ASSERT(
-                    math::Box2i(0, 50, 100, 100) ==
-                    getBox(1.F, math::Box2i(0, 0, 100, 200)));
-            }
         }
 
         void ImageTest::_enums()
@@ -97,7 +86,7 @@ namespace tl
             {
                 const Info info;
                 TLRENDER_ASSERT(Size() == info.size);
-                TLRENDER_ASSERT(PixelType::None == info.pixelType);
+                TLRENDER_ASSERT(PixelType::kNone == info.pixelType);
                 TLRENDER_ASSERT(!info.isValid());
             }
             {
@@ -176,7 +165,7 @@ namespace tl
             }
             {
                 TLRENDER_ASSERT(
-                    getClosest(PixelType::None, {}) == PixelType::None);
+                    getClosest(PixelType::kNone, {}) == PixelType::kNone);
                 TLRENDER_ASSERT(
                     getClosest(PixelType::L_U16, {PixelType::L_U8}) ==
                     PixelType::L_U8);

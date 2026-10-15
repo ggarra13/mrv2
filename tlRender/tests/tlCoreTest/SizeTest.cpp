@@ -76,19 +76,19 @@ namespace tl
         {
             {
                 Size2i v(1, 2);
-                TLRENDER_ASSERT(2.F == v.getArea());
+                TLRENDER_ASSERT(2.F == area(v));
             }
             {
                 Size2f v(1.F, 2.F);
-                TLRENDER_ASSERT(2.F == v.getArea());
+                TLRENDER_ASSERT(2.F == area(v));
             }
             {
                 Size2i v(2, 1);
-                TLRENDER_ASSERT(2.F == v.getAspect());
+                TLRENDER_ASSERT(2.F == aspectRatio(v));
             }
             {
                 Size2f v(2.F, 1.F);
-                TLRENDER_ASSERT(2.F == v.getAspect());
+                TLRENDER_ASSERT(2.F == aspectRatio(v));
             }
         }
 
@@ -210,7 +210,7 @@ namespace tl
                 ss << v;
                 // Size2i v2;
                 // ss >> v2;
-                TLRENDER_ASSERT(v == v2);
+                // TLRENDER_ASSERT(v == v2);
             }
             {
                 const Size2f v(1.F, 2.F);
@@ -218,7 +218,7 @@ namespace tl
                 ss << v;
                 // Size2f v2;
                 // ss >> v2;
-                TLRENDER_ASSERT(v == v2);
+                // TLRENDER_ASSERT(v == v2);
             }
             try
             {

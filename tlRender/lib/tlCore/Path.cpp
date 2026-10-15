@@ -103,6 +103,29 @@ namespace tl
             "Documents",
             "Downloads");
 
+        TmpDir::TmpDir() :
+            _path(createTmpDir())
+        {}
+
+        TmpDir::~TmpDir()
+        {
+            remove();
+        }
+
+        const std::filesystem::path& TmpDir::getPath() const
+        {
+            return _path;
+        }
+
+        void TmpDir::remove()
+        {
+            if (!_path.empty())
+            {
+                std::filesystem::remove_all(_path);
+                _path = std::filesystem::path();
+            }
+        }
+
         std::string toString(int64_t frame, int pad)
         {
             std::stringstream ss;

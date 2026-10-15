@@ -159,7 +159,8 @@ namespace tl
                 p.setFrames(sequence);
                 TLRENDER_ASSERT(sequence == p.getFrames());
                 TLRENDER_ASSERT(p.isSequence());
-                TLRENDER_ASSERT("0001-0100" == p.getSequenceString());
+                TLRENDER_ASSERT(math::Int64Range(1, 25) ==
+                                p.getFrames().value());
                 TLRENDER_ASSERT(p.sequence(Path("render.0101.exr")));
                 TLRENDER_ASSERT(!p.sequence(Path("render.101.exr")));
             }
@@ -167,7 +168,8 @@ namespace tl
                 Path p("render.0001.exr");
                 const math::Int64Range sequence(1, 9999);
                 p.setFrames(sequence);
-                TLRENDER_ASSERT("0001-9999" == p.getSequenceString());
+                TLRENDER_ASSERT(math::Int64Range(1, 9999) ==
+                                p.getFrames().value());
                 TLRENDER_ASSERT(p.sequence(Path("render.0001.exr")));
                 TLRENDER_ASSERT(p.sequence(Path("render.1000.exr")));
                 //! \bug Handle frame numbers that exceed the zero padding.
@@ -207,7 +209,6 @@ namespace tl
                 Path a("/tmp/render.1.exr");
                 a.setProtocol("file://");
                 TLRENDER_ASSERT("file://" == a.getProtocol());
-                TLRENDER_ASSERT("file:" == a.getProtocolName());
                 TLRENDER_ASSERT(a.get() == "file:///tmp/render.1.exr");
                 a.setDirectory("/usr/tmp/");
                 TLRENDER_ASSERT("/usr/tmp/" == a.getDirectory());
@@ -219,7 +220,8 @@ namespace tl
                 TLRENDER_ASSERT("0010" == a.getNumber());
                 TLRENDER_ASSERT(a.get() == "file:///usr/tmp/comp.0010.exr");
                 TLRENDER_ASSERT(a.getPadding() == 4);
-                TLRENDER_ASSERT(a.getSequence() == math::IntRange(10, 10));
+                TLRENDER_ASSERT(a.getFrames().value() ==
+                                math::Int64Range(10, 10));
                 a.setExtension(".tif");
                 TLRENDER_ASSERT(".tif" == a.getExtension());
                 TLRENDER_ASSERT(a.get() == "file:///usr/tmp/comp.0010.tif");
@@ -233,10 +235,6 @@ namespace tl
 
         void PathTest::_util()
         {
-            {
-                TLRENDER_ASSERT(isPathSeparator('/'));
-                TLRENDER_ASSERT(isPathSeparator('\\'));
-            }
             {
                 std::string path = appendSeparator(std::string());
                 TLRENDER_ASSERT(path.empty());

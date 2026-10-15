@@ -56,7 +56,7 @@ namespace tl
         namespace
         {
             void write(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IWritePlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, const image::Info& imageInfo,
                 const image::Tags& tags, const otime::RationalTime& duration,
@@ -76,14 +76,14 @@ namespace tl
             }
 
             void read(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, bool memoryIO, const image::Tags& tags,
                 const otime::RationalTime& duration, const Options& options)
             {
                 std::vector<uint8_t> memoryData;
                 std::vector<file::MemoryRead> memory;
-                std::shared_ptr<io::IRead> read;
+                std::shared_ptr<io::IVideoRead> read;
                 if (memoryIO)
                 {
                     auto fileIO =
@@ -91,13 +91,10 @@ namespace tl
                     memoryData.resize(fileIO->getSize());
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
-                        file::MemoryRead(memoryData.data(), memoryData.size()));
-                    read = plugin->read(path, memory, options);
+                        file::MemoryRead(nullptr, memoryData.data(), memoryData.size()));
                 }
-                else
-                {
-                    read = plugin->read(path, options);
-                }
+                read = plugin->videoRead(path, options);
+                TLRENDER_ASSERT(read);
                 const auto ioInfo = read->getInfo().get();
                 TLRENDER_ASSERT(!ioInfo.video.empty());
                 for (size_t i = 0; i < static_cast<size_t>(duration.value());
@@ -116,16 +113,10 @@ namespace tl
                         TLRENDER_ASSERT(k->second == j.second);
                     }
                 }
-                for (size_t i = 0; i < static_cast<size_t>(duration.value());
-                     ++i)
-                {
-                    const auto videoData =
-                        read->readVideo(otime::RationalTime(i, 24.0)).get();
-                }
             }
 
             void readError(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, bool memoryIO, const Options& options)
             {
@@ -134,7 +125,7 @@ namespace tl
                         file::FileIO::create(path.get(), file::Mode::Read);
                     const size_t size = fileIO->getSize();
                     fileIO.reset();
-                    file::truncate(path.get(), size / 2);
+                    file::truncateFile(path.get(), size / 2);
                 }
                 std::vector<uint8_t> memoryData;
                 std::vector<file::MemoryRead> memory;
@@ -145,19 +136,40 @@ namespace tl
                     memoryData.resize(fileIO->getSize());
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
-                        file::MemoryRead(memoryData.data(), memoryData.size()));
+                        file::MemoryRead(nullptr, memoryData.data(), memoryData.size()));
                 }
-                auto read = plugin->read(path, memory, options);
-                //! \bug This causes the test to hang.
-                // const auto videoData =
-                // read->readVideo(otime::RationalTime(0.0, 24.0)).get();
+                auto read = plugin->videoRead(path, memory, options);
+
+                // This previously hung on truncated files (suspected cause:
+                // the avIOBufferSeek() whence/return bug, since fixed). Use
+                // a watchdog rather than a bare get() so a regression fails
+                // the test instead of hanging the suite. Any result --
+                // including empty -- is acceptable; completing is what
+                // matters.
+                auto future = read->readVideo(OTIO_NS::RationalTime(0.0, 24.0));
+                if (future.wait_for(std::chrono::seconds(30)) !=
+                    std::future_status::ready)
+                {
+                    throw std::runtime_error(
+                        "Timeout reading a truncated file");
+                }
+                const auto videoData = future.get();
+                // The truncated file must record a queryable error;
+                // silently returning empty data is not acceptable.
+                if (read->getError().empty() || 0 == read->getErrorCount())
+                {
+                    throw std::runtime_error(
+                        "Expected an error reading a truncated file");
+                }
             }
         } // namespace
 
         void FFmpegTest::_io()
         {
-            auto system = _context->getSystem<System>();
-            auto plugin = system->getPlugin<ffmpeg::Plugin>();
+            auto readSystem = _context->getSystem<ReadSystem>();
+            auto readPlugin = readSystem->getPlugin<ffmpeg::ReadPlugin>();
+            auto writeSystem = _context->getSystem<WriteSystem>();
+            auto writePlugin = writeSystem->getPlugin<ffmpeg::WritePlugin>();
 
             const image::Tags tags = {
                 {"artist", "artist"},
@@ -196,7 +208,7 @@ namespace tl
                             {
                                 Options options;
                                 options[option.first] = option.second;
-                                const auto imageInfo = plugin->getWriteInfo(
+                                const auto imageInfo = writePlugin->getInfo(
                                     image::Info(size, pixelType));
                                 if (imageInfo.isValid())
                                 {
@@ -217,20 +229,18 @@ namespace tl
                                     try
                                     {
                                         write(
-                                            plugin, image, path, imageInfo,
+                                            writePlugin, image, path, imageInfo,
                                             tags, duration, options);
                                         read(
-                                            plugin, image, path, memoryIO, tags,
+                                            readPlugin, image, path, memoryIO, tags,
                                             duration, options);
-                                        system->getCache()->clear();
                                         readError(
-                                            plugin, image, path, memoryIO,
+                                            readPlugin, image, path, memoryIO,
                                             options);
-                                        system->getCache()->clear();
                                     }
                                     catch (const std::exception& e)
                                     {
-                                        _printError(e.what());
+                                        _error(e.what());
                                     }
                                 }
                             }

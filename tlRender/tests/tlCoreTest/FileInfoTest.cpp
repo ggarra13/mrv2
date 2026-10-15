@@ -72,57 +72,57 @@ namespace tl
                 f.sequence(FileInfo(Path("test.1.exr")));
                 f.sequence(FileInfo(Path("test.2.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getSequence() == math::IntRange(0, 2));
+                    f.getPath().getFrames().value() == math::Int64Range(0, 2));
             }
             {
                 FileInfo f(Path("test.0.exr"));
                 f.sequence(FileInfo(Path("test.0001.exr")));
                 f.sequence(FileInfo(Path("test.0002.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getSequence() == math::IntRange(0, 0));
+                    f.getPath().getFrames().value() == math::Int64Range(0, 0));
             }
             {
                 FileInfo f(Path("test.0000.exr"));
                 f.sequence(FileInfo(Path("test.1.exr")));
                 f.sequence(FileInfo(Path("test.2.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getSequence() == math::IntRange(0, 0));
+                    f.getPath().getFrames().value() == math::Int64Range(0, 0));
             }
             {
                 FileInfo f(Path("test.0.exr"));
                 f.sequence(FileInfo(Path("test.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getSequence() == math::IntRange(0, 0));
+                    f.getPath().getFrames().value() == math::Int64Range(0, 0));
             }
             {
                 FileInfo f(Path("test.1.exr"));
                 f.sequence(FileInfo(Path("test.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getSequence() == math::IntRange(1, 1));
+                    f.getPath().getFrames().value() == math::Int64Range(1, 1));
             }
             {
                 FileInfo f(Path("test.exr"));
                 f.sequence(FileInfo(Path("test3.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getSequence() == math::IntRange(0, 0));
+                    f.getPath().getFrames().value() == math::Int64Range(0, 0));
             }
             {
                 FileInfo f(Path("test3.exr"));
                 f.sequence(FileInfo(Path("test.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getSequence() == math::IntRange(3, 3));
+                    f.getPath().getFrames().value() == math::Int64Range(3, 3));
             }
             {
                 FileInfo f(Path("test0999.exr"));
                 f.sequence(FileInfo(Path("test1000.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getSequence() == math::IntRange(999, 1000));
+                    f.getPath().getFrames().value() == math::Int64Range(999, 1000));
             }
             {
                 FileInfo f(Path("0001.exr"));
                 f.sequence(FileInfo(Path("7800.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getSequence() == math::IntRange(1, 7800));
+                    f.getPath().getFrames().value() == math::Int64Range(1, 7800));
             }
         }
 
@@ -167,7 +167,7 @@ namespace tl
                     {
                         TLRENDER_ASSERT(path.isSequence());
                         TLRENDER_ASSERT(
-                            path.getSequence() == math::IntRange(1, 3));
+                            path.getFrames().value() == math::Int64Range(1, 3));
                     }
                 }
                 for (const auto i : {"movie.1.mov", "movie.2.mov"})
