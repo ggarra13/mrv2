@@ -28,13 +28,21 @@
 //
 // Use 1 for using dynamic stencils.
 //
-#define USE_DYNAMIC_STENCILS 0
+#ifdef __APPLE__
+#  define USE_DYNAMIC_STENCILS 0
+#else
+#  define USE_DYNAMIC_STENCILS 0 // 1 not working
+#endif
 
 //
 // Use 1 for using dynamic RGBA write masks.
 // MoltenVK does not currently support dynamic write masks.
 //
-#define USE_DYNAMIC_RGBA_WRITE_MASKS 0
+#ifdef __APPLE__
+#  define USE_DYNAMIC_RGBA_WRITE_MASKS 0
+#else
+#  define USE_DYNAMIC_RGBA_WRITE_MASKS 1
+#endif
 
 //
 // Use 1 to output display shader code.

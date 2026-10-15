@@ -65,13 +65,6 @@ namespace tl
                                                  offscreenBufferOptions);
             }
 
-// \@bug: If I set LEFT_IMAGE to 1 only, I get a red video
-//        If I set RIGHT_IMAGE to 1 only, I get a cyan video
-//        If I set LEFT_IMAGE AND RIGHT_IMAGE, I get the left image rendered normally.
-#define LEFT_IMAGE 1
-#define RIGHT_IMAGE 1
-
-#if LEFT_IMAGE
 
             // Draw left image to "stereo_image" buffer
             if (!videoData.empty() && !boxes.empty())
@@ -150,12 +143,10 @@ namespace tl
             _vkDraw("video");
 
             p.fbo->endRenderPass(p.cmd);
-#endif
             // END FIRST RENDER PASS
 
             // ----- SECOND RENDER PASS OF RIGHT VIDEO
 
-#if RIGHT_IMAGE
             // Draw second image to "stereo_image" buffer
             if (videoData.size() > 1 && boxes.size() > 1)
             {
@@ -230,7 +221,6 @@ namespace tl
 
             p.fbo->endRenderPass(p.cmd);
             // END SECOND RENDER PASS
-#endif
 
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
             if (ctx.vkCmdSetColorWriteMaskEXT)

@@ -975,7 +975,6 @@ namespace mrv
 
             p.monitorOCIOOptions[monitorId] = value;
             p.previous_screen = -1;
-
             redrawWindows();
         }
 
@@ -995,8 +994,10 @@ namespace mrv
                 MyViewport* view = p.ui->uiSecondary->viewport();
                 view->setOCIOOptions(value);
             }
+
             auto display = p.ui->uiTimeline->getDisplayOptions();
             display.ocio = value;
+            display.ocioNotOnVideos = p.ui->uiPrefs->uiOCIONotOnVideos->value();
             p.ui->uiTimeline->setDisplayOptions(display);
             p.ui->uiTimeline->redraw(); // to refresh thumbnail
 
@@ -1029,6 +1030,7 @@ namespace mrv
 
             auto display = p.ui->uiTimeline->getDisplayOptions();
             display.lut = value;
+            display.ocioNotOnVideos = p.ui->uiPrefs->uiOCIONotOnVideos->value();
             p.ui->uiTimeline->setDisplayOptions(display);
             p.ui->uiTimeline->redraw(); // to refresh thumbnail
 
@@ -2306,7 +2308,7 @@ namespace mrv
                 ocio::splitView(combined, o.display, o.view);
             }
 
-            std::string look = ocio::look(); //p.ui->uiOCIOLook->label();
+            std::string look = ocio::look();
             if (p.ui->uiOCIOLook->value() <= 0)
                 look = "";
             o.look = look;
@@ -2324,6 +2326,7 @@ namespace mrv
             }
 
             redrawWindows();
+            panel::redrawThumbnails();
         }
 
         inline float calculate_fstop(float exposure) noexcept

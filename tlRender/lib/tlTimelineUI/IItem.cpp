@@ -32,6 +32,7 @@ namespace tl
                    tracks == other.tracks && trackInfo == other.trackInfo &&
                    clipInfo == other.clipInfo &&
                    thumbnails == other.thumbnails &&
+                   ocioNotOnVideos == other.ocioNotOnVideos &&
                    waveforms == other.waveforms &&
                    effects   == other.effects &&
                    thumbnailHeight == other.thumbnailHeight &&

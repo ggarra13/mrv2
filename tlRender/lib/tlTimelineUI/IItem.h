@@ -68,6 +68,10 @@ namespace tl
             int thumbnailHeight = 100;
             float thumbnailFade = .2F;
 
+            //! Don't apply OCIO to thumbnails of movie / sRGB clips
+            //! (mirrors ui->uiPrefs->uiOCIONotOnVideos).
+            bool ocioNotOnVideos = false;
+
             bool waveforms  = true;
             int waveformWidth = 200;
             int waveformHeight = 50;

@@ -17,16 +17,48 @@
 #include <tlTimeline/Util.h>
 
 #include <tlIO/Cache.h>
+#include <tlIO/System.h>
 
 #include <tlCore/Assert.h>
 #include <tlCore/StringFormat.h>
 
 #include <cstring>
+#include <unordered_set>
 
 namespace tl
 {
     namespace TIMELINEUI
     {
+
+        namespace
+        {
+            bool isMovie(const std::shared_ptr<system::Context>& context,
+                         const std::string& ext)
+            {
+                std::string extension = string::toLower(ext);
+
+                auto ioSystem = context->getSystem<io::ReadSystem>();
+                return (ioSystem->getFileType(extension) == io::FileType::Movie);
+            }
+
+            bool isSRGB(const std::string& ext)
+            {
+                static const std::unordered_set<std::string> extensions =
+                    {
+                        ".bmp", ".tga", ".sgi", ".ico", ".rgb",
+                        ".jpg", ".jpeg", ".ppm", ".png",
+                        ".tif", ".tiff", ".psd",
+                    };
+
+                std::string extension = string::toLower(ext);
+
+                if (!extension.empty() && extension[0] != '.')
+                    extension.insert(extension.begin(), '.');
+
+                return extensions.find(extension) != extensions.end();
+            }
+        }
+
         struct VideoClipItem::Private
         {
             std::string clipName;
@@ -163,7 +195,8 @@ namespace tl
         {
             const bool thumbnailsChanged =
                 value.thumbnails != _displayOptions.thumbnails ||
-                value.thumbnailHeight != _displayOptions.thumbnailHeight;
+                value.thumbnailHeight != _displayOptions.thumbnailHeight ||
+                value.ocioNotOnVideos != _displayOptions.ocioNotOnVideos;
             IBasicItem::setDisplayOptions(value);
             TLRENDER_P();
             if (thumbnailsChanged)
@@ -348,9 +381,20 @@ namespace tl
             // display / view (ST2084, ACES 2.0 HDR, ...) would wash them
             // out.  Use the closest SDR display / view instead.
             timeline::OCIOOptions thumbnailOCIO = _displayOptions.ocio;
+            // Same rule as TimelineViewport::_getHDR(): movies and sRGB images
+            // don't get OCIO when "OCIO not on videos" is on.
+            if (_displayOptions.ocioNotOnVideos)
+            {
+                const auto ext = p.path.getExtension();
+                if (isMovie(_context.lock(), ext) || isSRGB(ext))
+                {
+                    thumbnailOCIO = timeline::OCIOOptions();
+                }
+            }
 #ifdef VULKAN_BACKEND
             thumbnailOCIO = toSDR(thumbnailOCIO);
 #endif
+
             event.render->setOCIOOptions(thumbnailOCIO);
             event.render->setLUTOptions(_displayOptions.lut);
 
