@@ -50,6 +50,7 @@ set(TLRENDER_GL TRUE CACHE BOOL "Enable OpenGL support")
 set(TLRENDER_VK FALSE CACHE BOOL "Enable Vulkan support")
 set(TLRENDER_ZFILE TRUE CACHE BOOL "Enable support Pixar ZFiles")
 set(TLRENDER_TESTS TRUE CACHE BOOL "Build tests")
+set(TLRENDER_FFMPEG_DECODE_TESTS FALSE CACHE BOOL "Build standalone FFmpeg decoding regression tests")
 if(APPLE)
     set(TLRENDER_IGNORE_PREFIX_PATH_DEFAULT /opt/homebrew)
 endif()
@@ -87,10 +88,13 @@ if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     add_definitions(-DTLRENDER_ASSERT)
 endif()
 
+if(TLRENDER_TESTS OR TLRENDER_FFMPEG_DECODE_TESTS)
+    enable_testing()
+endif()
+
 if(TLRENDER_TESTS)
     add_definitions(-DTLRENDER_SAMPLE_DATA="${CMAKE_CURRENT_SOURCE_DIR}/etc/SampleData")
     set(CTEST_OUTPUT_ON_FAILURE ON)
-    enable_testing()
 endif()
 
 include_directories(
