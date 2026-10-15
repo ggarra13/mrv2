@@ -1,0 +1,32 @@
+avcodec/liboapvenc: create the metadata handler with a description
+
+oapvm_create() took a description argument in OpenAPV 1.0, and this still
+calls the older form, so FFmpeg does not build against any current
+OpenAPV: "too few arguments to function call, expected 2, have 1".
+
+Pass a zeroed description, whose NULL allocator interface means the
+standard C one; oapvm_create() rejects a NULL description outright, so
+the argument cannot simply be NULL. Guarded on OAPV_VER_APISET so the
+older libraries still build.
+
+Made against n9.0.1; master has the same code.
+---
+--- a/libavcodec/liboapvenc.c
++++ b/libavcodec/liboapvenc.c
+@@ -509,7 +509,16 @@
+     }
+ 
+     /* create metadata handler */
++#if OAPV_VER_APISET >= 1
++    {
++        /* Zeroed: a NULL allocator interface means the standard C one.
++           oapvm_create() rejects a NULL description outright. */
++        oapvm_cdesc_t mcdsc = { 0 };
++        apv->mid = oapvm_create(&mcdsc, &ret);
++    }
++#else
+     apv->mid = oapvm_create(&ret);
++#endif
+     if (apv->mid == NULL || OAPV_FAILED(ret)) {
+         av_log(avctx, AV_LOG_ERROR, "cannot create OAPV metadata handler\n");
+         return AVERROR_EXTERNAL;

@@ -68,7 +68,7 @@ class POMissingTranslations:
     def find_missing_msgstr(self, po_input, po_output):
         if not os.path.exists(po_input):
             print(po_input,'does not exist!')
-            exit(1)
+            return
             
         po = polib.pofile(po_input)
         out = polib.POFile()

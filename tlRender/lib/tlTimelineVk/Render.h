@@ -48,7 +48,7 @@ namespace tl
             kColumns,
             kCheckers,
         };
-        
+
         //! Vulkan renderer.
         class Render : public timeline::IRender
         {
@@ -86,13 +86,37 @@ namespace tl
                 const timeline::RenderOptions& = timeline::RenderOptions());
             void end() override;
 
+            //! Begin an additional offscreen pass inside the frame started by
+            //! begin().  This lets ONE renderer draw into several buffers
+            //! (video, annotations, output-device overlay) without
+            //! re-running the per-frame setup of begin() (garbage
+            //! collection, VAO pool bind).
+            //!
+            //! The state of the outer pass (fbo, render size, transform,
+            //! viewport, clip rect, pipeline group) is saved and restored by
+            //! endPass().
+            //!
+            //! \param pipelineGroup Name used to keep this target's
+            //! pipelines apart from the ones of other targets with a
+            //! different render pass (for example "annotation").
+            void beginPass(
+                VkCommandBuffer& cmd,
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const math::Size2i& renderSize,
+                const timeline::RenderOptions& renderOptions,
+                const std::string& pipelineGroup);
+
+            //! End a pass started with beginPass() and restore the outer
+            //! pass state.
+            void endPass();
+
             Fl_Vk_Context& getContext() const;
             VkCommandBuffer getCommandBuffer() const;
             uint32_t getFrameIndex() const;
 
             // HDR functions
             void setMonitorCapabilities(const monitor::Capabilities&);
-            
+
             // Main entry pipeline creation function
             void createPipeline(const std::string& pipelineName,
                                 const std::string& pipelineLayoutName,
@@ -101,7 +125,7 @@ namespace tl
                                 const std::shared_ptr<vlk::VBO>& mesh,
                                 const vlk::ColorBlendStateInfo& cb = vlk::ColorBlendStateInfo(),
                                 const vlk::DepthStencilStateInfo& ds = vlk::DepthStencilStateInfo(),
-                                const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());         
+                                const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());
             void createPipeline(
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::string& pipelineName,
@@ -135,7 +159,7 @@ namespace tl
 
             //! Changes the current Vulkan render pass.
             void setRenderPass(VkRenderPass);
-            
+
             math::Box2i getViewport() const override;
             void setViewport(const math::Box2i&) override;
             void clearViewport(const image::Color4f&) override;
@@ -150,7 +174,7 @@ namespace tl
             void setOCIOOptions(const timeline::OCIOOptions&) override;
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;
-            
+
             //! @{
             //!     These functions draw to the internal FBO.
             void drawRect(const math::Box2i&, const image::Color4f&,
@@ -177,7 +201,7 @@ namespace tl
                 std::vector<timeline::TextInfo>& info,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position) override;
-            
+
             //! Draws the text meshes.
             void drawText(
                 const timeline::TextInfo&,
@@ -228,7 +252,7 @@ namespace tl
 
             //! Draws the video data to the internal FBO.
             void drawVideo(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>& = {},
                 const std::vector<timeline::DisplayOptions>& = {},
@@ -239,7 +263,7 @@ namespace tl
             //! Draws the stereo video data to the internal FBO with a
             //! particular method.
             void drawStereo(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const StereoType = StereoType::kScanlines,
                 const float offset = 0.F,
@@ -249,7 +273,7 @@ namespace tl
 
             //! Draws the stereo video data as an anaglyph to the internal FBO.
             void drawAnaglyph(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const float offset = 0.F,
                 const std::vector<timeline::ImageOptions>& = {},
@@ -276,9 +300,19 @@ namespace tl
             void beginRenderPass() override;
             void endRenderPass() override;
             void setupViewportAndScissor() override;
-            
+
         private:
             void _displayShader();
+
+            void _drawImageCommon(
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const std::shared_ptr<image::Image>& image,
+                const math::Box2i& box,
+                const image::Color4f& color,
+                const timeline::ImageOptions& imageOptions,
+                const bool clearRenderPass,
+                const bool flip,
+                const bool applyClipRect);
 
             void _uploadMesh(const std::string& meshName,
                              const geom::TriangleMesh2& mesh,
@@ -291,62 +325,82 @@ namespace tl
                                const image::Color4f& color);
 
             void _setupRectCommon(const math::Box2i& box);
-            
+
             void _drawBackground(
                 const std::vector<math::Box2i>&,
                 const timeline::BackgroundOptions&);
             void _drawVideoA(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoB(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoWipe(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoOverlay(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoDifference(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoAdd(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoMultiply(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoTile(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
+
+            void _drawVideoButterfly(
+                const std::vector<timeline::VideoFrame>& videoFrame,
+                const std::vector<math::Box2i>& boxes,
+                const std::vector<timeline::ImageOptions>& imageOptions,
+                const std::vector<timeline::DisplayOptions>& displayOptions,
+                const timeline::CompareOptions& compareOptions);
+
+            //! Draw both files into a pair of offscreen buffers, for the
+            //! comparisons that combine them a pixel at a time. Answers
+            //! whether there are two to combine.
+            bool _drawVideoPair(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&);
+            //! Draw the pair through a shader that samples both.
+            void _drawVideoPairShader(
+                const std::string& shader,
+                const math::Box2i&);
             void _drawVideo(
                 std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::string& pipelineName,
-                const timeline::VideoData&, const math::Box2i&,
+                const timeline::VideoFrame&, const math::Box2i&,
                 const std::shared_ptr<timeline::ImageOptions>&,
                 const timeline::DisplayOptions&);
             void _create2DMesh(
@@ -359,13 +413,13 @@ namespace tl
                 const std::shared_ptr<vlk::Shader> shader);
             void _bindDescriptorSets(
                 const std::string& pipelineLayoutName,
-                const std::string& shaderName);
+                const std::shared_ptr<vlk::Shader> shaderName);
             void _bindComputeDescriptorSets(
                 const std::string& pipelineLayoutName,
-                const std::string& shaderName);
+                const std::shared_ptr<vlk::Shader> shaderName);
             void _vkDraw(const std::string& meshName);
 
-            
+
 #if defined(TLRENDER_LIBPLACEBO)
             void _addTextures(
                 std::vector<std::shared_ptr<vlk::Texture> >& textures,

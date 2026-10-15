@@ -8,9 +8,12 @@ namespace tl
     {
         inline bool VideoLayer::operator==(const VideoLayer& other) const
         {
-            return image == other.image && imageOptions == other.imageOptions &&
+            return image == other.image &&
+                   imageOptions == other.imageOptions &&
                    imageB == other.imageB &&
                    imageOptionsB == other.imageOptionsB &&
+                   bounds == other.bounds &&
+                   boundsB == other.boundsB &&
                    transition == other.transition &&
                    transitionValue == other.transitionValue;
         }
@@ -20,18 +23,20 @@ namespace tl
             return !(*this == other);
         }
 
-        inline bool VideoData::operator==(const VideoData& other) const
+        inline bool VideoFrame::operator==(const VideoFrame& other) const
         {
-            return size == other.size && time.strictly_equal(other.time) &&
+            return size == other.size &&
+                   canvasSize == other.canvasSize &&
+                   time.strictly_equal(other.time) &&
                    layers == other.layers;
         }
 
-        inline bool VideoData::operator!=(const VideoData& other) const
+        inline bool VideoFrame::operator!=(const VideoFrame& other) const
         {
             return !(*this == other);
         }
 
-        inline bool isTimeEqual(const VideoData& a, const VideoData& b)
+        inline bool isTimeEqual(const VideoFrame& a, const VideoFrame& b)
         {
             return a.time.strictly_equal(b.time);
         }

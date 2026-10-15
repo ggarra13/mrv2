@@ -40,7 +40,7 @@ update_cacert() {
     # Download the new bundle into a temp file first
     local tmp
     tmp=$(mktemp "${dest}.XXXXXX")
-    rm -f $$tmp
+    rm -f $tmp
 
     echo "cacert: downloading updated bundle..."
     if ! curl -fsSL --proto '=https' --tlsv1.2 -o "$tmp" "$cacert_url"; then

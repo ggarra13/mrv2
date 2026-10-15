@@ -50,7 +50,7 @@ namespace tl
 
         void GLFWSystem::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::gl::GLFWSystem", context);
+            ISystem::_init(context, "tl::gl::GLFWSystem");
             TLRENDER_P();
 
             // Initialize GLFW.
@@ -74,7 +74,7 @@ namespace tl
             if (glfwPlatformSupported(platform_hint) == GLFW_TRUE)
                 glfwInitHint(GLFW_PLATFORM, platform_hint);
 #endif
-            
+
             if (!glfwInit())
             {
                 //! \todo Only log the error for now so that non-OpenGL
@@ -88,7 +88,9 @@ namespace tl
             p.glfwInit = true;
         }
 
-        GLFWSystem::GLFWSystem() :
+        GLFWSystem::GLFWSystem(
+            const std::shared_ptr<system::Context>& context) :
+            ISystem(context, "tl::glfw::System"),
             _p(new Private)
         {
         }
@@ -105,7 +107,7 @@ namespace tl
         std::shared_ptr<GLFWSystem>
         GLFWSystem::create(const std::shared_ptr<system::Context>& context)
         {
-            auto out = std::shared_ptr<GLFWSystem>(new GLFWSystem);
+            auto out = std::shared_ptr<GLFWSystem>(new GLFWSystem(context));
             out->_init(context);
             return out;
         }

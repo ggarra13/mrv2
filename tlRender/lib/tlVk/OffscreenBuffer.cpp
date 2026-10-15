@@ -11,12 +11,15 @@
 
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
+#include <tlCore/StringFormat.h>
 
 #include <FL/vk_enum_string_helper.h>
 #include <FL/Fl_Vk_Utils.H>
+#include <FL/vk_mem_alloc.h>
 
 #include <array>
 #include <atomic>
+#include <initializer_list>
 #include <sstream>
 #include <iostream>
 
@@ -59,9 +62,110 @@ namespace tl
                 return out;
             }
 
-            VkFormat getBufferInternalFormat(
-                OffscreenDepth depth, OffscreenStencil stencil)
+            // Reverse of getVulkanSamples(), used to write a clamped sample
+            // count back into OffscreenBufferOptions so every call site that
+            // reads options.sampling (via getSampleCount()) automatically
+            // sees the clamped value.
+            OffscreenSampling getOffscreenSampling(VkSampleCountFlagBits samples)
             {
+                switch (samples)
+                {
+                case VK_SAMPLE_COUNT_2_BIT:  return OffscreenSampling::_2;
+                case VK_SAMPLE_COUNT_4_BIT:  return OffscreenSampling::_4;
+                case VK_SAMPLE_COUNT_8_BIT:  return OffscreenSampling::_8;
+                case VK_SAMPLE_COUNT_16_BIT: return OffscreenSampling::_16;
+                default:                     return OffscreenSampling::kNone;
+                }
+            }
+            // Clamps `requested` down to the highest sample count this
+            // device guarantees for a framebuffer color attachment (and,
+            // when `needsDepthStencil` is true, one that is *also*
+            // supported for a depth/stencil attachment).
+            //
+            // The Vulkan 1.3 spec only guarantees VK_SAMPLE_COUNT_1_BIT.
+            // Anything above that -- including the 8x/16x that desktop
+            // NVIDIA/AMD GPUs commonly expose via
+            // VkPhysicalDeviceLimits::framebufferColorSampleCounts /
+            // framebufferDepthSampleCounts -- is optional and must be
+            // queried rather than assumed.
+            VkSampleCountFlagBits clampSampleCount(
+                const VkPhysicalDeviceLimits& limits,
+                VkSampleCountFlagBits requested, bool needsDepthStencil)
+            {
+                if (VK_SAMPLE_COUNT_1_BIT == requested)
+                    return requested;
+
+                VkSampleCountFlags supported =
+                    limits.framebufferColorSampleCounts;
+                if (needsDepthStencil)
+                    supported &= limits.framebufferDepthSampleCounts;
+
+                static const VkSampleCountFlagBits kDescending[] = {
+                    VK_SAMPLE_COUNT_16_BIT, VK_SAMPLE_COUNT_8_BIT,
+                    VK_SAMPLE_COUNT_4_BIT, VK_SAMPLE_COUNT_2_BIT};
+
+                for (VkSampleCountFlagBits candidate : kDescending)
+                {
+                    if (candidate <= requested && (supported & candidate))
+                        return candidate;
+                }
+                return VK_SAMPLE_COUNT_1_BIT;
+            }
+
+            // Returns true if `format` supports `feature` for
+            // VK_IMAGE_TILING_OPTIMAL on this physical device.
+            // VK_FORMAT_UNDEFINED is never "supported".
+            bool formatHasOptimalFeature(
+                VkPhysicalDevice gpu, VkFormat format,
+                VkFormatFeatureFlags feature)
+            {
+                if (VK_FORMAT_UNDEFINED == format)
+                    return false;
+
+                VkFormatProperties props{};
+                vkGetPhysicalDeviceFormatProperties(gpu, format, &props);
+                return (props.optimalTilingFeatures & feature) == feature;
+            }
+
+            // Returns the first candidate (in priority order) that supports
+            // `feature` with optimal tiling, or VK_FORMAT_UNDEFINED if none
+            // of them do.
+            VkFormat pickSupportedFormat(
+                VkPhysicalDevice gpu,
+                const std::initializer_list<VkFormat>& candidates,
+                VkFormatFeatureFlags feature)
+            {
+                for (VkFormat format : candidates)
+                {
+                    if (formatHasOptimalFeature(gpu, format, feature))
+                        return format;
+                }
+                return VK_FORMAT_UNDEFINED;
+            }
+
+            // Chooses a depth/stencil format for the requested
+            // depth/stencil precision, verifying support on `gpu` instead
+            // of assuming it.
+            //
+            // The Vulkan 1.3 spec only guarantees:
+            //   - VK_FORMAT_D16_UNORM is always supported.
+            //   - at least one of {VK_FORMAT_X8_D24_UNORM_PACK32,
+            //     VK_FORMAT_D32_SFLOAT} is supported.
+            //   - at least one of {VK_FORMAT_D24_UNORM_S8_UINT,
+            //     VK_FORMAT_D32_SFLOAT_S8_UINT} is supported.
+            // Everything else (D16_UNORM_S8_UINT, S8_UINT alone, and
+            // *which* member of the two "at least one of" pairs above is
+            // actually present) is optional and varies by implementation.
+            // Desktop NVIDIA/AMD drivers happen to support all of these,
+            // which is why picking a fixed format never showed a problem
+            // there -- it isn't guaranteed elsewhere.
+            VkFormat getBufferInternalFormat(
+                VkPhysicalDevice gpu, OffscreenDepth depth,
+                OffscreenStencil stencil)
+            {
+                const VkFormatFeatureFlags kDSFeature =
+                    VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
+
                 VkFormat out = VK_FORMAT_UNDEFINED;
                 switch (depth)
                 {
@@ -69,20 +173,38 @@ namespace tl
                     switch (stencil)
                     {
                     case OffscreenStencil::_8:
-                        out = VK_FORMAT_S8_UINT;
+                        // VK_FORMAT_S8_UINT support is optional and rarely
+                        // implemented in practice.  Fall back to a combined
+                        // depth/stencil format (the depth aspect is simply
+                        // left unused) rather than assuming it exists.
+                        out = pickSupportedFormat(
+                            gpu,
+                            {VK_FORMAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT,
+                             VK_FORMAT_D32_SFLOAT_S8_UINT},
+                            kDSFeature);
                         break;
                     default:
                         break;
                     }
                     break;
                 case OffscreenDepth::_16:
-                    out = VK_FORMAT_D16_UNORM;
                     switch (stencil)
                     {
                     case OffscreenStencil::_8:
-                        out = VK_FORMAT_D16_UNORM_S8_UINT;
+                        // D16_UNORM_S8_UINT is optional; fall back to a
+                        // combined format the spec guarantees at least one
+                        // of.
+                        out = pickSupportedFormat(
+                            gpu,
+                            {VK_FORMAT_D16_UNORM_S8_UINT,
+                             VK_FORMAT_D24_UNORM_S8_UINT,
+                             VK_FORMAT_D32_SFLOAT_S8_UINT},
+                            kDSFeature);
                         break;
                     default:
+                        // VK_FORMAT_D16_UNORM is always supported by the
+                        // spec, no query needed.
+                        out = VK_FORMAT_D16_UNORM;
                         break;
                     }
                     break;
@@ -90,11 +212,22 @@ namespace tl
                     switch (stencil)
                     {
                     case OffscreenStencil::kNone:
-                        // No pure D24 depth format in Vulkan, fallback
-                        out = VK_FORMAT_D24_UNORM_S8_UINT;
+                        // There is no pure 24-bit depth format; the closest
+                        // equivalent is X8_D24_UNORM_PACK32, with
+                        // D32_SFLOAT as the spec-guaranteed alternative.
+                        out = pickSupportedFormat(
+                            gpu,
+                            {VK_FORMAT_X8_D24_UNORM_PACK32,
+                             VK_FORMAT_D32_SFLOAT},
+                            kDSFeature);
                         break;
                     case OffscreenStencil::_8:
-                        out = VK_FORMAT_D24_UNORM_S8_UINT;
+                        // Spec guarantees at least one of these two.
+                        out = pickSupportedFormat(
+                            gpu,
+                            {VK_FORMAT_D24_UNORM_S8_UINT,
+                             VK_FORMAT_D32_SFLOAT_S8_UINT},
+                            kDSFeature);
                         break;
                     default:
                         break;
@@ -104,10 +237,19 @@ namespace tl
                     switch (stencil)
                     {
                     case OffscreenStencil::kNone:
-                        out = VK_FORMAT_D32_SFLOAT;
+                        out = pickSupportedFormat(
+                            gpu,
+                            {VK_FORMAT_D32_SFLOAT,
+                             VK_FORMAT_X8_D24_UNORM_PACK32},
+                            kDSFeature);
                         break;
                     case OffscreenStencil::_8:
-                        out = VK_FORMAT_D32_SFLOAT_S8_UINT;
+                        // Spec guarantees at least one of these two.
+                        out = pickSupportedFormat(
+                            gpu,
+                            {VK_FORMAT_D32_SFLOAT_S8_UINT,
+                             VK_FORMAT_D24_UNORM_S8_UINT},
+                            kDSFeature);
                         break;
                     default:
                         break;
@@ -116,6 +258,17 @@ namespace tl
                 default:
                     break;
                 }
+
+                if (out == VK_FORMAT_UNDEFINED &&
+                    (depth != OffscreenDepth::kNone ||
+                     stencil != OffscreenStencil::kNone))
+                {
+                    throw std::runtime_error(
+                        "tl::vlk::OffscreenBuffer: no supported "
+                        "depth/stencil format available on this device "
+                        "for the requested depth/stencil options.");
+                }
+
                 return out;
             }
         } // namespace
@@ -145,26 +298,26 @@ namespace tl
             std::atomic<size_t> objectCount = 0;
             std::atomic<size_t> totalByteCount = 0;
         }
-        
+
         size_t OffscreenBuffer::getTotalByteCount()
         {
             return totalByteCount;
         }
-        
+
         size_t OffscreenBuffer::getObjectCount()
         {
             return objectCount;
         }
-        
+
         static constexpr int NUM_PBO_BUFFERS = 3;
 
         struct StagingBuffer {
             VkBuffer buffer = VK_NULL_HANDLE;
-            VkDeviceMemory memory;
+            VmaAllocation allocation = VK_NULL_HANDLE;
             void* mappedPtr = nullptr;
             VkFence fence = VK_NULL_HANDLE;
         };
-        
+
         struct OffscreenBuffer::Private
         {
             // Active frame index – must be set by the caller each frame when
@@ -182,7 +335,7 @@ namespace tl
             // Ring indices
             int writeIndex = 0;  // where we'll submit the next copy
             int readIndex  = 0;  // where we'll next wait+read
-            
+
             std::vector<StagingBuffer> pboRing;
 
             // Vulkan handles
@@ -191,13 +344,13 @@ namespace tl
 
             // Multisampled color render target (only created when sampling > 1)
             VkImage         msColorImage       = VK_NULL_HANDLE;
-            VkDeviceMemory  msColorMemory      = VK_NULL_HANDLE;
+            VmaAllocation   msColorAllocation  = VK_NULL_HANDLE;
             VkImageView     msColorImageView   = VK_NULL_HANDLE;
             VkImageLayout   msColorImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
             // Resolved single-sample color image (public API image/view/layout)
             VkImage         resolveImage       = VK_NULL_HANDLE;
-            VkDeviceMemory  resolveMemory      = VK_NULL_HANDLE;
+            VmaAllocation   resolveAllocation  = VK_NULL_HANDLE;
             VkImageView     resolveImageView   = VK_NULL_HANDLE;
             VkImageLayout   resolveImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
@@ -208,7 +361,7 @@ namespace tl
             // All depth accessors index into these vectors with frameIndex.
             // ----------------------------------------------------------------
             std::vector<VkImage>        depthImages;
-            std::vector<VkDeviceMemory> depthMemories;
+            std::vector<VmaAllocation>  depthAllocations;
             std::vector<VkImageView>    depthImageViews;
             std::vector<VkImageLayout>  depthLayouts;
 
@@ -241,7 +394,7 @@ namespace tl
             }
 
             VkImage&        activeDepthImage()        { return depthImages[clampedFrameIndex()]; }
-            VkDeviceMemory& activeDepthMemory()       { return depthMemories[clampedFrameIndex()]; }
+            VmaAllocation&  activeDepthAllocation()    { return depthAllocations[clampedFrameIndex()]; }
             VkImageView&    activeDepthImageView()    { return depthImageViews[clampedFrameIndex()]; }
             VkImageLayout&  activeDepthLayout()       { return depthLayouts[clampedFrameIndex()]; }
             VkFramebuffer&  activeFramebuffer()       { return framebuffers[clampedFrameIndex()]; }
@@ -260,7 +413,7 @@ namespace tl
             const math::Size2i& size, const OffscreenBufferOptions& options)
         {
             TLRENDER_P();
-            
+
             OffscreenBufferOptions offscreenBufferOptions = options;
             switch(offscreenBufferOptions.colorType)
             {
@@ -283,8 +436,8 @@ namespace tl
             p.size = size;
             p.options = offscreenBufferOptions;
             p.colorFormat = getTextureFormat(p.options.colorType);
-            p.depthFormat =
-                getBufferInternalFormat(p.options.depth, p.options.stencil);
+            p.depthFormat = getBufferInternalFormat(
+                ctx.gpu, p.options.depth, p.options.stencil);
 
             // Resolve how many depth/framebuffer slots we need.
             if (p.options.multiFrameDepth)
@@ -302,14 +455,31 @@ namespace tl
             if (p.size.h > maxTextureSize)
                 p.size.h = maxTextureSize;
 
+            // Clamp the requested MSAA sample count to what this device
+            // actually supports. VK_SAMPLE_COUNT_8_BIT/16_BIT are optional
+            // per the Vulkan 1.3 spec; desktop NVIDIA/AMD GPUs commonly
+            // support them, but that isn't guaranteed on every conformant
+            // implementation.
+            const bool needsDepthStencil =
+                p.options.depth != OffscreenDepth::kNone ||
+                p.options.stencil != OffscreenStencil::kNone;
+            const VkSampleCountFlagBits requestedSamples =
+                getVulkanSamples(p.options.sampling);
+            const VkSampleCountFlagBits clampedSamples = clampSampleCount(
+                props.limits, requestedSamples, needsDepthStencil);
+            if (clampedSamples != requestedSamples)
+            {
+                p.options.sampling = getOffscreenSampling(clampedSamples);
+            }
+
             totalByteCount += vlk::getDataByteCount(VK_IMAGE_TYPE_2D,
                                                     p.size.w,
                                                     p.size.h,
                                                     1,
                                                     p.colorFormat);
             ++objectCount;
-            
-            
+
+
             initialize();
         }
 
@@ -322,14 +492,14 @@ namespace tl
         OffscreenBuffer::~OffscreenBuffer()
         {
             TLRENDER_P();
-            
+
             --objectCount;
             totalByteCount -= vlk::getDataByteCount(VK_IMAGE_TYPE_2D,
                                                     p.size.w,
                                                     p.size.h,
                                                     1,
                                                     p.colorFormat);
-            
+
             cleanup();
         }
 
@@ -344,18 +514,18 @@ namespace tl
             VkDevice device = ctx.device;
 
             {
-                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                std::lock_guard mutex(ctx.queue_mutex());
                 vkDeviceWaitIdle(device);
             }
-            
+
             if (p.sampler != VK_NULL_HANDLE)
                 vkDestroySampler(device, p.sampler, nullptr);
 
             // Multisampled color
             if (p.msColorImage != VK_NULL_HANDLE)
-                vkDestroyImage(device, p.msColorImage, nullptr);
-            if (p.msColorMemory != VK_NULL_HANDLE)
-                vkFreeMemory(device, p.msColorMemory, nullptr);
+                vmaDestroyImage(ctx.allocator, p.msColorImage, p.msColorAllocation);
+            p.msColorImage = VK_NULL_HANDLE;
+            p.msColorAllocation = VK_NULL_HANDLE;
             if (p.msColorImageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.msColorImageView, nullptr);
 
@@ -374,36 +544,32 @@ namespace tl
 
             // Resolved color (always present)
             if (p.resolveImage != VK_NULL_HANDLE)
-                vkDestroyImage(device, p.resolveImage, nullptr);
-            if (p.resolveMemory != VK_NULL_HANDLE)
-                vkFreeMemory(device, p.resolveMemory, nullptr);
+                vmaDestroyImage(ctx.allocator, p.resolveImage, p.resolveAllocation);
+            p.resolveImage = VK_NULL_HANDLE;
+            p.resolveAllocation = VK_NULL_HANDLE;
             if (p.resolveImageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.resolveImageView, nullptr);
-            
+
             // Per-frame depth resources
             for (uint32_t i = 0; i < static_cast<uint32_t>(p.depthImageViews.size()); ++i)
             {
                 if (p.depthImageViews[i] != VK_NULL_HANDLE)
                     vkDestroyImageView(device, p.depthImageViews[i], nullptr);
                 if (p.depthImages[i] != VK_NULL_HANDLE)
-                    vkDestroyImage(device, p.depthImages[i], nullptr);
-                if (p.depthMemories[i] != VK_NULL_HANDLE)
-                    vkFreeMemory(device, p.depthMemories[i], nullptr);
+                    vmaDestroyImage(ctx.allocator, p.depthImages[i], p.depthAllocations[i]);
             }
             p.depthImages.clear();
-            p.depthMemories.clear();
+            p.depthAllocations.clear();
             p.depthImageViews.clear();
             p.depthLayouts.clear();
 
             // PBO ring of buffers
             for (auto& pbo : p.pboRing)
             {
-                if (pbo.buffer != VK_NULL_HANDLE)
-                    vkDestroyBuffer(device, pbo.buffer, nullptr);
                 if (pbo.fence != VK_NULL_HANDLE)
                     vkDestroyFence(device, pbo.fence, nullptr);
-                if (pbo.memory != VK_NULL_HANDLE)
-                    vkFreeMemory(device, pbo.memory, nullptr);
+                if (pbo.buffer != VK_NULL_HANDLE)
+                    vmaDestroyBuffer(ctx.allocator, pbo.buffer, pbo.allocation);
             }
 
             // Reset layouts
@@ -432,7 +598,7 @@ namespace tl
             // not which specific image is used, so one set is sufficient).
             createClearRenderPass();
             createLoadRenderPass();
-            
+
             createFramebuffer();
 
             if (p.options.pbo)
@@ -465,7 +631,7 @@ namespace tl
             TLRENDER_P();
 
             p.depthImages.resize(p.depthFrameCount, VK_NULL_HANDLE);
-            p.depthMemories.resize(p.depthFrameCount, VK_NULL_HANDLE);
+            p.depthAllocations.resize(p.depthFrameCount, VK_NULL_HANDLE);
             p.depthLayouts.resize(p.depthFrameCount, VK_IMAGE_LAYOUT_UNDEFINED);
 
             VkSampleCountFlagBits samples = getVulkanSamples(p.options.sampling);
@@ -484,27 +650,22 @@ namespace tl
             imageInfo.samples       = samples;
             imageInfo.sharingMode   = VK_SHARING_MODE_EXCLUSIVE;
 
+            VmaAllocationCreateInfo allocCreateInfo{};
+            allocCreateInfo.usage         = VMA_MEMORY_USAGE_AUTO;
+            allocCreateInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+
             for (uint32_t i = 0; i < p.depthFrameCount; ++i)
             {
-                if (vkCreateImage(ctx.device, &imageInfo, nullptr,
-                                  &p.depthImages[i]) != VK_SUCCESS)
+                if (vmaCreateImage(ctx.allocator, &imageInfo, &allocCreateInfo,
+                                   &p.depthImages[i], &p.depthAllocations[i],
+                                   nullptr) != VK_SUCCESS)
                     throw std::runtime_error("Failed to create depth image");
 
-                VkMemoryRequirements memReq;
-                vkGetImageMemoryRequirements(ctx.device, p.depthImages[i], &memReq);
-
-                VkMemoryAllocateInfo allocInfo{};
-                allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.allocationSize  = memReq.size;
-                allocInfo.memoryTypeIndex = findMemoryType(
-                    memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-                if (vkAllocateMemory(ctx.device, &allocInfo, nullptr,
-                                     &p.depthMemories[i]) != VK_SUCCESS)
-                    throw std::runtime_error("Failed to allocate depth memory");
-
-                vkBindImageMemory(ctx.device, p.depthImages[i],
-                                  p.depthMemories[i], 0);
+#ifndef NDEBUG
+                std::string name = string::Format("OffscreenBuffer: depth image {0}").arg(i);
+                vmaSetAllocationName(ctx.allocator, p.depthAllocations[i],
+                                     name.c_str());
+#endif
             }
         }
 
@@ -567,22 +728,18 @@ namespace tl
                 info.samples       = VK_SAMPLE_COUNT_1_BIT;
                 info.sharingMode   = VK_SHARING_MODE_EXCLUSIVE;
 
-                if (vkCreateImage(device, &info, nullptr, &p.resolveImage) != VK_SUCCESS)
+                VmaAllocationCreateInfo allocCreateInfo{};
+                allocCreateInfo.usage         = VMA_MEMORY_USAGE_AUTO;
+                allocCreateInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+
+                if (vmaCreateImage(ctx.allocator, &info, &allocCreateInfo,
+                                   &p.resolveImage, &p.resolveAllocation,
+                                   nullptr) != VK_SUCCESS)
                     throw std::runtime_error("Failed to create resolve image");
-
-                VkMemoryRequirements memReq;
-                vkGetImageMemoryRequirements(device, p.resolveImage, &memReq);
-
-                VkMemoryAllocateInfo allocInfo{};
-                allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.allocationSize  = memReq.size;
-                allocInfo.memoryTypeIndex = findMemoryType(
-                    memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-                if (vkAllocateMemory(device, &allocInfo, nullptr, &p.resolveMemory) != VK_SUCCESS)
-                    throw std::runtime_error("Failed to allocate resolve image memory");
-
-                vkBindImageMemory(device, p.resolveImage, p.resolveMemory, 0);
+#ifndef NDEBUG
+                vmaSetAllocationName(ctx.allocator, p.resolveAllocation,
+                                     "OffscreenBuffer: resolve color image" );
+#endif
             }
 
             // --------------------------------------------------
@@ -604,25 +761,22 @@ namespace tl
                 info.samples       = samples;
                 info.sharingMode   = VK_SHARING_MODE_EXCLUSIVE;
 
-                if (vkCreateImage(device, &info, nullptr, &p.msColorImage) != VK_SUCCESS)
+                VmaAllocationCreateInfo allocCreateInfo{};
+                allocCreateInfo.usage         = VMA_MEMORY_USAGE_AUTO;
+                allocCreateInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+
+                if (vmaCreateImage(ctx.allocator, &info, &allocCreateInfo,
+                                   &p.msColorImage, &p.msColorAllocation,
+                                   nullptr) != VK_SUCCESS)
                     throw std::runtime_error("Failed to create multisampled color image");
 
-                VkMemoryRequirements memReq;
-                vkGetImageMemoryRequirements(device, p.msColorImage, &memReq);
-
-                VkMemoryAllocateInfo allocInfo{};
-                allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.allocationSize  = memReq.size;
-                allocInfo.memoryTypeIndex = findMemoryType(
-                    memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-                if (vkAllocateMemory(device, &allocInfo, nullptr, &p.msColorMemory) != VK_SUCCESS)
-                    throw std::runtime_error("Failed to allocate multisampled color memory");
-
-                vkBindImageMemory(device, p.msColorImage, p.msColorMemory, 0);
+#ifndef NDEBUG
+                vmaSetAllocationName(ctx.allocator, p.msColorAllocation,
+                                     "OffscreenBuffer: resolve multisampled color image" );
+#endif
             }
         }
-        
+
         std::shared_ptr<OffscreenBuffer> OffscreenBuffer::create(
             Fl_Vk_Context& context, const math::Size2i& size,
             const OffscreenBufferOptions& options)
@@ -681,17 +835,17 @@ namespace tl
         {
             return _p->colorFormat;
         }
-        
+
         VkFormat OffscreenBuffer::getDepthFormat() const
         {
             return _p->depthFormat;
         }
-        
+
         VkImageLayout OffscreenBuffer::getImageLayout() const
         {
             return _p->resolveImageLayout;
         }
-        
+
         void OffscreenBuffer::setImageLayout(VkImageLayout value)
         {
             _p->resolveImageLayout = value;
@@ -702,12 +856,12 @@ namespace tl
         {
             return _p->activeDepthLayout();
         }
-        
+
         void OffscreenBuffer::setDepthLayout(VkImageLayout value)
         {
             _p->activeDepthLayout() = value;
         }
-        
+
         const std::string OffscreenBuffer::getImageLayoutName() const
         {
             return getLayoutName(_p->resolveImageLayout);
@@ -830,7 +984,7 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
-            
+
             VkSampleCountFlagBits samples = getSampleCount();
             bool multisampled = (samples != VK_SAMPLE_COUNT_1_BIT);
 
@@ -1064,7 +1218,13 @@ namespace tl
         }
 
         // ====================================================================
-        //  Memory helpers (unchanged)
+        //  Memory helpers
+        //
+        //  No longer used internally now that all allocations go through
+        //  ctx.allocator (VMA), which picks memory types itself. Left in
+        //  place since it's part of the class's public API declared in the
+        //  header; remove it there too if nothing outside this class calls
+        //  it.
         // ====================================================================
 
         uint32_t OffscreenBuffer::findMemoryType(
@@ -1113,7 +1273,7 @@ namespace tl
         void OffscreenBuffer::setupScissor(const math::Box2i& value)
         {
             TLRENDER_P();
-            
+
             if (value.w() > 0 && value.h() > 0)
             {
                 p.scissor.offset = { value.x(), value.y() };
@@ -1127,12 +1287,12 @@ namespace tl
         // ====================================================================
         //  Render pass begin/end
         // ====================================================================
-        
+
         void OffscreenBuffer::beginLoadRenderPass(VkCommandBuffer cmd,
                                                   VkSubpassContents contents)
         {
             TLRENDER_P();
-            
+
             bool multisampled = (getSampleCount() != VK_SAMPLE_COUNT_1_BIT);
 
             std::vector<VkClearValue> clearValues;
@@ -1162,9 +1322,9 @@ namespace tl
             beginInfo.renderArea.extent = getExtent();
             beginInfo.clearValueCount   = static_cast<uint32_t>(clearValues.size());
             beginInfo.pClearValues      = clearValues.data();
-            
+
             vkCmdBeginRenderPass(cmd, &beginInfo, contents);
-            
+
             setupViewportAndScissor(cmd);
         }
 
@@ -1172,7 +1332,7 @@ namespace tl
                                                    VkSubpassContents contents)
         {
             TLRENDER_P();
-            
+
             bool multisampled = (getSampleCount() != VK_SAMPLE_COUNT_1_BIT);
 
             std::vector<VkClearValue> clearValues;
@@ -1205,9 +1365,9 @@ namespace tl
             beginInfo.renderArea.extent = getExtent();
             beginInfo.clearValueCount   = static_cast<uint32_t>(clearValues.size());
             beginInfo.pClearValues      = clearValues.data();
-            
+
             vkCmdBeginRenderPass(cmd, &beginInfo, contents);
-            
+
             setupViewportAndScissor(cmd);
         }
 
@@ -1260,26 +1420,29 @@ namespace tl
             barrier.sType         = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
             barrier.oldLayout     = oldLayout;
             barrier.newLayout     = newLayout;
-    
+
             // SOURCE: Wait for the previous pass to finish writing depth.
             barrier.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-    
+
             // DESTINATION: Allow the next pass to read the depth attachment.
             barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-    
+
             barrier.image         = depthImage;
             barrier.subresourceRange.aspectMask = 0;
             if (hasDepth())
                 barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_DEPTH_BIT;
             if (hasStencil())
                 barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
-        
+
             barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
             barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-            barrier.subresourceRange = { VK_IMAGE_ASPECT_DEPTH_BIT, 0, 1, 0, 1 };
+            barrier.subresourceRange.baseMipLevel   = 0;
+            barrier.subresourceRange.levelCount     = 1;
+            barrier.subresourceRange.baseArrayLayer = 0;
+            barrier.subresourceRange.layerCount     = 1;
 
             // We synchronize between the end of the previous depth tests and the start of the next ones.
-            
+
             vkCmdPipelineBarrier(
                 cmd,
                 VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, // src stages
@@ -1291,7 +1454,7 @@ namespace tl
 
             currentLayout = newLayout;
         }
-        
+
         void OffscreenBuffer::transitionToShaderRead(VkCommandBuffer cmd)
         {
             TLRENDER_P();
@@ -1362,14 +1525,14 @@ namespace tl
 
             currentLayout = newLayout;  // keep tracking happy
         }
-        
+
         void OffscreenBuffer::transitionDepthToShaderRead(VkCommandBuffer cmd)
         {
             TLRENDER_P();
 
             VkImageLayout& currentLayout = p.activeDepthLayout();
             VkImage        depthImage    = p.activeDepthImage();
-            
+
             VkImageLayout newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
 
             if (currentLayout == newLayout)
@@ -1432,7 +1595,7 @@ namespace tl
         // ====================================================================
         //  PBO / staging buffers (unchanged)
         // ====================================================================
-        
+
         void OffscreenBuffer::createStagingBuffers()
         {
             TLRENDER_P();
@@ -1440,7 +1603,7 @@ namespace tl
             // Calculate bufferSize
             image::Info info(p.size.w, p.size.h, p.options.colorType);
             VkDeviceSize bufferSize = image::getDataByteCount(info);
-            
+
             VkDevice device = ctx.device;
 
             // Create Staging buffers
@@ -1454,48 +1617,51 @@ namespace tl
                 bufferInfo.size        = bufferSize;
                 bufferInfo.usage       = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
                 bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-                vkCreateBuffer(device, &bufferInfo, nullptr, &pbo.buffer);
-
-                VkMemoryRequirements memReq;
-                vkGetBufferMemoryRequirements(device, pbo.buffer, &memReq);
-
-                VkMemoryAllocateInfo allocInfo = {};
-                allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.allocationSize  = memReq.size;
 
                 //
                 // Important:  we must use VK_MEMORY_PROPERTY_HOST_CACHED_BIT
                 //             for fast readbacks and invalidate the memory
-                //             before accessing the pointer.
+                //             before accessing the pointer.  HOST_ACCESS_RANDOM
+                //             is the VMA hint that steers it toward cached
+                //             host memory for readback (as opposed to
+                //             SEQUENTIAL_WRITE, which is meant for uploads).
                 //
-                allocInfo.memoryTypeIndex =
-                    findMemoryType(
-                    memReq.memoryTypeBits,
+                VmaAllocationCreateInfo allocCreateInfo{};
+                allocCreateInfo.usage         = VMA_MEMORY_USAGE_AUTO;
+                allocCreateInfo.flags         =
+                    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
+                    VMA_ALLOCATION_CREATE_MAPPED_BIT;
+                allocCreateInfo.requiredFlags =
                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                    VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+                    VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
 
-                vkAllocateMemory(device, &allocInfo, nullptr, &pbo.memory);
-                vkBindBufferMemory(device, pbo.buffer, pbo.memory, 0);
+                VmaAllocationInfo allocationInfo{};
+                if (vmaCreateBuffer(ctx.allocator, &bufferInfo, &allocCreateInfo,
+                                    &pbo.buffer, &pbo.allocation,
+                                    &allocationInfo) != VK_SUCCESS)
+                    throw std::runtime_error("Failed to create staging buffer");
 
-                vkMapMemory(device, pbo.memory, 0, bufferSize, 0, &pbo.mappedPtr);
+                // VMA_ALLOCATION_CREATE_MAPPED_BIT gives us a persistent
+                // pointer for the lifetime of the allocation.
+                pbo.mappedPtr = allocationInfo.pMappedData;
 
                 VkFenceCreateInfo fenceInfo{VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
                 fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT; // allow reuse on first frame
                 vkCreateFence(device, &fenceInfo, nullptr, &pbo.fence);
             }
         }
-        
+
         void OffscreenBuffer::readPixels(VkCommandBuffer cmd,
                                          int32_t x, int32_t y,
                                          uint32_t w, uint32_t h)
         {
             TLRENDER_P();
-            
+
             VkDevice device = ctx.device;
 
             auto& pbo = p.pboRing[p.writeIndex];
             VkResult result = vkWaitForFences(device, 1, &pbo.fence, VK_TRUE,
-                                              UINT64_MAX); 
+                                              UINT64_MAX);
             if (result != VK_SUCCESS) {
                 fprintf(stderr, "OffscreenBuffer: vkWaitForFences failed: %s\n", string_VkResult(result));
                 return;
@@ -1506,7 +1672,7 @@ namespace tl
             transitionImageLayout(cmd, p.resolveImage,
                                   p.resolveImageLayout,
                                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-            
+
             // Setup copy region
             VkBufferImageCopy region{};
             region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1517,7 +1683,7 @@ namespace tl
 
             if (w == 0) w = p.size.w;
             if (h == 0) h = p.size.h;
-            
+
             region.imageExtent = {w, h, 1};
 
             vkCmdCopyImageToBuffer(cmd, p.resolveImage,
@@ -1538,7 +1704,7 @@ namespace tl
 
             VkResult result;
             VkDevice device = ctx.device;
-        
+
             VkSubmitInfo submitInfo{VK_STRUCTURE_TYPE_SUBMIT_INFO};
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &cmd;
@@ -1548,7 +1714,7 @@ namespace tl
                 result = vkQueueSubmit(ctx.queue(), 1, &submitInfo,
                                        p.pboRing[p.writeIndex].fence);
             }
-            
+
             if (result != VK_SUCCESS)
             {
                 fprintf(stderr,
@@ -1599,62 +1765,52 @@ namespace tl
             // Advance ring — the data will be in the slot we just recorded into
             p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
         }
-        
+
         void* OffscreenBuffer::getInlineReadbackPtr()
         {
             TLRENDER_P();
-            VkDevice device = ctx.device;
 
             // The last-written slot is one behind the current writeIndex
             int slot = (p.writeIndex - 1 + NUM_PBO_BUFFERS) % NUM_PBO_BUFFERS;
             auto& pbo = p.pboRing[slot];
 
             // Invalidate host cache so we see the GPU's writes
-            VkMappedMemoryRange range{};
-            range.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-            range.memory = pbo.memory;
-            range.offset = 0;
-            range.size   = VK_WHOLE_SIZE;
-            vkInvalidateMappedMemoryRanges(device, 1, &range);
+            vmaInvalidateAllocation(ctx.allocator, pbo.allocation, 0, VK_WHOLE_SIZE);
 
             return pbo.mappedPtr;
         }
-        
+
         VkResult OffscreenBuffer::getLatestReadPixels(void*& imageData)
         {
             TLRENDER_P();
 
             VkDevice device = ctx.device;
             auto& pbo = p.pboRing[p.readIndex];
-            
-            // Check fence result without waiting indefinitely
-            VkResult result = vkGetFenceStatus(device, pbo.fence); 
 
-            if (result == VK_SUCCESS) 
+            // Check fence result without waiting indefinitely
+            VkResult result = vkGetFenceStatus(device, pbo.fence);
+
+            if (result == VK_SUCCESS)
             {
-                VkMappedMemoryRange memoryRange = {};
-                memoryRange.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-                memoryRange.memory = pbo.memory;
-                memoryRange.offset = 0; 
-                memoryRange.size   = VK_WHOLE_SIZE;
-                vkInvalidateMappedMemoryRanges(device, 1, &memoryRange);
-    
+                // Invalidate host cache so we see the GPU's writes
+                vmaInvalidateAllocation(ctx.allocator, pbo.allocation, 0, VK_WHOLE_SIZE);
+
                 imageData = pbo.mappedPtr;
 
-                p.readIndex = (p.readIndex + 1) % NUM_PBO_BUFFERS; 
+                p.readIndex = (p.readIndex + 1) % NUM_PBO_BUFFERS;
 
                 return VK_SUCCESS;
             }
             else
             {
-                return result; 
+                return result;
             }
         }
 
         // ====================================================================
         //  doCreate
         // ====================================================================
-        
+
         bool doCreate(
             const std::shared_ptr<OffscreenBuffer>& offscreenBuffer,
             const math::Size2i& size, const OffscreenBufferOptions& options)

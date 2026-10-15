@@ -12,6 +12,8 @@
 
 #include "mrvFLTK/mrvColorSchemes.h"
 
+#include <tlIO/SequenceIO.h>
+
 class ViewerUI;
 class PreferencesUI;
 
@@ -41,6 +43,7 @@ namespace mrv
         static void setConfig(std::string config);
 
     public:
+        static tl::io::MissingFrames missingFrames;
         static ColorSchemes schemes;
         static bool native_file_chooser;
         static int bgcolor;
@@ -52,8 +55,6 @@ namespace mrv
         static std::string root;
         static std::string hotkeys_file;
         static int language_index;
-        static int debug;
-        static int logLevel;
     };
 
 } // namespace mrv

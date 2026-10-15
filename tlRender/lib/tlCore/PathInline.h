@@ -5,13 +5,13 @@ namespace tl
 {
     namespace file
     {
-        
+
         inline bool isDotFile(const std::string& fileName)
         {
             return !fileName.empty() && '.' == fileName[0];
         }
 
-        inline const PathOptions& Path::getOptions()
+        inline const PathOptions& Path::getOptions() const
         {
             return _options;
         }
@@ -83,7 +83,7 @@ namespace tl
                 _path.substr(_suf.first, _suf.second) :
                 std::string();
         }
-        
+
         inline std::string Path::getNumber() const
         {
             return _num != _invalid ?
@@ -113,8 +113,15 @@ namespace tl
         inline std::string Path::getFileName(bool dir) const
         {
             return dir ?
-                getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() :
+                getProtocol() + getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() :
                 getBaseName() + getNumber() + getSuffix() + getExtension();
+        }
+
+        inline std::string Path::getFileNameWithRange(bool dir) const
+        {
+            return dir ?
+                getProtocol() + getDirectory() + getBaseName() + getFrameRange() + getSuffix() + getExtension() :
+                getBaseName() + getFrameRange() + getSuffix() + getExtension();
         }
 
         inline const std::optional<math::Int64Range>& Path::getFrames() const
@@ -122,10 +129,27 @@ namespace tl
             return _frames;
         }
 
+        inline const std::vector<FrameSeq>& Path::getSeq() const
+        {
+            return _seq;
+        }
+
+        inline size_t Path::getSeqSize() const
+        {
+            return getFrameCount(_seq);
+        }
+
         inline bool Path::isSequence() const
         {
             return hasNumber() && _frames.has_value() &&
                 !_frames.value().equal();
+        }
+
+        inline bool Path::isPartialSeq() const
+        {
+            return
+                _seq.size() > 1 ||
+                (1 == _seq.size() && _seq[0].inc > 1 && !_seq[0].range.equal());
         }
 
         inline bool Path::hasSuffix() const
@@ -152,8 +176,8 @@ namespace tl
         {
             return _frames.has_value() ?
                 !_frames.value().equal() ?
-                toString(_frames.value().getMin(), _pad) + "-" + toString(_frames.value().getMax(), _pad) :
-                toString(_frames.value().getMin(), _pad) :
+                toString(_frames.value().min(), _pad) + "-" + toString(_frames.value().max(), _pad) :
+                toString(_frames.value().min(), _pad) :
                 std::string();
         }
 
@@ -167,7 +191,7 @@ namespace tl
                 getSuffix() == other.getSuffix() &&
                 getExtension() == other.getExtension();
         }
-        
+
         inline bool Path::operator == (const Path& other) const
         {
             return _path == other._path && _frames == other._frames;
@@ -177,6 +201,6 @@ namespace tl
         {
             return !(*this == other);
         }
-        
+
     }
 }

@@ -23,7 +23,7 @@ namespace tl
         {
         public:
             float pressure = 1.F;
-            
+
             Point() :
                 Imath::V2d(), pressure(1.F)
             {
@@ -40,24 +40,38 @@ namespace tl
             }
 
             Point(const math::Vector2f& b) :
-                Imath::V2d(b.x, b.y)
+                Imath::V2d(b.x, b.y),
+                pressure(1.0)
             {
             }
 
             Point(const tl::math::Vector2i& b) :
-                Imath::V2d(b.x, b.y)
+                Imath::V2d(b.x, b.y),
+                pressure(1.0)
             {
             }
 
             Point(const Imath::V2d& b) :
-                Imath::V2d(b.x, b.y)
+                Imath::V2d(b.x, b.y),
+                pressure(1.0)
             {
             }
+
+            inline bool operator==(const Point& b)
+                {
+                    return (x == b.x && y == b.y && pressure == b.pressure);
+                }
+
+            inline bool operator!=(const Point& b)
+                {
+                    return !(*this == b);
+                }
 
             inline Point& operator=(const Imath::V2d& b)
             {
                 x = b.x;
                 y = b.y;
+                // we don't change pressure here
                 return *this;
             }
 
@@ -65,6 +79,7 @@ namespace tl
             {
                 x = b.x;
                 y = b.y;
+                pressure = b.pressure;
                 return *this;
             }
 

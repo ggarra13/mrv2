@@ -15,7 +15,7 @@ namespace tl
 {
     namespace math
     {
-        
+
         //! \name Boxes
         ///@{
 
@@ -45,10 +45,10 @@ namespace tl
             constexpr Box(const Vector<2, T>& min, const Vector<2, T>& max);
             constexpr Box(const Vector<2, T>& min, const Size<2, T>& max);
             constexpr Box(T x, T y, T width, T height);
-            
+
             Vector<2, T> min;
             Vector<2, T> max;
-            
+
             constexpr T x() const;
             constexpr T y() const;
 
@@ -68,7 +68,7 @@ namespace tl
             constexpr Box(const Vector<3, T>& min, const Vector<3, T>& max);
             constexpr Box(const Vector<3, T>& min, const Size<3, T>& max);
             constexpr Box(T x, T y, T z, T width, T height, T depth);
-            
+
             Vector<3, T> min;
             Vector<3, T> max;
 
@@ -143,6 +143,10 @@ namespace tl
         //! Add a margin to a box.
         template<typename T>
         constexpr Box<2, T> margin(const Box<2, T>&, T x0, T y0, T x1, T y1);
+
+        //! Get the bounding box.
+        template<int C, typename T>
+        constexpr Box<C, T> bbox(const std::vector<Box<C, T> >&);
 
         //! Get the bounding box from points.
         template<int C, typename T>

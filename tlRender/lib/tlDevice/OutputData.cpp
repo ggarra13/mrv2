@@ -215,7 +215,7 @@ namespace tl
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRMode);
 
         std::shared_ptr<image::HDRData>
-        getHDRData(const timeline::VideoData& videoData)
+        getHDRData(const timeline::VideoFrame& videoData)
         {
             std::shared_ptr<image::HDRData> out;
             for (const auto& layer : videoData.layers)

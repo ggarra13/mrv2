@@ -11,6 +11,7 @@ namespace mrv
     // Simple class to turn cursor to arrow when entered
     class PanelButton : public Fl_Button
     {
+        bool pen_handled = false;
     public:
         // basic constructor
         PanelButton(int x, int y, int w, int h, const char* l = 0);

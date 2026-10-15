@@ -17,10 +17,12 @@
 
 #include "mrvIcons/Settings.h"
 
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvPopupMenu.h"
 #include "mrvWidgets/mrvSpinner.h"
-#include "mrvWidgets/mrvCollapsibleGroup.h"
+#include "mrvWidgets/mrvVersion.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvSettingsPanel.h"
@@ -114,10 +116,10 @@ namespace mrv
             s->step(1.0);
             s->range(1.f, static_cast<double>(totalPhysMem));
             int Gbytes = settings->getValue<int>("Cache/GBytes");
-            s->default_value(totalPhysMem / 2);
+            s->default_value(totalPhysMem / 3);
             s->value(Gbytes);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     settings->setValue("Cache/GBytes", (int)w->value());
                     App::app->cacheUpdate();
@@ -132,7 +134,7 @@ namespace mrv
             s->default_value(timeline::PlayerCacheOptions().readAhead.value());
             s->value(settings->getValue<double>("Cache/ReadAhead"));
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     settings->setValue("Cache/ReadAhead", (double)w->value());
                     App::app->cacheUpdate();
@@ -147,7 +149,7 @@ namespace mrv
             s->default_value(timeline::PlayerCacheOptions().readBehind.value());
             s->value(settings->getValue<double>("Cache/ReadBehind"));
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     settings->setValue("Cache/ReadBehind", (double)w->value());
                     App::app->cacheUpdate();
@@ -195,13 +197,13 @@ namespace mrv
             Fl_Choice* m = mW;
             m->labelsize(12);
             m->align(FL_ALIGN_LEFT);
-            for (const auto& i : timeline::getFileSequenceAudioLabels())
+            for (const auto& i : timeline::getImageSeqAudioLabels())
             {
                 m->add(_(i.c_str()));
             }
             m->value(settings->getValue<int>("FileSequence/Audio"));
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = o->value();
                     settings->setValue("FileSequence/Audio", v);
@@ -219,26 +221,10 @@ namespace mrv
 
             i->value(file.c_str());
             iW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     std::string file = o->value();
                     settings->setValue("FileSequence/AudioFileName", file);
-                });
-
-            iW = new Widget<Fl_Input>(
-                g->x() + 130, 170, g->w() - 130, 20, "Audio directory");
-            i = iW;
-            i->labelsize(12);
-            i->textcolor(FL_BLACK);
-            i->cursor_color(FL_RED);
-            i->value(
-                settings->getValue<std::string>("FileSequence/AudioDirectory")
-                    .c_str());
-            iW->callback(
-                [=](auto o)
-                {
-                    std::string dir = o->value();
-                    settings->setValue("FileSequence/AudioDirectory", dir);
                 });
 
             auto inW = new Widget<Fl_Int_Input>(
@@ -251,7 +237,7 @@ namespace mrv
             std::string text = string::Format("{0}").arg(digits);
             i->value(text.c_str());
             inW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int digits = atoi(o->value());
                     settings->setValue("Misc/MaxFileSequenceDigits", digits);
@@ -263,12 +249,92 @@ namespace mrv
 
             key = prefix + "File Sequences";
             value = settings->getValue<std::any>(key);
-            open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+            open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+            if (!open)
+                cg->close();
+
+
+            cg = new CollapsibleGroup(
+                g->x(), 110, g->w(), 20, "OTIO");
+            b = cg->button();
+            b->labelsize(14);
+            b->size(b->w(), 18);
+            b->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                    if (cg->is_open())
+                        cg->close();
+                    else
+                        cg->open();
+
+                    const std::string& prefix = settingsPanel->tab_prefix();
+                    const std::string key = prefix + "OTIO";
+
+                    App* app = App::app;
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
+
+                    settingsPanel->refresh();
+                },
+                cg);
+
+            cg->begin();
+
+            bg = new Fl_Group(g->x(), 230, g->w(), 24);
+            bg->box(FL_NO_BOX);
+            bg->begin();
+
+            mW = new Widget< Fl_Choice >(
+                g->x() + 130, 230, g->w() - 130, 20, _("Spatial Coordinates"));
+            m = mW;
+            m->labelsize(12);
+            m->align(FL_ALIGN_LEFT);
+            for (const auto& i : timeline::getSpatialLabels())
+            {
+                m->add(i.c_str());
+            }
+            m->copy_tooltip(_(R"(Use the Spatial Coordinates in OTIO files to position and size the clips.
+
+* None: Ignore the spatial coordinates.
+* Coordinates: Use the spatial coordinates when clips provide them.
+* Normalize: Use the spatial coordinates, and display clips without them at the size of the first clip.  Use this to play clips of differing resolutions at the same size.)"));
+            m->value(settings->getValue<int>("OTIO/Spatial"));
+
+            mW->callback(
+                [=, this](auto o)
+                {
+                    int v = o->value();
+                    settings->setValue("OTIO/Spatial", v);
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+
+            bg->end();
+
+            auto cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, 250, g->w(), 20,
+                _("Compatibility"));
+            c = cV;
+            c->labelsize(12);
+            c->value(settings->getValue<bool>("OTIO/Compatibility"));
+            cV->callback(
+                [=, this](auto w)
+                {
+                    int v = w->value();
+                    settings->setValue("OTIO/Compatibility", v);
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+
+            cg->end();
+
+            key = prefix + "OTIO";
+            value = settings->getValue<std::any>(key);
+            open = std_any_empty(value) ? 0 : std_any_cast<int>(value);
             if (!open)
                 cg->close();
 
             cg =
-                new CollapsibleGroup(g->x(), 210, g->w(), 20, _("Performance"));
+                new CollapsibleGroup(g->x(), 210, g->w(), 22 * 7, _("Performance"));
             cg->spacing(2);
             b = cg->button();
             b->labelsize(14);
@@ -295,7 +361,7 @@ namespace mrv
 
             cg->begin();
 
-            bg = new Fl_Group(g->x(), 230, g->w(), 22 * 7);
+            bg = new Fl_Group(g->x(), 230, g->w(), 22 * 8);
             bg->box(FL_NO_BOX);
             bg->begin();
 
@@ -318,7 +384,7 @@ namespace mrv
             m->value(settings->getValue<int>("Performance/TimerMode"));
 
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = o->value();
                     settings->setValue("Performance/TimerMode", v);
@@ -336,7 +402,7 @@ namespace mrv
             sp->value(v);
 
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int v = static_cast<int>(o->value());
                     settings->setValue("Performance/AudioBufferFrameCount", v);
@@ -351,7 +417,7 @@ namespace mrv
             sp->value(digits);
 
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     TLRENDER_P();
                     int requests = static_cast<int>(o->value());
@@ -367,7 +433,7 @@ namespace mrv
             digits = settings->getValue<int>("Performance/AudioRequestCount");
             sp->value(digits);
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
@@ -382,7 +448,7 @@ namespace mrv
             digits = settings->getValue<int>("SequenceIO/ThreadCount");
             sp->value(digits);
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int requests = static_cast<int>(o->value());
                     settings->setValue("SequenceIO/ThreadCount", requests);
@@ -391,7 +457,7 @@ namespace mrv
 
             bg->end();
 
-            auto cV = new Widget< Fl_Check_Button >(
+            cV = new Widget< Fl_Check_Button >(
                 g->x() + 90, 398, g->w(), 20,
                 _("FFmpeg YUV to RGB conversion"));
             c = cV;
@@ -399,7 +465,7 @@ namespace mrv
             c->value(settings->getValue<bool>(
                 "Performance/FFmpegYUVToRGBConversion"));
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     int v = w->value();
                     settings->setValue(
@@ -418,19 +484,72 @@ namespace mrv
                          "Color Space as 'unknown', at the cost of some "
                          "performance."));
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     int v = w->value();
                     settings->setValue("Performance/FFmpegColorAccuracy", v);
                     refresh_movie_cb(nullptr, p.ui);
                 });
 
-            bg = new Fl_Group(g->x(), 440, g->w(), 30);
+            cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, 440, g->w(), 20, _("FFmpeg HW Accel"));
+            c = cV;
+            c->labelsize(12);
+            c->value(
+                settings->getValue<bool>("Performance/FFmpegHWAccel"));
+            c->tooltip(_("When this setting is on, the player will try to decode the movie in the GPU if possible."));
+            cV->callback(
+                [=, this](auto w)
+                {
+                    int v = w->value();
+                    settings->setValue("Performance/FFmpegHWAccel", v);
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+
+            PopupMenu* pm;
+            auto pV = new Widget< PopupMenu >(
+                g->x() + 90, 480, g->w(), 20, _("FFmpeg HW Driver"));
+            pm = pV;
+            pm->add(_("Default HW Driver"));
+
+            int selection = 0;
+
+            std::string selected = settings->getValue<std::string>("Performance/FFmpegHWDriver");
+
+            int idx = 1;
+            std::vector<std::string> hw_decoders = ffmpeg_hardware_decoders();
+            for (auto decoder : hw_decoders)
+            {
+                if (decoder == selected)
+                    selection = idx;
+                pm->add(decoder.c_str());
+                ++idx;
+            }
+            pm->labelsize(12);
+            pm->value(selection);
+            pm->tooltip(_("Select what driver to use for your GPU."));
+            pV->callback(
+                [=, this](auto w)
+                {
+                    Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
+                    if (!item || !item->label())
+                        return;
+
+                    std::string label = item->label();
+                    if (label == _("Default HW Driver"))
+                    {
+                        label = "";
+                    }
+                    settings->setValue("Performance/FFmpegHWDriver", label);
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+
+            bg = new Fl_Group(g->x(), 480, g->w(), 30);
             bg->box(FL_NO_BOX);
             bg->begin();
 
             spW = new Widget<Spinner>(
-                g->x() + 160, 440, g->w() - 160, 20, _("FFmpeg I/O threads"));
+                g->x() + 160, 520, g->w() - 160, 20, _("FFmpeg I/O threads"));
             sp = spW;
             digits = settings->getValue<int>("Performance/FFmpegThreadCount");
             sp->value(digits);
@@ -443,7 +562,7 @@ namespace mrv
                 "black frames.  For any like that, you should set them to 1, "
                 "press Enter and reload the movie file."));
             spW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int requests = static_cast<int>(o->value());
                     settings->setValue(
@@ -452,26 +571,6 @@ namespace mrv
                 });
 
             bg->end();
-
-#if defined(__APPLE__)
-            cV = new Widget< Fl_Check_Button >(
-                g->x() + 90, 462, g->w(), 20,
-                _("FFmpeg hardware decoding"));
-            c = cV;
-            c->labelsize(12);
-            c->value(settings->getValue<int>(
-                "Performance/FFmpegHardwareDecode"));
-            c->tooltip(_(
-                "Use VideoToolbox for ProRes, H.264 and H.265 when supported. "
-                "Automatically fall back to software decoding if unavailable."));
-            cV->callback(
-                [=](auto w)
-                {
-                    settings->setValue(
-                        "Performance/FFmpegHardwareDecode", int(w->value()));
-                    refresh_movie_cb(nullptr, p.ui);
-                });
-#endif
 
             cg->end();
 
@@ -486,7 +585,7 @@ namespace mrv
             b = bW;
             b->box(FL_UP_BOX);
             bW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int ok = fl_choice(
                         _("This will reset all your settings to their "

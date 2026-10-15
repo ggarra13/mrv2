@@ -121,7 +121,7 @@ struct Flu_Entry::Private
         timelineui_vk::ThumbnailRequest request;
     };
 #endif
-    
+
     ThumbnailData thumbnail;
 
     bool bind_image = false;
@@ -192,7 +192,7 @@ void Flu_Entry::timerEvent()
 
     if (p.thumbnail.request.future.valid() &&
         p.thumbnail.request.future.wait_for(std::chrono::seconds(0)) ==
-            std::future_status::ready)
+        std::future_status::ready)
     {
         if (auto image = p.thumbnail.request.future.get())
         {
@@ -244,6 +244,10 @@ void Flu_Entry::timerEvent()
 
 void Flu_Entry::updateIcon()
 {
+    TLRENDER_P();
+
+    p.bind_image = false;
+
     Flu_File_Chooser::FileTypeInfo* tt = nullptr;
     if (type == ENTRY_MYCOMPUTER)
     {
@@ -748,6 +752,8 @@ Flu_Entry::~Flu_Entry()
 {
     TLRENDER_P();
 
+    Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
+
     if (p.bind_image)
         delete icon;
 }
@@ -951,29 +957,16 @@ void Flu_Entry::startRequest()
     }
 
     image::Size size(128, 64);
-    otime::RationalTime time = time::invalidTime;
+    std::optional<OTIO_NS::RationalTime> time;
 
     // Needed to change icon when user saved over the same image name.
-
     if (auto thumbnailSystem = p.thumbnailSystem.lock())
     {
-        if (extension == ".otio" || extension == ".otioz")
-        {
-            const auto& timeline =
-                timeline::Timeline::create(path, mrv::App::app->getContext());
-            const auto& timeRange = timeline->getTimeRange();
-            if (time::isValid(timeRange))
-            {
-                time = timeRange.start_time();
-            }
-        }
-
         io::Options options;
-
-        std::random_device rd;
-        options["clearCache"] = string::Format("{0}").arg(rd());
-        p.thumbnail.request = thumbnailSystem->getThumbnail(path, size.h, time,
-                                                            options);
+        p.thumbnail.request =
+            thumbnailSystem->getThumbnail(path, path,
+                                          size.h, time,
+                                          "", options);
         p.thumbnail.init = false;
         isPicture = true;
 

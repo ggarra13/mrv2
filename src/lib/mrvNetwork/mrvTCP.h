@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <list>
+#include <deque>
 #include <vector>
 #include <string>
 #include <mutex>
@@ -44,9 +44,15 @@ namespace mrv
         virtual void stop();
 
         inline bool hasSend() const { return !m_send.empty(); }
-        virtual bool hasReceive() const { return !m_receive.empty(); }
+        virtual bool hasReceive() const {
+            if (m_lock)
+                return false;
+            return !m_receive.empty();
+        }
 
         virtual void pushMessage(const Message& message);
+        virtual void pushToPeer(const std::string& peerId,
+                                const Message& message);
 
         void pushMessage(const std::string& command, bool value);
         void pushMessage(const std::string& command, int8_t value);
@@ -59,29 +65,26 @@ namespace mrv
         void pushMessage(
             const std::string& command, const tl::math::Vector2i& value);
         void pushMessage(
-            const std::string& command, const otime::RationalTime& value);
+            const std::string& command, const OTIO_NS::RationalTime& value);
         void
-        pushMessage(const std::string& command, const otime::TimeRange& value);
-        
-        void lock() { m_lock = true; }
-        void unlock() { m_lock = false; }
-        bool isLocked() { return m_lock == true; }
+        pushMessage(const std::string& command, const OTIO_NS::TimeRange& value);
 
-        //! Sync client to peer's data.
-        void syncClient();
+        inline void lock() { m_lock = true; }
+        inline void unlock() { m_lock = false; }
+        inline bool isLocked() { return m_lock == true; }
 
         virtual Message popMessage();
 
-        void close();
+        void syncClient(const std::string& peerId);
 
-        inline size_t numReceive() const { return m_receive.size(); };
+        void close();
 
     protected:
         virtual void sendMessages() = 0;
         virtual void receiveMessages() = 0;
-        
+
         //! Sync client to peer's UI.
-        void syncUI();
+        void syncUI(const std::string& peerId);
 
         Message receiveMessage();
 
@@ -92,16 +95,16 @@ namespace mrv
 #endif
         volatile bool m_running = false;
 
-        bool m_lock = false;
+        std::atomic<bool> m_lock = false;
 
         bool m_isClient = false;
 
         std::vector< std::thread* > m_threads;
         std::mutex m_sendMutex;
-        std::list< Message > m_send;
+        std::deque< Message > m_send;
 
         static std::mutex m_receiveMutex;
-        static std::list< Message > m_receive;
+        static std::deque< Message > m_receive;
 
         std::vector< uint8_t > m_buffer;
     };

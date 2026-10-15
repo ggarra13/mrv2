@@ -79,30 +79,26 @@ namespace tl
         {
             {
                 Vector2i v(1, 2);
-                v.zero();
-                TLRENDER_ASSERT(0 == v.x);
-                TLRENDER_ASSERT(0 == v.y);
+                TLRENDER_ASSERT(1 == v.x);
+                TLRENDER_ASSERT(2 == v.y);
             }
             {
                 Vector2f v(1.F, 2.F);
-                v.zero();
                 TLRENDER_ASSERT(0.F == v.x);
                 TLRENDER_ASSERT(0.F == v.y);
             }
             {
                 Vector3f v(1.F, 2.F, 3.F);
-                v.zero();
-                TLRENDER_ASSERT(0.F == v.x);
-                TLRENDER_ASSERT(0.F == v.y);
-                TLRENDER_ASSERT(0.F == v.z);
+                TLRENDER_ASSERT(1.F == v.x);
+                TLRENDER_ASSERT(2.F == v.y);
+                TLRENDER_ASSERT(3.F == v.z);
             }
             {
                 Vector4f v(1.F, 2.F, 3.F, 4.F);
-                v.zero();
-                TLRENDER_ASSERT(0.F == v.x);
-                TLRENDER_ASSERT(0.F == v.y);
-                TLRENDER_ASSERT(0.F == v.z);
-                TLRENDER_ASSERT(0.F == v.w);
+                TLRENDER_ASSERT(1.F == v.x);
+                TLRENDER_ASSERT(2.F == v.y);
+                TLRENDER_ASSERT(3.F == v.z);
+                TLRENDER_ASSERT(4.F == v.w);
             }
             {
                 const Vector2i a(1, 2);

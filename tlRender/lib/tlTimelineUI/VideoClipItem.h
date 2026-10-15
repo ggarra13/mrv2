@@ -12,7 +12,7 @@ namespace tl
 {
     namespace TIMELINEUI
     {
-        class ThumbnailGenerator;
+        class ThumbnailSystem;
     }
 
     namespace TIMELINEUI
@@ -22,11 +22,12 @@ namespace tl
         {
         protected:
             void _init(
-                const otio::SerializableObject::Retainer<otio::Clip>&,
+                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<timeline::Timeline>& timeline,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<ThumbnailGenerator>,
-                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<ThumbnailSystem>&,
                 const std::shared_ptr<IWidget>& parent);
 
             VideoClipItem();
@@ -36,16 +37,18 @@ namespace tl
 
             //! Create a new item.
             static std::shared_ptr<VideoClipItem> create(
-                const otio::SerializableObject::Retainer<otio::Clip>&,
+                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<timeline::Timeline>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<ThumbnailGenerator>,
-                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<ThumbnailSystem>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 
             void setScale(double) override;
             void setDisplayOptions(const DisplayOptions&) override;
 
+            void setGeometry(const math::Box2i&) override;
             void tickEvent(bool, bool, const ui::TickEvent&) override;
             void sizeHintEvent(const ui::SizeHintEvent&) override;
             void clipEvent(const math::Box2i&, bool) override;
@@ -53,7 +56,6 @@ namespace tl
 
         private:
             void _drawThumbnails(const math::Box2i&, const ui::DrawEvent&);
-
             void _cancelRequests();
 
             TLRENDER_PRIVATE();

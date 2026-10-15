@@ -14,6 +14,9 @@
 
 #include "mrvIcons/Network.h"
 
+#include "mrvOS/mrvString.h"
+#include "mrvOS/mrvOS.h"
+
 #include "mrvCore/mrvUtil.h"
 
 #include <FL/Fl_Input.H>
@@ -40,6 +43,7 @@ namespace mrv
         {
             Fl_Button* createButton = nullptr;
             Fl_Group* roomGroup = nullptr;
+            Input* project = nullptr;
             Input* room = nullptr;
         };
 
@@ -75,66 +79,117 @@ namespace mrv
 
             Input* i;
             Fl_Button* b;
-            
+
             g->begin();
-            
+
             int X = 80 * g->w() / 270;
             int Y = 20;
 
-            _r->roomGroup = new Fl_Group(g->x(), Y, g->w(), 30);
+            _r->roomGroup = new Fl_Group(g->x(), Y, g->w(), 60);
+
             auto iW = new Widget< Input >(
+                g->x() + X, Y + 5, g->w() - X - 30, 20, _("Project"));
+            _r->project = i = iW;
+            i->value(settings->getValue<std::string>("WebRTC/Project").c_str());
+            i->tooltip(_("Project you are working on."));
+            iW->callback(
+                [=, this](auto o)
+                {
+                    settings->setValue("WebRTC/Project",
+                                       std::string(o->value()));
+                });
+
+            Y += 30;
+
+            iW = new Widget< Input >(
                 g->x() + X, Y + 5, g->w() - X - 30, 20, _("Room"));
             _r->room = i = iW;
+            i->value(settings->getValue<std::string>("WebRTC/Room").c_str());
             i->tooltip(_("Room name to enter."));
             iW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
+                    settings->setValue("WebRTC/Room", std::string(o->value()));
                 });
+
             _r->roomGroup->end();
-            
+
             const char* kButtonLabel = _("Connect");
             auto bW = new Widget<Fl_Button>(g->x(), Y, 30, 20, kButtonLabel);
             b = _r->createButton = bW;
             bW->callback(
-                [=](auto t)
+                [=, this](auto t)
                 {
                     if (dynamic_cast< DummyClient* >(tcp) == nullptr)
                     {
                         shutdown();
                         return;
                     }
-                    
+
                     bool showMessage = false;
+                    std::string projectId = _r->project->value();
                     std::string roomId = _r->room->value();
-                    if (roomId.size() < 6)
+
+                    if (projectId.empty())
                     {
-                        showMessage = true;
-                        roomId += generateRandomLetters(6);
+                        mrv::fl_alert(_("Please enter a Project.\n\n"),
+                                      nullptr);
+                        return;
                     }
-                    
-                    _r->room->value(roomId.c_str());
-                    
-                    if (showMessage)
+
+                    if (roomId.empty())
                     {
-                        mrv::fl_alert(_("Share the room ID with the persons "
-                                        "that will review the session "
-                                        "with you.\n\nNote that this feature "
-                                        "is only available in the Pro+ tier."),
+                        mrv::fl_alert(_("Please enter a unique Room.\n\n"),
+                                      nullptr);
+                        return;
+                    }
+
+                    roomId = string::stripWhitespace(roomId);
+                    projectId = string::stripWhitespace(projectId);
+
+                    settings->setValue("WebRTC/Project", projectId);
+                    settings->setValue("WebRTC/Room", roomId);
+
+                    projectId = string::replaceCharacter(projectId, ' ', '_');
+                    roomId = string::replaceCharacter(roomId, ' ', '_');
+
+                    roomId = projectId + "_" + roomId;
+
+                    // Prepend studio name to roomId to keep the connection
+                    // "secret".
+                    std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
+                    if (studio.empty())
+                        studio = p.ui->uiPrefs->WebRTCStudio->value();
+
+                    if (!mrv::app::soporta_voice)
+                    {
+                        mrv::fl_alert(_("This feature is unlimited on the "
+                                        "Pro and Pro+ tiers.\n\n"
+                                        "On other tiers, it is limited to 2\n"
+                                        "connections and 30 minutes of use."),
                                       nullptr);
                     }
-            
-                    tcp = new WebRTCClient(roomId);
+
+                    tcp = new WebRTCClient(studio, roomId);
+
                     deactivate();
                 });
-            
+
             g->end();
+
+            if (dynamic_cast< DummyClient* >(tcp) == nullptr)
+            {
+                deactivate();
+            }
         }
 
         void WebRTCPanel::deactivate()
         {
             const char* kButtonLabel = _("Disconnect");
             _r->createButton->copy_label(kButtonLabel);
-            
+
+            _r->roomGroup->deactivate();
+
             _p->ui->uiMain->fill_menu(_p->ui->uiMenuBar);
         }
 

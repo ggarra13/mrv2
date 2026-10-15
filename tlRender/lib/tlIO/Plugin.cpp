@@ -1,104 +1,87 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2024 Darby Johnston
-// All rights reserved.
+// Copyright Contributors to the tlRender project.
 
 #include <tlIO/Plugin.h>
 
-#include <tlCore/Error.h>
-#include <tlCore/String.h>
+#include <tlCore/LogSystem.h>
 
 namespace tl
 {
     namespace io
     {
         void IIO::_init(
-            const file::Path& path, const Options& options,
-            const std::shared_ptr<Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+            const file::Path& path,
+            const io::Options& options,
+            const std::shared_ptr<log::System>& logSystem)
         {
             _path = path;
             _options = options;
-            _cache = cache;
             _logSystem = logSystem;
         }
 
-        IIO::IIO() {}
-
-        IIO::~IIO() {}
-
-        void IRead::_init(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const Options& options, const std::shared_ptr<Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        namespace
         {
-            IIO::_init(path, options, cache, logSystem);
-            _memory = memory;
+            std::atomic<size_t> objectCount = 0;
         }
 
-        IRead::IRead() {}
-
-        IRead::~IRead() {}
-
-        std::future<VideoData>
-        IRead::readVideo(const otime::RationalTime&, const Options&)
+        IIO::IIO()
         {
-            return std::future<VideoData>();
+            ++objectCount;
         }
 
-        std::future<AudioData>
-        IRead::readAudio(const otime::TimeRange&, const Options&)
+        IIO::~IIO()
         {
-            return std::future<AudioData>();
+            --objectCount;
         }
 
-        void IWrite::_init(
-            const file::Path& path, const Options& options, const Info& info,
-            const std::weak_ptr<log::System>& logSystem)
+        const file::Path& IIO::getPath() const
         {
-            IIO::_init(path, options, nullptr, logSystem);
-            _info = info;
+            return _path;
         }
 
-        IWrite::IWrite() {}
-
-        IWrite::~IWrite() {}
-
-        struct IPlugin::Private
+        size_t IIO::getObjectCount()
         {
-            std::string name;
-            std::map<std::string, FileType> extensions;
-            std::shared_ptr<Cache> cache;
+            return objectCount;
+        }
+
+        struct IIOPlugin::Private
+        {
+            std::string pluginName;
+            std::map<std::string, FileType> exts;
         };
 
-        void IPlugin::_init(
+        void IIOPlugin::_init(
             const std::string& name,
-            const std::map<std::string, FileType>& extensions,
-            const std::shared_ptr<Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::map<std::string, FileType>& exts,
+            const std::shared_ptr<log::System>& logSystem)
         {
             TLRENDER_P();
-            _cache = cache;
             _logSystem = logSystem;
-            p.name = name;
-            p.extensions = extensions;
+            p.pluginName = name;
+            p.exts = exts;
         }
 
-        IPlugin::IPlugin() :
+        IIOPlugin::IIOPlugin() :
             _p(new Private)
+        {}
+
+        IIOPlugin::~IIOPlugin()
+        {}
+
+        const std::string& IIOPlugin::getPluginName() const
         {
+            return _p->pluginName;
         }
 
-        IPlugin::~IPlugin() {}
-
-        const std::string& IPlugin::getName() const
+        std::string IIOPlugin::getPluginInfo(const io::Options&) const
         {
-            return _p->name;
+            return std::string();
         }
 
-        std::set<std::string> IPlugin::getExtensions(int types) const
+        std::set<std::string> IIOPlugin::getExts(int types) const
         {
             std::set<std::string> out;
-            for (const auto& i : _p->extensions)
+            for (const auto& i : _p->exts)
             {
                 if (static_cast<int>(i.second) & types)
                 {
@@ -107,12 +90,5 @@ namespace tl
             }
             return out;
         }
-
-        bool IPlugin::_isWriteCompatible(
-            const image::Info& info, const Options& options) const
-        {
-            return info.pixelType != image::PixelType::kNone &&
-                   info == getWriteInfo(info, options);
-        }
-    } // namespace io
-} // namespace tl
+    }
+}

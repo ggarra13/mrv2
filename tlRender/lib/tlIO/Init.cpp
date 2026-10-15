@@ -21,9 +21,13 @@ namespace tl
 #ifndef VULKAN_BACKEND
             gl::init(context);
 #endif
-            if (!context->getSystem<System>())
+            if (!context->getSystem<ReadSystem>())
             {
-                context->addSystem(System::create(context));
+                context->addSystem(ReadSystem::create(context));
+            }
+            if (!context->getSystem<WriteSystem>())
+            {
+                context->addSystem(WriteSystem::create(context));
             }
         }
     } // namespace io

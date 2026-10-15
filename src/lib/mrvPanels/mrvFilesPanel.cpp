@@ -25,7 +25,6 @@
 #include "mrvIcons/FileCloseAll.h"
 #include "mrvIcons/FileOpen.h"
 #include "mrvIcons/FileOpenSeparateAudio.h"
-#include "mrvIcons/Filter.h"
 #include "mrvIcons/Next.h"
 #include "mrvIcons/Prev.h"
 
@@ -49,13 +48,13 @@ namespace mrv
     {
 
         typedef std::map< FileButton*, size_t > WidgetIndices;
-        
+
         struct FilesPanel::Private
         {
             std::weak_ptr<system::Context> context;
 
             Sort sort = Sort::Loaded;
-            
+
             std::map< size_t, FileButton* > map;
             WidgetIndices indices;
 
@@ -75,7 +74,7 @@ namespace mrv
             ThumbnailPanel(ui)
         {
             add_group("Files");
-            
+
             g->bind_image(MRV2_LOAD_SVG(Files));
 
             g->callback(
@@ -136,7 +135,7 @@ namespace mrv
 
             const auto player = p.ui->uiView->getTimelinePlayer();
 
-            otio::RationalTime time = otio::RationalTime(0.0, 1.0);
+            OTIO_NS::RationalTime time = OTIO_NS::RationalTime(0.0, 1.0);
             if (player)
                 time = player->currentTime();
 
@@ -148,7 +147,7 @@ namespace mrv
                 for (size_t i = 0; i < numFiles; ++i)
                 {
                     ordered.push_back(i);
-                } 
+                }
             }
             else if (r.sort == Sort::FileName ||
                      r.sort == Sort::Directory ||
@@ -164,11 +163,11 @@ namespace mrv
                     std::string key;
                     if (r.sort == Sort::FileName)
                     {
-                        key = path.getFileName(listdir);
+                        key = string::toLower(path.getFileName(listdir));
                     }
                     else if (r.sort == Sort::Directory)
                     {
-                        key = path.getDirectory();
+                        key = string::toLower(path.getDirectory());
                     }
                     else if (r.sort == Sort::User)
                     {
@@ -192,9 +191,10 @@ namespace mrv
                 }
             }
 
-            size = panel::calculateImageSize();
+            int thumbnailType = p.ui->uiPrefs->FilesPanelThumbnails->value();
+            size = panel::calculateImageSize(thumbnailType);
 
-                            
+
             for (const auto i : ordered)
             {
                 const auto& media = files->getItem(i);
@@ -208,10 +208,6 @@ namespace mrv
                     continue;
                 lastPath = path;
 
-                // We skip EDLs created in tmp dir here.
-                if (o.filterEDL && isEDL)
-                    continue;
-
                 const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
@@ -224,7 +220,7 @@ namespace mrv
                 r.indices[b] = i;
                 b->tooltip(_("Select main A image."));
                 bW->callback(
-                    [=](auto b)
+                    [=, this](auto b)
                     {
                         WidgetIndices::const_iterator it = r.indices.find(b);
                         if (it == r.indices.end())
@@ -254,8 +250,7 @@ namespace mrv
                 }
 
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     const std::string layer = getLayerName(media, layerId);
                     label = protocol + dir + "\n" + file + layer;
@@ -266,7 +261,14 @@ namespace mrv
                 }
                 b->copy_label(label.c_str());
 
-                _createThumbnail(b, path, time, layerId);
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
+
+                _createThumbnail(b, media, time, layerId,
+                                 media->mediaReferenceKey);
             }
 
             int Y = g->y() + 20 + numFiles * 64;
@@ -280,53 +282,38 @@ namespace mrv
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(FileOpen));
             b->tooltip(_("Open a filename"));
-            bW->callback([=](auto w) { open_cb(w, p.ui); });
+            bW->callback([=, this](auto w) { open_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 30, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(FileOpenSeparateAudio));
             b->tooltip(_("Open a filename with audio"));
-            bW->callback([=](auto w) { open_separate_audio_cb(w, p.ui); });
+            bW->callback([=, this](auto w) { open_separate_audio_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 60, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(FileClose));
             b->tooltip(_("Close current filename"));
-            bW->callback([=](auto w) { close_current_cb(w, p.ui); });
+            bW->callback([=, this](auto w) { close_current_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 90, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(FileCloseAll));
             b->tooltip(_("Close all filenames"));
-            bW->callback([=](auto w) { close_all_cb(w, p.ui); });
+            bW->callback([=, this](auto w) { close_all_cb(w, p.ui); });
 
             bW = new Widget< Button >(g->x() + 120, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(Prev));
             b->tooltip(_("Previous filename"));
-            bW->callback([=](auto w) { App::app->filesModel()->prev(); });
+            bW->callback([=, this](auto w) { App::app->filesModel()->prev(); });
 
             bW = new Widget< Button >(g->x() + 150, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(Next));
             b->tooltip(_("Next filename"));
-            bW->callback([=](auto w) { App::app->filesModel()->next(); });
+            bW->callback([=, this](auto w) { App::app->filesModel()->next(); });
 
-            auto btW = new Widget< Fl_Button >(g->x() + 150, Y, 30, 30);
-            b = btW;
-            b->image(MRV2_LOAD_SVG(Filter));
-            b->selection_color(FL_YELLOW);
-            b->value(o.filterEDL);
-            b->tooltip(_("Filter EDLs"));
-            btW->callback(
-                [=](auto w)
-                {
-                    auto model = App::app->filesModel();
-                    FilesPanelOptions o =
-                        model->observeFilesPanelOptions()->get();
-                    o.filterEDL ^= true;
-                    model->setFilesPanelOptions(o);
-                });
             bg->end();
 
             g->end();
@@ -337,7 +324,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_R();
 
-            otio::RationalTime time = otio::RationalTime(0.0, 1.0);
+            OTIO_NS::RationalTime time = OTIO_NS::RationalTime(0.0, 1.0);
 
             const auto player = p.ui->uiView->getTimelinePlayer();
             if (!player)
@@ -346,7 +333,10 @@ namespace mrv
             const auto& model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
-            
+
+            int thumbnailType = p.ui->uiPrefs->FilesPanelThumbnails->value();
+            image::Size size = panel::calculateImageSize(thumbnailType);
+
             for (auto& m : r.map)
             {
                 size_t i = m.first;
@@ -357,7 +347,7 @@ namespace mrv
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
                 const std::string file = path.getFileName(listdir);
-                
+
                 FileButton* b = m.second;
                 uint16_t layerId;
 
@@ -377,8 +367,7 @@ namespace mrv
                 }
 
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     const std::string layer = getLayerName(media, layerId);
                     label = protocol + dir + "\n" + file + layer;
@@ -388,23 +377,30 @@ namespace mrv
                     label = file;
                 }
                 b->copy_label(label.c_str());
-                
-                _createThumbnail(b, path, time, layerId);
+
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
+
+                _createThumbnail(b, media, time, layerId,
+                                 media->mediaReferenceKey);
             }
         }
 
         void FilesPanel::setSort(Sort value)
         {
             MRV2_R();
-            
+
             if (r.sort == value)
                 return;
 
             r.sort = value;
-            
+
             refresh();
         }
-        
+
         void FilesPanel::setFilesPanelOptions(const FilesPanelOptions& value)
         {
             refresh();

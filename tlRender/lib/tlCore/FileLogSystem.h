@@ -6,6 +6,8 @@
 
 #include <tlCore/LogSystem.h>
 
+#include <filesystem>
+
 namespace tl
 {
     namespace file
@@ -17,18 +19,18 @@ namespace tl
 
         protected:
             void _init(
-                const std::string& fileName,
-                const std::shared_ptr<system::Context>&);
+                const std::shared_ptr<system::Context>& context,
+                const std::filesystem::path& path);
 
             FileLogSystem();
 
         public:
             virtual ~FileLogSystem();
 
-            //! Create a new system.
+            //! Create a new log system.
             static std::shared_ptr<FileLogSystem> create(
-                const std::string& fileName,
-                const std::shared_ptr<system::Context>&);
+                const std::shared_ptr<system::Context>& context,
+                const std::filesystem::path& path);
 
         private:
             TLRENDER_PRIVATE();

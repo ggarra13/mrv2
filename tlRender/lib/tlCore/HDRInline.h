@@ -40,7 +40,7 @@ namespace tl
             }
             return s;
         }
-        
+
         inline bool HDRData::operator==(const HDRData& other) const
         {
             return eotf == other.eotf && primaries == other.primaries &&
@@ -60,24 +60,24 @@ namespace tl
         {
             return !(other == *this);
         }
-        
+
         inline bool isHDR(const HDRData& o)
         {
             return (o.eotf != image::EOTF_BT709 &&
                     o.eotf != image::EOTF_BT601);
         }
-        
+
         inline bool isHDRPlus(const HDRData& o)
         {
             return (o.eotf == image::EOTF_BT2100_PQ &&
                     o.sceneAvg != 0.F);
         }
-        
+
         inline bool isHDRDolbyVision(const HDRData& o)
         {
             return (o.eotf == image::EOTF_BT2020 && o.isDolbyVision);
         }
-        
+
         inline std::ostream& operator<<(std::ostream& s, const HDRData& o)
         {
             s << "eotf=" << (int)o.eotf << std::endl
@@ -89,8 +89,8 @@ namespace tl
               << o.primaries[2].y << std::endl
               << "white primaries=" << o.primaries[3].x << ", "
               << o.primaries[3].y << std::endl
-              << "display luminance=" << o.displayMasteringLuminance.getMin()
-              << " to " << o.displayMasteringLuminance.getMax() << std::endl
+              << "display luminance=" << o.displayMasteringLuminance.min()
+              << " to " << o.displayMasteringLuminance.max() << std::endl
               << "maxCLL =" << o.maxCLL << std::endl
               << "maxFALL=" << o.maxFALL;
             if (o.sceneMax[0] > 0.F)

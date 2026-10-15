@@ -4,16 +4,17 @@
 
 #pragma once
 
-#include <iostream>
-
-#include <FL/Fl_Group.H>
-
 #include "mrvWidgets/mrvDockGroup.h"
 #include "mrvWidgets/mrvDragButton.h"
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvPanelButton.h"
 #include "mrvWidgets/mrvPanelWindow.h"
 #include "mrvWidgets/mrvScroll.h"
+
+#include <FL/Fl_Group.H>
+
+#include <functional>
+#include <iostream>
 
 namespace mrv
 {
@@ -32,7 +33,7 @@ namespace mrv
             DockGroup* d, int x, int y, int w, int h, int n, const char* l);
 
         void set_Fl_Group(const std::string label);
-        
+
     protected:
         // Widgets used by the toolbar
         DragButton* dragger = nullptr;
@@ -62,7 +63,8 @@ namespace mrv
         Pack* get_pack() const { return pack; }
         Scroll* get_scroll() const { return scroll; }
         PanelWindow* get_window() const { return tw; }
-        
+
+
         // get the dock group ID
         inline DockGroup* get_dock(void) { return dock; }
 
@@ -111,6 +113,10 @@ namespace mrv
         inline void remove(Fl_Widget& w) { pack->remove(w); }
         inline void remove(Fl_Widget* w) { pack->remove(w); }
         inline int children() const { return pack->children(); }
+
+        inline void layout_callback(std::function<void()> cb) { _layout_cb = std::move(cb); }
+    private:
+        std::function<void()> _layout_cb;
     };
 
 } // namespace mrv

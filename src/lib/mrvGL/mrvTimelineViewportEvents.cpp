@@ -40,7 +40,7 @@
 namespace
 {
     const char* kModule = "view";
-    const int   kCrossSize = 10;    
+    const int   kCrossSize = 10;
     const float kPressure = 2.F;
 } // namespace
 
@@ -77,14 +77,14 @@ namespace mrv
                 return false;
             }
         }
-        
+
     } // namespace
 
 
     namespace opengl
     {
 
-        void TimelineViewport::_handleDragLeftMouseButtonShapes() noexcept
+        int TimelineViewport::_handleDragLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
 
@@ -92,28 +92,74 @@ namespace mrv
 
             auto player = getTimelinePlayer();
             if (!player)
-                return;
+                return 0;
 
             auto annotation = player->getAnnotation();
             if (p.actionMode != ActionMode::kScrub && !annotation)
-                return;
+                return 0;
 
             if (isDrawAction(p.actionMode) && !p.showAnnotations)
             {
                 p.showAnnotations = true;
             }
-                    
+
             std::shared_ptr< draw::Shape > s;
             if (annotation) s = annotation->lastShape();
 
+            math::Size2i renderSize = getRenderSize();
+
             ActionMode actionMode = p.actionMode;
-            
-#if FLTK_HAVE_PEN_SUPPORT
-            if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
-                actionMode = ActionMode::kErase;
-#endif
-            
             const float pen_size = _getPenSize();
+
+#if FLTK_HAVE_PEN_SUPPORT
+            if (actionMode == ActionMode::kDraw &&
+                Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
+            {
+                auto pathShape = dynamic_cast< GLPathShape* >(s.get());
+                if (pathShape)
+                {
+                    // The eraser tip just touched down mid-stroke: stop
+                    // extending the draw path here and start a brand new
+                    // freehand erase path from this same point onward.
+                    // (Mirrors the freehand-erase branch of
+                    // _handlePushLeftMouseButtonShapes().)
+                    uint8_t r, g, b;
+                    SettingsObject* settings = p.ui->app->settings();
+                    int fltk_color = p.ui->uiPenColor->color();
+                    Fl::get_color((Fl_Color)fltk_color, r, g, b);
+                    float alpha = p.ui->uiPenOpacity->value();
+                    const image::Color4f color(
+                        r / 255.F, g / 255.F, b / 255.F, alpha);
+                    bool softBrush = settings->getValue<bool>(kSoftBrush);
+
+                    auto eraseShape =
+                        std::make_shared< GLErasePathShape >();
+                    eraseShape->drawing = false;
+                    eraseShape->rectangle = false;
+                    eraseShape->pen_size = pen_size * 3.5F;
+                    eraseShape->color = color;
+                    eraseShape->soft = softBrush;
+                    eraseShape->pts.push_back(pnt);
+
+                    float pressure = kPressure * p.pressure;
+                    if (pressure <= 0.F)
+                        pressure = 1.F;
+                    eraseShape->pts.back().pressure = pressure;
+
+                    annotation->push_back(eraseShape);
+                    _createAnnotationShape(false); // erasing is never a laser
+
+                    redrawWindows();
+                    return 1;
+                }
+
+                // We already switched earlier in this same stroke (the
+                // last shape is already a VKErasePathShape) -- just keep
+                // extending it via the kErase case below.
+                actionMode = ActionMode::kErase;
+                _updateActionMode(actionMode);
+            }
+#endif
 
             switch (actionMode)
             {
@@ -122,7 +168,7 @@ namespace mrv
             {
                 auto shape = dynamic_cast< GLRectangleShape* >(s.get());
                 if (!shape)
-                    return;
+                    return 0;
 
                 shape->pts[1].x = pnt.x;
                 shape->pts[2].x = pnt.x;
@@ -131,44 +177,50 @@ namespace mrv
 
                 _updateAnnotationShape();
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kPolygon:
             case ActionMode::kFilledPolygon:
             {
                 auto shape = dynamic_cast< GLPathShape* >(s.get());
                 if (!shape)
-                    return;
-                
+                    return 0;
+
                 auto& lastPoint = shape->pts.back();
                 lastPoint = pnt;
-                
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+                lastPoint.pressure = pressure;
+
+
                 _updateAnnotationShape();
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kDraw:
             {
                 auto shape = dynamic_cast< GLPathShape* >(s.get());
                 if (!shape)
-                    return;
-                
+                    return 0;
+
                 shape->pts.push_back(pnt);
 
                 float pressure = kPressure * p.pressure;
                 if (pressure <= 0.F)
                     pressure = 1.F;
                 shape->pts.back().pressure = pressure;
-                
+
                 _addAnnotationShapePoint();
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kErase:
             {
                 auto shape = dynamic_cast< GLErasePathShape* >(s.get());
                 if (!shape)
-                    return;
+                    return 0;
 
                 if (shape->rectangle)
                 {
@@ -182,17 +234,22 @@ namespace mrv
                 else
                 {
                     shape->pts.push_back(pnt);
+                    float pressure = kPressure * p.pressure;
+                    if (pressure <= 0.F)
+                        pressure = 1.F;
+                    shape->pts.back().pressure = pressure;
+
                     _addAnnotationShapePoint();
                 }
-                
+
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kArrow:
             {
                 auto shape = dynamic_cast< GLArrowShape* >(s.get());
                 if (!shape)
-                    return;
+                    return 0;
 
                 Imath::V2d p1 = shape->pts[0];
                 Imath::V2d lineVector = pnt - p1;
@@ -216,17 +273,24 @@ namespace mrv
                 shape->pts[3] = pnt;
                 tmp = pointOnLine + -tNormal * normalVector;
                 shape->pts[4] = tmp;
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+                for (int i = 0; i < 5; ++i)
+                    shape->pts[i].pressure = pressure;
+
                 _updateAnnotationShape();
 
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kFilledCircle:
             case ActionMode::kCircle:
             {
                 auto shape = dynamic_cast< GLCircleShape* >(s.get());
                 if (!shape)
-                    return;
+                    return 0;
 
                 shape->radius =
                     2.0F * abs(shape->center.x - pnt.x) * pixels_per_unit();
@@ -234,7 +298,7 @@ namespace mrv
                     shape->radius = shape->pen_size / 2;
                 _updateAnnotationShape();
                 redrawWindows();
-                return;
+                return 1;
             }
             case ActionMode::kText:
             {
@@ -249,18 +313,18 @@ namespace mrv
 #endif
                     redrawWindows();
                 }
-                return;
+                return 1;
             }
             case ActionMode::kScrub:
             case ActionMode::kVoice:
             case ActionMode::kLink:
-                return;
+                return 1;
             default:
                 LOG_ERROR(_("Unknown action mode in ") << __FUNCTION__);
-                return;
+                return 0;
             }
         }
-        
+
         MultilineInput* TimelineViewport::getMultilineInput() const noexcept
         {
             MultilineInput* w;
@@ -366,7 +430,7 @@ namespace mrv
             return ret;
         }
 
-        void TimelineViewport::_handlePushLeftMouseButtonShapes() noexcept
+        int TimelineViewport::_handlePushLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
 
@@ -386,7 +450,7 @@ namespace mrv
 
             auto player = getTimelinePlayer();
             if (!player)
-                return;
+                return 0;
 
             auto annotation = player->getAnnotation();
             bool all_frames =
@@ -395,7 +459,7 @@ namespace mrv
             {
                 annotation = player->createAnnotation(all_frames);
                 if (!annotation)
-                    return;
+                    return 0;
             }
             else
             {
@@ -418,20 +482,23 @@ namespace mrv
                               "An all frames annotation already exists.");
                     }
                     LOG_ERROR(error);
-                    return;
+                    return 0;
                 }
             }
 
             p.mousePos = _getFocus();
             draw::Point pnt(_getRasterf());
-                        
+
             ActionMode actionMode = p.actionMode;
-            
+
 #if FLTK_HAVE_PEN_SUPPORT
             if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
+            {
                 actionMode = ActionMode::kErase;
+                _updateActionMode(actionMode);
+            }
 #endif
-            
+
             switch (actionMode)
             {
             case ActionMode::kDraw:
@@ -447,7 +514,7 @@ namespace mrv
                 if (pressure <= 0.F)
                     pressure = 1.F;
                 shape->pts.back().pressure = pressure;
-                
+
                 annotation->push_back(shape);
                 _createAnnotationShape(laser);
                 break;
@@ -473,13 +540,13 @@ namespace mrv
                     shape->color = color;
                     shape->soft = softBrush;
                     shape->pts.push_back(pnt);
-                    
+
                     float pressure = kPressure * p.pressure;
                     if (pressure <= 0.F)
                         pressure = 1.F;
                     shape->pts.back().pressure = pressure;
                 }
-                
+
                 annotation->push_back(shape);
                 _createAnnotationShape(false); // not laser
                 break;
@@ -491,11 +558,21 @@ namespace mrv
                 shape->soft = softBrush;
                 shape->color = color;
                 shape->laser = laser;
+
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+
+                for (int i = 0; i < 5; ++i)
+                    shape->pts[i].pressure = pressure;
+
+
                 annotation->push_back(shape);
                 _createAnnotationShape(laser);
                 break;
@@ -510,7 +587,6 @@ namespace mrv
                     shape->soft = false;
                     shape->color = color;
                     shape->laser = laser;
-                    shape->pts.push_back(pnt);
                     p.lastEvent = FL_PUSH;
                 }
                 else
@@ -519,16 +595,21 @@ namespace mrv
                     shape =
                         std::dynamic_pointer_cast<GLFilledPolygonShape>(s);
                     if (!shape)
-                        return;
-                    shape->pts.push_back(pnt);
+                        return 0;
                 }
-                    
+                shape->pts.push_back(pnt);
+
                 if (p.lastEvent == FL_PUSH)
                 {
                     annotation->push_back(shape);
                     _createAnnotationShape(false);
                     p.lastEvent = FL_DRAG;
                 }
+                else
+                {
+                    _updateAnnotationShape();
+                }
+                redrawWindows();
                 break;
             }
             case ActionMode::kPolygon:
@@ -548,17 +629,27 @@ namespace mrv
                     auto s = annotation->lastShape();
                     shape = std::dynamic_pointer_cast<GLPolygonShape>(s);
                     if (!shape)
-                        return;
+                        return 0;
                 }
-                    
+
                 shape->pts.push_back(pnt);
-                        
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+                shape->pts.back().pressure = pressure;
+
                 if (p.lastEvent == FL_PUSH)
                 {
                     annotation->push_back(shape);
                     _createAnnotationShape(false);
                     p.lastEvent = FL_DRAG;
                 }
+                else
+                {
+                    _updateAnnotationShape();
+                }
+                redrawWindows();
                 break;
             }
             case ActionMode::kFilledCircle:
@@ -612,11 +703,20 @@ namespace mrv
                 shape->soft = softBrush;
                 shape->color = color;
                 shape->laser = laser;
+
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+
+                for (int i = 0; i < 5; ++i)
+                    shape->pts[i].pressure = pressure;
+
                 annotation->push_back(shape);
                 _createAnnotationShape(laser);
                 break;
@@ -634,11 +734,11 @@ namespace mrv
                 // The L will be 5 pixels high and 3.5 pixels wide on screen.
                 const float L_height_px = 5.0F;
                 const float L_width_px = 3.5F;
-                
+
                 // Store PIXEL OFFSETS in pts[1]
                 // We only need one extra point for this.
                 shape->pts.push_back(draw::Point(L_width_px, L_height_px));
-                
+
                 if (shape->edit())
                 {
                     annotation->push_back(shape);
@@ -667,7 +767,7 @@ namespace mrv
 #endif
                     w->textsize(fontSize);
                     redrawWindows();
-                    return;
+                    return 1;
                 }
 
                 w = new MultilineInput(
@@ -685,18 +785,20 @@ namespace mrv
                 this->add(w);
 
                 redrawWindows();
-                return;
+                return 1;
             }
             default:
-                return;
+                return 0;
             }
             // Create annotation menus if not there already
             App::unsaved_annotations = true;
             p.ui->uiMain->update_title_bar();
             p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
             p.ui->uiUndoDraw->activate();
+
+            return 1;
         }
-        
+
         int TimelineViewport::_handleReleaseLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
@@ -704,16 +806,16 @@ namespace mrv
             auto annotation = p.player->getAnnotation();
             if (p.actionMode != ActionMode::kScrub && !annotation)
                 return 0;
-            
+
             std::shared_ptr< draw::Shape > s;
             if (annotation) s = annotation->lastShape();
-            
+
             auto shape = dynamic_cast< GLErasePathShape* >(s.get());
             if (!shape)
             {
                 return 0;
             }
-            
+
             if (shape->rectangle)
                 shape->drawing = false;
 
@@ -721,7 +823,7 @@ namespace mrv
 
             return 1;
         }
-        
+
         void TimelineViewport::editText(
             const std::shared_ptr< draw::Shape >& s, const int index) noexcept
         {

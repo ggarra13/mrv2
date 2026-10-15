@@ -7,13 +7,16 @@
 
 #include <tlVk/Mesh.h>
 
+#include <tlCore/Memory.h>
+#include <tlCore/StringFormat.h>
+
 #include <stdexcept>
 
 namespace tl
 {
     namespace vlk
     {
-        
+
         // ------------------------------------------------------------------
         //  VAOPool
         // ------------------------------------------------------------------
@@ -60,9 +63,14 @@ namespace tl
                 // error (a single draw call can't span two VkBuffers).
                 if (!_slots[_currentSlot]->canFit(data.size()))
                 {
-                    throw std::runtime_error(
-                        "VAOPool: single mesh upload exceeds one slot's "
-                        "per-frame region.  Increase slotSize.");
+                    std::string msg =
+                        string::Format("VAOPool: single mesh upload "
+                                       "{0} exceeds one slot's "
+                                       "per-frame region {1}.  "
+                                       "Increase slotSize.")
+                        .arg(data.size())
+                        .arg(_slotSize / memory::megabyte);
+                    throw std::runtime_error(msg);
                 }
             }
 

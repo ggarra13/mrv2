@@ -240,7 +240,7 @@ struct Flu_File_Chooser::Private
 void Flu_File_Chooser::previewCB()
 {
     TLRENDER_P();
-    
+
     bool inFavorites = (currentDir == FAVORITES_UNIQUE_STRING);
     if (inFavorites)
     {
@@ -325,7 +325,7 @@ Flu_File_Chooser::find_type(const char* extension)
             if (token.back() == ',') {
                 token.pop_back();
             }
-            
+
             if (ext == token) {
                 return &type;
             }
@@ -360,7 +360,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     _compact = compact;
 
     initFileTypes();
-    
+
     int oldNormalSize = FL_NORMAL_SIZE;
     FL_NORMAL_SIZE = 12;
 
@@ -385,7 +385,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     cancel.label(_(cancelTxt.c_str()));
     cancel.labelsize(FL_NORMAL_SIZE);
 
-    
+
     for (int j = 0; j < 4; j++)
     {
         std::string text = _(detailTxt[j].c_str());
@@ -459,7 +459,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     configFilename = userHome + "/.filmaura/mrv2.favorites";
 
     selectionType = type;
-    
+
     filenameEnterCallback = filenameTabCallback = false;
     sortMethod = SORT_NAME;
 
@@ -1427,7 +1427,7 @@ void Flu_File_Chooser::trashCB(bool recycle)
                                  _("Another process using the file."));
                     }
 #endif
-                    
+
                     char buf[2048];
                     snprintf(buf, 2048, _(deleteFileErrTxt.c_str()),
                              name.c_str(), error);
@@ -2613,10 +2613,10 @@ void Flu_File_Chooser::value(const char* v)
 {
     if (!v)
         return;
-    
+
     tl::file::Path path(v);
     const std::string directory = path.getDirectory();
-    
+
     cd(directory.c_str());
     // try to find the file and select it
     const char* slash = strrchr(v, '/');
@@ -2771,10 +2771,10 @@ void Flu_File_Chooser::cleanupPath(std::string& s)
 {
     if (s == "/")
         return;
-    
+
     try
     {
-        s = fs::canonical(fs::path(s)).u8string();
+        s = tl::file::fromFileSystem(fs::canonical(tl::file::toFileSystem(s)));
     }
     catch(const fs::filesystem_error& e)
     {
@@ -3083,7 +3083,7 @@ void Flu_File_Chooser::clear_history()
 {
     _history.clear();
     _historyIndex = 0;
-    
+
     backBtn->deactivate();
     forwardBtn->deactivate();
 }
@@ -4195,7 +4195,7 @@ static const char* _flu_file_chooser(
     {
         Flu_File_Chooser::window->value(filename);
     }
-    
+
     Flu_File_Chooser::window->set_non_modal();
     Flu_File_Chooser::window->show();
 

@@ -25,20 +25,23 @@ namespace tl
     {
         struct Player::Private
         {
-            otime::RationalTime loopPlayback(const otime::RationalTime&);
+            OTIO_NS::RationalTime loopPlayback(const OTIO_NS::RationalTime&);
 
             void reverseRequests(
-                const otime::RationalTime& start,
-                const otime::RationalTime& end, const otime::RationalTime& inc);
+                const OTIO_NS::RationalTime& start,
+                const OTIO_NS::RationalTime& end, const OTIO_NS::RationalTime& inc);
             void forwardRequests(
-                const otime::RationalTime& start,
-                const otime::RationalTime& end, const otime::RationalTime& inc,
+                const OTIO_NS::RationalTime& start,
+                const OTIO_NS::RationalTime& end, const OTIO_NS::RationalTime& inc,
                 const bool clearFrame = false);
             void clearRequests();
             void clearCache();
+            size_t getVideoCacheMax() const;
+            size_t getAudioCacheMax() const;
             void cacheUpdate();
 
             void finishedVideoRequests();
+            void finishedAudioRequests();
 
             void resetAudioTime();
 #if defined(TLRENDER_AUDIO)
@@ -62,23 +65,31 @@ namespace tl
             std::shared_ptr<Timeline> timeline;
             io::Info ioInfo;
 
+            // The audio format of the media, found when the timeline was read.
+            // This is stable across media reference keys, because the timeline
+            // hands the readers its own audio format to convert to, so every
+            // reference is read in the format found when the timeline was
+            // read. This is what the audio thread reads, and is not the audio
+            // device format; that is audioInfo.
+            audio::Info sourceAudioInfo;
+
             std::shared_ptr<observer::Value<double> > speed;
             std::shared_ptr<observer::Value<Playback> > playback;
             std::shared_ptr<observer::Value<Loop> > loop;
-            std::shared_ptr<observer::Value<otime::RationalTime> > currentTime;
-            std::shared_ptr<observer::Value<otime::TimeRange> > inOutRange;
+            std::shared_ptr<observer::Value<OTIO_NS::RationalTime> > currentTime;
+            std::shared_ptr<observer::Value<OTIO_NS::TimeRange> > inOutRange;
             std::shared_ptr<observer::List<std::shared_ptr<Timeline> > >
                 compare;
             std::shared_ptr<observer::Value<CompareTimeMode> > compareTime;
             std::shared_ptr<observer::Value<io::Options> > ioOptions;
             std::shared_ptr<observer::Value<int> > videoLayer;
             std::shared_ptr<observer::List<int> > compareVideoLayers;
-            std::shared_ptr<observer::List<VideoData> > currentVideoData;
+            std::shared_ptr<observer::List<VideoFrame> > currentVideoFrame;
             std::shared_ptr<observer::Value<float> > volume;
             std::shared_ptr<observer::Value<bool> > mute;
             std::shared_ptr<observer::List<int> > channelMute;
             std::shared_ptr<observer::Value<double> > audioOffset;
-            std::shared_ptr<observer::List<AudioData> > currentAudioData;
+            std::shared_ptr<observer::List<AudioFrame> > currentAudioFrame;
             std::shared_ptr<observer::Value<PlayerCacheOptions> > cacheOptions;
             std::shared_ptr<observer::Value<PlayerCacheInfo> > cacheInfo;
             std::shared_ptr<observer::ValueObserver<bool> > timelineObserver;
@@ -86,18 +97,18 @@ namespace tl
             struct Mutex
             {
                 Playback playback = Playback::Stop;
-                otime::RationalTime playbackStartTime = time::invalidTime;
+                OTIO_NS::RationalTime playbackStartTime = time::invalidTime;
                 std::chrono::steady_clock::time_point playbackStartTimer;
-                otime::RationalTime currentTime = time::invalidTime;
-                otime::TimeRange inOutRange = time::invalidTimeRange;
+                OTIO_NS::RationalTime currentTime = time::invalidTime;
+                OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
                 std::vector<std::shared_ptr<Timeline> > compare;
                 CompareTimeMode compareTime = CompareTimeMode::Relative;
                 io::Options ioOptions;
                 int videoLayer = 0;
                 std::vector<int> compareVideoLayers;
-                std::vector<VideoData> currentVideoData;
+                std::vector<VideoFrame> currentVideoFrame;
                 double audioOffset = 0.0;
-                std::vector<AudioData> currentAudioData;
+                std::vector<AudioFrame> currentAudioFrame;
                 bool clearRequests = false;
                 bool clearCache = false;
                 CacheDirection cacheDirection = CacheDirection::Forward;
@@ -114,7 +125,7 @@ namespace tl
                 bool mute = false;
                 std::vector<int> channelMute;
                 std::chrono::steady_clock::time_point muteTimeout;
-                std::map<int64_t, AudioData> audioDataCache;
+                std::map<int64_t, AudioFrame> cache;
                 bool reset = false;
                 std::mutex mutex;
             };
@@ -123,8 +134,8 @@ namespace tl
             struct Thread
             {
                 Playback playback = Playback::Stop;
-                otime::RationalTime currentTime = time::invalidTime;
-                otime::TimeRange inOutRange = time::invalidTimeRange;
+                OTIO_NS::RationalTime currentTime = time::invalidTime;
+                OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
                 std::vector<std::shared_ptr<Timeline> > compare;
                 CompareTimeMode compareTime = CompareTimeMode::Relative;
                 io::Options ioOptions;
@@ -134,14 +145,14 @@ namespace tl
                 CacheDirection cacheDirection = CacheDirection::Forward;
                 PlayerCacheOptions cacheOptions;
 
-                std::map<otime::RationalTime, std::vector<VideoRequest> >
-                    videoDataRequests;
-                std::map<otime::RationalTime, std::vector<VideoData> >
-                    videoDataCache;
+                std::map<OTIO_NS::RationalTime, std::vector<VideoRequest> >
+                    videoRequests;
+                std::map<OTIO_NS::RationalTime, std::vector<VideoFrame> >
+                    videoCache;
 #if defined(TLRENDER_AUDIO)
                 std::unique_ptr<RtAudio> rtAudio;
 #endif // TLRENDER_AUDIO
-                std::map<int64_t, AudioRequest> audioDataRequests;
+                std::map<int64_t, AudioRequest> audioRequests;
                 std::chrono::steady_clock::time_point cacheTimer;
                 std::chrono::steady_clock::time_point logTimer;
                 std::atomic<bool> running;

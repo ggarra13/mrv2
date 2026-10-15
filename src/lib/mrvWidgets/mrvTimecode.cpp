@@ -16,7 +16,7 @@ namespace mrv
 {
     struct Timecode::Private
     {
-        otime::RationalTime value = tl::time::invalidTime;
+        OTIO_NS::RationalTime value = tl::time::invalidTime;
         TimeUnits units = TimeUnits::Timecode;
     };
 
@@ -45,7 +45,7 @@ namespace mrv
 
     Timecode::~Timecode() {}
 
-    const otime::RationalTime& Timecode::time() const
+    const OTIO_NS::RationalTime& Timecode::time() const
     {
         return _p->value;
     }
@@ -55,7 +55,7 @@ namespace mrv
         return _p->units;
     }
 
-    void Timecode::setTime(const otime::RationalTime& value) noexcept
+    void Timecode::setTime(const OTIO_NS::RationalTime& value) noexcept
     {
         TLRENDER_P();
         if (value == p.value)
@@ -231,16 +231,16 @@ namespace mrv
                 {
                 case TimeUnits::Frames:
                     v = eval(value());
-                    p.value = otime::RationalTime(v, p.value.rate());
+                    p.value = OTIO_NS::RationalTime(v, p.value.rate());
                     break;
                 case TimeUnits::Seconds:
                     v = eval(value());
-                    p.value = otime::RationalTime(v, 1.0);
+                    p.value = OTIO_NS::RationalTime(v, 1.0);
                     break;
                 case TimeUnits::Timecode:
                 {
-                    otime::ErrorStatus status;
-                    p.value = otime::RationalTime::from_timecode(value(),
+                    opentime::ErrorStatus status;
+                    p.value = OTIO_NS::RationalTime::from_timecode(value(),
                                                                  p.value.rate(),
                                                                  &status);
                     break;

@@ -29,7 +29,7 @@ namespace mrv2
     {
         using namespace mrv;
 
-        void add(const otime::RationalTime& time, const std::string& note)
+        void add(const OTIO_NS::RationalTime& time, const std::string& note)
         {
             ViewerUI* ui = App::ui;
             MyViewport* view = ui->uiView;
@@ -52,8 +52,8 @@ namespace mrv2
             if (!player)
                 return;
             const auto& currentTime = player->currentTime();
-            const otime::RationalTime& time =
-                otime::RationalTime(frame, currentTime.rate());
+            const OTIO_NS::RationalTime& time =
+                OTIO_NS::RationalTime(frame, currentTime.rate());
             add(time, note);
         }
 
@@ -66,14 +66,14 @@ namespace mrv2
             auto player = view->getTimelinePlayer();
             if (!player)
                 return;
-            const otime::RationalTime& time = otime::RationalTime(seconds, 1.0);
+            const OTIO_NS::RationalTime& time = opentime::RationalTime(seconds, 1.0);
             add(time, note);
         }
 
-        std::vector< otime::RationalTime >
+        std::vector< OTIO_NS::RationalTime >
         getTimes()
         {
-            std::vector< otime::RationalTime > out;
+            std::vector< OTIO_NS::RationalTime > out;
             
             ViewerUI* ui = App::ui;
             MyViewport* view = ui->uiView;
@@ -237,7 +237,7 @@ Contains all functions and classes related to the annotationss.
 
     annotations.def(
         "add",
-        py::overload_cast<const otime::RationalTime&, const std::string&>(
+        py::overload_cast<const OTIO_NS::RationalTime&, const std::string&>(
             &mrv2::annotations::add),
         _("Add notes annotations to current clip at a certain time."),
         py::arg("time"), py::arg("notes"));

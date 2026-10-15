@@ -10,7 +10,7 @@ namespace tl
 {
     namespace math
     {
-    
+
         template<int C, typename T>
         constexpr Box<C, T>::Box(const Vector<C, T>& min, const Vector<C, T>& max) :
             min(min),
@@ -22,7 +22,7 @@ namespace tl
             min(min),
             max(min + Vector<C, T>(size))
         {}
-                
+
         template<int C, typename T>
         constexpr Size<C, T> Box<C, T>::getSize() const
         {
@@ -69,7 +69,7 @@ namespace tl
             min(x, y),
             max(x + width - 1, y + height - 1)
         {}
-        
+
         template<typename T>
         constexpr T Box<2, T>::x() const
         {
@@ -81,7 +81,7 @@ namespace tl
         {
             return min.y;
         }
-        
+
         template<typename T>
         constexpr Size<2, T> Box<2, T>::getSize() const
         {
@@ -133,7 +133,7 @@ namespace tl
             min(x, y, z),
             max(x + width, y + height, z + depth)
         {}
-        
+
         template<typename T>
         constexpr T Box<3, T>::x() const
         {
@@ -151,7 +151,7 @@ namespace tl
         {
             return min.z;
         }
-        
+
         template<typename T>
         constexpr Size<3, T> Box<3, T>::getSize() const
         {
@@ -335,6 +335,25 @@ namespace tl
         }
 
         template<typename T>
+        constexpr Box<2, T> bbox(const std::vector<Box<2, T> >& b)
+        {
+            Box<2, T> out;
+            if (!b.empty())
+            {
+                out.min = b[0].min;
+                out.max = b[0].max;
+                for (size_t i = 1; i < b.size(); ++i)
+                {
+                    out.min.x = std::min(out.min.x, b[i].min.x);
+                    out.min.y = std::min(out.min.y, b[i].min.y);
+                    out.max.x = std::max(out.max.x, b[i].max.x);
+                    out.max.y = std::max(out.max.y, b[i].max.y);
+                }
+            }
+            return out;
+        }
+
+        template<typename T>
         constexpr Box<2, T> bbox(const std::vector<Vector<2, T> >& v)
         {
             Box<2, T> out;
@@ -421,20 +440,20 @@ namespace tl
         {
             return a.min == b.min && a.max == b.max;
         }
-        
+
         template<int C, typename T>
         constexpr bool operator != (const Box<C, T>& a, const Box<C, T>& b)
         {
             return !(a == b);
         }
-        
+
         template<int C, typename T>
         inline std::ostream& operator << (std::ostream& os, const Box<C, T>& v)
         {
             os << to_string(v);
             return os;
         }
-        
+
         template<int C, typename T>
         inline std::istream& operator >> (std::istream& is, Box<C, T>& v)
         {

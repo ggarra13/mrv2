@@ -108,7 +108,7 @@ namespace mrv
             m->align(FL_ALIGN_LEFT);
             Y += 20;
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 { _p->ui->app->devicesModel()->setDeviceIndex(o->value()); });
 
             mW = new Widget< Fl_Choice >(
@@ -118,7 +118,7 @@ namespace mrv
             m->align(FL_ALIGN_LEFT);
             Y += 20;
             mW->callback(
-                [=](auto o) {
+                [=, this](auto o) {
                     _p->ui->app->devicesModel()->setDisplayModeIndex(
                         o->value());
                 });
@@ -130,7 +130,7 @@ namespace mrv
             m->align(FL_ALIGN_LEFT);
             Y += 20;
             mW->callback(
-                [=](auto o) {
+                [=, this](auto o) {
                     _p->ui->app->devicesModel()->setPixelTypeIndex(o->value());
                 });
 
@@ -141,7 +141,7 @@ namespace mrv
             m->align(FL_ALIGN_LEFT);
             Y += 20;
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     _p->ui->app->devicesModel()->setVideoLevels(
                         static_cast<image::VideoLevels>(o->value()));
@@ -170,7 +170,7 @@ namespace mrv
             Y += 25;
 
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     App::app->devicesModel()->setHDRMode(
                         static_cast<device::HDRMode>(o->value()));
@@ -203,11 +203,11 @@ namespace mrv
                 auto min = new Widget< DoubleSpinner >(X, Y, 50, 25);
                 min->range(0.0, 1.0);
                 min->step(0.01);
-                min->callback([=](auto o) {});
+                min->callback([=, this](auto o) {});
                 auto max = new Widget< DoubleSpinner >(X, Y, 50, 25);
                 max->range(0.0, 1.0);
                 max->step(0.01);
-                max->callback([=](auto o) {});
+                max->callback([=, this](auto o) {});
                 p.primariesSpinBoxes.push_back(std::make_pair(min, max));
                 sg->end();
 
@@ -226,7 +226,7 @@ namespace mrv
             dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
             r.whitePrimariesSpinBoxes.first = dW;
             dW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     auto hdrData = _p->ui->app->devicesModel()
                                        ->observeData()
@@ -238,7 +238,7 @@ namespace mrv
             dW = new Widget< DoubleSpinner >(X, Y, 50, 25);
             r.whitePrimariesSpinBoxes.second = dW;
             dW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     auto hdrData = _p->ui->app->devicesModel()
                                        ->observeData()
@@ -266,7 +266,7 @@ namespace mrv
             r.masteringLuminanceSpinBoxes.first->range(0.0, 10000.0);
             X += r.masteringLuminanceSpinBoxes.first->w() + 5;
             dW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     auto hdrData = _p->ui->app->devicesModel()
                                        ->observeData()
@@ -281,7 +281,7 @@ namespace mrv
             r.masteringLuminanceSpinBoxes.second = dW;
             r.masteringLuminanceSpinBoxes.second->range(0.0, 10000.0);
             dW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     auto hdrData = _p->ui->app->devicesModel()
                                        ->observeData()
@@ -301,7 +301,7 @@ namespace mrv
             s->range(0.F, 10000.F);
             s->step(0.1);
             sW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     auto hdrData = _p->ui->app->devicesModel()
                                        ->observeData()
@@ -319,7 +319,7 @@ namespace mrv
             s->step(0.1);
             Y += s->h();
             sW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     auto hdrData = _p->ui->app->devicesModel()
                                        ->observeData()

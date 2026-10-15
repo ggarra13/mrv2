@@ -53,7 +53,7 @@ namespace mrv
 
     namespace
     {
-        int getIndex(const otio::SerializableObject::Retainer<otio::Composable>&
+        int getIndex(const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Composable>&
                      composable)
         {
             int out = -1;
@@ -136,7 +136,7 @@ namespace mrv
 
     namespace opengl
     {
-        
+
         struct TimelineWidget::Private
         {
             std::weak_ptr<system::Context> context;
@@ -178,13 +178,14 @@ namespace mrv
             //! Flags
             bool draggingClip = false;
             bool continueReversePlaying = false;
+            timeline::EditMode editMode = timeline::EditMode::Move;
 
             //! Observers
             std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
             cacheInfoObserver;
 
-            std::vector<otime::RationalTime> annotationTimes;
-            otime::TimeRange timeRange = time::invalidTimeRange;
+            std::vector<OTIO_NS::RationalTime> annotationTimes;
+            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
         };
 
         TimelineWidget::TimelineWidget(int X, int Y, int W, int H, const char* L) :
@@ -273,7 +274,7 @@ namespace mrv
             _p->style = style;
             _styleUpdate();
         }
-        
+
         void TimelineWidget::hideThumbnail()
         {
             TLRENDER_P();
@@ -288,17 +289,18 @@ namespace mrv
             Fl::remove_timeout(timerEvent_cb, this);
         }
 
-        std::vector<const otio::Item* > TimelineWidget::getSelectedItems() const
+        std::vector<timeline::MoveData>
+        TimelineWidget::getSelectedItems() const
         {
             return _p->timelineWidget->getSelectedItems();
         }
-        
-        std::vector<const otio::Transition* >
+
+        std::vector<timeline::MoveData>
         TimelineWidget::getSelectedTransitions() const
         {
             return _p->timelineWidget->getSelectedTransitions();
         }
-        
+
         bool TimelineWidget::isEditable() const
         {
             return _p->timelineWidget->isEditable();
@@ -311,6 +313,7 @@ namespace mrv
 
         void TimelineWidget::setEditMode(const timeline::EditMode value)
         {
+            _p->editMode = value;
             _p->timelineWidget->setEditMode(value);
         }
 
@@ -507,7 +510,7 @@ namespace mrv
         {
             TLRENDER_P();
             if (p.thumbnailWindow && Fl::belowmouse() == this && p.player &&
-                p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                p.ui->uiPrefs->TimelineThumbnails->value())
             {
                 int X, Y, W, H;
                 _getThumbnailPosition(X, Y, W, H);
@@ -537,7 +540,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            if (!p.player || !p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+            if (!p.player || !p.ui->uiPrefs->TimelineThumbnails->value())
             {
                 hideThumbnail();
                 return 0;
@@ -559,15 +562,18 @@ namespace mrv
                 path = player->getPath();
 
             const image::Size size(kTHUMB_WIDTH, kTHUMB_HEIGHT);
-            const auto& time = _posToTime(_toUI(Fl::event_x()));
+            const OTIO_NS::RationalTime& timelineTime = _posToTime(_toUI(Fl::event_x()));
+            OTIO_NS::RationalTime time = timelineTime;
 
             if (auto thumbnailSystem = p.thumbnailSystem.lock())
             {
+                const auto timeline = timeline::Timeline::create(p.context.lock(), path);
+                auto mediaPath = timeline->getMediaPath(time);
                 p.thumbnail.request =
-                    thumbnailSystem->getThumbnail(path, size.h, time);
+                    thumbnailSystem->getThumbnail(path, mediaPath, size.h, time);
             }
 
-            timeToText(buffer, time, _p->units);
+            timeToText(buffer, timelineTime, _p->units);
             p.box->copy_label(buffer);
             return 1;
         }
@@ -676,6 +682,8 @@ namespace mrv
             {
                 try
                 {
+                    make_current();
+
                     p.render = timeline_gl::Render::create(context);
                     CHECK_GL;
                     const std::string vertexSource =
@@ -843,14 +851,14 @@ namespace mrv
 
             const float alpha = p.ui->uiMain->get_alpha() / 255.0F;
 
-            if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit ||
+            if (p.ui->uiPrefs->BlitTimeline->value() == kNoBlit ||
                 alpha < 1.0F)
             {
                 glViewport(0, 0, renderSize.w, renderSize.h);
                 glClearColor(0.F, 0.F, 0.F, 0.F);
                 glClear(GL_COLOR_BUFFER_BIT);
 
-                if (p.buffer)
+                if (p.buffer && p.shader)
                 {
                     p.shader->bind();
                     const auto pm = math::ortho(
@@ -1440,6 +1448,11 @@ namespace mrv
                 p.ui->uiEdit->do_callback();
                 return 1;
             }
+            if (key == FL_Delete && p.editMode == timeline::EditMode::Select)
+            {
+                edit_selected_remove_cb(nullptr, p.ui);
+                return 1;
+            }
             bool send = App::ui->uiPrefs->SendTimeline->value();
             if (send)
             {
@@ -1596,14 +1609,14 @@ namespace mrv
                 requestThumbnail(true);
                 return enterEvent();
             case FL_LEAVE:
-                if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                if (p.ui->uiPrefs->TimelineThumbnails->value())
                 {
                     _cancelThumbnailRequests();
                     hideThumbnail();
                 }
                 return leaveEvent();
             case FL_PUSH:
-                if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                if (p.ui->uiPrefs->TimelineThumbnails->value())
                     requestThumbnail(true);
                 return mousePressEvent();
             case FL_DRAG:
@@ -1626,7 +1639,7 @@ namespace mrv
                 return keyReleaseEvent();
             case FL_HIDE:
             {
-                if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                if (p.ui->uiPrefs->TimelineThumbnails->value())
                 {
                     _cancelThumbnailRequests();
                     hideThumbnail();
@@ -1689,11 +1702,11 @@ namespace mrv
 
         void TimelineWidget::_styleUpdate() {}
 
-        otime::RationalTime TimelineWidget::_posToTime(int value) noexcept
+        OTIO_NS::RationalTime TimelineWidget::_posToTime(int value) noexcept
         {
             TLRENDER_P();
 
-            otime::RationalTime out = time::invalidTime;
+            OTIO_NS::RationalTime out = time::invalidTime;
             if (p.player && p.timelineWidget)
             {
                 _setGeometry(); // needed, as Linux could have issues when
@@ -1703,7 +1716,7 @@ namespace mrv
                 const double normalized =
                     (value - geometry.min.x) / static_cast<double>(geometry.w());
                 out = (p.timeRange.start_time() +
-                       otime::RationalTime(
+                       OTIO_NS::RationalTime(
                            p.timeRange.duration().value() * normalized,
                            p.timeRange.duration().rate()))
                       .round();

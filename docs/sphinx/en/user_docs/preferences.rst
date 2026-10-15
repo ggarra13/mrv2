@@ -70,8 +70,11 @@ The Window Behavior section allows you to set how the main and secondary window 
 
 	   With this setting, it allows mrv2 to start at the size of the loaded image (Normal), at Fullscreen or in Presentation mode.
 
-UI Elements
-+++++++++++
+Elements
+++++++++
+
+.. image:: ./images/preferences/en_elements.png
+   :align: center
 
 .. topic:: The UI bars
    
@@ -591,13 +594,11 @@ Network
 
 The Network preferences allows you to set what settings are sent and received by the local machine when connected on a network to another server or client.
 
-OpenGL
-======
+Video
+=====
 
-.. image:: ./images/preferences/en_opengl.png
+.. image:: ./images/preferences/en_video.png
    :align: center
-
-OpenGL is the default API used for 3D rendering in the timeline and viewports.
 
 .. topic:: Monitor VSync
 
@@ -629,6 +630,95 @@ OpenGL is the default API used for 3D rendering in the timeline and viewports.
 	   moving and panning in the timeline, which is usually faster.
 	   Otherwise a shader must be used.
 
+Audio
+=====
+
+.. image:: ./images/preferences/en_audio.png
+   :align: center
+	   
+.. topic:: API
+
+	   Depending on platform, you might be able to change the backend used
+	   for audio.
+
+.. topic:: Output Device
+
+	   If you several outputs (like earphones and speakers), you might be
+	   able to change what device to use.
+
+Voice Annotations
+=================
+
+.. image:: ./images/preferences/en_voice_annotations.png
+   :align: center
+
+On the Pro and Pro+ tiers, you can have voice annotations.  Here you can set:
+
+.. topic:: Save Path
+
+	   Directory where the temporary .wav files will be stored.
+
+.. topic:: Playback Speed
+
+	   Speed when playing the Voice Annotation (leave in Normal).
+
+.. topic:: Microphone
+
+	   The actual device that has the microphone you will recording with.
+
+.. topic:: Volume
+
+	   The actual volume for the microphone (leave at 100).
+
+ComfyUI
+=======
+
+.. image:: ./images/preferences/en_comfyui.png
+   :align: center
+
+This allows you to connect ComfyUI with mrv2 and vmrv2 through a socket and the ComfyUI_mrv2 node.
+
+.. topic:: Use ComfyUI Pipe
+
+	   When active, program start up will be a little bit slower, but there will be a pipe to bring the images from ComfyUI.
+
+WebRTC
+======
+
+.. image:: ./images/preferences/en_webrtc.png
+   :align: center
+
+These settings control the deep innards of WebRTC.  If you are not doing anything complex, the only thing you need to fill in is "Studio".
+
+.. topic:: Stun Server
+
+	   The STUN server for WebRTC.
+	   You should likely leave it at its default.
+
+.. topic:: WebRTC Server
+
+	   The web socket server for vmrv2 / mrv2.
+	   You should likely leave it at its default.
+
+.. topic:: Studio
+
+	   This is the important setting that you *SHOULD* set for you studio.  Avoid a simple name that can be guessed.  Every machine to connect needs this name in common.
+	   
+.. topic:: Clean directory at Start up
+
+	   When checked, the cache directory used for WebRTC downloads is
+	   cleared on program start.
+
+.. topic:: WebRTC Cache
+
+	   Some presets for the cache directory.
+
+.. topic:: Cache Directory
+
+	   The actual cache directory files will be downloaded into.
+	   If it does not exist, it will be created.
+
+	   
 Errors
 ======
 

@@ -69,7 +69,7 @@ void show(PyObject *count = 0, PyObject *data = 0)
   }
   else {
     if (PyList_Check(data)) {
-      int size = PyInt_AsLong(count);
+      int size = PyLong_AsLong(count);
       int i = 0;
       char** tmp = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {
@@ -77,7 +77,7 @@ void show(PyObject *count = 0, PyObject *data = 0)
 %#if PY_VERSION_HEX>=0x03000000
         if (PyUnicode_Check(o))
 %#else  
-        if (PyString_Check(o))
+        if (PyBytes_Check(o))
 %#endif
           //tmp[i] = SWIG_Python_str_AsChar(PyList_GetItem(data,i));
      tmp[i] = const_cast<char*>(PyUnicode_AsUTF8(PyList_GetItem(data,i)));

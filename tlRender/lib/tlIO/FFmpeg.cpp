@@ -3,8 +3,11 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
-//#define DEBUG_DYNAMIC_HDR 1
-//#define DEBUG_STATIC_HDR 1
+#if 0
+#    define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+#else
+#    define DBG
+#endif
 
 #include <tlIO/FFmpeg.h>
 
@@ -22,23 +25,49 @@ extern "C"
 {
 #include <libavutil/channel_layout.h>
 #include <libavutil/dict.h>
-#include <libavutil/dovi_meta.h>
+#ifdef TLRENDER_DOVI
+#    include <libavutil/dovi_meta.h>
+#endif
+#include <libavutil/ffversion.h>
 #include <libavutil/hdr_dynamic_metadata.h>
 #include <libavutil/imgutils.h>
 #include <libavutil/mastering_display_metadata.h>
 }
 
 #include <array>
+#include <mutex>
 
 namespace tl
 {
     namespace ffmpeg
     {
+        bool Options::operator == (const Options& other) const
+        {
+            return
+                yuvToRgb == other.yuvToRgb &&
+                hwAccel == other.hwAccel &&
+                threadCount == other.threadCount;
+        }
+
+        bool Options::operator != (const Options& other) const
+        {
+            return !(*this == other);
+        }
+
+        io::Options getOptions(const Options& value)
+        {
+            io::Options out;
+            out["FFmpeg/YUVToRGB"] = string::Format("{0}").arg(value.yuvToRgb);
+            out["FFmpeg/HWAccel"] = string::Format("{0}").arg(value.hwAccel);
+            out["FFmpeg/ThreadCount"] = string::Format("{0}").arg(value.threadCount);
+            return out;
+        }
+
         TLRENDER_ENUM_IMPL(
             Profile, "None", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT",
             "ProRes_HQ", "ProRes_4444", "ProRes_XQ", "DNxHD", "DNxHR_LB",
             "DNxHR_SQ", "DNxHR_HQ", "DNxHR_HQX", "DNxHR_444", "VP9", "Cineform",
-            "AV1", "HAP", "AV1_AOM");
+            "AV1", "HAP", "AV1_AOM", "HEVC", "OAPV", "GIF", "WebP");
         TLRENDER_ENUM_SERIALIZE_IMPL(Profile);
 
         TLRENDER_ENUM_IMPL(
@@ -76,7 +105,7 @@ namespace tl
                         av_q2d(data->display_primaries[1][0]);
                     hdr.primaries[image::HDRPrimaries::Green].y =
                         av_q2d(data->display_primaries[1][1]);
-                    
+
                     hdr.primaries[image::HDRPrimaries::Blue].x =
                         av_q2d(data->display_primaries[2][0]);
                     hdr.primaries[image::HDRPrimaries::Blue].y =
@@ -88,7 +117,7 @@ namespace tl
                         av_q2d(data->white_point[1]);
                 }
             }
-                
+
             raw = get_stream_side_data(st, AV_PKT_DATA_CONTENT_LIGHT_LEVEL);
             if (raw)
             {
@@ -97,7 +126,7 @@ namespace tl
                 hdr.maxCLL = data->MaxCLL;
                 hdr.maxFALL = data->MaxFALL;
             }
-            
+
             raw = get_stream_side_data(st, AV_PKT_DATA_DYNAMIC_HDR10_PLUS);
             if (raw)
             {
@@ -123,7 +152,7 @@ namespace tl
                     }
 
                     histogramMax *= 10000.F;
-                    
+
                     if (!hdr.sceneMax[0])
                         hdr.sceneMax[0] = histogramMax;
                     if (!hdr.sceneMax[1])
@@ -191,7 +220,7 @@ namespace tl
             }
 #endif
         }
-        
+
         float dolby_rescale(float x)
         {
             static const float PQ_M1 = 2610./4096 * 1./4,
@@ -209,7 +238,7 @@ namespace tl
             x /= 203.F;
             return x;
         }
-        
+
         bool
         toHDRData(AVFrame* frame, image::HDRData& hdr)
         {
@@ -230,97 +259,101 @@ namespace tl
                         math::FloatRange(min_luma, max_luma);
                 }
             }
-        
-        raw = get_side_data_raw(frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
-        if (raw)
-        {
-            out = true;
-            auto data = reinterpret_cast<AVContentLightMetadata*>(raw);
-            hdr.maxCLL = data->MaxCLL;
-            hdr.maxFALL = data->MaxFALL;
-        }
-        raw = get_side_data_raw(frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
-        if (raw)
-        {
-            out = true;
-            auto data = reinterpret_cast<AVDynamicHDRPlus*>(raw);
-            if (data->application_version < 2)
+
+            raw = get_side_data_raw(frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
+            if (raw)
             {
-                const AVHDRPlusColorTransformParams* p = data->params;
-                hdr.sceneMax[0] = 10000.F * av_q2d(p->maxscl[0]);
-                hdr.sceneMax[1] = 10000.F * av_q2d(p->maxscl[1]);
-                hdr.sceneMax[2] = 10000.F * av_q2d(p->maxscl[2]);
-                hdr.sceneAvg = 10000.F * av_q2d(p->average_maxrgb);
+                out = true;
+                auto data = reinterpret_cast<AVContentLightMetadata*>(raw);
+                hdr.maxCLL = data->MaxCLL;
+                hdr.maxFALL = data->MaxFALL;
+            }
 
-                
-                float histogramMax = 0.F;
-                
-                for (int i = 0;
-                     i < p->num_distribution_maxrgb_percentiles; i++)
+            raw = get_side_data_raw(frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
+            if (raw)
+            {
+                out = true;
+                auto data = reinterpret_cast<AVDynamicHDRPlus*>(raw);
+                if (data->application_version < 2)
                 {
-                    float value = av_q2d(p->distribution_maxrgb[i].percentile);
-                    if (value > histogramMax)
-                        histogramMax = value;
-                }
+                    const AVHDRPlusColorTransformParams* p = data->params;
+                    hdr.sceneMax[0] = 10000.F * av_q2d(p->maxscl[0]);
+                    hdr.sceneMax[1] = 10000.F * av_q2d(p->maxscl[1]);
+                    hdr.sceneMax[2] = 10000.F * av_q2d(p->maxscl[2]);
+                    hdr.sceneAvg = 10000.F * av_q2d(p->average_maxrgb);
 
-                histogramMax *= 10000.F;
-                if (!hdr.sceneMax[0])
-                    hdr.sceneMax[0] = histogramMax;
-                if (!hdr.sceneMax[1])
-                    hdr.sceneMax[1] = histogramMax;
-                if (!hdr.sceneMax[2])
-                    hdr.sceneMax[2] = histogramMax;
 
-                if (p->tone_mapping_flag == 1)
-                {
-                    hdr.ootf.targetLuma = av_q2d(
-                        data->targeted_system_display_maximum_luminance);
-                    hdr.ootf.kneeX = av_q2d(p->knee_point_x);
-                    hdr.ootf.kneeY = av_q2d(p->knee_point_y);
-                    if (p->num_bezier_curve_anchors < 16)
+                    float histogramMax = 0.F;
+
+                    for (int i = 0;
+                         i < p->num_distribution_maxrgb_percentiles; i++)
                     {
-                        hdr.ootf.numAnchors =
-                            p->num_bezier_curve_anchors;
-                        for (int i = 0; i < hdr.ootf.numAnchors; ++i)
-                            hdr.ootf.anchors[i] =
-                                av_q2d(p->bezier_curve_anchors[i]);
+                        float value = av_q2d(p->distribution_maxrgb[i].percentile);
+                        if (value > histogramMax)
+                            histogramMax = value;
+                    }
+
+                    histogramMax *= 10000.F;
+                    if (!hdr.sceneMax[0])
+                        hdr.sceneMax[0] = histogramMax;
+                    if (!hdr.sceneMax[1])
+                        hdr.sceneMax[1] = histogramMax;
+                    if (!hdr.sceneMax[2])
+                        hdr.sceneMax[2] = histogramMax;
+
+                    if (p->tone_mapping_flag == 1)
+                    {
+                        hdr.ootf.targetLuma = av_q2d(
+                            data->targeted_system_display_maximum_luminance);
+                        hdr.ootf.kneeX = av_q2d(p->knee_point_x);
+                        hdr.ootf.kneeY = av_q2d(p->knee_point_y);
+                        if (p->num_bezier_curve_anchors < 16)
+                        {
+                            hdr.ootf.numAnchors =
+                                p->num_bezier_curve_anchors;
+                            for (int i = 0; i < hdr.ootf.numAnchors; ++i)
+                                hdr.ootf.anchors[i] =
+                                    av_q2d(p->bezier_curve_anchors[i]);
+                        }
                     }
                 }
             }
-        }
-        raw = get_side_data_raw(frame, AV_FRAME_DATA_DOVI_METADATA);
-        if (raw)
-        {
-            out = true;
 
-            const AVDOVIMetadata* metadata = reinterpret_cast<AVDOVIMetadata *>(raw);
-            const AVDOVIRpuDataHeader* header = av_dovi_get_header(metadata);
-            if (header->disable_residual_flag)
+#ifdef TLRENDER_DOVI
+            raw = get_side_data_raw(frame, AV_FRAME_DATA_DOVI_METADATA);
+            if (raw)
             {
-                const AVDOVIColorMetadata *dovi_color;
-                dovi_color = av_dovi_get_color(metadata);
-                hdr.eotf = image::EOTF_BT2020;
-                hdr.isDolbyVision = true;
-                float min_luma = dolby_rescale(dovi_color->source_min_pq / 4095.0f);
-                float max_luma = dolby_rescale(dovi_color->source_max_pq / 4095.0f);
-                hdr.displayMasteringLuminance = math::FloatRange(min_luma, max_luma);
-                const AVDOVIDmData *dovi_ext;
-                if ((dovi_ext = av_dovi_find_level(metadata, 1))) {
-                    hdr.maxPQY = dovi_ext->l1.max_pq / 4095.0f;
-                    hdr.avgPQY = dovi_ext->l1.avg_pq / 4095.0f;
+                out = true;
+
+                const AVDOVIMetadata* metadata = reinterpret_cast<AVDOVIMetadata *>(raw);
+                const AVDOVIRpuDataHeader* header = av_dovi_get_header(metadata);
+                if (header->disable_residual_flag)
+                {
+                    const AVDOVIColorMetadata *dovi_color;
+                    dovi_color = av_dovi_get_color(metadata);
+                    hdr.eotf = image::EOTF_BT2020;
+                    hdr.isDolbyVision = true;
+                    float min_luma = dolby_rescale(dovi_color->source_min_pq / 4095.0f);
+                    float max_luma = dolby_rescale(dovi_color->source_max_pq / 4095.0f);
+                    hdr.displayMasteringLuminance = math::FloatRange(min_luma, max_luma);
+                    const AVDOVIDmData *dovi_ext;
+                    if ((dovi_ext = av_dovi_find_level(metadata, 1))) {
+                        hdr.maxPQY = dovi_ext->l1.max_pq / 4095.0f;
+                        hdr.avgPQY = dovi_ext->l1.avg_pq / 4095.0f;
+                    }
+                }
+
+                AVFrameSideData* sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DOVI_RPU_BUFFER);
+                if (sd)
+                {
+                    hdr.isDolbyVision = true;
+                    hdr_metadata_from_dovi_rpu(hdr, sd->buf->data, sd->buf->size);
                 }
             }
+#endif
 
-            AVFrameSideData* sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DOVI_RPU_BUFFER);
-            if (sd)
-            {
-                hdr.isDolbyVision = true;
-                hdr_metadata_from_dovi_rpu(hdr, sd->buf->data, sd->buf->size);
-            }
+            return out;
         }
-
-        return out;
-    }
 
         audio::DataType toAudioType(AVSampleFormat value)
         {
@@ -444,98 +477,317 @@ namespace tl
             return std::string(buf);
         }
 
-        std::weak_ptr<log::System> Plugin::_logSystemWeak;
+        std::weak_ptr<log::System> ReadPlugin::_logSystemWeak;
 
-        void Plugin::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        struct ReadPlugin::Private
         {
-            IPlugin::_init(
-                "FFmpeg",
-                {// Video Formats
-                 {".avi", io::FileType::Movie},
-                 {".avif", io::FileType::Movie},
-                 {".divx", io::FileType::Movie},
-                 {".dv", io::FileType::Movie},
-                 {".flv", io::FileType::Movie},
-                 {".gif", io::FileType::Movie},
-                 {".heic", io::FileType::Movie},
-                 {".heif", io::FileType::Movie},
-                 {".m4v", io::FileType::Movie},
-                 {".mkv", io::FileType::Movie},
-                 {".mk3d", io::FileType::Movie},
-                 {".mov", io::FileType::Movie},
-                 {".mp4", io::FileType::Movie},
-                 {".mpg", io::FileType::Movie},
-                 {".mpeg", io::FileType::Movie},
-                 {".mpeg2", io::FileType::Movie},
-                 {".mpeg3", io::FileType::Movie},
-                 {".mpeg4", io::FileType::Movie},
-                 {".mxf", io::FileType::Movie},
-                 {".ts", io::FileType::Movie},
-                 {".vp9", io::FileType::Movie},
-                 {".y4m", io::FileType::Movie},
-                 {".webm", io::FileType::Movie},
-                 {".webp", io::FileType::Movie},
-                 {".wmv", io::FileType::Movie},
-                 
-                 // Audio Formats
-                 {".aiff", io::FileType::Audio},
-                 {".mka", io::FileType::Audio},
-                 {".m4a", io::FileType::Audio},
-                 {".mp3", io::FileType::Audio},
-                 {".ogg", io::FileType::Audio},
-                 {".opus", io::FileType::Audio},
-                 {".vorbis", io::FileType::Audio},
-                 {".wav", io::FileType::Audio}},
-                cache, logSystem);
+            std::vector<AVCodecID> codecIds;
+            std::vector<std::string> codecNames;
+        };
+
+        void ReadPlugin::_init(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            TLRENDER_P();
+
+            // Get codecs.
+            const AVCodec* avCodec = nullptr;
+            void* avCodecIterate = nullptr;
+            while ((avCodec = av_codec_iterate(&avCodecIterate)))
+            {
+                if ((AVMEDIA_TYPE_VIDEO == avCodec->type ||
+                     AVMEDIA_TYPE_AUDIO == avCodec->type) &&
+                    av_codec_is_decoder(avCodec))
+                {
+                    p.codecIds.push_back(avCodec->id);
+                    p.codecNames.push_back(avCodec->name);
+                }
+            }
+
+            // Get formats.
+            std::map<std::string, io::FileType> extensions;
+
+            const AVInputFormat* avInputFormat = nullptr;
+            void* avInputFormatIterate = nullptr;
+            std::vector<std::string> formatLog;
+            while ((avInputFormat = av_demuxer_iterate(&avInputFormatIterate)))
+            {
+                if (avInputFormat->extensions)
+                {
+                    for (auto extension : string::split(avInputFormat->extensions, ','))
+                    {
+                        if (!extension.empty() && extension[0] != '.')
+                        {
+                            extension.insert(0, ".");
+                        }
+                        //extensions[extension] = FileType::Media;
+                    }
+                    formatLog.push_back(string::Format("{0} ({1})").
+                                        arg(avInputFormat->name).
+                                        arg(avInputFormat->extensions));
+                }
+            }
+
+            // Video Formats (done manually to avoid things like .png getting
+            // added here).
+            extensions[".avi"] = io::FileType::Movie;
+            extensions[".avif"] = io::FileType::Movie;
+            extensions[".divx"] = io::FileType::Movie;
+            extensions[".dv"] = io::FileType::Movie;
+            extensions[".flv"] = io::FileType::Movie;
+            extensions[".gif"] = io::FileType::Movie;
+            extensions[".heic"] = io::FileType::Movie;
+            extensions[".heif"] = io::FileType::Movie;
+            extensions[".m4v"] = io::FileType::Movie;
+            extensions[".mkv"] = io::FileType::Movie;
+            extensions[".mk3d"] = io::FileType::Movie;
+            extensions[".mov"] = io::FileType::Movie;
+            extensions[".mp4"] = io::FileType::Movie;
+            extensions[".mpg"] = io::FileType::Movie;
+            extensions[".mpeg"] = io::FileType::Movie;
+            extensions[".mpeg2"] = io::FileType::Movie;
+            extensions[".mpeg3"] = io::FileType::Movie;
+            extensions[".mpeg4"] = io::FileType::Movie;
+            extensions[".mxf"] = io::FileType::Movie;
+            extensions[".ts"] = io::FileType::Movie;
+            extensions[".vp9"] = io::FileType::Movie;
+            extensions[".y4m"] = io::FileType::Movie;
+            extensions[".webm"] = io::FileType::Movie;
+            extensions[".webp"] = io::FileType::Movie;
+            extensions[".wmv"] = io::FileType::Movie;
+
+            // Audio Formats
+            extensions[".aiff"] = io::FileType::Audio;
+            extensions[".mka"] = io::FileType::Audio;
+            extensions[".m4a"] = io::FileType::Audio;
+            extensions[".mp3"] = io::FileType::Audio;
+            extensions[".ogg"] = io::FileType::Audio;
+            extensions[".opus"] = io::FileType::Audio;
+            extensions[".vorbis"] = io::FileType::Audio;
+            extensions[".wav"] = io::FileType::Audio;
+
+            IReadPlugin::_init("FFmpeg", extensions, logSystem);
 
             _logSystemWeak = logSystem;
             // av_log_set_level(AV_LOG_QUIET);
             av_log_set_level(AV_LOG_WARNING);
+            // av_log_set_level(AV_LOG_DEBUG);
             av_log_set_callback(_logCallback);
 
-            const AVCodec* avCodec = nullptr;
-            void* avCodecIterate = nullptr;
-            std::vector<std::string> codecNames;
-            while ((avCodec = av_codec_iterate(&avCodecIterate)))
-            {
-                codecNames.push_back(avCodec->name);
-            }
-            // std::cout << string::join(codecNames, ", ") << std::endl;
-            if (auto logSystem = _logSystemWeak.lock())
-            {
-                logSystem->print(
-                    "tl::io::ffmpeg::Plugin",
-                    "Codecs: " + string::join(codecNames, ", "));
-            }
+            logSystem->print(
+                "tl::ffmpeg::ReadPlugin",
+                string::Format(
+                    "\n"
+                    "    * Codecs: {0}\n"
+                    "    * Formats: {1}").
+                arg(string::join(p.codecNames, ", ")).
+                arg(string::join(formatLog, ", ")));
         }
 
-        Plugin::Plugin() {}
-
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        ReadPlugin::ReadPlugin() :
+            _p(new Private)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(cache, logSystem);
+        }
+
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::shared_ptr<io::IVideoRead>
+        ReadPlugin::videoRead(const file::Path& path, const io::Options& options)
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return VideoRead::create(path, options, _logSystem.lock());
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
+        std::shared_ptr<io::IVideoRead> ReadPlugin::videoRead(
             const file::Path& path, const std::vector<file::MemoryRead>& memory,
             const io::Options& options)
         {
-            return Read::create(path, memory, options, _cache, _logSystem);
+            return VideoRead::create(path, memory, options, _logSystem.lock());
         }
 
-        image::Info Plugin::getWriteInfo(
+        std::shared_ptr<io::IAudioRead> ReadPlugin::audioRead(
+            const file::Path& path,
+            const io::Options& options)
+        {
+            return AudioRead::create(path, options, _logSystem.lock());
+        }
+
+        std::shared_ptr<io::IAudioRead> ReadPlugin::audioRead(
+            const file::Path& path,
+            const std::vector<file::MemoryRead>& memory,
+            const io::Options& options)
+        {
+            return AudioRead::create(path, memory, options, _logSystem.lock());
+        }
+
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
+        {
+            return FFMPEG_VERSION;
+        }
+
+        void
+        ReadPlugin::_logCallback(void* avcl, int level, const char* fmt, va_list vl)
+        {
+            // Filter out verbose messages early
+            if (level == AV_LOG_VERBOSE || !fmt)
+                return;
+
+            if (auto logSystem = _logSystemWeak.lock())
+            {
+                // 1. Safely format the FFmpeg message itself (without the
+                //    prefix
+                char messageBuf[string::cBufferSize];
+                messageBuf[string::cBufferSize - 1] = 0;
+                vsnprintf(messageBuf, string::cBufferSize, fmt, vl);
+
+                std::string finalMessage = string::removeTrailingNewlines(messageBuf);
+
+                // 2. Safely extract the context name
+                std::string prefix = "";
+                if (avcl)
+                {
+                    AVClass* avc = *(AVClass**)avcl;
+                    // Safely check the function pointer BEFORE invoking it
+                    if (avc && avc->item_name)
+                    {
+                        const char* itemName = avc->item_name(avcl);
+                        prefix = std::string("(") + (itemName ? itemName : "Unknown") + ") ";
+                    }
+                    else
+                    {
+                        prefix = "(Unknown) ";
+                    }
+                }
+
+                finalMessage = prefix + finalMessage;
+
+                // 3. Thread-safe deduplication
+                if (level < AV_LOG_INFO)
+                {
+                    static std::string lastMessage;
+                    static std::mutex logMutex;
+
+                    std::lock_guard<std::mutex> lock(logMutex);
+                    if (finalMessage == lastMessage)
+                        return;
+                    lastMessage = finalMessage;
+                }
+
+                // 4. Dispatch to the logging system
+                switch (level)
+                {
+                case AV_LOG_PANIC:
+                case AV_LOG_FATAL:
+                case AV_LOG_ERROR:
+                    logSystem->print("tl::io::ffmpeg::Plugin", finalMessage, log::Type::Error, "ffmpeg");
+                    break;
+                case AV_LOG_WARNING:
+                    logSystem->print("tl::io::ffmpeg::Plugin", finalMessage, log::Type::Warning, "ffmpeg");
+                    break;
+                case AV_LOG_INFO:
+                    logSystem->print("tl::io::ffmpeg::Plugin", finalMessage, log::Type::Message, "ffmpeg");
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+
+        std::weak_ptr<log::System> WritePlugin::_logSystemWeak;
+
+        struct WritePlugin::Private
+        {
+            std::vector<AVCodecID>   codecIds;
+            std::vector<std::string> codecNames;
+            std::vector<AVCodecID>   audioCodecIds;
+            std::vector<std::string> audioCodecNames;
+        };
+
+        WritePlugin::WritePlugin() :
+            _p(new Private)
+        {}
+
+        void WritePlugin::_init(const std::shared_ptr<log::System>& logSystem)
+        {
+            TLRENDER_P();
+
+            // Get codecs.
+            const AVCodec* avCodec = nullptr;
+            void* avCodecIterate = nullptr;
+            while ((avCodec = av_codec_iterate(&avCodecIterate)))
+            {
+                if (!avCodec->name)
+                    continue;
+                if (AVMEDIA_TYPE_VIDEO == avCodec->type && av_codec_is_encoder(avCodec))
+                {
+                    p.codecIds.push_back(avCodec->id);
+                    p.codecNames.push_back(avCodec->name);
+                }
+                else if (AVMEDIA_TYPE_AUDIO == avCodec->type && av_codec_is_encoder(avCodec))
+                {
+                    p.audioCodecIds.push_back(avCodec->id);
+                    p.audioCodecNames.push_back(avCodec->name);
+                }
+            }
+
+            // Get formats.
+            std::map<std::string, io::FileType> extensions;
+            const AVOutputFormat* avOutputFormat = nullptr;
+            void* avOutputFormatIterate = nullptr;
+            std::vector<std::string> formatLog;
+            while ((avOutputFormat = av_muxer_iterate(&avOutputFormatIterate)))
+            {
+                if (avOutputFormat->extensions)
+                {
+                    for (auto extension : string::split(avOutputFormat->extensions, ','))
+                    {
+                        if (!extension.empty() && extension[0] != '.')
+                        {
+                            extension.insert(0, ".");
+                        }
+                        extensions[extension] = io::FileType::Movie;
+                    }
+                    formatLog.push_back(string::Format("{0} ({1})").arg(avOutputFormat->name).arg(avOutputFormat->extensions));
+                }
+            }
+
+            // Audio Formats
+            extensions[".aiff"] = io::FileType::Audio;
+            extensions[".wav"] = io::FileType::Audio;
+
+            IWritePlugin::_init("FFmpeg", extensions, logSystem);
+
+            logSystem->print(
+                "tl::ffmpeg::WritePlugin",
+                string::Format(
+                    "\n"
+                    "    * Codecs: {0}\n"
+                    "    * Audio codecs: {1}\n"
+                    "    * Formats: {2}").
+                arg(string::join(p.codecNames, ", ")).
+                arg(string::join(p.audioCodecNames, ", ")).
+                arg(string::join(formatLog, ", ")));
+        }
+
+        std::shared_ptr<WritePlugin> WritePlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<WritePlugin>(new WritePlugin);
+            out->_init(logSystem);
+            return out;
+        }
+
+        std::string WritePlugin::getPluginInfo(const io::Options&) const
+        {
+            return FFMPEG_VERSION;
+        }
+
+        image::Info WritePlugin::getInfo(
             const image::Info& info, const io::Options& options) const
         {
             image::Info out;
@@ -564,78 +816,16 @@ namespace tl
             return out;
         }
 
-        std::shared_ptr<io::IWrite> Plugin::write(
+        std::shared_ptr<io::IWrite> WritePlugin::write(
             const file::Path& path, const io::Info& info,
             const io::Options& options)
         {
             if (!info.video.empty() &&
-                !_isWriteCompatible(info.video[0], options))
+                !_isCompatible(info.video[0], options))
                 throw std::runtime_error(string::Format("{0}: {1}")
                                              .arg(path.get())
-                                             .arg("Unsupported video"));
-            return Write::create(path, info, options, _logSystem);
-        }
-
-        void
-        Plugin::_logCallback(void* avcl, int level, const char* fmt, va_list vl)
-        {
-            static std::string lastMessage;
-            std::string format;
-
-            if (level != AV_LOG_VERBOSE)
-            {
-                AVClass* avc = avcl ? *(AVClass**)avcl : NULL;
-                if (avc)
-                {
-                    format = "(";
-                    format += avc->item_name(avcl);
-                    format += ") ";
-                }
-                format += fmt;
-            }
-
-            if (level != AV_LOG_VERBOSE)
-            {
-                if (auto logSystem = _logSystemWeak.lock())
-                {
-                    char buf[string::cBufferSize];
-                    vsnprintf(buf, string::cBufferSize, format.c_str(), vl);
-
-                    const std::string& message =
-                        string::removeTrailingNewlines(buf);
-
-                    if (level < AV_LOG_INFO)
-                    {
-                        if (message == lastMessage)
-                            return;
-
-                        lastMessage = message;
-                    }
-
-                    switch (level)
-                    {
-                    case AV_LOG_PANIC:
-                    case AV_LOG_FATAL:
-                    case AV_LOG_ERROR:
-                        logSystem->print(
-                            "tl::io::ffmpeg::Plugin", message, log::Type::Error,
-                            "ffmpeg");
-                        break;
-                    case AV_LOG_WARNING:
-                        logSystem->print(
-                            "tl::io::ffmpeg::Plugin", message,
-                            log::Type::Warning, "ffmpeg");
-                        break;
-                    case AV_LOG_INFO:
-                        logSystem->print(
-                            "tl::io::ffmpeg::Plugin", message,
-                            log::Type::Message, "ffmpeg");
-                        break;
-                    default:
-                        break;
-                    }
-                }
-            }
+                                             .arg("Unsupported video depth"));
+            return Write::create(path, info, options, _logSystem.lock());
         }
     } // namespace ffmpeg
 } // namespace tl

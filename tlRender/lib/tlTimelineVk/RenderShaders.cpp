@@ -27,7 +27,7 @@ void main()
 {
     fNormal = vNormal;
     fPosition = vPos;
-    gl_Position = transform.mvp * vec4(vPos, 1.0);   
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
 })";
         }
 
@@ -36,11 +36,11 @@ void main()
             return R"(#version 450
 layout(location = 0) in vec3 fPos;
 layout(location = 0) out vec4 outColor;
-                  
+
 layout(push_constant) uniform PushConstants {
     vec4 color;
-} pc;       
-                 
+} pc;
+
 void main()
 {
     vec3 dx = dFdx(fPos);
@@ -61,7 +61,7 @@ void main()
     outColor = vec4(finalColor, pc.color.a);
 })";
         }
-        
+
         std::string vertexPBR()
         {
             return R"(#version 450
@@ -138,7 +138,7 @@ void main() {
 
 )";
         }
-        
+
         std::string vertexUSD()
         {
             return R"(#version 450
@@ -160,7 +160,7 @@ void main()
     fPos = vPos;
 })";
         }
-        
+
         std::string fragmentUSD()
         {
             return R"(#version 450
@@ -175,11 +175,11 @@ layout(binding = 5) uniform sampler2D u_AOMap;
 layout(binding = 6) uniform sampler2D u_OpacityMap;
 
 layout(location = 0) out vec4 outColor;
-                  
+
 layout(push_constant) uniform PushConstants {
     vec4 color;
-} pc;       
-                 
+} pc;
+
 // ─────────────────────────────────────────────
 //  Constants
 // ─────────────────────────────────────────────
@@ -290,7 +290,7 @@ void main()
     float dist     = length(u_Scene_lightPos - fPos);
     float atten    = 1.0 / (dist * dist);          // inverse-square falloff
     vec3  radiance = u_Scene_lightColor; // * atten;
- 
+
     vec3 Lo = (diffuse + specular) * radiance * NdotL;
 
     // Simple ambient term, attenuated by AO ( was 0.03)
@@ -317,7 +317,7 @@ void main()
     // VERIFIED: diffuse is correct for metallic
     //outColor = vec4(diffuse, opacity);
 
-    // VERIFIED: specular is correct 
+    // VERIFIED: specular is correct
     // outColor = vec4(specular, opacity);
 
     // VERIFIED: opacity works correctly.
@@ -327,7 +327,7 @@ void main()
 
 })";
         }
-        
+
         std::string vertexSTs()
         {
             return R"(#version 450
@@ -354,17 +354,17 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 1) in vec3 inPosition;
 layout(location = 0) out vec4 outColor;
-                  
+
 layout(push_constant) uniform PushConstants {
     vec4 color;
-} pc;       
-                 
+} pc;
+
 void main()
 {
       outColor = vec4(fTexture.r, fTexture.g, 0, 1);
 })";
         }
-        
+
         std::string vertexSource()
         {
             return R"(#version 450
@@ -415,18 +415,18 @@ void main()
     gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
 })";
         }
-        
+
         std::string meshFragmentSource()
         {
             return R"(#version 450
-                   
+
 layout(location = 0) in  vec2 fTexture;
 layout(location = 0) out vec4 outColor;
-                  
+
 layout(push_constant) uniform PushConstants {
     vec4 color;
-} pc;       
-                 
+} pc;
+
 void main()
 {
      outColor = pc.color;
@@ -436,7 +436,7 @@ void main()
         std::string colorMeshVertexSource()
         {
             return R"(#version 450
-                 
+
 layout(location = 0) in vec2 vPos;
 layout(location = 1) in vec4 vColor;
 layout(location = 0) out vec4 fColor;
@@ -444,7 +444,7 @@ layout(location = 0) out vec4 fColor;
 layout(set = 0, binding = 0, std140) uniform TransformUBO {
     mat4 mvp;
 } transform;
-                 
+
 void main()
 {
     gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
@@ -455,13 +455,13 @@ void main()
         std::string colorMeshFragmentSource()
         {
             return R"(#version 450
-                 
+
 layout(location = 0) in vec4 fColor;
 layout(location = 0) out vec4 outColor;
-                 
+
 layout(push_constant) uniform PushConstants {
     vec4 color;
-} pc; 
+} pc;
 
 void main()
 {
@@ -472,16 +472,16 @@ void main()
         std::string textFragmentSource()
         {
             return R"(#version 450
-                 
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
 layout(binding = 1) uniform sampler2D textureSampler;
-                 
+
 layout(push_constant) uniform PushConstants {
     vec4 color;
 } pc;
-                 
+
 void main()
 {
      outColor.r = pc.color.r;
@@ -494,7 +494,7 @@ void main()
         std::string textureFragmentSource()
         {
             return R"(#version 450
-                 
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
@@ -503,7 +503,7 @@ layout(binding = 1) uniform sampler2D textureSampler;
 layout(push_constant) uniform PushConstants {
     vec4 color;
 } pc;
-                 
+
 void main()
 {
      outColor = texture(textureSampler, fTexture); // * pc.color;
@@ -512,62 +512,73 @@ void main()
 
         const std::string videoLevels = R"(
 // enum tl::image::VideoLevels
-const uint VideoLevels_FullRange  = 0;
-const uint VideoLevels_LegalRange = 1;
+const int VideoLevels_FullRange  = 0;
+const int VideoLevels_LegalRange = 1;
 )";
+
 
         std::string imageFragmentSource()
         {
             return R"(#version 450
-                                
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
-                                
+
 // enum tl::image::PixelType
-const uint PixelType_None              = 0;
-const uint PixelType_L_U8              = 1;
-const uint PixelType_L_U16             = 2;
-const uint PixelType_L_U32             = 3;
-const uint PixelType_L_F16             = 4;
-const uint PixelType_L_F32             = 5;
+const int PixelType_None              = 0;
+const int PixelType_L_U8              = 1;
+const int PixelType_L_U16             = 2;
+const int PixelType_L_U32             = 3;
+const int PixelType_L_F16             = 4;
+const int PixelType_L_F32             = 5;
 
-const uint PixelType_LA_U8             = 6;
-const uint PixelType_LA_U32            = 7;
-const uint PixelType_LA_U16            = 8;
-const uint PixelType_LA_F16            = 9;
-const uint PixelType_LA_F32            = 10;
+const int PixelType_LA_U8             = 6;
+const int PixelType_LA_U16            = 7;
+const int PixelType_LA_U32            = 8;
+const int PixelType_LA_F16            = 9;
+const int PixelType_LA_F32            = 10;
 
-const uint PixelType_RGB_U8            = 11;
-const uint PixelType_RGB_U10           = 12;
-const uint PixelType_RGB_U16           = 13;
-const uint PixelType_RGB_U32           = 14;
-const uint PixelType_RGB_F16           = 15;
-const uint PixelType_RGB_F32           = 16;
+const int PixelType_RGB_U8            = 11;
+const int PixelType_RGB_U10           = 12;
+const int PixelType_RGB_U16           = 13;
+const int PixelType_RGB_U32           = 14;
+const int PixelType_RGB_F16           = 15;
+const int PixelType_RGB_F32           = 16;
 
-const uint PixelType_RGBA_U8           = 17;
-const uint PixelType_RGBA_U16          = 18;
-const uint PixelType_RGBA_U32          = 19;
-const uint PixelType_RGBA_F16          = 20;
-const uint PixelType_RGBA_F32          = 21;
+const int PixelType_RGBA_U8           = 17;
+const int PixelType_RGBA_U16          = 18;
+const int PixelType_RGBA_U32          = 19;
+const int PixelType_RGBA_F16          = 20;
+const int PixelType_RGBA_F32          = 21;
 
-const uint PixelType_YUV_420P_U8       = 22;
-const uint PixelType_YUV_422P_U8       = 23;
-const uint PixelType_YUV_444P_U8       = 24;
+const int PixelType_YUV_420P_U8       = 22;
+const int PixelType_YUV_422P_U8       = 23;
+const int PixelType_YUV_444P_U8       = 24;
 
-const uint PixelType_YUV_420P_U10      = 25;
-const uint PixelType_YUV_422P_U10      = 26;
-const uint PixelType_YUV_444P_U10      = 27;
+const int PixelType_YUV_420P_U10      = 25;
+const int PixelType_YUV_422P_U10      = 26;
+const int PixelType_YUV_444P_U10      = 27;
 
-const uint PixelType_YUV_420P_U12      = 28;
-const uint PixelType_YUV_422P_U12      = 29;
-const uint PixelType_YUV_444P_U12      = 30;
+const int PixelType_YUV_420P_U12      = 28;
+const int PixelType_YUV_422P_U12      = 29;
+const int PixelType_YUV_444P_U12      = 30;
 
-const uint PixelType_YUV_420P_U16      = 31;
-const uint PixelType_YUV_422P_U16      = 32;
-const uint PixelType_YUV_444P_U16      = 33;
+const int PixelType_YUV_420P_U16      = 31;
+const int PixelType_YUV_422P_U16      = 32;
+const int PixelType_YUV_444P_U16      = 33;
 
-const uint PixelType_ARGB_4444_Premult = 34;
-                                
+const int PixelType_YUV_420SP_U8      = 34;
+const int PixelType_YUV_420SP_U16     = 35;
+
+const int PixelType_YUV_422SP_U8      = 36;
+const int PixelType_YUV_422SP_U16     = 37;
+
+const int PixelType_YUV_444SP_U8      = 38;
+const int PixelType_YUV_444SP_U16     = 39;
+
+const int PixelType_ARGB_4444_Premult = 40;
+
+
 // enum tl::image::VideoLevels
 const uint VideoLevels_FullRange  = 0;
 const uint VideoLevels_LegalRange = 1;
@@ -588,7 +599,10 @@ float getBitDepth(int pixelType)
     }
     else if (pixelType == PixelType_YUV_420P_U16 ||
              pixelType == PixelType_YUV_422P_U16 ||
-             pixelType == PixelType_YUV_444P_U16)
+             pixelType == PixelType_YUV_444P_U16 ||
+             pixelType == PixelType_YUV_444SP_U16 ||
+             pixelType == PixelType_YUV_422SP_U16 ||
+             pixelType == PixelType_YUV_420SP_U16)
     {
         return 16.0;
     }
@@ -603,103 +617,112 @@ float getBitDepth(int pixelType)
 }
 
 vec4 sampleTexture(
-              vec2 textureCoord,
-              int pixelType,
-              int videoLevels,
-              vec4 yuvCoefficients,
-              int imageChannels,
-              sampler2D s0,
-              sampler2D s1,
-              sampler2D s2)
+    vec2 textureCoord,
+    int pixelType,
+    int videoLevels,
+    vec4 yuvCoefficients,
+    int imageChannels,
+    sampler2D s0,
+    sampler2D s1,
+    sampler2D s2)
 {
-       vec4 c;
+    vec4 c;
+    float y = 0; float cr = 0; float cb = 0;
 
-       if ((pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_ARGB_4444_Premult))
-       {
+    if (pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_444SP_U16)
+    {
+        // Check semi-Planar types first:
+        if (pixelType >= PixelType_YUV_420SP_U8 &&
+            pixelType <= PixelType_YUV_444SP_U16)
+        {
+            // Semi-Planar (NV12 / P010 / P016):
+            y  = texture(s0, textureCoord).r;
+            cb = texture(s1, textureCoord).r;
+            cr = texture(s1, textureCoord).g;
+        }
+        else
+        {
+            // Fully Planar (YUV 420P/422P/444P):
+            y  = texture(s0, textureCoord).r;
+            cb = texture(s1, textureCoord).r;
+            cr = texture(s2, textureCoord).r;
 
-          float y  = texture(s0, textureCoord).r;
-          float cb = texture(s1, textureCoord).r;
-          float cr = texture(s2, textureCoord).r;
+            // Normalize packed 10-bit / 12-bit in 16-bit textures
+            if (pixelType == PixelType_YUV_420P_U10 ||
+                pixelType == PixelType_YUV_422P_U10 ||
+                pixelType == PixelType_YUV_444P_U10)
+            {
+                float rangeScale = 1023.0 / 65535.0;
+                y  /= rangeScale;
+                cb /= rangeScale;
+                cr /= rangeScale;
+            }
+            else if (pixelType == PixelType_YUV_420P_U12 ||
+                     pixelType == PixelType_YUV_422P_U12 ||
+                     pixelType == PixelType_YUV_444P_U12)
+            {
+                float rangeScale = 4095.0 / 65535.0;
+                y  /= rangeScale;
+                cb /= rangeScale;
+                cr /= rangeScale;
+            }
+        }
 
-          // For 10-bit and 12-bit, ensure correct normalization
-          if (pixelType == PixelType_YUV_420P_U10 ||
-              pixelType == PixelType_YUV_422P_U10 ||
-              pixelType == PixelType_YUV_444P_U10)
-          {
-            // 
-            // 10-bit data may be packed in 16-bit textures, normalize to [0,1]
-            float rangeScale = 1023.0 / 65535.0; // 1023 = 2^10 - 1
-            y  = y / rangeScale; 
-            cb = cb / rangeScale;
-            cr = cr / rangeScale;
-          }
-          else if (pixelType == PixelType_YUV_420P_U12 ||
-                   pixelType == PixelType_YUV_422P_U12 ||
-                   pixelType == PixelType_YUV_444P_U12)
-          {
-            // 12-bit data may be packed in 16-bit textures, normalize to [0,1]
-            float rangeScale = 4095.0 / 65535.0; // 1023 = 2^10 - 1
-            y  = y / rangeScale; 
-            cb = cb / rangeScale;
-            cr = cr / rangeScale;
-          }
-
-          if (videoLevels == VideoLevels_FullRange)
-          {
+        // 2. Apply Video Levels (Full vs Legal Range)
+        if (videoLevels == VideoLevels_FullRange)
+        {
             cb -= 0.5;
             cr -= 0.5;
-          }
-          else if (videoLevels == VideoLevels_LegalRange)
-          {
-            float bitDepth = getBitDepth(pixelType); 
+        }
+        else if (videoLevels == VideoLevels_LegalRange)
+        {
+            float bitDepth = getBitDepth(pixelType);
             float maxValue = pow(2.0, bitDepth) - 1.0;
-            float range = pow(2.0, bitDepth - 8);
+            float range = pow(2.0, bitDepth - 8.0);
 
-            // Legal range scaling for YUV (ITU-R BT.601/BT.709)
-            float yMin = 16.0 * range;   // 16 << (bitDepth - 8)
-            float yMax = 235.0 * range;  // 235 << (bitDepth - 8)
-            float cMin = 16.0 * range;   // 16 << (bitDepth - 8)
-            float cMax = 240.0 * range;  // 240 << (bitDepth - 8)
-            
-            // Scale to 0-1 range and normalize
-            y = clamp((y * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
+            float yMin = 16.0 * range;
+            float yMax = 235.0 * range;
+            float cMin = 16.0 * range;
+            float cMax = 240.0 * range;
+
+            y  = clamp((y  * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
             cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
             cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
-          }
+        }
 
-          c.r = y + (yuvCoefficients.x * cr);
-          c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
-          c.b = y + (yuvCoefficients.w * cb);
-          c.a = 1.0;
-      }
-      else
-      {
+        // 3. YUV to RGB Matrix Transformation
+        c.r = y + (yuvCoefficients.x * cr);
+        c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
+        c.b = y + (yuvCoefficients.w * cb);
+        c.a = 1.0;
+    }
+    else
+    {
         c = texture(s0, textureCoord);
 
-        // Video levels.
         if (VideoLevels_LegalRange == videoLevels)
         {
-           c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
-           c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
-           c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+            c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
+            c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+            c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
         }
 
         if (1 == imageChannels)
         {
-           c.g = c.b = c.r;
-           c.a = 1.0;
+            c.g = c.b = c.r;
+            c.a = 1.0;
         }
         else if (2 == imageChannels)
         {
-           c.a = c.g;
-           c.g = c.b = c.r;
+            c.a = c.g;
+            c.g = c.b = c.r;
         }
         else if (3 == imageChannels)
         {
-           c.a = 1.0;
+            c.a = 1.0;
         }
-      }
-      return c;
+    }
+    return c;
 }
 
 layout(set = 0, binding = 1, std140) uniform UBO {
@@ -715,7 +738,7 @@ layout(set = 0, binding = 1, std140) uniform UBO {
 layout(binding = 2) uniform sampler2D textureSampler0;
 layout(binding = 3) uniform sampler2D textureSampler1;
 layout(binding = 4) uniform sampler2D textureSampler2;
-                                
+
 void main()
 {
     vec2 t = fTexture;
@@ -818,7 +841,7 @@ vec4 deband(sampler2D tex, vec2 pos) {
                 .arg(iterations)
                 .arg(grain);
         }
-        
+
         std::string displayFragmentSource(
             const std::string& ocioICSDef, const std::string& ocioICS,
             const std::string& ocioDef, const std::string& ocio,
@@ -854,7 +877,7 @@ vec4 deband(sampler2D tex, vec2 pos) {
                 break;
             }
             return string::Format(R"(#version 450
-                     
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
@@ -869,7 +892,7 @@ const uint Channels_Red   = 1;
 const uint Channels_Green = 2;
 const uint Channels_Blue  = 3;
 const uint Channels_Alpha = 4;
-const uint Channels_Luma = 5;
+const uint Channels_Luma  = 5;
 
 struct Levels
 {
@@ -963,26 +986,26 @@ vec4 softClipFunc(vec4 value, float softClip)
 {
     float tmp = 1.0 - softClip;
     if (value[0] > tmp)
-        value[0] = tmp + (1.0 - exp(-(value[0] - tmp) 
+        value[0] = tmp + (1.0 - exp(-(value[0] - tmp)
 / softClip)) * softClip;
     if (value[1] > tmp)
-        value[1] = tmp + (1.0 - exp(-(value[1] - tmp) 
+        value[1] = tmp + (1.0 - exp(-(value[1] - tmp)
 / softClip)) * softClip;
     if (value[2] > tmp)
-        value[2] = tmp + (1.0 - exp(-(value[2] - tmp) 
+        value[2] = tmp + (1.0 - exp(-(value[2] - tmp)
 / softClip)) * softClip;
     return value;
 }
 
 vec4 normalizeFunc(vec4 value, Normalize data)
 {
-    value[0] = (value[0] - data.minimum[0]) / 
+    value[0] = (value[0] - data.minimum[0]) /
 (data.maximum[0] - data.minimum[0]);
-    value[1] = (value[1] - data.minimum[1]) / 
+    value[1] = (value[1] - data.minimum[1]) /
 (data.maximum[1] - data.minimum[1]);
-    value[2] = (value[2] - data.minimum[2]) / 
+    value[2] = (value[2] - data.minimum[2]) /
 (data.maximum[2] - data.minimum[2]);
-    value[3] = (value[3] - data.minimum[3]) / 
+    value[3] = (value[3] - data.minimum[3]) /
 (data.maximum[3] - data.minimum[3]);
     return value;
 }
@@ -1119,13 +1142,13 @@ void main()
         std::string differenceFragmentSource()
         {
             return R"(#version 450
-                 
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
-                 
+
 layout(binding = 1) uniform sampler2D textureSampler;
 layout(binding = 2) uniform sampler2D textureSamplerB;
-                 
+
 void main()
 {
     vec4 c = texture(textureSampler, fTexture);
@@ -1140,13 +1163,13 @@ void main()
         std::string multiplyFragmentSource()
         {
             return R"(#version 450
-                 
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
-                 
+
 layout(binding = 1) uniform sampler2D textureSampler;
 layout(binding = 2) uniform sampler2D textureSamplerB;
-                 
+
 void main()
 {
     vec4 c = texture(textureSampler, fTexture);
@@ -1161,13 +1184,13 @@ void main()
         std::string addFragmentSource()
         {
             return R"(#version 450
-                 
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
-                 
+
 layout(binding = 1) uniform sampler2D textureSampler;
 layout(binding = 2) uniform sampler2D textureSamplerB;
-                 
+
 void main()
 {
     vec4 c = texture(textureSampler, fTexture);
@@ -1178,14 +1201,14 @@ void main()
     outColor.a = max(c.a, cB.a);
 })";
         }
-        
+
         std::string softFragmentSource()
         {
             return R"(#version 450
-              
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
-            
+
 layout(push_constant) uniform PushConstants {
     vec4 color;
 } pc;
@@ -1208,16 +1231,41 @@ void main()
 
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
-              
+
 layout(push_constant) uniform PushConstants {
     vec4 color;
 } pc;
-              
+
 void main()
 {
      fColor = pc.color;
 })";
+        }
+
+        std::string butterflyFragmentSource()
+        {
+            return R"(#version 450
+layout(location = 0) in vec2 fTexture;
+layout(location = 0) out vec4 outColor;
+
+layout(binding = 1) uniform sampler2D textureSampler;
+layout(binding = 2) uniform sampler2D textureSamplerB;
+
+void main()
+{
+    // The same half of both, the second one mirrored, so that
+    // the middle of the picture is on both sides of the seam.
+    if (fTexture.x < .5)
+    {
+        outColor = texture(textureSampler, fTexture);
     }
+    else
+    {
+        outColor = texture(textureSamplerB,
+                       vec2(1.0 - fTexture.x, fTexture.y));
+    }
+})";
+        }
 
         std::string computeRGB_F16_To_RGBA_F16()
         {
@@ -1241,7 +1289,7 @@ void main() {
         // Each pixel has 3 components of 16 bits = 48 bits total per pixel.
         // Total bits before this pixel = (y * width + x) * 48
         uint totalBits = (texelCoord.y * size.x + texelCoord.x) * 48;
-        
+
         // Find which 32-bit index the pixel starts at
         uint wordIdx = totalBits / 32;
         uint bitOffset = totalBits % 32;
@@ -1274,7 +1322,7 @@ void main() {
     }
 }
 )";
-        }    
+        }
 
         std::string computeRGB_F32_To_RGBA_F32()
         {
@@ -1317,7 +1365,7 @@ void main() {
 }
 )";
         }
-        
+
         std::string computeHDRPeakDetection()
         {
 #ifdef __APPLE__
@@ -1358,15 +1406,15 @@ void main() {
             void main() {
                 uvec2 pos = gl_GlobalInvocationID.xy;
                 uvec2 img_size = textureSize(img, 0);
-    
-                // SAFETY: All threads must reach the barrier. We use a boolean mask 
+
+                // SAFETY: All threads must reach the barrier. We use a boolean mask
                 // instead of an early 'return'.
                 bool valid = (pos.x < img_size.x && pos.y < img_size.y);
 
                 // 1. Initialize Shared Memory (All threads participate)
                 uint local_idx = gl_LocalInvocationIndex;
                 uint wg_size = gl_WorkGroupSize.x * gl_WorkGroupSize.y;
-    
+
                 if (local_idx == 0) {
                     wg_sum = 0;
                     wg_max = 0;
@@ -1375,7 +1423,7 @@ void main() {
                 for (uint i = local_idx; i < HIST_BINS; i += wg_size) {
                     wg_hist[i] = 0;
                 }
-    
+
                 // Barrier is safe because no thread returned early
                 barrier();
 
@@ -1386,14 +1434,14 @@ void main() {
                     vec3 color = texture(img, vec2(pos) / vec2(img_size)).rgb;
                     // Use MaxRGB for better peak detection (MoltenVK compatible)
                     float luma = max(color.r, max(color.g, color.b));
-        
+
                     // Manual PQ OETF (Linear 0..1 to PQ 0..1)
                     // Adjust these constants if your input scaling is different
                     luma = clamp(luma, 0.0, 1.0);
                     float l = pow(luma, 0.1593017578125);
                     l = (0.8359375 + 18.8515625 * l) / (1.0 + 18.6875 * l);
                     l = pow(l, 78.84375);
-        
+
                     y_pq = uint(l * PQ_MAX + 0.5);
                     is_active = (y_pq > 0);
                 }
@@ -1424,7 +1472,7 @@ void main() {
                 if (local_idx == 0) {
                     uint slice = (gl_WorkGroupID.y * gl_NumWorkGroups.x + gl_WorkGroupID.x) % SLICES;
                     atomicAdd(data.frame_wg_count[slice], 1u);
-        
+
                     if (wg_active_count > 0) {
                         atomicAdd(data.frame_wg_active[slice], 1u);
                         atomicAdd(data.frame_sum_pq[slice], wg_sum / wg_active_count);
@@ -1455,7 +1503,7 @@ void main() {
 #define HIST_BIAS 64
 #define HIST_BINS 64
 
-// Nvidia RTX 3080 has a warp size of 32. 
+// Nvidia RTX 3080 has a warp size of 32.
 // A 16x16 local size gives us exactly 8 warps per workgroup.
 layout(local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
 
@@ -1485,14 +1533,14 @@ shared uint wg_hist[HIST_BINS];
 void main() {
     uvec2 pos = gl_GlobalInvocationID.xy;
     uvec2 img_size = textureSize(img, 0);
-    
-    // On NVIDIA, early returns are fine as long as they don't bypass 
+
+    // On NVIDIA, early returns are fine as long as they don't bypass
     // a barrier that other threads in the same warp need.
     bool within_bounds = (pos.x < img_size.x && pos.y < img_size.y);
 
     uint local_idx = gl_LocalInvocationIndex;
     uint wg_size = gl_WorkGroupSize.x * gl_WorkGroupSize.y;
-    
+
     // 1. Fast Parallel Clear
     if (local_idx == 0) {
         wg_sum = 0;
@@ -1502,7 +1550,7 @@ void main() {
     for (uint i = local_idx; i < HIST_BINS; i += wg_size) {
         wg_hist[i] = 0;
     }
-    
+
     // Sync shared memory
     barrier();
 
@@ -1514,13 +1562,13 @@ void main() {
         // RTX 3080 handles max() extremely fast
         // float luma = dot(color, LUMA_COEFFS);  // Weighted for accuracy
         float luma = max(color.r, max(color.g, color.b));
-        
+
         // Fast PQ OETF approximation or full precision
         luma = clamp(luma, 0.0, 1.0);
         float l = pow(luma, 0.1593017578125);
         l = (0.8359375 + 18.8515625 * l) / (1.0 + 18.6875 * l);
         l = pow(l, 78.84375);
-        
+
         y_pq = uint(l * PQ_MAX + 0.5);
         is_active = (y_pq > 0);
     }
@@ -1553,9 +1601,9 @@ void main() {
     if (local_idx == 0) {
         // Use a modulo-based slice to distribute atomic pressure across the SSBO
         uint slice = (gl_WorkGroupID.y * gl_NumWorkGroups.x + gl_WorkGroupID.x) % SLICES;
-        
+
         atomicAdd(data.frame_wg_count[slice], 1u);
-        
+
         if (wg_active_count > 0) {
             atomicAdd(data.frame_wg_active[slice], 1u);
             // On high-end GPUs, we can calculate the average here

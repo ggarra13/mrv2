@@ -122,7 +122,7 @@ namespace mrv
                 r->value(0);
             r->tooltip(_("Turn off image warping."));
             rB->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
@@ -141,7 +141,7 @@ namespace mrv
                 r->value(0);
             r->tooltip(_("Wrap the image or images onto a sphere."));
             rB->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
@@ -160,7 +160,7 @@ namespace mrv
                 r->value(0);
             r->tooltip(_("Wrap the image or images onto a cube."));
             rB->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
@@ -214,7 +214,7 @@ namespace mrv
             s->step(0.01F);
             s->default_value(24.0f);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
@@ -230,7 +230,7 @@ namespace mrv
             s->step(0.1F);
             s->default_value(0.f);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
@@ -248,7 +248,7 @@ namespace mrv
             s->step(0.1F);
             s->default_value(45.f);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
@@ -307,7 +307,7 @@ namespace mrv
             view->setEnvironmentMapOptions(o);
 
             cB->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
@@ -323,7 +323,7 @@ namespace mrv
             s->range(-90.f, 90.0f);
             s->default_value(0.0f);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
@@ -338,7 +338,7 @@ namespace mrv
             s->range(-180.f, 180.0f);
             s->default_value(0.0f);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
@@ -396,7 +396,7 @@ namespace mrv
 
             s->default_value(v);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();
@@ -422,7 +422,7 @@ namespace mrv
 
             s->default_value(v);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto view = p.ui->uiView;
                     EnvironmentMapOptions o = view->getEnvironmentMapOptions();

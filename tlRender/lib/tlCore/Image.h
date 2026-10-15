@@ -53,10 +53,6 @@ namespace tl
             bool operator<(const Size&) const;
         };
 
-        //! Get a box with the given aspect ratio that fits within
-        //! the given box.
-        math::Box2i getBox(float aspect, const math::Box2i&);
-
         ///@}
 
         //! \name Pixel Types
@@ -98,15 +94,21 @@ namespace tl
             YUV_420P_U10,
             YUV_422P_U10,
             YUV_444P_U10,
-            
+
             YUV_420P_U12,
             YUV_422P_U12,
             YUV_444P_U12,
-            
+
             YUV_420P_U16,
             YUV_422P_U16,
             YUV_444P_U16,
 
+            YUV_420SP_U8,   //!< Semi-planar 4:2:0 8-bit (e.g. hardware-decoded NV12)
+            YUV_420SP_U16,  //!< Semi-planar 4:2:0 16-bit (e.g. hardware-decoded P010)
+            YUV_422SP_U8,   //!< Semi-planar 4:2:2 8-bit (e.g. hardware-decoded NV16)
+            YUV_422SP_U16,  //!< Semi-planar 4:2:2 16-bit (e.g. hardware-decoded P216)
+            YUV_444SP_U8,   //!< Semi-planar 4:4:4 8-bit (e.g. hardware-decoded NV16)
+            YUV_444SP_U16,  //!< Semi-planar 4:4:4 16-bit (e.g. hardware-decoded P216)
             ARGB_4444_Premult,
 
             Count,
@@ -267,6 +269,12 @@ namespace tl
             //! Is the information valid?
             bool isValid() const;
 
+            //! Get the aspect ratio.
+            float getAspect() const;
+
+            //! Get the number of bytes used to store an image.
+            size_t getByteCount() const;
+
             bool operator==(const Info&) const;
             bool operator!=(const Info&) const;
         };
@@ -359,7 +367,7 @@ namespace tl
 
             //! Fill in the image data with NANs or 255.
             void fill();
-            
+
             //! Get number of planes.
             int getPlaneCount() const
                 {
@@ -384,17 +392,17 @@ namespace tl
 
             //! Get total number of images.
             static size_t getObjectCount();
-            
+
         private:
             Info _info;
             Tags _tags;
             std::shared_ptr<HDRData>  _hdr;
-            
+
             std::shared_ptr<AVFrame> _avFrame;
             const uint8_t* _planes[3] = { nullptr, nullptr, nullptr };
             int _linesize[3] = { 0, 0, 0 };
             bool _planar = false;
-            
+
             uint8_t* _data = nullptr;
             size_t _dataByteCount = 0;
             bool _owns = false;

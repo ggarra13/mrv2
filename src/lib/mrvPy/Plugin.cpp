@@ -122,7 +122,7 @@ namespace mrv
     {
         std::unordered_map<std::string, std::string> plugins;
         std::vector<std::string> paths = python_plugin_paths();
-        
+
         std::string installed_plugins = mrv::rootpath() + "/python/plug-ins";
         if (fs::exists(installed_plugins))
             paths.push_back(installed_plugins);
@@ -153,21 +153,20 @@ namespace mrv
                 if (entry.is_regular_file() &&
                     fs::path(entry).extension() == kPattern)
                 {
-                    const std::string& file =
-                        entry.path().filename().u8string();
-                    if (plugins.find(file) != plugins.end())
+                    std::string fileName = file::fromFileSystem(entry.path().filename());
+                    if (plugins.find(fileName) != plugins.end())
                     {
                         /* xgettext:c++-format */
                         std::string err =
                             string::Format(_("Duplicated Python plugin {0} in "
                                              "{1} and {2}."))
-                            .arg(file)
+                            .arg(fileName)
                             .arg(path)
-                            .arg(plugins[file]);
+                            .arg(plugins[fileName]);
                         LOG_ERROR(err);
                         continue;
                     }
-                    plugins[file] = path;
+                    plugins[fileName] = path;
                 }
             }
         }
@@ -183,7 +182,7 @@ namespace mrv
         std::string installed_modules = mrv::rootpath() + "/python/";
         if (fs::exists(installed_modules))
             sysPath.attr("append")(installed_modules);
-        
+
         for (const auto& path : paths)
         {
             // Add the additional directory to the sys.path list

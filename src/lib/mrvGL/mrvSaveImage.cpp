@@ -45,7 +45,7 @@ namespace
 
 namespace mrv
 {
-    
+
     int _save_single_frame(
         std::string file, const ViewerUI* ui, SaveOptions options,
         const int32_t frameIndex)
@@ -73,6 +73,20 @@ namespace mrv
         bool saveHDR = string::compare(
             extension, ".hdr", string::Compare::CaseInsensitive);
 
+        timeline::OCIOOptions savedOCIOOptions;
+        bool restoreOCIOOptions = false;
+
+        if (saveEXR &&
+            options.exportMode == timeline::HDRExportMode::LinearHDR)
+        {
+            savedOCIOOptions = view->getOCIOOptions();
+            timeline::OCIOOptions ocioOptions = savedOCIOOptions;
+            restoreOCIOOptions = true;
+
+            ocioOptions.enabled = false;
+            view->setOCIOOptions(ocioOptions);
+        }
+
         try
         {
 
@@ -92,8 +106,8 @@ namespace mrv
             }
 #endif
 
-            otime::TimeRange oneFrameTimeRange(
-                currentTime, otime::RationalTime(1, currentTime.rate()));
+            OTIO_NS::TimeRange oneFrameTimeRange(
+                currentTime, OTIO_NS::RationalTime(1, currentTime.rate()));
 
             auto context = ui->app->getContext();
             auto timeline = player->timeline();
@@ -154,14 +168,14 @@ namespace mrv
                 LOG_STATUS(msg);
             }
 
-                    
+
             // Create the renderer.
             render = timeline_gl::Render::create(context);
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
 
             // Create the writer.
             auto writerPlugin =
-                context->getSystem<io::System>()->getPlugin(path);
+                context->getSystem<io::WriteSystem>()->getPlugin(path);
 
             if (!writerPlugin)
             {
@@ -175,7 +189,7 @@ namespace mrv
             io::Info ioInfo;
             image::Info outputInfo;
             outputInfo.size = renderSize;
-            
+
             auto tags = ui->uiView->getTags();
 
 
@@ -202,7 +216,7 @@ namespace mrv
                 }
                 if (options.exrSaveContents == SaveContents::kDisplayWindow)
                     dataWindow = displayWindow;
-                
+
                 outputInfo.size.w = dataWindow.max.x - dataWindow.min.x + 1;
                 outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
             }
@@ -320,8 +334,8 @@ namespace mrv
                       .arg(outputInfo.pixelType);
                 LOG_STATUS(msg);
             }
-            
-            outputInfo = writerPlugin->getWriteInfo(outputInfo);
+
+            outputInfo = writerPlugin->getInfo(outputInfo);
             if (image::PixelType::kNone == outputInfo.pixelType)
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
@@ -346,7 +360,7 @@ namespace mrv
                 outputInfo.pixelType = image::PixelType::RGB_F32;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
             }
-            
+
 #ifdef TLRENDER_EXR
             if (saveEXR)
             {
@@ -367,7 +381,7 @@ namespace mrv
             ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
             outputImage = image::Image::create(outputInfo);
-            
+
             ioInfo.video.push_back(outputInfo);
             ioInfo.videoTime = oneFrameTimeRange;
 
@@ -471,12 +485,12 @@ namespace mrv
 
                 glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-                
+
                 glReadPixels(
                     X, Y, outputInfo.size.w, outputInfo.size.h, format, type,
                     outputImage->getData());
 #endif
-                
+
             }
             else
             {
@@ -491,7 +505,7 @@ namespace mrv
                     render->begin(offscreenBufferSize);
                     render->setOCIOOptions(view->getOCIOOptions());
                     render->setLUTOptions(view->lutOptions());
-                    
+
                     render->drawVideo(
                         {videoData},
                         {math::Box2i(0, 0, renderSize.w, renderSize.h)},
@@ -499,17 +513,17 @@ namespace mrv
                         {timeline::DisplayOptions()},
                         timeline::CompareOptions(),
                         ui->uiView->getBackgroundOptions());
-                    
+
                     render->end();
                 }
 
                 // Read back the image
-                
+
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                
+
 
                 glPixelStorei(GL_PACK_ALIGNMENT, outputInfo.layout.alignment);
-                
+
                 glPixelStorei(
                     GL_PACK_SWAP_BYTES,
                     outputInfo.layout.endian != memory::getEndian());
@@ -529,7 +543,28 @@ namespace mrv
                              outputImage->getHeight(), format, type,
                              outputImage->getData());
 
-                
+
+            }
+
+            const auto videoFrame = view->getVideoFrame();
+            if (!videoFrame.empty() &&
+                !videoFrame[0].layers.empty() &&
+                videoFrame[0].layers[0].image)
+            {
+                auto hdrData = videoFrame[0].layers[0].image->getHDR();
+                if (hdrData)
+                {
+                    outputImage->setHDR(*hdrData);
+                }
+            }
+
+            writer->writeHeader();
+
+            if (saveEXR)
+            {
+                const std::string id = ocio::getInteropID(false);
+                if (!id.empty())
+                    tags["ColorInteropID"] = id;
             }
 
             outputImage->setTags(tags);
@@ -540,11 +575,17 @@ namespace mrv
             LOG_ERROR(e.what());
             ret = -1;
         }
+
+        if (restoreOCIOOptions)
+        {
+            view->setOCIOOptions(savedOCIOOptions);
+        }
+
         return ret;
     }
 
     int save_multiple_frames(
-        const std::string& file, const std::vector<otime::RationalTime>& times,
+        const std::string& file, const std::vector<OTIO_NS::RationalTime>& times,
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
@@ -574,7 +615,7 @@ namespace mrv
 
         }
 
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
         view->setPresentationMode(presentation);
@@ -590,7 +631,7 @@ namespace mrv
     }
 
     int save_multiple_annotation_frames(
-        const std::string& file, const std::vector<otime::RationalTime>& times,
+        const std::string& file, const std::vector<OTIO_NS::RationalTime>& times,
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
@@ -619,7 +660,7 @@ namespace mrv
             _save_single_frame(file, ui, options, frameIndex);
         }
 
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
         view->setPresentationMode(presentation);
@@ -695,7 +736,7 @@ namespace mrv
             }
         }
 
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
         view->setPresentationMode(presentation);

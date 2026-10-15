@@ -86,6 +86,7 @@ namespace tl
                 std::vector<uint16_t> maxLineWidth = {0, 0, 1};
                 for (size_t i = 0; i < text.size(); ++i)
                 {
+                    _print(string::Format("Text Test: {0}").arg(i));
                     _print(string::Format("Text: {0}").arg(text[i]));
                     const math::Size2i size =
                         fontSystem->getSize(text[i], fi, maxLineWidth[i]);

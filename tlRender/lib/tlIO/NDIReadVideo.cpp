@@ -2,8 +2,9 @@
 // Copyright (c) 2024 Gonzalo Garramuño
 // All rights reserved.
 
-#include <tlIO/FFmpegMacros.h>
+#include <tlIO/IOMacros.h>
 #include <tlIO/NDIReadPrivate.h>
+#include <tlIO/NDIUtil.h>
 
 #include <tlDevice/NDI/NDIUtil.h>
 
@@ -40,22 +41,19 @@ namespace tl
         } // namespace
 
         ReadVideo::ReadVideo(
-            const std::string& fileName, const NDIlib_source_t& NDIsource,
             const NDIlib_recv_create_t& recv_desc,
             const NDIlib_video_frame_t& v,
             const std::weak_ptr<log::System>& logSystem,
             const Options& options) :
-            _fileName(fileName),
             _logSystem(logSystem),
             _options(options)
         {
-            _tags["otioClipName"] = _fileName;
             double fps = v.frame_rate_N / static_cast<double>(v.frame_rate_D);
             double startTime = 0.0;
             double lastTime = kNDI_MOVIE_DURATION * fps;
-            _timeRange = otime::TimeRange(
-                otime::RationalTime(startTime, fps),
-                otime::RationalTime(lastTime, fps));
+            _timeRange = OTIO_NS::TimeRange(
+                OTIO_NS::RationalTime(startTime, fps),
+                OTIO_NS::RationalTime(lastTime, fps));
 
             NDI_recv = NDIlib_recv_create(&recv_desc);
             if (!NDI_recv)
@@ -92,14 +90,13 @@ namespace tl
             return _info;
         }
 
-        const otime::TimeRange& ReadVideo::getTimeRange() const
+        const OTIO_NS::TimeRange& ReadVideo::getTimeRange() const
         {
             return _timeRange;
         }
 
         void ReadVideo::_from_ndi(const NDIlib_video_frame_t& video_frame)
         {
-
             bool init = false;
 
             float pixelAspectRatio = 1.F;
@@ -303,7 +300,7 @@ namespace tl
             _buffer.push_back(image);
         }
 
-        bool ReadVideo::process(const otime::RationalTime& currentTime)
+        bool ReadVideo::process(const OTIO_NS::RationalTime& currentTime)
         {
             bool out = true;
 
@@ -318,22 +315,21 @@ namespace tl
             return out;
         }
 
-        int ReadVideo::_decode(const otime::RationalTime& time)
+        int ReadVideo::_decode(const OTIO_NS::RationalTime& time)
         {
             int out = 0;
             NDIlib_video_frame_t video_frame;
             NDIlib_frame_type_e type;
 
-            {
-                std::stringstream ss;
-                ss << time;
-                _tags["otioClipTime"] = ss.str();
-            }
+            io::addOtioTags(_tags, _fileName, time);
 
             while (out == 0 && NDI_recv)
             {
-                type = NDIlib_recv_capture(
-                    NDI_recv, &video_frame, nullptr, nullptr, 50);
+                {
+                    std::unique_lock<std::mutex> lock(NDI_recv_mutex);
+                    type = NDIlib_recv_capture(
+                        NDI_recv, &video_frame, nullptr, nullptr, 50);
+                }
                 if (type == NDIlib_frame_type_error)
                 {
                     out = -1;
@@ -341,7 +337,10 @@ namespace tl
                 else if (type == NDIlib_frame_type_video)
                 {
                     _from_ndi(video_frame);
-                    NDIlib_recv_free_video(NDI_recv, &video_frame);
+                    {
+                        std::unique_lock<std::mutex> lock(NDI_recv_mutex);
+                        NDIlib_recv_free_video(NDI_recv, &video_frame);
+                    }
                     out = 1;
                 }
                 else if (type == NDIlib_frame_type_status_change)

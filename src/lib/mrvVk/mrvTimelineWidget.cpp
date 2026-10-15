@@ -58,7 +58,7 @@ namespace mrv
     namespace
     {
         int getIndex(
-            const otio::SerializableObject::Retainer<otio::Composable>&
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Composable>&
                 composable)
         {
             int out = -1;
@@ -151,7 +151,7 @@ namespace mrv
 
             int screen_index = 0;
 
-            
+
             TimelinePlayer* player = nullptr;
 
             std::weak_ptr<timelineui_vk::ThumbnailSystem> thumbnailSystem;
@@ -172,6 +172,10 @@ namespace mrv
             mrv::TimeUnits units = mrv::TimeUnits::Timecode;
 
             // Render data
+
+            //! Main counter for vlk::MAX_FRAMES_IN_FLIGHT
+            uint32_t frameIndex = 0;
+
             std::shared_ptr<ui::Style> style;
             std::shared_ptr<image::FontSystem> fontSystem;
             std::shared_ptr<timeline_vlk::Render> render;
@@ -194,8 +198,8 @@ namespace mrv
             std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
                 cacheInfoObserver;
 
-            std::vector<otime::RationalTime> annotationTimes;
-            otime::TimeRange timeRange = time::invalidTimeRange;
+            std::vector<OTIO_NS::RationalTime> annotationTimes;
+            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
         };
 
         TimelineWidget::TimelineWidget(
@@ -203,8 +207,6 @@ namespace mrv
             VkWindow(X, Y, W, H, L),
             _p(new Private)
         {
-            int fl_double = FL_DOUBLE;
-            mode(FL_RGB | FL_ALPHA | fl_double);
             // m_debugSync = true;
         }
 
@@ -215,7 +217,12 @@ namespace mrv
             colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
             format() = VK_FORMAT_B8G8R8A8_UNORM;
         }
-        
+
+        int TimelineWidget::get_max_frames_in_flight()
+        {
+            return vlk::MAX_FRAMES_IN_FLIGHT;
+        }
+
         void TimelineWidget::setContext(
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::TimeUnitsModel>& timeUnitsModel,
@@ -238,8 +245,8 @@ namespace mrv
             p.fontSystem = image::FontSystem::create(context);
 
             p.timelineWindow = TimelineWindow::create(context);
-            
-            
+
+
             p.timelineWidget =
                 timelineui_vk::TimelineWidget::create(timeUnitsModel, ctx,
                                                       context);
@@ -253,22 +260,20 @@ namespace mrv
                     std::placeholders::_1));
 
             p.timelineWidget->setParent(p.timelineWindow);
-            
+
             auto settings = ui->app->settings();
-            
+
             timelineui_vk::DisplayOptions displayOptions;
             displayOptions.trackInfo =
                 settings->getValue<bool>("Timeline/TrackInfo");
             displayOptions.clipInfo =
                 settings->getValue<bool>("Timeline/ClipInfo");
             p.timelineWidget->setDisplayOptions(displayOptions);
-                
+
             if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
             {
-                context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+                p.thumbnailSystem = timelineui_vk::ThumbnailSystem::create(context, ctx);
             }
-            
-            p.thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
 
             setStopOnScrub(false);
 
@@ -297,17 +302,18 @@ namespace mrv
             Fl::remove_timeout(timerEvent_cb, this);
         }
 
-        std::vector<const otio::Item* > TimelineWidget::getSelectedItems() const
+        std::vector<timeline::MoveData>
+        TimelineWidget::getSelectedItems() const
         {
             return _p->timelineWidget->getSelectedItems();
         }
-        
-        std::vector<const otio::Transition* >
+
+        std::vector<timeline::MoveData>
         TimelineWidget::getSelectedTransitions() const
         {
             return _p->timelineWidget->getSelectedTransitions();
         }
-        
+
         bool TimelineWidget::isEditable() const
         {
             return _p->timelineWidget->isEditable();
@@ -323,7 +329,7 @@ namespace mrv
             _p->editMode = value;
             _p->timelineWidget->setEditMode(value);
         }
-        
+
         void TimelineWidget::setScrollBarsVisible(bool value)
         {
             _p->timelineWidget->setScrollBarsVisible(value);
@@ -520,7 +526,7 @@ namespace mrv
         {
             TLRENDER_P();
             if (p.thumbnailWindow && Fl::belowmouse() == this && p.player &&
-                p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                p.ui->uiPrefs->TimelineThumbnails->value())
             {
                 int X, Y, W, H;
                 _getThumbnailPosition(X, Y, W, H);
@@ -550,7 +556,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            if (!p.player || !p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+            if (!p.player || !p.ui->uiPrefs->TimelineThumbnails->value())
             {
                 hideThumbnail();
                 return 0;
@@ -566,10 +572,16 @@ namespace mrv
             file::Path path;
             auto model = p.ui->app->filesModel();
             auto Aitem = model->observeA()->get();
+            std::string mediaReferenceKey;
             if (Aitem)
+            {
                 path = Aitem->path;
+                mediaReferenceKey = Aitem->mediaReferenceKey;
+            }
             else
+            {
                 path = player->getPath();
+            }
 
             const image::Size size(kTHUMB_WIDTH, kTHUMB_HEIGHT);
             const auto& time = _posToTime(_toUI(Fl::event_x()));
@@ -577,7 +589,8 @@ namespace mrv
             if (auto thumbnailSystem = p.thumbnailSystem.lock())
             {
                 p.thumbnail.request =
-                    thumbnailSystem->getThumbnail(path, size.h, time);
+                    thumbnailSystem->getThumbnail(path, size.h, time,
+                                                  mediaReferenceKey);
             }
 
             timeToText(buffer, time, _p->units);
@@ -706,7 +719,7 @@ namespace mrv
                         math::Matrix4x4f pm;
                         p.shader->createUniform(
                             "transform.mvp", pm, vlk::kShaderVertex);
-                        p.shader->addFBO("textureSampler");
+                        p.shader->addTexture("textureSampler");
                         p.shader->addPush("opacity", 1.0, vlk::kShaderFragment);
                         p.shader->createBindingSet();
                     }
@@ -727,7 +740,7 @@ namespace mrv
             TLRENDER_P();
 
             const math::Size2i renderSize(pixel_w(), pixel_h());
-            
+
             const auto& mesh =
                 geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
             if (!p.vbo)
@@ -746,22 +759,22 @@ namespace mrv
                 p.vao = vlk::VAO::create(ctx);
             }
         }
-        
+
         void TimelineWidget::prepare()
         {
             TLRENDER_P();
-            
+
             prepare_shaders();
             prepare_mesh();
             prepare_render_pass();
-            prepare_pipeline_layout(); // Main shader layout
+            prepare_pipeline_layout();
             prepare_pipeline();
         }
 
         void TimelineWidget::destroy()
         {
             TLRENDER_P();
-            
+
             p.buffer.reset();
 
             if (p.pipeline_layout != VK_NULL_HANDLE)
@@ -785,7 +798,7 @@ namespace mrv
             TLRENDER_P();
 
             wait_device();
-            
+
             // Destroy main render
             p.render.reset();
 
@@ -811,7 +824,7 @@ namespace mrv
             _sizeHintEvent();
             _setGeometry();
             _clipEvent();
-            
+
             if (p.draggingClip)
                 toOtioFile(p.player, p.ui);
 
@@ -821,10 +834,13 @@ namespace mrv
         void TimelineWidget::draw()
         {
             TLRENDER_P();
-            
+
             const math::Size2i renderSize(pixel_w(), pixel_h());
-            
+
             VkCommandBuffer cmd = getCurrentCommandBuffer();
+
+            // Get frameIndex
+            frameIndex = frameIndex % vlk::MAX_FRAMES_IN_FLIGHT;
 
             bool changed_screen = false;
             if (p.screen_index != this->screen_num())
@@ -881,7 +897,7 @@ namespace mrv
                             p.style->getColorRole(ui::ColorRole::Window);
                         if (vlk::doCreate(
                                 p.buffer, renderSize, offscreenBufferOptions))
-                        { 
+                        {
                             p.buffer = vlk::OffscreenBuffer::create(
                                 ctx, renderSize, offscreenBufferOptions);
                         }
@@ -889,22 +905,23 @@ namespace mrv
                     else
                     {
                         wait_device();
-                        
+
                         p.buffer.reset();
                     }
 
                     if (p.render && p.buffer)
                     {
                         p.buffer->transitionToColorAttachment(cmd);
-                        
+
                         timeline::RenderOptions renderOptions;
                         renderOptions.clear = true;
+                        renderOptions.vaoSize = 32 * memory::megabyte;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
 
                         // Clear color in new render pass.
                         p.render->begin(
-                            cmd, p.buffer, m_currentFrameIndex, renderSize,
+                            cmd, p.buffer, frameIndex, renderSize,
                             renderOptions);
                         const math::Matrix4x4f ortho = math::ortho(
                             0.F, static_cast<float>(renderSize.w),
@@ -914,12 +931,12 @@ namespace mrv
 
                         const auto& ocioOptions = p.ui->uiView->getOCIOOptions();
                         p.render->setOCIOOptions(ocioOptions);
-                        
+
                         const auto& lutOptions = p.ui->uiView->lutOptions();
                         p.render->setLUTOptions(lutOptions);
-                        
+
                         p.render->setClipRectEnabled(true);
-                        
+
                         ui::DrawEvent drawEvent(
                             p.style, p.render, p.fontSystem);
                         p.render->beginLoadRenderPass();
@@ -928,7 +945,7 @@ namespace mrv
                             math::Box2i(0, 0, renderSize.w, renderSize.h),
                             drawEvent);
                         p.render->endRenderPass();
-                        
+
                         p.render->setClipRectEnabled(false);
                         p.render->end();
                     }
@@ -940,15 +957,15 @@ namespace mrv
             }
 
             const float alpha = p.ui->uiMain->get_alpha() / 255.F;
-                
-            if (p.ui->uiPrefs->uiPrefsBlitTimeline->value() == kNoBlit ||
+
+            if (p.ui->uiPrefs->BlitTimeline->value() == kNoBlit ||
                 alpha < 1.0F)
             {
                 p.buffer->transitionToShaderRead(cmd);
-                        
+
                 begin_render_pass(cmd);
 
-                p.shader->bind(m_currentFrameIndex);
+                p.shader->bind(frameIndex);
                 const auto pm = math::ortho(
                     0.F, static_cast<float>(renderSize.w),
                     0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
@@ -963,12 +980,12 @@ namespace mrv
                 // this draw loop)
                 vkCmdBindPipeline(
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline());
-                
+
                 VkDescriptorSet descriptorSet = p.shader->getDescriptorSet();
                 vkCmdBindDescriptorSets(
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0,
                     1, &descriptorSet, 0, nullptr);
-                
+
                 const float opacity = 1.0;
                 vkCmdPushConstants(
                     cmd, p.pipeline_layout,
@@ -992,13 +1009,15 @@ namespace mrv
 
                 if (p.vao && p.vbo)
                 {
-            
-                    const VkColorComponentFlags allMask[] =
-                        { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-                          VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
-                    ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
-            
-                    p.vao->bind(m_currentFrameIndex);
+                    if (ctx.vkCmdSetColorWriteMaskEXT)
+                    {
+                        const VkColorComponentFlags allMask[] =
+                            { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                              VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+                        ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+                    }
+
+                    p.vao->bind(frameIndex);
                     p.vao->draw(cmd, p.vbo);
                 }
             }
@@ -1006,7 +1025,7 @@ namespace mrv
             {
                 VkImage srcImage = p.buffer->getImage();
                 VkImage dstImage = get_back_buffer_image();
-                
+
                 // srcImage barrier
                 transitionImageLayout(cmd, srcImage,
                                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
@@ -1068,13 +1087,13 @@ namespace mrv
                         VK_FILTER_NEAREST
                     );
                 }
-                
+
                 // srcImage barrier
                 transitionImageLayout(cmd, srcImage,
                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
                 p.buffer->setImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-                
+
                 // dstImage barrier (swapchain image)
                 transitionImageLayout(cmd, dstImage,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -1116,38 +1135,38 @@ namespace mrv
         void TimelineWidget::prepare_pipeline()
         {
             TLRENDER_P();
-            
+
             // Elements of new Pipeline (fill with mesh info)
             vlk::VertexInputStateInfo vi;
             vi.bindingDescriptions = p.vbo->getBindingDescription();
             vi.attributeDescriptions = p.vbo->getAttributes();
-            
+
             // Defaults are fine
             vlk::InputAssemblyStateInfo ia;
 
             // Defaults are fine
             vlk::RasterizationStateInfo rs;
-            
+
             // Defaults are fine
             vlk::ViewportStateInfo vp;
-            
+
             vlk::ColorBlendStateInfo cb;
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             colorBlendAttachment.blendEnable = VK_FALSE;
             cb.attachments.push_back(colorBlendAttachment);
-            
+
             vlk::DepthStencilStateInfo ds;
             ds.depthTestEnable = VK_FALSE;
             ds.depthWriteEnable = VK_FALSE;
             ds.stencilTestEnable = VK_FALSE;
-            
+
             vlk::DynamicStateInfo dynamicState;
             dynamicState.dynamicStates = {
                 VK_DYNAMIC_STATE_VIEWPORT,
                 VK_DYNAMIC_STATE_SCISSOR,
                 VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT,
             };
-            
+
             // Defaults are fine
             vlk::MultisampleStateInfo ms;
 
@@ -1729,7 +1748,7 @@ namespace mrv
             }
             if (key == FL_Delete && p.editMode == timeline::EditMode::Select)
             {
-                edit_remove_selected_cb(nullptr, p.ui);
+                edit_selected_remove_cb(nullptr, p.ui);
                 return 1;
             }
             bool send = App::ui->uiPrefs->SendTimeline->value();
@@ -1843,7 +1862,7 @@ namespace mrv
                     redraw();
                 }
             }
-            
+
             Fl::repeat_timeout(
                 kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
         }
@@ -1861,14 +1880,14 @@ namespace mrv
                 requestThumbnail(true);
                 return enterEvent();
             case FL_LEAVE:
-                if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                if (p.ui->uiPrefs->TimelineThumbnails->value())
                 {
                     _cancelThumbnailRequests();
                     hideThumbnail();
                 }
                 return leaveEvent();
             case FL_PUSH:
-                if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                if (p.ui->uiPrefs->TimelineThumbnails->value())
                     requestThumbnail(true);
                 return mousePressEvent();
             case FL_DRAG:
@@ -1891,7 +1910,7 @@ namespace mrv
                 return keyReleaseEvent();
             case FL_HIDE:
             {
-                if (p.ui->uiPrefs->uiPrefsTimelineThumbnails->value())
+                if (p.ui->uiPrefs->TimelineThumbnails->value())
                 {
                     _cancelThumbnailRequests();
                     hideThumbnail();
@@ -1948,11 +1967,11 @@ namespace mrv
 
         void TimelineWidget::_styleUpdate() {}
 
-        otime::RationalTime TimelineWidget::_posToTime(int value) noexcept
+        OTIO_NS::RationalTime TimelineWidget::_posToTime(int value) noexcept
         {
             TLRENDER_P();
 
-            otime::RationalTime out = time::invalidTime;
+            OTIO_NS::RationalTime out = time::invalidTime;
             if (p.player && p.timelineWidget)
             {
                 _setGeometry(); // needed, as Linux could have issues when
@@ -1962,7 +1981,7 @@ namespace mrv
                 const double normalized = (value - geometry.min.x) /
                                           static_cast<double>(geometry.w());
                 out = (p.timeRange.start_time() +
-                       otime::RationalTime(
+                       OTIO_NS::RationalTime(
                            p.timeRange.duration().value() * normalized,
                            p.timeRange.duration().rate()))
                           .round();

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "mrvNetwork/mrvMessage.h"
 #include "mrvNetwork/mrvSignalingMessage.h"
 #include "mrvNetwork/mrvWebRTCConnection.h"
@@ -13,39 +15,59 @@ namespace mrv
     {
     public:
         WebRTCManager();
+        ~WebRTCManager();
 
         void setConfiguration(const rtc::Configuration&);
-        
+
         std::shared_ptr<WebRTCConnection> createPeer(const std::string peerId,
                                                      bool isOfferer);
-    
+
+
+        std::shared_ptr<WebRTCConnection> getClient(const std::string& peerId);
+
         void handleOffer(const std::string& peerId, const std::string& sdp);
-    
+
         void handleAnswer(const std::string& peerId, const std::string& sdp);
-    
+
         void addRemoteCandidate(const std::string& peerId, const rtc::Candidate& c);
 
+        void pushMessageToPeer(const Message&, const std::string& peerId);
         void publish(const Message&);
-        
-        std::function<void(const rtc::binary&)>
+
+        std::function<void(const std::string& peerId, const rtc::binary&)>
         onBinaryMessage;
-        
-        std::function<void(const std::string&)>
+
+        std::function<void(const std::string& peerId, const std::string&)>
         onStringMessage;
-        
+
+        std::function<void(const std::string& peerId,
+                           std::shared_ptr<rtc::DataChannel>)>
+        onExtraDataChannel;
+
         std::function<void(const SignalingMessage&)>
         onSignalMessage;
 
+        std::function<void(const std::string& peerId)> onPeerDisconnected;
+
         void erase(const std::string& peerId);
-    
+
     protected:
+        // queue-based, non-blocking
+        void requestErase(const std::string& peerId);
+        void eraseWorker();                            // runs on eraseThread_
         void drainPendingCandidates(const std::string& peerId);
-    
+
         rtc::Configuration config;
         std::unordered_map<std::string, std::shared_ptr<WebRTCConnection> > clients;
         std::unordered_map<std::string, std::vector<rtc::Candidate> > pendingCandidates;
 
         std::mutex mtx;
+
+        std::thread eraseThread_;
+        std::mutex eraseQueueMutex_;
+        std::condition_variable eraseQueueCv_;
+        std::deque<std::string> eraseQueue_;
+        bool stopping_ = false;   // guarded by eraseQueueMutex_
     };
 
 }

@@ -125,6 +125,11 @@ namespace tl
             return size.isValid() && pixelType != PixelType::kNone;
         }
 
+        inline float Info::getAspect() const
+        {
+            return size.h > 0 ? (size.w / static_cast<float>(size.h) * size.pixelAspectRatio) : 0.F;
+        }
+
         inline bool Info::operator==(const Info& other) const
         {
             return name == other.name && compression == other.compression &&
@@ -193,7 +198,7 @@ namespace tl
         {
             _hdr.reset(new HDRData(hdr));
         }
-                
+
         inline size_t Image::getDataByteCount() const
         {
             return _dataByteCount;

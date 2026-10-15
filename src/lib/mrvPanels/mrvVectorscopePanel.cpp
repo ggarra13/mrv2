@@ -62,7 +62,7 @@ namespace mrv
             int Y = g->y();
             int W = g->w();
             int H = g->h();
-            
+
             Fl_Group* cg;
             Fl_Box* b;
             Fl_Choice* c;
@@ -80,7 +80,7 @@ namespace mrv
 #endif
             c->tooltip(_("Type of Vectorscope."));
             cW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     VectorscopeMethod c =
                         static_cast<VectorscopeMethod>(o->value());

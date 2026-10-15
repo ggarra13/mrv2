@@ -24,15 +24,27 @@ namespace tl
 {
     namespace timeline_vlk
     {
+        namespace
+        {
+            //! Pipelines are cached by name and by pipeline group (the
+            //! render target they were built for).  The main target has an
+            //! empty group, so its keys are the plain pipeline names.
+            std::string pipelineKey(const std::string& name,
+                                    const std::string& group)
+            {
+                return group.empty() ? name : name + "@" + group;
+            }
+        }
+
         void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
         {
             TLRENDER_P();
-            
+
             auto bindingSet = shader->createBindingSet();
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
         }
-        
-        
+
+
         VkPipelineLayout Render::_createPipelineLayout(
             const std::string& pipelineLayoutName,
             const std::shared_ptr<vlk::Shader> shader)
@@ -44,7 +56,7 @@ namespace tl
             {
                 p.garbage[p.frameIndex].pipelineLayouts.push_back(pipelineLayout);
             }
-            
+
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
             pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
             pPipelineLayoutCreateInfo.pNext = NULL;
@@ -62,14 +74,14 @@ namespace tl
                 pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
                 pPipelineLayoutCreateInfo.pPushConstantRanges = &pushConstantRange;
             }
-            
+
             VkResult result = vkCreatePipelineLayout(ctx.device, &pPipelineLayoutCreateInfo, NULL, &pipelineLayout);
             VK_CHECK(result);
-            
+
             p.pipelineLayouts[pipelineLayoutName] = pipelineLayout;
             return pipelineLayout;
         }
-        
+
         void Render::createPipeline(const std::string& pipelineName,
                                     const std::string& pipelineLayoutName,
                                     const VkRenderPass renderPass,
@@ -80,7 +92,7 @@ namespace tl
                                     const vlk::MultisampleStateInfo& ms)
         {
             TLRENDER_P();
-            
+
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
             {
@@ -90,7 +102,7 @@ namespace tl
             }
 
             VkDevice device = ctx.device;
-            
+
             // Elements of new Pipeline (fill with mesh info)
             vlk::VertexInputStateInfo vi;
             vi.bindingDescriptions = mesh->getBindingDescription();
@@ -110,7 +122,7 @@ namespace tl
             dynamicState.dynamicStates = {
                 VK_DYNAMIC_STATE_VIEWPORT,
                 VK_DYNAMIC_STATE_SCISSOR,
-                
+
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
                 // For dynamic R/G/B/A masks
                 VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT,
@@ -156,17 +168,18 @@ namespace tl
             pipelineState.renderPass = renderPass;
             pipelineState.layout = pipelineLayout;
 
+            const std::string key = pipelineKey(pipelineName, p.pipelineGroup);
             VkPipeline pipeline;
-            if (p.pipelines.count(pipelineName) == 0)
+            if (p.pipelines.count(key) == 0)
             {
                 DEBUG_PIPELINE("CREATING   pipeline " << pipelineName);
                 pipeline = pipelineState.create(device);
-                p.pipelines[pipelineName] = std::make_pair(pipelineState,
+                p.pipelines[key] = std::make_pair(pipelineState,
                                                            pipeline);
             }
             else
             {
-                const auto& pair = p.pipelines[pipelineName];
+                const auto& pair = p.pipelines[key];
                 const auto& oldPipelineState = pair.first;
                 VkPipeline oldPipeline = pair.second;
                 if (pipelineState != oldPipelineState)
@@ -176,7 +189,7 @@ namespace tl
                         oldPipeline);
                     pipeline = pipelineState.create(device);
                     auto pair = std::make_pair(pipelineState, pipeline);
-                    p.pipelines[pipelineName] = pair;
+                    p.pipelines[key] = pair;
                 }
                 else
                 {
@@ -186,9 +199,9 @@ namespace tl
 
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-            p.currentPipeline = pipelineName;
+            p.currentPipeline = key;
         }
-        
+
         void Render::createPipeline(
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::string& pipelineName,
@@ -207,7 +220,7 @@ namespace tl
 
             const auto& shader = p.shaders[shaderName];
             const auto& mesh = p.vbos[meshName];
-            
+
             vlk::ColorBlendStateInfo cb;
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             if (enableBlending)
@@ -225,18 +238,18 @@ namespace tl
                 colorBlendAttachment.blendEnable = VK_FALSE;
             }
             cb.attachments.push_back(colorBlendAttachment);
-            
+
             vlk::DepthStencilStateInfo ds;
             ds.depthTestEnable = fbo->hasDepth() ? VK_TRUE : VK_FALSE;
             ds.depthWriteEnable = fbo->hasDepth() ? VK_TRUE : VK_FALSE;
             ds.stencilTestEnable = fbo->hasStencil() ? VK_TRUE : VK_FALSE;
-            
+
             vlk::MultisampleStateInfo ms;
             ms.rasterizationSamples = fbo->getSampleCount();
 
             createPipeline(pipelineName, pipelineLayoutName,
                            fbo->getLoadRenderPass(), shader, mesh, cb, ds, ms);
-            
+
             fbo->setupViewportAndScissor(p.cmd);
             if (p.clipRectEnabled)
             {
@@ -248,58 +261,65 @@ namespace tl
         {
             TLRENDER_P();
 
-            if (p.currentPipeline == pipelineName)
+            const std::string key = pipelineKey(pipelineName, p.pipelineGroup);
+            if (p.currentPipeline == key)
                 return;
-            
-            const auto& pair = p.pipelines[pipelineName];
-            VkPipeline pipeline = pair.second;
+
+            const auto pipelineIt = p.pipelines.find(key);
+            if (pipelineIt == p.pipelines.end())
+                return;
+            VkPipeline pipeline = pipelineIt->second.second;
 
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-            p.currentPipeline = pipelineName;
-            
+            p.currentPipeline = key;
+
             ++(p.currentStats.pipelineChanges);
         }
-        
+
         void Render::_bindDescriptorSets(
-            const std::string& pipelineLayoutName, const std::string& shaderName)
+            const std::string& pipelineLayoutName, const std::shared_ptr<vlk::Shader> shader)
         {
             TLRENDER_P();
-            
-            VkDescriptorSet descriptorSet = p.shaders[shaderName]->getDescriptorSet();
-            
+
+            VkDescriptorSet descriptorSet = shader->getDescriptorSet();
+
             vkCmdBindDescriptorSets(
                 p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                 p.pipelineLayouts[pipelineLayoutName], 0, 1,
                 &descriptorSet, 0, nullptr);
         }
-        
+
         void Render::_bindComputeDescriptorSets(
-            const std::string& pipelineLayoutName, const std::string& shaderName)
+            const std::string& pipelineLayoutName, const std::shared_ptr<vlk::Shader> shader)
         {
             TLRENDER_P();
-            
-            VkDescriptorSet descriptorSet = p.compute[shaderName]->getDescriptorSet();
+
+            VkDescriptorSet descriptorSet = shader->getDescriptorSet();
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
             {
                 pipelineLayout = _createPipelineLayout(pipelineLayoutName,
-                                                       p.compute[shaderName]);
+                                                       shader);
             }
-            
+
             vkCmdBindDescriptorSets(
                 p.cmd, VK_PIPELINE_BIND_POINT_COMPUTE,
                 p.pipelineLayouts[pipelineLayoutName], 0, 1,
                 &descriptorSet, 0, nullptr);
         }
-        
+
 
         void Render::_vkDraw(const std::string& meshName)
         {
             TLRENDER_P();
-            
-            p.vaos[meshName]->bind(p.frameIndex);
-            p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
+
+            // Upload the vertex data into the pool and draw immediately.
+            // The pool selects a slot with enough room, overflowing to a new
+            // 1 GB buffer when the current one is full.
+            const vlk::VAOAllocation alloc =
+                p.vaoPool->upload(p.vbos[meshName]);
+            p.vaoPool->draw(p.cmd, alloc);
         }
 
         VkRenderPass Render::getRenderPass() const

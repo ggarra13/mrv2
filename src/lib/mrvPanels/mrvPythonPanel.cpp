@@ -304,7 +304,7 @@ namespace mrv
         {
 #ifdef __APPLE__
             TLRENDER_P();
-            if (!p.ui->uiPrefs->uiPrefsMacOSMenus->value())
+            if (!p.ui->uiPrefs->MacOSMenus->value())
             {
                 if (_r->menu)
                     g->remove(_r->menu);
@@ -324,7 +324,7 @@ namespace mrv
             TLRENDER_P();
 
 #ifdef __APPLE__
-            if (p.ui->uiPrefs->uiPrefsMacOSMenus->value())
+            if (p.ui->uiPrefs->MacOSMenus->value())
             {
                 _r->menu = p.ui->uiMenuBar;
             }
@@ -495,9 +495,16 @@ namespace mrv
             if (textBuffer->length() == 0)
             {
                 std::string imports = R"PYTHON(
+
+#
+# OpenTimelineIO imports (used by mrv2 API)
+#
 import opentimelineio as otio
 import opentimelineio.opentime as otime
 
+#
+# mrv2 API
+#
 import mrv2
 from mrv2 import annotations, cmd, math, image, io, media
 from mrv2 import playlist, timeline, ui, )PYTHON";
@@ -506,6 +513,14 @@ from mrv2 import playlist, timeline, ui, )PYTHON";
                 imports += "usd, ";
 #endif
                 imports += "session, settings";
+                imports += R"PYTHON(
+
+#
+# mrv2 UI toolkit
+#
+from fltk import *
+import fltk as Fl
+)PYTHON";
                 textBuffer->append(imports.c_str());
             }
 

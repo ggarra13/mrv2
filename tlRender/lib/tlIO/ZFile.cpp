@@ -15,35 +15,31 @@ namespace tl
 {
     namespace zfile
     {
-        
-        Plugin::Plugin() {}
 
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        void ReadPlugin::_init(const std::shared_ptr<log::System>& logSystem)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(
-                "zFile",
-                {
-                    {".z", io::FileType::Sequence},
-                    {".zfile", io::FileType::Sequence},
-                },
-                cache, logSystem);
+            std::map<std::string, io::FileType> exts;
+            exts[".z"] = io::FileType::Sequence;
+            exts[".zfile"] = io::FileType::Sequence;
+            IReadPlugin::_init("ZFILE", exts, logSystem);
+        }
+
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::shared_ptr<io::IDecode> ReadPlugin::decode(const io::Options&)
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return Decode::create();
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options)
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
         {
-            return Read::create(path, memory, options, _cache, _logSystem);
+            return "ZFILE";
         }
     } // namespace zfile
 } // namespace tl

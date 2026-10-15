@@ -60,7 +60,7 @@ namespace tl
                 }
             }
 #endif
-            
+
             RtAudioFormat toRtAudio(audio::DataType value) noexcept
             {
                 RtAudioFormat out = 0;
@@ -117,18 +117,19 @@ namespace tl
 
             p.playerOptions = playerOptions;
             p.timeline = timeline;
-            p.ioInfo = p.timeline->getIOInfo();
+            p.ioInfo = timeline->getIOInfo();
+            p.sourceAudioInfo = timeline->getIOInfo().audio;
 
             // Create observers.
             p.speed = observer::Value<double>::create(
                 p.timeline->getTimeRange().duration().rate());
             p.playback = observer::Value<Playback>::create(Playback::Stop);
             p.loop = observer::Value<Loop>::create(Loop::Loop);
-            p.currentTime = observer::Value<otime::RationalTime>::create(
+            p.currentTime = observer::Value<OTIO_NS::RationalTime>::create(
                 playerOptions.currentTime != time::invalidTime
                     ? playerOptions.currentTime
                     : p.timeline->getTimeRange().start_time());
-            p.inOutRange = observer::Value<otime::TimeRange>::create(
+            p.inOutRange = observer::Value<OTIO_NS::TimeRange>::create(
                 p.timeline->getTimeRange());
             p.compare = observer::List<std::shared_ptr<Timeline> >::create();
             p.compareTime = observer::Value<CompareTimeMode>::create(
@@ -136,12 +137,12 @@ namespace tl
             p.ioOptions = observer::Value<io::Options>::create();
             p.videoLayer = observer::Value<int>::create(0);
             p.compareVideoLayers = observer::List<int>::create();
-            p.currentVideoData = observer::List<VideoData>::create();
+            p.currentVideoFrame = observer::List<VideoFrame>::create();
             p.volume = observer::Value<float>::create(1.F);
             p.mute = observer::Value<bool>::create(false);
             p.channelMute = observer::List<int>::create();
             p.audioOffset = observer::Value<double>::create(0.0);
-            p.currentAudioData = observer::List<AudioData>::create();
+            p.currentAudioFrame = observer::List<AudioFrame>::create();
             p.cacheOptions = observer::Value<PlayerCacheOptions>::create(
                 playerOptions.cache);
             p.cacheInfo = observer::Value<PlayerCacheInfo>::create();
@@ -301,13 +302,13 @@ namespace tl
                         p.cacheUpdate();
 
                         // Update the current video data.
-                        updateVideoData();
+                        updateVideoFrame();
 
                         // Update the current audio data.
-                        if (p.ioInfo.audio.isValid())
+                        if (p.sourceAudioInfo.isValid())
                         {
                             const auto& timeRange = p.timeline->getTimeRange();
-                            std::vector<AudioData> audioDataList;
+                            std::vector<AudioFrame> audioFrameList;
                             {
                                 const int64_t seconds =
                                     p.thread.currentTime.rescaled_to(1.0)
@@ -320,18 +321,17 @@ namespace tl
                                 for (int64_t s :
                                      {seconds - 1, seconds, seconds + 1})
                                 {
-                                    auto i =
-                                        p.audioMutex.audioDataCache.find(s);
-                                    if (i != p.audioMutex.audioDataCache.end())
+                                    auto i = p.audioMutex.cache.find(s);
+                                    if (i != p.audioMutex.cache.end())
                                     {
-                                        audioDataList.push_back(i->second);
+                                        audioFrameList.push_back(i->second);
                                     }
                                 }
                             }
                             {
                                 std::unique_lock<std::mutex> lock(
                                     p.mutex.mutex);
-                                p.mutex.currentAudioData = audioDataList;
+                                p.mutex.currentAudioFrame = audioFrameList;
                             }
                         }
 
@@ -401,18 +401,17 @@ namespace tl
             return out;
         }
 
-        void Player::updateVideoData()
+        void Player::updateVideoFrame()
         {
             TLRENDER_P();
             const auto& timeRange = p.timeline->getTimeRange();
             if (!p.ioInfo.video.empty())
             {
-                const auto i =
-                    p.thread.videoDataCache.find(p.thread.currentTime);
-                if (i != p.thread.videoDataCache.end())
+                const auto i = p.thread.videoCache.find(p.thread.currentTime);
+                if (i != p.thread.videoCache.end())
                 {
                     std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                    p.mutex.currentVideoData = i->second;
+                    p.mutex.currentVideoFrame = i->second;
                 }
                 else if (p.thread.playback != Playback::Stop)
                 {
@@ -423,7 +422,7 @@ namespace tl
                             std::chrono::steady_clock::now();
                         if (!timeRange.contains(p.thread.currentTime))
                         {
-                            p.mutex.currentVideoData.clear();
+                            p.mutex.currentVideoFrame.clear();
                         }
                     }
                     p.resetAudioTime();
@@ -439,7 +438,7 @@ namespace tl
                     std::unique_lock<std::mutex> lock(p.mutex.mutex);
                     if (!timeRange.contains(p.thread.currentTime))
                     {
-                        p.mutex.currentVideoData.clear();
+                        p.mutex.currentVideoFrame.clear();
                     }
                 }
             }
@@ -475,7 +474,7 @@ namespace tl
             return _p->timeline->getOptions();
         }
 
-        const otime::TimeRange& Player::getTimeRange() const
+        const OTIO_NS::TimeRange& Player::getTimeRange() const
         {
             return _p->timeline->getTimeRange();
         }
@@ -628,18 +627,18 @@ namespace tl
             _p->loop->setIfChanged(value);
         }
 
-        otime::RationalTime Player::getCurrentTime() const
+        OTIO_NS::RationalTime Player::getCurrentTime() const
         {
             return _p->currentTime->get();
         }
 
-        std::shared_ptr<observer::IValue<otime::RationalTime> >
+        std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
         Player::observeCurrentTime() const
         {
             return _p->currentTime;
         }
 
-        void Player::seek(const otime::RationalTime& time)
+        void Player::seek(const OTIO_NS::RationalTime& time)
         {
             TLRENDER_P();
 
@@ -689,49 +688,49 @@ namespace tl
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime -
-                    otime::RationalTime(1, timeRange.duration().rate()));
+                    OTIO_NS::RationalTime(1, timeRange.duration().rate()));
                 break;
             case TimeAction::FramePrevX10:
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime -
-                    otime::RationalTime(10, timeRange.duration().rate()));
+                    OTIO_NS::RationalTime(10, timeRange.duration().rate()));
                 break;
             case TimeAction::FramePrevX100:
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime -
-                    otime::RationalTime(100, timeRange.duration().rate()));
+                    OTIO_NS::RationalTime(100, timeRange.duration().rate()));
                 break;
             case TimeAction::FrameNext:
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime +
-                    otime::RationalTime(1, timeRange.duration().rate()));
+                    OTIO_NS::RationalTime(1, timeRange.duration().rate()));
                 break;
             case TimeAction::FrameNextX10:
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime +
-                    otime::RationalTime(10, timeRange.duration().rate()));
+                    OTIO_NS::RationalTime(10, timeRange.duration().rate()));
                 break;
             case TimeAction::FrameNextX100:
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime +
-                    otime::RationalTime(100, timeRange.duration().rate()));
+                    OTIO_NS::RationalTime(100, timeRange.duration().rate()));
                 break;
             case TimeAction::JumpBack1s:
-                seek(currentTime - otime::RationalTime(1.0, 1.0));
+                seek(currentTime - OTIO_NS::RationalTime(1.0, 1.0));
                 break;
             case TimeAction::JumpBack10s:
-                seek(currentTime - otime::RationalTime(10.0, 1.0));
+                seek(currentTime - OTIO_NS::RationalTime(10.0, 1.0));
                 break;
             case TimeAction::JumpForward1s:
-                seek(currentTime + otime::RationalTime(1.0, 1.0));
+                seek(currentTime + OTIO_NS::RationalTime(1.0, 1.0));
                 break;
             case TimeAction::JumpForward10s:
-                seek(currentTime + otime::RationalTime(10.0, 1.0));
+                seek(currentTime + OTIO_NS::RationalTime(10.0, 1.0));
                 break;
             default:
                 break;
@@ -758,18 +757,18 @@ namespace tl
             timeAction(TimeAction::FrameNext);
         }
 
-        otime::TimeRange Player::getInOutRange() const
+        OTIO_NS::TimeRange Player::getInOutRange() const
         {
             return _p->inOutRange->get();
         }
 
-        std::shared_ptr<observer::IValue<otime::TimeRange> >
+        std::shared_ptr<observer::IValue<OTIO_NS::TimeRange> >
         Player::observeInOutRange() const
         {
             return _p->inOutRange;
         }
 
-        void Player::setInOutRange(const otime::TimeRange& value)
+        void Player::setInOutRange(const OTIO_NS::TimeRange& value)
         {
             TLRENDER_P();
             if (p.inOutRange->setIfChanged(value))
@@ -783,7 +782,7 @@ namespace tl
         void Player::setInPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time(
+            setInOutRange(OTIO_NS::TimeRange::range_from_start_end_time(
                 p.currentTime->get(),
                 p.inOutRange->get().end_time_exclusive()));
         }
@@ -791,7 +790,7 @@ namespace tl
         void Player::resetInPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time(
+            setInOutRange(OTIO_NS::TimeRange::range_from_start_end_time(
                 p.timeline->getTimeRange().start_time(),
                 p.inOutRange->get().end_time_exclusive()));
         }
@@ -799,14 +798,14 @@ namespace tl
         void Player::setOutPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time_inclusive(
+            setInOutRange(OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                 p.inOutRange->get().start_time(), p.currentTime->get()));
         }
 
         void Player::resetOutPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time_inclusive(
+            setInOutRange(OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                 p.inOutRange->get().start_time(),
                 p.timeline->getTimeRange().end_time_inclusive()));
         }
@@ -928,15 +927,15 @@ namespace tl
             }
         }
 
-        const std::vector<VideoData>& Player::getCurrentVideo() const
+        const std::vector<VideoFrame>& Player::getCurrentVideo() const
         {
-            return _p->currentVideoData->get();
+            return _p->currentVideoFrame->get();
         }
 
-        std::shared_ptr<observer::IList<VideoData> >
+        std::shared_ptr<observer::IList<VideoFrame> >
         Player::observeCurrentVideo() const
         {
-            return _p->currentVideoData;
+            return _p->currentVideoFrame;
         }
 
         float Player::getVolume() const
@@ -1000,15 +999,15 @@ namespace tl
             }
         }
 
-        const std::vector<AudioData>& Player::getCurrentAudio() const
+        const std::vector<AudioFrame>& Player::getCurrentAudio() const
         {
-            return _p->currentAudioData->get();
+            return _p->currentAudioFrame->get();
         }
 
-        std::shared_ptr<observer::IList<AudioData> >
+        std::shared_ptr<observer::IList<AudioFrame> >
         Player::observeCurrentAudio() const
         {
-            return _p->currentAudioData;
+            return _p->currentAudioFrame;
         }
 
         const PlayerCacheOptions& Player::getCacheOptions() const
@@ -1029,6 +1028,8 @@ namespace tl
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
                 p.mutex.cacheOptions = value;
+                if (p.timeline)
+                    p.timeline->setCacheOptions(value);
             }
         }
 
@@ -1038,20 +1039,20 @@ namespace tl
             return _p->cacheInfo;
         }
 
-        void Player::updateVideoCache(const otime::RationalTime& time)
+        void Player::updateVideoCache(const OTIO_NS::RationalTime& time)
         {
             TLRENDER_P();
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                p.thread.videoDataCache.erase(time);
+                p.thread.videoCache.erase(time);
                 p.forwardRequests(
-                    time, time, otime::RationalTime(1.0, time.rate()), true);
+                    time, time, OTIO_NS::RationalTime(1.0, time.rate()), true);
             }
             const auto playback = p.playback->get();
             if (playback == Playback::Stop)
             {
                 p.finishedVideoRequests();
-                updateVideoData();
+                updateVideoFrame();
             }
         }
 
@@ -1064,17 +1065,17 @@ namespace tl
         }
 
         void Player::setTimeline(
-            const otio::SerializableObject::Retainer<otio::Timeline>& value)
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& value)
         {
             TLRENDER_P();
-            
+
             p.timeline->setTimeline(value);
             if (!p.timeline)
                 return;
             p.speed->setIfChanged(p.timeline->getTimeRange().duration().rate());
             p.inOutRange->setIfChanged(p.timeline->getTimeRange());
         }
-    
+
         void Player::tick()
         {
             TLRENDER_P();
@@ -1090,7 +1091,7 @@ namespace tl
                 const double timelineSpeed = timeRange.duration().rate();
                 const double speed = p.speed->get();
 
-                otime::RationalTime playbackStartTime = time::invalidTime;
+                OTIO_NS::RationalTime playbackStartTime = time::invalidTime;
                 std::chrono::steady_clock::time_point playbackStartTimer;
                 {
                     std::unique_lock<std::mutex> lock(p.mutex.mutex);
@@ -1117,9 +1118,9 @@ namespace tl
                 {
                     seconds = -seconds;
                 }
-                const otime::RationalTime currentTime = p.loopPlayback(
+                const OTIO_NS::RationalTime currentTime = p.loopPlayback(
                     playbackStartTime +
-                    otime::RationalTime(seconds, 1.0)
+                    OTIO_NS::RationalTime(seconds, 1.0)
                         .rescaled_to(timeRange.duration().rate())
                         .floor());
                 // const double currentTimeDiff = abs(currentTime.value() -
@@ -1132,18 +1133,18 @@ namespace tl
             }
 
             // Sync with the thread.
-            std::vector<VideoData> currentVideoData;
-            std::vector<AudioData> currentAudioData;
+            std::vector<VideoFrame> currentVideoFrame;
+            std::vector<AudioFrame> currentAudioFrame;
             PlayerCacheInfo cacheInfo;
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
                 p.mutex.currentTime = p.currentTime->get();
-                currentVideoData = p.mutex.currentVideoData;
-                currentAudioData = p.mutex.currentAudioData;
+                currentVideoFrame = p.mutex.currentVideoFrame;
+                currentAudioFrame = p.mutex.currentAudioFrame;
                 cacheInfo = p.mutex.cacheInfo;
             }
-            p.currentVideoData->setIfChanged(currentVideoData);
-            p.currentAudioData->setIfChanged(currentAudioData);
+            p.currentVideoFrame->setIfChanged(currentVideoFrame);
+            p.currentAudioFrame->setIfChanged(currentAudioFrame);
             p.cacheInfo->setIfChanged(cacheInfo);
         }
     } // namespace timeline

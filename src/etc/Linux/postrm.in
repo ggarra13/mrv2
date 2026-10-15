@@ -7,6 +7,14 @@
 # 
 set +e
 
+# dpkg -i handling of overwriting (upgrade)
+# Check why the script is being called.
+# We only want to delete things if the package is actually being removed or purged.
+if [ "$1" = "upgrade" ]; then
+    # Do nothing during an upgrade, let dpkg handle file replacement
+    exit 0
+fi
+
 # Constants
 ICON_SIZES='16 32 48 64 128 256'
 BIN_DIR="/usr/bin"

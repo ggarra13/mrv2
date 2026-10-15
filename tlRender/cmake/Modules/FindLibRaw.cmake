@@ -25,14 +25,18 @@ set(LibRaw_INCLUDE_DIRS
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     find_library(LibRaw_LIBRARY
-        NAMES rawd raw)
+        NAMES rawd raw
+	HINTS ${CMAKE_INSTALL_PREFIX})
     find_library(LibRaw_r_LIBRARY
-        NAMES raw_rd raw_r)
+        NAMES raw_rd raw_r
+	HINTS ${CMAKE_INSTALL_PREFIX})
 else()
     find_library(LibRaw_LIBRARY
-        NAMES raw)
+        NAMES raw
+	HINTS ${CMAKE_INSTALL_PREFIX})
     find_library(LibRaw_r_LIBRARY
-        NAMES raw_r)
+        NAMES raw_r
+	HINTS ${CMAKE_INSTALL_PREFIX})
 endif()
 set(LibRaw_LIBRARIES
     ${LibRaw_LIBRARY}
@@ -44,7 +48,7 @@ find_package_handle_standard_args(
     REQUIRED_VARS LibRaw_INCLUDE_DIR LibRaw_LIBRARY)
 mark_as_advanced(LibRaw_INCLUDE_DIR LibRaw_LIBRARY)
 
-set(LibRaw_LINK_LIBRARIES ZLIB)
+set(LibRaw_LINK_LIBRARIES ZLIB::ZLIB)
 if(LCMS2_FOUND)
     list(APPEND LibRaw_LINK_LIBRARIES LCMS2::lcms2)
 endif()

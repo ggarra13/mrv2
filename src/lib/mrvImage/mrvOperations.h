@@ -8,7 +8,7 @@
 
 #include <Imath/half.h>
 
-    
+
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -21,7 +21,7 @@
 namespace mrv
 {
     using namespace tl;
-    
+
     namespace
     {
         // HLG (BT.2100) -> Linear light (normalized to 10,000 nits = 1.0)
@@ -36,13 +36,13 @@ namespace mrv
             const double a = 0.17883277;
             const double b = 1.0 - 4.0 * a; // ~0.28466892
             const double c = 0.5 - 2.0 * a; // ~0.14233446
-    
+
             // Scale factor to convert the output (normalized to L_W) to L_PEAK (10000 nits)
             // L_W / L_PEAK = 100 / 10000 = 0.01
-            const double scale_factor = L_W / 10000.F; 
+            const double scale_factor = L_W / 10000.F;
 
             double L; // Linear light value, normalized to 10000 nits = 1.0
-    
+
             // Low-luminance segment (0 <= V <= 0.5)
             if (hlg <= 0.5)
             {
@@ -62,13 +62,13 @@ namespace mrv
 
             return static_cast<float>(L);
         }
-        
+
         // PQ (ST2084) → Linear light (normalized to 10,000 nits = 1.0)
         inline float pq_to_linear(float pq)
         {
             // Clamp to [0, 1] to avoid NANs
             pq = std::clamp(pq, 0.0f, 1.0f);
-        
+
             // Note: Constants are defined in terms of the formula:
             // L = ((max(0, V^(1/m2) - c1)) / (c2 - c3 * V^(1/m2)))^(1/m1)
             const double m1 = 0.1593017578125;
@@ -82,100 +82,25 @@ namespace mrv
             const double numerator = std::max(vp - c1, 0.0);
             const double denominator = c2 - c3 * vp;
             const double L = std::pow(numerator / denominator, 1.0 / m1);
-        
+
             // L is already the relative linear light value where
             // 1.0 == 10000 nits.
             return static_cast<float>(L);
         }
-        
-        // Saturating cast: integers clamp to their min/max, floats just cast.
-        // (Works for uint8_t/uint16_t/int16_t/etc. and float/half-like types.)
-        template <class T, class Acc>
-        inline T sat_cast(Acc v)
-        {
-            if constexpr (std::numeric_limits<T>::is_integer)
-            {
-                const Acc lo = static_cast<Acc>(std::numeric_limits<T>::min());
-                const Acc hi = static_cast<Acc>(std::numeric_limits<T>::max());
-                v = std::clamp(v, lo, hi);
-                return static_cast<T>(std::lrint(v)); // round-to-nearest
-            } else {
-                // Floating-point (float/double/half): no clamp by default
-                return static_cast<T>(v);
-            }
-        }
-        
-        template <typename T>
-        inline T lerp(const T& a, const T& b, float t)
-        {
-            return a + (b - a) * t;
-        }
+
     }
 
-    // Generic pixel scaling (assumes operator+,-,* are defined for T)
-    template <typename T>
-    void scaleImageLinear(
-        const T* src, std::size_t width, std::size_t height,
-        T* dst, std::size_t W, std::size_t H, std::size_t channels,
-        bool align_corners = false)
-    {
-        assert(src && dst);
-        assert(width > 0 && height > 0 && W > 0 && H > 0 && channels > 0);
+    /**
+     * Bilinear resampling in the pixel's current numerical encoding.
+     * Caller is responsible for performing color-space conversion if
+     * interpolation must occur in linear light.
+     *
+     * @param source source image to be scaled-
+     * @param scaled ouput image with its size already set.
+     */
+    void scaleImageLinear(std::shared_ptr<image::Image> source,
+                          std::shared_ptr<image::Image> scaled);
 
-        using Acc = double; // accumulator precision
-    
-        const Acc xScale = (align_corners && W > 1) ?
-                           Acc(width - 1) / Acc(W - 1) :
-                           Acc(width)     / Acc(W);
-        const Acc yScale = (align_corners && H > 1) ?
-                           Acc(height - 1) / Acc(H - 1) :
-                           Acc(height)     / Acc(H);
-
-        for (std::size_t j = 0; j < H; ++j)
-        {
-            const Acc sy = align_corners ?
-                           (j * yScale) :
-                           ((j + Acc(0.5)) * yScale - Acc(0.5));
-            const Acc syc = std::clamp(sy, Acc(0), Acc(height - 1));
-            const std::size_t y0 = static_cast<std::size_t>(std::floor(syc));
-            const std::size_t y1 = std::min(y0 + 1, height - 1);
-            const Acc fy = syc - y0;
-
-            for (std::size_t i = 0; i < W; ++i)
-            {
-                const Acc sx = align_corners ?
-                               (i * xScale) :
-                               ((i + Acc(0.5)) * xScale - Acc(0.5));
-                const Acc sxc = std::clamp(sx, Acc(0), Acc(width - 1));
-                const std::size_t x0 = static_cast<std::size_t>(
-                    std::floor(sxc));
-                const std::size_t x1 = std::min(x0 + 1, width - 1);
-                const Acc fx = sxc - x0;
-
-                const std::size_t dstBase = (j * W + i) * channels;
-
-                for (std::size_t c = 0; c < channels; ++c) {
-                    const T p00 = src[(y0 * width + x0) * channels + c];
-                    const T p10 = src[(y0 * width + x1) * channels + c];
-                    const T p01 = src[(y1 * width + x0) * channels + c];
-                    const T p11 = src[(y1 * width + x1) * channels + c];
-                    
-                    const Acc a00 = static_cast<Acc>(p00);
-                    const Acc a10 = static_cast<Acc>(p10);
-                    const Acc a01 = static_cast<Acc>(p01);
-                    const Acc a11 = static_cast<Acc>(p11);
-
-                    const Acc top    = lerp(a00, a10, fx);
-                    const Acc bottom = lerp(a01, a11, fx);
-                    const Acc value  = lerp(top, bottom, fy);
-
-                    dst[dstBase + c] = sat_cast<T, Acc>(value);
-                }
-            }
-        }
-    }
-    
-    
     template<typename T>
     inline void flipImageInY(
         T* pixels, const size_t width, const size_t height,
@@ -184,7 +109,7 @@ namespace mrv
         const size_t rowSize = width * depth;
         const size_t rowByteCount = rowSize * sizeof(T);
         T* tempRow = new T[width * depth];
-        
+
         for (size_t y = 0; y < height / 2; ++y)
         {
             T* topRow = pixels + y * rowSize;
@@ -197,6 +122,7 @@ namespace mrv
 
         delete[] tempRow; // Free the temporary buffer
     }
+
 
 /**
  * @brief Composites a source image onto a destination using a custom OpenGL-style blend.
@@ -253,7 +179,7 @@ void compositeImageOverNoAlpha(
         const float dst_r_norm = dstPixels[pixelIndex + 0] / max_dst_val;
         const float dst_g_norm = dstPixels[pixelIndex + 1] / max_dst_val;
         const float dst_b_norm = dstPixels[pixelIndex + 2] / max_dst_val;
-        
+
         // 3. Apply the custom blending formulas.
         // RGB: C_out = C_src * 1 + C_dst * (1 - A_src)
         const float out_r_norm = src_r_norm + dst_r_norm * (1.0f - src_alpha_norm);
@@ -323,7 +249,7 @@ void compositeImageOver(
         const float dst_g_norm = dstPixels[pixelIndex + 1] / max_dst_val;
         const float dst_b_norm = dstPixels[pixelIndex + 2] / max_dst_val;
         const float dst_a_norm = dstPixels[pixelIndex + 3] / max_dst_val;
-        
+
         // 3. Apply the custom blending formulas.
         // RGB: C_out = C_src * 1 + C_dst * (1 - A_src)
         const float out_r_norm = src_r_norm + dst_r_norm * (1.0f - src_alpha_norm);
@@ -341,7 +267,7 @@ void compositeImageOver(
         dstPixels[pixelIndex + 3] = static_cast<T>(out_a_norm * max_dst_val);
     }
 }
-    
+
 
     inline void flipImageInY(
         uint8_t* outputPixels, const uint8_t* inputPixels, const size_t width,
@@ -424,13 +350,13 @@ void compositeImageOver(
             }
         }
     }
-    
+
     void flipImageInY(const std::shared_ptr<image::Image> image);
-    
+
     void composite_RGBA_U8(std::shared_ptr<image::Image>& dest,
                            std::shared_ptr<image::Image>& source);
 
     void convert_RGBA_to_RGB_U8(std::shared_ptr<image::Image>& dest,
                                 std::shared_ptr<image::Image>& source);
-    
+
 } // namespace mrv

@@ -27,10 +27,7 @@ NSIS_INSTALLER="${PACKAGE_DIRECTORY}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARC
 AZURE_HTTP="http://timestamp.sectigo.com/"
 
 # Define password variable
-if [[ $USER == "User-PC" || $USER == "ggarra13" || $USER == "gga" ||
-	  $GITHUB_OWNER == "ggarra13" ]]; then
-    PASS="secretsalt1973!"
-fi
+PASS="${MRV2_WINDOWS_SIGNING_PASSWORD:=}"
 
 sign_installer() {
     for i in 1 2 3; do
@@ -48,19 +45,20 @@ sign_installer() {
     done
     
     echo "Signing failed after retries"
-    rm -f "$NSIS_INSTALLER"
+    #rm -f "$NSIS_INSTALLER"
     exit 1
 }
 
 #
-# Call the function to sign the NSIS installer
-# if I am USER-PC or on GITHUB_ACTIONS.
+# Call the function to sign the NSIS installer if password is set
 #
-if [[ "$USER" == "User-PC" || "$GITHUB_ACTIONS" == "true" ]]; then
+if [[ "$PASS" != "" ]]; then
     if [[ -e "${NSIS_INSTALLER}" ]]; then
         echo "Installer found. Starting signing process..."
         sign_installer
     else
         echo "Error: Installer not found at ${NSIS_INSTALLER}"
     fi
+else
+    echo "PASSWORD not set.  Cannot sign installer."
 fi

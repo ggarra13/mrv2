@@ -48,12 +48,15 @@ namespace mrv
             //! Virtual hide method.  Destroys ALL resources.
             void hide() FL_OVERRIDE;
 
+            //! Virtual function to return Vulkan's max frames in flight.
+            int get_max_frames_in_flight() FL_OVERRIDE;
+
             //! Set the internal system context for the widget.
             void setContext(const std::weak_ptr<system::Context>& context);
 
             void init_colorspace() FL_OVERRIDE;
             std::vector<const char*> get_device_extensions() FL_OVERRIDE;
-            
+
             void prepare() FL_OVERRIDE;
             void destroy() FL_OVERRIDE;
 
@@ -63,7 +66,11 @@ namespace mrv
 
             void setSaveOverlay(const bool save);
 
-        protected:            
+            std::shared_ptr<image::FontSystem > getFontSystem();
+
+            void _retryHDR();
+
+        protected:
             void _updateHDRMetadata();
 
             void _createCubicEnvironmentMap();
@@ -101,7 +108,7 @@ namespace mrv
 
             void _drawHUD(const std::vector<timeline::TextInfo>& textInfos,
                 const float alpha) const noexcept;
-            
+
             void _drawHUD(float alpha) const noexcept;
 
             void _drawCursor(const math::Matrix4x4f& mvp) noexcept;
@@ -109,9 +116,8 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
             void _drawAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
-                const std::shared_ptr<tl::timeline_vlk::Render>& render,
                 const math::Matrix4x4f& renderMVP,
-                const otime::RationalTime& time,
+                const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>&
                     annotations,
                 const std::vector<std::shared_ptr<voice::Annotation> >&
@@ -120,9 +126,8 @@ namespace mrv
 #else
             void _drawAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
-                const std::shared_ptr<tl::timeline_vlk::Render>& render,
                 const math::Matrix4x4f& renderMVP,
-                const otime::RationalTime& time,
+                const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>&
                     annotations,
                 const std::vector<bool>&
@@ -135,18 +140,16 @@ namespace mrv
             image::Color4f _pq_to_nits(const image::Color4f& rgba) const override;
             image::Color4f _pq_to_linear(const image::Color4f& rgba) const override;
 
-            void _drawHelpText() const noexcept;
-
             void _drawRectangleOutline(
                 const std::string& pipelineName,
                 const math::Matrix4x4f& mvp,
                 const math::Box2i& box, const image::Color4f& color)
                 const noexcept;
-            
+
             void _appendText(std::vector<timeline::TextInfo>& textInfos,
                              const std::vector<std::shared_ptr<image::Glyph> >&,
                              math::Vector2i&, const int16_t lineHeight) const;
-            
+
             void _appendText(std::vector<timeline::TextInfo>& textInfos,
                              const std::string& text,
                              const image::FontInfo& fontInfo,
@@ -195,7 +198,7 @@ namespace mrv
             void _mapBuffer();
             void _unmapBuffer();
             void _getMonitorNits(bool quiet = true);
-            
+
             // Helper function to diagnose current state
             void _diagnoseColorSpaceState() const;
 

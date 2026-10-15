@@ -78,7 +78,7 @@ namespace tl
 
         void System::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::ndi::System", context);
+            ISystem::_init(context, "tl::ndi::System");
             TLRENDER_P();
 
             p.context = context;
@@ -185,7 +185,8 @@ namespace tl
                 });
         }
 
-        System::System() :
+        System::System(const std::shared_ptr<system::Context>& context) :
+            ISystem::ISystem(context, "tl::ndi::System"),
             _p(new Private)
         {
         }
@@ -259,7 +260,7 @@ namespace tl
         std::shared_ptr<System>
         System::create(const std::shared_ptr<system::Context>& context)
         {
-            auto out = std::shared_ptr<System>(new System);
+            auto out = std::shared_ptr<System>(new System(context));
             out->_init(context);
             return out;
         }

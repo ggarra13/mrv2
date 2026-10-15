@@ -52,6 +52,14 @@ endfunction()
 function( is_system_lib TARGET ISSYSLIB )
 
     #
+    # Cairo libs
+    #
+    set(_cairo_libs
+	libcairo-gobject
+	libcairo
+	libpixman)
+    
+    #
     # Vulkan Libs to distribute on Linux and macOS
     # 
     set(_vulkan_libs
@@ -67,7 +75,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	    libMoltenVK
 	    libvulkan)
     endif()
-    
+
     #
     # List of libraries that are accepted to distribute
     #
@@ -77,7 +85,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libavfilter
 	libavformat
 	libavutil
-	libcairo
+	#libcairo
 	libcryp
 	libdisplay-info
 	libdovi
@@ -97,7 +105,7 @@ function( is_system_lib TARGET ISSYSLIB )
     #
     set(_kde_libs
 	libkwin
-	
+
 	libKF5ConfigCore
 	libKF5ConfigGui
 	libKF5CoreAddons
@@ -106,7 +114,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libKF5Plasma
 	libKF5WaylandClient
 	libKF5WindowSystem
-	
+
 	libKF6ConfigCore
 	libKF6ConfigGui
 	libKF6CoreAddons
@@ -115,11 +123,11 @@ function( is_system_lib TARGET ISSYSLIB )
 	libKF6Plasma
 	libKF6WaylandClient
 	libKF6WindowSystem
-	
+
 	libinput
     )
 
-    set(_qt_libs	
+    set(_qt_libs
 	libQt5Core
 	libQt5DBus
 	libQt5Gui
@@ -134,23 +142,42 @@ function( is_system_lib TARGET ISSYSLIB )
 	libQt6WaylandClient
 	libQt6WaylandCompositor
     )
+
+    set(_gtk_libs
+	libatk-bridge
+	libepoxy
+	libgtk
+	libgdk
+	libgdk_pixbuf
+	libgmodule
+	libpangocairo
+	libpango
+	libpangoft2
+	libharfbuzz
+	libatk
+	libatk
+    )
     
     set(_gnome_libs
-	libcairo
 	libdrm
 	libdrm2
+	libgdk
 	libgio
 	libglib
+	liggmodule
 	libgobject
+	libgtk
 	libpango
 	libwayland-client
 	libwayland-cursor
 	libwayland-egl
 	libwayland-server
 	libxkbcommon
+	${_gtk_libs}
     )
 
     set(_x11_libs
+	libICE
 	libX11
 	libX11-xcb
 	libXau
@@ -179,7 +206,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libXv
 	libXxf86dga
 	libXxf86vm
-	
+
 	libxcb-shape
 	libxcb-xfixes
 	libxcb-render
@@ -213,7 +240,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	    tk
 	)
     endif()
-    
+
     #
     # List of system libraries that should *NOT* be distributed
     #
@@ -246,6 +273,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libz
 	vulkan-          # On Windows, we don't distribute vulkan-1.dll
 	${_audio_libs}
+	${_cairo_libs}
 	${_kde_libs}
 	${_gnome_libs}
 	${_qt_libs}
@@ -254,7 +282,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	${_macos_libs}
     )
 
-    
+
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
     foreach( lib ${_acceptedlibs} )
 	if ("${TARGET}" MATCHES "${lib}")
@@ -310,6 +338,7 @@ function( get_runtime_dependencies TARGET )
     foreach (exe ${TARGET})
 	if ( EXISTS ${exe} )
 	    message( STATUS "PARSING ${exe} for DSOs...." )
+	    execute_process(COMMAND chmod a+x "${exe}")
 	    execute_process(COMMAND ldd ${exe} OUTPUT_VARIABLE ldd_out)
 	    string (REPLACE "\n" ";" ldd_out_lines ${ldd_out})
 	    foreach (line ${ldd_out_lines})
@@ -384,6 +413,75 @@ endfunction()
 #
 function( get_macos_runtime_dependencies TARGET )
     install_macos_target_with_deps( "${TARGET}" )
+endfunction()
+
+#
+# Function used to copy a macOS library or .framework *directly* into an
+# app bundle's Resources/lib directory, recursively pulling in every
+# non-system dependency it references (transitively) so the copy is
+# self-contained.
+#
+# Unlike install_macos_target_with_deps() (which drops discovered
+# dependencies into CMAKE_INSTALL_PREFIX/lib, i.e. the pre-packaging
+# staging area), this installs straight into DEST_LIB_DIR, so it is safe
+# to call for libraries that are copied into an .app bundle from *outside*
+# the staging tree (e.g. Vulkan libraries pulled from the Vulkan SDK or
+# Homebrew), and it will also pick up incidental extra dependencies that
+# only show up on some macOS/toolchain versions (e.g. libpsl.dylib pulled
+# in by curl/openssl in the Vulkan/MoltenVK chain).
+#
+# Bookkeeping is keyed by "DEST_LIB_DIR|library", so the same library can
+# be correctly re-processed for more than one app bundle (mrv2.app,
+# hdr.app, ...) in the same packaging run without being skipped the
+# second time.
+#
+set(INSTALLED_BUNDLE_DEPS "" CACHE INTERNAL
+    "Libraries already copied into an app bundle, keyed by DEST_LIB_DIR|library")
+
+function( install_macos_lib_with_deps LIBFILE DEST_LIB_DIR )
+    if ( NOT EXISTS "${LIBFILE}" )
+	message( WARNING "install_macos_lib_with_deps: ${LIBFILE} does not exist" )
+	return()
+    endif()
+
+    set( _key "${DEST_LIB_DIR}|${LIBFILE}" )
+    list(FIND INSTALLED_BUNDLE_DEPS "${_key}" _already_installed)
+    if (_already_installed GREATER -1)
+	return()
+    endif()
+    list(APPEND INSTALLED_BUNDLE_DEPS "${_key}")
+    set(INSTALLED_BUNDLE_DEPS "${INSTALLED_BUNDLE_DEPS}" CACHE INTERNAL
+	"Libraries already copied into an app bundle, keyed by DEST_LIB_DIR|library")
+
+    file(INSTALL
+	DESTINATION "${DEST_LIB_DIR}"
+	TYPE SHARED_LIBRARY
+	FOLLOW_SYMLINK_CHAIN
+	FILES "${LIBFILE}"
+    )
+
+    execute_process(COMMAND otool -L "${LIBFILE}" OUTPUT_VARIABLE ldd_out)
+    string (REPLACE "\n" ";" ldd_out_lines "${ldd_out}")
+    foreach (line ${ldd_out_lines})
+	string(REGEX REPLACE " \\(.*\\)" "" pruned "${line}")
+	string(REGEX REPLACE ":$" "" pruned "${pruned}")
+	string(STRIP "${pruned}" dep_filename)
+
+	if ("${dep_filename}" STREQUAL "" OR "${dep_filename}" STREQUAL "${LIBFILE}")
+	    continue()
+	endif()
+	if (NOT IS_ABSOLUTE "${dep_filename}")
+	    continue()
+	endif()
+
+	is_macos_system_lib("${dep_filename}" sys_lib)
+	if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
+	    # Collapse .framework/Versions/A/Name paths down to the
+	    # .framework bundle itself.
+	    string( REGEX REPLACE ".framework/.*$" ".framework" framework "${dep_filename}" )
+	    install_macos_lib_with_deps( "${framework}" "${DEST_LIB_DIR}" )
+	endif()
+    endforeach()
 endfunction()
 
 #
@@ -521,6 +619,13 @@ function( fixup_macos_rpath APP_LIB_DIR )
 	# Read the first few lines of the file
 	file(READ "${LAUNCHER_SCRIPT}" LAUNCHER_CONTENT LIMIT 256)
 
+	# Check if it starts with #!/bin/bash
+	string(FIND "${LAUNCHER_CONTENT}" "#!/usr/bin/env bash" POS)
+	if (POS EQUAL 0)
+	    message(STATUS "Launcher uses /usr/bin/env bash shebang")
+	    continue()
+	endif()
+	
 	# Check if it starts with #!/bin/bash
 	string(FIND "${LAUNCHER_CONTENT}" "#!/bin/bash" POS)
 	if (POS EQUAL 0)
@@ -724,5 +829,57 @@ function(install_ndi)
         " COMPONENT applications)
 
 	endif()
+    endif()
+endfunction()
+
+function(fix_dylib_rpath EXE LIBNAME FIND_PATHS)
+    unset(UNVERSIONED_LIB CACHE)
+    unset(UNVERSIONED_LIB)
+    
+    # 1. Look for the unversioned DSO (libintl.dylib). 
+    # We provide the standard Homebrew paths as hints so it works seamlessly
+    # on both architectures.
+    find_library(UNVERSIONED_LIB
+	NAMES
+	${LIBNAME}
+        HINTS
+	${FIND_PATHS}
+        /opt/homebrew/lib  # Apple Silicon Homebrew
+        /usr/local/lib     # Intel Homebrew
+	NO_DEFAULT_PATH
+
+    )
+    
+    if (UNVERSIONED_LIB)
+	# 2. Extract the actual LC_ID_DYLIB from the library
+        # This is the exact string the linker embeds into your EXE.
+        execute_process(
+            COMMAND otool -D "${UNVERSIONED_LIB}"
+            OUTPUT_VARIABLE OTOOL_OUTPUT
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+        
+        # otool -D outputs two lines: the file path, and the ID path.
+        # We use regex to grab just the second line.
+        string(REGEX REPLACE ".*\n(.*)" "\\1" DYLIB_ID "${OTOOL_OUTPUT}")
+        string(STRIP "${DYLIB_ID}" DYLIB_ID)
+
+        message(STATUS "Found ${LIBNAME}: Internal ID is ${DYLIB_ID}")
+	
+	# 3. Extract just the versioned filename for the new @rpath
+        get_filename_component(REAL_NAME "${DYLIB_ID}" NAME)
+        message(STATUS "Will change to: @rpath/${REAL_NAME}")
+	
+
+        # 4. Run install_name_tool using the dynamically resolved paths
+        add_custom_command(TARGET ${EXE} POST_BUILD
+            COMMAND install_name_tool -change 
+            "${DYLIB_ID}" 
+            "@rpath/${REAL_NAME}" 
+            $<TARGET_FILE:${EXE}>
+            COMMENT "Fixing ${LIBNAME} path to use @rpath/${REAL_NAME} for ${EXE}"
+        )
+    else()
+        message(WARNING "Could not find ${LIBNAME}. Skipping install_name_tool configuration.")
     endif()
 endfunction()

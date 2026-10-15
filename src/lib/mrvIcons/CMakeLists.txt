@@ -9,6 +9,7 @@ set(SOURCES
     Annotations.cpp
     Arrow.cpp
     Audio.cpp
+    Butterfly.cpp
     Circle.cpp
     Clear.cpp
     ColorArea.cpp
@@ -62,7 +63,6 @@ set(SOURCES
     OutlineCircle.cpp
     OutlinePolygon.cpp
     OutlineRectangle.cpp
-    Playlist.cpp
     Polygon.cpp
     Prev.cpp
     Python.cpp

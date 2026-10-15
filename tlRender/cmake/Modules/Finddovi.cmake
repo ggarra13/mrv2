@@ -17,8 +17,7 @@ find_path(dovi_INCLUDE_DIR
 
 find_library(dovi_LIBRARY
     NAMES dovi
-    PATHS
-    ${CMAKE_INSTALL_PREFIX}/lib/
+    HINTS ${CMAKE_INSTALL_PREFIX}
 )
 
 message(STATUS "dovi is ${dovi_LIBRARY}")

@@ -22,9 +22,7 @@ namespace tl
         class Render : public std::enable_shared_from_this<Render>
         {
         protected:
-            void _init(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            void _init(const std::shared_ptr<log::System>&);
 
             Render();
 
@@ -32,9 +30,7 @@ namespace tl
             ~Render();
 
             //! Create a new renderer.
-            static std::shared_ptr<Render> create(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            static std::shared_ptr<Render> create(const std::shared_ptr<log::System>&);
 
             //! Get information.
             std::future<io::Info> getInfo(int64_t id, const file::Path& path);
@@ -42,7 +38,7 @@ namespace tl
             //! Render an image.
             std::future<io::VideoData> render(
                 int64_t id, const file::Path& path,
-                const otime::RationalTime& time, const io::Options&);
+                const OTIO_NS::RationalTime& time, const io::Options&);
 
             //! Cancel requests.
             void cancelRequests(int64_t id);

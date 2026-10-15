@@ -53,7 +53,10 @@ if ( UNIX )
 endif()
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
+    set(mrv2_NAME vmrv2)
     find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
+else()
+    set(mrv2_NAME mrv2)
 endif()
 
 find_package(FLTK CONFIG REQUIRED)
@@ -113,6 +116,9 @@ find_package(nlohmann_json REQUIRED)
 find_package(minizip REQUIRED)
 find_package(OpenGL REQUIRED)
 
+# For .pc packages (currently libwebp)
+find_package(PkgConfig REQUIRED)
+
 if (WIN32 OR APPLE)
     if (MRV2_BACKEND STREQUAL "VK")
 	find_package(harfbuzz REQUIRED)
@@ -129,18 +135,18 @@ elseif(MRV2_BACKEND STREQUAL "BOTH")
 endif()
 
 if(MRV2_CPPTRACE)
-    add_definitions( -D MRV2_CPPTRACE )
+    add_definitions(-D MRV2_CPPTRACE)
 endif()
 
 if(MRV2_NETWORK)
     find_package(Poco REQUIRED
 	COMPONENTS Net NetSSL Foundation
 	CONFIG)
-    add_definitions( -DMRV2_NETWORK )
+    add_definitions( -D MRV2_NETWORK )
 endif()
 
 if(MRV2_PDF)
-    add_definitions( -DMRV2_PDF )
+    add_definitions( -D MRV2_PDF )
 endif()
 
 # Pass flags for CMAKE_BUILD_TYPE
@@ -199,6 +205,10 @@ if(TLRENDER_LIBPLACEBO)
     add_definitions(-DTLRENDER_LIBPLACEBO)
 endif()
 
+if(TLRENDER_LIBWEBP)
+    add_definitions(-DTLRENDER_LIBWEBP)
+endif()
+
 if(TLRENDER_NDI)
     add_definitions(-DTLRENDER_NDI)
     if (TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
@@ -208,6 +218,10 @@ endif()
 
 if(TLRENDER_NET)
     add_definitions(-DTLRENDER_NET)
+endif()
+
+if(TLRENDER_OAPV)
+    add_definitions(-DTLRENDER_OAPV)
 endif()
 
 if(TLRENDER_OCIO)
@@ -310,7 +324,7 @@ endif()
 add_definitions(
     -DNOMINMAX
     -DMRV2_VERSION="${mrv2_VERSION}"
-    -DTLRENDER_VERSION="${tlRender_VERSION}"
+    -DTLRENDER_VERSION="${TLRENDER_VERSION}"
     -DFLTK_GIT_TAG="${FLTK_GIT_TAG}"
 )
 
@@ -360,7 +374,7 @@ if (UNIX AND NOT APPLE)
 	DESTINATION icons
 	COMPONENT applications )
 elseif(WIN32)
-    install( FILES icons/mrv2.png
+    install( FILES icons/mrv2.png icons/crosshair.png
 	DESTINATION icons
 	COMPONENT applications )
 endif()
@@ -387,10 +401,6 @@ if (MRV2_PYBIND11)
     
     install(FILES python/plug-ins/update-mrv2.py
 	DESTINATION python/plug-ins
-	COMPONENT python_plugins)
-    
-    install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
-	DESTINATION python/
 	COMPONENT python_plugins)
     
     #
@@ -475,13 +485,19 @@ add_subdirectory(license_helper)
 # Add hdr source
 #
 if (TLRENDER_NDI AND TLRENDER_VK AND MRV2_HDR)
+    message(STATUS "Will build hdr utility")
     add_subdirectory(hdr)
+else()
+    message(STATUS "Will NOT build hdr utility due to one of these being OFF")
+    message(STATUS "TLRENDER_NDI=${TLRENDER_NDI}")
+    message(STATUS "TLRENDER_VK=${TLRENDER_VK}")
+    message(STATUS "MRV2_HDR=${MRV2_HDR}")
 endif()
 
 #
 # Add main source
 #
-add_subdirectory(main)
+add_subdirectory(mrv2)
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
     add_subdirectory(tests)

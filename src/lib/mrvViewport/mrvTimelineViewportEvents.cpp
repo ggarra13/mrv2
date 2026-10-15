@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-// #define DEBUG_EVENTS 1
+//#define DEBUG_EVENTS 1
 
 #include "mrViewer.h"
 
@@ -35,6 +35,10 @@
 #include <FL/filename.H>
 #include <FL/Fl_Menu_Button.H>
 
+#ifdef DEBUG_EVENTS
+#include <Fl/names.h>
+#endif
+
 #include <memory>
 #include <cmath>
 #include <algorithm>
@@ -56,7 +60,7 @@ namespace
     const float kVoiceTimeout = 1.0 / 30.0;
 
     const char* kModule = "view";
-    
+
 } // namespace
 
 namespace mrv
@@ -92,7 +96,7 @@ namespace mrv
                 return false;
             }
         }
-        
+
     } // namespace
 
 
@@ -114,7 +118,7 @@ namespace mrv
 #endif
                 s->open();
             }
-            
+
             void link_edit_cb(Fl_Menu_*, tl::draw::Shape* shape)
             {
 #ifdef VULKAN_BACKEND
@@ -129,32 +133,32 @@ namespace mrv
 #endif
                 s->edit();
             }
-            
+
             void link_delete_cb(Fl_Menu_*, TimelineViewport* view)
             {
                 view->linkDelete();
             }
-            
+
             void voice_over_delete_cb(Fl_Menu_*, TimelineViewport* view)
             {
                 view->voiceOverDelete();
             }
-            
+
             void voice_over_clear_cb(Fl_Menu_*, TimelineViewport* view)
             {
                 view->voiceOverClear();
             }
-            
+
             void voice_over_append_cb(Fl_Menu_*, TimelineViewport* view)
             {
                 view->voiceOverAppend();
             }
-            
+
             void record_mouse_position_cb(TimelineViewport* view)
             {
                 view->recordMousePosition();
             }
-    
+
             void play_mouse_position_cb(TimelineViewport* view)
             {
                 view->playMousePosition();
@@ -172,10 +176,10 @@ namespace mrv
 
             if (!currentLink)
                 return;
-            
+
             if (!p.player)
                 return;
-            
+
             auto annotation = p.player->getAnnotation();
             if (!annotation)
                 return;
@@ -188,15 +192,15 @@ namespace mrv
                                }),
                 annotation->shapes.end()
                 );
-            
+
             currentLink.reset();
-            
+
             if (annotation->shapes.empty())
                 p.player->removeAnnotation(annotation);
-            
+
             redrawWindows();
         }
-        
+
         void TimelineViewport::voiceOverDelete()
         {
             TLRENDER_P();
@@ -220,16 +224,16 @@ namespace mrv
                                }),
                 annotation->voices.end()
                 );
-            
+
             currentVoiceOver.reset();
-            
+
             if (annotation->voices.empty())
                 p.player->removeAnnotation(annotation);
-            
+
             redrawWindows();
 #endif
         }
-        
+
         void TimelineViewport::voiceOverClear()
         {
 #ifdef TLRENDER_FFMPEG
@@ -254,7 +258,7 @@ namespace mrv
                             (Fl_Timeout_Handler)record_mouse_position_cb, this);
 #endif
         }
-        
+
         void TimelineViewport::recordMousePosition()
         {
 #ifdef TLRENDER_FFMPEG
@@ -280,7 +284,7 @@ namespace mrv
 
             currentVoiceOver->tick();
             redrawWindows();
-            
+
             if (currentVoiceOver->getStatus() == voice::RecordStatus::Playing)
             {
                 Fl::repeat_timeout(kVoiceTimeout,
@@ -296,7 +300,7 @@ namespace mrv
             }
 #endif
         }
-        
+
         //! This callback must be part of TimelineViewport as CommandInterpreter will call it.
         void TimelineViewport::laserFade_cb(LaserFadeData* data)
         {
@@ -362,7 +366,7 @@ namespace mrv
             {
                 math::Vector2f pos = _getRasterf();
                 const auto& renderSize = getRenderSize();
-            
+
                 float dx = pos.x / renderSize.w;
                 float dy = pos.y / renderSize.h;
 
@@ -379,18 +383,20 @@ namespace mrv
                 redrawWindows();
             }
         }
-        
-        void TimelineViewport::_handleDragLeftMouseButton() noexcept
+
+        int TimelineViewport::_handleDragLeftMouseButton() noexcept
         {
             TLRENDER_P();
 
             if (p.compareOptions.mode == timeline::CompareMode::Wipe)
             {
                 _handleCompareWipe();
+                return 1;
             }
             else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
             {
                 _handleCompareOverlay();
+                return 1;
             }
             else
             {
@@ -414,6 +420,8 @@ namespace mrv
                     {
                         if (Fl::event_shift())
                         {
+                            if (!mrv::feature_needs_solo_or_later())
+                                return 0;
                             return _handleDragSelection();
                         }
                         else
@@ -421,7 +429,7 @@ namespace mrv
                             p.isScrubbing = true;
                             if (Fl::event_alt())
                             {
-                                float multiplier = p.ui->uiPrefs->uiPrefsAltScrubbingSensitivity->value();
+                                float multiplier = p.ui->uiPrefs->AltScrubbingSensitivity->value();
                                 scrub(multiplier);
                             }
                             else
@@ -430,13 +438,12 @@ namespace mrv
                             }
                         }
                     }
-                    return;
+                    return 1;
                 }
                 else if (
                     Fl::event_shift() || p.actionMode == ActionMode::kSelection)
                 {
-                    _handleDragSelection();
-                    return;
+                    return _handleDragSelection();
                 }
                 else
                 {
@@ -444,18 +451,18 @@ namespace mrv
 
                     auto player = getTimelinePlayer();
                     if (!player)
-                        return;
+                        return 0;
 
                     auto annotation = player->getAnnotation();
                     if (p.actionMode != ActionMode::kScrub && !annotation)
-                        return;
+                        return 0;
 
                     if (isDrawAction(p.actionMode) &&
                         !p.showAnnotations)
                     {
                         p.showAnnotations = true;
                     }
-                    
+
                     std::shared_ptr< draw::Shape > s;
                     if (annotation)
                         s = annotation->lastShape();
@@ -466,12 +473,12 @@ namespace mrv
                         if (Fl::event_alt())
                         {
                             if (!p.player)
-                                return;
+                                return 0;
 
                             const int X = Fl::event_x() * pixels_per_unit();
-                            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * 20;
+                            const float scale = p.ui->uiPrefs->ScrubbingSensitivity->value() * 20;
                             float dx = (X - p.mousePress.x) / scale;
-                            
+
                             if (std::abs(dx) >= 1.0F)
                             {
                                 p.isScrubbing = true;
@@ -483,10 +490,9 @@ namespace mrv
                         {
                             scrub();
                         }
-                        return;
+                        return 1;
                     default:
-                        _handleDragLeftMouseButtonShapes();
-                        return;
+                        return _handleDragLeftMouseButtonShapes();
                     }
                 }
             }
@@ -495,7 +501,7 @@ namespace mrv
         void TimelineViewport::_startVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice)
         {
             TLRENDER_P();
-            
+
 #ifdef TLRENDER_FFMPEG
             p.mousePos = _getFocus();
             auto pos = _getRasterf();
@@ -510,7 +516,7 @@ namespace mrv
             redrawWindows();
 #endif
         }
-        
+
         void TimelineViewport::_stopVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice)
         {
 #ifdef TLRENDER_FFMPEG
@@ -519,7 +525,7 @@ namespace mrv
             redrawWindows();
 #endif
         }
-                                            
+
         void TimelineViewport::_stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice)
         {
 #ifdef TLRENDER_FFMPEG
@@ -528,14 +534,14 @@ namespace mrv
             redrawWindows();
 #endif
         }
-        
+
         void TimelineViewport::_stopVoiceRecording()
         {
             TLRENDER_P();
-            
+
             if (!p.player)
                 return;
-            
+
             auto annotations = p.player->getVoiceAnnotations();
             if (!annotations.empty())
             {
@@ -548,14 +554,14 @@ namespace mrv
                 }
             }
         }
-                                            
+
         void TimelineViewport::_stopVoicePlaying()
         {
             TLRENDER_P();
 
             if (!p.player)
                 return;
-            
+
             auto annotations = p.player->getVoiceAnnotations();
             if (!annotations.empty())
             {
@@ -567,10 +573,10 @@ namespace mrv
                     }
                 }
             }
-            
+
         }
-        
-        void TimelineViewport::_handlePushLeftMouseButton() noexcept
+
+        int TimelineViewport::_handlePushLeftMouseButton() noexcept
         {
             TLRENDER_P();
 
@@ -582,27 +588,34 @@ namespace mrv
             if (p.compareOptions.mode == timeline::CompareMode::Wipe)
             {
                 _handleCompareWipe();
+                return 1;
             }
             else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
             {
                 _handleCompareOverlay();
+                return 1;
             }
             else
             {
                 if (Fl::event_shift() || p.actionMode == ActionMode::kSelection)
                 {
+                    if (!mrv::feature_needs_solo_or_later())
+                        return 0;
+
                     p.lastEvent = FL_DRAG;
                     p.mousePos = _getFocus();
                     math::Vector2i pos = _getRaster();
 
                     _clampSelectionArea(pos);
                     p.selectionAnchor = pos;
-                    
+
                     math::Box2i area;
                     area.min = pos;
                     area.max = pos;
                     setSelectionArea(area);
                     redrawWindows();
+
+                    return 1;
                 }
                 else
                 {
@@ -616,20 +629,20 @@ namespace mrv
                             p.player->setPlayback(timeline::Playback::Stop,
                                                   p.isScrubbing);
                         }
-                        
+
                         p.lastEvent = FL_PUSH;
-                        return;
+                        return 1;
                     }
                     else if (p.actionMode == ActionMode::kVoice)
                     {
                         if (!p.player)
-                            return;
-                        
+                            return 0;
+
                         p.mousePos = _getFocus();
                         auto pos = _getRasterf();
 
                         auto renderSize = getRenderSize();
-                        
+
                         float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2;
                         mult = std::clamp(mult, 1.F, 10.F);
 
@@ -652,7 +665,7 @@ namespace mrv
                                     if (status != voice::RecordStatus::Saved &&
                                         status != voice::RecordStatus::Stopped)
                                         dont_create_annotation = true;
-                                    
+
                                     if (math::contains(buttonBox, pos))
                                     {
                                         dont_create_annotation = true;
@@ -661,7 +674,7 @@ namespace mrv
                                         // if the user hits Esc it will not
                                         // pop it out of the program.
                                         App::unsaved_annotations = true;
-                                        
+
 #ifdef TLRENDER_FFMPEG
                                         switch(status)
                                         {
@@ -689,16 +702,16 @@ namespace mrv
                                             break;
                                         }
                                         default:
-                                            return;
+                                            return 0;
                                         }
 #endif
                                         redrawWindows();
-                                        return;
+                                        return 1;
                                     }
                                 }
                             }
                         }
-                        
+
 #ifdef TLRENDER_FFMPEG
                         if (currentVoiceOver)
                         {
@@ -707,7 +720,7 @@ namespace mrv
                             case voice::RecordStatus::Recording:
                                 currentMouseData.pressed = true;
                                 redrawWindows();
-                                return;
+                                return 1;
                                 break;
                             default:
                                 break;
@@ -716,23 +729,24 @@ namespace mrv
                         else
                         {
                             if (dont_create_annotation)
-                                return;
+                                return 0;
 
                             bool allFrames = false;
                             auto annotation = p.player->createVoiceAnnotation(pos, allFrames);
                             auto voice = annotation->voices.back();
                             _startVoiceRecording(voice);
                         }
-                        return;
+                        return 1;
                     }
 #endif
 
-                    _handlePushLeftMouseButtonShapes();
+                    return _handlePushLeftMouseButtonShapes();
                 }
             }
+            return 0;
         }
-            
-        void TimelineViewport::_handleDragSelection() noexcept
+
+        int TimelineViewport::_handleDragSelection() noexcept
         {
             TLRENDER_P();
             p.lastEvent = FL_DRAG;
@@ -744,10 +758,12 @@ namespace mrv
             math::Box2i area = p.selection;
             area.min = p.selectionAnchor;
             area.max = pos;
-            
+
             setSelectionArea(area);
 
             redrawWindows();
+
+            return 1;
         }
 
         void TimelineViewport::handleViewSpinning() noexcept
@@ -788,7 +804,7 @@ namespace mrv
             }
         }
 
-        void TimelineViewport::_handleDragMiddleMouseButton() noexcept
+        int TimelineViewport::_handleDragMiddleMouseButton() noexcept
         {
             TLRENDER_P();
 
@@ -814,7 +830,7 @@ namespace mrv
                 if (Fl::event_shift())
                 {
                     if (changed)
-                        return;
+                        return 0;
 
                     auto o = p.environmentMapOptions;
                     o.focalLength += dx * speed;
@@ -833,7 +849,7 @@ namespace mrv
                     }
 
                     if (changed)
-                        return;
+                        return 1;
 
                     const auto viewportSize = getViewportSize();
 
@@ -874,7 +890,7 @@ namespace mrv
                     }
                 }
 
-                return;
+                return 1;
             }
             else
             {
@@ -883,6 +899,7 @@ namespace mrv
                 pos.y = p.viewPosMousePress.y + (p.mousePos.y - p.mousePress.y);
                 setViewPosAndZoom(pos, p.viewZoom);
             }
+            return 1;
         }
 
         void
@@ -933,7 +950,7 @@ namespace mrv
         int TimelineViewport::_popupRMBMenu() noexcept
         {
             TLRENDER_P();
-            
+
             Fl_Group::current(0);
             p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
 
@@ -944,7 +961,7 @@ namespace mrv
             auto pos = _getRasterf();
 
             auto renderSize = getRenderSize();
-                        
+
             float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
             mult = std::clamp(mult, 1.F, 10.F);
 
@@ -984,28 +1001,28 @@ namespace mrv
                 }
             }
 #endif
-                    
+
             p.ui->uiMain->fill_menu(p.popupMenu);
             p.popupMenu->popup();
-            
+
             delete p.popupMenu;
             p.popupMenu = nullptr;
             return 1;
         }
-        
+
         int TimelineViewport::_handlePopupLinkMenu(int event) noexcept
         {
             TLRENDER_P();
-            
+
             if (p.player)
             {
                 p.mousePos = _getFocus();
                 auto pos = _getRasterf();
                 const auto& renderSize = getRenderSize();
-                    
+
                 float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
                 mult = std::clamp(mult, 1.F, 10.F);
-                    
+
                 auto annotation = p.player->getAnnotation();
                 if (p.actionMode == ActionMode::kLink && annotation)
                 {
@@ -1031,7 +1048,7 @@ namespace mrv
                             else
                             {
                                 currentLink = shape;
-                                    
+
                                 Fl_Group::current(0);
                                 p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
                                 p.popupMenu->textsize(14);
@@ -1059,7 +1076,7 @@ namespace mrv
             }
             return 0;
         }
-                    
+
         int TimelineViewport::handle(int event)
         {
             TLRENDER_P();
@@ -1076,7 +1093,7 @@ namespace mrv
                 LOG_INFO("BELOWMOUSE? " << (Fl::belowmouse() == this));
             }
 #endif
-            
+
             int ret = BACKEND_SUPER_CLASS::handle(event);
             if ((event == FL_KEYDOWN || event == FL_KEYUP ||
                  (event == FL_PUSH && ret == 1)) &&
@@ -1093,7 +1110,7 @@ namespace mrv
             if (p.multilineText)
             {
                 switch(event)
-                {   
+                {
                 case FL_ENTER:
                 case FL_LEAVE:
                 case FL_FOCUS:
@@ -1117,7 +1134,7 @@ namespace mrv
                             set_cursor(FL_CURSOR_CROSS);
                     }
 
-                    
+
                     return 1;
                 }
                 case FL_NO_EVENT:
@@ -1149,7 +1166,41 @@ namespace mrv
                         return 1;
                     }
                 }
-                    
+
+                const math::Vector2i pos = _getRaster();
+                if (!math::contains(p.multilineText->box, pos))
+                {
+                    auto settings = p.ui->app->settings();
+                    const auto& renderSize = getRenderSize();
+                    float pct = renderSize.h / 1024.F;
+                    if (pct < 1.F) pct = 1.F;
+
+                    bool got_key = false;
+                    int fontSize = settings->getValue<int>(kFontSize);
+                    if (kPenSizeMore.match(rawkey))
+                    {
+                        ++fontSize;
+                        got_key = true;
+                    }
+                    else if (kPenSizeLess.match(rawkey))
+                    {
+                        --fontSize;
+                        got_key = true;
+                    }
+
+                    if (got_key)
+                    {
+                        fontSize = std::clamp(fontSize, 8, 120);
+                        settings->setValue(kFontSize, fontSize);
+
+                        p.multilineText->fontSize = fontSize * pct * pixels_per_unit();
+                        if (panel::annotationsPanel)
+                            panel::annotationsPanel->refresh();
+                        redrawWindows();
+                        return 1;
+                    }
+                }
+
                 ret = p.multilineText->handle(event);
                 if (ret)
                 {
@@ -1158,14 +1209,13 @@ namespace mrv
                 }
             }
 #endif
-            
+
             switch (event)
             {
             case FL_FOCUS:
                 return 1;
             case Fl::Pen::ENTER:
                 p.lastEvent = 0;
-                p.pen_handled = false;
                 _updateCursor();
                 _updatePixelBar();
                 updateCoords();
@@ -1181,22 +1231,30 @@ namespace mrv
 #else
                 p.pressure = 1.F;
 #endif
-                p.pen_handled = true;
                 p.mousePos = _getFocus();
-                _handlePushLeftMouseButton();
+                ret = _handlePushLeftMouseButton();
                 _updatePixelBar();
-                return 1;
+                return ret;
                 /* fall through */
             case Fl::Pen::DRAW:
             {
-                p.pen_handled = true;
+                float oldPressure = p.pressure;
 #if FLTK_HAVE_PEN_SUPPORT
-                p.pressure = Fl::Pen::event_pressure();
+                float pressure = Fl::Pen::event_pressure();
+                if (pressure <= 0.F)
+                    return 1;
+                p.pressure = pressure;
 #else
                 p.pressure = 1.F;
 #endif
-                // std::cerr << "DRAW p.pressure=" << p.pressure << std::endl;
+                math::Vector2i oldPos = p.mousePos;
                 p.mousePos = _getFocus();
+
+                int length2 = math::length2(p.mousePos - oldPos);
+                float width = _getPenSize();
+                if (length2 < width && p.pressure < oldPressure)
+                    p.pressure = oldPressure;
+
                 _handleDragLeftMouseButton();
                 _updatePixelBar();
                 return 1;
@@ -1210,14 +1268,14 @@ namespace mrv
                 if (!children())
                 {
                     Fl_Widget* oldFocus = Fl::focus();
-                    if (p.ui->uiPrefs->uiPrefsRaiseOnEnter->value())
+                    if (p.ui->uiPrefs->RaiseOnEnter->value())
                         Fl::focus(this);
                     if (oldFocus)
                         oldFocus->redraw();
                 }
-            
+
 #ifdef __APPLE__
-                if (p.ui->uiMenuBar && p.ui->uiPrefs->uiPrefsMacOSMenus->value())
+                if (p.ui->uiMenuBar && p.ui->uiPrefs->MacOSMenus->value())
                     p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
 #endif
                 _updateCursor();
@@ -1231,13 +1289,13 @@ namespace mrv
             {
                 p.lastEvent = 0;
                 p.lastCursor = FL_CURSOR_ARROW;
-                
+
                 const float NaN = std::numeric_limits<float>::quiet_NaN();
                 image::Color4f rgba(NaN, NaN, NaN, NaN);
                 _updatePixelBar(rgba);
-            
+
                 set_cursor(FL_CURSOR_DEFAULT);
-            
+
                 redraw(); // to clear the drawing cursor
                 return 1;
                 break;
@@ -1271,16 +1329,13 @@ namespace mrv
 
                 int ret = _handlePopupLinkMenu(event);
                 if (ret) return ret;
-                
+
                 p.mousePress = _getFocus();
                 if (!children() && Fl::focus() != this && Fl::event_button1())
                 {
                     take_focus();
                 }
 
-                if (p.pen_handled)
-                    return 1;
-                
                 if (Fl::event_button1())
                 {
                     if (Fl::event_ctrl())
@@ -1289,7 +1344,7 @@ namespace mrv
                         return 1;
                     }
 
-                    _handlePushLeftMouseButton();
+                    return _handlePushLeftMouseButton();
                 }
                 else if (Fl::event_button2())
                 {
@@ -1314,14 +1369,14 @@ namespace mrv
                     set_cursor(FL_CURSOR_DEFAULT);
 
                     _popupRMBMenu();
-                    
+
                     _updateCursor();
                 }
                 return 1;
             }
             case Fl::Pen::HOVER:
             case FL_MOVE:
-            {                
+            {
                 updateCoords();
                 // If we are drawing or erasing, draw the cursor
                 if (p.actionMode != ActionMode::kScrub &&
@@ -1332,17 +1387,17 @@ namespace mrv
                     if (currentVoiceOver)
                     {
                         p.mousePos = _getFocus();
-                        
+
                         const math::Vector2f& pnt = _getRasterf();
                         currentMouseData.pos = pnt;
                     }
-                    
+
                     redrawWindows();
                 }
 
                 if (p.player && p.actionMode == ActionMode::kLink)
                 {
-                            
+
                     auto annotation = p.player->getAnnotation();
                     if (annotation)
                     {
@@ -1350,10 +1405,10 @@ namespace mrv
 
                         const math::Vector2f& pos = _getRasterf();
                         const auto& renderSize = getRenderSize();
-                        
+
                         float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
                         mult = std::clamp(mult, 1.F, 10.F);
-                        
+
                         for (auto& shape : annotation->shapes)
                         {
 #ifdef VULKAN_BACKEND
@@ -1372,8 +1427,8 @@ namespace mrv
                                 found = true;
 
                                 int X, Y;
-                                
-                                X = Fl::event_x_root(); 
+
+                                X = Fl::event_x_root();
                                 Y = Fl::event_y_root();
 
                                 if (desktop::Wayland())
@@ -1381,7 +1436,7 @@ namespace mrv
                                     X -= p.ui->uiMain->x_root();
                                     Y -= p.ui->uiMain->y_root();
                                 }
-                                    
+
                                 if (!p.tooltip)
                                 {
                                     if (desktop::Wayland())
@@ -1402,14 +1457,14 @@ namespace mrv
                                 break;
                             }
                         }
-                        
+
                         if (!found && p.tooltip)
                         {
                             p.tooltip->hide();
                         }
                     }
                 }
-                
+
                 if (p.presentation)
                 {
                     p.presentationTime = std::chrono::high_resolution_clock::now();
@@ -1420,15 +1475,12 @@ namespace mrv
                 return 1;
             }
             case Fl::Pen::LIFT:
-                p.pressure = 0.F;
-                /* fall-thru */
             case FL_RELEASE:
             {
-                p.pen_handled = false;
                 if (p.actionMode == ActionMode::kPolygon ||
                     p.actionMode == ActionMode::kFilledPolygon)
                     return 1;
-            
+
                 if (p.actionMode == ActionMode::kScrub ||
                     p.actionMode == ActionMode::kRotate)
                 {
@@ -1445,7 +1497,7 @@ namespace mrv
                             if (!p.player)
                                 return 1;
                             p.player->setPlayback(p.playbackMode);
-                            
+
                             panel::redrawThumbnails();
                         }
                     }
@@ -1455,20 +1507,12 @@ namespace mrv
                             Fl::event_button() == FL_LEFT_MOUSE &&
                             p.actionMode == ActionMode::kScrub)
                         {
-                            if (p.ui->uiPrefs->uiPrefsSingleClickPlayback->value())
+                            if (p.ui->uiPrefs->SingleClickPlayback->value())
                             {
                                 p.lastEvent = 0;
                                 if (!p.player)
                                     return 1;
 
-                                if (_isPlaybackStopped())
-                                {
-                                    setHelpText(_("Play"));
-                                }
-                                else
-                                {
-                                    setHelpText(_("Stop"));
-                                }
                                 togglePlayback();
                             }
                             else
@@ -1499,7 +1543,7 @@ namespace mrv
                     std::shared_ptr< draw::Shape > s;
                     if (annotation)
                         s = annotation->lastShape();
-                
+
                     p.lastEvent = 0;
 
                     if (_handleReleaseLeftMouseButtonShapes())
@@ -1529,13 +1573,11 @@ namespace mrv
             }
             case FL_DRAG:
             {
-                if (p.pen_handled) return 1;
-                
                 p.mousePos = _getFocus();
                 if (Fl::event_button1())
                 {
                     const math::Vector2i pos = _getRaster();
-                    
+
 #ifdef VULKAN_BACKEND
                     if (p.multilineText &&
                         math::contains(p.multilineText->box, pos))
@@ -1548,20 +1590,21 @@ namespace mrv
                         }
                     }
 #endif
-                    
+
                     if (Fl::event_ctrl())
                     {
-                        _handleDragMiddleMouseButton();
+                        return _handleDragMiddleMouseButton();
                     }
                     else
                     {
-                        _handleDragLeftMouseButton();
+                        int ret = _handleDragLeftMouseButton();
                         _updatePixelBar();
+                        return ret;
                     }
                 }
                 else if (Fl::event_button2())
                 {
-                    _handleDragMiddleMouseButton();
+                    return _handleDragMiddleMouseButton();
                 }
                 else if (Fl::event_button3())
                 {
@@ -1605,7 +1648,7 @@ namespace mrv
             {
                 if (Fl::belowmouse() != this)
                     return 0;
-            
+
                 float dy = Fl::event_dy();
                 const float speed = _getZoomSpeedValue();
                 if (_isEnvironmentMap())
@@ -2046,7 +2089,7 @@ namespace mrv
         void TimelineViewport::dragAndDrop(const std::string& text) noexcept
         {
             TLRENDER_P();
-        
+
             std::vector<std::string> loadFiles;
             auto tmpFiles = string::split(text, '\n');
 
@@ -2069,7 +2112,7 @@ namespace mrv
                     free(decode);
 #endif
                 }
-            
+
                 if (file::isDirectory(file))
                 {
                     std::vector<std::string> movies, sequences, audios;
@@ -2088,7 +2131,7 @@ namespace mrv
                     {
                         file = "https://" + file;
                     }
-                
+
                     loadFiles.push_back(file);
                 }
             }

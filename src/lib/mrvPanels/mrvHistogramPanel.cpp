@@ -83,7 +83,7 @@ namespace mrv
             c->add(_("Square Root"));
             c->value(1);
             cW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     Histogram::Type c = (Histogram::Type)o->value();
                     _r->histogram->histogram_type(c);
@@ -102,7 +102,7 @@ namespace mrv
             c->add(_("Lumma"));
             c->value(0);
             cW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     Histogram::Channel c = (Histogram::Channel)o->value();
                     _r->histogram->channel(c);

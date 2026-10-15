@@ -22,6 +22,7 @@
 
 
 #include <pybind11/embed.h>
+#include <pybind11/eval.h>
 #include <pybind11/stl.h>
 namespace py = pybind11;
 
@@ -29,18 +30,27 @@ namespace py = pybind11;
 #include <string>
 #include <chrono>
 
+namespace mrv
+{
+    void run_python_script(const std::vector<std::string>& py_args)
+    {
+        if (py_args.empty())
+            return;
+
+        // 1. Import sys and set sys.argv
+        py::module_ sys = py::module_::import("sys");
+        sys.attr("argv") = py_args; // stl.h handles the automatic conversion here
+
+        // 2. Execute the Python script
+        py::eval_file(py_args[0]);
+    }
+}
 
 namespace mrv2
 {
     namespace cmd
     {
         using namespace mrv;
-
-        const std::vector<std::string>& args()
-        {
-            App* app = App::app;
-            return app->getPythonArgs();
-        }
 
         std::string getLanguage()
         {
@@ -76,7 +86,7 @@ namespace mrv2
             }
             app->open(filename, audioFile);
         }
-        
+
         /**
          *  \brief Open an url movie with optional user, password and suffix.
          *
@@ -88,7 +98,7 @@ namespace mrv2
                             const std::string& suffix)
         {
             App* app = App::app;
-            
+
             std::vector<std::string> files;
             std::string full_url = url;
             if (!user.empty())
@@ -97,7 +107,7 @@ namespace mrv2
                 full_url += ";password=" + password;
             if (!suffix.empty())
                 full_url += suffix;
-        
+
             files.push_back(full_url);
 
             open_files_cb(files, App::ui);
@@ -229,12 +239,19 @@ namespace mrv2
         {
             if (value.color.enabled)
             {
-                App::ui->uiGain->value(1.0);
-                App::ui->uiSaturation->value(value.color.saturation.x);
+                const float gain = value.color.brightness.x;
+                App::ui->uiGain->value(gain);
+                App::ui->uiGainInput->value(gain);
+
+                const float saturation = value.color.saturation.x;
+                App::ui->uiSaturation->value(saturation);
+                App::ui->uiSaturationInput->value(saturation);
             }
             if (value.levels.enabled)
             {
-                App::ui->uiGamma->value(value.levels.gamma);
+                const float gamma = value.levels.gamma;
+                App::ui->uiGamma->value(gamma);
+                App::ui->uiGammaInput->value(gamma);
             }
             App::app->setDisplayOptions(value);
         }
@@ -448,12 +465,12 @@ namespace mrv2
          * @param options (annotations and OpenEXR options)
          */
         void saveMultipleFrames(
-            const std::string& file, std::vector<otime::RationalTime> times,
+            const std::string& file, std::vector<OTIO_NS::RationalTime> times,
             const SaveOptions opts = SaveOptions())
         {
             save_multiple_frames(file, times, App::ui, opts);
         }
-        
+
         /**
          * \brief Save multiple annotation frames.
          *
@@ -462,12 +479,12 @@ namespace mrv2
          * @param options (annotations and OpenEXR options)
          */
         void saveMultipleAnnotationFrames(
-            const std::string& file, std::vector<otime::RationalTime> times,
+            const std::string& file, std::vector<OTIO_NS::RationalTime> times,
             SaveOptions opts = SaveOptions())
         {
             opts.annotations = true;
             opts.video = false;
-            
+
             save_multiple_annotation_frames(file, times, App::ui, opts);
         }
 
@@ -529,14 +546,9 @@ Used to run main commands and get arguments and set the display, image, compare,
 )PYTHON");
 
     cmds.def(
-        "args", &mrv2::cmd::args,
-        _("Get command-line arguments passed as single quoted string to "
-          "-pythonArgs."));
-
-    cmds.def(
         "open", &mrv2::cmd::open, _("Open file with optional audio."),
         py::arg("fileName"), py::arg("audioFileName") = std::string());
-    
+
     cmds.def(
         "open_url_movie", &mrv2::cmd::open_url_movie, _("Open url movie with optional user, password and suffix"),
         py::arg("url"),
@@ -562,7 +574,7 @@ Used to run main commands and get arguments and set the display, image, compare,
     cmds.def(
         "prefsPath", &mrv2::cmd::prefsPath,
         _("Return the path to preferences of mrv2."));
-    
+
     cmds.def(
         "studioPath", &mrv2::cmd::studioPath,
         _("Return the path to studio preferences of mrv2."));
@@ -682,18 +694,18 @@ Used to run main commands and get arguments and set the display, image, compare,
         "saveSingleFrame", &mrv2::cmd::saveSingleFrame,
         _("Save a single frame."), py::arg("fileName"),
         py::arg("options") = mrv::SaveOptions());
-    
+
     cmds.def(
         "saveMultipleAnnotationFrames",
         &mrv2::cmd::saveMultipleAnnotationFrames,
         _("Save multiple annotation frames."), py::arg("fileName"),
-        py::arg("times") = std::vector<mrv::otime::RationalTime>(),
+        py::arg("times") = std::vector<OTIO_NS::RationalTime>(),
         py::arg("options") = mrv::SaveOptions());
 
     cmds.def(
         "saveMultipleFrames", &mrv2::cmd::saveMultipleFrames,
         _("Save multiple frames."), py::arg("fileName"),
-        py::arg("times") = std::vector<mrv::otime::RationalTime>(),
+        py::arg("times") = std::vector<OTIO_NS::RationalTime>(),
         py::arg("options") = mrv::SaveOptions());
 
     cmds.def(

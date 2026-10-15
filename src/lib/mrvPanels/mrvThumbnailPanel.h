@@ -20,15 +20,24 @@
 class ViewerUI;
 class Fl_Widget;
 
+namespace tl
+{
+    namespace timeline
+    {
+        class Timeline;
+    }
+}
+
 namespace mrv
 {
     class ThumbnailCreator;
+    class FilesModelItem;
 
     namespace panel
     {
         using namespace tl;
         class ThumbnailPanel : public PanelWidget
-        {            
+        {
         public:
             ThumbnailPanel(ViewerUI* ui);
             virtual ~ThumbnailPanel();
@@ -39,13 +48,19 @@ namespace mrv
 
             void clearCache();
 
-            
+
         protected:
 
-            
+            void _createThumbnail(
+                Fl_Widget* widget, const std::shared_ptr<FilesModelItem>&,
+                const OTIO_NS::RationalTime& time, const int layerId = 0,
+                const std::string& mediaReferenceKey = "");
+
             void _createThumbnail(
                 Fl_Widget* widget, const file::Path& path,
-                const otime::RationalTime& time, const int layerId = 0);
+                const std::shared_ptr<timeline::Timeline>& timeline,
+                const OTIO_NS::RationalTime& time, const int layerId = 0,
+                const std::string& mediaReferenceKey = "");
 
             void _cancelRequests();
 

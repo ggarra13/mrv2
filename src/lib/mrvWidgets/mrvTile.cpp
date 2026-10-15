@@ -157,7 +157,7 @@ namespace mrv
         tile_set_dragbar_color(t, c);
         t->window()->cursor(c);
     }
-    
+
     int Tile::handle(int event)
     {
         static int sdrag;
@@ -238,6 +238,7 @@ namespace mrv
             // This is necessary if CONSOLIDATE_MOTION in Fl_x.cxx is turned
             // off: if (damage()) return 1; // don't fall behind
             {
+                save_edit_mode_state(App::ui);
                 set_edit_button(mrv::EditMode::kSaved, App::ui);
                 tile_set_cursor(this, cursors[sdrag]);
             }
@@ -271,6 +272,7 @@ namespace mrv
                 move_intersection(sx, sy, newx, newy, true);
                 do_callback(FL_REASON_CHANGED);
             }
+            save_edit_mode_state(App::ui);
             set_edit_button(mrv::EditMode::kSaved, App::ui);
             return 1;
         }
@@ -329,6 +331,7 @@ namespace mrv
             tile_set_cursor(this, cursors[sdrag]);
             break;
         case FL_RELEASE:
+            save_edit_mode_state(App::ui);
             set_edit_button(mrv::EditMode::kSaved, App::ui);
             break;
         default:
@@ -341,7 +344,7 @@ namespace mrv
         return ret;
     }
 
-    /**
+/**
   Creates a new Tile widget using the given position, size,
   and label string. The default boxtype is FL_NO_BOX.
 

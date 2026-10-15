@@ -4,81 +4,95 @@
 
 #include <tlIO/NDI.h>
 
+#include <tlCore/Error.h>
 #include <tlCore/LogSystem.h>
 #include <tlCore/String.h>
+#include <tlCore/StringFormat.h>
 
 #include <array>
+#include <fstream>
 
 namespace tl
 {
     namespace ndi
     {
-        AVSampleFormat fromAudioType(audio::DataType value)
+        void ReadPlugin::_init(const std::shared_ptr<log::System>& logSystem)
         {
-            AVSampleFormat out = AV_SAMPLE_FMT_NONE;
-            switch (value)
-            {
-            case audio::DataType::S16:
-                out = AV_SAMPLE_FMT_S16;
-                break;
-            case audio::DataType::S32:
-                out = AV_SAMPLE_FMT_S32;
-                break;
-            case audio::DataType::F32:
-                out = AV_SAMPLE_FMT_FLT;
-                break;
-            case audio::DataType::F64:
-                out = AV_SAMPLE_FMT_DBL;
-                break;
-            default:
-                break;
-            }
-            return out;
-        }
-
-        void Plugin::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            IPlugin::_init(
+            IReadPlugin::_init(
                 "ndi",
                 {
                     {".ndi", io::FileType::Movie},
-                },
-                cache, logSystem);
-
-            _logSystemWeak = logSystem;
-
-            if (auto logSystem = _logSystemWeak.lock())
-            {
-                logSystem->print("tl::io::ndi::Plugin", "");
-            }
+                }, logSystem);
         }
 
-        Plugin::Plugin() {}
-
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        ReadPlugin::ReadPlugin()
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(cache, logSystem);
+        }
+
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::shared_ptr<io::IVideoRead>
+        ReadPlugin::videoRead(const file::Path& path, const io::Options& options)
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return VideoRead::create(path, options, _logSystem.lock());
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
+        std::shared_ptr<io::IVideoRead> ReadPlugin::videoRead(
             const file::Path& path, const std::vector<file::MemoryRead>& memory,
             const io::Options& options)
         {
-            return Read::create(path, memory, options, _cache, _logSystem);
+            return VideoRead::create(path, memory, options, _logSystem.lock());
         }
 
-        std::weak_ptr<log::System> Plugin::_logSystemWeak;
+        std::shared_ptr<io::IAudioRead> ReadPlugin::audioRead(
+            const file::Path& path,
+            const io::Options& options)
+        {
+            ndi::Options opt;
+            {
+                std::ifstream s(path.get());
+
+                if (s.is_open())
+                {
+                    nlohmann::json j;
+                    s >> j;
+                    opt = j;
+                }
+            }
+            if (opt.noAudio) return nullptr;
+            return AudioRead::create(path, options, _logSystem.lock());
+        }
+
+        std::shared_ptr<io::IAudioRead> ReadPlugin::audioRead(
+            const file::Path& path,
+            const std::vector<file::MemoryRead>& memory,
+            const io::Options& options)
+        {
+            ndi::Options opt;
+            {
+                std::ifstream s(path.get());
+
+                if (s.is_open())
+                {
+                    nlohmann::json j;
+                    s >> j;
+                    opt = j;
+                }
+            }
+            if (opt.noAudio) return nullptr;
+            return AudioRead::create(path, memory, options, _logSystem.lock());
+        }
+
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
+        {
+            return "NDI";
+        }
+
     } // namespace ndi
 } // namespace tl

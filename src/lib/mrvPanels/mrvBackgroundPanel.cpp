@@ -81,7 +81,7 @@ namespace mrv
             c->value(static_cast<int>(options.type));
             c->tooltip(_("Selects the current background type from the list"));
             cW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int type = o->value();
                     settings->setValue("Background/Type", type);
@@ -113,7 +113,7 @@ namespace mrv
                 b->color(color);
                 b->labelsize(11);
                 bW->callback(
-                    [=](auto o)
+                    [=, this](auto o)
                     {
                         auto color = get_color_cb(o->color(), p.ui);
                         Fl_Color c = to_fltk_color(color);
@@ -144,7 +144,7 @@ namespace mrv
                 s->tooltip(_("Selects the checker size."));
                 s->default_value(options.checkersSize.w);
                 sV->callback(
-                    [=](auto o)
+                    [=, this](auto o)
                     {
                         settings->setValue(
                             "Background/CheckersSize",
@@ -178,7 +178,7 @@ namespace mrv
                 b->color(color);
                 b->labelsize(11);
                 bW->callback(
-                    [=](auto o)
+                    [=, this](auto o)
                     {
                         auto color = get_color_cb(o->color(), p.ui);
                         Fl_Color c = to_fltk_color(color);
@@ -205,7 +205,7 @@ namespace mrv
                 b->color(color);
                 b->labelsize(11);
                 bW->callback(
-                    [=](auto o)
+                    [=, this](auto o)
                     {
                         auto color = get_color_cb(o->color(), p.ui);
                         Fl_Color c = to_fltk_color(color);

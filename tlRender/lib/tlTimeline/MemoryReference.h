@@ -20,7 +20,7 @@ namespace tl
         typedef std::vector<uint8_t> MemoryReferenceData;
 
         //! Read references from raw memory pointers.
-        class RawMemoryReference : public otio::MediaReference
+        class RawMemoryReference : public OTIO_NS::MediaReference
         {
         public:
             struct Schema
@@ -32,9 +32,9 @@ namespace tl
             RawMemoryReference(
                 const std::string& target_url = std::string(),
                 const uint8_t* memory = nullptr, size_t memory_size = 0,
-                const std::optional<otio::TimeRange>& available_range =
+                const std::optional<OTIO_NS::TimeRange>& available_range =
                     std::nullopt,
-                const otio::AnyDictionary& metadata = otio::AnyDictionary());
+                const OTIO_NS::AnyDictionary& metadata = OTIO_NS::AnyDictionary());
 
             const std::string& target_url() const noexcept;
 
@@ -55,7 +55,7 @@ namespace tl
         };
 
         //! Read references from a shared memory pointer.
-        class SharedMemoryReference : public otio::MediaReference
+        class SharedMemoryReference : public OTIO_NS::MediaReference
         {
         public:
             struct Schema
@@ -67,9 +67,9 @@ namespace tl
             SharedMemoryReference(
                 const std::string& target_url = std::string(),
                 const std::shared_ptr<MemoryReferenceData>& memory = nullptr,
-                const std::optional<otio::TimeRange>& available_range =
+                const std::optional<OTIO_NS::TimeRange>& available_range =
                     std::nullopt,
-                const otio::AnyDictionary& metadata = otio::AnyDictionary());
+                const OTIO_NS::AnyDictionary& metadata = OTIO_NS::AnyDictionary());
 
             const std::string& target_url() const noexcept;
 
@@ -87,7 +87,7 @@ namespace tl
         };
 
         //! Read sequence references from raw memory pointers.
-        class RawMemorySequenceReference : public otio::MediaReference
+        class RawMemorySequenceReference : public OTIO_NS::MediaReference
         {
         public:
             struct Schema
@@ -100,9 +100,9 @@ namespace tl
                 const std::string& target_url = std::string(),
                 const std::vector<const uint8_t*>& memory = {},
                 const std::vector<size_t> memory_sizes = {},
-                const std::optional<otio::TimeRange>& available_range =
+                const std::optional<OTIO_NS::TimeRange>& available_range =
                     std::nullopt,
-                const otio::AnyDictionary& metadata = otio::AnyDictionary());
+                const OTIO_NS::AnyDictionary& metadata = OTIO_NS::AnyDictionary());
 
             const std::string& target_url() const noexcept;
 
@@ -125,7 +125,7 @@ namespace tl
         };
 
         //! Read sequence references from shared memory pointers.
-        class SharedMemorySequenceReference : public otio::MediaReference
+        class SharedMemorySequenceReference : public OTIO_NS::MediaReference
         {
         public:
             struct Schema
@@ -138,9 +138,9 @@ namespace tl
                 const std::string& target_url = std::string(),
                 const std::vector<std::shared_ptr<MemoryReferenceData> >&
                     memory = {},
-                const std::optional<otio::TimeRange>& available_range =
+                const std::optional<OTIO_NS::TimeRange>& available_range =
                     std::nullopt,
-                const otio::AnyDictionary& metadata = otio::AnyDictionary());
+                const OTIO_NS::AnyDictionary& metadata = OTIO_NS::AnyDictionary());
 
             const std::string& target_url() const noexcept;
 
@@ -173,9 +173,9 @@ namespace tl
                 const std::shared_ptr<file::FileIO>& file_io = nullptr,
                 const std::string& target_url = std::string(),
                 const uint8_t* memory = nullptr, size_t memory_size = 0,
-                const std::optional<otio::TimeRange>& available_range =
+                const std::optional<OTIO_NS::TimeRange>& available_range =
                     std::nullopt,
-                const otio::AnyDictionary& metadata = otio::AnyDictionary());
+                const OTIO_NS::AnyDictionary& metadata = OTIO_NS::AnyDictionary());
 
             const std::shared_ptr<file::FileIO>& file_io() const noexcept;
 
@@ -202,9 +202,9 @@ namespace tl
                 const std::string& target_url = std::string(),
                 const std::vector<const uint8_t*>& memory = {},
                 const std::vector<size_t> memory_sizes = {},
-                const std::optional<otio::TimeRange>& available_range =
+                const std::optional<OTIO_NS::TimeRange>& available_range =
                     std::nullopt,
-                const otio::AnyDictionary& metadata = otio::AnyDictionary());
+                const OTIO_NS::AnyDictionary& metadata = OTIO_NS::AnyDictionary());
 
             const std::shared_ptr<file::FileIO>& file_io() const noexcept;
 

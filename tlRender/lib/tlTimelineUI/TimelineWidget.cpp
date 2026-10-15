@@ -37,16 +37,16 @@ namespace tl
             std::vector<int> frameMarkers;
             std::shared_ptr<observer::Value<ItemOptions> > itemOptions;
             std::shared_ptr<observer::Value<DisplayOptions> > displayOptions;
-            otime::TimeRange timeRange = time::invalidTimeRange;
+            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
             timeline::Playback playback = timeline::Playback::Stop;
-            otime::RationalTime currentTime = time::invalidTime;
+            OTIO_NS::RationalTime currentTime = time::invalidTime;
             double scale = 500.0;
             bool sizeInit = true;
 
 #ifdef OPENGL_BACKEND
             std::shared_ptr<gl::GLFWWindow> window;
 #endif
-            
+
             std::shared_ptr<ui::ScrollWidget> scrollWidget;
             std::shared_ptr<TimelineItem> timelineItem;
 
@@ -102,7 +102,7 @@ namespace tl
                 "tl::TIMELINEUI::TimelineWidget", math::Size2i(1, 1), context,
                 static_cast<int>(gl::GLFWWindowOptions::kNone));
 #endif
-            
+
             p.scrollWidget = ui::ScrollWidget::create(
                 context, ui::ScrollType::Both, shared_from_this());
             p.scrollWidget->setScrollEventsEnabled(false);
@@ -128,7 +128,7 @@ namespace tl
         }
 #endif
 
-#ifdef VULKAN_BACKEND        
+#ifdef VULKAN_BACKEND
         TimelineWidget::TimelineWidget(Fl_Vk_Context& ctx) :
             ctx(ctx),
             _p(new Private)
@@ -146,7 +146,7 @@ namespace tl
             return out;
         }
 #endif
-        
+
         double TimelineWidget::getScale() const
         {
             TLRENDER_P();
@@ -197,7 +197,7 @@ namespace tl
                 p.currentTimeObserver =
                     observer::ValueObserver<otime::RationalTime>::create(
                         p.player->observeCurrentTime(),
-                        [this](const otime::RationalTime& value)
+                        [this](const OTIO_NS::RationalTime& value)
                         {
                             _p->currentTime = value;
                             _scrollUpdate();
@@ -243,7 +243,7 @@ namespace tl
                 p.timelineItem->setEditMode(value);
             }
         }
-        
+
         void TimelineWidget::setViewZoom(double value)
         {
             setViewZoom(
@@ -640,7 +640,7 @@ namespace tl
             double out = 1.0;
             if (p.player)
             {
-                const otime::TimeRange& timeRange = p.player->getTimeRange();
+                const OTIO_NS::TimeRange& timeRange = p.player->getTimeRange();
                 const double duration =
                     timeRange.duration().rescaled_to(1.0).value();
                 if (duration > 0.0)
@@ -661,7 +661,7 @@ namespace tl
             {
                 const math::Box2i scrollViewport =
                     p.scrollWidget->getViewport();
-                const otime::TimeRange& timeRange = p.player->getTimeRange();
+                const OTIO_NS::TimeRange& timeRange = p.player->getTimeRange();
                 const double duration =
                     timeRange.duration().rescaled_to(1.0).value();
                 if (duration < 1.0)
@@ -742,7 +742,7 @@ namespace tl
                     const int offset = pos < (vp.min.x + margin)
                                            ? (vp.min.x + margin)
                                            : (vp.max.x - margin);
-                    const otime::RationalTime t =
+                    const OTIO_NS::RationalTime t =
                         p.currentTime - p.timeRange.start_time();
                     math::Vector2i scrollPos = p.scrollWidget->getScrollPos();
                     scrollPos.x = _geometry.min.x - offset +
@@ -772,17 +772,19 @@ namespace tl
                     p.itemData->options = p.player->getOptions();
 #ifdef OPENGL_BACKEND
                     p.timelineItem = TimelineItem::create(
+                        context,
                         p.player,
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
-                        p.itemData, p.window, context);
+                        p.itemData, p.window);
 #endif
 #ifdef VULKAN_BACKEND
                     p.timelineItem = TimelineItem::create(
+                        context,
                         p.player,
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
-                        p.itemData, ctx, context);
+                        p.itemData, ctx);
 #endif
                     p.timelineItem->setEditable(p.editable->get());
                     p.timelineItem->setEditMode(p.editMode->get());
@@ -803,28 +805,29 @@ namespace tl
                     p.timeScrubObserver =
                         observer::ValueObserver<otime::RationalTime>::create(
                             p.timelineItem->observeTimeScrub(),
-                            [this](const otime::RationalTime& value)
+                            [this](const OTIO_NS::RationalTime& value)
                             { _p->timeScrub->setIfChanged(value); });
                 }
             }
         }
-        
-        std::vector<const otio::Item*> TimelineWidget::getSelectedItems() const
+
+        std::vector<timeline::MoveData>
+        TimelineWidget::getSelectedItems() const
         {
             TLRENDER_P();
-            
-            std::vector<const otio::Item* > out;
+
+            std::vector<timeline::MoveData> out;
             if (p.timelineItem)
                 out = p.timelineItem->getSelectedItems();
             return out;
         }
-        
-        std::vector<const otio::Transition*>
+
+        std::vector<timeline::MoveData>
         TimelineWidget::getSelectedTransitions() const
         {
             TLRENDER_P();
-            
-            std::vector<const otio::Transition* > out;
+
+            std::vector<timeline::MoveData> out;
             if (p.timelineItem)
                 out = p.timelineItem->getSelectedTransitions();
             return out;

@@ -25,6 +25,9 @@ endif()
 FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
 
 set(HEADERS
+    mrvAnnotationGroup.h
+    mrvAnnotationInput.h
+    mrvAnnotationWidget.h
     mrvAudioButton.h
     mrvButton.h
     mrvBrowser.h
@@ -44,6 +47,7 @@ set(HEADERS
     mrvHorSlider.h
     mrvHotkeyInput.h
     mrvIntInput.h
+    mrvLayoutUtil.h
     mrvLogDisplay.h
     mrvMainWindow.h
     mrvMenuBar.h
@@ -55,7 +59,6 @@ set(HEADERS
     mrvPanelConstants.h
     mrvPanelGroup.h
     mrvPanelWindow.h
-    mrvPlaylistButton.h
     mrvPopupMenu.h
     mrvPreferencesTree.h
     mrvProgressReport.h
@@ -83,6 +86,9 @@ set(HEADERS
 set(SOURCES
     ${mrvWidgets_FLTK_UI_SRCS}
 
+    mrvAnnotationGroup.cpp
+    mrvAnnotationInput.cpp
+    mrvAnnotationWidget.cpp
     mrvAudioButton.cpp
     mrvBrowser.cpp
     mrvButton.cpp
@@ -99,6 +105,7 @@ set(SOURCES
     mrvHistogram.cpp
     mrvHorSlider.cpp
     mrvHotkeyInput.cpp
+    mrvLayoutUtil.cpp
     mrvLogDisplay.cpp
     mrvMainWindow.cpp
     mrvMenuBar.cpp
@@ -109,7 +116,6 @@ set(SOURCES
     mrvPanelButton.cpp
     mrvPanelGroup.cpp
     mrvPanelWindow.cpp
-    mrvPlaylistButton.cpp
     mrvPopupMenu.cpp
     mrvPreferencesTree.cpp
     mrvProgressReport.cpp
@@ -196,6 +202,10 @@ if(MRV2_PYBIND11)
     endif()
 endif()
 
+if (TLRENDER_LIBWEBP)
+    find_package(WebP CONFIG REQUIRED)
+    list(APPEND LIBRARIES WebP::webp)
+endif()
 
 files_to_absolute_paths()
 
@@ -217,8 +227,19 @@ if(TLRENDER_LIBPLACEBO)
 endif()
 
 if(TLRENDER_NET)
-    find_package(CURL REQUIRED)
-    list(APPEND LIBRARIES CURL::libcurl)
+    # First, try the one we built ourselves, which has CONFIG for cmake
+    find_package(CURL CONFIG)
+    if (CURL_FOUND)
+	list(APPEND LIBRARIES CURL::libcurl_static)
+    else()
+	# If that failed, use Findcurl.cmake to locate the system one
+	find_package(curl REQUIRED)
+	list(APPEND LIBRARIES curl::libcurl)
+    endif()
+endif()
+
+if(TLRENDER_OAPV)
+    list(APPEND LIBRARIES oapv)
 endif()
 
 if( WIN32 )

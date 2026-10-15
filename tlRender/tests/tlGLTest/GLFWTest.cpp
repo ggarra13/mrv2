@@ -119,10 +119,10 @@ namespace tl
                 TLRENDER_ASSERT(window->isFullScreen());
                 window->setFullScreen(false);
 
-                window->setFloatOnTop(true);
-                window->setFloatOnTop(true);
-                TLRENDER_ASSERT(window->isFloatOnTop());
-                window->setFloatOnTop(false);
+                // window->setFloatOnTop(true);
+                // window->setFloatOnTop(true);
+                // TLRENDER_ASSERT(window->isFloatOnTop());
+                // window->setFloatOnTop(false);
 
                 window->swap();
                 window->doneCurrent();

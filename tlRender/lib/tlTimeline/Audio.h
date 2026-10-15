@@ -17,26 +17,26 @@ namespace tl
         {
             std::shared_ptr<audio::Audio> audio;
 
-            otime::TimeRange clipTimeRange;
-            otio::Transition* inTransition = nullptr;
-            otio::Transition* outTransition = nullptr;
+            OTIO_NS::TimeRange clipTimeRange;
+            OTIO_NS::Transition* inTransition = nullptr;
+            OTIO_NS::Transition* outTransition = nullptr;
 
             bool operator==(const AudioLayer&) const;
             bool operator!=(const AudioLayer&) const;
         };
 
         //! Audio data.
-        struct AudioData
+        struct AudioFrame
         {
             double seconds = -1.0;
             std::vector<AudioLayer> layers;
 
-            bool operator==(const AudioData&) const;
-            bool operator!=(const AudioData&) const;
+            bool operator==(const AudioFrame&) const;
+            bool operator!=(const AudioFrame&) const;
         };
 
         //! Compare the time values of audio data.
-        bool isTimeEqual(const AudioData&, const AudioData&);
+        bool isTimeEqual(const AudioFrame&, const AudioFrame&);
     } // namespace timeline
 } // namespace tl
 

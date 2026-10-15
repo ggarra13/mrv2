@@ -20,7 +20,7 @@ namespace tl
                 return (x + alignment - 1) & ~(alignment - 1);
             }
         }
-        
+
         void Render::_create2DMesh(
             const std::string& meshName, const geom::TriangleMesh2& mesh)
         {
@@ -28,10 +28,10 @@ namespace tl
 
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
-            
+
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += size;
-            
+
             auto type = vlk::VBOType::Pos2_F32;
             if (!mesh.t.empty() && !mesh.c.empty())
             {
@@ -56,11 +56,6 @@ namespace tl
                 p.vbos[meshName]->copy(convert(mesh, type));
             }
 
-            if (!p.vaos[meshName] && p.vbos[meshName])
-            {
-                p.vaos[meshName] = vlk::VAO::create(ctx);
-                p.vaos[meshName]->bind(p.frameIndex);
-            }
         }
 
         void Render::_uploadMesh(const std::string& meshName,
@@ -71,7 +66,7 @@ namespace tl
 
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += triangleCount;
-            
+
             if (!p.vbos[meshName] ||
                 p.vbos[meshName]->getSize() != triangleCount * 3)
             {
@@ -80,12 +75,6 @@ namespace tl
             }
             if (p.vbos[meshName])
                 p.vbos[meshName]->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
-
-            if (!p.vaos[meshName] && p.vbos[meshName])
-            {
-                p.vaos[meshName] = vlk::VAO::create(ctx);
-                p.vaos[meshName]->bind(p.frameIndex);
-            }
         }
 
         void Render::_create3DMesh(const std::string& meshName,
@@ -126,7 +115,7 @@ namespace tl
             {
                 type = vlk::VBOType::Pos3_F32_Color_U8;
             }
-            
+
             if (!p.vbos[meshName] ||
                 (p.vbos[meshName] &&
                  p.vbos[meshName]->getSize() != triangleCount * 3))
@@ -135,14 +124,8 @@ namespace tl
             }
             if (p.vbos[meshName])
                 p.vbos[meshName]->copy(convert(mesh, type));
-
-            if (!p.vaos[meshName] && p.vbos[meshName])
-            {
-                p.vaos[meshName] = vlk::VAO::create(ctx);
-                p.vaos[meshName]->bind(p.frameIndex);
-            }
         }
-        
+
         void Render::_emitMeshDraw(const std::string& pipelineLayoutName,
                                    const std::string& shaderName,
                                    const std::string& meshName,
@@ -157,7 +140,7 @@ namespace tl
                                shader->getPushStageFlags(), 0,
                                sizeof(color), &color);
             shader->setUniform("transform.mvp", transform);
-            _bindDescriptorSets(pipelineLayoutName, shaderName);
+            _bindDescriptorSets(pipelineLayoutName, shader);
             _vkDraw(meshName);
         }
 
@@ -238,7 +221,7 @@ namespace tl
             TLRENDER_P();
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
-            
+
             _createBindingSet(p.shaders[shaderName]);
             _uploadMesh(meshName, mesh, size);
 
@@ -264,7 +247,7 @@ namespace tl
             TLRENDER_P();
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
-            
+
             auto shader = p.shaders[shaderName];
             if (!shader)
                 throw std::runtime_error("Unknown shader '" + shaderName + "'.");
@@ -283,9 +266,9 @@ namespace tl
             const auto transform = p.transform *
                                    math::translate(math::Vector3f(position.x, position.y, 0.F));
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, transform, color);
-        }        
-        
-        
+        }
+
+
         void Render::drawMesh(
             const geom::TriangleMesh2& mesh, const math::Vector2i& position,
             const image::Color4f& color, const std::string& meshName)
@@ -308,26 +291,29 @@ namespace tl
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += mesh.triangles.size();
 
-            _createBindingSet(p.shaders["colorMesh"]);
-            
+            auto shader = p.shaders["colorMesh"];
+            _createBindingSet(shader);
+
             const auto transform =
                 p.transform *
                 math::translate(
                     math::Vector3f(position.x, position.y, 0.F));
-            
-            p.shaders["colorMesh"]->bind(p.frameIndex);
-            p.shaders["colorMesh"]->setUniform(
-                "transform.mvp", transform, vlk::kShaderVertex);
-            _bindDescriptorSets(pipelineLayoutName, "colorMesh");
 
-            if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
-            {
-                _vkDraw("colorMesh");
-            }
+            shader->bind(p.frameIndex);
+            shader->setUniform(
+                "transform.mvp", transform, vlk::kShaderVertex);
+            _bindDescriptorSets(pipelineLayoutName, shader);
+
+            // Upload the vertex data into the pool and draw immediately.
+            // The pool selects a slot with enough room, overflowing to a new
+            // 1 GB buffer when the current one is full.
+            const vlk::VAOAllocation alloc =
+                p.vaoPool->upload(p.vbos["colorMesh"]);
+            p.vaoPool->draw(p.cmd, alloc);
         }
 
 
-        
+
         void Render::Private::createTextMesh(
             Fl_Vk_Context& ctx, const geom::TriangleMesh2& mesh)
         {
@@ -345,11 +331,6 @@ namespace tl
             {
                 vbos["text"]->copy(convert(mesh, vbos["text"]->getType()));
             }
-            if (!vaos["text"] && vbos["text"])
-            {
-                vaos["text"] = vlk::VAO::create(ctx);
-                vaos["text"]->bind(frameIndex);
-            }
         }
 
         void Render::drawText(
@@ -358,7 +339,7 @@ namespace tl
             const image::Color4f& color)
         {
             TLRENDER_P();
-            
+
             const geom::TriangleMesh2& mesh = info.mesh;
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
@@ -371,50 +352,51 @@ namespace tl
 
             _uploadMesh("text", mesh, size);
             _createBindingSet(p.shaders["text"]);
-            
+
             vlk::ColorBlendStateInfo cb;
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             colorBlendAttachment.blendEnable = VK_TRUE;
-                
+
             colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
             colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
             colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-            
+
             cb.attachments.push_back(colorBlendAttachment);
-            
-                
+
+
             vlk::DepthStencilStateInfo ds;
             ds.depthTestEnable = VK_FALSE;
             ds.depthWriteEnable = VK_FALSE;
             ds.stencilTestEnable = VK_FALSE;
 
+            auto shader = p.shaders["text"];
             createPipeline("text", "text",
-                           getRenderPass(), p.shaders["text"],
+                           getRenderPass(), shader,
                            p.vbos["text"], cb, ds);
-            
-            p.shaders["text"]->bind(p.frameIndex);
-            p.shaders["text"]->setUniform("transform.mvp", transform);
-            p.shaders["text"]->setTexture("textureSampler",
+
+            shader->bind(p.frameIndex);
+            shader->setUniform("transform.mvp", transform);
+            shader->setTexture("textureSampler",
                                           textures[textureIndex]);
-            _bindDescriptorSets("text", "text");
-                            
+            _bindDescriptorSets("text", shader);
+
             VkPipelineLayout pipelineLayout = p.pipelineLayouts["text"];
             vkCmdPushConstants(
                 p.cmd, pipelineLayout,
-                p.shaders["text"]->getPushStageFlags(), 0,
+                shader->getPushStageFlags(), 0,
                 sizeof(color), &color);
-                            
+
             _vkDraw("text");
-        }                
-        
+        }
+
         void Render::appendText(
             std::vector<timeline::TextInfo>& textInfos,
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
             const math::Vector2i& pos)
         {
             TLRENDER_P();
-            
+
             uint8_t textureIndex = 0;
             const auto& textures = p.glyphTextureAtlas->getTextures();
 
@@ -435,7 +417,7 @@ namespace tl
                     textInfos.emplace_back(textInfo);
                 }
             }
-            
+
             timeline::TextInfo& lastTextInfo = textInfos.back();
             geom::TriangleMesh2& mesh = lastTextInfo.mesh;
             size_t& meshIndex = lastTextInfo.meshIndex;
@@ -471,10 +453,10 @@ namespace tl
                         if (item.textureIndex != textureIndex)
                         {
                             textureIndex = item.textureIndex;
-                            
+
                             const timeline::TextInfo textInfo(textureIndex);
                             textInfos.emplace_back(textInfo);
-                            
+
                             timeline::TextInfo& lastTextInfo = textInfos.back();
                             mesh = lastTextInfo.mesh;
                             meshIndex = lastTextInfo.meshIndex;
@@ -482,7 +464,7 @@ namespace tl
 
                         const math::Vector2i& offset = glyph->offset;
                         const math::Box2i box(
-                            pos.x + x + offset.x, pos.y - offset.y, 
+                            pos.x + x + offset.x, pos.y - offset.y,
                             glyph->image->getWidth(),
                             glyph->image->getHeight());
                         const auto& min = box.min;
@@ -492,24 +474,24 @@ namespace tl
                         mesh.v.push_back(math::Vector2f(max.x + 1, min.y));
                         mesh.v.push_back(math::Vector2f(max.x + 1, max.y + 1));
                         mesh.v.push_back(math::Vector2f(min.x, max.y + 1));
-                        
+
                         mesh.t.push_back(
                             math::Vector2f(
-                                item.textureU.getMin(),
-                                item.textureV.getMin()));
+                                item.textureU.min(),
+                                item.textureV.min()));
                         mesh.t.push_back(
                             math::Vector2f(
-                                item.textureU.getMax(),
-                                item.textureV.getMin()));
+                                item.textureU.max(),
+                                item.textureV.min()));
                         mesh.t.push_back(
                             math::Vector2f(
-                                item.textureU.getMax(),
-                                item.textureV.getMax()));
+                                item.textureU.max(),
+                                item.textureV.max()));
                         mesh.t.push_back(
                             math::Vector2f(
-                                item.textureU.getMin(),
-                                item.textureV.getMax()));
-                        
+                                item.textureU.min(),
+                                item.textureV.max()));
+
                         geom::Triangle2 triangle;
                         triangle.v[0].v = meshIndex + 1;
                         triangle.v[1].v = meshIndex + 2;
@@ -545,7 +527,7 @@ namespace tl
             const std::string shaderName = "texture";
             const std::string pipelineLayoutName = shaderName;
             const std::string meshName = "texture";
-            
+
             createPipeline(
                 p.fbo, pipelineName, pipelineLayoutName,
                 shaderName, meshName);
@@ -553,29 +535,31 @@ namespace tl
             auto shader = p.shaders[shaderName];
             shader->bind(p.frameIndex);
             shader->setTexture("textureSampler", texture);
-            _bindDescriptorSets(pipelineLayoutName, shaderName);
+            _bindDescriptorSets(pipelineLayoutName, shader);
 
             if (p.vbos["texture"])
             {
                 p.vbos["texture"]->copy(
                     convert(geom::box(box), p.vbos["texture"]->getType()));
             }
-            
+
             VkPipelineLayout pipelineLayout = p.pipelineLayouts["texture"];
             vkCmdPushConstants(
                 p.cmd, pipelineLayout,
                 shader->getPushStageFlags(), 0,
                 sizeof(color), &color);
-            
+
             _vkDraw("texture");
         }
 
-        void Render::drawImage(
+        void Render::_drawImageCommon(
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::shared_ptr<image::Image>& image, const math::Box2i& box,
             const image::Color4f& color,
             const timeline::ImageOptions& imageOptions,
-            const bool clearRenderPass)
+            const bool clearRenderPass,
+            const bool flip,
+            const bool applyClipRect)
         {
             TLRENDER_P();
             ++(p.currentStats.images);
@@ -655,6 +639,26 @@ namespace tl
                 shader->setTexture("textureSampler0", textures[0]);
                 shader->setTexture("textureSampler1", textures[1]);
                 shader->setTexture("textureSampler2", textures[2]);
+                break;
+            case image::PixelType::YUV_420SP_U8:
+            case image::PixelType::YUV_420SP_U16:
+            case image::PixelType::YUV_444SP_U8:
+            case image::PixelType::YUV_422SP_U8:
+            case image::PixelType::YUV_422SP_U16:
+            case image::PixelType::YUV_444SP_U16:
+                textures[0]->transition(
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    VK_ACCESS_TRANSFER_WRITE_BIT,
+                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
+                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                textures[1]->transition(
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    VK_ACCESS_TRANSFER_WRITE_BIT,
+                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
+                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                shader->setTexture("textureSampler0", textures[0]);
+                shader->setTexture("textureSampler1", textures[1]);
+                shader->setTexture("textureSampler2", textures[1]);
                 break;
             default:
                 textures[0]->transition(
@@ -707,7 +711,7 @@ namespace tl
             if (p.vbos["image"])
             {
                 p.vbos["image"]->copy(
-                    convert(geom::box(box, true), p.vbos["image"]->getType()));
+                    convert(geom::box(box, flip), p.vbos["image"]->getType()));
             }
 
             //
@@ -721,12 +725,29 @@ namespace tl
                            shaderName, meshName, enableBlending,
                            srcColorBlendFactor, dstColorBlendFactor,
                            srcAlphaBlendFactor, dstAlphaBlendFactor);
-            _bindDescriptorSets(pipelineLayoutName, shaderName);
+            _bindDescriptorSets(pipelineLayoutName, p.shaders["image"]);
             fbo->setupViewportAndScissor(p.cmd);
 
+            if (applyClipRect && p.clipRectEnabled)
+            {
+                setClipRect(p.clipRect);
+            }
+
             _vkDraw("image");
-            
+
             fbo->endRenderPass(p.cmd);
+        }
+
+        void Render::drawImage(
+            const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+            const std::shared_ptr<image::Image>& image, const math::Box2i& box,
+            const image::Color4f& color,
+            const timeline::ImageOptions& imageOptions,
+            const bool clearRenderPass)
+        {
+            _drawImageCommon(
+                fbo, image, box, color, imageOptions, clearRenderPass,
+                /* flip = */ true, /* applyClipRect = */ false);
         }
 
         void Render::drawImage(
@@ -735,157 +756,16 @@ namespace tl
             const timeline::ImageOptions& imageOptions)
         {
             TLRENDER_P();
-            ++(p.currentStats.images);
-
-            const auto& info = image->getInfo();
-            std::vector<std::shared_ptr<vlk::Texture> > textures;
-            if (!imageOptions.cache)
-            {
-                textures = getTextures(ctx, info, imageOptions.imageFilters);
-                copyTextures(image, textures);
-            }
-            else if (!p.textureCache->get(image, textures))
-            {
-                textures = getTextures(ctx, info, imageOptions.imageFilters);
-                copyTextures(image, textures);
-                p.textureCache->add(image, textures, image->getDataByteCount());
-            }
-
-            auto shader = p.shaders["image"];
-            _createBindingSet(shader);
-
-            shader->bind(p.frameIndex);
-            shader->setUniform("transform.mvp", p.transform);
-
-            UBOTexture ubo;
-            ubo.color = color;
-            ubo.pixelType = static_cast<int>(info.pixelType);
-            image::VideoLevels videoLevels = info.videoLevels;
-            switch (imageOptions.videoLevels)
-            {
-            case timeline::InputVideoLevels::FullRange:
-                videoLevels = image::VideoLevels::FullRange;
-                break;
-            case timeline::InputVideoLevels::LegalRange:
-                videoLevels = image::VideoLevels::LegalRange;
-                break;
-            default:
-                break;
-            }
-            ubo.videoLevels = static_cast<int>(videoLevels);
-            ubo.yuvCoefficients =
-                image::getYUVCoefficients(info.yuvCoefficients);
-            ubo.imageChannels = image::getChannelCount(info.pixelType);
-            ubo.mirrorX = info.layout.mirror.x;
-            ubo.mirrorY = !info.layout.mirror.y;
-            shader->setUniform("ubo", ubo);
-
-            switch (info.pixelType)
-            {
-            case image::PixelType::YUV_420P_U8:
-            case image::PixelType::YUV_422P_U8:
-            case image::PixelType::YUV_444P_U8:
-            case image::PixelType::YUV_420P_U10:
-            case image::PixelType::YUV_422P_U10:
-            case image::PixelType::YUV_444P_U10:
-            case image::PixelType::YUV_420P_U12:
-            case image::PixelType::YUV_422P_U12:
-            case image::PixelType::YUV_444P_U12:
-            case image::PixelType::YUV_420P_U16:
-            case image::PixelType::YUV_422P_U16:
-            case image::PixelType::YUV_444P_U16:
-                textures[0]->transition(
-                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                    VK_ACCESS_TRANSFER_WRITE_BIT,
-                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
-                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-                textures[1]->transition(
-                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                    VK_ACCESS_TRANSFER_WRITE_BIT,
-                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
-                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-                textures[2]->transition(
-                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                    VK_ACCESS_TRANSFER_WRITE_BIT,
-                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
-                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-                shader->setTexture("textureSampler0", textures[0]);
-                shader->setTexture("textureSampler1", textures[1]);
-                shader->setTexture("textureSampler2", textures[2]);
-                break;
-            default:
-                textures[0]->transition(
-                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                    VK_ACCESS_TRANSFER_WRITE_BIT,
-                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
-                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
-                shader->setTexture("textureSampler0", textures[0]);
-                shader->setTexture("textureSampler1", textures[0]);
-                shader->setTexture("textureSampler2", textures[0]);
-                break;
-            }
-            bool enableBlending = true;
-            VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-            VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-            VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-            VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-            switch (imageOptions.alphaBlend)
-            {
-            case timeline::AlphaBlend::kNone:
-                srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-                dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
-                srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-                dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-                break;
-            case timeline::AlphaBlend::Straight:
-                srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-                dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-                dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                break;
-            case timeline::AlphaBlend::Premultiplied:
-                srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-                dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-                dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-                break;
-            default:
-                break;
-            }
 
             // This is used in the timeline, so we need to use a load
             // render pass.
-            p.fbo->beginLoadRenderPass(p.cmd);
-            if (p.vbos["image"])
-            {
-                p.vbos["image"]->copy(
-                    convert(geom::box(box, false), p.vbos["image"]->getType()));
-            }
-
-            //
-            // Create pipeline
-            //
-            const std::string pipelineName = "image";
-            const std::string pipelineLayoutName = "image";
-            const std::string shaderName = "image";
-            const std::string meshName = "image";
-            createPipeline(p.fbo, pipelineName, pipelineLayoutName,
-                           shaderName, meshName, enableBlending,
-                           srcColorBlendFactor, dstColorBlendFactor,
-                           srcAlphaBlendFactor, dstAlphaBlendFactor);
-            _bindDescriptorSets(pipelineLayoutName, shaderName);
-            p.fbo->setupViewportAndScissor(p.cmd);
-
-            if (p.clipRectEnabled)
-            {
-                setClipRect(p.clipRect);
-            }
-            
-            _vkDraw("image");
-                
-            p.fbo->endRenderPass(p.cmd);
+            _drawImageCommon(
+                p.fbo, image, box, color, imageOptions,
+                /* clearRenderPass = */ false,
+                /* flip             = */ false,
+                /* applyClipRect    = */ true);
         }
 
-        
+
     } // namespace timeline_vlk
 } // namespace tl

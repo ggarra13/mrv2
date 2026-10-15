@@ -128,17 +128,17 @@ namespace tl
             std::atomic<size_t> objectCount = 0;
             std::atomic<size_t> totalByteCount = 0;
         }
-        
+
         size_t OffscreenBuffer::getTotalByteCount()
         {
             return totalByteCount;
         }
-        
+
         size_t OffscreenBuffer::getObjectCount()
         {
             return objectCount;
         }
-        
+
         struct OffscreenBuffer::Private
         {
             math::Size2i size;
@@ -326,9 +326,9 @@ namespace tl
                 glDeleteRenderbuffers(1, &p.depthStencilID);
                 p.depthStencilID = 0;
             }
-            
+
             --objectCount;
-            
+
             image::Info info(p.size.w, p.size.h, p.options.colorType);
             totalByteCount -= image::getDataByteCount(info);
         }

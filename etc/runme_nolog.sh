@@ -28,6 +28,35 @@ echo "PATH is now set now to ${PATH}"
 echo "It has:"
 mkdir -p $PWD/${BUILD_DIR}/install/bin/
 
+#
+# Create Windows certificate file
+#
+if [[ $KERNEL == *Windows* ]]; then
+    if [[ ! -e certificates/mrv2.pfx ]]; then
+	cd certificates
+	./create_windows_cert.sh
+	cd -
+    else
+	echo
+	echo "Windows .pfx certificate exists"
+	echo
+    fi
+elif [[ $KERNEL == *Darwin* ]]; then
+    true
+    # echo "Global secrets"
+    # echo "--------------"
+    # echo "MACOS_CERTIFICATE_BASE64=$MACOS_CERTIFICATE_BASE64"
+    # echo "P12_PASSWORD=$P12_PASSWORD"
+    # echo "DEVELOPER_ID=$DEVELOPER_ID"
+    # echo "APPLE_ID=$APPLE_ID"
+    # echo "TEAM_ID=$TEAM_ID"
+    # echo "NOTARYTOOL_PROFILE=$NOTARYTOOL_PROFILE"
+    # echo
+    # echo "Local secrets"
+    # echo "-------------"
+    # echo "APP_PASSWORD=$APP_PASSWORD"
+fi
+
 if [[ $INSTALL_CMAKE == 1 ]]; then
     . etc/install_cmake.sh
 fi
@@ -58,6 +87,10 @@ update_cacert
 #
 if [ -z "$MSYS2_INSTALL" ]; then
     export MSYS2_INSTALL=ON
+fi
+
+if [ -z "$USE_SYSTEM_LIBS" ]; then
+    export USE_SYSTEM_LIBS=OFF
 fi
 
 if [ -z "$BUILD_VCPKG" ]; then
@@ -202,7 +235,7 @@ if [ -z "$TLRENDER_LIBPLACEBO" ]; then
 fi
 
 if [ -z "$TLRENDER_LIBWEBP" ]; then
-    export TLRENDER_LIBWEBP=OFF
+    export TLRENDER_LIBWEBP=ON
 fi
 
 if [ -z "$TLRENDER_NDI_SDK" ]; then
@@ -229,6 +262,10 @@ fi
 
 if [ -z "$TLRENDER_NET" ]; then
     export TLRENDER_NET=ON
+fi
+
+if [ -z "$TLRENDER_OAPV" ]; then
+    export TLRENDER_OAPV=ON
 fi
 
 if [ -z "$TLRENDER_OPENJPH" ]; then
@@ -303,7 +340,6 @@ if [ -z "$VULKAN_SDK" ]; then
 	echo "Coukd not guess VULKAN_SDK, last guess ${VULKAN_SDK}"
 	unset VULKAN_SDK
 	export TLRENDER_VK=OFF
-	export MRV2_HDR=OFF
     fi
 else
     echo "Using VULKAN_SDK from environment: ${VULKAN_SDK}"
@@ -414,6 +450,8 @@ echo "GNU arhiver ${GNU_ARCHIVER_NAME} version ${GNU_ARCHIVER_VERSION}"
 echo
 
 
+export CMAKE_INSTALL_PREFIX=$PWD/$BUILD_DIR/install
+export CMAKE_PREFIX_PATH=$PWD/$BUILD_DIR/install
 
 echo "CMake at: ${CMAKE_LOCATION} ${CMAKE_VERSION}"
 echo "Git at: ${GIT_LOCATION} ${GIT_VERSION}"
@@ -441,6 +479,25 @@ if command -v ninja > /dev/null 2>&1; then
 else
     echo
     echo "ninja NOT found!!! Cannot compile mrv2/vmrv2."
+    echo
+    exit 1
+fi
+
+build_swig=0
+if command -v swig > /dev/null 2>&1; then
+    swig -version
+else
+    echo
+    echo "swig NOT found!!!  Cannot compile pyFLTK"
+    echo
+    exit 1
+fi
+
+if command -v perl > /dev/null 2>&1; then
+    perl -version
+else
+    echo
+    echo "Perl NOT found!!! Cannot compile OpenSSL."
     echo
     exit 1
 fi
@@ -518,40 +575,11 @@ if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
 fi
 
-export CMAKE_INSTALL_PREFIX=$PWD/$BUILD_DIR/install
-export CMAKE_PREFIX_PATH=$PWD/$BUILD_DIR/install
-
 #
 # Handle Windows pre-flight compiles
 #
 if [[ $KERNEL == *Windows* ]]; then
     . $PWD/etc/windows/compile_dlls.sh
-fi
-
-if command -v swig > /dev/null 2>&1; then
-    swig -version
-else
-    echo
-    echo "swig NOT found!!! Trying to compile from source."
-    echo
-    . etc/common/build_swig.sh
-    if command -v swig > /dev/null 2>&1; then
-	swig -version
-    else
-	echo
-	echo "swig NOT found!!! Cannot compile pyFLTK."
-	echo
-	exit 1
-    fi
-fi
-
-if command -v perl > /dev/null 2>&1; then
-    perl -version
-else
-    echo
-    echo "Perl NOT found!!! Cannot compile OpenSSL."
-    echo
-    exit 1
 fi
 
 #
@@ -567,6 +595,7 @@ cd $BUILD_DIR
 unset  VCPKG_ROOT
 export VCPKG_INSTALL_PREFIX=$PWD/install
 
+
 cmd="cmake -G 'Ninja'
 	   -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
            -D CMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
@@ -574,9 +603,11 @@ cmd="cmake -G 'Ninja'
 	   -D CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
            -D CMAKE_OSX_ARCHITECTURES=\"${CMAKE_OSX_ARCHITECTURES}\"
            -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
+	   -D CMAKE_CXX_STANDARD=20
 
 	   -D BUILD_VCPKG=${BUILD_VCPKG}
 	   -D BUILD_PYTHON=${BUILD_PYTHON}
+	   -D USE_SYSTEM_LIBS=${USE_SYSTEM_LIBS}
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
 	   -D BUILD_GETTEXT=${BUILD_GETTEXT}
@@ -608,7 +639,7 @@ cmd="cmake -G 'Ninja'
 	   -D TLRENDER_LIBWEBP=${TLRENDER_LIBWEBP}
 	   -D TLRENDER_NDI=${TLRENDER_NDI}
 	   -D TLRENDER_NET=${TLRENDER_NET}
-	   -D TLRENDER_NFD=OFF
+           -D TLRENDER_OAPV=${TLRENDER_OAPV}
 	   -D TLRENDER_OPENJPH=${TLRENDER_OPENJPH}
            -D TLRENDER_PNG=${TLRENDER_PNG}
 	   -D TLRENDER_RAW=${TLRENDER_RAW}

@@ -19,6 +19,8 @@ namespace fs = std::filesystem;
 #include "mrvOS/mrvFileManager.h"
 #include "mrvOS/mrvOS.h"
 
+#include <tlCore/Path.h>
+
 
 #ifdef __linux__
 namespace
@@ -71,7 +73,7 @@ namespace mrv
     {
         fs::path path(file);
         const fs::path back = path.make_preferred();
-        const auto native_path = back.u8string();
+        const auto native_path = tl::file::fromFileSystem(back);
         const std::string cmd = "explorer /select,\"" + native_path + "\"";
         return os::exec_command(cmd);
     }

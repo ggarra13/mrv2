@@ -35,6 +35,7 @@
 
 #include <tlTimelineUI/IItem.h>
 
+#include <tlCore/Path.h>
 #include <tlCore/StringFormat.h>
 
 #include <fstream>
@@ -43,7 +44,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 17;
+    const int kSessionVersion = 20;
 } // namespace
 
 namespace
@@ -121,6 +122,7 @@ namespace mrv
             Message time;
             Message playback;
             Message inOutRange;
+            Message mediaReferenceKey;
 
             if (player)
             {
@@ -130,6 +132,8 @@ namespace mrv
                 std::vector< voice::Annotation > voAnnotations;
                 for (const auto& ann : annotations)
                 {
+                    if (ann->shapes.empty())
+                        continue;
                     jAnnotations.push_back(*(ann.get()));
                 }
                 for (const auto& ann : voannotations)
@@ -141,6 +145,10 @@ namespace mrv
                 time = player->currentTime();
                 playback = player->playback();
                 inOutRange = player->inOutRange();
+
+                auto timeline = player->timeline();
+                if (timeline)
+                    mediaReferenceKey = timeline->getMediaReferenceKey();
             }
 
             timeline["annotations"] = annotation;
@@ -148,6 +156,7 @@ namespace mrv
             timeline["time"] = time;
             timeline["playback"] = playback;
             timeline["inOutRange"] = inOutRange;
+            timeline["mediaReferenceKey"] = mediaReferenceKey;
 
             Message bars = {
                 {"menu_bar", (bool)ui->uiMenuGroup->visible()},
@@ -164,17 +173,14 @@ namespace mrv
                 {"Color", (colorPanel != nullptr)},
                 {"Color Area", (colorAreaPanel != nullptr)},
                 {"Compare", (comparePanel != nullptr)},
-                {"Playlist", (playlistPanel != nullptr)},
                 {"Media Information", (imageInfoPanel != nullptr)},
                 {"Annotations", (annotationsPanel != nullptr)},
+                {"Notes", (notesPanel != nullptr)},
                 {"Devices", (devicesPanel != nullptr)},
                 {"Environment Map", (environmentMapPanel != nullptr)},
                 {"Settings", (settingsPanel != nullptr)},
 #ifdef MRV2_PYBIND11
                 {"Python", (pythonPanel != nullptr)},
-#endif
-#ifdef MRV2_NETWORK
-                {"Network", (networkPanel != nullptr)},
 #endif
 #ifdef TLRENDER_NDI
                 {"NDI", (ndiPanel != nullptr)},
@@ -187,6 +193,7 @@ namespace mrv
                 {"USD", (usdPanel != nullptr)},
 #endif
                 {"Logs", (logsPanel != nullptr)},
+                {"WebRTC", (webrtcPanel != nullptr)},
             };
 
             if (filesPanel)
@@ -197,12 +204,12 @@ namespace mrv
                 colorAreaPanel->save();
             if (comparePanel)
                 comparePanel->save();
-            if (playlistPanel)
-                playlistPanel->save();
             if (imageInfoPanel)
                 imageInfoPanel->save();
             if (annotationsPanel)
                 annotationsPanel->save();
+            if (notesPanel)
+                notesPanel->save();
 #ifdef TLRENDER_NDI
             if (ndiPanel)
                 ndiPanel->save();
@@ -214,10 +221,6 @@ namespace mrv
 #ifdef MRV2_PYBIND11
             if (pythonPanel)
                 pythonPanel->save();
-#endif
-#ifdef MRV2_NETWORK
-            if (networkPanel)
-                networkPanel->save();
 #endif
 #ifdef TLRENDER_USD
             if (usdPanel)
@@ -231,8 +234,10 @@ namespace mrv
                 waveformPanel->save();
             if (logsPanel)
                 logsPanel->save();
+            if (webrtcPanel)
+                webrtcPanel->save();
 
-            std::string config = ui->uiPrefs->uiPrefsOCIOConfig->value();
+            std::string config = ui->uiPrefs->OCIOConfig->value();
 
             if (config.substr(0, 7) != "ocio://")
             {
@@ -360,7 +365,7 @@ namespace mrv
             session["viewZoom"] = view->viewZoom();
             session["viewPos"] = view->viewPos();
             session["actionMode"] = view->getActionMode();
-                        
+
             std::ofstream ofs(fileName);
             if (!ofs.is_open())
             {
@@ -397,7 +402,7 @@ namespace mrv
             App::unsaved_annotations = false;
 
             ui->uiMain->update_title_bar();
-            
+
             /* xgettext:c++-format */
             const std::string msg =
                 string::Format(_("Session saved to \"{0}\".")).arg(fileName);
@@ -451,7 +456,7 @@ namespace mrv
                     return false;
                 }
                 ifs.close();
-                
+
                 // Set the edit mode to timeline
                 set_edit_mode_cb(EditMode::kTimeline, ui);
 
@@ -459,17 +464,17 @@ namespace mrv
                 fs::path currentDir = fileName;
                 currentDir = fs::absolute(currentDir);
                 currentDir = currentDir.parent_path();
-                fl_chdir(currentDir.u8string().c_str());
+                fl_chdir(tl::file::fromFileSystem(currentDir).c_str());
 
                 // Get session version
                 int version = session["version"];
 
                 // Close all first, but don't exit.
                 close_all_cb(nullptr, ui);
-                
+
                 // Turn off auto-playback temporarily
-                bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
-                ui->uiPrefs->uiPrefsAutoPlayback->value(false);
+                bool autoPlayback = ui->uiPrefs->AutoPlayback->value();
+                ui->uiPrefs->AutoPlayback->value(false);
 
                 for (const auto& j : session["files"])
                 {
@@ -513,11 +518,11 @@ namespace mrv
                             break;
                         }
                     }
-                    
+
                     if (!audioPath.empty())
                     {
                         replace_path(audioPath);
-                        
+
                         while (!file::isReadable(audioPath))
                         {
                             const std::string msg = string::Format(_("Audio File '{0}' is not readable.\n\nDo you want to replace it with another?")).arg(audioPath);
@@ -542,7 +547,7 @@ namespace mrv
                             }
                         }
                     }
-                    
+
                     app->open(path, audioPath);
 
                     // Copy annotations to both item and player
@@ -556,6 +561,7 @@ namespace mrv
                     Aitem->annotations = item.annotations;
                     Aitem->voiceAnnotations = item.voiceAnnotations;
                     Aitem->videoLayer = item.videoLayer;
+                    Aitem->mediaReferenceKey = item.mediaReferenceKey;
                     Aitem->currentTime = item.currentTime;
                     Aitem->inOutRange = item.inOutRange;
 
@@ -565,13 +571,14 @@ namespace mrv
                     auto player = view->getTimelinePlayer();
                     if (player)
                     {
+                        player->setMediaReferenceKey(item.mediaReferenceKey);
                         player->setAllAnnotations(item.annotations);
                         player->setInOutRange(Aitem->inOutRange);
                         player->seek(Aitem->currentTime);
                     }
                 }
 
-                ui->uiPrefs->uiPrefsAutoPlayback->value(autoPlayback);
+                ui->uiPrefs->AutoPlayback->value(autoPlayback);
 
                 Message j = session["ui"];
 
@@ -615,12 +622,12 @@ namespace mrv
                         replace_path(config);
 
                         if (file::isReadable(config))
-                            ui->uiPrefs->uiPrefsOCIOConfig->value(
+                            ui->uiPrefs->OCIOConfig->value(
                                 config.c_str());
                     }
                     else
                     {
-                        ui->uiPrefs->uiPrefsOCIOConfig->value(config.c_str());
+                        ui->uiPrefs->OCIOConfig->value(config.c_str());
                     }
 
                     ocio::setup();
@@ -670,7 +677,7 @@ namespace mrv
                     // Hide Panels and Windows
                     removePanels(ui);
                     removeWindows(ui);
-                    
+
                     j = session["settings"];
 
                     auto settings = app->settings();
@@ -740,7 +747,7 @@ namespace mrv
                         show_window_cb(_(wc->name), ui);
                     }
                 }
-                    
+
                 if (version >= 3)
                 {
                     EnvironmentMapOptions env =
@@ -805,7 +812,7 @@ namespace mrv
                         session["imageOptions"];
                     app->setImageOptions(imageOptions);
                 }
-                
+
                 if (version >= 2)
                 {
                     std::vector<int> Bindexes = session["Bindexes"];
@@ -844,13 +851,13 @@ namespace mrv
                                 auto annotation = voice::messageToAnnotation(value);
                                 voiceAnnotations.push_back(annotation);
                             }
-                    
+
                             player->setAllAnnotations(voiceAnnotations);
                         }
 
                         if (version >= 11)
                         {
-                            otime::TimeRange inOutRange;
+                            OTIO_NS::TimeRange inOutRange;
                             j["inOutRange"].get_to(inOutRange);
                             player->setInOutRange(inOutRange);
 
@@ -871,14 +878,21 @@ namespace mrv
                                 {
                                     c->uiEndFrame->setTime(
                                         inOutRange.end_time_exclusive() -
-                                        otime::RationalTime(
+                                        OTIO_NS::RationalTime(
                                             1.0, inOutRange.duration().rate()));
                                     c->uiEndButton->value(1);
                                 }
                             }
                         }
 
-                        otime::RationalTime time;
+                        if (version >= 20)
+                        {
+                            std::string key;
+                            j["mediaReferenceKey"].get_to(key);
+                            player->setMediaReferenceKey(key);
+                        }
+
+                        OTIO_NS::RationalTime time;
                         j["time"].get_to(time);
                         player->seek(time);
 
@@ -907,11 +921,11 @@ namespace mrv
                             auto viewPos = session["viewPos"];
                             double viewZoom = session["viewZoom"];
                             view->setViewPosAndZoom(viewPos, viewZoom);
-                        
+
                             bool frameView = session["frameView"];
                             view->setFrameView(frameView);
                             view->redraw();
-                            
+
                             // If we are running command-line, wait a tad for
                             // the callbacks and the main resize of window
                             // function to update.
@@ -923,7 +937,13 @@ namespace mrv
                             auto actionMode = session["actionMode"];
                             view->setActionMode(actionMode);
                         }
-                        
+
+                        if (version >= 18)
+                        {
+                            if (notesPanel)
+                                notesPanel->refresh();
+                        }
+
                     }
                 }
             }
@@ -940,8 +960,8 @@ namespace mrv
             if (! string::ends_with(fileName, "temp.mrv2s") &&
                 ! string::ends_with(fileName, "lang.mrv2s"))
                 setCurrent(fileName);
-                
-            
+
+
             return true;
         }
 

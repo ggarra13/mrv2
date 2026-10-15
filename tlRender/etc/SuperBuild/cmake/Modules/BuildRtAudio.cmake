@@ -6,6 +6,7 @@ set(RtAudio_GIT_TAG "5.2.0") # Nov. 16, 2021
 set(RtAudio_PATCH )
 
 set(RtAudio_DEPENDENCIES )
+message(STATUS "RtAudio DEPENDENCIES=${RtAudio_DEPENDENCIES}")
 
 #
 # \bug: this is needed to have Linux not hang when switching clips quickly.
@@ -16,7 +17,7 @@ if (NOT APPLE)
     if (RtAudio_GIT_TAG STREQUAL "5.2.0")
 	set(RtAudio_PATCH ${CMAKE_COMMAND} -E copy_if_different
             ${CMAKE_CURRENT_SOURCE_DIR}/patches/RtAudio-patch/RtAudio.cpp
-            ${CMAKE_CURRENT_BINARY_DIR}/RtAudio/src/RtAudio/RtAudio.cpp )
+            ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/RtAudio/src/RtAudio/RtAudio.cpp )
     endif()
 endif()
 
@@ -37,7 +38,7 @@ endif()
 
 ExternalProject_Add(
     RtAudio
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/RtAudio
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/RtAudio
     GIT_REPOSITORY ${RtAudio_GIT_REPOSITORY}
     GIT_TAG ${RtAudio_GIT_TAG}
     
@@ -48,3 +49,5 @@ ExternalProject_Add(
     LIST_SEPARATOR |
 
     CMAKE_ARGS ${RtAudio_ARGS})
+
+set(RtAudio_DEP RtAudio)

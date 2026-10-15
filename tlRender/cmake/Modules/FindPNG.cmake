@@ -22,10 +22,12 @@ set(PNG_INCLUDE_DIRS
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     find_library(PNG_LIBRARY
-        NAMES png16d libpng16d libpng16_staticd pngd png16 png16_static libpng16_static png)
+        NAMES png16d libpng16d libpng16_staticd pngd png16 png16_static libpng16_static png
+	HINTS ${CMAKE_INSTALL_PREFIX})
 else()
     find_library(PNG_LIBRARY
-        NAMES png16 libpng16 png16_static libpng16_static png)
+        NAMES png16 libpng16 png16_static libpng16_static png
+	HINTS ${CMAKE_INSTALL_PREFIX})
 endif()
 set(PNG_LIBRARIES
     ${PNG_LIBRARY}
@@ -43,7 +45,7 @@ if(PNG_FOUND AND NOT TARGET PNG::PNG)
         IMPORTED_LOCATION "${PNG_LIBRARY}"
         INTERFACE_COMPILE_DEFINITIONS PNG_FOUND
         INTERFACE_INCLUDE_DIRECTORIES "${PNG_INCLUDE_DIR}"
-        INTERFACE_LINK_LIBRARIES "ZLIB")
+        INTERFACE_LINK_LIBRARIES "ZLIB::ZLIB")
 endif()
 if(PNG_FOUND AND NOT TARGET PNG)
     add_library(PNG INTERFACE)

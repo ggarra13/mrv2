@@ -97,8 +97,8 @@ namespace mrv
         {
             TLRENDER_P();
 
-            const int autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
-            const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
+            const int autoHide = p.ui->uiPrefs->AutoHidePixelBar->value();
+            const bool hasPixelBar = p.ui->uiPrefs->PixelToolbar->value();
             const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
 
             if (!hasPixelBar || visiblePixelBar ||
@@ -112,7 +112,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            const int autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
+            const int autoHide = p.ui->uiPrefs->AutoHidePixelBar->value();
             const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
 
             if (!visiblePixelBar || (autoHide != kAutoHideOpenGLAndVulkan))
@@ -125,8 +125,8 @@ namespace mrv
         {
             TLRENDER_P();
 
-            const int autoHide = p.ui->uiPrefs->uiPrefsAutoHidePixelBar->value();
-            const bool hasPixelBar = p.ui->uiPrefs->uiPrefsPixelToolbar->value();
+            const int autoHide = p.ui->uiPrefs->AutoHidePixelBar->value();
+            const bool hasPixelBar = p.ui->uiPrefs->PixelToolbar->value();
             const bool visiblePixelBar = p.ui->uiPixelBar->visible_r();
 
             if ((hasPixelBar && (autoHide != kAutoHideOpenGLAndVulkan)) ||

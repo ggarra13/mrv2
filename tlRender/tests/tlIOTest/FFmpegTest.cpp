@@ -170,6 +170,8 @@ namespace tl
             const std::vector<std::pair<std::string, std::string> > options = {
                 {"FFmpeg/HardwareDecode", "0"},
                 {"FFmpeg/HardwareDecode", "1"},
+                {"FFmpeg/HWAccel", "0"},
+                {"FFmpeg/HWAccel", "1"},
                 {"FFmpeg/YUVToRGBConversion", "1"},
                 {"FFmpeg/ThreadCount", "1"},
                 {"FFmpeg/RequestTimeout", "1"},

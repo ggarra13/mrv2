@@ -1,19 +1,23 @@
 # Hardware video decoding
 
 On macOS, FFmpeg playback tries VideoToolbox for ProRes, H.264 (AVC), and
-H.265 (HEVC). Other codecs and other platforms use the existing software
-decoder. Availability depends on the FFmpeg build, macOS, hardware, and the
+H.265 (HEVC). Linux and Windows default to software decoding; upstream's
+other hardware backends remain available when supported by the FFmpeg build.
+Availability depends on the FFmpeg build, operating system, hardware, and the
 video profile.
 
-In **Settings > Performance**, **FFmpeg hardware decoding** enables this
-behavior (on by default on macOS). Turning it off reloads the current movie
-with the software decoder. The persisted setting is
-`Performance/FFmpegHardwareDecode` (`1` or `0`); the tlRender reader option is
-`FFmpeg/HardwareDecode` (`"1"` or `"0"`). These options affect playback, and
-are independent of `FFmpeg/HardwareEncode` for export.
+In **Settings > Performance**, the existing **FFmpeg HW Accel** switch enables
+this behavior (on by default on macOS). **FFmpeg HW Driver** selects a backend.
+Turning hardware acceleration off reloads the current movie with the software
+decoder. The persisted switch is `Performance/FFmpegHWAccel` (`1` or `0`);
+the tlRender reader options are `FFmpeg/HWAccel` (`"1"` or `"0"`) and
+`FFmpeg/HWDriver` (e.g. `"videotoolbox"`). The original `FFmpeg/HardwareDecode`
+reader option remains an alias; an explicit `FFmpeg/HWAccel` takes precedence.
+These options affect playback and are independent of `FFmpeg/HardwareEncode`
+for export.
 
 Hardware frames are downloaded to system memory and converted to the existing
-image layout. Planar YUV images retain their three planes and strides; the
+image layout. Upstream's native semi-planar output is retained, while the
 RGB conversion setting, bit depth, timestamps, color information, and HDR
 metadata are preserved. This implementation does not import hardware surfaces
 directly into the renderer.
@@ -28,7 +32,7 @@ ProRes 4444 without alpha can use hardware decoding.
 
 The first decoded frame records `Video Decode Backend` as `VideoToolbox` or
 `Software`, and logs changes to the selected backend. Before the first frame,
-file info may show `VideoToolbox (pending)`; that indicates preparation, not a
+file info may show `Hardware (pending)`; that indicates preparation, not a
 successfully decoded hardware frame. The backend describes the FFmpeg output
 path; it is not a measurement of GPU or media-engine utilization.
 
@@ -44,7 +48,7 @@ A standalone regression test can use an existing dependency installation:
 
 ```sh
 cmake -S tlRender -B BUILD-decode-test -G Ninja \
-  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=20 \
   -DCMAKE_PREFIX_PATH=/absolute/path/to/dependency/install \
   -DTLRENDER_TESTS=OFF -DTLRENDER_FFMPEG_DECODE_TESTS=ON
 cmake --build BUILD-decode-test --target tlffmpeg-decode-test

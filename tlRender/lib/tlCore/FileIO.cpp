@@ -6,6 +6,7 @@
 
 #include <tlCore/Assert.h>
 #include <tlCore/Error.h>
+#include <tlCore/Path.h>
 
 #include <algorithm>
 #include <array>
@@ -18,15 +19,42 @@ namespace tl
         TLRENDER_ENUM_IMPL(Mode, "Read", "Write", "ReadWrite", "Append");
         TLRENDER_ENUM_SERIALIZE_IMPL(Mode);
 
-        TLRENDER_ENUM_IMPL(ReadType, "Normal", "MemoryMapped");
-        TLRENDER_ENUM_SERIALIZE_IMPL(ReadType);
+        TLRENDER_ENUM_IMPL(Read, "Normal", "MemoryMapped");
+        TLRENDER_ENUM_SERIALIZE_IMPL(Read);
+
+        TLRENDER_ENUM_IMPL(Access, "Sequential", "Random");
+        TLRENDER_ENUM_SERIALIZE_IMPL(Access);
+
+        TLRENDER_ENUM_IMPL(SeekMode, "Set", "Forward", "Reverse");
+        TLRENDER_ENUM_SERIALIZE_IMPL(SeekMode);
 
         std::shared_ptr<FileIO> FileIO::create(
-            const std::string& fileName, Mode mode, ReadType readType)
+            const std::filesystem::path& path,
+            Mode mode,
+            Read read,
+            Access access)
         {
             auto out = std::shared_ptr<FileIO>(new FileIO);
-            out->_open(fileName, mode, readType);
+            out->_open(path, mode, read, access);
             return out;
+        }
+
+        std::shared_ptr<FileIO> FileIO::create(
+            const std::string& fileName,
+            Mode mode,
+            Read read,
+            Access access)
+        {
+            auto out = std::shared_ptr<FileIO>(new FileIO);
+            return create(file::toFileSystem(fileName), mode, read, access);
+            return out;
+        }
+
+        std::shared_ptr<FileIO> FileIO::create(
+            const std::string& path,
+            const file::MemoryRead& memFile)
+        {
+            return create(toFileSystem(path), memFile);
         }
 
         void FileIO::read8(int8_t* value, size_t size)
@@ -140,7 +168,7 @@ namespace tl
                 reinterpret_cast<const int8_t*>(value.c_str()), value.size());
         }
 
-        std::string readContents(const std::shared_ptr<FileIO>& io)
+        std::string read(const std::shared_ptr<FileIO>& io)
         {
             std::string out;
             if (const uint8_t* p = io->getMemoryP())
@@ -201,49 +229,66 @@ namespace tl
             out[i] = 0;
         }
 
-        void
-        readLine(const std::shared_ptr<FileIO>& io, char* out, size_t maxLen)
+        std::string
+        readLine(const std::shared_ptr<FileIO>& io)
         {
-            TLRENDER_ASSERT(maxLen);
-            size_t i = 0;
-            if (!io->isEOF())
-            {
-                char c = 0;
-                do
-                {
-                    io->read(&c, 1);
-                    if (c != '\n' && c != '\r')
-                    {
-                        out[i++] = c;
-                    }
-                } while (c != '\n' && c != '\r' && !io->isEOF() &&
-                         i < (maxLen - 1));
-            }
-            out[i] = 0;
-        }
-
-        std::vector<std::string> readLines(const std::string& fileName)
-        {
-            std::vector<std::string> out;
-            auto io = FileIO::create(fileName, Mode::Read);
+            std::string out;
             while (!io->isEOF())
             {
-                char buf[string::cBufferSize] = "";
-                readLine(io, buf, string::cBufferSize);
-                out.push_back(buf);
+                char c = 0;
+                io->read(&c, 1);
+                if ('\r' == c || '\n' == c)
+                {
+                    if ('\r' == c && !io->isEOF())
+                    {
+                        io->read(&c, 1);
+                        if (c != '\n')
+                        {
+                            io->seek(1, SeekMode::Reverse);
+                        }
+                    }
+                    break;
+                }
+                out.push_back(c);
             }
             return out;
         }
 
-        void writeLines(
-            const std::string& fileName, const std::vector<std::string>& lines)
+
+        std::vector<std::string> readLines(const std::filesystem::path& path)
         {
-            auto io = FileIO::create(fileName, Mode::Write);
+            std::vector<std::string> out;
+            auto io = FileIO::create(path, Mode::Read);
+            while (!io->isEOF())
+            {
+                out.push_back(readLine(io));
+            }
+            return out;
+        }
+
+        std::vector<std::string> readLines(const std::string& fileName)
+        {
+            return readLines(toFileSystem(fileName));
+        }
+
+        void writeLines(const std::filesystem::path& path, const std::vector<std::string>& lines)
+        {
+            auto io = FileIO::create(path, Mode::Write);
             for (const auto& line : lines)
             {
                 io->write(line);
                 io->write8('\n');
             }
+        }
+
+        void writeLines(const std::string& path, const std::vector<std::string>& lines)
+        {
+            writeLines(toFileSystem(path), lines);
+        }
+
+        void truncateFile(const std::string& path, size_t size)
+        {
+            truncateFile(toFileSystem(path), size);
         }
     } // namespace file
 } // namespace tl

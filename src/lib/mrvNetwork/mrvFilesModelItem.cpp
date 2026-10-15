@@ -27,6 +27,7 @@ namespace mrv
         j["volume"] = value.volume;
         j["mute"] = value.mute;
         j["audioOffset"] = value.audioOffset;
+        j["mediaReferenceKey"] = value.mediaReferenceKey;
         j["ocioIcs"] = value.ocioIcs;
         j["ocioLook"] = value.ocioLook;
         j["lutOptions"] = value.lutOptions;
@@ -37,7 +38,7 @@ namespace mrv
             annotations.push_back(*annotation.get());
         }
         j["annotations"] = annotations;
-        
+
         std::vector< voice::Annotation > voiceAnnotations;
         for (const auto& voannotation : value.voiceAnnotations)
         {
@@ -91,6 +92,10 @@ namespace mrv
         {
             j.at("lutOptions").get_to(value.lutOptions);
         }
+        if (j.contains("mediaReferenceKey"))
+        {
+            j.at("mediaReferenceKey").get_to(value.mediaReferenceKey);
+        }
         const nlohmann::json& annotations = j["annotations"];
         for (const auto& annotation : annotations)
         {
@@ -98,7 +103,7 @@ namespace mrv
                 draw::messageToAnnotation(annotation);
             value.annotations.push_back(tmp);
         }
-        
+
         const nlohmann::json& voannotations = j["voiceAnnotations"];
         for (const auto& voannotation : voannotations)
         {

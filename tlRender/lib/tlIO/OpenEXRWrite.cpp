@@ -45,7 +45,7 @@ namespace tl
         void Write::_init(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             TLRENDER_P();
 
@@ -55,9 +55,9 @@ namespace tl
             if (i != options.end())
             {
                 std::stringstream ss(i->second);
-                int i;
-                ss >> i;
-                _compression = static_cast<Imf::Compression>(i);
+                int j;
+                ss >> j;
+                _compression = static_cast<Imf::Compression>(j);
             }
             i = options.find("OpenEXR/PixelType");
             if (i != options.end())
@@ -77,22 +77,34 @@ namespace tl
                 std::stringstream ss(i->second);
                 ss >> _dwaCompressionLevel;
             }
+            i = options.find("OpenEXR/lossyHTJ2KQuality");
+            if (i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> _lossyHTJ2KQuality;
+            }
+            i = options.find("OpenEXR/zstdCompressionLevel");
+            if (i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> _zstdCompressionLevel;
+            }
             i = options.find("OpenEXR/Speed");
             if (i != options.end())
             {
                 std::stringstream ss(i->second);
                 ss >> _speed;
             }
-            i = options.find("OpenEXR/Chromaticities");
-            if (i != options.end())
-            {
-                _hasChromaticities = true;
-                std::stringstream ss(i->second);
-                ss >> _chromaticities.red.x   >> _chromaticities.red.y
-                   >> _chromaticities.green.x >> _chromaticities.green.y
-                   >> _chromaticities.blue.x  >> _chromaticities.blue.y
-                   >> _chromaticities.white.x >> _chromaticities.white.y;
-            }
+            // i = options.find("OpenEXR/Chromaticities");
+            // if (i != options.end())
+            // {
+            //     _hasChromaticities = true;
+            //     std::stringstream ss(i->second);
+            //     ss >> _chromaticities.red.x   >> _chromaticities.red.y
+            //        >> _chromaticities.green.x >> _chromaticities.green.y
+            //        >> _chromaticities.blue.x  >> _chromaticities.blue.y
+            //        >> _chromaticities.white.x >> _chromaticities.white.y;
+            // }
         }
 
         Write::Write() :
@@ -105,7 +117,7 @@ namespace tl
         std::shared_ptr<Write> Write::create(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             auto out = std::shared_ptr<Write>(new Write);
             out->_init(path, info, options, logSystem);
@@ -156,26 +168,62 @@ namespace tl
         }
 
         void Write::_writeVideo(
-            const std::string& fileName, const otime::RationalTime&,
+            const std::string& fileName, const OTIO_NS::RationalTime&,
             const std::shared_ptr<image::Image>& image, const io::Options&)
         {
             TLRENDER_P();
 
             const auto& info = image->getInfo();
+            p.pixelType = info.pixelType;  // Not needed but for safety
+
             Imf::Header header(
                 info.size.w, info.size.h, info.size.pixelAspectRatio,
                 Imath::V2f(0.F, 0.F), 1.F, Imf::INCREASING_Y, _compression);
             header.zipCompressionLevel() = _zipCompressionLevel;
             header.dwaCompressionLevel() = _dwaCompressionLevel;
-            if (_hasChromaticities)
+
+            // HTJ2K default is 110f.  Valid range 1 to 150.
+            header.lossyHTJ2KQuality() = _lossyHTJ2KQuality;
+
+            // Valid range is 1 through 22.
+            header.zstdCompressionLevel() = _zstdCompressionLevel;
+
+            auto hdr = image->getHDR();
+            if (hdr)
             {
-                addChromaticities(header, _chromaticities);
+                Imf::Chromaticities chromaticities;
+
+                const float rx = hdr->primaries[0].x;
+                const float ry = hdr->primaries[0].y;
+
+                const float gx = hdr->primaries[1].x;
+                const float gy = hdr->primaries[1].y;
+
+                const float bx = hdr->primaries[2].x;
+                const float by = hdr->primaries[2].y;
+
+                const float wx = hdr->primaries[3].x;
+                const float wy = hdr->primaries[3].y;
+
+                chromaticities.red.x = rx;
+                chromaticities.red.y = ry;
+
+                chromaticities.green.x = gx;
+                chromaticities.green.y = gy;
+
+                chromaticities.blue.x = bx;
+                chromaticities.blue.y = by;
+
+                chromaticities.white.x = wx;
+                chromaticities.white.y = wy;
+
+                addChromaticities(header, chromaticities);
                 addWhiteLuminance(header, 1.F);
-                Imath::V2f adoptedNeutral(_chromaticities.white.x,
-                                          _chromaticities.white.y);
+                Imath::V2f adoptedNeutral(chromaticities.white.x,
+                                          chromaticities.white.y);
                 addAdoptedNeutral(header, adoptedNeutral);
             }
-            
+
             const auto tags = image->getTags();
             writeTags(tags, _speed, header);
 

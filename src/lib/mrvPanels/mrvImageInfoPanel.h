@@ -139,7 +139,7 @@ namespace mrv
 
             void add_time(
                 const char* name, const char* tooltip,
-                const otime::RationalTime& content,
+                const OTIO_NS::RationalTime& content,
                 const bool editable = false);
 
             void add_enum(

@@ -33,7 +33,7 @@ namespace tl
 #ifdef VULKAN_BACKEND
             OutputDevice(Fl_Vk_Context&);
 #endif
-            
+
         public:
             ~OutputDevice();
 
@@ -83,10 +83,10 @@ namespace tl
             observeSize() const override;
 
             //! Get the output device frame rate.
-            const otime::RationalTime& getFrameRate() const override;
+            const OTIO_NS::RationalTime& getFrameRate() const override;
 
             //! Observe the output device frame rate.
-            std::shared_ptr<observer::IValue<otime::RationalTime> >
+            std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
             observeFrameRate() const override;
 
             //! Set the view.
@@ -141,8 +141,8 @@ namespace tl
             void _run();
             void _createDevice(
                 const device::DeviceConfig&, bool& active, math::Size2i& size,
-                otime::RationalTime& frameRate);
-            timeline::AudioData findAudioData(double seconds);
+                OTIO_NS::RationalTime& frameRate);
+            timeline::AudioFrame findAudioFrame(double seconds);
             void _audio();
             math::Matrix4x4f _projectionMatrix() const noexcept;
             void _render(
@@ -153,12 +153,12 @@ namespace tl
                 const timeline::CompareOptions&,
                 const timeline::BackgroundOptions&);
             void _read(const device::DeviceConfig&);
-            void _cacheUpdate(const std::vector<timeline::AudioData>&);
+            void _cacheUpdate(const std::vector<timeline::AudioFrame>&);
 
 #ifdef VULKAN_BACKEND
             Fl_Vk_Context& ctx;
 #endif
-            
+
             TLRENDER_PRIVATE();
         };
     } // namespace ndi

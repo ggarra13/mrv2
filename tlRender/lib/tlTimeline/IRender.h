@@ -143,7 +143,7 @@ namespace tl
 
             //! Draw timeline video data.
             virtual void drawVideo(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<ImageOptions>& = {},
                 const std::vector<DisplayOptions>& = {},

@@ -45,11 +45,13 @@ set(HEADERS
     Mesh.h
     MeshInline.h
     Monitor.h
+    NDIOptions.h
     OS.h
     Observer.h
     Path.h
     PathInline.h
     PathMapping.h
+    Quantize.h
     Random.h
     RandomInline.h
     Range.h
@@ -60,6 +62,7 @@ set(HEADERS
     String.h
     StringFormat.h
     StringFormatInline.h
+    Thread.h
     Time.h
     TimeInline.h
     Timer.h
@@ -94,9 +97,11 @@ set(SOURCE
     Matrix.cpp
     Memory.cpp
     Mesh.cpp
+    NDIOptions.cpp
     OS.cpp
     Path.cpp
     PathMapping.cpp
+    Quantize.cpp
     Random.cpp
     Range.cpp
     Size.cpp

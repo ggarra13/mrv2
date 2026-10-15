@@ -44,7 +44,7 @@ if [[ $KERNEL == *Windows* ]]; then
 fi
 
 echo "Cleaning tlRender/etc/SuperBuild/OTIO"
-rm -rf $BUILD_DIR/tlRender/etc/SuperBuild/OTIO
+rm -rf $BUILD_DIR/deps/OTIO
 
 echo "Cleaning deps/Python"
 rm -rf $BUILD_DIR/deps/Python

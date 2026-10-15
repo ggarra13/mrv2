@@ -8,6 +8,8 @@
 
 #include "mrvWidgets/mrvBackend.h"
 
+class Fl_Group;
+
 namespace mrv
 {
     class MainWindow;
@@ -25,6 +27,9 @@ namespace mrv
 
         //! Get the main window
         MainWindow* window() const;
+
+        //! Get the group that holds the viewport.
+        Fl_Group* group() const;
 
         //! Get the viewport.
         MyViewport* viewport() const;

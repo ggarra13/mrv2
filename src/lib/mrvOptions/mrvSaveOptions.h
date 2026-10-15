@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <tlTimeline/HDROptions.h>
+
 #ifdef TLRENDER_FFMPEG
 #    include <tlIO/FFmpeg.h>
 #endif
@@ -12,11 +14,12 @@
 #    include <tlIO/OpenEXR.h>
 #endif
 
+
 namespace mrv
 {
     //! Resolution to save
     enum class SaveResolution { kSameSize, kHalfSize, kQuarterSize };
-    
+
     enum class SaveContents   { kDataWindow, kDisplayWindow };
 
     struct SaveOptions
@@ -29,6 +32,9 @@ namespace mrv
                                // audio only is saved.
 
         SaveResolution resolution = SaveResolution::kSameSize;
+
+        tl::timeline::HDRExportMode exportMode =
+            tl::timeline::HDRExportMode::LinearHDR;
 
 #ifdef TLRENDER_FFMPEG
         tl::ffmpeg::Profile ffmpegProfile = tl::ffmpeg::Profile::kNone;
@@ -49,6 +55,8 @@ namespace mrv
         SaveContents exrSaveContents = SaveContents::kDataWindow;
         int zipCompressionLevel = 4;
         float dwaCompressionLevel = 45.0F;
+        int zstdCompressionLevel = 16;
+        float lj2kCompressionLevel = 110.0F;
 #endif
         bool noRename = false;
     };

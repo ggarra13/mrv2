@@ -1,0 +1,281 @@
+{
+    "OTIO_SCHEMA": "Timeline.1", 
+    "metadata": {},
+    "name": "TransitionOverlay",
+    "tracks": {
+        "OTIO_SCHEMA": "Stack.1", 
+        "children": [
+            {
+                "OTIO_SCHEMA": "Track.1", 
+                "children": [
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 30,
+                                    "value": 704
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 30,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "BART_2021-02-07.m4v"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 30,
+                                "value": 90
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 30,
+                                "value": 90
+                            }
+                        },
+                        "name": "BART_2021-02-07"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Transition.1",
+                        "name": "Dissolve",
+                        "transition_type": "SMPTE_Dissolve",
+                        "in_offset": {
+                          "OTIO_SCHEMA": "RationalTime.1",
+                          "rate": 30,
+                          "value": 45
+                        },
+                        "out_offset": {
+                          "OTIO_SCHEMA": "RationalTime.1",
+                          "rate": 30,
+                          "value": 45
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 30,
+                                    "value": 704
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 30,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": ""
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 30,
+                                "value": 90
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 30,
+                                "value": 450
+                            }
+                        },
+                        "name": "BART_2021-02-07"
+                    }
+                ],
+                "kind": "Video", 
+                "name": "Video"
+            },
+            {
+                "OTIO_SCHEMA": "Track.1", 
+                "children": [
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 1033131
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": ""
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 132300
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 132300
+                            }
+                        },
+                        "name": "BART_2021-02-07"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Transition.1",
+                        "name": "Dissolve",
+                        "transition_type": "SMPTE_Dissolve",
+                        "in_offset": {
+                          "OTIO_SCHEMA": "RationalTime.1",
+                          "rate": 44100,
+                          "value": 66150
+                        },
+                        "out_offset": {
+                          "OTIO_SCHEMA": "RationalTime.1",
+                          "rate": 44100,
+                          "value": 66150
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 1033131
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 44100,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "BART_2021-02-07.m4v"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 132300
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 661500
+                            }
+                        },
+                        "name": "BART_2021-02-07"
+                    }
+                ],
+                "kind": "Audio", 
+                "name": "Audio"
+            },
+            {
+                "OTIO_SCHEMA": "Track.1", 
+                "children": [
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 30,
+                                    "value": 90
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 30,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": ""
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 30,
+                                "value": 90
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 30,
+                                "value": 0
+                            }
+                        },
+                        "name": "Overlay"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Transition.1",
+                        "name": "Dissolve",
+                        "transition_type": "SMPTE_Dissolve",
+                        "in_offset": {
+                          "OTIO_SCHEMA": "RationalTime.1",
+                          "rate": 30,
+                          "value": 45
+                        },
+                        "out_offset": {
+                          "OTIO_SCHEMA": "RationalTime.1",
+                          "rate": 30,
+                          "value": 45
+                        }
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 30,
+                                    "value": 90
+                                },
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 30,
+                                    "value": 0
+                                }
+                            },
+                            "target_url": "OverlayB.png"
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 30,
+                                "value": 90
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 30,
+                                "value": 0
+                            }
+                        },
+                        "name": "Overlay"
+                    }
+                ],
+                "kind": "Video", 
+                "name": "Overlay"
+            }
+        ], 
+        "name": "Stack"
+    }
+}

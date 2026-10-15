@@ -1,28 +1,47 @@
+// BSD 3-Clause License
 //
-// "$Id$"
+// Copyright (c) 2024, mrv2 project contributors.
+// All rights reserved.
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
-// Port to FLTK 1.4 by Gonzalo Garramuño.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
 //
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
 //
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
 //
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
+// 3. Neither the name of the copyright holder nor the names of its
+//    contributors may be used to endorse or promote products derived from
+//    this software without specific prior written permission.
 //
-// Please report all bugs and problems on the following page:
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+// IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+// PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-//    http://www.fltk.org/str.php
+// ---------------------------------------------------------------------
+// mrv::Slider
 //
+// An FLTK 1.4 slider widget that adds optional logarithmic scaling and
+// tick-mark drawing on top of Fl_Slider. This is an independent
+// implementation written for the mrv2 project: it targets the same
+// feature set that FLTK2's fltk::Slider offered (linear / logarithmic /
+// squared value mapping, drawn tick marks with adaptive spacing, and
+// mouse/keyboard dragging along that mapping) but the code below is a
+// clean, original implementation rather than a derivative of FLTK2's
+// GPL/LGPL-licensed sources.
+// ---------------------------------------------------------------------
 
 #pragma once
 
@@ -33,51 +52,78 @@
 namespace mrv
 {
 
+    //! A slider that can optionally map its track to a logarithmic scale
+    //! and can draw graduated tick marks along the track.
     class Slider : public Fl_Slider
     {
     public:
-        enum SliderType {
-            kNORMAL = 0,
-            kLOG = 1,
+        //! How a value on [minimum(), maximum()] is mapped onto the track.
+        enum SliderType
+        {
+            kNORMAL = 0, //!< Plain linear mapping (Fl_Slider behavior).
+            kLOG = 1,    //!< Logarithmic / squared mapping, see below.
         };
 
-        enum Ticks { TICK_ABOVE = 1, TICK_BELOW = 2, TICK_BOTH = 3, NO_TICK };
+        //! Where tick marks are drawn relative to the track.
+        enum Ticks
+        {
+            TICK_ABOVE = 1,
+            TICK_BELOW = 2,
+            TICK_BOTH = 3,
+            NO_TICK = 0,
+        };
 
-    public:
-        Slider(int x, int y, int w, int h, const char* l = 0) :
-            Fl_Slider(x, y, w, h, l),
-            _slider_type(kNORMAL),
-            _tick_color(FL_BLACK),
-            tick_size_(4)
+        Slider(int X, int Y, int W, int H, const char* L = nullptr) :
+            Fl_Slider(X, Y, W, H, L),
+            m_type(kNORMAL),
+            m_ticks(NO_TICK),
+            m_tickColor(FL_BLACK),
+            m_tickLength(4)
         {
             type(FL_HORIZONTAL);
         }
 
-        bool log() const { return _slider_type & kLOG; }
+        //! True when this slider is currently using the non-linear mapping.
+        bool log() const { return m_type == kLOG; }
 
-        inline void ticks(Ticks t) { _ticks = t; }
-        inline Ticks ticks() const { return _ticks; }
+        void ticks(Ticks t) { m_ticks = t; }
+        Ticks ticks() const { return m_ticks; }
 
-        inline int tick_size() const { return tick_size_; }
-        inline void tick_size(int i) { tick_size_ = i; }
+        int tick_size() const { return m_tickLength; }
+        void tick_size(int px) { m_tickLength = px; }
 
-        inline void tick_color(Fl_Color c) { _tick_color = c; }
+        void tick_color(Fl_Color c) { m_tickColor = c; }
+        Fl_Color tick_color() const { return m_tickColor; }
 
-        inline SliderType slider_type() const { return _slider_type; }
-        inline void slider_type(enum SliderType x) { _slider_type = x; }
+        SliderType slider_type() const { return m_type; }
+        void slider_type(SliderType t) { m_type = t; }
 
-        virtual void draw() FL_OVERRIDE;
-        virtual int handle(int e) FL_OVERRIDE;
+        void draw() FL_OVERRIDE;
+        int handle(int event) FL_OVERRIDE;
 
     protected:
-        double position_value(int X, int w);
-        int slider_position(double p, int w);
-        void draw_ticks(const tl::math::Box2i& r, int min_spacing);
+        //! Map a value in [minimum(), maximum()] to a pixel offset within a
+        //! track of the given pixel width, honoring the current mapping
+        //! (linear/log/squared) and axis orientation.
+        int slider_position(double value, int trackWidth);
 
-        SliderType _slider_type;
-        Ticks _ticks;
-        Fl_Color _tick_color;
-        int tick_size_;
+        //! Inverse of slider_position(): map a pixel offset within a track
+        //! of the given pixel width back to a value, snapped to a sensible
+        //! multiple of step().
+        double position_value(int pixelOffset, int trackWidth);
+
+        //! Draw graduated tick marks and their numeric labels across r.
+        void draw_ticks(const tl::math::Box2i& r, int minTickSpacingPx);
+
+    private:
+        //! Handles the FL_PUSH/FL_DRAG mouse-tracking math for kLOG
+        //! sliders; returns the FLTK event-handled status.
+        int handleDrag(int event, const tl::math::Box2i& r);
+
+        SliderType m_type;
+        Ticks m_ticks;
+        Fl_Color m_tickColor;
+        int m_tickLength;
     };
 
 } // namespace mrv

@@ -10,6 +10,8 @@
 
 #include <tlIO/System.h>
 
+#include <tlCore/Path.h>
+
 #include <algorithm>
 #include <filesystem>
 #include <random>
@@ -46,7 +48,7 @@ namespace mrv
             if (!fs::exists(*i) || fs::is_directory(*i))
                 continue;
 
-            std::string file = (*i).path().u8string();
+            std::string file = tl::file::fromFileSystem((*i).path());
             files.push_back(file);
         }
         std::sort(files.begin(), files.end());
@@ -127,42 +129,42 @@ namespace mrv
     std::string generateRandomNumbers(int length) {
         // Define the character set to choose from
         const std::string alphabet = "0123456789";
-    
+
         // Setup the random number generator
         std::random_device rd;  // Obtain a random seed from the hardware
         std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
-    
+
         // Define the range (0 to the last index of the alphabet string)
         std::uniform_int_distribution<size_t> distrib(0, alphabet.size() - 1);
 
         std::string result = "";
-        
+
         // Generate the random letters
         for (int i = 0; i < length; ++i) {
             result += alphabet[distrib(gen)];
         }
-    
+
         return result;
     }
-    
+
     std::string generateRandomLetters(int length) {
         // Define the character set to choose from
         const std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    
+
         // Setup the random number generator
         std::random_device rd;  // Obtain a random seed from the hardware
         std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
-    
+
         // Define the range (0 to the last index of the alphabet string)
         std::uniform_int_distribution<size_t> distrib(0, alphabet.size() - 1);
 
         std::string result = "";
-        
+
         // Generate the random letters
         for (int i = 0; i < length; ++i) {
             result += alphabet[distrib(gen)];
         }
-    
+
         return result;
     }
 } // namespace mrv

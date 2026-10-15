@@ -30,6 +30,7 @@
 namespace
 {
     const char* kModule = "player";
+    const double kOTIOFuzzy = 1e-5;
 }
 
 namespace
@@ -46,7 +47,7 @@ namespace mrv
         {
             TimelinePlayer* player;
             double speed;
-            otio::RationalTime time;
+            OTIO_NS::RationalTime time;
         };
 
         void stop_playback_cb(StopData* data)
@@ -69,7 +70,7 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<timeline::Playback> >
             playbackObserver;
         std::shared_ptr<observer::ValueObserver<timeline::Loop> > loopObserver;
-        std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
+        std::shared_ptr<observer::ValueObserver<OTIO_NS::RationalTime> >
             currentTimeObserver;
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheOptions> >
             cacheOptionsObserver;
@@ -109,7 +110,7 @@ namespace mrv
         p.player = player;
 
         timeline::Loop loop = static_cast<timeline::Loop>(
-            App::ui->uiPrefs->uiPrefsLoopMode->value());
+            App::ui->uiPrefs->LoopMode->value());
         p.player->setLoop(loop);
 
         p.speedObserver = observer::ValueObserver<double>::create(
@@ -126,9 +127,9 @@ namespace mrv
             [this](timeline::Loop value) { loopChanged(value); });
 
         p.currentTimeObserver =
-            observer::ValueObserver<otime::RationalTime>::create(
+            observer::ValueObserver<OTIO_NS::RationalTime>::create(
                 p.player->observeCurrentTime(),
-                [this](const otime::RationalTime& value)
+                [this](const OTIO_NS::RationalTime& value)
                     { currentTimeChanged(value); });
 
         p.cacheOptionsObserver =
@@ -178,14 +179,14 @@ namespace mrv
         return _p->player->getTimeline();
     }
 
-    const otio::SerializableObject::Retainer<otio::Timeline>&
+    const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&
     TimelinePlayer::getTimeline() const
     {
         return _p->player->getTimeline()->getTimeline();
     }
 
     void TimelinePlayer::setTimeline(
-        const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
+        const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& timeline)
     {
         _p->player->getTimeline()->setTimeline(timeline);
     }
@@ -210,7 +211,18 @@ namespace mrv
         return _p->player->getOptions();
     }
 
-    const otime::TimeRange& TimelinePlayer::timeRange() const
+    const std::string TimelinePlayer::getMediaReferenceKey() const
+    {
+        std::string out;
+        auto timeline = this->timeline();
+        if (timeline)
+        {
+            out = timeline->getMediaReferenceKey();
+        }
+        return out;
+    }
+
+    const OTIO_NS::TimeRange& TimelinePlayer::timeRange() const
     {
         return _p->player->getTimeRange();
     }
@@ -240,17 +252,17 @@ namespace mrv
         return _p->player->observeLoop()->get();
     }
 
-    const otime::RationalTime& TimelinePlayer::currentTime() const
+    const OTIO_NS::RationalTime& TimelinePlayer::currentTime() const
     {
         return _p->player->observeCurrentTime()->get();
     }
 
-    const otime::TimeRange& TimelinePlayer::inOutRange() const
+    const OTIO_NS::TimeRange& TimelinePlayer::inOutRange() const
     {
         return _p->player->observeInOutRange()->get();
     }
 
-    const std::vector<timeline::VideoData>& TimelinePlayer::currentVideo() const
+    const std::vector<timeline::VideoFrame>& TimelinePlayer::currentVideo() const
     {
         return _p->player->getCurrentVideo();
     }
@@ -270,7 +282,8 @@ namespace mrv
         return _p->player->observeAudioOffset()->get();
     }
 
-    const std::vector<timeline::AudioData>& TimelinePlayer::currentAudio() const
+    const std::vector<timeline::AudioFrame>&
+    TimelinePlayer::currentAudio() const
     {
         return _p->player->observeCurrentAudio()->get();
     }
@@ -285,7 +298,7 @@ namespace mrv
         return _p->player->observeCacheInfo()->get();
     }
 
-    void TimelinePlayer::updateVideoCache(const otime::RationalTime& time)
+    void TimelinePlayer::updateVideoCache(const OTIO_NS::RationalTime& time)
     {
         pushMessage("updateVideoCache", time);
         _p->player->updateVideoCache(time);
@@ -368,7 +381,7 @@ namespace mrv
         _p->player->setLoop(value);
     }
 
-    void TimelinePlayer::seek(const otime::RationalTime& value)
+    void TimelinePlayer::seek(const OTIO_NS::RationalTime& value)
     {
         pushMessage("seek", value);
         _p->player->seek(value);
@@ -415,7 +428,7 @@ namespace mrv
 
         p.isStepping = true;
         const auto oneFrame =
-            otime::RationalTime(1.0, timeRange().duration().rate());
+            OTIO_NS::RationalTime(1.0, timeRange().duration().rate());
         auto time = currentTime() - oneFrame;
         if (time <= inOutRange().start_time())
         {
@@ -455,7 +468,7 @@ namespace mrv
 
         p.isStepping = true;
         const auto oneFrame =
-            otime::RationalTime(1.0, timeRange().duration().rate());
+            OTIO_NS::RationalTime(1.0, timeRange().duration().rate());
         auto time = currentTime() + oneFrame;
 
         if (time >= inOutRange().end_time_exclusive())
@@ -484,7 +497,7 @@ namespace mrv
             1.75 / speed(), (Fl_Timeout_Handler)stop_playback_cb, data);
     }
 
-    void TimelinePlayer::setInOutRange(const otime::TimeRange& value)
+    void TimelinePlayer::setInOutRange(const OTIO_NS::TimeRange& value)
     {
         pushMessage("setInOutRange", value);
         _p->player->setInOutRange(value);
@@ -571,6 +584,19 @@ namespace mrv
         _p->player->setAudioOffset(value);
     }
 
+    void TimelinePlayer::setMediaReferenceKey(const std::string& value)
+    {
+        auto timeline = this->timeline();
+        if (!timeline)
+            return;
+
+        bool send = App::ui->uiPrefs->SendUI->value();
+        if (send)
+            tcp->pushMessage("setMediaReferenceKey", value);
+
+        timeline->setMediaReferenceKey(value);
+    }
+
     void TimelinePlayer::setTimelineViewport(MyViewport* view)
     {
         timelineViewport = view;
@@ -602,7 +628,7 @@ namespace mrv
     }
 
     //! This signal is emitted when the current time is changed.
-    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value)
+    void TimelinePlayer::currentTimeChanged(const OTIO_NS::RationalTime& value)
     {
         auto timeline = App::ui->uiTimeline;
         timeline->redraw();
@@ -641,12 +667,12 @@ namespace mrv
 #endif
     }
 
-    const std::vector< otime::RationalTime >
+    const std::vector< OTIO_NS::RationalTime >
     TimelinePlayer::getAnnotationTimes() const
     {
         TLRENDER_P();
 
-        std::vector< otime::RationalTime > times;
+        std::vector< OTIO_NS::RationalTime > times;
         for (auto annotation : p.annotations)
         {
             times.push_back(annotation->time);
@@ -694,7 +720,8 @@ namespace mrv
         return annotations;
     }
 
-    std::shared_ptr< draw::Annotation > TimelinePlayer::getAnnotation() const
+    std::shared_ptr< draw::Annotation >
+    TimelinePlayer::getAnnotation(const OTIO_NS::RationalTime& time) const
     {
         TLRENDER_P();
 
@@ -702,11 +729,9 @@ namespace mrv
         if (playback() != timeline::Playback::Stop)
             return nullptr;
 
-        const auto& time = currentTime();
-
         const auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found == p.annotations.end())
         {
@@ -717,7 +742,12 @@ namespace mrv
             return *found;
         }
     }
-    
+
+    std::shared_ptr< draw::Annotation > TimelinePlayer::getAnnotation() const
+    {
+        return getAnnotation(currentTime());
+    }
+
     std::shared_ptr< draw::Annotation > TimelinePlayer::getUndoAnnotation() const
     {
         TLRENDER_P();
@@ -730,7 +760,7 @@ namespace mrv
 
         const auto found = std::find_if(
             p.undoAnnotations.begin(), p.undoAnnotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found == p.undoAnnotations.end())
         {
@@ -758,7 +788,7 @@ namespace mrv
 
         auto found = std::find_if(
             p.annotations.begin(), p.annotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found == p.annotations.end())
         {
@@ -790,10 +820,70 @@ namespace mrv
     }
 
     void TimelinePlayer::setAllAnnotations(
-        const std::vector< std::shared_ptr< draw::Annotation >>& value)
+        const std::vector<std::shared_ptr<draw::Annotation > >& value)
     {
         _p->annotations = value;
         _p->undoAnnotations.clear();
+    }
+
+    void TimelinePlayer::mergeAllAnnotations(
+        const std::vector<std::shared_ptr<draw::Annotation > >& values)
+    {
+        TLRENDER_P();
+
+        for (const auto& incomingAnnotation : values)
+        {
+            if (!incomingAnnotation)
+                continue;
+
+            // Search for an existing annotation at the exact same time
+            auto found = std::find_if(
+                p.annotations.begin(), p.annotations.end(),
+                [&incomingAnnotation](const std::shared_ptr<draw::Annotation>& a)
+                {
+                    return a->time.almost_equal(incomingAnnotation->time,
+                                                kOTIOFuzzy);
+                });
+
+            if (found != p.annotations.end())
+            {
+                // Clash exists: merge shapes into the existing annotation
+                auto& existingAnnotation = *found;
+
+                existingAnnotation->shapes.insert(
+                    existingAnnotation->shapes.end(),
+                    incomingAnnotation->shapes.begin(),
+                    incomingAnnotation->shapes.end()
+                );
+
+                // Clear the local undo buffer since new shapes were added
+                // (Matches the behavior of Annotation::push_back)
+                existingAnnotation->undo_shapes.clear();
+            }
+            else
+            {
+                // No clash: append the new annotation
+                p.annotations.push_back(incomingAnnotation);
+            }
+        }
+
+        // Clear global undo annotations since the timeline state has been modified externally
+        p.undoAnnotations.clear();
+    }
+
+    void TimelinePlayer::clearFrameAnnotation(const OTIO_NS::RationalTime& time)
+    {
+        TLRENDER_P();
+
+        auto found = std::find_if(
+            p.annotations.begin(), p.annotations.end(),
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
+
+        if (found != p.annotations.end())
+        {
+            p.undoAnnotations = p.annotations;
+            p.annotations.erase(found);
+        }
     }
 
     void TimelinePlayer::clearFrameAnnotation()
@@ -802,15 +892,7 @@ namespace mrv
 
         const auto& time = currentTime();
 
-        auto found = std::find_if(
-            p.annotations.begin(), p.annotations.end(),
-            [time](const auto& a) { return a->time == time; });
-
-        if (found != p.annotations.end())
-        {
-            p.undoAnnotations = p.annotations;
-            p.annotations.erase(found);
-        }
+        clearFrameAnnotation(time);
     }
 
     void TimelinePlayer::clearAllAnnotations()
@@ -927,7 +1009,7 @@ namespace mrv
 
         const auto found = std::find_if(
             p.voiceAnnotations.begin(), p.voiceAnnotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found == p.voiceAnnotations.end())
         {
@@ -938,7 +1020,7 @@ namespace mrv
             return *found;
         }
     }
-        
+
     //! Get undo annotation for current time
     std::shared_ptr< voice::Annotation > TimelinePlayer::getUndoVoiceAnnotation() const
     {
@@ -952,7 +1034,7 @@ namespace mrv
 
         const auto found = std::find_if(
             p.undoVoiceAnnotations.begin(), p.undoVoiceAnnotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time, kOTIOFuzzy); });
 
         if (found == p.undoVoiceAnnotations.end())
         {
@@ -982,7 +1064,8 @@ namespace mrv
 
         auto found = std::find_if(
             p.voiceAnnotations.begin(), p.voiceAnnotations.end(),
-            [time](const auto& a) { return a->time == time; });
+            [time](const auto& a) { return a->time.almost_equal(time,
+                                                                kOTIOFuzzy); });
 
         std::shared_ptr< voice::Annotation > annotation;
         if (found == p.voiceAnnotations.end())
@@ -1010,7 +1093,7 @@ namespace mrv
         TLRENDER_P();
 
         std::vector< std::shared_ptr< voice::Annotation > > out;
-        
+
         const auto& time = currentTime();
         const int64_t frame = time.value();
 
@@ -1056,7 +1139,7 @@ namespace mrv
     void TimelinePlayer::removeAnnotation(const std::shared_ptr< voice::Annotation >& voiceAnnotation)
     {
         TLRENDER_P();
-        
+
         p.undoVoiceAnnotations = p.voiceAnnotations;
         p.voiceAnnotations.erase(
             std::remove(p.voiceAnnotations.begin(),
@@ -1064,7 +1147,7 @@ namespace mrv
             p.voiceAnnotations.end());
     }
 #endif
-    
+
     void TimelinePlayer::timerEvent()
     {
         _p->player->tick();

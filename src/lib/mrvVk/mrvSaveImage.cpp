@@ -8,13 +8,13 @@
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvFl/mrvConvertImage.h"
 #include "mrvOptions/mrvSaveOptions.h"
 #include "mrvFLTK/mrvSave.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvNetwork/mrvTCP.h"
 
+#include "mrvImage/mrvConvertImage.h"
 #include "mrvImage/mrvOperations.h"
 
 #include "mrvCore/mrvLocale.h"
@@ -63,7 +63,7 @@ namespace mrv
 
         // Stop the playback
         player->stop();
-        
+
         std::shared_ptr<image::Image> tmpImage;
 
         auto currentTime = player->currentTime();
@@ -101,8 +101,8 @@ namespace mrv
             }
 #endif
 
-            otime::TimeRange oneFrameTimeRange(
-                currentTime, otime::RationalTime(1, currentTime.rate()));
+            OTIO_NS::TimeRange oneFrameTimeRange(
+                currentTime, OTIO_NS::RationalTime(1, currentTime.rate()));
 
             auto context = ui->app->getContext();
             auto timeline = player->timeline();
@@ -115,7 +115,6 @@ namespace mrv
             }
 
             vlk::OffscreenBufferOptions offscreenBufferOptions;
-            std::shared_ptr<timeline_vlk::Render> render;
 
             image::Size renderSize;
 
@@ -137,7 +136,7 @@ namespace mrv
                     renderSize.h = compareSize.h;
                 }
                 // \@todo: rotated images not yet supported.
-                
+
                 // auto rotation = view->getRotation();
                 // if (options.annotations && rotationSign(rotation) != 0)
                 // {
@@ -170,17 +169,13 @@ namespace mrv
                 LOG_STATUS(msg);
             }
 
-                    
-            // Create the renderer.
-            auto ctx = ui->uiView->getContext();
-            render = timeline_vlk::Render::create(ctx, context);
-            
+
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
             offscreenBufferOptions.pbo = true;
 
             // Create the writer.
             auto writerPlugin =
-                context->getSystem<io::System>()->getPlugin(path);
+                context->getSystem<io::WriteSystem>()->getPlugin(path);
 
             if (!writerPlugin)
             {
@@ -188,12 +183,12 @@ namespace mrv
                     string::Format("{0}: Cannot open writer plugin.")
                     .arg(file));
             }
-            
+
             auto tags = ui->uiView->getTags();
 
             io::Info ioInfo;
             image::Info outputInfo, scaleInfo, bufferInfo;
-            
+
             outputInfo.pixelType = info.video[layerId].pixelType;
             outputInfo.size.pixelAspectRatio = 1.0;
 
@@ -201,21 +196,8 @@ namespace mrv
             std::shared_ptr<image::Image> annotationImage;
             std::shared_ptr<image::Image> bufferImage;
             std::shared_ptr<image::Image> scaleImage;
-            
-            // Create scaleImage if resolution is not the same.
-            if (resolution != SaveResolution::kSameSize)
-            {
-                scaleInfo.size = renderSize;
-                scaleInfo.pixelType = outputInfo.pixelType;
-                scaleImage = image::Image::create(scaleInfo);
 
-                msg = tl::string::Format(_("Image info: {0} {1}"))
-                      .arg(scaleInfo.size)
-                      .arg(scaleInfo.pixelType);
-                LOG_STATUS(msg);
-            }
-            
-            else if (resolution == SaveResolution::kHalfSize)
+            if (resolution == SaveResolution::kHalfSize)
             {
                 renderSize.w /= 2;
                 renderSize.h /= 2;
@@ -233,8 +215,8 @@ namespace mrv
             }
 
             outputInfo.size = renderSize;
-            outputInfo = writerPlugin->getWriteInfo(outputInfo);
-                
+            outputInfo = writerPlugin->getInfo(outputInfo);
+
             if (image::PixelType::kNone == outputInfo.pixelType)
             {
                 outputInfo.pixelType = image::PixelType::RGBA_U8;
@@ -259,7 +241,7 @@ namespace mrv
                 offscreenBufferOptions.colorType =
                     outputInfo.pixelType;
             }
-            
+
             math::Box2i displayWindow(0, 0, renderSize.w, renderSize.h);
             math::Box2i dataWindow(0, 0, renderSize.w, renderSize.h);
             if (!options.annotations && saveEXR)
@@ -278,20 +260,24 @@ namespace mrv
                 }
                 if (options.exrSaveContents == SaveContents::kDisplayWindow)
                     dataWindow = displayWindow;
-                
+
                 outputInfo.size.w = dataWindow.max.x - dataWindow.min.x + 1;
                 outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
             }
 #endif
-            
+
             //
             // Create image buffer (main FBO).
-            // 
+            //
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
             std::shared_ptr<vlk::OffscreenBuffer> buffer;
 
             buffer = view->getVideoFBO();
-            offscreenBufferOptions = buffer->getOptions();
+            if (!buffer)
+            {
+                LOG_ERROR("No Video FBO");
+                return 1;
+            }
 
             if (options.annotations)
             {
@@ -307,30 +293,15 @@ namespace mrv
                 view->redraw();
                 // flush is needed
                 Fl::flush();
-                
+
                 image::Info annotationInfo = outputInfo;
                 annotationInfo.pixelType = image::PixelType::RGBA_U8;
                 annotationImage = image::Image::create(annotationInfo);
             }
-            
-            const size_t width = buffer->getWidth();
-            const size_t height = buffer->getHeight();
-                
-            bufferInfo = outputInfo;
-            bufferInfo.pixelType = offscreenBufferOptions.colorType;
-            bufferInfo.size.w = width;
-            bufferInfo.size.h = height;
-            bufferImage = image::Image::create(bufferInfo);
 
-            std::string msg =
-                tl::string::Format(_("Offscreen Buffer info: {0}"))
-                .arg(offscreenBufferOptions.colorType);
-            LOG_STATUS(msg);
-            
-            
             // Turn off hud so it does not get captured by readPixels.
             view->setHudActive(false);
-                
+
             // Prepare annotations without HUD, cursors, and overlay with
             // a centered and frame image for easier checking.
             if (options.annotations)
@@ -349,18 +320,18 @@ namespace mrv
                 // flush is needed
                 Fl::flush();
             }
-            
+
             if (saveHDR)
             {
                 outputInfo.pixelType = image::PixelType::RGB_F32;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
             }
-            
+
             if (saveJPEG)
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
             }
-            
+
 #ifdef TLRENDER_EXR
             if (saveEXR)
             {
@@ -378,11 +349,49 @@ namespace mrv
 #ifdef TLRENDER_EXR
             ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
+
+            //
+            // Create buffer image
+            //
+            const size_t width = buffer->getWidth();
+            const size_t height = buffer->getHeight();
+            offscreenBufferOptions = buffer->getOptions();
+
+            bufferInfo = outputInfo;
+            bufferInfo.pixelType = offscreenBufferOptions.colorType;
+            bufferInfo.size.w = width;
+            bufferInfo.size.h = height;
+            bufferImage = image::Image::create(bufferInfo);
+
+            msg = tl::string::Format(_("Offscreen Buffer info: {0}"))
+                  .arg(offscreenBufferOptions.colorType);
+            LOG_STATUS(msg);
+
+            //
+            // Create scaleImage if resolution is not the same.
+            //
+            if (resolution != SaveResolution::kSameSize)
+            {
+                // Scale image has to have the same size as the buffer
+                scaleInfo.size = bufferInfo.size;
+                // But, the pixel type of the output buffer.
+                scaleInfo.pixelType = outputInfo.pixelType;
+                scaleImage = image::Image::create(scaleInfo);
+
+                msg = tl::string::Format(_("Image info: {0} {1}"))
+                      .arg(scaleInfo.size)
+                      .arg(scaleInfo.pixelType);
+                LOG_STATUS(msg);
+            }
+
+            //
+            // Create output image
+            //
             outputImage = image::Image::create(outputInfo);
-            
+
             ioInfo.videoTime = oneFrameTimeRange;
             ioInfo.video.push_back(outputInfo);
-            
+
             auto writer = writerPlugin->write(path, ioInfo, ioOptions);
             if (!writer)
             {
@@ -396,6 +405,9 @@ namespace mrv
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
 
+            // Do NOT turn off tonemapping so libplacebo gets used.
+            view->setToneMapping(true);
+
             if (options.annotations)
             {
                 view->setSaveOverlay(true);
@@ -404,27 +416,56 @@ namespace mrv
             {
                 view->setSaveOverlay(false);
             }
-                
-                
+
+            timeline::OCIOOptions savedOCIOOptions;
+            timeline::HDROptions savedHdrOptions;
+            bool restoreHdrOptions = false;
+            bool restoreOCIOOptions = false;
+
+            // \@bug:
+            //       Note that libplacebo and OpenColorIO have different
+            //       concepts of white.  Also, OpenColorIO and OpenEXR cannot
+            //       parse HDR10+ or DolbyVision metadata.
+            savedHdrOptions = view->getHDROptions();
+            timeline::HDROptions hdrOptions = savedHdrOptions;
+
+            savedOCIOOptions = view->getOCIOOptions();
+            timeline::OCIOOptions ocioOptions = savedOCIOOptions;
+
+            hdrOptions.exportMode = options.exportMode;
+            view->setHDROptions(hdrOptions);
+            restoreHdrOptions = true;
+
+            if (hdrOptions.exportMode != timeline::HDRExportMode::BakedHDR)
+            {
+                ocioOptions.enabled = false;
+                view->setOCIOOptions(ocioOptions);
+                restoreOCIOOptions = true;
+            }
+
+            msg = string::Format(_("HDR Export mode {0}")).
+                  arg(hdrOptions.exportMode);
+            LOG_STATUS(msg);
+
             view->redraw();
             view->flush(); // needed
             Fl::flush();
-                        
+
             VkDevice device = view->device();
             VkCommandPool commandPool = view->commandPool();
 
             // Read Main Image Viewport
             VkCommandBuffer cmd = beginSingleTimeCommands(device,
                                                           commandPool);
-            
+
             buffer->readPixels(cmd, 0, 0, width, height);
-            
+
             vkEndCommandBuffer(cmd);
-            
+
             buffer->submitReadback(cmd);
 
             view->wait_queue();
-            
+
             VkResult result = VK_NOT_READY;
             void* imageData = nullptr;
             while (result == VK_NOT_READY)
@@ -432,7 +473,7 @@ namespace mrv
                 result = buffer->getLatestReadPixels(imageData);
             }
             if (imageData)
-            {                            
+            {
                 std::memcpy(bufferImage->getData(), imageData,
                             bufferImage->getDataByteCount());
             }
@@ -447,8 +488,8 @@ namespace mrv
             // Read Annotation Image
             //
             flipImageInY(bufferImage);
-                        
-                        
+
+
             if (options.annotations)
             {
                 auto overlayBuffer = view->getAnnotationFBO();
@@ -458,13 +499,13 @@ namespace mrv
                                                                   commandPool);
 
                     overlayBuffer->readPixels(cmd, 0, 0, width, height);
-            
+
                     vkEndCommandBuffer(cmd);
-            
+
                     overlayBuffer->submitReadback(cmd);
 
                     view->wait_queue();
-            
+
                     VkResult result = VK_NOT_READY;
                     void* imageData = nullptr;
                     while (result == VK_NOT_READY)
@@ -480,7 +521,7 @@ namespace mrv
                     {
                         annotationImage->zero();
                     }
-                            
+
                     vkFreeCommandBuffers(device, commandPool, 1, &cmd);
                 }
                 else
@@ -492,13 +533,13 @@ namespace mrv
                 // Composite annotation image over buffer.
                 //
                 composite_RGBA_U8(bufferImage, annotationImage);
-                
+
                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-                        
+
                 view->setSaveOverlay(false);
             }
-            
-            
+
+
             if (bufferImage != scaleImage)
             {
                 if (!scaleImage)
@@ -508,24 +549,16 @@ namespace mrv
 
                 convertImage(scaleImage, bufferImage);
             }
-                    
+
             //
             // Scale down result.
             //
             if (scaleImage)
             {
                 if (outputImage != scaleImage &&
-                    (scaleImage->getWidth() != outputImage->getWidth() ||
-                     scaleImage->getHeight() != outputImage->getHeight()))
+                    (scaleImage->getSize() != outputImage->getSize()))
                 {
-                    int numChannels = image::getChannelCount(outputImage->getPixelType());
-                    scaleImageLinear(scaleImage->getData(),
-                                     scaleImage->getWidth(),
-                                     scaleImage->getHeight(),
-                                     outputImage->getData(),
-                                     outputImage->getWidth(),
-                                     outputImage->getHeight(),
-                                     numChannels);
+                    scaleImageLinear(scaleImage, outputImage);
                 }
                 else
                 {
@@ -536,20 +569,55 @@ namespace mrv
             {
                 outputImage = bufferImage;
             }
-            
+
+            const auto videoFrame = view->getVideoFrame();
+            if (!videoFrame.empty() &&
+                !videoFrame[0].layers.empty() &&
+                videoFrame[0].layers[0].image)
+            {
+                auto hdrData = videoFrame[0].layers[0].image->getHDR();
+                if (hdrData)
+                {
+                    outputImage->setHDR(*hdrData);
+                }
+            }
+
+            writer->writeHeader();
+
+            if (saveEXR)
+            {
+                const std::string id = ocio::getInteropID(false);
+                if (!id.empty())
+                    tags["ColorInteropID"] = id;
+            }
+
             outputImage->setTags(tags);
             writer->writeVideo(currentTime, outputImage);
+
+            if (restoreOCIOOptions)
+            {
+                view->setOCIOOptions(savedOCIOOptions);
+            }
+            if (restoreHdrOptions)
+            {
+                view->setHDROptions(savedHdrOptions);
+            }
         }
         catch (const std::exception& e)
         {
             LOG_ERROR(e.what());
             ret = -1;
         }
+
+        // Turn on tonemapping so libplacebo gets used.
+        view->setToneMapping(true);
+        view->redraw();
+
         return ret;
     }
 
     int save_multiple_frames(
-        const std::string& file, const std::vector<otime::RationalTime>& times,
+        const std::string& file, const std::vector<OTIO_NS::RationalTime>& times,
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
@@ -576,11 +644,11 @@ namespace mrv
             waitForFrame(player, time);
 
             _save_single_frame(file, ui, options, frameIndex);
-            
+
             frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
         }
 
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
         tcp->unlock();
@@ -595,7 +663,7 @@ namespace mrv
     }
 
     int save_multiple_annotation_frames(
-        const std::string& file, const std::vector<otime::RationalTime>& times,
+        const std::string& file, const std::vector<OTIO_NS::RationalTime>& times,
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
@@ -622,11 +690,11 @@ namespace mrv
             waitForFrame(player, time);
 
             _save_single_frame(file, ui, options, frameIndex);
-            
+
             frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
         }
 
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
         view->setPresentationMode(presentation);
@@ -667,14 +735,14 @@ namespace mrv
         // Stop the playback
         player->stop();
 
-        const auto& currentTime = player->currentTime(); 
+        const auto& currentTime = player->currentTime();
 
         // Save this frame with the frame number
         player->seek(currentTime);
         waitForFrame(player, currentTime);
-            
+
         _save_single_frame(file, ui, options, 0);
-        
+
         // Rename file name that got saved with a frame number to the actual
         // frame that the user set.
         int64_t currentFrame = currentTime.to_frames();
@@ -702,7 +770,7 @@ namespace mrv
             }
         }
 
-        view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
+        view->setFrameView(ui->uiPrefs->AutoFitImage->value());
         view->setHudActive(hud);
         view->setShowVideo(true);
         view->setPresentationMode(presentation);
@@ -711,6 +779,9 @@ namespace mrv
         auto settings = ui->app->settings();
         if (file::isReadable(file))
         {
+            msg = string::Format(_("Saved '{0}'.")).arg(file);
+            LOG_STATUS(msg);
+
             settings->addRecentFile(file);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }

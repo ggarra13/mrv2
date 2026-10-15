@@ -6,6 +6,7 @@
 
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
+#include <tlCore/StringFormat.h>
 
 #include <algorithm>
 #include <array>
@@ -17,10 +18,15 @@ namespace tl
         TLRENDER_ENUM_IMPL(
             Channels, "Color", "Red", "Green", "Blue", "Alpha", "Lumma");
         TLRENDER_ENUM_SERIALIZE_IMPL(Channels);
-        
+
+        TLRENDER_ENUM_IMPL(
+            AspectRatioType, "Pixel", "Display");
+        TLRENDER_ENUM_SERIALIZE_IMPL(AspectRatioType);
+
         TLRENDER_ENUM_IMPL(
             HDRInformation, "From File", "Inactive", "Active");
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRInformation);
+
 
         math::Matrix4x4f brightness(const math::Vector3f& value)
         {
@@ -30,8 +36,7 @@ namespace tl
         }
 
         math::Matrix4x4f contrast(const math::Vector3f& value)
-        {
-            return math::Matrix4x4f(
+        {            return math::Matrix4x4f(
                        1.F, 0.F, 0.F, -.5F, 0.F, 1.F, 0.F, -.5F, 0.F, 0.F, 1.F,
                        -.5F, 0.F, 0.F, 0.F, 1.F) *
                    math::Matrix4x4f(
@@ -69,6 +74,20 @@ namespace tl
         {
             return brightness(in.brightness) * contrast(in.contrast) *
                    saturation(in.saturation) * tint(in.tint);
+        }
+
+        std::string getLabel(const AspectRatio& value)
+        {
+            return string::Format("{0}:{1}").
+                arg(value.num).
+                arg(value.den);
+        }
+
+        std::string getLabel(const AspectRatioOptions& value)
+        {
+            return string::Format("{0} {1}").
+                arg(getLabel(value.value)).
+                arg(value.type);
         }
 
         void to_json(nlohmann::json& j, const Color& value)
@@ -147,6 +166,30 @@ namespace tl
             j.at("maximum").get_to(value.maximum);
         }
 
+        void to_json(nlohmann::json& json, const AspectRatio& in)
+        {
+            json["num"] = in.num;
+            json["den"] = in.den;
+        }
+
+        void from_json(const nlohmann::json& json, AspectRatio& out)
+        {
+            json.at("num").get_to(out.num);
+            json.at("den").get_to(out.den);
+        }
+
+        void to_json(nlohmann::json& json, const AspectRatioOptions& in)
+        {
+            json["value"] = in.value;
+            json["type"] = to_string(in.type);
+        }
+
+        void from_json(const nlohmann::json& json, AspectRatioOptions& out)
+        {
+            json.at("value").get_to(out.value);
+            from_string(json.at("type").get<std::string>(), out.type);
+        }
+
         void to_json(nlohmann::json& j, const DisplayOptions& value)
         {
             nlohmann::json mirror(value.mirror);
@@ -154,7 +197,9 @@ namespace tl
             nlohmann::json levels(value.levels);
             nlohmann::json softClip(value.softClip);
             nlohmann::json imageFilters(value.imageFilters);
+            nlohmann::json aspect(value.aspect);
             j["channels"] = value.channels;
+            j["aspect"] = aspect;
             j["mirror"] = mirror;
             j["color"] = color;
             j["levels"] = levels;
@@ -170,6 +215,10 @@ namespace tl
         void from_json(const nlohmann::json& j, DisplayOptions& value)
         {
             j.at("channels").get_to(value.channels);
+            if (j.contains("aspect"))
+                j.at("aspect").get_to(value.aspect);
+            else
+                value.aspect = AspectRatioOptions();
             j.at("mirror").get_to(value.mirror);
             j.at("color").get_to(value.color);
             j.at("levels").get_to(value.levels);
@@ -181,6 +230,107 @@ namespace tl
             j.at("ignoreChromaticities").get_to(value.ignoreChromaticities);
             j.at("invalidValues").get_to(value.invalidValues);
         }
-        
+
+        float getAspectRatio(
+            const image::Info& info,
+            const AspectRatioOptions& options)
+        {
+            float out = 0.F;
+            if (options.value.isValid())
+            {
+                switch (options.type)
+                {
+                case AspectRatioType::Pixel:
+                    out = info.getAspect() * options.value;
+                    break;
+                case AspectRatioType::Display:
+                    out = options.value;
+                    break;
+                default: break;
+                }
+            }
+            else
+            {
+                out = info.getAspect();
+            }
+            return out;
+        }
+
+        math::Size2i getRenderSize(
+            const image::Info& info,
+            const AspectRatioOptions& options)
+        {
+            math::Size2i out;
+            if (options.value.isValid())
+            {
+                switch (options.type)
+                {
+                case AspectRatioType::Pixel:
+                    out.w = info.size.w * options.value;
+                    out.h = info.size.h;
+                    break;
+                case AspectRatioType::Display:
+                    out.w = info.size.h * options.value;
+                    out.h = info.size.h;
+                    break;
+                default: break;
+                }
+            }
+            else
+            {
+                out.w = info.size.w * info.size.pixelAspectRatio;
+                out.h = info.size.h;
+            }
+            return out;
+        }
+
+        math::Box2i getBox(
+            const math::Box2i& box,
+            const image::Info& info,
+            const AspectRatioOptions& options,
+            BoxHAlign hAlign,
+            BoxVAlign vAlign)
+        {
+            math::Box2i out;
+            const math::Size2i boxSize = box.getSize();
+            const float boxAspect = math::aspectRatio(boxSize);
+            const float aspect = getAspectRatio(info, options);
+            if (boxAspect > aspect)
+            {
+                const int w = boxSize.h * aspect;
+                const int h = boxSize.h;
+                int x = box.min.x;
+                switch (hAlign)
+                {
+                case BoxHAlign::Center:
+                    x += boxSize.w / 2.F - (boxSize.h * aspect) / 2.F;
+                    break;
+                case BoxHAlign::Right:
+                    x += boxSize.w - w;
+                    break;
+                default: break;
+                }
+                out = math::Box2i(x, box.min.y, w, h);
+            }
+            else
+            {
+                const int w = boxSize.w;
+                const int h = boxSize.w / aspect;
+                int y = box.min.y;
+                switch (vAlign)
+                {
+                case BoxVAlign::Center:
+                    y += boxSize.h / 2.F - (boxSize.w / aspect) / 2.F;
+                    break;
+                case BoxVAlign::Bottom:
+                    y += boxSize.h - h;
+                    break;
+                default: break;
+                }
+                out = math::Box2i(box.min.x, y, w, h);
+            }
+            return out;
+        }
+
     } // namespace timeline
 } // namespace tl

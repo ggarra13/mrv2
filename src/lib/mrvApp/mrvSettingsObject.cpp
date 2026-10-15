@@ -122,31 +122,39 @@
              timeline::PlayerCacheOptions().readAhead.value();
          p.defaultValues["Cache/ReadBehind"] =
              timeline::PlayerCacheOptions().readBehind.value();
-         p.defaultValues["FileSequence/Audio"] =
-             static_cast<int>(timeline::FileSequenceAudio::BaseName);
-         p.defaultValues["FileSequence/AudioFileName"] = std::string();
-         p.defaultValues["FileSequence/AudioDirectory"] = std::string();
+
+         p.defaultValues["ImageSequence/Audio"] =
+             static_cast<int>(timeline::ImageSeqAudio::Ext);
+         p.defaultValues["ImageSequence/AudioFileName"] = std::string();
+         p.defaultValues["ImageSequence/AudioDirectory"] = std::string();
+         p.defaultValues["OTIO/Spatial"] =
+             static_cast<int>(timeline::Spatial::Coordinates);
+         p.defaultValues["OTIO/Compatibility"] = true;
+
          const timeline::PlayerOptions playerOptions;
          p.defaultValues["Performance/TimerMode"] =
              static_cast<int>(playerOptions.timerMode);
          p.defaultValues["Performance/AudioBufferFrameCount"] =
              static_cast<int>(playerOptions.audioBufferFrameCount);
          p.defaultValues["SequenceIO/ThreadCount"] = 16;
+
          p.defaultValues["Performance/VideoRequestCount"] = 16;
          p.defaultValues["Performance/AudioRequestCount"] = 16;
          p.defaultValues["Performance/FFmpegThreadCount"] = 0;
-#if defined(__APPLE__)
-         p.defaultValues["Performance/FFmpegHardwareDecode"] = 1;
-#else
-         p.defaultValues["Performance/FFmpegHardwareDecode"] = 0;
-#endif
          p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
          p.defaultValues["Performance/FFmpegColorAccuracy"] = 0;
+#if defined(__APPLE__)
+         p.defaultValues["Performance/FFmpegHWAccel"] = 1;
+#else
+         p.defaultValues["Performance/FFmpegHWAccel"] = 0;
+#endif
+         p.defaultValues["Performance/FFmpegHWDriver"] = "";
+
          p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
+
          p.defaultValues["EnvironmentMap/Sphere/SubdivisionX"] = 36;
          p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
          p.defaultValues["EnvironmentMap/Spin"] = 1;
-         p.defaultValues["TCP/Control/Port"] = std::string("55150");
 
          Fl_Color c;
          p.defaultValues["Background/Type"] = 0;
@@ -281,6 +289,8 @@
         }
 
         p.defaultValues["Python/Editor"] = command;
+        p.defaultValues["WebRTC/Room"] = "Unique Name";
+        p.defaultValues["WebRTC/Project"] = "Unnamed";
     }
 
     SettingsObject::~SettingsObject() {}
@@ -691,9 +701,10 @@
                 fs::exists(filePath))
             {
                 auto path = fs::absolute(filePath);
-                if (set.find(path.u8string()) == set.end())
+                std::string filePath = tl::file::fromFileSystem(path);
+                if (set.find(filePath) == set.end())
                 {
-                    set.insert(path.u8string());
+                    set.insert(filePath);
                     result.push_back(str);
                 }
             }

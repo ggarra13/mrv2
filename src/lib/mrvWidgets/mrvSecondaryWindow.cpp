@@ -11,12 +11,15 @@
 #include "mrvWidgets/mrvSecondaryWindow.h"
 #include "mrvWidgets/mrvMainWindow.h"
 
+#include <FL/Fl_Group.H>
+
 namespace mrv
 {
     struct SecondaryWindow::Private
     {
         ViewerUI* ui = nullptr;
         MainWindow* mainWindow = nullptr;
+        Fl_Group* group = nullptr;
         MyViewport* viewport = nullptr;
     };
 
@@ -27,7 +30,7 @@ namespace mrv
 
         p.ui = ui;
 
-        int X = 30, Y = 30, W = 1280, H = 720;
+        int X = 30, Y = 30, W = 1280, H = 720, screen = 0;
 
         SettingsObject* settings = ui->app->settings();
         std::string key;
@@ -49,19 +52,30 @@ namespace mrv
         value = settings->getValue<std::any>(key);
         H = std_any_empty(value) ? H : std_any_cast<int>(value);
 
+        key = "gui/Secondary/Screen";
+        value = settings->getValue<std::any>(key);
+        screen = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+
         Fl_Group::current(0);
         p.mainWindow = new MainWindow(X, Y, W, H, "SecondaryWindow");
+        p.mainWindow->screen_num(screen);
         p.mainWindow->labeltype(FL_NO_LABEL);
         p.mainWindow->begin();
+
+        p.group = new Fl_Group(0, 0, W, H);
+        p.group->box(FL_FLAT_BOX);
+        p.group->begin();
 
         p.viewport = new MyViewport(0, 0, W, H);
         p.viewport->main(ui); // needed
         p.viewport->end();
 
+        p.group->end();
+
         p.viewport->setContext(ui->app->getContext());
         p.viewport->setFrameView(true);
 
-        p.mainWindow->resizable(p.viewport);
+        p.mainWindow->resizable(p.group);
 
         p.mainWindow->end();
 
@@ -123,12 +137,20 @@ namespace mrv
 
             key = "gui/Secondary/WindowH";
             settings->setValue(key, w->h());
+
+            key = "gui/Secondary/Screen";
+            settings->setValue(key, w->screen_num());
         }
     }
 
     MainWindow* SecondaryWindow::window() const
     {
         return _p->mainWindow;
+    }
+
+    Fl_Group* SecondaryWindow::group() const
+    {
+        return _p->group;
     }
 
     MyViewport* SecondaryWindow::viewport() const

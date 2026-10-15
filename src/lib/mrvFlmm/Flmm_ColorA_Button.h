@@ -29,8 +29,8 @@
 
 class Flmm_ColorA_Button : public Fl_Button
 {
-    uchar r_, g_, b_, a_;
-    float r, g, b, a;
+    uchar r_, g_, b_, a_ = 255;
+    float r, g, b, a = 1.F;
     int th;
     static void generate_achip(void*, int, int, int, uchar*);
     void draw();

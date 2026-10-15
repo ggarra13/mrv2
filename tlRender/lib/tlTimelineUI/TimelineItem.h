@@ -32,28 +32,28 @@ namespace tl
         protected:
 #ifdef OPENGL_BACKEND
             void _init(
-                const std::shared_ptr<timeline::Player>&,
-                const otio::SerializableObject::Retainer<otio::Stack>&,
+                const std::shared_ptr<system::Context>& context,
+                const std::shared_ptr<timeline::Player>& player,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<gl::GLFWWindow>&,
-                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent);
 
-            
+
             TimelineItem();
 #endif
 
 #ifdef VULKAN_BACKEND
             void _init(
-                const std::shared_ptr<timeline::Player>&,
-                const otio::SerializableObject::Retainer<otio::Stack>&,
+                const std::shared_ptr<system::Context>& context,
+                const std::shared_ptr<timeline::Player>& player,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent);
 
-            TimelineItem(Fl_Vk_Context&);	
+            TimelineItem(Fl_Vk_Context&);
 #endif
 
         public:
@@ -62,27 +62,27 @@ namespace tl
 #ifdef OPENGL_BACKEND
             //! Create a new item.
             static std::shared_ptr<TimelineItem> create(
+                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<timeline::Player>&,
-                const otio::SerializableObject::Retainer<otio::Stack>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<gl::GLFWWindow>&,
-                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 #endif
 
 #ifdef VULKAN_BACKEND
             //! Create a new item.
             static std::shared_ptr<TimelineItem> create(
+                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<timeline::Player>&,
-                const otio::SerializableObject::Retainer<otio::Stack>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 Fl_Vk_Context& ctx,
-                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 #endif
-            
+
             //! Set whether the timeline is editable.
             void setEditable(bool);
 
@@ -124,10 +124,10 @@ namespace tl
             // void keyPressEvent(ui::KeyEvent&) override;
             // void keyReleaseEvent(ui::KeyEvent&) override;
 
-            std::vector<const otio::Item*> getSelectedItems() const;
-            std::vector<const otio::Transition*> getSelectedTransitions() const;
-            
-            
+            std::vector<timeline::MoveData> getSelectedItems() const;
+            std::vector<timeline::MoveData> getSelectedTransitions() const;
+
+
         protected:
             void _timeUnitsUpdate() override;
 
@@ -136,7 +136,7 @@ namespace tl
 #ifdef VULKAN_BACKEND
             Fl_Vk_Context& ctx;
 #endif
-            
+
         private:
             bool _isTrackVisible(int) const;
 
@@ -148,7 +148,7 @@ namespace tl
             void _mouseMoveEventSlide(ui::MouseMoveEvent&);
             void _mouseMoveEventSlip(ui::MouseMoveEvent&);
             void _mouseMoveEventTrim(ui::MouseMoveEvent&);
-            
+
             void _mouseReleaseEventFill(ui::MouseClickEvent&);
             void _mouseReleaseEventMove(ui::MouseClickEvent&);
             void _mouseReleaseEventRipple(ui::MouseClickEvent&);
@@ -158,10 +158,10 @@ namespace tl
             void _mouseReleaseEventSlip(ui::MouseClickEvent&);
             void _mouseReleaseEventTrim(ui::MouseClickEvent&);
 
-            bool _clampRangeToNeighborTransitions(const otio::Item* item,
-                                                  const otime::TimeRange& proposedRange,
-                                                  otime::TimeRange& clampedRange);
-            
+            bool _clampRangeToNeighborTransitions(const OTIO_NS::Item* item,
+                                                  const OTIO_NS::TimeRange& proposedRange,
+                                                  OTIO_NS::TimeRange& clampedRange);
+
             void _drawInOutPoints(const math::Box2i&, const ui::DrawEvent&);
             math::Size2i
             _getLabelMaxSize(const std::shared_ptr<image::FontSystem>&) const;
@@ -175,15 +175,15 @@ namespace tl
             void _drawCurrentTime(const math::Box2i&, const ui::DrawEvent&);
             void _getTransitionItems(std::vector<IBasicItem*>& items,
                                      const int trackNumber,
-                                     const otime::TimeRange& transitionRange);
+                                     const OTIO_NS::TimeRange& transitionRange);
             void _getTransitionTimeRanges(std::vector<otime::TimeRange>& items,
                                           const int trackNumber,
-                                          const otime::TimeRange& transitionRange);
-            void _addOneFrameGap(const otime::RationalTime& videoTime,
-                                 otime::TimeRange& timeRange);
+                                          const OTIO_NS::TimeRange& transitionRange);
+            void _addOneFrameGap(const OTIO_NS::RationalTime& videoTime,
+                                 OTIO_NS::TimeRange& timeRange);
             bool _transitionIntersects(const std::shared_ptr<IItem> transition,
                                        const int transitionTrack,
-                                       const otime::TimeRange& timeRange);
+                                       const OTIO_NS::TimeRange& timeRange);
             void _tracksUpdate();
             void _textUpdate();
             void _storeUndo();

@@ -23,6 +23,7 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvUI/mrvDesktop.h"
+#include "mrvUI/mrvUtil.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
@@ -59,8 +60,11 @@
 
 #include <tlDevice/IOutput.h>
 
+#include <tlTimeline/Edit.h>
+
 #include <tlCore/HDR.h>
 #include <tlCore/Matrix.h>
+#include <tlCore/StringFormat.h>
 
 #include <FL/Fl.H>
 
@@ -127,6 +131,7 @@ namespace mrv
         float TimelineViewport::Private::masking = 0.F;
         int64_t TimelineViewport::Private::lastFrame;
         uint64_t TimelineViewport::Private::droppedFrames = 0;
+        bool TimelineViewport::Private::presentation = false;
         float TimelineViewport::Private::rotation = 0.F;
         bool TimelineViewport::Private::resizeWindow = true;
         bool TimelineViewport::Private::safeAreas = false;
@@ -134,18 +139,11 @@ namespace mrv
         bool TimelineViewport::Private::displayWindow = false;
         bool TimelineViewport::Private::ignoreDisplayWindow = false;
         float TimelineViewport::Private::pixelAspectRatio = -1.F;
-        std::string TimelineViewport::Private::helpText;
-        float TimelineViewport::Private::helpTextFade;
         bool TimelineViewport::Private::hudActive = true;
         HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
         image::Tags TimelineViewport::Private::tagData;
         short TimelineViewport::Private::ghostNext = 5;
         short TimelineViewport::Private::ghostPrevious = 5;
-
-        static void drawTimeoutText_cb(TimelineViewport* view)
-        {
-            view->clearHelpText();
-        }
 
         void TimelineViewport::_init()
         {
@@ -184,43 +182,10 @@ namespace mrv
         }
 
         //
-        const std::vector<tl::timeline::VideoData>&
-        TimelineViewport::getVideoData() const noexcept
+        const std::vector<tl::timeline::VideoFrame>&
+        TimelineViewport::getVideoFrame() const noexcept
         {
             return _p->videoData;
-        }
-
-        void TimelineViewport::clearHelpText()
-        {
-            TLRENDER_P();
-            p.helpTextFade -= kHelpTimeout;
-            if (mrv::is_equal(p.helpTextFade, 0.F))
-            {
-                Fl::remove_timeout((Fl_Timeout_Handler)drawTimeoutText_cb, this);
-                p.helpText.clear();
-            }
-            else
-            {
-                Fl::repeat_timeout(
-                    kHelpTimeout, (Fl_Timeout_Handler)drawTimeoutText_cb, this);
-            }
-            redrawWindows();
-        }
-
-        void TimelineViewport::setHelpText(const std::string& text)
-        {
-            TLRENDER_P();
-            if (text == p.helpText)
-                return;
-
-            p.helpText = text;
-            p.helpTextFade = kHelpTextFade;
-
-            Fl::remove_timeout((Fl_Timeout_Handler)drawTimeoutText_cb, this);
-            Fl::add_timeout(
-                kHelpTimeout, (Fl_Timeout_Handler)drawTimeoutText_cb, this);
-
-            redrawWindows();
         }
 
         void TimelineViewport::undo()
@@ -280,7 +245,7 @@ namespace mrv
             p.ui->uiSlip->value(0);
             p.ui->uiTrim->value(0);
 
-            if (!app::soporta_editing)
+            if (!feature_needs_edit_or_later())
             {
                 p.ui->uiMove->value(1);
                 return;
@@ -340,6 +305,11 @@ namespace mrv
             }
 
             p.ui->uiTimeline->setEditMode(mode);
+
+            nlohmann::json msg;
+            msg["command"] = "setEditMode";
+            msg["value"] = mode;
+            tcp->pushMessage(msg);
         }
 
         ActionMode TimelineViewport::getActionMode() noexcept
@@ -373,6 +343,28 @@ namespace mrv
             if (mode == p.actionMode)
                 return;
 
+            if (mode != ActionMode::kSelection)
+            {
+                math::Box2i area;
+                area.min.x = -1; // disable area selection.
+                setSelectionArea(area);
+            }
+
+
+            if (p.actionMode == ActionMode::kText && mode != ActionMode::kText)
+            {
+                acceptMultilineInput();
+            }
+
+            p.actionMode = mode;
+
+            _updateActionMode(mode);
+        }
+
+        void TimelineViewport::_updateActionMode(const ActionMode mode)
+        {
+            TLRENDER_P();
+
             //! Turn off all buttons
             p.ui->uiScrub->value(0);
             p.ui->uiSelection->value(0);
@@ -388,27 +380,6 @@ namespace mrv
             p.ui->uiText->value(0);
             p.ui->uiVoice->value(0);
             p.ui->uiLink->value(0);
-
-            if (mode != ActionMode::kSelection)
-            {
-                math::Box2i area;
-                area.min.x = -1; // disable area selection.
-                setSelectionArea(area);
-            }
-
-            if (!app::soporta_annotations)
-            {
-                p.ui->uiScrub->value(1);
-                return;
-            }
-
-            if (p.actionMode == ActionMode::kText && mode != ActionMode::kText)
-            {
-                acceptMultilineInput();
-            }
-
-            p.actionMode = mode;
-
 
             switch (mode)
             {
@@ -430,51 +401,117 @@ namespace mrv
                 p.ui->uiStatus->copy_label(_("Erase"));
                 break;
             case ActionMode::kCircle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiCircle->value(1);
                 p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(OutlineCircle));
                 p.ui->uiStatus->copy_label(_("Circle"));
                 break;
             case ActionMode::kFilledCircle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiCircle->value(1);
                 p.ui->uiCircle->bind_image(MRV2_LOAD_SVG(FilledCircle));
                 p.ui->uiStatus->copy_label(_("Filled Circle"));
                 break;
             case ActionMode::kRectangle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiRectangle->value(1);
                 p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(OutlineRectangle));
                 p.ui->uiStatus->copy_label(_("Rectangle"));
                 break;
             case ActionMode::kFilledRectangle:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiRectangle->value(1);
                 p.ui->uiRectangle->bind_image(MRV2_LOAD_SVG(FilledRectangle));
                 p.ui->uiStatus->copy_label(_("Filled Rectangle"));
                 break;
             case ActionMode::kArrow:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiArrow->value(1);
                 p.ui->uiStatus->copy_label(_("Arrow"));
                 break;
             case ActionMode::kText:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiText->value(1);
                 p.ui->uiStatus->copy_label(_("Text"));
                 break;
             case ActionMode::kVoice:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiVoice->value(1);
                 p.ui->uiStatus->copy_label(_("Voice"));
                 break;
             case ActionMode::kRotate:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiStatus->copy_label(_("Rotate"));
                 break;
             case ActionMode::kPolygon:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiPolygon->value(1);
                 p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(OutlinePolygon));
                 p.ui->uiStatus->copy_label(_("Polygon"));
                 break;
             case ActionMode::kFilledPolygon:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiPolygon->value(1);
                 p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(FilledPolygon));
                 p.ui->uiStatus->copy_label(_("Filled Polygon"));
                 break;
             case ActionMode::kLink:
+                if (!mrv::feature_needs_solo_or_later())
+                {
+                    p.actionMode = ActionMode::kScrub;
+                    p.ui->uiScrub->value(1);
+                    return;
+                }
                 p.ui->uiLink->value(1);
                 p.ui->uiStatus->copy_label(_("Link"));
                 break;
@@ -493,9 +530,39 @@ namespace mrv
             if (n == p.lastCursor)
                 return;
 
+#ifdef OPENGL_BACKEND
             if (window())
                 window()->cursor(n);
+#endif
 
+#ifdef VULKAN_BACKEND
+#   ifdef _WIN32
+            if (window())
+            {
+                if (n == FL_CURSOR_CROSS)
+                {
+                    static std::unique_ptr<Fl_PNG_Image> rgba_cross {
+                        load_png("crosshair.png")
+                    };
+                    window()->cursor(rgba_cross.get(), 16, 16);
+                }
+                else if (n == FL_CURSOR_INSERT)
+                {
+                    static std::unique_ptr<Fl_PNG_Image> rgba_insert {
+                        load_png("textcursor.png")
+                    };
+                    window()->cursor(rgba_insert.get(), 16, 16);
+                }
+                else
+                {
+                    window()->cursor(n);
+                }
+            }
+#   else
+                if (window())
+                    window()->cursor(n);
+#   endif
+#endif
             p.lastCursor = n;
         }
 
@@ -553,10 +620,10 @@ namespace mrv
                 return;
 
             const auto& t = player->currentTime();
-            auto time = t + otime::RationalTime(dx, t.rate());
+            auto time = t + OTIO_NS::RationalTime(dx, t.rate());
 
             // Stop at end/beginning if not looping.
-            int behavior = p.ui->uiPrefs->uiPrefsScrubbingLoopMode->value();
+            int behavior = p.ui->uiPrefs->ScrubbingLoopMode->value();
             const auto& range = player->inOutRange();
             const auto loop = player->loop();
             if ((behavior == kScrubLoopButton &&
@@ -575,7 +642,7 @@ namespace mrv
             bool isMuted = player->isMuted();
             if (!info.audio.isValid())
                 isMuted = true;
-            if (!isMuted && p.ui->uiPrefs->uiPrefsScrubAutoPlay->value())
+            if (!isMuted && p.ui->uiPrefs->ScrubAutoPlay->value())
             {
                 if (player->playback() == timeline::Playback::Stop)
                 {
@@ -607,7 +674,7 @@ namespace mrv
                 return;
 
             const int X = Fl::event_x() * pixels_per_unit();
-            const float scale = p.ui->uiPrefs->uiPrefsScrubbingSensitivity->value() * multiplier;
+            const float scale = p.ui->uiPrefs->ScrubbingSensitivity->value() * multiplier;
             float dx = (X - p.mousePress.x) / scale;
 
             if (std::abs(dx) >= 1.0F)
@@ -994,10 +1061,12 @@ namespace mrv
 
             updateDisplayOptions();
 
+
             if (p.displayOptions.empty())
                 return;
 
             const auto& d = p.displayOptions[0];
+            App::app->setDisplayOptions(d);
 
             if (d.hdrInfo == timeline::HDRInformation::Inactive)
             {
@@ -1053,6 +1122,7 @@ namespace mrv
             p.hdrOptions.peak_scene_low_limit = value.peak_scene_low_limit;
             p.hdrOptions.peak_scene_high_limit = value.peak_scene_high_limit;
 
+            p.hdrOptions.exportMode = value.exportMode;
             p.hdrOptions.algorithm = value.algorithm;
             p.hdrOptions.gamutMapping = value.gamutMapping;
             redrawWindows();
@@ -1061,6 +1131,18 @@ namespace mrv
         const timeline::HDROptions& TimelineViewport::getHDROptions() const noexcept
         {
             return _p->hdrOptions;
+        }
+
+        void TimelineViewport::setToneMapping(const bool value) noexcept
+        {
+            TLRENDER_P();
+
+            if (p.tonemap == value)
+                return;
+
+            p.tonemap = value;
+            _getHDR();
+            redrawWindows();
         }
 
         void TimelineViewport::setTimelinePlayer(TimelinePlayer* player) noexcept
@@ -1079,11 +1161,12 @@ namespace mrv
             if (player)
             {
                 p.videoDataObserver =
-                    observer::ListObserver<timeline::VideoData>::create(
+                    observer::ListObserver<timeline::VideoFrame>::create(
                         p.player->player()->observeCurrentVideo(),
-                        [this](const std::vector<timeline::VideoData>& value)
+                        [this](const std::vector<timeline::VideoFrame>& value)
                             { currentVideoCallback(value); },
-                        observer::CallbackAction::Suppress);
+                        observer::CallbackAction::Trigger);
+                        // observer::CallbackAction::Suppress);
 
                 // needed for refreshing secondary viewport when stopped.
                 p.videoData = player->currentVideo();
@@ -1314,21 +1397,14 @@ namespace mrv
             bool send = p.ui->uiPrefs->SendPanAndZoom->value();
             if (send)
             {
-                nlohmann::json viewPos = p.viewPos;
                 nlohmann::json viewport = getViewportSize();
                 Message msg;
                 msg["command"] = "viewPosAndZoom";
-                msg["viewPos"] = viewPos;
+                msg["viewPos"] = p.viewPos;
                 msg["zoom"] = p.viewZoom;
                 msg["viewport"] = viewport;
                 tcp->pushMessage(msg);
             }
-
-            auto m = getMultilineInput();
-            if (!m)
-                return;
-
-            redraw();
         }
 
         void TimelineViewport::setViewZoom(
@@ -1362,7 +1438,7 @@ namespace mrv
         }
 
         void TimelineViewport::currentVideoCallback(
-            const std::vector<timeline::VideoData>& values) noexcept
+            const std::vector<timeline::VideoFrame>& values) noexcept
         {
             TLRENDER_P();
 
@@ -1372,12 +1448,23 @@ namespace mrv
             if (p.selection.min.x >= 0)
             {
                 image::Size videoSize;
-                if (!values.empty() && !values[0].layers.empty())
+                if (!values.empty())
                 {
-                    const auto image = values[0].layers[0].image;
-                    if (image && image->isValid())
+                    if (!values[0].layers.empty())
                     {
-                        videoSize = image->getSize();
+                        auto image = values[0].layers[0].image;
+                        if (image && image->isValid())
+                        {
+                            videoSize = image->getSize();
+                        }
+                        else
+                        {
+                            image = values[0].layers[0].imageB;
+                            if (image && image->isValid())
+                            {
+                                videoSize = image->getSize();
+                            }
+                        }
                     }
                 }
 
@@ -1390,44 +1477,41 @@ namespace mrv
                 }
             }
 
-            if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
-                !p.videoData[0].layers.empty())
-            {
-                auto image = p.videoData[0].layers[0].image;
-                p.videoData[0].size.pixelAspectRatio = p.pixelAspectRatio;
-                image->setPixelAspectRatio(p.pixelAspectRatio);
-            }
-
             if (p.resizeWindow)
             {
                 if (!p.presentation && !p.fullScreen)
                 {
                     resizeWindow();
                 }
-                else if (p.frameView)
-                {
-                    frameView();
-                }
 
                 const auto& renderSize = getRenderSize();
                 if (renderSize.isValid())
                 {
+                    if (p.frameView)
+                        frameView();
+
                     p.resizeWindow = false;
                 }
-            }
-            else if (p.frameView && p.switchClip)
-            {
-                frameView();
             }
 
             if (p.switchClip && !values.empty() && !values[0].layers.empty())
             {
-                const auto image = values[0].layers[0].image;
+                auto image = values[0].layers[0].image;
                 if (image && image->isValid())
                 {
-                    const auto& videoSize = image->getSize();
-                    p.videoSize = videoSize;
+                    p.videoSize = image->getSize();
                 }
+                else
+                {
+                    image = values[0].layers[0].imageB;
+                    if (image && image->isValid())
+                    {
+                        p.videoSize = image->getSize();
+                    }
+                }
+
+                if (p.frameView)
+                    frameView();
 
                 p.switchClip = false;
                 p.droppedFrames = 0;
@@ -1436,60 +1520,11 @@ namespace mrv
             _getTags();
 
             p.missingFrame = false;
-            if (p.missingFrameType != MissingFrameType::kBlackFrame &&
-                !values[0].layers.empty())
+            if (!values.empty() && !values[0].layers.empty())
             {
-                const auto image = values[0].layers[0].image;
-                const auto imageB = values[0].layers[0].imageB;
-                if ((!image || !image->isValid()) &&
-                    (!imageB || !imageB->isValid()))
-                {
-                    p.missingFrame = true;
-                    if (p.player->playback() != timeline::Playback::Forward)
-                    {
-                        int layerId = 0;
-                        if (p.player)
-                            layerId =
-                                p.player->player()->observeVideoLayer()->get();
-
-                        io::Options ioOptions;
-                        {
-                            std::stringstream s;
-                            s << layerId;
-                            ioOptions["Layer"] = s.str();
-                        }
-                        const auto& timeline = p.player->timeline();
-                        const auto& inOutRange = p.player->inOutRange();
-                        auto currentTime = values[0].time;
-                        // Seek until we find a previous frame or reach
-                        // the beginning of the inOutRange.
-                        while (1)
-                        {
-                            currentTime -=
-                                otio::RationalTime(1, currentTime.rate());
-                            const auto& videoData =
-                                timeline->getVideo(currentTime, ioOptions)
-                                .future.get();
-                            if (videoData.layers.empty())
-                                continue;
-                            const auto image = videoData.layers[0].image;
-                            if (image && image->isValid())
-                            {
-                                p.lastVideoData = videoData;
-                                break;
-                            }
-                            if (currentTime <= inOutRange.start_time())
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    if (p.player->playback() != timeline::Playback::Reverse)
-                    {
-                        p.lastVideoData = values[0];
-                    }
-                }
+                const auto& layer = values[0].layers[0];
+                p.missingFrame = layer.missing;
+                p.lastVideoFrame = values[0];
             }
 
             if (panel::imageInfoPanel)
@@ -1610,7 +1645,10 @@ namespace mrv
         math::Size2i TimelineViewport::getRenderSize() const noexcept
         {
             TLRENDER_P();
-            return timeline::getRenderSize(p.compareOptions.mode, p.videoData);
+
+            return timeline::getRenderSize(p.compareOptions,
+                                           p.displayOptions,
+                                           p.videoData);
         }
 
         float TimelineViewport::getRotation() const noexcept
@@ -1776,7 +1814,7 @@ namespace mrv
             maxW -= dW;
             maxH -= dH;
 
-            bool alwaysFrameView = (bool)uiPrefs->uiPrefsAutoFitImage->value();
+            bool alwaysFrameView = (bool)uiPrefs->AutoFitImage->value();
             p.frameView = alwaysFrameView;
             bool frameView = alwaysFrameView;
 
@@ -1918,7 +1956,7 @@ namespace mrv
                 // Otherwise when hiding the timeline, it would appear
                 // floating in space.
                 if (use_maximize ||
-                    (!uiPrefs->uiPrefsTimeline->value() &&
+                    (!uiPrefs->Timeline->value() &&
                      (W > minW || H > minH)))
                 {
                     wait::milliseconds(500);
@@ -2038,7 +2076,7 @@ namespace mrv
         }
 
         //! Set the Annotation previous ghost frames.
-        void TimelineViewport::setMissingFrameType(MissingFrameType x)
+        void TimelineViewport::setMissingFrameType(tl::io::MissingFrames x)
         {
             _p->missingFrameType = x;
         }
@@ -2253,7 +2291,7 @@ namespace mrv
 
             int screen = this->screen_num();
             timeline::OCIOOptions o = getOCIOOptions(screen);
-            o.fileName = p.ui->uiPrefs->uiPrefsOCIOConfig->value();
+            o.fileName = p.ui->uiPrefs->OCIOConfig->value();
 
             std::string input = ocio::ics(); //p.ui->uiICS->label();
             if (p.ui->uiICS->value() <= 0)
@@ -2330,20 +2368,15 @@ namespace mrv
             if (p.videoData.empty())
             {
                 p.displayOptions.resize(1); // needed for image filters
-                p.ui->uiGain->value(1.0f);
-                p.ui->uiGainInput->value(1.0f);
-                p.ui->uiGamma->value(1.0f);
-                p.ui->uiGammaInput->value(1.0f);
-                p.ui->uiSaturation->value(1.0f);
-                p.ui->uiSaturationInput->value(1.0f);
-                _pushColorMessage("saturation", 1.0f);
-                _pushColorMessage("gain", 1.0f);
-                _pushColorMessage("gamma", 1.0f);
+
+                // \@note:
+                // We don't reset gain/gamma/saturation here as there's
+                // a small time when video data is empty and there's a
+                // switch to a new clip.
                 return;
             }
 
-            timeline::DisplayOptions d;
-            d = p.displayOptions[0];
+            timeline::DisplayOptions d = App::app->displayOptions();
 
             // Get these from the toggle menus
 
@@ -2359,16 +2392,15 @@ namespace mrv
             }
 
             d.exrDisplay.enabled = false;
-            if (d.exrDisplay.exposure < 0.001F)
-                d.exrDisplay.exposure = d.color.brightness.x;
 
             float gain = p.ui->uiGain->value();
             _pushColorMessage("gain", gain);
-            d.color.brightness.x = d.exrDisplay.exposure * gain;
-            d.color.brightness.y = d.exrDisplay.exposure * gain;
-            d.color.brightness.z = d.exrDisplay.exposure * gain;
+            d.color.brightness.x = gain;
+            d.color.brightness.y = gain;
+            d.color.brightness.z = gain;
 
             float saturation = p.ui->uiSaturation->value();
+            p.ui->uiSaturationInput->value(saturation);
             _pushColorMessage("saturation", saturation);
             d.color.saturation.x = saturation;
             d.color.saturation.y = saturation;
@@ -2396,6 +2428,11 @@ namespace mrv
                 p.ui->uiFStop->labelcolor(p.ui->uiGain->labelcolor());
             }
 
+            // If color panel is open, update it too.
+            if (panel::colorPanel)
+            {
+                panel::colorPanel->setDisplayOptions(d);
+            }
             _updateDisplayOptions(d);
         }
 
@@ -2410,6 +2447,10 @@ namespace mrv
             const auto& info = player->player()->getIOInfo();
 
             const auto& videos = info.video;
+
+            int layerId = p.ui->uiColorChannel->value();
+            if (layerId < 0)
+                layerId = 0;
 
             p.ui->uiColorChannel->clear();
 
@@ -2429,22 +2470,18 @@ namespace mrv
             }
             else
             {
-                const Fl_Menu_Item* item = p.ui->uiColorChannel->child(idx);
-                p.ui->uiColorChannel->copy_label(item->label());
+                p.ui->uiColorChannel->value(layerId);
+
+                _updateLayers();
             }
         }
 
-        // This function is needed to force the repositioning of the window/view
-        // before querying, for example, the mouse coordinates.
+        // This function is needed to force the repositioning of the
+        // window/view before querying, for example, the mouse coordinates.
         void TimelineViewport::_refresh() noexcept
         {
             redraw();
             Fl::flush(); // force the redraw
-        }
-
-        bool TimelineViewport::getPresentationMode() const noexcept
-        {
-            return _p->presentation;
         }
 
         bool TimelineViewport::_hasSecondaryViewport() const noexcept
@@ -2508,7 +2545,12 @@ namespace mrv
             w->fill_menu(p.ui->uiMenuBar);
         }
 
-        //! Set or unset the window to full screen and hide/show all bars
+        bool TimelineViewport::getPresentationMode() const noexcept
+        {
+            return _p->presentation;
+        }
+
+        //! Set or unset the window to full screen and hide/show all bars.
         void TimelineViewport::setPresentationMode(bool active) noexcept
         {
             TLRENDER_P();
@@ -2516,19 +2558,24 @@ namespace mrv
             if (p.presentation == active)
                 return;
 
+            const bool secondary = _hasSecondaryViewport();
+            auto* target = secondary ? p.ui->uiSecondary->viewport()
+                           : reinterpret_cast<MyViewport*>(this);
+
             if (!active)
             {
-                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                int vsync = p.ui->uiPrefs->OpenGLVsync->value();
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncNone)
                 {
-                    swap_interval(0);
+                    target->swap_interval(0);
                     p.ui->uiTimeline->swap_interval(0);
                 }
                 else if (vsync == MonitorVSync::kVSyncAlways)
                 {
-                    swap_interval(1);
-                    p.ui->uiTimeline->swap_interval(1);
+                    target->swap_interval(1);
+                    if (!secondary)
+                        p.ui->uiTimeline->swap_interval(1);
                 }
                 if (!p.fullScreen)
                     _setFullScreen(false);
@@ -2536,21 +2583,21 @@ namespace mrv
                     Fl::add_timeout(
                         kFullScreenTimeout,
                         (Fl_Timeout_Handler)restore_ui_state, p.ui);
-                p.presentation = false;
                 _updateCursor();
             }
             else
             {
-                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                int vsync = p.ui->uiPrefs->OpenGLVsync->value();
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncAlways)
                 {
-                    swap_interval(1);
-                    p.ui->uiTimeline->swap_interval(1);
+                    target->swap_interval(1);
+                    if (!secondary)
+                        p.ui->uiTimeline->swap_interval(1);
                 }
                 else if (vsync == MonitorVSync::kVSyncNone)
                 {
-                    swap_interval(0);
+                    target->swap_interval(0);
                     p.ui->uiTimeline->swap_interval(0);
                 }
                 save_ui_state(p.ui);
@@ -2559,9 +2606,9 @@ namespace mrv
                     hide_ui_state(p.ui);
                 }
                 _setFullScreen(active);
-                p.presentation = true;
                 p.presentationTime = std::chrono::high_resolution_clock::now();
             }
+            p.presentation = active;
         }
 
         bool TimelineViewport::getFullScreenMode() const noexcept
@@ -2581,7 +2628,7 @@ namespace mrv
 
             if (!active)
             {
-                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                int vsync = p.ui->uiPrefs->OpenGLVsync->value();
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncNone)
                 {
@@ -2606,7 +2653,7 @@ namespace mrv
             }
             else
             {
-                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                int vsync = p.ui->uiPrefs->OpenGLVsync->value();
                 if (vsync == MonitorVSync::kVSyncPresentationOnly ||
                     vsync == MonitorVSync::kVSyncAlways)
                 {
@@ -2633,16 +2680,9 @@ namespace mrv
             w->maximize();
         }
 
-        void TimelineViewport::_updateDisplayOptions(
-            const timeline::DisplayOptions& d) noexcept
+        void TimelineViewport::_updateLayers()
         {
             TLRENDER_P();
-
-            p.displayOptions.resize(p.videoData.size());
-            for (auto& display : p.displayOptions)
-            {
-                display = d;
-            }
 
             const TimelinePlayer* player = getTimelinePlayer();
             if (!player)
@@ -2654,12 +2694,13 @@ namespace mrv
             if (videos.empty())
                 return;
 
-            int layer = p.ui->uiColorChannel->value();
-            if (layer < 0)
-                layer = 0;
+            int layerId = p.ui->uiColorChannel->value();
+            layerId = std::clamp(layerId, 0,
+                                 static_cast<int>(videos.size()-1));
 
-            std::string name = mrv::color::layer(videos[layer].name);
+            std::string name = mrv::color::layer(videos[layerId].name);
 
+            auto d = App::app->displayOptions();
             switch (d.channels)
             {
             case timeline::Channels::Red:
@@ -2674,17 +2715,35 @@ namespace mrv
             case timeline::Channels::Alpha:
                 name += " (A)";
                 break;
+            case timeline::Channels::Lumma:
+                name += " (L)";
+                break;
             case timeline::Channels::Color:
             default:
                 break;
             }
 
+            p.ui->uiColorChannel->copy_label(name.c_str());
+            p.ui->uiColorChannel->redraw();
+        }
+
+        void TimelineViewport::_updateDisplayOptions(
+            const timeline::DisplayOptions& d) noexcept
+        {
+            TLRENDER_P();
+
+            p.displayOptions.resize(p.videoData.size());
+            for (auto& display : p.displayOptions)
+            {
+                display = d;
+            }
+
+            _updateLayers();
+
             const auto outputDevice = App::app->outputDevice();
             if (outputDevice)
                 outputDevice->setDisplayOptions({d});
 
-            p.ui->uiColorChannel->copy_label(name.c_str());
-            p.ui->uiColorChannel->redraw();
             redraw();
         }
 
@@ -2821,10 +2880,16 @@ namespace mrv
             case image::PixelType::YUV_420P_U8:
             case image::PixelType::YUV_422P_U8:
             case image::PixelType::YUV_444P_U8:
+            case image::PixelType::YUV_420SP_U8:
+            case image::PixelType::YUV_422SP_U8:
+            case image::PixelType::YUV_444SP_U8:
                 break;
             case image::PixelType::YUV_420P_U16:
             case image::PixelType::YUV_422P_U16:
             case image::PixelType::YUV_444P_U16:
+            case image::PixelType::YUV_420SP_U16:
+            case image::PixelType::YUV_422SP_U16:
+            case image::PixelType::YUV_444SP_U16:
                 break;
             case image::PixelType::RGB_U10:
                 offset *= sizeof(uint32_t);
@@ -3320,6 +3385,126 @@ namespace mrv
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
             }
+            case image::PixelType::YUV_420SP_U8:
+            {
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0);
+                offset = Y * stride + X;
+                rgba.r = data[offset] / 255.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1);
+                offset = (Y / 2) * stride + (X / 2) * 2;
+                rgba.g = data[offset] / 255.0f;
+                rgba.b = data[offset + 1] / 255.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_422SP_U8:
+            {
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0);
+                offset = Y * stride + X;
+                rgba.r = data[offset] / 255.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1);
+                offset = Y * stride + (X / 2) * 2;
+                rgba.g = data[offset] / 255.0f;
+                rgba.b = data[offset + 1] / 255.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_444SP_U8:
+            {
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0);
+                offset = Y * stride + X;
+                rgba.r = data[offset] / 255.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1);
+                offset = Y * stride + X * 2;
+                rgba.g = data[offset] / 255.0f;
+                rgba.b = data[offset + 1] / 255.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_420SP_U16:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 65535.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = (Y / 2) * stride + (X / 2) * 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 65535.0f;
+                rgba.b = f[offset + 1] / 65535.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_422SP_U16:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 65535.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = Y * stride + (X / 2) * 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 65535.0f;
+                rgba.b = f[offset + 1] / 65535.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
+            case image::PixelType::YUV_444SP_U16:
+            {
+                const uint16_t* f;
+
+                data = image->getPlaneData(0);
+                if (!data) return;
+                stride = image->getLineSize(0) / sizeof(uint16_t);
+                offset = Y * stride + X;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.r = f[offset] / 65535.0f;
+
+                data = image->getPlaneData(1);
+                stride = image->getLineSize(1) / sizeof(uint16_t);
+                offset = Y * stride + X * 2;
+                f = reinterpret_cast<const uint16_t*>(data);
+                rgba.g = f[offset] / 65535.0f;
+                rgba.b = f[offset + 1] / 65535.0f;
+
+                color::checkLevels(rgba, videoLevels);
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
+                break;
+            }
             default:
                 break;
             }
@@ -3551,7 +3736,12 @@ namespace mrv
             if (path == nullptr)
                 return;
 
-            const draw::Point& pnt = path->pts.back();
+            draw::Point pnt = path->pts.back();
+
+#ifdef OPENGL_BACKEND
+            math::Size2i size = getRenderSize();
+            pnt.y = size.h - pnt.y;
+#endif
 
             nlohmann::json json = pnt;
 
@@ -3665,7 +3855,7 @@ namespace mrv
 
             p.videoData.clear();
 
-            timeline::VideoData data;
+            timeline::VideoFrame data;
             data.size = image->getSize();
             if (p.player)
             {
@@ -3673,7 +3863,7 @@ namespace mrv
             }
             else
             {
-                data.time = otime::RationalTime(0.F, 24.F);
+                data.time = OTIO_NS::RationalTime(0.F, 24.F);
                 activate();
             }
 
@@ -3728,7 +3918,7 @@ namespace mrv
 
         float TimelineViewport::_getZoomSpeedValue() const noexcept
         {
-            int idx = _p->ui->uiPrefs->uiPrefsZoomSpeed->value();
+            int idx = _p->ui->uiPrefs->ZoomSpeed->value();
             const float speedValues[] = {0.1F, 0.25F, 0.5F};
             return speedValues[idx];
         }
@@ -3737,6 +3927,14 @@ namespace mrv
         TimelineViewport::getTags() const noexcept
         {
             return _p->tagData;
+        }
+
+
+        void TimelineViewport::setAutoICS()
+        {
+            TLRENDER_P();
+
+            _getHDR();
         }
 
         void TimelineViewport::_getHDR() noexcept
@@ -3754,8 +3952,8 @@ namespace mrv
             if (hdrData)
             {
                 // When we have video data, we must tonemap it with libplacebo.
+                p.hdrOptions.tonemap = p.tonemap;
                 p.hdrOptions.hdrData = *hdrData;
-                p.hdrOptions.tonemap = true;
 
                 if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
                     p.ocio_disabled = true;
@@ -3764,27 +3962,33 @@ namespace mrv
             }
             else
             {
-                const auto path = p.player->player()->getPath();
-                const auto extension = path.getExtension();
-                if (file::isMovie(extension) || file::isOTIO(path))
+                auto path = p.player->player()->getPath();
+                if (file::isOTIO(path))
                 {
-                    p.hdrOptions.tonemap = true;
+                    // We have an otio timeline.  Get the clip name from the
+                    // tag and recreate the path for checking if it is a movie
+                    // or sequence of OpenEXR's for example.
+                    auto tags = p.videoData[0].layers[0].image->getTags();
+                    if (tags.find("otioClipName") != tags.end())
+                    {
+                        path = file::Path(tags["otioClipName"]);
+                    }
+                }
+
+                const auto extension = path.getExtension();
+                if (file::isMovie(extension))
+                {
+                    p.hdrOptions.tonemap = p.tonemap;
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
 
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
-                    {
                         p.ocio_disabled = true;
-                    }
                     else
-                    {
-                        if (file::isOTIO(path))
-                            p.hdrOptions.tonemap = false;
                         p.ocio_disabled = false;
-                    }
                 }
                 else if (file::isSRGB(extension))
                 {
-                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.tonemap = p.tonemap;
                     p.hdrOptions.hdrData = image::nameToPrimaries("SRGB");
 
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
@@ -3794,11 +3998,42 @@ namespace mrv
                 }
                 else
                 {
-                    // A linear or log image.  Do not tonemap with libplacebo.
+                    // A linear or log image.  Do not tonemap with
+                    // libplacebo.
                     p.hdrOptions.tonemap = false;
 
                     // Make sure ocio is enabled.
                     p.ocio_disabled = false;
+
+                    const std::string help =
+                        _("Automatically select Input Color Space\n"
+                          "from file and OpenEXR metadata.  ");
+
+                    // Handle OCIO Auto ICS
+                    if (p.ui->uiAutoICS->value())
+                    {
+                        bool autoUnmatched;
+                        std::string autoName;
+                        std::string autoSource;
+                        std::string name = ocio::autoICS(autoUnmatched,
+                                                         autoName,
+                                                         autoSource);
+
+                        if (!name.empty() && name != p.ocioOptions.input)
+                        {
+                            ocio::setIcs(name);
+                            const std::string tooltip =
+                                string::Format(_("{0}Currently: {1} from {2}"))
+                                .arg(help)
+                                .arg(autoName)
+                                .arg(autoSource);
+                            p.ui->uiAutoICS->copy_tooltip(tooltip.c_str());
+                        }
+                    }
+                    else
+                    {
+                        p.ui->uiAutoICS->copy_tooltip(help.c_str());
+                    }
 
                     // We pass BT709 metadata unless OCIO changes it in
                     // Viewport::_updateHDRMetadata().

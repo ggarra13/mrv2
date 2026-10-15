@@ -44,7 +44,8 @@
                     }
                 ],
                 "kind": "Video", 
-                "name": "Video"
+                "name": "Video",
+                "enabled": true
             },
             {
                 "OTIO_SCHEMA": "Track.1", 
@@ -85,7 +86,8 @@
                     }
                 ],
                 "kind": "Audio", 
-                "name": "Audio"
+                "name": "Audio",
+                "enabled": true
             }
         ], 
         "name": "Stack"

@@ -16,7 +16,7 @@ download_assets v{VERSION}
 
 A program to download all betas or version assets from sourceforge.
 """
-            
+ 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=description)
@@ -50,10 +50,12 @@ headers = {
     'User-Agent': 'Wget/1.21.4'
 }
 
+global num_downloads
+num_downloads = 0
 
 KNOWN_SF_MIRRORS = [
-    "ufpr", "netix", "nav", "kent", "nchc", "jaist",
-    "versaweb", "cytranet", "iweb", "tenet"
+    "ufpr", "altushost-swe", "netix", "nav", "kent", "nchc", "jaist",
+    "versaweb", "cytranet", "iweb", "tenet",
 ]
 
 def resolve_mirror_url(file_url, mirror_name):
@@ -84,6 +86,7 @@ def download_with_best_mirror(file_url, output_path, filename):
     print(f"Benchmarking mirrors for {filename}...")
     ranked = benchmark_mirrors(file_url, KNOWN_SF_MIRRORS)
 
+    global num_downloads
     downloaded = False
     for latency, mirror, final_url in ranked:
         print(f"Trying mirror '{mirror}' ({latency:.2f}s)...")
@@ -150,7 +153,9 @@ def download_with_best_mirror(file_url, output_path, filename):
             print(f"Mirror '{mirror}' failed: {e}, trying next...")
 
     if not downloaded:
-        print(f"✗ All mirrors failed for {filename}")
+        print(f"✗ ALL MIRRORS FAILED FOR: {filename}")
+    else:
+        num_downloads += 1
     
 def parse_sourceforge_page(html_content, base_url):
     """
@@ -215,3 +220,5 @@ def download_url(base_url, dest_dir, mrv2_prefix):
 
 download_url(VULKAN_URL, VULKAN_DIR, 'vmrv2')
 download_url(OPENGL_URL, OPENGL_DIR, 'mrv2')
+
+print("Number of downloads are:",num_downloads)

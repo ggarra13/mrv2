@@ -41,8 +41,8 @@ namespace fs = std::filesystem;
 
 std::string get_machine_id() {
     std::string out;
-        
-        
+
+
 #if defined(_WIN32)
     //
     // Due to legacy issues, on AMD64 we relied on wmic for the license.
@@ -96,7 +96,7 @@ std::string licensepath()
 static void donate_cb(Fl_Widget* b, void* data)
 {
     fl_alert("%s", _("Check your browser for a valid donation.  Send your machine id in the comment."));
-    
+
     fl_open_uri("https://www.paypal.com/donate/?hosted_button_id=PSYEULZG24QHY");
     fl_alert("%s", _("If you submitted a valid donation, you will get a message in the mail activating your license plan."));
 }
@@ -110,7 +110,7 @@ Fl_Multiline_Input* master_key;
 
 static void install_cb(Fl_Widget* b, void* data)
 {
-    std::string key = master_key->value(); 
+    std::string key = master_key->value();
     if (key.empty())
     {
         fl_alert("%s", _("Please fill in the master key with the one you got."));
@@ -123,7 +123,7 @@ static void install_cb(Fl_Widget* b, void* data)
     s << key << std::endl;
 
     fl_alert("Saved master key file to %s\n\nMove it some place safe and set the environment variable MRV2_LICENSEPATH pointing to it on each machine.", prefs_file.c_str());
-    
+
     exit(0);
 }
 
@@ -134,9 +134,9 @@ int main(int argc, char** argv)
 
     std::string msg = mrv::setLanguageLocale();
     std::cout << msg << std::endl;
-        
+
     const std::string machine_id = get_machine_id();
-    
+
     MainWindow win(640, 660, _("License helper"));
     win.begin();
 
@@ -151,7 +151,7 @@ int main(int argc, char** argv)
                Fl_Flex* plans = nullptr;
                Fl_Box* listed = nullptr; // good so far
          Fl_Box* internet = nullptr;
-      Fl_Flex* what = nullptr;    
+      Fl_Flex* what = nullptr;
         Fl_Box* plan_type = nullptr;
         Fl_Box* plan_features = nullptr;
      Fl_Flex* info = nullptr;
@@ -159,11 +159,11 @@ int main(int argc, char** argv)
          Fl_Output* machine = nullptr;
          Fl_Button* demo = nullptr;
          Fl_Button* donate = nullptr;
-        
+
     { // node_locker
-        node_locked = new Fl_Flex(20, 60, 600, tabs->h() - 90,
+        node_locked = new Fl_Flex(20, 60, 600, tabs->h() - 40,
                                   _("Node-Locked License"));
-        
+
         { // node_locked contents
             message = new Fl_Flex(20, 60, 600, 440);
             message->box(FL_FLAT_BOX);
@@ -185,8 +185,8 @@ int main(int argc, char** argv)
                     plans->margin(190, 0, 190, 0);
                     plans->gap(5);
                     plans->box(FL_ENGRAVED_BOX);
-                
-                    Fl_Box* usd = new Fl_Box(20, prices->y(), 300, prices->h());
+
+                    Fl_Box* usd = new Fl_Box(20, prices->y(), 300, plans->h());
                     usd->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                     usd->label(R"TEXT(
 USD $ 25
@@ -194,7 +194,7 @@ USD $ 50
 USD $ 75
 USD $150
 USD $300)TEXT");
-                    Fl_Box* type = new Fl_Box(320, prices->y(), 300, prices->h());
+                    Fl_Box* type = new Fl_Box(320, prices->y(), 300, plans->h());
                     type->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                     type->label(R"TEXT(
 Solo
@@ -205,20 +205,18 @@ Pro+
 )TEXT");
                     plans->end();
                 }
-                
+
                 Fl_Box*    listed = new Fl_Box(20, 0, 600, 30);
                 listed->label(_("Only the listed amounts unlock features; all others are regular donations."));
                 listed->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
-                
-                prices->fixed(plans, plans->h());
-                prices->fixed(listed, listed->h());
+
 
                 what = new Fl_Flex(20, 0, 600, 120);
                 what->box(FL_FLAT_BOX);
                 what->type(Fl_Flex::HORIZONTAL);
                 what->margin(30, 0, 190, 0);
                 what->gap(5);
-                
+
                 plan_type = new Fl_Box(20, 20, 100, 100);
                 plan_type->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                 plan_type->label(R"TEXT(
@@ -231,7 +229,7 @@ Pro+
                 plan_features = new Fl_Box(220, 20, 300, 100);
                 plan_features->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                 plan_features->label(_(R"TEXT(
-Annotations and Saving only for a year
+Annotations for one year
 Solo + Python for one year
 Standard + Editing for one year
 Editing + Voice and Link Annotations for one year
@@ -239,15 +237,20 @@ All of Pro but without expiration date (you own it).
 )TEXT"));
                 what->fixed(plan_type, plan_type->w());
                 what->end();
+
+                prices->fixed(plans, plans->h());
+                prices->fixed(listed, listed->h());
                 prices->fixed(what, what->h());
             } // what
-            
+
+            prices->end();
+
             internet = new Fl_Box(20, 0, 600, 80);
             internet->box(FL_FLAT_BOX);
             internet->label(R"TEXT(Your email will be added to mrv2's Internet database.
 You need an Internet connection to use.)TEXT");
             internet->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
-            
+
             prices->gap(5);
             message->fixed(internet, internet->h());
             message->end();
@@ -267,15 +270,15 @@ You need an Internet connection to use.)TEXT");
                 buttons = new Fl_Flex(180, info->y() + 50, 100, 40);
                 buttons->type(Fl_Flex::HORIZONTAL);
                 buttons->gap(10);
-                
+
                 donate = new Fl_Button(180, buttons->y(), 200, 40, "Donate");
                 donate->callback((Fl_Callback*)donate_cb, nullptr);
-                
+
                 buttons->end();
                 info->fixed(machine, machine->h());
                 info->end();
             }
-         
+
             node_locked->margin(10, 10, 10, 10);
             node_locked->gap(10);
             node_locked->fixed(message, message->h());
@@ -288,27 +291,30 @@ You need an Internet connection to use.)TEXT");
     }
 
     {
-        Fl_Group* floating = new Fl_Group(20, 60, 600-20, 320,
+        Fl_Group* floating = new Fl_Group(20, 60, 600-20, tabs->h() - 40,
                                           "Floating Licenses");
-        
-        Fl_Box*    box = new Fl_Box(20, 60, 580, 80);
-        box->label("Please enter your master key for your facility you "
-                   "got from ggarra13@@gmail.com");
 
-        master_key = new Fl_Multiline_Input(20, 150, 580, 140, "Master Key");
+        Fl_Box*    box = new Fl_Box(20, 60, 580, 160);
+        box->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+        box->label(_("Floating licenses available upon request. Contact\n"
+                     "ggarra13@@gmail.com and once agreed upon price,\n"
+                     "you will be given a Master Key.  Enter it here and\n"
+                     "follow the instructions you will be given."));
+
+        master_key = new Fl_Multiline_Input(20, 220, 580, 200, _("Master Key"));
         master_key->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
-        
-        Fl_Button* install = new Fl_Button(340, 300, 250, 40, "Install");
+
+        Fl_Button* install = new Fl_Button(340, 480, 250, 40, _("Install"));
         install->callback((Fl_Callback*)install_cb, nullptr);
-        
-        Fl_Button* demo = new Fl_Button(80, 300, 220, 40, "Demo");
+
+        Fl_Button* demo = new Fl_Button(80, 480, 220, 40, _("Demo"));
         demo->callback((Fl_Callback*)exit_cb, nullptr);
-    
+
         floating->end();
     }
 
     {
-        
+
         Fl_Flex* custom_dev = new Fl_Flex(20, 60, 600, tabs->h() - 30,
                                            _("Custom Development"));
         custom_dev->box(FL_ENGRAVED_BOX);
@@ -318,7 +324,7 @@ You need an Internet connection to use.)TEXT");
         intro->labelfont(FL_HELVETICA);
         intro->label(_(R"TEXT(For custom development:)TEXT"));
         intro->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
-                   
+
         Fl_Box*    prices = new Fl_Box(20, 0, 600, 360);
         prices->box(FL_ENGRAVED_BOX);
         prices->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
@@ -329,7 +335,7 @@ You need an Internet connection to use.)TEXT");
         custom_msg->fixed(intro, intro->h());
         custom_msg->fixed(prices, prices->h());
         custom_msg->end();
-        
+
         custom_dev->margin(10, 10, 10, 10);
         custom_dev->gap(5);
         custom_dev->fixed(custom_msg, custom_msg->h());
@@ -337,12 +343,12 @@ You need an Internet connection to use.)TEXT");
     }
 
     tabs->end();
-    
+
     win.callback((Fl_Callback*)exit_cb, nullptr);
 
 
-    
-    win.end();               
+
+    win.end();
     win.show();
     win.always_on_top();
     return Fl::run();
@@ -378,7 +384,7 @@ int WINAPI WinMain(
 
     /* Allocate an array of 'argc + 1' string pointers */
     argv = (char **)malloc((argc + 1) * sizeof(char *));
-  
+
     /* Convert the command line arguments to UTF-8 */
     for (i = 0; i < argc; i++) {
         /* find the required size of the buffer */

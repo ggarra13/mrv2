@@ -27,12 +27,22 @@ set(OpenSSL_INCLUDE_DIRS ${OpenSSL_INCLUDE_DIR})
 set(OPENSSL_INCLUDE_DIR ${OpenSSL_INCLUDE_DIR})
 set(OPENSSL_INCLUDE_DIRS ${OpenSSL_INCLUDE_DIRS})
 
-find_library(OpenSSL_SSL_LIBRARY NAMES ssl libssl PATH_SUFFIXES lib64)
+find_library(OpenSSL_SSL_LIBRARY NAMES ssl libssl
+    PATH_SUFFIXES lib64
+    HINTS ${CMAKE_INSTALL_PREFIX}
+)
 set(OPENSSL_SSL_LIBRARY ${OpenSSL_SSL_LIBRARY})
-find_library(OpenSSL_Crypto_LIBRARY NAMES crypto libcrypto PATH_SUFFIXES lib64)
+
+find_library(OpenSSL_Crypto_LIBRARY
+    NAMES crypto libcrypto
+    PATH_SUFFIXES lib64
+    HINTS ${CMAKE_INSTALL_PREFIX})
+
 set(OPENSSL_CRYPTO_LIBRARY ${OpenSSL_Crypto_LIBRARY})
+
 set(OpenSSL_LIBRARIES ${OpenSSL_SSL_LIBRARY} ${OpenSSL_Crypto_LIBRARY})
 set(OPENSSL_LIBRARIES ${OpenSSL_LIBRARIES})
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
     OpenSSL

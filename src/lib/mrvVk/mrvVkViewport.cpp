@@ -60,7 +60,7 @@ namespace mrv
 {
     namespace
     {
-        
+
         tl::monitor::Capabilities
         getHDRCapabilities(int screen_num)
         {
@@ -94,16 +94,30 @@ namespace mrv
 
     namespace vulkan
     {
+        static void hdrRetryCB(void* d)
+        {
+            static_cast<Viewport*>(d)->_retryHDR();
+        }
+
+        void Viewport::_retryHDR()
+        {
+            TLRENDER_P();
+            // The window moved again meanwhile; the new move will handle it.
+            if (p.screen_index != this->screen_num())
+            {
+                p.hdrRetries = 0;
+                return;
+            }
+            p.monitor = p.pendingMonitor;          // restore DXGI's answer
+            m_swapchain_needs_recreation = true;   // may also nudge the driver
+            init_colorspace();                     // success, or re-arms the timer
+            redraw();
+        }
 
         Viewport::Viewport(int X, int Y, int W, int H, const char* L) :
             TimelineViewport(X, Y, W, H, L),
             _vk(new VKPrivate)
         {
-            TLRENDER_P();
-            
-            int stereo = 0;
-            mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | stereo);
-            // m_debugSync = true;
         }
 
         Viewport::~Viewport() {}
@@ -132,12 +146,12 @@ namespace mrv
             if (vk.annotation_pipeline_layout != VK_NULL_HANDLE) {
                 return;
             }
-    
+
             VkResult result;
 
             //
             // Prepare annotation pipeline layout
-            //            
+            //
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
             pPipelineLayoutCreateInfo.sType =
                 VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -165,7 +179,7 @@ namespace mrv
                 device(), &pPipelineLayoutCreateInfo, NULL,
                 &vk.annotation_pipeline_layout);
         }
-        
+
         void Viewport::prepare_pipeline_layout()
         {
             MRV2_VK();
@@ -174,11 +188,11 @@ namespace mrv
             if (vk.pipeline_layout != VK_NULL_HANDLE) {
                 return;  // Already created; reuse it
             }
-            
+
             VkResult result;
 
             //
-            // Prepare main buffer comping layout 
+            // Prepare main buffer comping layout
             //
 
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
@@ -217,21 +231,21 @@ namespace mrv
                 vkDestroyPipeline(device(), m_pipeline, nullptr);
                 pipeline() = VK_NULL_HANDLE;
             }
-            
+
             // Elements of new Pipeline (fill with mesh info)
             vlk::VertexInputStateInfo vi;
             vi.bindingDescriptions = vk.vbo->getBindingDescription();
             vi.attributeDescriptions = vk.vbo->getAttributes();
-            
+
             // Defaults are fine
             vlk::InputAssemblyStateInfo ia;
 
             // Defaults are fine
             vlk::RasterizationStateInfo rs;
-            
+
             // Defaults are fine
             vlk::ViewportStateInfo vp;
-            
+
             vlk::ColorBlendStateInfo cb;
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             colorBlendAttachment.blendEnable = VK_FALSE;
@@ -239,19 +253,19 @@ namespace mrv
 
             const bool hasDepth = mode() & FL_DEPTH;
             const bool hasStencil = mode() & FL_STENCIL;
-            
+
             vlk::DepthStencilStateInfo ds;
             ds.depthTestEnable = hasDepth ? VK_TRUE : VK_FALSE;
             ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
             ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
-            
+
             vlk::DynamicStateInfo dynamicState;
             dynamicState.dynamicStates = {
                 VK_DYNAMIC_STATE_VIEWPORT,
                 VK_DYNAMIC_STATE_SCISSOR,
                 VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT,
             };
-            
+
             // Defaults are fine
             vlk::MultisampleStateInfo ms;
 
@@ -291,7 +305,7 @@ namespace mrv
                 throw std::runtime_error("Composition pipeline failed");
             }
         }
-        
+
         void Viewport::prepare_annotation_pipeline()
         {
             MRV2_VK();
@@ -301,7 +315,7 @@ namespace mrv
                 vkDestroyPipeline(device(), vk.annotation_pipeline, nullptr);
                 vk.annotation_pipeline = VK_NULL_HANDLE;
             }
-            
+
             // Elements of new Pipeline (fill with mesh info)
             vlk::VertexInputStateInfo vi;
             vi.bindingDescriptions = vk.avbo->getBindingDescription();
@@ -309,10 +323,10 @@ namespace mrv
 
             // Defaults are fine
             vlk::InputAssemblyStateInfo ia;
-            
+
             // Defaults are fine
             vlk::RasterizationStateInfo rs;
-            
+
             // Defaults are fine
             vlk::ViewportStateInfo vp;
 
@@ -328,7 +342,7 @@ namespace mrv
 
             bool has_depth = mode() & FL_DEPTH;     // Check window depth
             bool has_stencil = mode() & FL_STENCIL; // Check window stencil
-            
+
             vlk::DepthStencilStateInfo ds;
             ds.depthTestEnable = VK_FALSE;
             ds.depthWriteEnable = VK_FALSE;
@@ -336,12 +350,12 @@ namespace mrv
 
             // Defaults are fine
             vlk::MultisampleStateInfo ms;
-            
+
             // Defaults are fine
             vlk::DynamicStateInfo dynamicState;
             dynamicState.dynamicStates = {
                 VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
-            
+
             // Get the vertex and fragment shaders
             std::vector<vlk::PipelineCreationState::ShaderStageInfo>
                 shaderStages(2);
@@ -379,25 +393,31 @@ namespace mrv
             }
         }
 
+        int Viewport::get_max_frames_in_flight()
+        {
+            return vlk::MAX_FRAMES_IN_FLIGHT;
+        }
+
         std::vector<const char*> Viewport::get_device_extensions()
         {
             std::vector<const char*> out;
             out = Fl_Vk_Window::get_device_extensions();
-            out.push_back(VK_EXT_HDR_METADATA_EXTENSION_NAME);
+            if (!headless())
+                out.push_back(VK_EXT_HDR_METADATA_EXTENSION_NAME);
             return out;
         }
-        
+
         void Viewport::_getMonitorNits(bool quiet)
         {
             TLRENDER_P();
 
             if (p.monitor.hdr_enabled)
-            {                
+            {
                 std::string msg =
                     string::Format(_("HDR monitor min. nits = {0}")).
                     arg(p.monitor.min_nits);
                 LOG_STATUS(msg);
-                
+
                 msg = string::Format(_("HDR monitor max. nits = {0}")).
                       arg(p.monitor.max_nits);
                 LOG_STATUS(msg);
@@ -412,19 +432,19 @@ namespace mrv
                 {
                     colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                     format() = VK_FORMAT_B8G8R8A8_UNORM;
-                    
+
                     p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
                     p.monitor.min_nits = 0.001F;
                     p.monitor.max_nits = 100.F;
-                    
+
                     LOG_STATUS(_("HDR monitor not found or not configured."));
                 }
-                
-                
+
+
             }
         }
-            
-        
+
+
         void Viewport::init_colorspace()
         {
             TLRENDER_P();
@@ -432,7 +452,7 @@ namespace mrv
             // This call will try to set colorSpace() to the best color space
             // possible based on what Vulkan returns.
             Fl_Vk_Window::init_colorspace();
-            
+
             // First check if Wayland returned a valid color space for this
             // monitor.
             bool valid_colorspace = false;
@@ -448,14 +468,14 @@ namespace mrv
             default:
                 break;
             }
-            
+
             if (valid_colorspace)
             {
                 if (p.monitor_first_run)
                 {
                     p.screen_index = this->screen_num();
                     p.monitor = getHDRCapabilities(p.screen_index);
-                    p.monitor_first_run = false; 
+                    p.monitor_first_run = false;
                 }
                 _getMonitorNits();
             }
@@ -466,26 +486,38 @@ namespace mrv
                     colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                     format() = VK_FORMAT_B8G8R8A8_UNORM;
                 }
-                
-                if (p.monitor.hdr_enabled)
+
+                if (p.monitor.hdr_enabled && p.hdrRetries < 8)
+                {
+                    // DXGI says HDR, driver hasn't caught up yet. Stay SDR
+                    // for now but remember the real state and try again
+                    // shortly.
+                    p.pendingMonitor = p.monitor;
+                    ++p.hdrRetries;
+                    Fl::remove_timeout(hdrRetryCB, this);
+                    Fl::add_timeout(0.25, hdrRetryCB, this);
+                }
+                else if (p.monitor.hdr_enabled)
+                {
                     LOG_STATUS(_("HDR monitor not detected by Vulkan or Window Manager."));
-                
+                }
+
                 p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
                 p.monitor.min_nits = 0.001F;
                 p.monitor.max_nits = 100.F;
             }
 
-            std::string msg;            
+            std::string msg;
             msg = string::Format(_("Vulkan color space is {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
             LOG_STATUS(msg);
-                    
+
             msg = string::Format(_("Vulkan format is {0}")).arg(string_VkFormat(format()));
             LOG_STATUS(msg);
         }
 
-        
+
         void Viewport::prepare()
-        {            
+        {
             prepare_render_pass();       // Main swapchain render pass
             prepare_load_render_pass();  // swapchain render pass that loads contents
             prepare_shaders();
@@ -509,7 +541,7 @@ namespace mrv
 
             vk.vbo.reset();
             vk.vao.reset();
-            
+
             vk.avbo.reset();
             vk.avao.reset();
 
@@ -524,11 +556,24 @@ namespace mrv
                 vkDestroyPipeline(device(), m_pipeline, nullptr);
                 m_pipeline = VK_NULL_HANDLE;
             }
-            
+
             if (vk.annotation_pipeline != VK_NULL_HANDLE)
             {
                 vkDestroyPipeline(device(), vk.annotation_pipeline, nullptr);
                 vk.annotation_pipeline = VK_NULL_HANDLE;
+            }
+
+            if (vk.pipeline_layout != VK_NULL_HANDLE)
+            {
+                vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
+                vk.pipeline_layout = VK_NULL_HANDLE;
+            }
+
+            if (vk.annotation_pipeline_layout != VK_NULL_HANDLE)
+            {
+                vkDestroyPipelineLayout(device(),
+                                        vk.annotation_pipeline_layout, nullptr);
+                vk.annotation_pipeline_layout = VK_NULL_HANDLE;
             }
 
             VkWindow::destroy();
@@ -544,13 +589,11 @@ namespace mrv
 
             // Destroy main renderers
             vk.render.reset();
-            vk.annotationRender.reset();
-            vk.overlayRender.reset();
 
             // Destroy auxiliary render classes
             vk.lines.reset();
             vk.viewport.reset();
-            
+
             // Destroy Buffers
             vk.buffer.reset();
             vk.stereoBuffer.reset();
@@ -562,7 +605,7 @@ namespace mrv
                 vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
                 vk.pipeline_layout = VK_NULL_HANDLE;
             }
-            
+
             if (vk.annotation_pipeline_layout != VK_NULL_HANDLE)
             {
                 vkDestroyPipelineLayout(device(),
@@ -589,17 +632,15 @@ namespace mrv
 
         std::shared_ptr<vlk::OffscreenBuffer> Viewport::getVideoFBO()
         {
-            MRV2_VK();
-            return vk.buffer;
+            return _vk->buffer;
         }
 
         std::shared_ptr<vlk::OffscreenBuffer> Viewport::getAnnotationFBO()
         {
-            MRV2_VK();
-            return vk.overlay;
+            return _vk->overlay;
         }
 
-        
+
         void Viewport::prepare_shaders()
         {
             TLRENDER_P();
@@ -610,15 +651,12 @@ namespace mrv
                 // Add the thumbnail system if not present.
                 if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
                 {
-                    context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
+                    timelineui_vk::ThumbnailSystem::create(context, ctx);
                 }
-                
+
                 // Set the renderers's max nits
                 if (!vk.render)
                     vk.render = timeline_vlk::Render::create(ctx, context);
-        
-                if (!vk.annotationRender)
-                    vk.annotationRender = timeline_vlk::Render::create(ctx, context);
 
 #if FLTK_HAVE_PEN_SUPPORT
                 if (!desktop::X11() && !desktop::XWayland())
@@ -627,13 +665,13 @@ namespace mrv
                     Fl::Pen::subscribe(this);
                 }
 #endif
-                
+
                 p.fontSystem = image::FontSystem::create(context);
 
                 vk.lines = std::make_shared<vulkan::Lines>(ctx, VK_NULL_HANDLE);
                 vk.viewport = std::make_shared<vulkan::Lines>(ctx, renderPass());
 
-                
+
                 const image::Color4f color(1.F, 1.F, 1.F);
                 math::Matrix4x4f mvp;
                 if (!vk.shader)
@@ -649,11 +687,11 @@ namespace mrv
                     // Create parameters for shader.
                     vk.shader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
-                    vk.shader->addFBO("textureSampler"); // default is fragment
+                    vk.shader->addTexture("textureSampler"); // default is fragment
                     float opacity = 1.F;
                     vk.shader->addPush("opacity", opacity, vlk::kShaderFragment);
                     vk.shader->createBindingSet();
-                    
+
                     if (vk.pipeline_layout != VK_NULL_HANDLE)
                     {
                         vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
@@ -664,7 +702,7 @@ namespace mrv
                 if (!vk.annotationShader)
                 {
                     vk.annotationShader = vlk::Shader::create(
-                        ctx, 
+                        ctx,
                         timeline_vlk::Vertex3_spv,
                         timeline_vlk::Vertex3_spv_len,
                         annotationFragment_spv,
@@ -672,11 +710,11 @@ namespace mrv
                         "vk.annotationShader");
                     vk.annotationShader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
-                    vk.annotationShader->addFBO("textureSampler");
+                    vk.annotationShader->addTexture("textureSampler");
                     int channels = 0; // Color Channel
                     vk.annotationShader->createUniform("channels", channels);
                     vk.annotationShader->createBindingSet();
-            
+
                     if (vk.annotation_pipeline_layout != VK_NULL_HANDLE)
                     {
                         vkDestroyPipelineLayout(device(),
@@ -697,20 +735,25 @@ namespace mrv
         {
             return ctx;
         }
-        
+
+        std::shared_ptr<image::FontSystem > Viewport::getFontSystem()
+        {
+            return _p->fontSystem;
+        }
+
         void Viewport::draw()
         {
+
             TLRENDER_P();
             MRV2_VK();
-            
-            
+
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
 
             // Clear the frame
             begin_render_pass(cmd);
             end_render_pass(cmd);
-            
+
             // Check if the window changed screen.  This must come
             // after end_render_pass(cmd).
             bool changed_screen = false;
@@ -729,7 +772,7 @@ namespace mrv
                 {
                     std::string msg;
                     if (monitor.hdr_enabled)
-                    { 
+                    {
                         msg =
                             string::Format(
                                 _("Changed to HDR active monitor at index {0}")).
@@ -739,7 +782,7 @@ namespace mrv
                     else
                     {
                         if (monitor.hdr_supported)
-                        {                            
+                        {
                             msg = string::Format(
                                 _("Changed to HDR supported but inactive monitor "
                                   "at index {0}")).
@@ -755,7 +798,7 @@ namespace mrv
                     }
                 }
                 p.monitor = monitor;
-                
+
                 // If we changed screen we may have gone to a monitor with
                 // different scaling.  Recreate swapchain.
                 m_swapchain_needs_recreation = true;
@@ -763,12 +806,12 @@ namespace mrv
                 redraw();
                 return;
             }
-            
+
             // Store command for easy access.
             vk.cmd = cmd;
-            
+
             const math::Size2i viewportSize = getViewportSize();
-            const math::Size2i renderSize = getRenderSize();
+            math::Size2i renderSize = getRenderSize();
 
             bool hasAlpha = false;
             const float alpha = p.ui->uiMain->get_alpha() / 255.F;
@@ -783,10 +826,9 @@ namespace mrv
 
             if (renderSize.isValid())
             {
-
                 vk.colorBufferType = image::PixelType::RGBA_U8;
 
-                int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
+                int accuracy = p.ui->uiPrefs->ColorAccuracy->value();
                 switch (accuracy)
                 {
                 case kAccuracyFloat32:
@@ -799,11 +841,15 @@ namespace mrv
                     break;
                 case kAccuracyAuto:
                     image::PixelType pixelType = image::PixelType::RGBA_U8;
-                    auto& video = p.videoData[0];
+                    static auto emptyVideo = timeline::VideoFrame();
+                    timeline::VideoFrame& video = emptyVideo;
+                    if (!p.videoData.empty())
+                        video = p.videoData[0];
+
                     if (p.missingFrame &&
-                        p.missingFrameType != MissingFrameType::kBlackFrame)
+                        p.missingFrameType != tl::io::MissingFrames::Black)
                     {
-                        video = p.lastVideoData;
+                        video = p.lastVideoFrame;
                     }
 
                     if (!video.layers.empty() && video.layers[0].image &&
@@ -829,12 +875,18 @@ namespace mrv
                         case image::PixelType::RGBA_U16:
                         case image::PixelType::LA_U16:
                             hasAlpha = true;
+                        case image::PixelType::YUV_420P_U10:
+                        case image::PixelType::YUV_422P_U10:
+                        case image::PixelType::YUV_444P_U10:
                         case image::PixelType::YUV_420P_U12:
                         case image::PixelType::YUV_422P_U12:
                         case image::PixelType::YUV_444P_U12:
                         case image::PixelType::YUV_420P_U16:
                         case image::PixelType::YUV_422P_U16:
                         case image::PixelType::YUV_444P_U16:
+                        case image::PixelType::YUV_420SP_U16:
+                        case image::PixelType::YUV_422SP_U16:
+                        case image::PixelType::YUV_444SP_U16:
                         case image::PixelType::RGB_U16:
                         case image::PixelType::L_U16:
                             vk.colorBufferType = image::PixelType::RGBA_U16;
@@ -850,7 +902,15 @@ namespace mrv
                     break;
                 }
 
-                
+                if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
+                    !p.videoData.front().layers.empty())
+                {
+                    auto image = p.videoData.front().layers.front().image;
+                    p.videoData.front().size.pixelAspectRatio = p.pixelAspectRatio;
+                    if (image) image->setPixelAspectRatio(p.pixelAspectRatio);
+                    renderSize = getRenderSize();
+                }
+
                 vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = vk.colorBufferType;
 
@@ -862,14 +922,14 @@ namespace mrv
                 offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
                 offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
                 offscreenBufferOptions.pbo = true;
-            
+
                 if (vlk::doCreate(
                         vk.buffer, renderSize, offscreenBufferOptions))
                 {
                     vk.buffer = vlk::OffscreenBuffer::create(
                         ctx, renderSize, offscreenBufferOptions);
                     vk.readPixels = false;
-                    
+
                     // As render resolution might have changed,
                     // we need to reset the quad size.
                     vk.vbo.reset();
@@ -878,7 +938,7 @@ namespace mrv
             else
             {
                 wait_device();
-                
+
                 vk.buffer.reset();
                 vk.stereoBuffer.reset();
             }
@@ -907,7 +967,8 @@ namespace mrv
 
             if (!p.presentation)
             {
-                Fl_Color c = p.ui->uiPrefs->uiPrefsViewBG->color();
+                Fl_Color c = p.ui->uiPrefs->ViewBG->color();
+
 
                 uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
                 Fl::get_color(c, ur, ug, ub, ua);
@@ -959,18 +1020,19 @@ namespace mrv
             locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = vk.colorBufferType;
+            renderOptions.vaoSize = 16 * memory::megabyte;
 
             _updateHDRMetadata();
-            
+
             try
             {
                 if (vk.buffer)
                 {
                     vk.buffer->transitionToColorAttachment(cmd);
                 }
-                
+
                 vk.render->begin(
-                    cmd, vk.buffer, m_currentFrameIndex, renderSize,
+                    cmd, vk.buffer, frameIndex, renderSize,
                     renderOptions);
                 vk.render->applyTransforms();
 
@@ -978,10 +1040,10 @@ namespace mrv
                 {
                     int screen = this->screen_num();
                     auto ocio = p.ocioOptions;
-                    
+
                     if (p.ocio_disabled)
                         ocio.enabled = false;
-                            
+
                     if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
                         screen < p.monitorOCIOOptions.size())
                     {
@@ -994,7 +1056,7 @@ namespace mrv
                     {
                         vk.render->setOCIOOptions(ocio);
                     }
-                    
+
                     _updateMonitorDisplayView(screen, ocio);
 
                     timeline::BackgroundOptions backgroundOptions = getBackgroundOptions();
@@ -1002,8 +1064,7 @@ namespace mrv
                     vk.render->setLUTOptions(p.lutOptions);
                     vk.render->setHDROptions(p.hdrOptions);
                     vk.render->setMonitorCapabilities(p.monitor);
-                    if (p.missingFrame &&
-                        p.missingFrameType != MissingFrameType::kBlackFrame)
+                    if (p.missingFrame)
                     {
                         _drawMissingFrame(renderSize);
                     }
@@ -1019,7 +1080,9 @@ namespace mrv
                             vk.render->drawVideo(
                                 p.videoData,
                                 timeline::getBoxes(
-                                    p.compareOptions.mode, p.videoData),
+                                    p.compareOptions,
+                                    p.displayOptions,
+                                    p.videoData),
                                 p.imageOptions, p.displayOptions,
                                 p.compareOptions, backgroundOptions);
                         }
@@ -1034,7 +1097,7 @@ namespace mrv
             _drawOverlays(renderSize);
             vk.render->end();
 
-            
+
             m_clearColor = {r, g, b, a};
 
             math::Matrix4x4f mvp;
@@ -1061,11 +1124,11 @@ namespace mrv
             {
                 panel::annotationsPanel->notes->value("");
             }
-            
-            const otime::RationalTime& currentTime = player->currentTime();
-            
+
+            const OTIO_NS::RationalTime& currentTime = player->currentTime();
+
             const auto& voannotations = p.player->getVoiceAnnotations();
-            
+
             if (p.showAnnotations &&
                 (!annotations.empty() || !voannotations.empty()))
             {
@@ -1085,16 +1148,16 @@ namespace mrv
                 {
                     vk.annotation = vlk::OffscreenBuffer::create(
                         ctx, viewportSize, offscreenBufferOptions);
-                    
+
                     vk.avbo.reset();
-                    
+
                     const auto& mesh = geom::box(math::Box2i(0, 0,
                                                              viewportSize.w,
                                                              viewportSize.h));
                     const size_t numTriangles = mesh.triangles.size();
                     vk.avbo = vlk::VBO::create(
                         numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                
+
                     if (vk.avbo)
                     {
                         vk.avbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
@@ -1108,11 +1171,11 @@ namespace mrv
                 }
 
                 _drawAnnotations(
-                    vk.annotation, vk.annotationRender,
+                    vk.annotation,
                     mvp, currentTime, annotations, voannotations, viewportSize);
-                
+
             }
-            
+
             //
             // Draw annotations for output device in an overlay buffer.
             //
@@ -1137,19 +1200,12 @@ namespace mrv
                         vk.overlay = vlk::OffscreenBuffer::create(ctx,
                                                                   renderSize,
                                                                   offscreenBufferOptions);
-                        if (!vk.overlayRender)
-                        {
-                            if (auto context = vk.context.lock())
-                            {
-                                vk.overlayRender = timeline_vlk::Render::create(ctx, context);
-                            }
-                        }
                     }
 
                     const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
-                    
+
                     _drawAnnotations(
-                        vk.overlay, vk.overlayRender,
+                        vk.overlay,
                         renderMVP, currentTime, annotations, voannotations,
                         renderSize);
 
@@ -1162,16 +1218,16 @@ namespace mrv
                 {
                     const image::PixelType pixelType = image::PixelType::RGBA_U8;
                     vk.annotationImage = image::Image::create(1, 1, pixelType);
-                    
+
                 }
 
                 if (outputDevice)
                     outputDevice->setOverlay(vk.annotationImage);
             }
-            
+
             uint32_t W = pixel_w();
             uint32_t H = pixel_h();
-            
+
             VkViewport viewport = {};
             viewport.width = static_cast<float>(W);
             viewport.height = static_cast<float>(H);
@@ -1183,13 +1239,13 @@ namespace mrv
             scissor.extent.width = W;
             scissor.extent.height = H;
             vkCmdSetScissor(cmd, 0, 1, &scissor);
-                
+
             const float rotation = _getRotation();
             bool blitViewport = false;
             if (this == p.ui->uiView)
-                blitViewport = p.ui->uiPrefs->uiPrefsBlitMainViewport->value();
+                blitViewport = p.ui->uiPrefs->BlitMainViewport->value();
             else
-                blitViewport = p.ui->uiPrefs->uiPrefsBlitSecondaryViewport->value();
+                blitViewport = p.ui->uiPrefs->BlitSecondaryViewport->value();
             if (p.presentation ||
                 blitViewport == kNoBlit ||
                 p.environmentMapOptions.type != EnvironmentMapOptions::kNone ||
@@ -1201,23 +1257,23 @@ namespace mrv
                 {
                     vk.annotation->transitionToShaderRead(cmd);
                 }
-                
+
                 begin_render_pass(cmd);
 
                 // Bind the shaders to the current frame index.
-                vk.shader->bind(m_currentFrameIndex);
+                vk.shader->bind(frameIndex);
 
                 // Bind the main composition pipeline (created/managed outside this
                 // draw loop)
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                                   pipeline());
-            
+
                 // --- Update Descriptor Set for the SECOND pass (Composition) ---
                 // This updates the descriptor set for the CURRENT frame index on
                 // the CPU.
                 vk.shader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
                 vk.shader->setFBO("textureSampler", vk.buffer);
-            
+
                 // --- Bind Descriptor Set for the SECOND pass ---
                 // Record the command to bind the descriptor set for the CURRENT
                 // frame index
@@ -1225,19 +1281,22 @@ namespace mrv
                 vkCmdBindDescriptorSets(
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.pipeline_layout, 0, 1,
                     &descriptorSet, 0, nullptr);
-            
+
                 vkCmdPushConstants(
                     cmd, vk.pipeline_layout,
                     vk.shader->getPushStageFlags(), 0, sizeof(float), &opacity);
 
                 if (vk.vao && vk.vbo)
                 {
-                    const VkColorComponentFlags allMask[] =
-                        { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-                          VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
-                    ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
-            
-                    vk.vao->bind(m_currentFrameIndex);
+                    if (ctx.vkCmdSetColorWriteMaskEXT)
+                    {
+                        const VkColorComponentFlags allMask[] =
+                            { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                              VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+                        ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+                    }
+
+                    vk.vao->bind(frameIndex);
                     vk.vao->draw(cmd, vk.vbo);
                 }
             }
@@ -1245,14 +1304,14 @@ namespace mrv
             {
                 VkImage srcImage = vk.buffer->getImage();
                 VkImage dstImage = get_back_buffer_image();
-                
+
                 // srcImage barrier
                 transitionImageLayout(cmd, srcImage,
                                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
                 // srcImage barrier
-                vk.buffer->setImageLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL); 
-                
+                vk.buffer->setImageLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+
                 // dstImage barrier (swapchain image)
                 transitionImageLayout(cmd, dstImage,
                                       VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
@@ -1271,12 +1330,12 @@ namespace mrv
                         filters.magnify == timeline::ImageFilter::Linear)
                         filter = VK_FILTER_LINEAR;
                 }
-                
+
                 const int32_t viewportX = p.viewPos.x;
                 const int32_t viewportY = p.viewPos.y;
                 const int32_t sizeW = renderSize.w * p.viewZoom;
                 const int32_t sizeH = renderSize.h * p.viewZoom;
-                
+
                 int dstRight  = std::min(viewportX + sizeW, viewportSize.w);
                 int dstBottom = std::min(viewportY + sizeH, viewportSize.h);
                 int dstLeft   = std::max(viewportX, 0);
@@ -1290,14 +1349,14 @@ namespace mrv
                     m_in_render_pass = false;
                     return; // Nothing to blit
                 }
-                
+
                 // Adjust source region.
                 const int srcWidth = renderSize.w;
                 const int srcHeight = renderSize.h;
-                
+
                 const float scaleX = static_cast<float>(srcWidth) / sizeW;
                 const float scaleY = static_cast<float>(srcHeight) / sizeH;
-                
+
                 const int offsetX = dstLeft - viewportX;
                 const int offsetY = dstTop - viewportY;
 
@@ -1308,7 +1367,7 @@ namespace mrv
                 int srcTop    = static_cast<int>(offsetY * scaleY);
                 int srcRight  = static_cast<int>((offsetX + visibleW) * scaleX);
                 int srcBottom = static_cast<int>((offsetY + visibleH) * scaleY);
-                
+
                 VkImageBlit region = {};
                 region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
                 region.srcSubresource.mipLevel = 0;
@@ -1329,13 +1388,13 @@ namespace mrv
                     1, &region,
                     filter
                     );
-                
+
                 // srcImage barrier
                 transitionImageLayout(cmd, srcImage,
                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                       VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
                 vk.buffer->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-                
+
                 // dstImage barrier (swapchain image)
                 transitionImageLayout(cmd, dstImage,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -1343,7 +1402,7 @@ namespace mrv
             }
 
 
-            
+
             if (!m_in_render_pass)
             {
                 VkClearValue clear_values[2];
@@ -1360,20 +1419,20 @@ namespace mrv
                 rp_begin.renderArea.extent.height = H;
                 rp_begin.clearValueCount = 2;
                 rp_begin.pClearValues = clear_values;
-                
+
                 vkCmdBeginRenderPass(cmd, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
                 m_in_render_pass = true;
             }
-            
 
-            
+
+
             if (p.showAnnotations &&
                 vk.annotation_pipeline != VK_NULL_HANDLE &&
                 (!annotations.empty() || !voannotations.empty()))
-            {             
+            {
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                                   vk.annotation_pipeline);
-            
+
                 // We already flipped the coords, so we use a normal ortho
                 // matrix here
                 const math::Matrix4x4f orthoMatrix = math::ortho(
@@ -1383,7 +1442,7 @@ namespace mrv
                                       vk.annotationShader, vk.avbo,
                                       viewportSize);
             }
-    
+
             if (p.dataWindow)
                 _drawDataWindow();
             if (p.displayWindow)
@@ -1391,7 +1450,7 @@ namespace mrv
 
             if (p.safeAreas)
                 _drawSafeAreas();
-            
+
             if (p.actionMode != ActionMode::kScrub &&
                 p.actionMode != ActionMode::kText &&
                 p.actionMode != ActionMode::kVoice &&
@@ -1402,17 +1461,14 @@ namespace mrv
             {
                 _drawCursor(mvp);
             }
-                
+
             if (p.hudActive && p.hud != HudDisplay::kNone)
                 _drawHUD(alpha);
-            
-            if (!p.helpText.empty())
-                _drawHelpText();
-            
+
             if (p.selection.min.x >= 0)
             {
                 p.colorAreaInfo.box = p.selection;
-            
+
                 // Copy the pixel type
                 if (p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kOriginal)
                 {
@@ -1424,12 +1480,12 @@ namespace mrv
                     p.colorAreaInfo.pixelType = image::PixelType::RGBA_F32;
                 }
             }
-            
-                    
+
+
             if (p.selection.min.x >= 0)
                 _drawAreaSelection();
-            
-            
+
+
             end_render_pass(cmd);
 
             if (vk.buffer)
@@ -1440,7 +1496,7 @@ namespace mrv
             {
                 vk.annotation->transitionToColorAttachment(cmd);
             }
-            
+
             if (p.selection.min.x >= 0)
             {
                 if (panel::colorAreaPanel || panel::histogramPanel ||
@@ -1471,9 +1527,9 @@ namespace mrv
                 }
             }
 
-            
+
             // Update the pixel bar from here only if we are playing a movie
-            // and one that is not 1 frames long.                
+            // and one that is not 1 frames long.
             bool update = vk.readPixels && !_shouldUpdatePixelBar();
             if (update)
                 updatePixelBar();
@@ -1482,7 +1538,7 @@ namespace mrv
             vk.readPixels = true;
         }
 
-        
+
         void Viewport::_calculateColorAreaFullValues(area::Info& info) noexcept
         {
             TLRENDER_P();
@@ -1497,15 +1553,15 @@ namespace mrv
 
             const uint32_t W = info.box.w();
             const uint32_t H = info.box.h();
-            
-            const uint8_t* ptr = reinterpret_cast<const uint8_t*>(p.image);            
+
+            const uint8_t* ptr = reinterpret_cast<const uint8_t*>(p.image);
             const int channelCount = image::getChannelCount(info.pixelType);
             const int byteCount = image::getBitDepth(info.pixelType) / 8;
 
             const size_t dataSize = W * H;
-            
+
             image::Color4f rgba, hsv;
-            
+
             for (size_t i = 0; i < dataSize; ++i)
             {
                 rgba = color::fromVoidPtr(ptr, info.pixelType);
@@ -1527,7 +1583,7 @@ namespace mrv
                     }
                 }
 
-                
+
                 info.rgba.mean.r += rgba.r;
                 info.rgba.mean.g += rgba.g;
                 info.rgba.mean.b += rgba.b;
@@ -1632,7 +1688,7 @@ namespace mrv
             out.b = color::pqToNits(rgba.b);
             return out;
         }
-        
+
         image::Color4f Viewport::_pq_to_linear(const image::Color4f& rgba) const
         {
             image::Color4f out = rgba;
@@ -1644,7 +1700,7 @@ namespace mrv
             return out;
         }
 
-        
+
         void Viewport::_readPixel(image::Color4f& rgba)
         {
 
@@ -1667,7 +1723,7 @@ namespace mrv
                     {
                         image::Color4f pixel, pixelB;
 
-                        
+
                         const auto& image = layer.image;
                         if (image && image->isValid())
                         {
@@ -1705,7 +1761,7 @@ namespace mrv
                 {
                     return;
                 }
-                
+
 
                 _unmapBuffer();
 
@@ -1724,18 +1780,18 @@ namespace mrv
                 }
                 else
                 {
-                    
+
                     VkCommandBuffer cmd =
                         beginSingleTimeCommands(device(), commandPool());
 
                     vk.buffer->readPixels(cmd, pos.x, pos.y, 1, 1);
 
                     vkEndCommandBuffer(cmd);
-                    
+
                     vk.buffer->submitReadback(cmd);
 
                     wait_queue();
-                        
+
                     vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
 
                     VkResult result = VK_NOT_READY;
@@ -1744,7 +1800,7 @@ namespace mrv
                     {
                         result = vk.buffer->getLatestReadPixels(data);
                     }
-                    
+
                     if (!data)
                         return;
 
@@ -1754,7 +1810,7 @@ namespace mrv
                 }
             }
         }
-        
+
         void Viewport::_mapBuffer()
         {
             TLRENDER_P();
@@ -1768,17 +1824,17 @@ namespace mrv
             {
                 if (!vk.readPixels)
                     return;
-                
+
                 const math::Box2i box = p.colorAreaInfo.box;
 
                 const uint32_t W = box.w();
                 const uint32_t H = box.h();
-                
+
                 VkCommandBuffer cmd = beginSingleTimeCommands(device(),
                                                               commandPool());
 
                 vk.buffer->transitionToShaderRead(cmd);
-                
+
                 vk.buffer->readPixels(cmd, box.min.x, box.min.y, W, H);
 
                 vkEndCommandBuffer(cmd);
@@ -1786,7 +1842,7 @@ namespace mrv
                 vk.buffer->submitReadback(cmd);
 
                 wait_queue();
-                    
+
                 vk.buffer->transitionToColorAttachment(cmd);
 
                 vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
@@ -1796,7 +1852,7 @@ namespace mrv
                     free(p.image);
                     p.image = nullptr;
                 }
-                
+
                 VkResult result = VK_NOT_READY;
                 while (result == VK_NOT_READY)
                 {
@@ -1804,7 +1860,7 @@ namespace mrv
                 }
                 if (!p.image)
                     return;
-                
+
                 p.rawImage = false;
                 break;
             }
@@ -1916,9 +1972,9 @@ namespace mrv
             msg["value"] = value;
             tcp->pushMessage(msg);
         }
-        
+
         // m_depth (optionally) -> creates m_renderPass
-        void Viewport::prepare_load_render_pass() 
+        void Viewport::prepare_load_render_pass()
         {
             MRV2_VK();
 
@@ -1928,7 +1984,7 @@ namespace mrv
                 // Format hasn't changed and render pass exists: DO NOTHING.
                 return;
             }
-            
+
             bool has_depth = mode() & FL_DEPTH;
             bool has_stencil = mode() & FL_STENCIL;
 
@@ -1940,8 +1996,17 @@ namespace mrv
             attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
             attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachments[0].initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-            attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
+
+            if (headless())
+            {
+                attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            }
+            else
+            {
+                attachments[0].initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+                attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            }
 
             attachments[1] = VkAttachmentDescription();
 
@@ -1949,11 +2014,11 @@ namespace mrv
             VkAttachmentReference color_reference = {};
             color_reference.attachment = 0;
             color_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    
+
             VkAttachmentReference depth_reference = {};
             depth_reference.attachment = 1;
             depth_reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-    
+
             VkSubpassDescription subpass = {};
             subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
             subpass.flags = 0;
@@ -1982,7 +2047,7 @@ namespace mrv
                     VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 attachments[1].finalLayout =
                     VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-    
+
                 subpass.pDepthStencilAttachment = &depth_reference;
                 subpass.preserveAttachmentCount = 0;
                 subpass.pPreserveAttachments = NULL;
@@ -2007,7 +2072,7 @@ namespace mrv
             dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
             dependencies[1].dstAccessMask = 0;
             dependencies[1].dependencyFlags = 0;
-            
+
             VkRenderPassCreateInfo rp_info = {};
             rp_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             rp_info.pNext = NULL;
@@ -2017,20 +2082,20 @@ namespace mrv
             rp_info.pSubpasses = &subpass;
             rp_info.dependencyCount = 2;
             rp_info.pDependencies = dependencies;
-                    
+
             VkResult result;
             result = vkCreateRenderPass(device(), &rp_info, NULL, &vk.loadRenderPass);
             VK_CHECK(result);
         }
 
-        
+
         // Helper function to diagnose current state
         void Viewport::_diagnoseColorSpaceState() const
         {
             TLRENDER_P();
-    
+
             std::cerr << "\n=== COLOR SPACE DIAGNOSTICS ===" << std::endl;
-    
+
             // Monitor info
             std::cerr << "Monitor Index: " << p.screen_index << std::endl;
             std::cerr << "Monitor HDR Supported: " << (p.monitor.hdr_supported ? "YES" : "NO") << std::endl;
@@ -2041,21 +2106,21 @@ namespace mrv
             std::cerr << "Monitor Green: (" << p.monitor.green.x << ", " << p.monitor.green.y << ")" << std::endl;
             std::cerr << "Monitor Blue: (" << p.monitor.blue.x << ", " << p.monitor.blue.y << ")" << std::endl;
             std::cerr << "Monitor White: (" << p.monitor.white.x << ", " << p.monitor.white.y << ")" << std::endl;
-    
+
             // Vulkan state
             std::cerr << "\nVulkan Configuration:" << std::endl;
             std::cerr << "Color Space: " << string_VkColorSpaceKHR(colorSpace()) << std::endl;
             std::cerr << "Format: " << string_VkFormat(format()) << std::endl;
             std::cerr << "Swapchain Valid: " << (m_swapchain != VK_NULL_HANDLE ? "YES" : "NO") << std::endl;
             std::cerr << "Swapchain Needs Recreation: " << (m_swapchain_needs_recreation ? "YES" : "NO") << std::endl;
-    
+
             // HDR options
             std::cerr << "\nHDR Options:" << std::endl;
             std::cerr << "Tonemapping Enabled: " << (p.hdrOptions.tonemap ? "YES" : "NO") << std::endl;
             std::cerr << "HDR Data Max CLL: " << p.hdrOptions.hdrData.maxCLL << std::endl;
             std::cerr << "HDR Data Max FALL: " << p.hdrOptions.hdrData.maxFALL << std::endl;
-            std::cerr << "HDR Data Max Luminance: " << p.hdrOptions.hdrData.displayMasteringLuminance.getMax() << std::endl;
-    
+            std::cerr << "HDR Data Max Luminance: " << p.hdrOptions.hdrData.displayMasteringLuminance.max() << std::endl;
+
             // OCIO state
             const int screen_idx = this->screen_num();
             const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
@@ -2063,27 +2128,27 @@ namespace mrv
             std::cerr << "OCIO Enabled: " << (ocio.enabled ? "YES" : "NO") << std::endl;
             std::cerr << "OCIO Display: " << ocio.display << std::endl;
             std::cerr << "OCIO View: " << ocio.view << std::endl;
-    
+
             // HDR metadata
             std::cerr << "\nHDR Metadata:" << std::endl;
             std::cerr << "Max Luminance: " << m_hdr_metadata.maxLuminance << std::endl;
             std::cerr << "Min Luminance: " << m_hdr_metadata.minLuminance << std::endl;
             std::cerr << "Max Content Light Level: " << m_hdr_metadata.maxContentLightLevel << std::endl;
             std::cerr << "Max Frame Average Light Level: " << m_hdr_metadata.maxFrameAverageLightLevel << std::endl;
-            std::cerr << "Display Primary Red: (" 
-                      << m_hdr_metadata.displayPrimaryRed.x << ", " 
+            std::cerr << "Display Primary Red: ("
+                      << m_hdr_metadata.displayPrimaryRed.x << ", "
                       << m_hdr_metadata.displayPrimaryRed.y << ")" << std::endl;
-            std::cerr << "Display Primary Green: (" 
-                      << m_hdr_metadata.displayPrimaryGreen.x << ", " 
+            std::cerr << "Display Primary Green: ("
+                      << m_hdr_metadata.displayPrimaryGreen.x << ", "
                       << m_hdr_metadata.displayPrimaryGreen.y << ")" << std::endl;
-            std::cerr << "Display Primary Blue: (" 
-                      << m_hdr_metadata.displayPrimaryBlue.x << ", " 
+            std::cerr << "Display Primary Blue: ("
+                      << m_hdr_metadata.displayPrimaryBlue.x << ", "
                       << m_hdr_metadata.displayPrimaryBlue.y << ")" << std::endl;
-            std::cerr << "White Point: (" 
-                      << m_hdr_metadata.whitePoint.x << ", " 
+            std::cerr << "White Point: ("
+                      << m_hdr_metadata.whitePoint.x << ", "
                       << m_hdr_metadata.whitePoint.y << ")" << std::endl;
             std::cerr << "Metadata Changed: " << (m_hdr_metadata_changed ? "YES" : "NO") << std::endl;
-    
+
             std::cerr << "==============================\n" << std::endl;
         }
 

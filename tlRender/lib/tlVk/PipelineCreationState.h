@@ -7,10 +7,18 @@
 #include <tlVk/Vk.h>
 
 #include <array>
+#include <cstddef>
+#include <cstdint>
 #include <optional>
+#include <stdexcept>
+#include <string>
 #include <vector>
 
-// Helper for comparing VkStencilOpState
+// Helpers for comparing VkStencilOpState.
+//
+// VkStencilOpState lives in the global namespace, so these are found through
+// ADL. In C++20 the compiler also considers the reversed form of operator==,
+// which is fine here because both parameters have the same type.
 inline bool operator==(const VkStencilOpState& a, const VkStencilOpState& b)
 {
     return a.failOp == b.failOp && a.passOp == b.passOp &&
@@ -47,7 +55,7 @@ namespace tl
 
                 // Compare VkVertexInputBindingDescription elements field by
                 // field
-                for (size_t i = 0; i < bindingDescriptions.size(); ++i)
+                for (std::size_t i = 0; i < bindingDescriptions.size(); ++i)
                 {
                     const auto& b1 = bindingDescriptions[i];
                     const auto& b2 = other.bindingDescriptions[i];
@@ -60,7 +68,7 @@ namespace tl
 
                 // Compare VkVertexInputAttributeDescription elements field by
                 // field
-                for (size_t i = 0; i < attributeDescriptions.size(); ++i)
+                for (std::size_t i = 0; i < attributeDescriptions.size(); ++i)
                 {
                     const auto& a1 = attributeDescriptions[i];
                     const auto& a2 = other.attributeDescriptions[i];
@@ -125,7 +133,8 @@ namespace tl
             VkFrontFace frontFace = VK_FRONT_FACE_CLOCKWISE;
             VkBool32 depthBiasEnable = VK_FALSE;
             float depthBiasConstantFactor = 0.F;
-            float depthBiasClamp = VK_FALSE;
+            float depthBiasClamp = 0.F; // was VK_FALSE (a VkBool32) assigned
+                                        // to a float
             float depthBiasSlopeFactor = 0.F;
             float lineWidth = 1.F;
 
@@ -165,7 +174,7 @@ namespace tl
             VkColorComponentFlags colorWriteMask =
                 VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
                 VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-            
+
             // Add comparison operators (==, !=)
             bool operator==(const ColorBlendAttachmentStateInfo& other) const
             {
@@ -188,27 +197,17 @@ namespace tl
         {
             // Corresponds to VkPipelineColorBlendStateCreateInfo
             VkBool32 logicOpEnable = VK_FALSE;
-            VkLogicOp logicOp = {};
-            std::array<float, 4> blendConstants;
+            VkLogicOp logicOp = VK_LOGIC_OP_CLEAR;
+            std::array<float, 4> blendConstants{}; // zero-initialized
             std::vector<ColorBlendAttachmentStateInfo>
                 attachments; // Store our custom attachment info
-
-            ColorBlendStateInfo()
-                {
-                    memset(&blendConstants, 0, sizeof(blendConstants));
-                }
 
             // Add comparison operators (==, !=)
             bool operator==(const ColorBlendStateInfo& other) const
             {
-                for (int i = 0; i < 4; ++i)
-                {
-                    if (blendConstants[i] != other.blendConstants[i])
-                        return false;
-                }
-
                 return logicOpEnable == other.logicOpEnable &&
                        logicOp == other.logicOp &&
+                       blendConstants == other.blendConstants &&
                        attachments ==
                            other.attachments; // std::vector comparison works if
                                               // element type is comparable
@@ -241,10 +240,10 @@ namespace tl
             VkPipelineMultisampleStateCreateFlags flags = 0;
             VkSampleCountFlagBits rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
             VkBool32 sampleShadingEnable = VK_FALSE;
-            float minSampleShading = 0;
+            float minSampleShading = 0.F;
             std::vector<VkSampleMask> sampleMasks;
-            VkBool32 alphaToCoverageEnable = 0;
-            VkBool32 alphaToOneEnable = 0;
+            VkBool32 alphaToCoverageEnable = VK_FALSE;
+            VkBool32 alphaToOneEnable = VK_FALSE;
 
             // Add comparison operators (==, !=)
             bool operator==(const MultisampleStateInfo& other) const
@@ -279,12 +278,13 @@ namespace tl
             float maxDepthBounds = 0.F;
 
             DepthStencilStateInfo()
-                {
-                    front.failOp = VK_STENCIL_OP_KEEP;
-                    front.passOp = VK_STENCIL_OP_KEEP;
-                    front.compareOp = VK_COMPARE_OP_ALWAYS;
-                    back = front;
-                }
+            {
+                front.failOp = VK_STENCIL_OP_KEEP;
+                front.passOp = VK_STENCIL_OP_KEEP;
+                front.depthFailOp = VK_STENCIL_OP_KEEP;
+                front.compareOp = VK_COMPARE_OP_ALWAYS;
+                back = front;
+            }
 
             // Add comparison operators (==, !=)
             bool operator==(const DepthStencilStateInfo& other) const
@@ -317,13 +317,15 @@ namespace tl
             struct ShaderStageInfo
             {
                 std::string name;
-                VkShaderStageFlagBits stage;
+                VkShaderStageFlagBits stage =
+                    static_cast<VkShaderStageFlagBits>(0);
                 std::string entryPoint;
                 // Could add info here to identify the shader source/SPIR-V if
                 // needed for recreation e.g., std::string filename; or
                 // std::vector<char> spirvCode;
-                VkShaderModule
-                    module; // Or an identifier/path to look up the module
+                VkShaderModule module =
+                    VK_NULL_HANDLE; // Or an identifier/path to look up the
+                                    // module
 
                 // Add comparison operators (==, !=) - be careful if comparing
                 // raw VkShaderModule handles Comparing identifiers/paths is
@@ -351,10 +353,8 @@ namespace tl
             std::optional<InputAssemblyStateInfo> inputAssemblyState;
             std::optional<ViewportStateInfo> viewportState;
             std::optional<RasterizationStateInfo> rasterizationState;
-            std::optional<MultisampleStateInfo>
-                multisampleState; // Define MultisampleStateInfo
-            std::optional<DepthStencilStateInfo>
-                depthStencilState; // Define DepthStencilStateInfo
+            std::optional<MultisampleStateInfo> multisampleState;
+            std::optional<DepthStencilStateInfo> depthStencilState;
             std::optional<ColorBlendStateInfo> colorBlendState;
             std::optional<DynamicStateInfo> dynamicState;
 
@@ -426,9 +426,10 @@ namespace tl
                 VkGraphicsPipelineCreateInfo createInfo = {};
                 createInfo.sType =
                     VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-                // Declare a temporary VkPipelineVertexInputStateCreateInfo
-                // struct This struct will live on the stack and only needs to
-                // exist for the duration of the vkCreateGraphicsPipelines call.
+
+                // The temporary VkPipeline*StateCreateInfo structs below live
+                // on the stack and only need to exist for the duration of the
+                // vkCreateGraphicsPipelines call.
                 VkPipelineVertexInputStateCreateInfo tempVertexInputStateInfo{};
 
                 if (vertexInputState.has_value())
@@ -445,7 +446,7 @@ namespace tl
                     tempVertexInputStateInfo.vertexBindingDescriptionCount =
                         static_cast<uint32_t>(
                             vi_info.bindingDescriptions.size());
-                    
+
                     // Get a pointer to the start of the data in our std::vector
                     tempVertexInputStateInfo.pVertexBindingDescriptions =
                         vi_info.bindingDescriptions.data();
@@ -543,6 +544,7 @@ namespace tl
                     const auto& ms = this->multisampleState.value();
                     tempMultisampleStateInfo.sType =
                         VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+                    tempMultisampleStateInfo.flags = ms.flags;
                     tempMultisampleStateInfo.rasterizationSamples =
                         ms.rasterizationSamples;
                     tempMultisampleStateInfo.sampleShadingEnable =
@@ -607,14 +609,14 @@ namespace tl
                         VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
                     tempColorBlendStateInfo.logicOpEnable = cb.logicOpEnable;
                     tempColorBlendStateInfo.logicOp = cb.logicOp;
-                    for (int i = 0; i < 4; ++i)
+                    for (std::size_t i = 0; i < cb.blendConstants.size(); ++i)
                         tempColorBlendStateInfo.blendConstants[i] =
                             cb.blendConstants[i];
 
                     tempColorBlendAttachments.reserve(cb.attachments.size());
                     for (const auto& a : cb.attachments)
                     {
-                        VkPipelineColorBlendAttachmentState tmpState;
+                        VkPipelineColorBlendAttachmentState tmpState{};
                         tmpState.blendEnable = a.blendEnable;
                         tmpState.srcColorBlendFactor = a.srcColorBlendFactor;
                         tmpState.dstColorBlendFactor = a.dstColorBlendFactor;
@@ -686,6 +688,8 @@ namespace tl
                 {
                     throw std::runtime_error("Layout is null handle");
                 }
+                createInfo.subpass = subpass;
+                createInfo.flags = flags;
 
                 // Create a temporary pipeline cache
                 VkResult result;
@@ -694,14 +698,14 @@ namespace tl
                 pipelineCacheCreateInfo.sType =
                     VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 
-                VkPipelineCache pipelineCache;
+                VkPipelineCache pipelineCache = VK_NULL_HANDLE;
                 result = vkCreatePipelineCache(
-                    device, &pipelineCacheCreateInfo, NULL, &pipelineCache);
+                    device, &pipelineCacheCreateInfo, nullptr, &pipelineCache);
                 VK_CHECK(result);
 
-                VkPipeline graphicsPipeline;
+                VkPipeline graphicsPipeline = VK_NULL_HANDLE;
                 result = vkCreateGraphicsPipelines(
-                    device, pipelineCache, 1, &createInfo, NULL,
+                    device, pipelineCache, 1, &createInfo, nullptr,
                     &graphicsPipeline);
                 VK_CHECK(result);
 

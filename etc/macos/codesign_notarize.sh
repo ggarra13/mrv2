@@ -16,20 +16,11 @@ get_kernel
 extract_version
 
 
+
 # ─────────────────────────────────────────────────────────────────────────────
 #  CONFIGURATION
-#  Override any of these via environment variables or CLI flags.
+#  Secret variables
 # ─────────────────────────────────────────────────────────────────────────────
-
-# Developer ID Application certificate — exactly as it appears in Keychain Access.
-# Example: "Developer ID Application: Gonzalo Garramuño (XXXXXXXXXX)"
-DEVELOPER_ID="${DEVELOPER_ID:-}"
-
-# Apple ID (email) associated with your developer account.
-APPLE_ID="${APPLE_ID:-ggarra13@gmail.com}"
-
-# Apple Team ID (10-character string, visible at developer.apple.com).
-TEAM_ID="${TEAM_ID:-XXXXXXXXXX}"
 
 # App-specific password created at appleid.apple.com > Sign-In and Security.
 # Pass the literal value OR use the @keychain: prefix to avoid shell history exposure:
@@ -37,8 +28,29 @@ TEAM_ID="${TEAM_ID:-XXXXXXXXXX}"
 #   APP_PASSWORD="@keychain:mrv2-notarytool"
 APP_PASSWORD="${APP_PASSWORD:-@keychain:mrv2-notarytool}"
 
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  CONFIGURATION
+#  Override any of these via environment variables or CLI flags.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Developer ID Application certificate — exactly as it appears in Keychain Access.
+# Example: "Developer ID Application: Gonzalo Garramuño (XXXXXXXXXX)"
+DEVELOPER_ID="${DEVELOPER_ID:-}"  # Safe
+if [[ "$DEVELOPER_ID" == "empty" ]]; then
+    DEVELOPER_ID=""
+fi
+
+# Apple ID (email) associated with your developer account.
+APPLE_ID="${APPLE_ID:-ggarra13@gmail.com}"  # Somewhat safe, but recommended
+                                            # to encrypt due to email.
+
+# Apple Team ID (10-character string, visible at developer.apple.com).
+TEAM_ID="${TEAM_ID:-XXXXXXXXXX}"  # Safe
+
 # Keychain profile name used with xcrun notarytool store-credentials (run once).
-NOTARYTOOL_PROFILE="${NOTARYTOOL_PROFILE:-mrv2-notarytool}"
+NOTARYTOOL_PROFILE="${NOTARYTOOL_PROFILE:-mrv2-notarytool}" # Safe
 
 # CPack / build output directory that contains the .app bundles and the DMG.
 
@@ -194,9 +206,15 @@ _sign_macho() {
         --sign "${DEVELOPER_ID}"
         --timestamp
     )
-    [[ -n "${ents}" && -f "${ents}" ]] && args+=(--entitlements "${ents}")
 
-    codesign "${args[@]}" "${target}" 2>&1 | grep -v "^$" || true
+    [[ -n "${ents}" && -f "${ents}" ]] &&
+        args+=(--entitlements "${ents}")
+
+    local output
+    if ! output=$(codesign "${args[@]}" "${target}" 2>&1); then
+        warn "codesign reported an issue signing: ${target}"
+        [[ -n "${output}" ]] && echo "${output}"
+    fi
 }
 
 # Sign a plain file (shell script, resource) — no hardened-runtime flag needed.
@@ -220,6 +238,15 @@ sign_bundle() {
     [[ -d "${bundle}" ]] || { warn "Bundle not found, skipping: ${bundle}"; return 0; }
 
     step "Signing bundle: $(basename "${bundle}")"
+
+    # Normalize permissions before signing. Files copied in from Homebrew
+    # (e.g. the Vulkan ICD manifests under Contents/Resources/etc/vulkan,
+    # copied by prepackage_macos.cmake's file(COPY ... FOLLOW_SYMLINK_CHAIN)
+    # with no FILE_PERMISSIONS override) keep the Cellar's usual read-only
+    # mode, which can make codesign unable to seal the bundle as a whole
+    # ("Permission denied" on the top-level bundle sign). Best-effort only —
+    # a failure here shouldn't abort the run.
+    chmod -R u+rwX "${bundle}" 2>/dev/null || true
 
     # ── 1. Individual .dylib files ────────────────────────────────────────────
     info "Signing .dylib files…"
@@ -255,7 +282,8 @@ sign_bundle() {
         fi
     done < <(find "${bundle}" -name "python*" -type f -print0)
 
-    # ── 5. Every other Mach-O binary in Contents/MacOS and Contents/bin ───────
+    # ── 5. Every other Mach-O binary in Contents/MacOS, Contents/bin, and
+    #      Contents/Resources/bin (mrv2/hdr/license_helper live here) ────────
     info "Signing executables…"
     while IFS= read -r -d '' exe; do
         # Skip symlinks (they don't need signing) and already-handled dirs.
@@ -265,6 +293,7 @@ sign_bundle() {
             _sign_macho "${exe}" "${ENTITLEMENTS}"
         fi
     done < <(find "${bundle}/Contents/MacOS" "${bundle}/Contents/bin" \
+                  "${bundle}/Contents/Resources/bin" \
                   -maxdepth 3 -type f -print0 2>/dev/null)
 
     # ── 6. Shell-script launchers (mrv2.sh / launcher.sh / hdr.sh) ───────────
@@ -273,7 +302,8 @@ sign_bundle() {
     while IFS= read -r -d '' sh; do
         info "  sh:    ${sh#"${bundle}/"}"
         _sign_plain "${sh}"
-    done < <(find "${bundle}/Contents/MacOS" -name "*.sh" -type f -print0 2>/dev/null)
+    done < <(find "${bundle}/Contents/MacOS" "${bundle}/Contents/Resources/bin" \
+                  -name "*.sh" -type f -print0 2>/dev/null)
 
     # ── 7. Sign the whole app bundle last ─────────────────────────────────────
     info "Signing top-level bundle…"
@@ -299,13 +329,19 @@ sign_bundle() {
 
 sign_all_bundles() {
     if [[ -n "${MRV2_APP:-}" ]]; then
-	sign_bundle "${PACK_DIR}/${MRV2_APP}"
+	if [[ -e "${PACK_DIR}/${MRV2_APP}" ]]; then
+	    sign_bundle "${PACK_DIR}/${MRV2_APP}"
+	fi
     fi
     if [[ -n "${VMRV2_APP:-}" ]]; then
-	sign_bundle "${PACK_DIR}/${VMRV2_APP}"
+	if [[ -e "${PACK_DIR}/${VMRV2_APP}" ]]; then
+	    sign_bundle "${PACK_DIR}/${VMRV2_APP}"
+	fi
     fi
     if [[ -n "${HDR_APP:-}" ]]; then
-        sign_bundle "${PACK_DIR}/${HDR_APP}"
+	if [[ -e "${PACK_DIR}/${HDR_APP}" ]]; then
+            sign_bundle "${PACK_DIR}/${HDR_APP}"
+	fi
     fi
 }
 
@@ -314,46 +350,9 @@ sign_all_bundles() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 create_dmg() {
-    step "Creating DMG: ${DMG_NAME}"
+    step "Creating DMG: ${DMG_NAME} with args ${VK_ARG}"
 
     runmeq.sh -t package ${VK_ARG}
-    
-    # local src_apps=()
-    # [[ -d "${PACK_DIR}/${MRV2_APP}" ]] && src_apps+=("${PACK_DIR}/${MRV2_APP}")
-    # [[ -n "${HDR_APP:-}" && -d "${PACK_DIR}/${HDR_APP}" ]] \
-    #     && src_apps+=("${PACK_DIR}/${HDR_APP}")
-    # [[ ${#src_apps[@]} -gt 0 ]] || die "No app bundles found in ${PACK_DIR}."
-
-    # local staging_dir
-    # staging_dir="$(mktemp -d)"
-    # trap 'rm -rf "${staging_dir}"' RETURN
-
-    # # Copy apps into a staging folder.
-    # for app in "${src_apps[@]}"; do
-    #     ditto "${app}" "${staging_dir}/$(basename "${app}")"
-    # done
-
-    # # Create a symlink to /Applications for drag-install UX.
-    # ln -s /Applications "${staging_dir}/Applications"
-
-    # local tmp_dmg="${PACK_DIR}/tmp_$$.dmg"
-    # local final_dmg="${PACK_DIR}/${DMG_NAME}"
-
-    # rm -f "${tmp_dmg}" "${final_dmg}"
-
-    # hdiutil create \
-    #     -volname "mrv2 Installer" \
-    #     -srcfolder "${staging_dir}" \
-    #     -ov -format UDRW \
-    #     "${tmp_dmg}"
-
-    # hdiutil convert "${tmp_dmg}" \
-    #     -format UDZO \
-    #     -imagekey zlib-level=9 \
-    #     -o "${final_dmg}"
-
-    # rm -f "${tmp_dmg}"
-    # ok "DMG created: ${final_dmg}"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -380,6 +379,11 @@ sign_dmg() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 notarize() {
+    if [[ "${DEVELOPER_ID}" == "" ]]; then
+	echo "DEVELOPER_ID not set. Will not notarize .dmg.  "
+	echo "Need NOTARYTOOL_PROFILE set."
+	exit 0
+    fi
     local target="${1:-${PACKAGE_DIRECTORY}/${DMG_NAME}}"
     step "Notarizing: $(basename "${target}")"
     [[ -f "${target}" ]] || die "File not found for notarization: ${target}"
@@ -389,13 +393,14 @@ notarize() {
     output=$(xcrun notarytool submit "${target}" \
         --keychain-profile "${NOTARYTOOL_PROFILE}" \
         --wait 2>&1)
+    
 
     echo "${output}"
 
     if echo "${output}" | grep -q "status: Accepted"; then
         ok "Notarization accepted by Apple."
     else
-        # Extract submission UUID and fetch the detailed log for diagnosis.
+        # Extract the submission UUID and fetch the detailed log for diagnosis.
         local uuid
         uuid=$(echo "${output}" | grep -Eo 'id: [0-9a-f-]{36}' | head -1 | awk '{print $2}')
         if [[ -n "${uuid}" ]]; then
@@ -413,7 +418,12 @@ notarize() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 staple_target() {
-    local target="${1:-${PACK_DIR}/${DMG_NAME}}"
+    if [[ "${DEVELOPER_ID}" == "" ]]; then
+	echo "DEVELOPER_ID not set. Cannot staple certificate"
+	echo "Need NOTARYTOOL_PROFILE set."
+	exit 0
+    fi
+    local target="${1:-${PACKAGE_DIRECTORY}/${DMG_NAME}}"
     step "Stapling notarization ticket: $(basename "${target}")"
 
     xcrun stapler staple "${target}" \
@@ -462,7 +472,7 @@ verify() {
             || warn "  Gatekeeper check failed"
     done
 
-    local dmg="${PACK_DIR}/${DMG_NAME}"
+    local dmg="${PACKAGE_DIRECTORY}/${DMG_NAME}"
     if [[ -f "${dmg}" ]]; then
         info "Checking DMG: $(basename "${dmg}")"
         codesign --verify --verbose=2 "${dmg}" \
@@ -573,6 +583,10 @@ fi
 
 export BUILD_DIR="${ROOT_DIR}/Release/"
 export PACK_DIR="${BUILD_DIR}/mrv2/src/mrv2-build/_CPack_Packages/Darwin/DragNDrop/${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}"
+
+if [[ -z "$PACKAGE_DIRECTORY" ]]; then
+    export PACKAGE_DIRECTORY="packages/${BUILD_DIR}"
+fi
 
 # Name of the DMG produced by CPack (or the one this script creates).
 DMG_NAME="${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}.dmg"

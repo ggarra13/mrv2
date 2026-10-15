@@ -9,6 +9,8 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#include <tlCore/Path.h>
+
 #include <FL/fl_utf8.h>
 
 #if defined(WIN32) || defined(WIN64)
@@ -60,14 +62,14 @@ namespace
                        << std::endl;
             return -1;
         }
-    
+
         // // Replace backslashes with forward slashes
         // wchar_t* p = pname;
         // while (*p) {
         //     if (*p == L'\\') *p = L'/';
         //     p++;
         // }
-        
+
         return 0; // Success
     }
 #else  // !_WIN32
@@ -174,7 +176,7 @@ namespace mrv
 {
     // Store root path of mrv2's (Installation Directory)
     std::string g_root_path;
-    
+
     void set_root_path(const int argc, char** argv)
     {
 #ifdef _WIN32
@@ -197,8 +199,9 @@ namespace mrv
         fs::path parent = rootdir.parent_path(); // Skip executable
         rootdir = parent.parent_path();          // Skip bin/ directory
 
-        g_root_path = string::normalizePath(rootdir.u8string());
-        
+        std::string rootpath = tl::file::fromFileSystem(rootdir);
+        g_root_path = string::normalizePath(rootpath);
+
         std::wstring root_str = rootdir.wstring();
         if (setenv(L"MRV2_ROOT", root_str.c_str(), 1) != 0)
         {
@@ -223,8 +226,9 @@ namespace mrv
             fs::path parent = rootdir.parent_path(); // skip executable
             rootdir = parent.parent_path();          // skip bin/ directory
 
-            setenv("MRV2_ROOT", rootdir.u8string().c_str(), 1);
-            g_root_path = rootdir.u8string();
+            std::string root_string = tl::file::fromFileSystem(rootdir);
+            setenv("MRV2_ROOT", root_string.c_str(), 1);
+            g_root_path = root_string;
         }
         else
         {

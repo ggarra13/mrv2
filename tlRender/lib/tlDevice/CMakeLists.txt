@@ -37,12 +37,10 @@ endif()
 
 if(TLRENDER_NDI AND TLRENDER_FFMPEG)
     list(APPEND HEADERS
-	NDI/NDIOptions.h
 	NDI/NDIOutputDevice.h
 	NDI/NDISystem.h
 	NDI/NDIUtil.h)
     list(APPEND SOURCE
-	NDI/NDIOptions.cpp
 	NDI/NDIOutputDevice.cpp
 	NDI/NDISystem.cpp
 	NDI/NDIUtil.cpp)

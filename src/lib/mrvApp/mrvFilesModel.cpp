@@ -136,6 +136,24 @@ namespace mrv
         p.layers->setIfChanged(_getLayers());
     }
 
+    void FilesModel::add(
+        const std::vector<std::shared_ptr<FilesModelItem> >& items)
+    {
+        TLRENDER_P();
+
+        if (items.empty()) return;
+
+        auto files = p.files->get();
+        files.insert(files.end(), items.begin(), items.end());
+        p.files->setIfChanged(files);               // one notification
+
+        p.a->setIfChanged(files.back()); // Make only the *last* item A
+        p.aIndex->setIfChanged(_index(p.a->get()));
+
+        p.active->setIfChanged(_getActive()); // one activation → one timeline
+        p.layers->setIfChanged(_getLayers());
+    }
+
     void FilesModel::replace(
         const std::size_t index, const std::shared_ptr<FilesModelItem>& item)
     {
@@ -192,7 +210,7 @@ namespace mrv
 
                 p.active->setIfChanged(_getActive());
                 p.layers->setIfChanged(_getLayers());
-                
+
                 if (files.size() <= 1)
                 {
                     auto compareOptions = p.compareOptions->get();
@@ -239,7 +257,7 @@ namespace mrv
     void FilesModel::forceA(int index)
     {
         TLRENDER_P();
-        
+
         if (index >= 0 && index < p.files->getSize())
         {
             auto oldA = p.files->getItem(index);
@@ -250,7 +268,7 @@ namespace mrv
             p.layers->setAlways(_getLayers());
         }
     }
-    
+
     // value == true → “make sure this index is included in B”
     // value == false → “make sure this index is NOT included in B”
     void FilesModel::setB(int index, bool value)
@@ -270,6 +288,7 @@ namespace mrv
                 case timeline::CompareMode::A:
                 case timeline::CompareMode::B:
                 case timeline::CompareMode::Wipe:
+                case timeline::CompareMode::Butterfly:
                 case timeline::CompareMode::Overlay:
                 case timeline::CompareMode::Difference:
                 case timeline::CompareMode::Add:
@@ -556,13 +575,14 @@ namespace mrv
     void FilesModel::setCompareOptions(const timeline::CompareOptions& value)
     {
         TLRENDER_P();
-        
+
         if (p.compareOptions->setIfChanged(value))
         {
             switch (value.mode)
             {
             case timeline::CompareMode::A:
             case timeline::CompareMode::B:
+            case timeline::CompareMode::Butterfly:
             case timeline::CompareMode::Wipe:
             case timeline::CompareMode::Overlay:
             case timeline::CompareMode::Difference:
@@ -666,6 +686,7 @@ namespace mrv
         switch (p.compareOptions->get().mode)
         {
         case timeline::CompareMode::B:
+        case timeline::CompareMode::Butterfly:
         case timeline::CompareMode::Wipe:
         case timeline::CompareMode::Overlay:
         case timeline::CompareMode::Difference:

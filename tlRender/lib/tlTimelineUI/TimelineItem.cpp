@@ -18,39 +18,43 @@
 
 #include <tlCore/StringFormat.h>
 
+#include <algorithm>
+#include <cmath>
+
 namespace tl
 {
     namespace TIMELINEUI
     {
 #ifdef OPENGL_BACKEND
         void TimelineItem::_init(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
-            const otio::SerializableObject::Retainer<otio::Stack>& stack,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             const std::shared_ptr<gl::GLFWWindow>& window,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
 #endif
 
 #ifdef VULKAN_BACKEND
         void TimelineItem::_init(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
-            const otio::SerializableObject::Retainer<otio::Stack>& stack,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
 #endif
         {
-            const otime::TimeRange timeRange = player->getTimeRange();
-            const otime::TimeRange trimmedRange(
-                otime::RationalTime(0.0, timeRange.duration().rate()),
+            const OTIO_NS::TimeRange timeRange = player->getTimeRange();
+            const OTIO_NS::TimeRange trimmedRange(
+                OTIO_NS::RationalTime(0.0, timeRange.duration().rate()),
                 timeRange.duration());
             IItem::_init(
-                "tl::TIMELINEUI::TimelineItem", timeRange, trimmedRange, scale,
+                "tl::TIMELINEUI::TimelineItem", timeRange, trimmedRange,
+                trimmedRange, scale,
                 options, displayOptions, itemData, context, parent);
             TLRENDER_P();
 
@@ -63,28 +67,14 @@ namespace tl
             p.timeScrub =
                 observer::Value<otime::RationalTime>::create(time::invalidTime);
 
-#ifdef OPENGL_BACKEND
-            p.thumbnailGenerator = TIMELINEUI::ThumbnailGenerator::create(
-                context->getSystem<TIMELINEUI::ThumbnailSystem>()->getCache(), context,
-                window);
-#endif
+            p.thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
 
-#ifdef VULKAN_BACKEND
-            if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
-            {
-                context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
-            }
-                
-            p.thumbnailGenerator = timelineui_vk::ThumbnailGenerator::create(
-                context->getSystem<timelineui_vk::ThumbnailSystem>()->getCache(), context,
-                ctx);
-#endif
-
-            const auto otioTimeline = p.player->getTimeline()->getTimeline();
+            const auto timeline = p.player->getTimeline();
+            const auto otioTimeline = timeline->getTimeline();
             for (const auto& child : otioTimeline->tracks()->children())
             {
                 if (auto otioTrack =
-                        otio::dynamic_retainer_cast<otio::Track>(child))
+                        OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(child))
                 {
                     if (!otioTrack->enabled())
                         continue;
@@ -92,7 +82,7 @@ namespace tl
                     int otioIndex = 0;
                     track.index = p.tracks.size();
                     std::string trackLabel = otioTrack->name();
-                    if (otio::Track::Kind::video == otioTrack->kind())
+                    if (OTIO_NS::Track::Kind::video == otioTrack->kind())
                     {
                         track.type = TrackType::Video;
                         if (trackLabel.empty())
@@ -100,7 +90,7 @@ namespace tl
                             trackLabel = "Video Track";
                         }
                     }
-                    else if (otio::Track::Kind::audio == otioTrack->kind())
+                    else if (OTIO_NS::Track::Kind::audio == otioTrack->kind())
                     {
                         track.type = TrackType::Audio;
                         if (trackLabel.empty())
@@ -120,20 +110,22 @@ namespace tl
                     for (const auto& child : otioTrack->children())
                     {
                         if (auto clip =
-                                otio::dynamic_retainer_cast<otio::Clip>(child))
+                                OTIO_NS::dynamic_retainer_cast<OTIO_NS::Clip>(child))
                         {
                             switch (track.type)
                             {
                             case TrackType::Video:
                                 track.items.push_back(VideoClipItem::create(
-                                    clip, scale, options, displayOptions,
-                                    itemData, p.thumbnailGenerator, context,
+                                    context, timeline, clip, scale, options,
+                                    displayOptions,
+                                    itemData, p.thumbnailSystem,
                                     shared_from_this()));
                                 break;
                             case TrackType::Audio:
                                 track.items.push_back(AudioClipItem::create(
-                                    clip, scale, options, displayOptions,
-                                    itemData, p.thumbnailGenerator, context,
+                                    context, timeline, clip, scale, options,
+                                    displayOptions,
+                                    itemData, p.thumbnailSystem,
                                     shared_from_this()));
                                 break;
                             default:
@@ -141,27 +133,12 @@ namespace tl
                             }
                             track.otioIndexes.push_back(otioIndex);
 
-                            auto effects = clip->effects();
-                            std::vector<std::shared_ptr<EffectItem> > effectItems;
-
-                            otio::Item* item = clip;
-                            
-                            effectItems.reserve(effects.size());
-                            for (const auto effect : effects)
-                            {
-                                effectItems.push_back(EffectItem::create(
-                                                          effect, item, scale, options, displayOptions,
-                                                          itemData, context, shared_from_this()));
-                            }
-
-                            if (!effectItems.empty())
-                            {
-                                track.effects[otioIndex] = effectItems;
-                            }
+                            // Note: effects are created and laid out by the
+                            // VideoClipItem itself (they are its children).
                         }
                         else if (
                             auto gap =
-                                otio::dynamic_retainer_cast<otio::Gap>(child))
+                                OTIO_NS::dynamic_retainer_cast<OTIO_NS::Gap>(child))
                         {
                             track.items.push_back(GapItem::create(
                                 TrackType::Video == track.type
@@ -173,7 +150,7 @@ namespace tl
                         }
                         else if (
                             auto transition =
-                                otio::dynamic_retainer_cast<otio::Transition>(
+                                OTIO_NS::dynamic_retainer_cast<OTIO_NS::Transition>(
                                     child))
                         {
                             track.transitions.push_back(TransitionItem::create(
@@ -192,18 +169,18 @@ namespace tl
             _textUpdate();
 
             p.currentTimeObserver =
-                observer::ValueObserver<otime::RationalTime>::create(
+                observer::ValueObserver<OTIO_NS::RationalTime>::create(
                     p.player->observeCurrentTime(),
-                    [this](const otime::RationalTime& value)
+                    [this](const OTIO_NS::RationalTime& value)
                     {
                         _p->currentTime = value;
                         _updates |= ui::Update::Draw;
                     });
 
             p.inOutRangeObserver =
-                observer::ValueObserver<otime::TimeRange>::create(
+                observer::ValueObserver<OTIO_NS::TimeRange>::create(
                     p.player->observeInOutRange(),
-                    [this](const otime::TimeRange value)
+                    [this](const OTIO_NS::TimeRange value)
                     {
                         _p->inOutRange = value;
                         _updates |= ui::Update::Draw;
@@ -219,7 +196,9 @@ namespace tl
                     });
         }
 
-        TimelineItem::~TimelineItem() {}
+        TimelineItem::~TimelineItem()
+        {
+        }
 
 #ifdef OPENGL_BACKEND
         TimelineItem::TimelineItem() :
@@ -228,19 +207,19 @@ namespace tl
         }
 
         std::shared_ptr<TimelineItem> TimelineItem::create(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
-            const otio::SerializableObject::Retainer<otio::Stack>& stack,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             const std::shared_ptr<gl::GLFWWindow>& window,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<TimelineItem>(new TimelineItem);
             out->_init(
-                player, stack, scale, options, displayOptions, itemData, window,
-                context, parent);
+                context, player, stack, scale, options, displayOptions,
+                itemData, window, parent);
             return out;
         }
 #endif
@@ -253,19 +232,19 @@ namespace tl
         }
 
         std::shared_ptr<TimelineItem> TimelineItem::create(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
-            const otio::SerializableObject::Retainer<otio::Stack>& stack,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             Fl_Vk_Context& ctx,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<TimelineItem>(new TimelineItem(ctx));
             out->_init(
-                player, stack, scale, options, displayOptions, itemData,
-                context, parent);
+                context, player, stack, scale, options, displayOptions,
+                itemData, parent);
             return out;
         }
 #endif
@@ -274,7 +253,7 @@ namespace tl
         {
             _p->editable = value;
         }
-        
+
         void TimelineItem::setEditMode(const timeline::EditMode value)
         {
             _p->editMode = value;
@@ -291,7 +270,7 @@ namespace tl
             return _p->scrub;
         }
 
-        std::shared_ptr<observer::IValue<otime::RationalTime> >
+        std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
         TimelineItem::observeTimeScrub() const
         {
             return _p->timeScrub;
@@ -363,7 +342,7 @@ namespace tl
                     {
                         continue;
                     }
-                    const otime::TimeRange& timeRange = item->getTimeRange();
+                    const OTIO_NS::TimeRange& timeRange = item->getTimeRange();
                     math::Size2i sizeHint;
                     if (visible)
                     {
@@ -375,31 +354,6 @@ namespace tl
                                 _scale,
                         y + std::max(labelSizeHint.h, durationSizeHint.h),
                         sizeHint.w, track.clipHeight));
-
-                    for (auto index : track.otioIndexes)
-                    {
-                        auto i = track.effects.find(index);
-                        if (i == track.effects.end())
-                            continue;
-
-                        auto effects = i->second;
-                        int effectsY = y;
-                        for (const auto& effect : effects)
-                        {
-                            const math::Size2i& sizeHint = effect->getSizeHint();
-                        
-                            const otime::TimeRange& timeRange =
-                                effect->getTimeRange();
-                            effect->setGeometry(math::Box2i(
-                                                    _geometry.min.x + timeRange.start_time()
-                                                    .rescaled_to(1.0)
-                                                    .value() *
-                                                    _scale,
-                                                    effectsY, sizeHint.w, sizeHint.h));
-
-                            effectsY += sizeHint.h;
-                        }
-                    }
                 }
 
                 if (visible)
@@ -411,7 +365,7 @@ namespace tl
                     {
                         const math::Size2i& sizeHint = item->getSizeHint();
                         transitionH = sizeHint.h;
-                        
+
                         const auto i = std::find_if(
                             p.mouse.items.begin(), p.mouse.items.end(),
                             [item](const std::shared_ptr<Private::MouseItemData>&
@@ -421,7 +375,7 @@ namespace tl
                         {
                             continue;
                         }
-                        const otime::TimeRange& timeRange =
+                        const OTIO_NS::TimeRange& timeRange =
                             item->getTimeRange();
                         item->setGeometry(math::Box2i(
                             _geometry.min.x + timeRange.start_time()
@@ -517,7 +471,7 @@ namespace tl
         {
             IItem::drawOverlayEvent(drawRect, event);
             TLRENDER_P();
-            
+
             const math::Box2i& g = _geometry;
 
             int y = p.size.scrollPos.y + g.min.y;
@@ -590,7 +544,7 @@ namespace tl
                 throw std::runtime_error("Unhandled Edit Mode");
             }
         }
-            
+
         void TimelineItem::mousePressEvent(ui::MouseClickEvent& event)
         {
             IWidget::mousePressEvent(event);
@@ -616,12 +570,12 @@ namespace tl
                     0 == event.modifiers)
                     doSelection = true;
             }
-            
+
             if (p.editMode == timeline::EditMode::Slip)
             {
                 saveUndo = true;
             }
-            
+
             if (doSelection)
             {
                 takeKeyFocus();
@@ -653,14 +607,19 @@ namespace tl
                                     moveToFront(item);
                                     if (_options.editAssociatedClips)
                                     {
-                                        if (auto associated =
-                                                p.getAssociated(item, j, i))
+                                        // Note: j and i are passed by value
+                                        // so the enclosing loops are not
+                                        // disturbed.
+                                        for (const auto& associated :
+                                             p.getAssociated(item, i))
                                         {
                                             p.mouse.items.push_back(
                                                 std::make_shared<
                                                     Private::MouseItemData>(
-                                                    associated, j, i));
-                                            moveToFront(associated);
+                                                    associated.item,
+                                                    associated.index,
+                                                    associated.track));
+                                            moveToFront(associated.item);
                                         }
                                     }
                                     break;
@@ -703,7 +662,7 @@ namespace tl
                         }
                     }
                 }
-                
+
                 if (p.mouse.items.empty())
                 {
                     p.mouse.mode = Private::MouseMode::CurrentTime;
@@ -711,14 +670,14 @@ namespace tl
                     {
                         p.player->setPlayback(timeline::Playback::Stop);
                     }
-                    const otime::RationalTime time = posToTime(event.pos.x);
+                    const OTIO_NS::RationalTime time = posToTime(event.pos.x);
                     p.scrub->setIfChanged(true);
                     p.timeScrub->setIfChanged(time);
                     p.player->seek(time);
                 }
                 else
                 {
-                    const math::Box2i& g = p.mouse.items[0]->geometry;                    
+                    const math::Box2i& g = p.mouse.items[0]->geometry;
                     const int midpoint = (g.x() + g.w() / 2);
                     if (_mouse.pressPos.x < midpoint)
                     {
@@ -816,53 +775,53 @@ namespace tl
             event.accept = true;
         }*/
 
-        void TimelineItem::_addOneFrameGap(const otime::RationalTime& videoTime,
-                                           otime::TimeRange& timeRange)
+        void TimelineItem::_addOneFrameGap(const OTIO_NS::RationalTime& videoTime,
+                                           OTIO_NS::TimeRange& timeRange)
         {
-            otime::RationalTime one_frame(1.0, videoTime.rate());
-            const otime::RationalTime& startTime =
+            OTIO_NS::RationalTime one_frame(1.0, videoTime.rate());
+            const OTIO_NS::RationalTime& startTime =
                 timeRange.start_time() + one_frame;
-            const otime::RationalTime& duration =
+            const OTIO_NS::RationalTime& duration =
                 timeRange.duration() - one_frame;
-            timeRange = otime::TimeRange(startTime, duration);
+            timeRange = OTIO_NS::TimeRange(startTime, duration);
         }
-        
+
         void TimelineItem::_getTransitionItems(std::vector<IBasicItem*>& items,
                                                const int trackNumber,
-                                               const otime::TimeRange& transitionRange)
+                                               const OTIO_NS::TimeRange& transitionRange)
         {
             TLRENDER_P();
-            
+
             for (const auto& item : p.tracks[trackNumber].items)
             {
                 IBasicItem* clip = static_cast<IBasicItem*>(item.get());
-                otime::TimeRange itemRange = clip->getTimeRange();
+                OTIO_NS::TimeRange itemRange = clip->getTimeRange();
                 if (itemRange.intersects(transitionRange))
                 {
                     items.push_back(clip);
                 }
             }
         }
-        
-        void TimelineItem::_getTransitionTimeRanges(std::vector<otime::TimeRange>& timeRanges,
+
+        void TimelineItem::_getTransitionTimeRanges(std::vector<OTIO_NS::TimeRange>& timeRanges,
                                                     const int trackNumber,
-                                                    const otime::TimeRange& transitionRange)
+                                                    const OTIO_NS::TimeRange& transitionRange)
         {
             TLRENDER_P();
-            
+
             std::vector<IBasicItem*> items;
             _getTransitionItems(items, trackNumber, transitionRange);
 
             for (const auto& item : items)
             {
-                otime::TimeRange itemRange = item->getTimeRange();
+                OTIO_NS::TimeRange itemRange = item->getTimeRange();
                 timeRanges.push_back(itemRange);
             }
 
             if (timeRanges.size() != 2)
                 throw std::runtime_error("Broken transition in otio file");
         }
-        
+
         void TimelineItem::_timeUnitsUpdate()
         {
             IItem::_timeUnitsUpdate();
@@ -1076,7 +1035,7 @@ namespace tl
             for (const auto& frameMarker : p.frameMarkers)
             {
                 const math::Box2i g2(
-                    timeToPos(otime::RationalTime(frameMarker, rate)),
+                    timeToPos(OTIO_NS::RationalTime(frameMarker, rate)),
                     p.size.scrollPos.y + g.min.y, p.size.border * 2,
                     p.size.margin + p.size.fontMetrics.lineHeight +
                         p.size.margin + p.size.border * 4);
@@ -1110,9 +1069,9 @@ namespace tl
                             _getLabelMaxSize(event.fontSystem);
                         for (double t = 0.0; t < duration; t += seconds)
                         {
-                            const otime::RationalTime time =
+                            const OTIO_NS::RationalTime time =
                                 _timeRange.start_time() +
-                                otime::RationalTime(t, 1.0).rescaled_to(
+                                OTIO_NS::RationalTime(t, 1.0).rescaled_to(
                                     _timeRange.duration().rate());
                             const math::Box2i box(
                                 g.min.x + t / duration * w + p.size.border +
@@ -1246,7 +1205,7 @@ namespace tl
 
                 const std::string label =
                     _data->timeUnitsModel->getLabel(p.currentTime);
-                
+
                 math::Vector2i labelPos(
                     pos.x + p.size.border * 2 + p.size.margin,
                     pos.y + p.size.margin + p.size.fontMetrics.ascender);
@@ -1264,13 +1223,13 @@ namespace tl
                         labelPos = labelPos2;
                     }
                 }
-                
+
                 std::vector<timeline::TextInfo> textInfos;
                 event.render->appendText(textInfos,
                                          event.fontSystem->getGlyphs(
                                              label, p.size.fontInfo),
                                          labelPos);
-                            
+
                 for (const auto& textInfo : textInfos)
                 {
                     event.render->drawText(textInfo, math::Vector2i(),
@@ -1299,15 +1258,15 @@ namespace tl
         void TimelineItem::_textUpdate()
         {
             TLRENDER_P();
-            
+
             p.size.textInfos.clear();
             for (const auto& track : p.tracks)
             {
-                const otime::RationalTime duration = track.timeRange.duration();
+                const OTIO_NS::RationalTime duration = track.timeRange.duration();
                 const bool khz = TrackType::Audio == track.type
                                      ? (duration.rate() >= 1000.0)
                                      : false;
-                const otime::RationalTime rescaled =
+                const OTIO_NS::RationalTime rescaled =
                     duration.rescaled_to(_data->speed);
                 const std::string label =
                     string::Format("{0}, {1}{2}")
@@ -1320,16 +1279,16 @@ namespace tl
 
         bool TimelineItem::_transitionIntersects(const std::shared_ptr<IItem> item,
                                                  const int transitionTrack,
-                                                 const otime::TimeRange& timeRange)
+                                                 const OTIO_NS::TimeRange& timeRange)
         {
             TLRENDER_P();
-            
+
             bool out = false;
             for (const auto& transition : p.tracks[transitionTrack].transitions)
             {
                 if (item == transition)
                     continue;
-                otime::TimeRange transitionRange = transition->getTimeRange();
+                OTIO_NS::TimeRange transitionRange = transition->getTimeRange();
                 if (transitionRange.intersects(timeRange))
                 {
                     out = true;
@@ -1339,35 +1298,44 @@ namespace tl
             return out;
         }
 
-        std::vector<const otio::Item*>
+        std::vector<timeline::MoveData>
         TimelineItem::getSelectedItems() const
         {
             TLRENDER_P();
-            
-            std::vector<const otio::Item*> out;
+
+            std::vector<timeline::MoveData> out;
             for (const auto& item : p.mouse.items)
             {
-                if (auto clip = dynamic_cast<const IBasicItem*>(item->p.get()))
-                    out.push_back(clip->getOtioItem());
+                if (!dynamic_cast<VideoClipItem*>(item->p.get()) &&
+                    !dynamic_cast<AudioClipItem*>(item->p.get()))
+                    continue;
+                timeline::MoveData move;
+                move.fromTrack = move.toTrack = item->track;
+                move.fromIndex = move.toIndex = item->index;
+                out.push_back(move);
             }
             return out;
         }
-        
-        std::vector<const otio::Transition*>
+
+        std::vector<timeline::MoveData>
         TimelineItem::getSelectedTransitions() const
         {
             TLRENDER_P();
-            
-            std::vector<const otio::Transition*> out;
+
+            std::vector<timeline::MoveData> out;
             for (const auto& item : p.mouse.items)
             {
-                if (auto transition = dynamic_cast<const TransitionItem*>(item->p.get()))
-                    out.push_back(transition->getOtioItem());
+                if (!dynamic_cast<TransitionItem*>(item->p.get()))
+                    continue;
+                timeline::MoveData move;
+                move.fromTrack = move.toTrack = item->track;
+                move.fromIndex = move.toIndex = item->index;
+                out.push_back(move);
             }
             return out;
         }
-        
-    
+
+
         TimelineItem::Private::MouseItemData::MouseItemData() {}
 
         TimelineItem::Private::MouseItemData::MouseItemData(
@@ -1392,75 +1360,82 @@ namespace tl
             }
         }
 
-        std::shared_ptr<IItem> TimelineItem::Private::getAssociated(
-            const std::shared_ptr<IItem>& item, int& index,
-            int& trackIndex) const
+        std::vector<TimelineItem::Private::Associated>
+        TimelineItem::Private::getAssociated(
+            const std::shared_ptr<IItem>& item, int trackIndex) const
         {
-            std::shared_ptr<IItem> out;
-            if (trackIndex >= 0 && trackIndex < tracks.size() &&
-                tracks.size() > 1)
+            std::vector<Associated> out;
+            const int tracksSize = static_cast<int>(tracks.size());
+            if (!item || trackIndex < 0 || trackIndex >= tracksSize)
+                return out;
+
+            // Look for items on tracks of the opposite type.
+            const TrackType otherType =
+                TrackType::Video == tracks[trackIndex].type ?
+                    TrackType::Audio :
+                    TrackType::Video;
+
+            const OTIO_NS::TimeRange& timeRange = item->getTimeRange();
+            const double start = timeRange.start_time().to_seconds();
+            const double end = timeRange.end_time_exclusive().to_seconds();
+            const double rate = timeRange.start_time().rate();
+
+            // Scored candidates (lower is better).
+            struct Candidate
             {
-                const otime::TimeRange& timeRange = item->getTimeRange();
-                if (TrackType::Video == tracks[trackIndex].type &&
-                    trackIndex < tracks.size() - 1 &&
-                    TrackType::Audio == tracks[trackIndex + 1].type)
+                Associated associated;
+                double score = 0.0;
+            };
+            std::vector<Candidate> candidates;
+
+            for (int t = 0; t < tracksSize; ++t)
+            {
+                if (t == trackIndex || tracks[t].type != otherType)
+                    continue;
+
+                const auto& items = tracks[t].items;
+                for (int i = 0; i < static_cast<int>(items.size()); ++i)
                 {
-                    for (size_t i = 0; i < tracks[trackIndex + 1].items.size();
-                         ++i)
+                    const auto& other = items[i];
+                    if (!other || std::dynamic_pointer_cast<GapItem>(other))
+                        continue;
+
+                    const OTIO_NS::TimeRange& otherRange =
+                        other->getTimeRange();
+
+                    // Tolerance is half a frame at the slowest of the two
+                    // rates (so a 48kHz audio range does not make it
+                    // vanishingly small).
+                    double minRate = rate;
+                    const double otherRate = otherRange.start_time().rate();
+                    if (otherRate > 0.0 && (minRate <= 0.0 || otherRate < minRate))
+                        minRate = otherRate;
+                    const double tolerance =
+                        0.5 / (minRate > 0.0 ? minRate : 24.0);
+
+                    const double ds = std::abs(
+                        otherRange.start_time().to_seconds() - start);
+                    const double de = std::abs(
+                        otherRange.end_time_exclusive().to_seconds() - end);
+                    if (ds <= tolerance && de <= tolerance)
                     {
-                        const otime::TimeRange& audioTimeRange =
-                            tracks[trackIndex + 1].items[i]->getTimeRange();
-                        const otime::RationalTime audioStartTime =
-                            audioTimeRange.start_time().rescaled_to(
-                                timeRange.start_time().rate());
-                        const otime::RationalTime audioDuration =
-                            audioTimeRange.duration().rescaled_to(
-                                timeRange.duration().rate());
-                        if (math::fuzzyCompare(
-                                audioStartTime.value(),
-                                timeRange.start_time().value()) &&
-                            math::fuzzyCompare(
-                                audioDuration.value(),
-                                timeRange.duration().value()))
-                        {
-                            out = tracks[trackIndex + 1].items[i];
-                            index = i;
-                            trackIndex = trackIndex + 1;
-                            break;
-                        }
-                    }
-                }
-                else if (
-                    TrackType::Audio == tracks[trackIndex].type &&
-                    trackIndex > 0 &&
-                    TrackType::Video == tracks[trackIndex - 1].type)
-                {
-                    for (size_t i = 0; i < tracks[trackIndex - 1].items.size();
-                         ++i)
-                    {
-                        const otime::TimeRange& videoTimeRange =
-                            tracks[trackIndex - 1].items[i]->getTimeRange();
-                        const otime::RationalTime videoStartTime =
-                            videoTimeRange.start_time().rescaled_to(
-                                timeRange.start_time().rate());
-                        const otime::RationalTime videoDuration =
-                            videoTimeRange.duration().rescaled_to(
-                                timeRange.duration().rate());
-                        if (math::fuzzyCompare(
-                                videoStartTime.value(),
-                                timeRange.start_time().value()) &&
-                            math::fuzzyCompare(
-                                videoDuration.value(),
-                                timeRange.duration().value()))
-                        {
-                            out = tracks[trackIndex - 1].items[i];
-                            index = i;
-                            trackIndex = trackIndex - 1;
-                            break;
-                        }
+                        Candidate c;
+                        c.associated = {other, i, t};
+                        // Closest match first; ties go to the nearest track.
+                        c.score = ds + de + 1e-9 * std::abs(t - trackIndex);
+                        candidates.push_back(c);
                     }
                 }
             }
+
+            std::stable_sort(
+                candidates.begin(), candidates.end(),
+                [](const Candidate& a, const Candidate& b)
+                { return a.score < b.score; });
+
+            out.reserve(candidates.size());
+            for (const auto& c : candidates)
+                out.push_back(c.associated);
             return out;
         }
 
@@ -1519,7 +1494,7 @@ namespace tl
         void TimelineItem::_storeUndo()
         {
             TLRENDER_P();
-            
+
             std::vector<timeline::MoveData> moveData;
             moveData.push_back(
                 {
@@ -1528,16 +1503,16 @@ namespace tl
             if (p.moveCallback)
                 p.moveCallback(moveData);
         }
-        
-        bool TimelineItem::_clampRangeToNeighborTransitions(const otio::Item* item,
-                                                            const otime::TimeRange& proposedRange,
-                                                            otime::TimeRange& clampedRange)
+
+        bool TimelineItem::_clampRangeToNeighborTransitions(const OTIO_NS::Item* item,
+                                                            const OTIO_NS::TimeRange& proposedRange,
+                                                            OTIO_NS::TimeRange& clampedRange)
         {
             if (!item) {
                 return false;
             }
 
-            const auto* track = dynamic_cast<const otio::Track*>(item->parent());
+            const auto* track = dynamic_cast<const OTIO_NS::Track*>(item->parent());
             if (!track) {
                 return false;
             }
@@ -1547,28 +1522,28 @@ namespace tl
                 return false;
             }
 
-            otime::RationalTime proposed_start = proposedRange.start_time();
-            otime::RationalTime proposed_duration = proposedRange.duration();
-            otime::RationalTime proposed_end_excl = proposed_start + proposed_duration;
+            OTIO_NS::RationalTime proposed_start = proposedRange.start_time();
+            OTIO_NS::RationalTime proposed_duration = proposedRange.duration();
+            OTIO_NS::RationalTime proposed_end_excl = proposed_start + proposed_duration;
 
             // We need the CURRENT range to understand where the transition boundaries are
             // in the parent's coordinate space.
-            const otime::TimeRange currentRange = track->range_of_child(item);
-            otime::RationalTime current_duration = currentRange.duration();
+            const OTIO_NS::TimeRange currentRange = track->range_of_child(item);
+            OTIO_NS::RationalTime current_duration = currentRange.duration();
 
-            otime::RationalTime clamped_start = proposed_start;
-            otime::RationalTime clamped_end_excl = proposed_end_excl;
+            OTIO_NS::RationalTime clamped_start = proposed_start;
+            OTIO_NS::RationalTime clamped_end_excl = proposed_end_excl;
 
             // ---------------------------------------------------
             // Incoming transition (at the start of the item)
             // ---------------------------------------------------
-            otime::RationalTime transition_end = proposed_end_excl;
-            otime::RationalTime transition_out_offset(0, proposed_start.rate());
-            otime::RationalTime transition_start = proposed_start;
-            otime::RationalTime transition_in_offset(0, proposed_start.rate());
-            
+            OTIO_NS::RationalTime transition_end = proposed_end_excl;
+            OTIO_NS::RationalTime transition_out_offset(0, proposed_start.rate());
+            OTIO_NS::RationalTime transition_start = proposed_start;
+            OTIO_NS::RationalTime transition_in_offset(0, proposed_start.rate());
+
             if (index > 0) {
-                if (auto prevTransition = otio::dynamic_retainer_cast<otio::Transition>(track->children()[index - 1])) {
+                if (auto prevTransition = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Transition>(track->children()[index - 1])) {
                     transition_out_offset = prevTransition->out_offset();
                     transition_end = currentRange.start_time() + transition_out_offset;
                 }
@@ -1578,7 +1553,7 @@ namespace tl
             // Outgoing transition (at the end of the item)
             // ---------------------------------------------------
             if (index + 1 < static_cast<int>(track->children().size())) {
-                if (auto nextTransition = otio::dynamic_retainer_cast<otio::Transition>(track->children()[index + 1])) {
+                if (auto nextTransition = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Transition>(track->children()[index + 1])) {
                     transition_in_offset = nextTransition->in_offset();
                     transition_start = currentRange.end_time_exclusive() - transition_in_offset;
                 }
@@ -1591,7 +1566,7 @@ namespace tl
             if (proposed_start > transition_start) {
                 clamped_start = proposed_start = transition_start;
             }
-    
+
             if (proposed_start > transition_end) {
                 clamped_start = proposed_start = transition_end;
             }
@@ -1605,11 +1580,11 @@ namespace tl
                 clamped_end_excl = clamped_start + transition_in_offset + transition_out_offset;
             }
 
-            otime::RationalTime clamped_duration = clamped_end_excl - clamped_start;
-            clampedRange = otime::TimeRange(clamped_start, clamped_duration);
+            OTIO_NS::RationalTime clamped_duration = clamped_end_excl - clamped_start;
+            clampedRange = OTIO_NS::TimeRange(clamped_start, clamped_duration);
 
             return !(clampedRange == proposedRange);
         }
-        
+
     } // namespace TIMELINEUI
 } // namespace tl

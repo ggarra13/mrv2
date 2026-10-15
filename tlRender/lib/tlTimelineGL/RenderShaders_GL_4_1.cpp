@@ -134,8 +134,8 @@ namespace tl
                 "const uint PixelType_L_F16             = 4;\n"
                 "const uint PixelType_L_F32             = 5;\n"
                 "const uint PixelType_LA_U8             = 6;\n"
-                "const uint PixelType_LA_U32            = 7;\n"
-                "const uint PixelType_LA_U16            = 8;\n"
+                "const uint PixelType_LA_U16            = 7;\n"
+                "const uint PixelType_LA_U32            = 8;\n"
                 "const uint PixelType_LA_F16            = 9;\n"
                 "const uint PixelType_LA_F32            = 10;\n"
                 "const uint PixelType_RGB_U8            = 11;\n"
@@ -149,6 +149,7 @@ namespace tl
                 "const uint PixelType_RGBA_U32          = 19;\n"
                 "const uint PixelType_RGBA_F16          = 20;\n"
                 "const uint PixelType_RGBA_F32          = 21;\n"
+
                 "const uint PixelType_YUV_420P_U8       = 22;\n"
                 "const uint PixelType_YUV_422P_U8       = 23;\n"
                 "const uint PixelType_YUV_444P_U8       = 24;\n"
@@ -161,7 +162,17 @@ namespace tl
                 "const uint PixelType_YUV_420P_U16      = 31;\n"
                 "const uint PixelType_YUV_422P_U16      = 32;\n"
                 "const uint PixelType_YUV_444P_U16      = 33;\n"
-                "const uint PixelType_ARGB_4444_Premult = 34;\n";
+
+                "const uint PixelType_YUV_420SP_U8      = 34;\n"
+                "const uint PixelType_YUV_420SP_U16     = 35;\n"
+
+                "const uint PixelType_YUV_422SP_U8      = 36;\n"
+                "const uint PixelType_YUV_422SP_U16     = 37;\n"
+
+                "const uint PixelType_YUV_444SP_U8      = 38;\n"
+                "const uint PixelType_YUV_444SP_U16     = 39;\n"
+
+                "const uint PixelType_ARGB_4444_Premult = 40;\n";
 
             const std::string videoLevels =
                 "// enum tl::image::VideoLevels\n"
@@ -183,7 +194,10 @@ float getBitDepth(int pixelType)
     {
         return 12.0;
     }
-    else if (pixelType == PixelType_YUV_420P_U16 ||
+    else if (pixelType == PixelType_YUV_444SP_U16 ||
+             pixelType == PixelType_YUV_422SP_U16 ||
+             pixelType == PixelType_YUV_420SP_U16 ||
+             pixelType == PixelType_YUV_420P_U16 ||
              pixelType == PixelType_YUV_422P_U16 ||
              pixelType == PixelType_YUV_444P_U16)
     {
@@ -195,104 +209,116 @@ float getBitDepth(int pixelType)
     }
 }
 
+
 vec4 sampleTexture(
-              vec2 textureCoord,
-              int pixelType,
-              int videoLevels,
-              vec4 yuvCoefficients,
-              int imageChannels,
-              sampler2D s0,
-              sampler2D s1,
-              sampler2D s2)
+    vec2 textureCoord,
+    int pixelType,
+    int videoLevels,
+    vec4 yuvCoefficients,
+    int imageChannels,
+    sampler2D s0,
+    sampler2D s1,
+    sampler2D s2)
 {
-       vec4 c;
-       if ((pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_444P_U16))
-       {
+    vec4 c;
+    float y = 0.0, cb = 0.0, cr = 0.0;
 
-          float y  = texture(s0, textureCoord).r;
-          float cb = texture(s1, textureCoord).r;
-          float cr = texture(s2, textureCoord).r;
-// For 10-bit and 12-bit, ensure correct normalization
-          if (pixelType == PixelType_YUV_420P_U10 ||
-              pixelType == PixelType_YUV_422P_U10 ||
-              pixelType == PixelType_YUV_444P_U10)
-          {
-            // 
-            // 10-bit data may be packed in 16-bit textures, normalize to [0,1]
-            float rangeScale = 1023.0 / 65535.0; // 1023 = 2^10 - 1
-            y  = y / rangeScale; 
-            cb = cb / rangeScale;
-            cr = cr / rangeScale;
-          }
-          else if (pixelType == PixelType_YUV_420P_U12 ||
-                   pixelType == PixelType_YUV_422P_U12 ||
-                   pixelType == PixelType_YUV_444P_U12)
-          {
-            // 12-bit data may be packed in 16-bit textures, normalize to [0,1]
-            float rangeScale = 4095.0 / 65535.0; // 1023 = 2^10 - 1
-            y  = y / rangeScale; 
-            cb = cb / rangeScale;
-            cr = cr / rangeScale;
-          }
+    if (pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_444SP_U16)
+    {
+        // Check semi-planar types first:
+        if (pixelType >= PixelType_YUV_420SP_U8 &&
+            pixelType <= PixelType_YUV_444SP_U16)
+        {
+            // Semi-Planar (NV12 / P010 / P016): s0 = Y, s1 = RG (U/V)
+            y  = texture(s0, textureCoord).r;
+            cb = texture(s1, textureCoord).r; // U
+            cr = texture(s1, textureCoord).g; // V
+        }
+        else
+        {
+            // Fully Planar (YUV 420P/422P/444P): s0 = Y, s1 = U, s2 = V
+            y  = texture(s0, textureCoord).r;
+            cb = texture(s1, textureCoord).r;
+            cr = texture(s2, textureCoord).r;
 
-          if (videoLevels == VideoLevels_FullRange)
-          {
-              cb -= 0.5;
-              cr -= 0.5;
-          }
-          else if (videoLevels == VideoLevels_LegalRange)
-          {
-              float bitDepth = getBitDepth(pixelType);
-              float maxValue = pow(2.0, bitDepth) - 1.0;
-              float range = pow(2.0, bitDepth - 8);
+            // Normalize packed 10-bit / 12-bit in 16-bit textures
+            if (pixelType == PixelType_YUV_420P_U10 ||
+                pixelType == PixelType_YUV_422P_U10 ||
+                pixelType == PixelType_YUV_444P_U10)
+            {
+                float rangeScale = 1023.0 / 65535.0;
+                y  /= rangeScale;
+                cb /= rangeScale;
+                cr /= rangeScale;
+            }
+            else if (pixelType == PixelType_YUV_420P_U12 ||
+                     pixelType == PixelType_YUV_422P_U12 ||
+                     pixelType == PixelType_YUV_444P_U12)
+            {
+                float rangeScale = 4095.0 / 65535.0;
+                y  /= rangeScale;
+                cb /= rangeScale;
+                cr /= rangeScale;
+            }
+        }
 
-              // Legal range scaling for YUV (ITU-R BT.601/BT.709)
-              float yMin = 16.0 * range;   // 16 << (bitDepth - 8)
-              float yMax = 235.0 * range;  // 235 << (bitDepth - 8)
-              float cMin = 16.0 * range;   // 16 << (bitDepth - 8)
-              float cMax = 240.0 * range;  // 240 << (bitDepth - 8)
-            
-              // Scale to 0-1 range and normalize
-              y = clamp((y * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
-              cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
-              cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
-          }
+        // 2. Apply Video Levels (Full vs Legal Range)
+        if (videoLevels == VideoLevels_FullRange)
+        {
+            cb -= 0.5;
+            cr -= 0.5;
+        }
+        else if (videoLevels == VideoLevels_LegalRange)
+        {
+            float bitDepth = getBitDepth(pixelType);
+            float maxValue = pow(2.0, bitDepth) - 1.0;
+            float range = pow(2.0, bitDepth - 8.0);
 
-          c.r = y + (yuvCoefficients.x * cr);
-          c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
-          c.b = y + (yuvCoefficients.w * cb);
-          c.a = 1.0;
-      }
-      else
-      {
-          c = texture(s0, textureCoord);
+            float yMin = 16.0 * range;
+            float yMax = 235.0 * range;
+            float cMin = 16.0 * range;
+            float cMax = 240.0 * range;
 
-          // Video levels.
-          if (VideoLevels_LegalRange == videoLevels)
-          {
-              c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
-              c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
-              c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
-          }
-              
-          if (1 == imageChannels)
-          {
-              c.g = c.b = c.r;
-              c.a = 1.0;
-          }
-          else if (2 == imageChannels)
-          {
-              c.a = c.g;
-              c.g = c.b = c.r;
-          }
-          else if (3 == imageChannels)
-          {
-              c.a = 1.0;
-          }
-       }
-      return c;
-}
-            )";
+            y  = clamp((y  * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
+            cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+            cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+        }
+
+        // 3. YUV to RGB Matrix Transformation
+        c.r = y + (yuvCoefficients.x * cr);
+        c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
+        c.b = y + (yuvCoefficients.w * cb);
+        c.a = 1.0;
+    }
+    else
+    {
+        c = texture(s0, textureCoord);
+
+        if (VideoLevels_LegalRange == videoLevels)
+        {
+            c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
+            c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+            c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+        }
+
+        if (1 == imageChannels)
+        {
+            c.g = c.b = c.r;
+            c.a = 1.0;
+        }
+        else if (2 == imageChannels)
+        {
+            c.a = c.g;
+            c.g = c.b = c.r;
+        }
+        else if (3 == imageChannels)
+        {
+            c.a = 1.0;
+        }
+    }
+    return c;
+})";
+
         } // namespace
 
         std::string imageFragmentSource()
@@ -661,32 +687,34 @@ vec4 sampleTexture(
             return "#version 410\n"
                    "\n"
                    "in vec2 fTexture;\n"
+                   "\n"
                    "out vec4 outColor;\n"
                    "\n"
                    "uniform sampler2D textureSampler;\n"
                    "uniform sampler2D textureSamplerB;\n"
+                   "uniform float gain;\n"
                    "\n"
                    "void main()\n"
                    "{\n"
                    "    vec4 c = texture(textureSampler, fTexture);\n"
                    "    vec4 cB = texture(textureSamplerB, fTexture);\n"
-                   "    outColor.r = abs(c.r - cB.r);\n"
-                   "    outColor.g = abs(c.g - cB.g);\n"
-                   "    outColor.b = abs(c.b - cB.b);\n"
+                   "    outColor.r = abs(c.r - cB.r) * gain;\n"
+                   "    outColor.g = abs(c.g - cB.g) * gain;\n"
+                   "    outColor.b = abs(c.b - cB.b) * gain;\n"
                    "    outColor.a = max(c.a, cB.a);\n"
                    "}\n";
         }
-        
+
         std::string multiplyFragmentSource()
         {
             return R"(#version 410
-                 
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
-                 
+
 uniform sampler2D textureSampler;
 uniform sampler2D textureSamplerB;
-                 
+
 void main()
 {
     vec4 c = texture(textureSampler, fTexture);
@@ -701,13 +729,13 @@ void main()
         std::string addFragmentSource()
         {
             return R"(#version 410
-                 
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
-                 
+
 uniform sampler2D textureSampler;
 uniform sampler2D textureSamplerB;
-                 
+
 void main()
 {
     vec4 c = texture(textureSampler, fTexture);
@@ -718,6 +746,34 @@ void main()
     outColor.a = max(c.a, cB.a);
 })";
         }
-        
+
+        std::string butterflyFragmentSource()
+        {
+            return
+                "#version 410\n"
+                "\n"
+                "in vec2 fTexture;\n"
+                "out vec4 outColor;\n"
+                "\n"
+                "uniform sampler2D textureSampler;\n"
+                "uniform sampler2D textureSamplerB;\n"
+                "\n"
+                "void main()\n"
+                "{\n"
+                // The same half of both, the second one mirrored, so that
+                // the middle of the picture is on both sides of the seam.
+                "    if (fTexture.x < .5)\n"
+                "    {\n"
+                "        outColor = texture(textureSampler, fTexture);\n"
+                "    }\n"
+                "    else\n"
+                "    {\n"
+                "        outColor = texture(\n"
+                "            textureSamplerB,\n"
+                "            vec2(1.0 - fTexture.x, fTexture.y));\n"
+                "    }\n"
+                "}\n";
+        }
+
     } // namespace timeline_gl
 } // namespace tl

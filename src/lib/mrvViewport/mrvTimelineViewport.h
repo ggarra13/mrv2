@@ -29,9 +29,12 @@
 #include <tlTimeline/PlayerOptions.h>
 #include <tlTimeline/ShaderOptions.h>
 
-#include <tlDraw/Shape.h>
+#include <tlIO/SequenceIO.h>
 
 #include <tlCore/ValueObserver.h>
+
+#include <tlDraw/Shape.h>
+
 
 
 class ViewerUI;
@@ -54,7 +57,7 @@ namespace mrv
     {
         class VoiceOver;
     }
-    
+
     namespace BACKEND_NAMESPACE
     {
 
@@ -98,7 +101,7 @@ namespace mrv
 
             //! Set the edit mode.
             void setEditMode(const timeline::EditMode& mode) noexcept;
-            
+
             //! Get the edit mode.
             timeline::EditMode getEditMode() noexcept;
 
@@ -114,11 +117,11 @@ namespace mrv
 
             //! Set the shader options.
             void setShaderOptions(const timeline::ShaderOptions& value) noexcept;
-            
+
             //! Get the background options.
             const timeline::BackgroundOptions&
             getBackgroundOptions() const noexcept;
-            
+
             //! Observe the background options.
             std::shared_ptr<observer::IValue<timeline::BackgroundOptions> >
             observeBackgroundOptions() const;
@@ -132,6 +135,9 @@ namespace mrv
             //! Set the OCIO options for monitor.
             void setOCIOOptions(
                 unsigned monitorId, const timeline::OCIOOptions&) noexcept;
+
+            //! Set the auto Input Color Space.
+            void setAutoICS();
 
             const timeline::OCIOOptions&
             getOCIOOptions(unsigned monitorId) const noexcept;
@@ -161,6 +167,9 @@ namespace mrv
             void setHDROptions(const timeline::HDROptions&) noexcept;
 
             const timeline::HDROptions& getHDROptions() const noexcept;
+
+            //! Toggle libplacebo tonemapping.
+            void setToneMapping(const bool) noexcept;
 
             //! Set the timeline players.
             void setTimelinePlayer(TimelinePlayer*) noexcept;
@@ -197,12 +206,6 @@ namespace mrv
 
             //! Set pixel aspect ratio of image.
             void setPixelAspectRatio(const float x) noexcept;
-
-            //! Clear the help text after 1 second has elapsed.
-            void clearHelpText();
-
-            //! Set help HUD text
-            void setHelpText(const std::string&);
 
             //! @{ HUD controls
 
@@ -288,21 +291,21 @@ namespace mrv
             void setGhostNext(int);
 
             //! Set the missing frame type.
-            void setMissingFrameType(const MissingFrameType);
+            void setMissingFrameType(const tl::io::MissingFrames);
 
             //
-            const std::vector<tl::timeline::VideoData>&
-            getVideoData() const noexcept;
+            const std::vector<tl::timeline::VideoFrame>&
+            getVideoFrame() const noexcept;
 
             // Callbacks
             int acceptMultilineInput() noexcept;
 
             void cacheChangedCallback() const noexcept;
 
-            void currentTimeChanged(const otime::RationalTime&) const noexcept;
+            void currentTimeChanged(const OTIO_NS::RationalTime&) const noexcept;
 
             void currentVideoCallback(
-                const std::vector<tl::timeline::VideoData>&) noexcept;
+                const std::vector<tl::timeline::VideoFrame>&) noexcept;
 
             //! Set the OCIO configuration from the GUI.
             void updateOCIOOptions() noexcept;
@@ -366,7 +369,7 @@ namespace mrv
 
             //! Refresh window by clearing the associated resources.
             virtual void refresh(){};
-            
+
             //! Handle view spinning when in Environment Map mode.
             void handleViewSpinning() noexcept;
 
@@ -385,7 +388,7 @@ namespace mrv
 
             //! Laser fading annotation
             static void laserFade_cb(LaserFadeData*);
-            
+
             //! Laser fading annotation
             void laserFade(LaserFadeData*);
 
@@ -414,7 +417,7 @@ namespace mrv
 
             //! Get current frame/video tags
             image::Tags getTags() const noexcept;
-            
+
             //! Record the mouse position callback.
             void recordMousePosition();
 
@@ -423,7 +426,7 @@ namespace mrv
 
             //! Delete the selected URL link.
             void linkDelete();
-            
+
             //! Delete the voice over.
             void voiceOverDelete();
 
@@ -435,9 +438,11 @@ namespace mrv
 
             //! Get the full projection matrix.
             const math::Matrix4x4f projectionMatrix() const noexcept;
-            
+
         protected:
             void _init();
+
+            void _updateActionMode(const ActionMode mode);
 
             void _updateDevices() const noexcept;
 
@@ -455,22 +460,24 @@ namespace mrv
             math::Vector2f _getRasterf(int X, int Y) const noexcept;
             math::Vector2f _getRasterf() const noexcept;
 
+
+
             //! Get the normalized rotation between 0 and 360
             //! full rotation of the image (user rotation + video rotation)
             float _getRotation() const noexcept;
 
             //! Get the full projection matrix.
             math::Matrix4x4f _projectionMatrixNoRotation() const noexcept;
-            
+
             //! Get the raster matrix.
             math::Matrix4x4f _rasterProjectionMatrix() const noexcept;
-            
+
             //! Get the render projection matrix.
             math::Matrix4x4f _renderProjectionMatrix() const noexcept;
 
             //! Get the matrix to pixel (raster) coordinates of image.
             math::Matrix4x4f _pixelMatrix() const noexcept;
-            
+
             //! Get the matrix to pixel (raster) coordinates of image with
             //! panning and zooming.
             math::Matrix4x4f _pixelMatrixWithTransforms() const noexcept;
@@ -512,15 +519,15 @@ namespace mrv
             void _handleCompareWipe() noexcept;
             void _handleCompareOverlay() noexcept;
 
-            void _handlePushLeftMouseButton() noexcept;
-            void _handlePushLeftMouseButtonShapes() noexcept;
+            int  _handlePushLeftMouseButton() noexcept;
+            int  _handlePushLeftMouseButtonShapes() noexcept;
             int  _handleReleaseLeftMouseButtonShapes() noexcept;
-            
-            void _handleDragLeftMouseButton() noexcept;
-            void _handleDragLeftMouseButtonShapes() noexcept;
-            void _handleDragSelection() noexcept;
-            
-            void _handleDragMiddleMouseButton() noexcept;
+
+            int  _handleDragLeftMouseButton() noexcept;
+            int  _handleDragLeftMouseButtonShapes() noexcept;
+            int  _handleDragSelection() noexcept;
+
+            int  _handleDragMiddleMouseButton() noexcept;
 
             int _popupRMBMenu() noexcept;
             int _handlePopupLinkMenu(int event) noexcept;
@@ -569,13 +576,15 @@ namespace mrv
             void _stopVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice);
             void _stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice);
 
+            void _updateLayers();
+
             void _stopVoiceRecording();
             void _stopVoicePlaying();
-            
+
             voice::MouseData currentMouseData;
             std::shared_ptr<voice::VoiceOver> currentVoiceOver;
             std::shared_ptr<tl::draw::Shape>  currentLink;
-            
+
             TLRENDER_PRIVATE();
         };
 

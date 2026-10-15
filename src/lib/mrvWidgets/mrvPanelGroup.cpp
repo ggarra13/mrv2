@@ -125,7 +125,7 @@ namespace mrv
                 key = prefix + "/Screen";
                 value = settings->getValue<std::any>(key);
                 N = std_any_empty(value) ? 0 : std_any_cast<int>(value);
-            
+
                 key = prefix + "/WindowX";
                 value = settings->getValue<std::any>(key);
                 X = std_any_empty(value) ? X : std_any_cast<int>(value);
@@ -157,11 +157,12 @@ namespace mrv
             bool parented_to_main = true;
             if (Fl_Group::current() == nullptr)
                 parented_to_main = false;
-            
+
             tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
             tw->end();
+            tw->copy_label(label.c_str());
             tw->screen_num(N);
-            
+
             dock->remove(this);
             tw->add(this);  // move the tool group into the floating window
             position(kMargin, kMargin); // align group in floating window (needed)
@@ -226,7 +227,7 @@ namespace mrv
             assert(screen >= 0);
             int minX = 0, minY = 0, maxW = 640, maxH = 480;
             Fl::screen_work_area(minX, minY, maxW, maxH, screen);
-            
+
             // leave some headroom for topbar
             maxH = maxH - docker->h(); // 20 of offset
             assert(maxH > 0);
@@ -240,7 +241,7 @@ namespace mrv
                 H = maxH;
             }
             assert(H >= 0);
-            
+
             group->size(W, group->h());
 
             scroll->resize(kMargin, scroll->y(), pack->w(), H - kMargin);
@@ -248,9 +249,9 @@ namespace mrv
                 pack->size(W, H - kTitleBar - kMargin);
             scroll->init_sizes(); // needed? to reset scroll size init size
         }
-        
+
         Fl_Group::resize(X, Y, W, pack->h() + DH + GH);
-        
+
         // Make sure buttons don't stretch
         W = w() - kButtonW * 2;
 #ifdef LEFT_BUTTONS
@@ -299,7 +300,7 @@ namespace mrv
             assert(minY >= 0);
             assert(maxW >= 0);
             assert(maxH >= 0);
-            
+
             // leave some headroom for topbar
             maxH = maxH - DH;
             assert(maxH >= 0);
@@ -320,20 +321,23 @@ namespace mrv
 
             if (H > maxH)
                 H = maxH;
-        
+
             scroll->size(pack->w(), H);
             scroll->init_sizes();
-            
+
 
             if (pack->h() > scroll->h())
                 scroll->scrollbar.set_visible();
             else
                 scroll->scrollbar.clear_visible();
-                         
+
             // Adjust pack for scrollbar if bigger than scroll.
             int sw = scroll->scrollbar.visible() ? scroll->scrollbar.w() : 0;
             pack->size(pack->w() - sw, pack->h());
         }
+
+        if (_layout_cb)
+            _layout_cb();
     }
 
     // Constructors for docked/floating window
@@ -462,14 +466,15 @@ namespace mrv
         // create a floating toolbar window
         // Ensure the window is not created as a child of its own inner group!
         set_Fl_Group(lbl);
-        
+
         bool parented_to_main = true;
         if (Fl_Group::current() == nullptr)
             parented_to_main = false;
-        
+
         tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
         tw->end();
         tw->screen_num(N);
+        tw->copy_label(lbl);
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
         this->position(kMargin, kMargin);

@@ -8,7 +8,7 @@
 show_help()
 {
     if [[ $RUNME == 1 ]]; then
-	echo "$0 [debug|release|reldeb] [clean] [-v] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
+	echo "$0 [debug|release|reldeb] [clean] [-v] [-vk] [-j <num>] [-lgpl] [-gpl] [-D VAR=VALUE] [-t <target>] [-help]"
 	echo ""
 	echo "* debug builds a debug build."
 	echo "* release builds a release build. (default)"
@@ -16,6 +16,7 @@ show_help()
 	echo "* clean clears the directory before building -- use only with runme.sh"
 	echo "* -j <num>  controls the threads to use when compiling. [default=$CPU_CORES]"
 	echo "* -v builds verbosely. [default=off]"
+	echo "* -vk Sets defaults for a Vulkan build (needs Vulkan SDK)"
 	echo "* -D sets cmake variables, like -D TLRENDER_USD=OFF."
 	echo "* -gpl builds FFmpeg with x264 encoder support in a GPL version of it."
 	echo "* -lgpl builds FFmpeg as a LGPL version of it."

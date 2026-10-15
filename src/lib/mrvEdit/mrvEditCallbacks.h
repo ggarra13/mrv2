@@ -22,12 +22,12 @@ namespace mrv
     using namespace tl;
 
     class TimelinePlayer;
-    using otio::Timeline;
+    using OTIO_NS::Timeline;
 
     //@{
     //! Store timeline in undo queue.
 
-    void edit_store_undo(TimelinePlayer*, ViewerUI* ui);
+    void edit_store_undo(TimelinePlayer*&, ViewerUI* ui);
     void edit_clear_redo(ViewerUI* ui);
     //@}
 
@@ -48,54 +48,54 @@ namespace mrv
     file::Path
     getRelativePath(const file::Path& path, const fs::path& fileName);
 
-    //! Make paths of an otio::Timeline absolute.
+    //! Make paths of an OTIO_NS::Timeline absolute.
     void makePathsAbsolute(TimelinePlayer* player, ViewerUI* ui);
 
     //! Menu function to copy one frame to the buffer.
-    void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_frame_copy_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to cut one frame from the timeline.
-    void edit_cut_frame_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_frame_cut_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to paste one frame from the buffer.
-    void edit_paste_frame_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_frame_paste_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to insert one frame from the buffer.
-    void edit_insert_frame_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_frame_insert_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to slice the timeline.
-    void edit_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_time_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to remove item(s) from the timeline.
-    void edit_remove_clip_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_time_remove_clip_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to insert an audio clip at current time.
-    void edit_insert_audio_clip_cb(ViewerUI* ui, const std::string& audioFile);
+    void edit_time_insert_audio_clip(ViewerUI* ui, const std::string& audioFile);
 
-    //! Edit callbacks that open file requesters
-    void insert_audio_clip_cb(Fl_Menu_* w, ViewerUI* ui);
+    //! Edit callbacks that open audio file requesters.
+    void edit_time_insert_audio_clip_cb(Fl_Menu_* w, ViewerUI* ui);
+
+    //! Menu function to insert an audio gap at current time.
+    void edit_time_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to remove audio clip(s) at current time.
-    void edit_remove_audio_clip_cb(Fl_Menu_* m, ViewerUI* ui);
-
-    //! Menu function to insert an audio gap at current time.
-    void edit_insert_video_gap_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_time_remove_audio_clip_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to remove audio gap at current time.
-    void edit_remove_video_gap_cb(Fl_Menu_* m, ViewerUI* ui);
-    
+    void edit_time_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
+
     //! Menu function to insert an audio gap at current time.
-    void edit_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_time_insert_video_gap_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to remove audio gap at current time.
-    void edit_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
-    
+    void edit_time_remove_video_gap_cb(Fl_Menu_* m, ViewerUI* ui);
+
     //! Menu function to remove selected items.
-    void edit_remove_selected_cb(Fl_Menu_* m, ViewerUI* ui);
+    void edit_selected_remove_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to add a transition between 2 or 4 selected items.
-    void edit_add_transition_cb(Fl_Menu_* m, ViewerUI* ui);
-    
+    void edit_selected_add_transition_cb(Fl_Menu_* m, ViewerUI* ui);
+
     //! Menu function to undo an edit or annotation.
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui);
 
@@ -104,7 +104,7 @@ namespace mrv
 
     //! Edit function to shift annotations in a timeRange to a start time
     void shiftAnnotations(
-        const otime::TimeRange& range, const otime::RationalTime& startTime,
+        const OTIO_NS::TimeRange& range, const OTIO_NS::RationalTime& startTime,
         ViewerUI* ui);
 
     //! Refresh file cache
@@ -147,4 +147,12 @@ namespace mrv
     void set_edit_button(EditMode mode, ViewerUI* ui);
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui);
     int calculate_edit_viewport_size(ViewerUI* ui);
+
+    const std::vector<file::Path> getOtioTimelinePaths(
+        const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& otioTimeline,
+        const std::string& directory);
+
+    const std::vector<file::Path> getOtioTimelinePaths(
+        const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&
+        otioTimeline);
 } // namespace mrv

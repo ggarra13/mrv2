@@ -37,11 +37,8 @@ namespace mrv
 {
     using namespace tl;
 
-    struct Playlist;
-
     class TimeObject;
     class FilesModel;
-    class PlaylistsModel;
     class SettingsObject;
 
     //! Application.
@@ -65,9 +62,6 @@ namespace mrv
 
         //! Get the files model.
         const std::shared_ptr<FilesModel>& filesModel() const;
-
-        //! Get the playlists model.
-        const std::shared_ptr<PlaylistsModel>& playlistsModel() const;
 
         //! Get the LUT options.
         const timeline::LUTOptions& lutOptions() const;
@@ -112,6 +106,10 @@ namespace mrv
         //! Open a file (with optional audio) or directory.
         void open(const std::string&, const std::string& = std::string());
 
+        //! Open a set of files (with optional audio) or directory.
+        void open(const std::vector<std::string >&,
+                  const std::string& = std::string());
+
         //! Open a file dialog.
         void openDialog();
 
@@ -126,12 +124,6 @@ namespace mrv
 
         //! Set the display options.
         void setDisplayOptions(const tl::timeline::DisplayOptions&);
-
-        //! Set all the playlists
-        void setPlaylists(const std::vector< Playlist& >);
-
-        //! Set a playlists
-        void setPlaylist(const int, const std::vector< Playlist& >);
 
         //! Set the audio volume.
         void setVolume(float);
@@ -184,7 +176,7 @@ namespace mrv
     public:
         static ViewerUI* ui;
         static App* app;
-        
+
         static bool unsaved_annotations;
         static bool unsaved_edits;
 
@@ -193,11 +185,11 @@ namespace mrv
 
         io::Options _getIOOptions() const;
 
-        void _calculateCacheTimes(otime::RationalTime& startTime,
-                                  otime::RationalTime& endTime);
-        
-        otime::RationalTime _cacheReadAhead() const;
-        otime::RationalTime _cacheReadBehind() const;
+        void _calculateCacheTimes(OTIO_NS::RationalTime& startTime,
+                                  OTIO_NS::RationalTime& endTime);
+
+        OTIO_NS::RationalTime _cacheReadAhead() const;
+        OTIO_NS::RationalTime _cacheReadBehind() const;
 
         void _filesUpdate(const std::vector<std::shared_ptr<FilesModelItem> >&);
 

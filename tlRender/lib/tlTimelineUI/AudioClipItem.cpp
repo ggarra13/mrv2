@@ -3,6 +3,7 @@
 // All rights reserved.
 
 #include "AudioClipItem.h"
+#include "EffectItem.h"
 #include "ThumbnailSystem.h"
 
 #include <tlUI/DrawUtil.h>
@@ -21,13 +22,22 @@ namespace tl
     {
         struct AudioClipItem::Private
         {
+            file::Path timelinePath;
             file::Path path;
-            std::vector<file::MemoryRead> memoryRead;
-            std::shared_ptr<ThumbnailGenerator> thumbnailGenerator;
+
+            std::shared_ptr<ThumbnailSystem> thumbnailSystem;
+
+            //! Effect items.  These are children of the clip so they move,
+            //! hide and show together with it.
+            std::vector<std::shared_ptr<EffectItem> > effects;
 
             struct SizeData
             {
                 int dragLength = 0;
+
+                //! Total height taken by the effects (0 if hidden).
+                int effectsHeight = 0;
+
                 math::Box2i clipRect;
             };
             SizeData size;
@@ -38,16 +48,17 @@ namespace tl
         };
 
         void AudioClipItem::_init(
-            const otio::SerializableObject::Retainer<otio::Clip>& clip,
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Timeline>& timeline,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<TIMELINEUI::ThumbnailGenerator> thumbnailGenerator,
-            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<ThumbnailSystem>& thumbnailSystem,
             const std::shared_ptr<IWidget>& parent)
         {
             const auto path = timeline::getPath(
-                clip->media_reference(), itemData->directory,
+                timeline->getMediaReference(clip), itemData->directory,
                 itemData->options.pathOptions);
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
@@ -57,9 +68,9 @@ namespace tl
                 parent);
             TLRENDER_P();
 
+            p.timelinePath = timeline->getPath();
             p.path = path;
-            p.memoryRead = timeline::getMemoryRead(clip->media_reference());
-            p.thumbnailGenerator = thumbnailGenerator;
+            p.thumbnailSystem = thumbnailSystem;
 
             const std::string infoCacheKey =
                 io::getInfoCacheKey(path, _data->options.ioOptions);
@@ -67,6 +78,17 @@ namespace tl
             if (i != itemData->info.end())
             {
                 p.ioInfo = i->second;
+            }
+
+            // Create one item per effect.  They are laid out by
+            // AudioClipItem::setGeometry() between the clip info and the
+            // waveforms.
+            p.effects.reserve(clip->effects().size());
+            for (const auto& effect : clip->effects())
+            {
+                p.effects.push_back(EffectItem::create(
+                    effect, clip.value, scale, options, displayOptions,
+                    itemData, context, shared_from_this()));
             }
         }
 
@@ -82,18 +104,19 @@ namespace tl
         }
 
         std::shared_ptr<AudioClipItem> AudioClipItem::create(
-            const otio::SerializableObject::Retainer<otio::Clip>& clip,
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Timeline>& timeline,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<TIMELINEUI::ThumbnailGenerator> thumbnailGenerator,
-            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<ThumbnailSystem>& thumbnailSystem,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<AudioClipItem>(new AudioClipItem);
             out->_init(
-                clip, scale, options, displayOptions, itemData,
-                thumbnailGenerator, context, parent);
+                context, timeline, clip, scale, options, displayOptions,
+                itemData, thumbnailSystem, parent);
             return out;
         }
 
@@ -112,7 +135,7 @@ namespace tl
         void AudioClipItem::setDisplayOptions(const DisplayOptions& value)
         {
             const bool thumbnailsChanged =
-                value.thumbnails != _displayOptions.thumbnails ||
+                value.waveforms != _displayOptions.waveforms ||
                 value.waveformWidth != _displayOptions.waveformWidth ||
                 value.waveformHeight != _displayOptions.waveformHeight ||
                 value.waveformPrim != _displayOptions.waveformPrim;
@@ -122,6 +145,34 @@ namespace tl
             {
                 _cancelRequests();
                 _updates |= ui::Update::Draw;
+            }
+        }
+
+        void AudioClipItem::setGeometry(const math::Box2i& value)
+        {
+            IBasicItem::setGeometry(value);
+            TLRENDER_P();
+
+            // Vertical layout of a clip:
+            //
+            //   clip info (name / duration)
+            //   effect 1
+            //   effect 2
+            //   ...
+            //   waveforms
+            //   markers
+            const math::Box2i g = _getInsideGeometry();
+            int y = g.min.y;
+            if (_displayOptions.clipInfo)
+            {
+                y += _getLineHeight() + _getMargin() * 2;
+            }
+            for (const auto& effect : p.effects)
+            {
+                const int h =
+                    _displayOptions.effects ? effect->getSizeHint().h : 0;
+                effect->setGeometry(math::Box2i(g.min.x, y, g.w(), h));
+                y += h;
             }
         }
 
@@ -137,13 +188,21 @@ namespace tl
                 p.infoRequest.future.wait_for(std::chrono::seconds(0)) ==
                     std::future_status::ready)
             {
-                p.ioInfo =
-                    std::make_shared<io::Info>(p.infoRequest.future.get());
-                const std::string infoCacheKey =
-                    io::getInfoCacheKey(p.path, _data->options.ioOptions);
-                _data->info[infoCacheKey] = p.ioInfo;
-                _updates |= ui::Update::Size;
-                _updates |= ui::Update::Draw;
+
+                // Extract the result and reset the request wrapper
+                const auto info = p.infoRequest.future.get();
+                p.infoRequest = {};
+
+                // Only store if the media actually contains valid audio
+                // stream metadata
+                if (info.audio.isValid())
+                {
+                    p.ioInfo = std::make_shared<io::Info>(info);
+                    const std::string infoCacheKey =
+                        io::getInfoCacheKey(p.path, _data->options.ioOptions);
+                    _data->info[infoCacheKey] = p.ioInfo;
+                    _updates |= ui::Update::Size | ui::Update::Draw;
+                }
             }
 
             // Check if any audio waveforms are finished.
@@ -156,7 +215,7 @@ namespace tl
                 {
                     const auto mesh = i->second.future.get();
                     const std::string cacheKey = io::getAudioCacheKey(
-                        p.path, i->second.timeRange, _data->options.ioOptions,
+                        p.path, i->second.timeRange.value(), _data->options.ioOptions,
                         {});
                     _data->waveforms[cacheKey] = mesh;
                     i = p.waveformRequests.erase(i);
@@ -175,7 +234,20 @@ namespace tl
             TLRENDER_P();
             p.size.dragLength = event.style->getSizeRole(
                 ui::SizeRole::DragLength, _displayScale);
-            if (_displayOptions.thumbnails)
+
+            // The effect items are children, so their size hints have
+            // already been calculated at this point.
+            p.size.effectsHeight = 0;
+            if (_displayOptions.effects)
+            {
+                for (const auto& effect : p.effects)
+                {
+                    p.size.effectsHeight += effect->getSizeHint().h;
+                }
+            }
+            _sizeHint.h += p.size.effectsHeight;
+
+            if (_displayOptions.waveforms)
             {
                 _sizeHint.h += _displayOptions.waveformHeight;
             }
@@ -199,7 +271,7 @@ namespace tl
             const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
             IBasicItem::drawEvent(drawRect, event);
-            if (_displayOptions.thumbnails)
+            if (_displayOptions.waveforms)
             {
                 _drawWaveforms(drawRect, event);
             }
@@ -214,10 +286,13 @@ namespace tl
             const int m = _getMargin();
             const int lineHeight = _getLineHeight();
 
+            // Waveforms go below the clip info and the effects.
+            const int waveformY =
+                g.min.y + (_displayOptions.clipInfo ? (lineHeight + m * 2) : 0) +
+                p.size.effectsHeight;
+
             const math::Box2i box(
-                g.min.x,
-                g.min.y + (_displayOptions.clipInfo ? (lineHeight + m * 2) : 0),
-                g.w(), _displayOptions.waveformHeight);
+                g.min.x, waveformY, g.w(), _displayOptions.waveformHeight);
             event.render->drawRect(box, image::Color4f(0.F, 0.F, 0.F));
             const timeline::ClipRectEnabledState clipRectEnabledState(
                 event.render);
@@ -232,8 +307,8 @@ namespace tl
             {
                 if (!p.ioInfo && !p.infoRequest.future.valid())
                 {
-                    p.infoRequest = p.thumbnailGenerator->getInfo(
-                        p.path, p.memoryRead, _data->options.ioOptions);
+                    p.infoRequest = p.thumbnailSystem->getInfo(
+                        p.timelinePath, p.path, _data->options.ioOptions);
                 }
             }
 
@@ -243,23 +318,19 @@ namespace tl
                 for (int x = 0; x < w; x += _displayOptions.waveformWidth)
                 {
                     const math::Box2i box(
-                        g.min.x + x,
-                        g.min.y + (_displayOptions.clipInfo
-                                       ? (lineHeight + m * 2)
-                                       : 0),
-                        _displayOptions.waveformWidth,
+                        g.min.x + x, waveformY, _displayOptions.waveformWidth,
                         _displayOptions.waveformHeight);
                     if (math::intersects(box, clipRect))
                     {
-                        const otime::RationalTime time =
-                            otime::RationalTime(
+                        const OTIO_NS::RationalTime time =
+                            OTIO_NS::RationalTime(
                                 _timeRange.start_time().value() +
                                     (w > 0 ? (x / static_cast<double>(w)) : 0) *
                                 _timeRange.duration().rescaled_to(_timeRange.start_time()).value(),
                                 _timeRange.start_time().rate())
                                 .round();
-                        const otime::RationalTime time2 =
-                            otime::RationalTime(
+                        const OTIO_NS::RationalTime time2 =
+                            OTIO_NS::RationalTime(
                                 _timeRange.start_time().value() +
                                     (w > 0 ? ((x +
                                                _displayOptions.waveformWidth) /
@@ -268,19 +339,20 @@ namespace tl
                                 _timeRange.duration().rescaled_to(_timeRange.start_time()).value(),
                                 _timeRange.start_time().rate())
                                 .round();
-                        otime::TimeRange trimmedRange = _trimmedRange;
-                        if (trimmedRange.start_time() < p.ioInfo->audioTime.start_time())
+                        OTIO_NS::TimeRange trimmedRange = _trimmedRange;
+                        if (_data->options.compat &&
+                            trimmedRange.start_time() < p.ioInfo->audioTime->start_time())
                         {
                             //! \bug If the trimmed range is less than the media time,
                             //! assume the media time is wrong (e.g., ALab trailer) and
                             //! compensate for it.
-                            trimmedRange = otime::TimeRange(
-                                p.ioInfo->audioTime.start_time() + trimmedRange.start_time(),
+                            trimmedRange = OTIO_NS::TimeRange(
+                                p.ioInfo->audioTime->start_time() + trimmedRange.start_time(),
                                 trimmedRange.duration());
                         }
-                        const otime::TimeRange mediaRange =
+                        const OTIO_NS::TimeRange mediaRange =
                             timeline::toAudioMediaTime(
-                                otime::TimeRange::range_from_start_end_time(
+                                OTIO_NS::TimeRange::range_from_start_end_time(
                                     time, time2),
                                 _timeRange, trimmedRange,
                                 p.ioInfo->audio.sampleRate);
@@ -304,9 +376,12 @@ namespace tl
                             if (j == p.waveformRequests.end())
                             {
                                 p.waveformRequests[mediaRange.start_time()] =
-                                    p.thumbnailGenerator->getWaveform(
-                                        p.path, p.memoryRead, box.getSize(),
-                                        mediaRange, _data->options.ioOptions);
+                                    p.thumbnailSystem->getWaveform(
+                                        p.timelinePath,
+                                        p.path,
+                                        box.getSize(),
+                                        mediaRange, "",
+                                        _data->options.ioOptions);
                             }
                         }
                     }
@@ -328,7 +403,7 @@ namespace tl
                 ids.push_back(i.second.id);
             }
             p.waveformRequests.clear();
-            p.thumbnailGenerator->cancelRequests(ids);
+            p.thumbnailSystem->cancelRequests(ids);
         }
     } // namespace TIMELINEUI
 } // namespace tl

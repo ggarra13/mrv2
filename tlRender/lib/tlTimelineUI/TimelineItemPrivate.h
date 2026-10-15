@@ -20,8 +20,8 @@ namespace tl
         struct TimelineItem::Private
         {
             std::shared_ptr<timeline::Player> player;
-            otime::RationalTime currentTime = time::invalidTime;
-            otime::TimeRange inOutRange = time::invalidTimeRange;
+            OTIO_NS::RationalTime currentTime = time::invalidTime;
+            OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
             timeline::PlayerCacheInfo cacheInfo;
             bool editable = false;
             timeline::EditMode editMode = timeline::EditMode::Count;
@@ -32,22 +32,22 @@ namespace tl
             std::shared_ptr<observer::Value<otime::RationalTime> > timeScrub;
             std::vector<int> frameMarkers;
             int minimumHeight = 0;
-            std::shared_ptr<TIMELINEUI::ThumbnailGenerator> thumbnailGenerator;
+            std::shared_ptr<ThumbnailSystem> thumbnailSystem;
             std::unordered_map<std::string,
                                std::vector<std::shared_ptr<image::Glyph>> > labelsCache;
             struct Track
             {
                 int index = 0;
                 TrackType type = TrackType::kNone;
-                otime::TimeRange timeRange;
+                OTIO_NS::TimeRange timeRange;
                 std::shared_ptr<ui::Label> label;
                 std::shared_ptr<ui::Label> durationLabel;
 
                 std::vector<std::shared_ptr<IItem> > items;
                 std::vector<int> otioIndexes;
-                
+
                 std::map<int, std::vector<std::shared_ptr<EffectItem> > > effects;
-                
+
 
                 std::vector<std::shared_ptr<TransitionItem> > transitions;
                 std::vector<int> otioTransitionIndexes;
@@ -91,7 +91,7 @@ namespace tl
                 Left,
                 Right,
             };
-            
+
             struct MouseItemData
             {
                 MouseItemData();
@@ -129,9 +129,15 @@ namespace tl
             std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
                 cacheInfoObserver;
 
-            std::shared_ptr<IItem> getAssociated(
-                const std::shared_ptr<IItem>&, int& index,
-                int& trackIndex) const;
+            struct Associated
+            {
+                std::shared_ptr<IItem> item;
+                int index = 0;
+                int track = 0;
+            };
+
+            std::vector<Associated> getAssociated(
+                const std::shared_ptr<IItem>& item, int trackIndex) const;
 
             std::vector<MouseItemDropTarget>
             getDropTargets(const math::Box2i& geometry, int index, int track);

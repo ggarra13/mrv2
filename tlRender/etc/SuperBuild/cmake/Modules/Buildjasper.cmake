@@ -16,13 +16,13 @@ set(jasper_ARGS
 
 set(jasper_DEPENDENCIES )
 if(TLRENDER_JPEG)
-    list(APPEND jasper_DEPENDENCIES libjpeg-turbo)
+    list(APPEND jasper_DEPENDENCIES ${libjpeg-turbo_DEP})
 endif()
 message(STATUS "jasper DEPENDENCIES=${jasper_DEPENDENCIES}")
     
 ExternalProject_Add(
      jasper
-     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/jasper
+     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/../../../deps/jasper
      GIT_REPOSITORY ${jasper_GIT_REPOSITORY}
      GIT_TAG ${jasper_GIT_TAG}
      
@@ -31,3 +31,5 @@ ExternalProject_Add(
      LIST_SEPARATOR |
      CMAKE_ARGS ${jasper_ARGS}
 )
+
+set(jasper_DEP jasper)

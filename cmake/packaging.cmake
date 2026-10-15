@@ -108,6 +108,7 @@ set( CPACK_INSTALL_SCRIPT ${MRV2_ROOT}/cmake/dummy.cmake )
 #
 set( CPACK_PRE_BUILD_SCRIPTS ${MRV2_ROOT}/cmake/prepackage.cmake )
 
+
 if(APPLE)
     ##############################
     # New Method using Dragndrop #
@@ -148,12 +149,6 @@ if(APPLE)
 	COMPONENT applications
     )
 
-    # Install README.md file at root of .dmg
-    install(FILES "${CMAKE_SOURCE_DIR}/etc/macOS/README.md"
-        DESTINATION .
-        COMPONENT applications
-    )
-    
     if (EXISTS ${CMAKE_INSTALL_PREFIX}/bin/hdr)
 	
 	set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/hdr.app)
@@ -200,8 +195,19 @@ if(APPLE)
     set(CPACK_DMG_VOLUME_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns)
     
     
-    
-    set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${mrv2_NAME};applications;/")
+    # 1. Always install the core applications component flat to the root directory
+    set(CPACK_INSTALL_CMAKE_PROJECTS 
+	"${CMAKE_BINARY_DIR}" "${mrv2_NAME}" "applications" "/"
+    )
+
+    # 2. If Python is enabled, append those components directly to the list
+    if(BUILD_PYTHON)
+	list(APPEND CPACK_INSTALL_CMAKE_PROJECTS 
+            "${CMAKE_BINARY_DIR}" "${mrv2_NAME}" "python_plugins" "/"
+            "${CMAKE_BINARY_DIR}" "${mrv2_NAME}" "python_demos" "/"
+	)
+    endif()
+
     set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/install;.")
 
 elseif(UNIX)
@@ -347,8 +353,8 @@ else()
     #
     # Set the MUI Installer icon
     #
-    set(CPACK_NSIS_MUI_ICON "${MRV2_DIR}/main/app.ico")
-    set(CPACK_NSIS_MUI_UNICON "${MRV2_DIR}/main/app.ico")
+    set(CPACK_NSIS_MUI_ICON "${MRV2_DIR}/mrv2/app.ico")
+    set(CPACK_NSIS_MUI_UNICON "${MRV2_DIR}/mrv2/app.ico")
 
     #
     # Set the MUI banner to use a custom mrv2 one.

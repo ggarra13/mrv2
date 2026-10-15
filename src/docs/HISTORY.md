@@ -1,3 +1,560 @@
+v1.8.3
+======
+
+- UI: Added options to **Preferences->Edit** to hide or show effects, waveforms and thumbnails.
+- UI: Fixed tooltips for AutoICS now showing with color space was selected and why.
+- UI/Core: Fixed moving the primary display window between an HDR and SDR monitor on Windows, which could sometimes not update the HDR Display properly.
+- UI/Edit: **Edit->Time->Slice** now supports selected items to only slice on the selection.
+- UI/Edit: **Edit->Associated Clips** is now more reliable when moving a video and audio clip in the timeline.  It will move **ALL** video and audio clips with similar start/end points.
+
+Fixes:
+
+- Edit/Core: Moving a clip with annotations in an .otio timeline with a global_start_time() > 0 would not offset the annotation correctly.
+
+
+v1.8.2
+======
+
+- UI: URL Movies are now added to the File->Recent Files list.
+- UI: Notes in the Note Panel now show the time in the selected units (Frames, Seconds or Timecode).
+- UI: Notes in the Note Panel are now edited by clicking on its title or double clicking on the text box.
+- UI: Text drawing annotations' font size can now be changed by using + or - in the Vulkan backend.
+- UI: File requesters now show the correct filters for writing and reading.
+- UI: Thumbnails, Waveforms and Effects in the Timeline Viewport can be toggled independently.
+- UI: Effects are shown below the clip's name in Timeline Viewport.
+
+- UI/Core: Saving of movies now automatically tries to detect the color space to use (ie. SDR vs HDR), without having to manually set the override.
+- UI/Core: Saving of movies for most codecs defaults to "TV (Legal Range)" instead of "PC (Full Range)", unless you use **Advanced Settings** Override.
+
+- Core: Added exporting of animated .webp.  They can be played in Chrome.
+- Core: Added exporting of animated .gif.
+- Core: Improvements in playback performance.
+
+
+Fixes
+-----
+
+- UI: Fixed Save Movie's **Advanced Settings**, Presets' tooltip.
+- UI: Fixed default values of Save Movie's **Advance Settings**.
+- UI: Fixed Timeline Viewport (Editing) getting activated when closing the Preference Window.
+- UI: Fixed Timeline Viewport's thumbnails on first starting the players.
+- UI/Core: Fixed refresh_media_cb starting playback due to **Preferences->Playback->Auto Playback**.
+- UI: Added missing tooltips in the status bar for Panels and Windows.
+- UI: Added missing toggle element in Panels.
+- Core: Fixed saving of audio on movie files.
+- Core: Fixed audio saving only.
+
+
+Libraries
+---------
+
+	- libwebp v1.5.0
+	- FLTK v2.4.4 with new Clipboard Selection protocol. 
+
+
+v1.8.1
+======
+
+- Core/Vulkan: Improved performance of the Vulkan backend.
+- Core/Vulkan: Improved memory footprint of the Vulkan backend.
+- Core/Vulkan: Made Text Tool Annotations be created on demand for faster annotations.
+
+- Core: Made the SVG reader be thread safe.
+- Core: Made the SVG reader support <text> tags.
+- Core: Made the SVG reader support gradients.
+- Core: Made the SVG reader support embedded .pngs.
+
+Fixes
+-----
+
+- Fixed loading files with relative paths from the command-line.
+
+Libraries
+---------
+
+	- lunasvg v3.5.0
+
+v1.8.0
+======
+
+- UI: Movie files and sequences with associated audio also allow turning off any of the two tracks.
+- UI: Built-in File Requester (used mainly on Linux) no longer shows the patterns in a floating window.
+- UI: Added tooltips in the status bar for each menu entry.
+- UI/Core: Annotations are now drawn much faster, as they don't need three render engines.
+- UI/Compare has been moved to Image/Compare Mode.  You can now also easily select what to compare from the RMBB menus.
+
+- Command-Line: Now -systemInfo will list all libraries used in the players.
+- Command-Line: Now -systemInfo will now show up the start up message.
+- Command-Line: Now -systemInfo properly displays the graphics card information on the OpenGL backend.
+
+- Core/Command-Line: Opening many files at once or a directory no longer reads every one of them immediately.
+- Core: The Vulkan backend now starts much faster and uses less memory. 
+
+
+Fixes
+-----
+
+- UI: Built-in File Requester could crash the application when switching extension patterns.
+- UI: Area selection had a bug which prevented it from marking an area bigger than one pixel.
+
+- Command-Line: Displaying -systemInfo does not hang the Vulkan backend.
+
+- Edit: Made all Edit functions work properly.
+
+- Core: Switching back to **Preferences->Loading->Missing Frames->Error** would not trigger a reload of the file.
+- Core: Adding a text annotation no longer crashes vmrv2.  This was a regressionfrom v1.7.8.
+
+
+Translations
+------------
+	- New documentation on codecs.
+	- New AI translations on all supported languages.
+
+v1.7.9
+======
+
+- UI: Secondary Window now remembers the screen number and positioning except on Linux Wayland (which does not allow it).
+- UI: Secondary and Main Window now draw black borders when any of them is in Presentation Mode.  If not in presentation mode, they will use the color set in **Preferences->Language and Colors->BG Color**.
+- UI: Added back **Playback->Toggle In/Out OTIO clip** for .otio and .otioz to make the in and out points for one video clip in the timeline.
+- UI: Changing **Preferences->Loading->Missing Frame** immediately reloads the suquence being shown for updating.
+- UI/Core: Added **File->Reload Media** context menu on the clips of the Files panel.  This allows reloading the media to refresh frames that are currently being rendered.
+- UI/Core: Changing between **Preferences->Loading->Missing Frames** now automatically refreshes the file being viewed.
+
+- Command-Line: -mr or -mediaRefence is now available.
+- Edit: Media Reference Keys are now saved in the session file.
+
+- UI/Core: Movies can be exported with the OpenAPV codec with or without alpha.  UI has been updated to reflect the valid Pixel Formats.
+- UI/Core: OpenAPV codec has three presets (.pst) files.
+
+- UI/Edit: .otioz files are now properly detected for OTIO features in the UI.
+- UI/Edit: You can now hide the tracks of .otioz files.
+- UI/Edit: Hiding the audio tracks of .otio or .otioz files also makes them silent.
+
+- Core: Updated code to use the new OpenColorIO's colorInterOp functions.
+
+
+Fixes
+-----
+
+- UI/Linux: Audio is no longer turned off if the main window is hidden, but the secondary window is still visible.
+- UI/Linux: There's no longer stuttering of Secondary display under either Linux or Windows on any of the backends.
+- Core/Linux: Fixed a mis-used EGL (ie.OpenGL) function.
+- Edit: Selecting an item and deleting it no longer crashes the application.  A regression in v1.7.8 from v1.7.7.
+
+Libraries
+---------
+
+	- OpenAPV v1.1.1.2 - with version, alpha and license information.
+	- OpenColorIO v2.6.0 - with new color interop ID functions.
+	- OpenEXR v3.5.1 - fixed possible ZSTD overruns.
+
+Translations
+------------
+
+	- Updated Japanese translations by @coolvitto.
+
+
+v1.7.8
+======
+
+- Install: The macOS versions of mrv2 and vmrv2 are now code-signed and notarized.  You should be able to install them much more easily by just dragging the icons to the Applications folder.
+
+- UI: Added a progress indicator when unzipping .otioz files for editing.
+- UI: Cancelling saving of a session upon exit now also avoids exiting the application.
+- UI: Removed old Preferences->Thumbnails->Playlist Panel options.
+
+- Edit: Editing clips is now faster (particularly from .otioz bundles).
+- Edit: Fixed precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
+
+- Vulkan: Improved the start-up of the Vulkan version of mrv2.
+- Vulkan: Improved the memory footprint and performance of drawing annotations on the Vulkan version of mrv2.
+
+- Python: Added missing OpenEXR compressors to Python bindings.
+- Python: Added new Python methods to control the values of the new OpenEXR compressors.
+
+- Core/UI: Added more Missing Frame types.  Currently supported:
+  	* Error Frame	   - Reports an error.
+	* Hold Frame	   - Holds the last frame read.
+	* Scratched Frame  - Holds the last frame read but draws a red cross.
+	* Black Frame	   - Replaces current frame with black.
+	* Skip Frame	   - Skips the current frame.
+	* Gap Frame	   - Adds an .otio Gap for the missing frames.
+	
+- Core: .otio files now support URI paths properly.
+- Core/UI: Thumbnail cache is now independant from the main caches.
+- Core: Cleaned up Timeline code.
+- Core: Fixed opening of https:// movies due to incorrect handling of cacert.pem and https:// protocol.  Now File->Open->URL Movie should work again.
+- Core: Synced to tlRender v0.23.0, with several modifications.
+- Core: Made ColorInteropID work both saving and loading.
+
+Fixes
+-----
+
+- Added OpentimelinIO tags to all formats, as some were missing them.
+- Precision errors when Edit->Selected->Add Transition complaining clips were not contiguous.  This was common with audio tracks at different Khz.
+- File->Save Image on the Vulkan backend not paying attention to the HDR Export options.
+- File->Save Image and File->Save Movies changing resolution when HDR Export was changed.
+- Thumbnail size selection on monitors with DPI higher than 100%.
+- A potential crash on the Vulkan backend on cleaning up thumbnail resources on program exit.
+- YUV_444P_U12 movies are no longer attempted to decode in hardware, like SolLevante Netflix demo clip.
+- Edit->Frame->Insert incorrectly leaving a wrong tail clip's range.
+- Thumbnail pictures when pixelAspectRatio was different than 1.0.
+- Fixed Secondary Viewport on Vulkan backend which would stutter (mainly on Windows).
+
+
+Libraries
+---------
+	- OpenEXR v3.5.0 - with lossy HJ2K and ZSTD compressors.
+	- OpenJPH v0.32.0
+	- ZSTD v0.17.0
+	- libvpx v1.17.0
+
+v1.7.7	
+======
+
+- Improved FBO depth when saving HDR movies.
+- Added automatically saving of "colorInteropID" metadata when saving OpenEXR images.
+- Added automatically saving of chromaticities to OpenEXRs if HDR data is present in a movie.
+- Notes Panel and Annotations Panel's Frame Note are now synchronized both ways and will display the text entered.
+- Added OTIO's Spatial Coordinates and compatibility setting to the Settings Panel.
+- Added the (L) (Lumma) channel selection on the Layer's pull-down.
+- Made (R), (G), (B), (A) and (L) channel selection be persistant when changing clips.
+- Made gain, gamma and saturation persistant when changing clips.
+- Closing all the clips now resets gain, gamma and saturation.
+- Python: Improved the cmd.setDisplayOptions() to reflect in the UI properly.
+- Python: Improved Python online docs for display options.
+- Core: Improved memory on HW decoding frames.  Switching back and forth between HW and SW decoding works better now.
+- Core/UI/Vulkan:  Added a "Export Mode" options to control how the colors are exported into the pictures.
+     * Baked HDR (bakes the HDR transform in the picture.  Will only look good in an HDR display)
+     * Scene Linear (linearizes the data for OpenEXR, with metadata.  Will look good when the proper OCIO transform is used)
+     * Baked SDR (bakes the HDR transform in an SDR space.  Will match OpenGL SDR, but will clip HDR data).
+
+Fixes:
+
+- Fixed HW decoding to select HW decoders first before software decoders when HW decoding is on.  Previously, the software decoder, depending on codec, would come first.
+- Fixed automatic bit selection of main framebuffer for YUV_420P_U10 and 16-bit semi-planar formats.  They were defaulting to 8 bits instead of 16 bits.
+- Fixed saving pictures and videos with half or quarter resolution on the Vulkan backend.
+- Fixed + button in Notes Panel adding two annotations.
+- Fixed one standing validation error on Wipe comparison.
+- Fixed saving of images from a video on OpenGL backend, which could hang.
+- Fixed saving of images with padded zeros in the Vulkan backend.
+
+
+v1.7.6
+======
+
+- Bug/MacOS:  "Help->Update mrv2" would always download and install the amd64 version of the installer.  It was fixed in v1.7.5.
+
+- UI: Added pencil annotations and erasing without a Solo License.  Note that area tools and other drawing tools like arrows remain on the Solo License.  This is a compromise between features present on all viewers and features only on mrv2/vmrv2 so that those that unlocked a Solo License, won't feel cheated.
+
+- UI: Added a Notes Panel to display and edit the list of review notes easily, as suggested by Serban Jipa.
+
+- UI: Updated translations to supported languages.
+
+- Core: MacOS OpenGL M1 builds no longer come with USD support so they load faster now.  This is for two reasons: Apple now provides a Preview.app to see the USD on M1+ boxes and the newest USD repository's compilation is broken on M1+ (works only on Linux).
+
+- Core: Added HW decoding and encoding on aarch64 platforms (untested).
+
+- Core: Added support for OpenEXR's colorInteropID with the new Auto ICS button and its tooltip describing what it chose.  Auto ICS works with image files.  For videos, on Vulkan, you should rely on **Preferences->OCIO->No OCIO on Videos or sRGB/BT709** data as it is faster.  On the OpenGL backend, you can indeed use OCIO, but it will be slower.
+
+- Core: Added SVG reader.  Works with all .svg with paths.  Does not currently decode SVGs with text yet, though.
+
+- Core: Added HW encoding with NVidia (Windows and Linux), Intel/AMD (Linux) and macOS (was already present).  As usual, the speed and support depend on your hardware and drivers.  It should now work on all platforms, including aarch64.
+
+- Core: Added CUDA decoding on Windows.
+
+- Core: Added the NVidia headers to the build, so the Linux branch will compile without the need for local files.
+
+- Core: Added OpenColorIO's LUT inversion on Color Panel.
+
+- Core: Fixed support for Original pixels on OpenEXR's UINT format.
+
+- Core: Added semi-planar pixel formats to color picker pixel toolbar's O(riginal) colors.
+
+- Core: Improved the memory usage of the Vulkan backend.
+
+- Updated Libraries and utilities:
+    * OpenEXR 3.4.15
+    * libtiff 4.7.2
+    * swig v4.5.0
+	
+Fixes:
+
+- Vulkan: Fixed a major bug between MAX_FRAMES_IN_FLIGHT and FrameData resources which could lead to random crashes.
+- UI/Core: Made editing .otioz files properly update the Files Panel icon.
+- UI/Core: Fixed annotations creating a long line when trying to create an all frame and a current frame annotation on the same frame.
+- UI/Core: Fixed the compilation of pyFLTK with newer swig (v4.5.0+).
+- OpenGL/Core: Fixed OpenGL display of YUV_444P_U16 and similar movies.  One plane was missing.  Vulkan backend was fine.
+- Core: Fixed reading of UINT OpenEXR frames on the Vulkan backend.
+- Windows: Fixed minor memory leak on the cursor icon.
+- Windows: Added Text Insert icon to avoid the Vulkan dreaded ghosted square when annotating text.
+
+
+
+v1.7.5
+======
+
+- Bug/Core: Fix a potential race (crash) condition in FFmpeg's log callback.
+- UI/Core: Added to Settings->Performance a pulldown select the HW driver.
+
+- Vulkan: Improved performance of movies with changing HDR metadata and destroying textures.
+- Vulkan: Fixed validation error when OCIO and libplacebo were used together.
+- Vulkan: Fixed one validation error when saving and no tonemapping.
+- Vulkan/Linux: Added HW decoding under Vulkan on both backends.  Allows HW decoding of prores, h264, hevc, av1, and vpx.  Note that performance is wildly dependant on the graphics card.
+
+- HDR: Added Saving of HDR movies with stream metadata.
+- HDR: Added Saving of HDR movies with frame metadata (HDR10+).  Tested using VPX, Pixel Format YUV_420P_U10_LE and a .mkv container.  Well done FFmpeg 9.0.1 and VPX!
+
+- Linux: Fixed a random crash when reloading the file requester.
+
+- Core: Fixed an infringing file on the BSD-3 license (mrvSlider.cpp).
+
+- Build: Made all temporary build directories to be in $BUILD_DIR/deps.
+
+- Libraries: Updated libvpx to v1.16.0, with aarch64 and Neon assembler
+  	     optimizations.  Also added runtime-cpu-detection.
+	     This improves 8K playback to 45-50FPS on my old NVidia 3080 RTX.
+	     Well done, Google!
+- Libraries: Updated libdav1d to v1.5.4.
+- Libraries: Updated Svt-AV1 to v4.2.0.
+- Libraries: Updated FFmpeg to v9.0.1.
+
+v1.7.4
+======
+
+- UI: Fixed a resizing of the clip to zoom of 1 in WebRTC transmissions and in Compare B mode.
+- UI/Core: Added Butterfly compare mode.
+- UI: Added Default Panel Sizes for each Panel in the Preferences->Thumbnails, so you can have, for example, the Files Panel displaying the full thumbnail information, while the compare panel displays the small thumbnail.
+- UI: Fixed clipping of file names on the Compare Panel.
+- UI/Core: Improved thumbnails performance of all files, particularly .otio files.
+- UI: Fixed a bug when going into Presentation mode, and opening the Preferences window and then going back to Normal mode.  It was mainly a Windows bug.
+- UI: Added LogLevel to change the display of messages in the Logs Panel.
+
+- Edit: .otioz files are now loaded in memory.
+- Edit: Added the ability to edit .otioz files.
+- Edit: Adding clips to a timeline with dissolves now keeps the dissolves intact instead of removing them.
+- Edit: Improved the performance of editing .otio files when dragging clips to the Timeline Viewport.  This removes the clunky file switching that used to happen.
+- Edit: The Playlist panel has been removed.  Now all clip concatenation operations happen directly by dragging clips to the Timeline Viewport.
+- UI/Edit: Removed some duplicated messages of an Edit donation.  Now in demo mode, you can open the timeline viewport to see the .otio tracks, but you just cannot edit them.
+
+- OpenEXR: Improved loading performance a tad.
+- OpenEXR: Fixed layer information (like lossy compression for the layer not the part number).
+- OpenEXR: Fixed ghosted DWA and ZIP compression settings when saving EXR images.
+
+- Vulkan: Made Offscreen buffers use the memory allocator for better performance.  This makes creating the 4K buffers much faster.  Noticeable at the first annotation.
+
+- Network: TCP network connections have been deprecated in favor of WebRTC connections.
+- WebRTC: Added project and room id command-line flags.
+
+- OTIO: Improved the loading of .otioz files as they are now read in memory.  However, they can no longer be edited.  If you need to edit an .otioz file, you should unzip it first.
+- OTIO: Multiple Media References are now allowed.
+- OTIO: Spatial Coordinates are now interpreted.
+
+- Wayland: Fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on long .otioz or .otio files).
+
+- Core: Added support for hardware video decoding of NV12 formats (ie. YUV420SP_U8, YUV420SP_U16, YUV422SP_U8 and YUV422SP_U16).  The decoding is subject to the graphic cards' capabilities, thou.
+
+- Vulkan: Optimized shader pipeline.
+- OpenGL: Optimized shader pipeline.
+
+
+v1.7.3
+======
+
+- UI: Fixed tooltip of "Advance forward one frame" button in all languages.
+- UI: Fixed "Window/Preferences" not showing up in Japanese due to weird gettext bug.
+- UI: You can now easily drag a clip to the timeline view to create a new .otio EDL timeline, without having to go first to the Playlist Panel.
+
+- Core/Windows: Fixed a skipping of current and parent directories for FileInfoWin32.cpp.
+- Core: Fixed a crash on the OpenEXR reader when reading a corrupt/truncated file.
+- Core: Fixed and added tlRender's unit tests.
+- Core: Fixed Thumbnail crashes on file requester on Linux.
+- Core: Fixed loading of image sequences command-line from the current directory.
+- Core: Fixed potential hanging of thumbnail generator on Vulkan backend.
+- Core/macOS: Fixed a crash on start-up on OpenGL backend.
+- Core: OpenTimelineIO clips now tonemap each clip found if it is a movie, an HDR movie, a bt709 or an sRGB image, all will get tonemapped correctly.  Of course dissolves from one format of image to another one will not work.
+- Core: Saving OpenTimelineIO timelines with audio now works.
+- Core: Saving clips or .otio timelines in the Vulkan backend turns off tonemapping so that BT709 and similar clips will write their data intact, not in HDR.
+- Core: Fixed and added tlRender's unit tests.
+
+- Build: Documented Vulkan compilation on Linux.
+
+
+v1.7.2
+======
+
+ChangeLog
+---------
+
+- UI: Linux Vulkan backend now uses GTK / GLib as window decorations.
+- UI: Improved Japanese translation (thanks to @coolvitto).
+- UI: Improved all translations.
+- UI: Adding a Transition with Select and then Edit->Selected->Add Transition
+      now refits the Edit timeline to show the transition.
+- UI/Core: Added support for multiple Projects in WebRTC connections.
+- UI: Fixed Compare Panel not showing the Tile compare mode.
+- UI: Fixed some natural language translations.
+- UI: Fixed Compare Panel buttons sometimes not responding.
+- UI: Put Compare Panel buttons in two rows which is cleaner.
+- UI: Made Timeline display the audio cache, as it was hidden.
+- UI: Improved HUD Cache display to just return a percentage for video and
+      audio.
+- UI: Fixed timeline dragging position getting reset when editing a transition.
+
+- WebRTC: Added support for TURN server and a "Custom" preset.
+- WebRTC: Removed the room ID from the player's name.
+
+- HDR: Added missing hdr.exe utility on Windows.
+
+- Python: Added a pre-built Python's opentimelineio package on all platforms, which was getting compiled but not packaged.
+
+- Core: Added pyFLTK python package that was missing from macOS.
+- Core: mrv2/vmrv2's Help->Update mrv2 will now correctly determine vmrv2 and mrv2.
+- Core: When using Help->Update mrv2 on macOS, it will automatically remove the quarantine flag and now call the installation.command script for a smooth installation.
+- Core: From v1.7.2 on, macOS will be able to upgrade mrv2 or vmrv2 by just going to Help->Update mrv2.
+- Core: We now allow the Vulkan backend to work in headless mode (ie. no UI), for running python scripts like baking OCIO for example.
+- Core: Fixed a validation error on Main Viewport.
+- Core: Renamed main subdirectory as mrv2.
+- Core: Fixed a bug on CPU feature detection on Windows aarch64.
+- Core: Added more HW CPU acceleration features on arm64 and aarch64 to mrvCPU.h/mrvCPU.cpp.
+- Core: Brought back the hdr utility on Windows which was missing from vmrv2.
+- Core: Bumped FFmpeg version to v8.1.2.
+- Core: Improved failed FFmpeg reads and proper handling of reverse playback on
+  	broken movies.
+- Core: Fixed a random crash when using Wipes (particularly on the Vulkan
+  	backend on Linux).
+- Core: Added work-around when .otio clips that have video (or audio) greater
+  	than the media time.
+- Core: Fixed transitions not using a consistant resolution.
+- Core: Fixed incorrect media references' paths when loading and modifying an
+  	.otio timeline with multiple media references (ie. Full and Proxy for
+	example).
+- Core: Fixed spaces on FontSystem.cpp.
+- Core: Added support for multiple media references in .otio files (works in
+  	Viewport, Timeline and Thumbnails).
+- Core: FLTK's Pen support is now improved.
+- Core: FLTK's UTF-8 support is now improved.
+- Core: Removed even more libraries from Linux packaging to depend more on
+  	the system ones.
+
+v1.7.1
+======
+
+ChangeLog
+---------
+
+- Installation: Simplified macOS installation a tad.  Also fixed shebang issue with the installation.command script.
+
+- UI: File->Recent menu now correctly displays the first frame of the sequence, instead of the frame that was used to load it with.
+- UI: Fixed some flickering of Progress Report on Windows to not using Fl_Double_Window.
+- UI: Made client side decoration on Linux Wayland use GNOME with Vulkan backend.  The OpenGL backend must remain using the uglier Cairo decoration.
+- UI: Fixed double repeated message about Solo upgrade when clicking on area selection.
+- UI: Linux Wayland.  Made tablet cursor hide the tooltips upon leaving the widget.
+- UI: Linux Wayland.  Made tablet cursor not allow flickering the tooltip (still somewhat buggy).
+
+- Licensing: Removed a repeated message of floating licensing.
+
+- WebRTC: It is now live.  You can now connect two or more computers and share their media.
+On the free tier, only two computers can be connected and there's a limit of 30 minutes.  On the Pro tier, there's no limit on the number of computers or time limit.
+   Quick start:
+      * Go to Preferences->WebRTC, enter the name of your studio.  Use the same name on each computer you will hook up.  Make sure it is unique and not easy to guess.x
+      * Go to Panel/WebRTC on one machine.  Enter the name of a room longer than 6 characters.  Click Connect.
+      * Go to Panel/WebRTC on the other machine.  Enter the same room name.  Click connect.
+      * If all went well, both machines will sync and you can synchronize what gets received/sent with the Sync menu.
+      
+- WebRTC: Added environment variable MRV2_WEBRTC_STUDIO that gets prepended to any room ID connection.  This can be used to keep the connection secure.
+- WebRTC: Added WebRTC panel to Preferences.  Allows setting cache directory and whether to clean it at the start of mrv2.
+- WebRTC: When connected and file is opened, if it does not exist locally, it will now transfer it (Pro+ version only).
+- WebRTC: Made it read the environment variable MRV2_WEBRTC_STUDIO to prepend it to the room name and keep the connection secret.
+- WebRTC: Made the transaction be atomic and cleanly close the data channel on abort or error.
+- WebRTC: added -room command-line flag to start a WebRTC connection.
+- WebRTC: Added Preferences->WebRTC to easily change settings.  Note that environment variables take precedence over these settings and they are purposedly not shown to keep the connection confidential.
+- WebRTC: Added support for transfering .otio files, with all the files referenced in them.
+
+- Core: Made clips create textures of their size only to save memory when using smaller files.
+- Core: Added support for .otio Spatial coordinates.
+- Core: Fixed some Vulkan AMD/NVidia assumptions for comformancy with Vulkan 1.3.
+- Core: Fixed Vulkan fatal errors when changing pixel ratio.
+- Core: Fixed OpenGL NAN reporting when changing pixel ratio.
+- Core: Fixed a crash upon exit with compare options and video playback.
+- Core: Fixed the use of Fl::check in tlRender innards, as it was crashing WebRTC downloads.
+- Core: Made the default Settings->Cache->Gigabytes use 1 / 3 of available memory instead of 1 / 2.
+- Core: Bumped FLTK to v2.1.5.
+- Core: Changed license server's domain so that it will be possible to move to a new VPS due price increases.
+- Core: Added comments to License functions, as they were rather messy.
+
+v1.7.0
+======
+	
+ChangeLog
+---------
+
+- Licensing/UI: Fixed licensing helper's Donate button not responding to clicks, making it difficult to actually donate.
+- Licensing: Added helper messages about what options require a donation (and what type) to unlock.
+- Licensing: Fixed Edit license not being accepted as such.
+- macOS Licensing: Fixed license_helper not finding the shipped libint.dylib.
+
+- Install: Simplified macOS install using an installer script that automatically codesigns the applications.
+
+- Startup: Fixed Preferences->User Interface->Single Instance being slow to startup, particularly on Windows.
+
+- Assets: Fixed Autodesk's Flow bridge getting instantiated twice and being slower than it should be.
+
+- UI/Color: Fixed Saturation in the Color Panel not updating the view.
+- UI: Added WebRTC Panel to session saving and loading.
+
+- Annotations: mrv2 and vmrv2 now use the same coordinates when working through the network.  It is now possible to sync mrv2<->vmrv2 or viceversa.
+- Annotations: vmrv2 can now send Text annotations to another machine.  However there's still no guarantee the actual font will be available, so a default font is used in that case.
+- Annotations: Fixed annotations algorithm when syncing to a remote machine.  Now the annotations for the player are merged.
+- Annotations: Fixed annotations appearing at time -1/-1 due to an incorrect use resize of a std::vector, instead of reserve.
+- Annotations: Fixed Polygon and Filled Polygon annotations not getting transmitted properly through network connections.
+- Annotations: Fixed Text annotations not being able to be sent through the network.  Note, however, in order to get the same annotation, the font chosen must be available on both the local and remote machine.
+
+- Syncing: Made WebRTC syncing faster and sync only between offerer-answerer, instead of syncing all the mesh nodes.
+
+- Draw: Fixed soft edges drawing sometimes leaving triangle gaps, due to wrong UVs.
+- Draw: Fixed drawing leaving small tips at the end of drawing a shape when using the tablet's pressure.
+
+- Python: deprecated the cmd.args function.  Just use sys.argv as usual in python.
+- Python: fixed missing use of GIL lock in menus.
+
+- Core: Improved the performance of Preferences->Single Instance.  Previously, it was locking the UI for 5 seconds on start up.  Now it is immediate.
+- Core: Updated OpenColorIO version to v2.5.2.
+- Core: Updated OpenEXR version to v3.4.13.
+
+- Build: Fixed incorrect reporting of ZLIB version as 1.2.3.
+- Build: Fixed incorrect reporting of TIFF version.
+
+
+v1.6.9
+======
+
+ChangeLog
+---------
+
+- Install: Fixed dpkg -i reinstall of the same version on Debian/Ubuntu systems.
+
+- UI: Added tablet eraser support when drawing free-hand, allowing you to toggle
+      between drawing and erasing mid point.
+- UI: Fixed one really nasty crash in the color picker due to some variables being derived from the wrong class.
+- UI: Fixed HEX pulldown of color picker which was using decimals instead.
+- UI: Fixed Kwin/Plasma's windows decorations.  Now vmrv2 on that window manager shows with nice decorations.
+- UI: Added Tablet support to libdecor's cairo and GTK3 plugins, without modifying its sources.
+- UI: Added Tablet support for the panels to allow them to be moved and docked with the pen.
+- Core: Fixed crashes when using FLTK_BACKEND=x11 on Linux's Vulkan build.
+- UI: Allowed resizable bar to the right of viewport to be resized with the tablet.
+- UI: Made showing of tooltips optional in Window->Preferences.
+- UI: Made floating panels respond properly to tablet events.
+- UI: Fixed two Edit buttons which could potentially not show up.
+- UI: All shapes now respond properly to tablet/pen pressure. 
+
+- Core: Updated PNG version to v1.6.58.
+
+- Build: Conditionally allowed building with less features.
+- Build: WIP. Added -D USE_SYSTEM_LIBS=ON for faster building using system libraries when possible instead of building from source, even if you are not getting cutting edge performance.  However this should make it simpler for Unix distros to bundle vmrv2/mrv2 with apt, dnf, snap or flatpack.
+- Build: Fixed a bug when NOT building Python.
+
+
 v1.6.8
 ======
 

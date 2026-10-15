@@ -43,12 +43,11 @@ namespace tl
         {
             TLRENDER_NON_COPYABLE(System);
 
-        protected:
             void _init(const std::shared_ptr<system::Context>&);
-
-            System();
+            System(const std::shared_ptr<system::Context>&);
 
         public:
+
             virtual ~System();
 
             //! Create a new system.

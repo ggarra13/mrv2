@@ -30,11 +30,19 @@ namespace tl
             "Highlight",
             "Linear");
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRGamutMapping);
-        
+
         TLRENDER_ENUM_IMPL(
             HDRTonemapAlgorithm, "ST2094_40", "ST2094_10", "Clip", "BT2390",
             "BT2446A", "Spline", "Reinhard", "Mobius", "Hable", "Gamma",
-            "Linear", "Linear Light", "None");
+            "Linear", "Linear_Light", "None");
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRTonemapAlgorithm);
+
+        TLRENDER_ENUM_IMPL(
+            HDRExportMode,
+            "Display_Baked_HDR",
+            "Scene-Linear_HDR",
+            "Display_Baked_SDR");
+        TLRENDER_ENUM_SERIALIZE_IMPL(HDRExportMode);
+
     } // namespace timeline
 } // namespace tl

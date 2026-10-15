@@ -95,31 +95,31 @@ namespace tl
             std::shared_ptr<observer::Value<bool> > enabled;
             std::shared_ptr<observer::Value<bool> > active;
             std::shared_ptr<observer::Value<math::Size2i> > size;
-            std::shared_ptr<observer::Value<otime::RationalTime> > frameRate;
-            std::shared_ptr<observer::Value<otime::RationalTime> > currentTime;
+            std::shared_ptr<observer::Value<OTIO_NS::RationalTime> > frameRate;
+            std::shared_ptr<observer::Value<OTIO_NS::RationalTime> > currentTime;
 
             std::shared_ptr<timeline::Player> player;
             std::shared_ptr<observer::ValueObserver<timeline::Playback> >
                 playbackObserver;
-            std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
+            std::shared_ptr<observer::ValueObserver<OTIO_NS::RationalTime> >
                 currentTimeObserver;
-            std::shared_ptr<observer::ListObserver<timeline::VideoData> >
+            std::shared_ptr<observer::ListObserver<timeline::VideoFrame> >
                 videoObserver;
-            std::shared_ptr<observer::ListObserver<timeline::AudioData> >
+            std::shared_ptr<observer::ListObserver<timeline::AudioFrame> >
                 audioObserver;
             std::shared_ptr<observer::ValueObserver<double> > speedObserver;
 
 #ifdef OPENGL_BACKEND
             std::shared_ptr<gl::GLFWWindow> window;
 #endif
-            
+
             struct Mutex
             {
                 device::DeviceConfig config;
                 bool enabled = false;
                 bool active = false;
                 math::Size2i size;
-                otime::RationalTime frameRate = time::invalidTime;
+                OTIO_NS::RationalTime frameRate = time::invalidTime;
                 timeline::OCIOOptions ocioOptions;
                 timeline::LUTOptions lutOptions;
                 std::vector<timeline::ImageOptions> imageOptions;
@@ -133,21 +133,21 @@ namespace tl
                 double viewZoom = 1.0;
                 bool frameView = true;
                 float rotateZ = 0.F;
-                otime::TimeRange timeRange = time::invalidTimeRange;
+                OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
                 timeline::Playback playback = timeline::Playback::Stop;
-                otime::RationalTime currentTime = time::invalidTime;
-                otime::RationalTime playbackStartTime = time::invalidTime;
+                OTIO_NS::RationalTime currentTime = time::invalidTime;
+                OTIO_NS::RationalTime playbackStartTime = time::invalidTime;
                 double speed = 24.F;
                 double defaultSpeed = 24.F;
-                std::vector<timeline::VideoData> videoData;
+                std::vector<timeline::VideoFrame> videoFrame;
                 std::shared_ptr<image::Image> overlay;
                 float volume = 1.F;
                 bool mute = false;
                 std::vector<int> channelMute;
                 std::chrono::steady_clock::time_point muteTimeout;
                 double audioOffset = 0.0;
-                std::vector<timeline::AudioData> audioData;
-                std::map<int64_t, timeline::AudioData> audioDataCache;
+                std::vector<timeline::AudioFrame> audioFrame;
+                std::map<int64_t, timeline::AudioFrame> audioFrameCache;
 
                 bool reset = false;
                 std::mutex mutex;
@@ -166,8 +166,8 @@ namespace tl
                 double viewZoom = 1.0;
                 float rotateZ = 0.F;
                 bool frameView = true;
-                otime::TimeRange timeRange = time::invalidTimeRange;
-                std::vector<timeline::VideoData> videoData;
+                OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
+                std::vector<timeline::VideoFrame> videoFrame;
                 std::shared_ptr<image::Image> overlay;
 
 #ifdef OPENGL_BACKEND
@@ -219,9 +219,9 @@ namespace tl
             p.active = observer::Value<bool>::create(false);
             p.size = observer::Value<math::Size2i>::create();
             p.frameRate =
-                observer::Value<otime::RationalTime>::create(time::invalidTime);
+                observer::Value<OTIO_NS::RationalTime>::create(time::invalidTime);
             p.currentTime =
-                observer::Value<otime::RationalTime>::create(time::invalidTime);
+                observer::Value<OTIO_NS::RationalTime>::create(time::invalidTime);
 
             p.mutex.reset = true;
 
@@ -261,7 +261,7 @@ namespace tl
                         }
                     }
 #endif
-     
+
                 });
         }
 
@@ -271,7 +271,7 @@ namespace tl
         {
         }
 #endif
-        
+
 #ifdef VULKAN_BACKEND
         OutputDevice::OutputDevice(Fl_Vk_Context& c) :
             ctx(c),
@@ -381,12 +381,12 @@ namespace tl
             return _p->size;
         }
 
-        const otime::RationalTime& OutputDevice::getFrameRate() const
+        const OTIO_NS::RationalTime& OutputDevice::getFrameRate() const
         {
             return _p->frameRate->get();
         }
 
-        std::shared_ptr<observer::IValue<otime::RationalTime> >
+        std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
         OutputDevice::observeFrameRate() const
         {
             return _p->frameRate;
@@ -566,9 +566,9 @@ namespace tl
                         },
                         observer::CallbackAction::Suppress);
                 p.currentTimeObserver =
-                    observer::ValueObserver<otime::RationalTime>::create(
+                    observer::ValueObserver<OTIO_NS::RationalTime>::create(
                         p.player->observeCurrentTime(),
-                        [weak](const otime::RationalTime& value)
+                        [weak](const OTIO_NS::RationalTime& value)
                         {
                             if (auto device = weak.lock())
                             {
@@ -591,32 +591,32 @@ namespace tl
                         },
                         observer::CallbackAction::Suppress);
                 p.videoObserver =
-                    observer::ListObserver<timeline::VideoData>::create(
+                    observer::ListObserver<timeline::VideoFrame>::create(
                         p.player->observeCurrentVideo(),
-                        [weak](const std::vector<timeline::VideoData>& value)
+                        [weak](const std::vector<timeline::VideoFrame>& value)
                         {
                             if (auto device = weak.lock())
                             {
                                 {
                                     std::unique_lock<std::mutex> lock(
                                         device->_p->mutex.mutex);
-                                    device->_p->mutex.videoData = value;
+                                    device->_p->mutex.videoFrame = value;
                                 }
                                 device->_p->thread.cv.notify_one();
                             }
                         },
                         observer::CallbackAction::Suppress);
                 p.audioObserver =
-                    observer::ListObserver<timeline::AudioData>::create(
+                    observer::ListObserver<timeline::AudioFrame>::create(
                         p.player->observeCurrentAudio(),
-                        [weak](const std::vector<timeline::AudioData>& value)
+                        [weak](const std::vector<timeline::AudioFrame>& value)
                         {
                             if (auto device = weak.lock())
                             {
                                 {
                                     std::unique_lock<std::mutex> lock(
                                         device->_p->mutex.mutex);
-                                    device->_p->mutex.audioData = value;
+                                    device->_p->mutex.audioFrame = value;
                                 }
                                 device->_p->thread.cv.notify_one();
                             }
@@ -661,12 +661,12 @@ namespace tl
                     p.mutex.currentTime = time::invalidTime;
                     p.mutex.speed = p.mutex.defaultSpeed = 24.F;
                 }
-                p.mutex.videoData.clear();
-                p.mutex.audioData.clear();
+                p.mutex.videoFrame.clear();
+                p.mutex.audioFrame.clear();
                 if (p.player)
                 {
-                    p.mutex.videoData = p.player->getCurrentVideo();
-                    p.mutex.audioData = p.player->getCurrentAudio();
+                    p.mutex.videoFrame = p.player->getCurrentVideo();
+                    p.mutex.audioFrame = p.player->getCurrentAudio();
                 }
             }
         }
@@ -676,7 +676,7 @@ namespace tl
             TLRENDER_P();
             bool active = false;
             math::Size2i size = p.size->get();
-            otime::RationalTime frameRate = p.frameRate->get();
+            OTIO_NS::RationalTime frameRate = p.frameRate->get();
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
                 active = p.mutex.active;
@@ -688,29 +688,29 @@ namespace tl
             p.frameRate->setIfChanged(frameRate);
         }
 
-        timeline::AudioData OutputDevice::findAudioData(double seconds)
+        timeline::AudioFrame OutputDevice::findAudioFrame(double seconds)
         {
             TLRENDER_P();
-            timeline::AudioData audioData;
+            timeline::AudioFrame audioFrame;
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                const auto j = p.mutex.audioDataCache.find(seconds);
-                if (j != p.mutex.audioDataCache.end())
+                const auto j = p.mutex.audioFrameCache.find(seconds);
+                if (j != p.mutex.audioFrameCache.end())
                 {
-                    audioData = j->second;
+                    audioFrame = j->second;
                 }
             }
 
-            // if (audioData.layers.empty())
+            // if (audioFrame.layers.empty())
             // {
             //     std::cerr << "NO AUDIO DATA FOUND FOR " << seconds <<
-            //     std::endl; for (const auto& j : p.mutex.audioDataCache)
+            //     std::endl; for (const auto& j : p.mutex.audioFrameCache)
             //     {
             //         std::cerr << "\tcache.seconds=" << j.first << std::endl;
             //     }
             // }
 
-            return audioData;
+            return audioFrame;
         }
 
         void OutputDevice::_run()
@@ -726,15 +726,15 @@ namespace tl
             timeline::CompareOptions compareOptions;
             timeline::BackgroundOptions backgroundOptions;
             timeline::Playback playback = timeline::Playback::Stop;
-            otime::RationalTime currentTime = time::invalidTime;
+            OTIO_NS::RationalTime currentTime = time::invalidTime;
             math::Size2i size;
             float volume = 1.F;
             bool mute = false;
             bool reset = true;
-            otime::RationalTime frameRate = time::invalidTime;
+            OTIO_NS::RationalTime frameRate = time::invalidTime;
             double audioOffset = 0.0;
             double speed = 24.0F;
-            std::vector<timeline::AudioData> audioData;
+            std::vector<timeline::AudioFrame> audioFrame;
             std::shared_ptr<image::Image> overlay;
 
             if (auto context = p.context.lock())
@@ -746,7 +746,7 @@ namespace tl
                 p.thread.render = timeline_vlk::Render::create(ctx, context);
 
                 VkDevice device = ctx.device;
-                                
+
                 VkCommandPoolCreateInfo cmd_pool_info = {};
                 cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
                 cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
@@ -766,7 +766,7 @@ namespace tl
             {
                 bool createDevice = false;
                 bool doRender = false;
-                bool audioDataChanged = false;
+                bool audioFrameChanged = false;
                 {
                     std::unique_lock<std::mutex> lock(p.mutex.mutex);
                     if (p.thread.cv.wait_for(
@@ -775,7 +775,7 @@ namespace tl
                              imageOptions, displayOptions, compareOptions,
                              backgroundOptions, playback, currentTime,
                              frameRate, speed, volume, mute, audioOffset,
-                             audioData, reset]
+                             audioFrame, reset]
                             {
                                 return config != _p->mutex.config ||
                                        enabled != _p->mutex.enabled ||
@@ -804,14 +804,14 @@ namespace tl
                                            _p->mutex.timeRange ||
                                        playback != _p->mutex.playback ||
                                        currentTime != _p->mutex.currentTime ||
-                                       _p->thread.videoData !=
-                                           _p->mutex.videoData ||
+                                       _p->thread.videoFrame !=
+                                           _p->mutex.videoFrame ||
                                        _p->thread.overlay !=
                                            _p->mutex.overlay ||
                                        volume != _p->mutex.volume ||
                                        mute != _p->mutex.mute ||
                                        audioOffset != _p->mutex.audioOffset ||
-                                       audioData != _p->mutex.audioData ||
+                                       audioFrame != _p->mutex.audioFrame ||
                                        speed != _p->mutex.speed;
                             }))
                     {
@@ -820,7 +820,7 @@ namespace tl
                                          frameRate != p.mutex.frameRate;
 
                         size = timeline::getRenderSize(
-                            compareOptions.mode, p.thread.videoData);
+                            compareOptions, displayOptions, p.thread.videoFrame);
 
                         createDevice = p.mutex.config != config ||
                                        p.mutex.enabled != enabled ||
@@ -828,8 +828,8 @@ namespace tl
                                        p.mutex.speed != speed ||
                                        p.mutex.size != size;
 
-                        audioDataChanged = createDevice ||
-                                           audioData != p.mutex.audioData ||
+                        audioFrameChanged = createDevice ||
+                                           audioFrame != p.mutex.audioFrame ||
                                            currentTime != p.mutex.currentTime;
 
                         config = p.mutex.config;
@@ -855,7 +855,7 @@ namespace tl
                             p.thread.viewZoom != p.mutex.viewZoom ||
                             p.thread.rotateZ != p.mutex.rotateZ ||
                             p.thread.frameView != p.mutex.frameView ||
-                            p.thread.videoData != p.mutex.videoData ||
+                            p.thread.videoFrame != p.mutex.videoFrame ||
                             p.thread.overlay != p.mutex.overlay;
                         ocioOptions = p.mutex.ocioOptions;
                         lutOptions = p.mutex.lutOptions;
@@ -871,13 +871,13 @@ namespace tl
                         p.thread.viewZoom = p.mutex.viewZoom;
                         p.thread.rotateZ = p.mutex.rotateZ;
                         p.thread.frameView = p.mutex.frameView;
-                        p.thread.videoData = p.mutex.videoData;
+                        p.thread.videoFrame = p.mutex.videoFrame;
                         p.thread.overlay = p.mutex.overlay;
 
                         volume = p.mutex.volume;
                         mute = p.mutex.mute;
                         audioOffset = p.mutex.audioOffset;
-                        audioData = p.mutex.audioData;
+                        audioFrame = p.mutex.audioFrame;
                     }
                 }
 
@@ -885,7 +885,7 @@ namespace tl
                 p.thread.cmd = beginSingleTimeCommands(ctx.device,
                                                        p.thread.commandPool);
 #endif
-                
+
                 if (createDevice)
                 {
 #ifdef OPENGL_BACKEND
@@ -904,16 +904,16 @@ namespace tl
 
                     if (enabled)
                     {
-                        if (!p.thread.videoData.empty())
+                        if (!p.thread.videoFrame.empty())
                         {
                             double rate = 0;
-                            for (const auto& videoData : p.thread.videoData)
+                            for (const auto& videoFrame : p.thread.videoFrame)
                             {
-                                const double videoRate = videoData.time.rate();
+                                const double videoRate = videoFrame.time.rate();
                                 if (videoRate > rate)
                                     rate = videoRate;
                             }
-                            frameRate = otime::RationalTime(1.0, rate);
+                            frameRate = OTIO_NS::RationalTime(1.0, rate);
                         }
 
                         try
@@ -949,9 +949,9 @@ namespace tl
 #endif
                 }
 
-                if (audioDataChanged && p.thread.render && !config.noAudio)
+                if (audioFrameChanged && p.thread.render && !config.noAudio)
                 {
-                    _cacheUpdate(audioData);
+                    _cacheUpdate(audioFrame);
                     _audio();
                 }
 
@@ -1015,7 +1015,7 @@ namespace tl
 
         void OutputDevice::_createDevice(
             const device::DeviceConfig& config, bool& active,
-            math::Size2i& size, otime::RationalTime& frameRate)
+            math::Size2i& size, OTIO_NS::RationalTime& frameRate)
         {
             TLRENDER_P();
             if (config.deviceIndex != -1 && config.displayModeIndex != -1 &&
@@ -1039,7 +1039,7 @@ namespace tl
                 }
 
                 auto& video_frame = p.thread.NDI_video_frame;
-                
+
                 p.thread.outputPixelType = getOutputType(config.pixelType);
 
                 video_frame.xres = size.w;
@@ -1051,7 +1051,7 @@ namespace tl
 
                 double frame_rate = frameRate.rate() * speedMultiplier;
                 const auto& oldFrameRate = frameRate;
-                frameRate = otime::RationalTime(1.0, frame_rate);
+                frameRate = OTIO_NS::RationalTime(1.0, frame_rate);
 
                 int denominator = 1000;
                 int numerator = static_cast<int>(frame_rate * 1000);
@@ -1139,7 +1139,7 @@ namespace tl
                 {
                     numerator = 1000;
                     denominator = 1000 * std::round(frame_rate);
-                    frameRate = otime::RationalTime(numerator, denominator);
+                    frameRate = OTIO_NS::RationalTime(numerator, denominator);
                 }
 
                 if (oldFrameRate != frameRate)
@@ -1195,7 +1195,7 @@ namespace tl
         }
 
         void OutputDevice::_cacheUpdate(
-            const std::vector<timeline::AudioData>& audioDataList)
+            const std::vector<timeline::AudioFrame>& audioFrameList)
         {
             TLRENDER_P();
             if (!p.player)
@@ -1206,15 +1206,15 @@ namespace tl
             const double outSampleRate = 1.0F; // 48000.0F;
 
             // Get the pl<yer ranges to be cached.
-            const otime::TimeRange& timeRange = p.player->getTimeRange();
-            const otime::TimeRange& inOutRange = p.player->getInOutRange();
+            const OTIO_NS::TimeRange& timeRange = p.player->getTimeRange();
+            const OTIO_NS::TimeRange& inOutRange = p.player->getInOutRange();
 
-            const otime::TimeRange audioTimeRange = otime::TimeRange(
+            const OTIO_NS::TimeRange audioTimeRange = opentime::TimeRange(
                 timeRange.start_time().rescaled_to(outSampleRate),
                 timeRange.duration().rescaled_to(outSampleRate));
 
             // Set inOutRange in outSampleRate units.
-            const otime::RationalTime& currentTime =
+            const OTIO_NS::RationalTime& currentTime =
                 p.mutex.currentTime.rescaled_to(outSampleRate);
             const auto cacheOptions = p.player->getCacheOptions();
 
@@ -1236,10 +1236,10 @@ namespace tl
 
             // Get the CacheOptions
             // we need to look up one frame for buffer
-            const otime::RationalTime readAheadDivided(
+            const OTIO_NS::RationalTime readAheadDivided(
                 cacheOptions.readAhead.value() + 1.0,
                 cacheOptions.readAhead.rate());
-            const otime::RationalTime readBehindDivided(
+            const OTIO_NS::RationalTime readBehindDivided(
                 cacheOptions.readBehind.value() + 1.0,
                 cacheOptions.readBehind.rate());
 
@@ -1248,47 +1248,47 @@ namespace tl
             // readBehindDivided << std::endl;
 
             // Rescale read aheads to times
-            const otime::RationalTime readAheadRescaled =
+            const OTIO_NS::RationalTime readAheadRescaled =
                 readAheadDivided.rescaled_to(outSampleRate).floor();
-            const otime::RationalTime readBehindRescaled =
+            const OTIO_NS::RationalTime readBehindRescaled =
                 readBehindDivided.rescaled_to(outSampleRate).floor();
             // Get the audio ranges to be cached.
-            const otime::RationalTime audioOffsetTime =
-                otime::RationalTime(p.mutex.audioOffset, 1.0)
+            const OTIO_NS::RationalTime audioOffsetTime =
+                OTIO_NS::RationalTime(p.mutex.audioOffset, 1.0)
                     .rescaled_to(outSampleRate);
-            const otime::RationalTime audioOffsetAhead =
-                otime::RationalTime(
+            const OTIO_NS::RationalTime audioOffsetAhead =
+                OTIO_NS::RationalTime(
                     audioOffsetTime.value() < 0.0
                         ? -audioOffsetTime
-                        : otime::RationalTime(0.0, outSampleRate))
+                        : OTIO_NS::RationalTime(0.0, outSampleRate))
                     .round();
-            const otime::RationalTime audioOffsetBehind =
-                otime::RationalTime(
+            const OTIO_NS::RationalTime audioOffsetBehind =
+                OTIO_NS::RationalTime(
                     audioOffsetTime.value() > 0.0
                         ? audioOffsetTime
-                        : otime::RationalTime(0.0, outSampleRate))
+                        : OTIO_NS::RationalTime(0.0, outSampleRate))
                     .round();
             // std::cerr << "currentTime: " << currentTime << std::endl;
-            otime::TimeRange audioRange = time::invalidTimeRange;
+            OTIO_NS::TimeRange audioRange = time::invalidTimeRange;
             switch (cacheDirection)
             {
             case timeline::CacheDirection::Forward:
                 audioRange =
-                    otime::TimeRange::range_from_start_end_time_inclusive(
+                    OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                         currentTime - readBehindRescaled - audioOffsetBehind,
                         currentTime + readAheadRescaled + audioOffsetAhead);
                 break;
             case timeline::CacheDirection::Reverse:
                 audioRange =
-                    otime::TimeRange::range_from_start_end_time_inclusive(
+                    OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                         currentTime - readAheadRescaled - audioOffsetAhead,
                         currentTime + readBehindRescaled + audioOffsetBehind);
                 break;
             default:
                 break;
             }
-            const otime::TimeRange inOutAudioRange =
-                otime::TimeRange::range_from_start_end_time_inclusive(
+            const OTIO_NS::TimeRange inOutAudioRange =
+                OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                     inOutRange.start_time() - audioOffsetBehind,
                     inOutRange.end_time_inclusive() + audioOffsetAhead)
                     .clamped(audioTimeRange);
@@ -1300,23 +1300,23 @@ namespace tl
             // Remove old audio from the cache.
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                auto audioCacheIt = p.mutex.audioDataCache.begin();
-                while (audioCacheIt != p.mutex.audioDataCache.end())
+                auto audioCacheIt = p.mutex.audioFrameCache.begin();
+                while (audioCacheIt != p.mutex.audioFrameCache.end())
                 {
-                    const otime::TimeRange cacheRange(
-                        otime::RationalTime(
+                    const OTIO_NS::TimeRange cacheRange(
+                        OTIO_NS::RationalTime(
                             timeRange.start_time().rescaled_to(1.0).value() +
                                 audioCacheIt->first,
                             1.0),
-                        otime::RationalTime(1.0, 1.0));
+                        OTIO_NS::RationalTime(1.0, 1.0));
                     const auto j = std::find_if(
                         audioRanges.begin(), audioRanges.end(),
-                        [cacheRange](const otime::TimeRange& value)
+                        [cacheRange](const OTIO_NS::TimeRange& value)
                         { return cacheRange.intersects(value); });
                     if (j == audioRanges.end())
                     {
                         audioCacheIt =
-                            p.mutex.audioDataCache.erase(audioCacheIt);
+                            p.mutex.audioFrameCache.erase(audioCacheIt);
                     }
                     else
                     {
@@ -1326,11 +1326,11 @@ namespace tl
             }
 
             // Now, add the audios from the cacheList
-            for (const auto& audioData : audioDataList)
+            for (const auto& audioFrame : audioFrameList)
             {
                 p.mutex
-                    .audioDataCache[static_cast<int64_t>(audioData.seconds)] =
-                    audioData;
+                    .audioFrameCache[static_cast<int64_t>(audioFrame.seconds)] =
+                    audioFrame;
             }
         }
 
@@ -1340,18 +1340,18 @@ namespace tl
             if (!p.player)
                 return;
 
-            const otime::TimeRange& timeRange = p.player->getTimeRange();
-            const otime::RationalTime& currentTime = p.player->getCurrentTime();
+            const OTIO_NS::TimeRange& timeRange = p.player->getTimeRange();
+            const OTIO_NS::RationalTime& currentTime = p.player->getCurrentTime();
             const auto& currentLocalTime = currentTime - timeRange.start_time();
             double currentSeconds = currentLocalTime.to_seconds();
             double secondsD = std::floor(currentSeconds);
 
             auto& thread = p.thread;
 
-            const timeline::AudioData& audioData = findAudioData(secondsD);
+            const timeline::AudioFrame& audioFrame = findAudioFrame(secondsD);
 
             std::shared_ptr<audio::Audio> inputAudio;
-            for (const auto& layer : audioData.layers)
+            for (const auto& layer : audioFrame.layers)
             {
                 if (layer.audio)
                 {
@@ -1371,20 +1371,20 @@ namespace tl
 
             // One frame
             const size_t outSampleRate = 48000;
-            const otime::RationalTime kOneFrame(1.0, currentTime.rate());
+            const OTIO_NS::RationalTime kOneFrame(1.0, currentTime.rate());
             const size_t outSamples =
                 kOneFrame.rescaled_to(outSampleRate).value();
             const auto& inSampleDuration = kOneFrame.rescaled_to(inSampleRate);
 
             // auto outStartSample  =
-            // otime::RationalTime(secondsD, 1.0).rescaled_to(outSampleRate);
+            // OTIO_NS::RationalTime(secondsD, 1.0).rescaled_to(outSampleRate);
             // auto outCurrentSample  =
-            // otime::RationalTime(currentSeconds, 1.0).rescaled_to(outSampleRate);
+            // OTIO_NS::RationalTime(currentSeconds, 1.0).rescaled_to(outSampleRate);
             // size_t outSampleStart = outStartSample.value();
             // size_t outSampleCurrent = outCurrentSample.value();
 
             timeline::Playback playback = timeline::Playback::Stop;
-            otime::RationalTime playbackStartTime = time::invalidTime;
+            OTIO_NS::RationalTime playbackStartTime = time::invalidTime;
             double audioOffset = 0.0;
             double speed = 1.0;
             double defaultSpeed = 1.0;
@@ -1467,13 +1467,13 @@ namespace tl
                         .start_time()
                         .rescaled_to(inSampleRate)
                         .value() -
-                    otime::RationalTime(audioOffset, 1.0)
+                    OTIO_NS::RationalTime(audioOffset, 1.0)
                         .rescaled_to(inSampleRate)
                         .value();
                 const auto bufferSampleCount =
                     audio::getSampleCount(thread.buffer);
                 const auto& timeOffset =
-                    otime::RationalTime(
+                    OTIO_NS::RationalTime(
                         thread.rtAudioCurrentFrame + bufferSampleCount,
                         outSampleRate)
                         .rescaled_to(inSampleRate);
@@ -1496,13 +1496,13 @@ namespace tl
 
                 while (audio::getSampleCount(thread.buffer) < outSamples)
                 {
-                    const timeline::AudioData& audioData =
-                        findAudioData(seconds);
+                    const timeline::AudioFrame& audioFrame =
+                        findAudioFrame(seconds);
 
                     std::vector<float> volumeScale;
-                    volumeScale.reserve(audioData.layers.size());
+                    volumeScale.reserve(audioFrame.layers.size());
                     std::vector<std::shared_ptr<audio::Audio> > audios;
-                    std::vector<const uint8_t*> audioDataP;
+                    std::vector<const uint8_t*> audioFrameP;
                     const int64_t dataByteOffset =
                         inOffsetSamples * inputInfo.getByteCount();
                     const size_t sampleGlobal =
@@ -1510,7 +1510,7 @@ namespace tl
 
                     int audioIndex = 0;
                     std::shared_ptr<audio::Audio> audio;
-                    for (const auto& layer : audioData.layers)
+                    for (const auto& layer : audioFrame.layers)
                     {
                         float volumeMultiplier = 1.F;
                         if (layer.audio && layer.audio->getInfo() == inputInfo)
@@ -1520,7 +1520,7 @@ namespace tl
                             if (layer.inTransition)
                             {
                                 const auto& clipTimeRange = layer.clipTimeRange;
-                                const auto& range = otime::TimeRange(
+                                const auto& range = OTIO_NS::TimeRange(
                                     clipTimeRange.start_time().rescaled_to(
                                         inSampleRate),
                                     clipTimeRange.duration().rescaled_to(
@@ -1556,7 +1556,7 @@ namespace tl
                             if (layer.outTransition)
                             {
                                 const auto& clipTimeRange = layer.clipTimeRange;
-                                const auto& range = otime::TimeRange(
+                                const auto& range = OTIO_NS::TimeRange(
                                     clipTimeRange.start_time().rescaled_to(
                                         inSampleRate),
                                     clipTimeRange.duration().rescaled_to(
@@ -1611,16 +1611,16 @@ namespace tl
                                 audio = tmp;
                                 audios.push_back(audio);
                             }
-                            audioDataP.push_back(
+                            audioFrameP.push_back(
                                 audio->getData() + dataByteOffset);
                             volumeScale.push_back(volumeMultiplier);
                             ++audioIndex;
                         }
                     }
-                    if (audioDataP.empty())
+                    if (audioFrameP.empty())
                     {
                         volumeScale.push_back(0.F);
-                        audioDataP.push_back(thread.silence->getData());
+                        audioFrameP.push_back(thread.silence->getData());
                     }
 
                     size_t inSamples = std::min(
@@ -1635,15 +1635,15 @@ namespace tl
                         }
 
                         audio::reverse(
-                            const_cast<uint8_t**>(audioDataP.data()),
-                            audioDataP.size(), inSamples,
+                            const_cast<uint8_t**>(audioFrameP.data()),
+                            audioFrameP.size(), inSamples,
                             inputInfo.channelCount, inputInfo.dataType);
                     }
 
                     auto tmp = audio::Audio::create(inputInfo, inSamples);
                     tmp->zero();
                     audio::mix(
-                        audioDataP.data(), audioDataP.size(), tmp->getData(),
+                        audioFrameP.data(), audioFrameP.size(), tmp->getData(),
                         volume, volumeScale, inSamples, inputInfo.channelCount,
                         inputInfo.dataType);
 
@@ -1784,12 +1784,12 @@ namespace tl
                 timeline::RenderOptions renderOptions;
                 renderOptions.colorBuffer =
                     getColorBuffer(p.thread.outputPixelType);
-                
+
 #ifdef OPENGL_BACKEND
                 gl::OffscreenBufferBinding binding(p.thread.offscreenBuffer);
                 p.thread.render->begin(renderSize, renderOptions);
 #endif
-#ifdef VULKAN_BACKEND                                    
+#ifdef VULKAN_BACKEND
                 p.thread.offscreenBuffer->transitionToColorAttachment(p.thread.cmd);
                 p.thread.render->begin(p.thread.cmd, p.thread.offscreenBuffer,
                                        p.thread.frameIndex,
@@ -1913,16 +1913,19 @@ namespace tl
                     resizeScaleMatrix =
                         math::scale(math::Vector3f(scale, scale, 1.0f));
                 }
-                if (!p.thread.videoData.empty())
+                if (!p.thread.videoFrame.empty())
                 {
                     p.thread.render->setTransform(
                         pm * centerTranslationMatrix * resizeScaleMatrix *
                         translateMatrix * zoomMatrix * offsetTransformMatrix *
                         rotateMatrix * centeringMatrix);
+
                     p.thread.render->drawVideo(
-                        p.thread.videoData,
+                        p.thread.videoFrame,
                         timeline::getBoxes(
-                            compareOptions.mode, p.thread.videoData),
+                            compareOptions,
+                            displayOptions,
+                            p.thread.videoFrame),
                         imageOptions, displayOptions, compareOptions,
                         backgroundOptions);
                 }
@@ -1941,7 +1944,7 @@ namespace tl
                 }
 
                 p.thread.render->end();
-                
+
 #ifdef OPENGL_BACKEND
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, p.thread.pbo);
                 glPixelStorei(
@@ -1987,11 +1990,11 @@ namespace tl
             }
             glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 #endif
-            
+
 #ifdef VULKAN_BACKEND
             if (!p.thread.offscreenBuffer)
                 return;
-            
+
             p.thread.offscreenBuffer->transitionToColorAttachment(p.thread.cmd);
 
             const uint32_t width = p.thread.size.w;
@@ -1999,7 +2002,7 @@ namespace tl
             p.thread.offscreenBuffer->readPixels(p.thread.cmd, 0, 0, width, height);
 
             vkEndCommandBuffer(p.thread.cmd);
-            
+
             p.thread.offscreenBuffer->submitReadback(p.thread.cmd);
 
             {
@@ -2014,19 +2017,19 @@ namespace tl
             {
                 result = p.thread.offscreenBuffer->getLatestReadPixels(data);
             }
-            
+
             vkFreeCommandBuffers(ctx.device, p.thread.commandPool, 1, &p.thread.cmd);
             p.thread.cmd = VK_NULL_HANDLE;
 
             if (!data)
                 return;
-            
+
             p.thread.frameIndex = (p.thread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
 
-                                    
+
             copyPackPixels(video_frame.p_data, data, p.thread.size,
                            p.thread.outputPixelType);
-#endif    
+#endif
 
             std::shared_ptr<image::HDRData> hdrData;
             switch (p.thread.hdrMode)
@@ -2034,10 +2037,10 @@ namespace tl
             case device::HDRMode::FromFile:
             case device::HDRMode::Custom:
             {
-                if (p.thread.videoData.empty())
+                if (p.thread.videoFrame.empty())
                     return;
-                const auto ocio = p.mutex.ocioOptions; 
-                hdrData = device::getHDRData(p.thread.videoData[0]);
+                const auto ocio = p.mutex.ocioOptions;
+                hdrData = device::getHDRData(p.thread.videoFrame[0]);
                 if (!hdrData && !config.noMetadata)
                 {
                     const std::string& display = ocio.display;
@@ -2045,7 +2048,7 @@ namespace tl
                     if (ocio.enabled && !display.empty() && !view.empty())
                     {
                         std::string displayView = ocio.display;
-                        if (!view.empty() && view != "Default" && 
+                        if (!view.empty() && view != "Default" &&
                             view != "(default)" && view != "None")
                         {
                             displayView += "/" + view;
@@ -2053,7 +2056,7 @@ namespace tl
 
                         hdrData.reset(new image::HDRData(image::nameToPrimaries(displayView)));
                         hdrData->isDisplayReferred = true;
-                        
+
                         float peak = 1000.F;
                         if (view.find("10000") != std::string::npos)
                         {
@@ -2067,7 +2070,7 @@ namespace tl
                         {
                             peak = 100.F;
                         }
-                    
+
                         switch (hdrData->eotf)
                         {
                         case image::EOTF_BT2100_PQ:

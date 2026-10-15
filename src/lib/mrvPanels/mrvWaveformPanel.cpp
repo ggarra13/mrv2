@@ -58,7 +58,7 @@ namespace mrv
             MRV2_R();
 
             SettingsObject* settings = App::app->settings();
-            
+
             Pack* pack = g->get_pack();
             pack->spacing(5);
 
@@ -90,7 +90,7 @@ namespace mrv
 #endif
             c->tooltip(_("Type of Waveform Monitor."));
             cW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     bool isSDR = (o->value() == 0);
                     if (isSDR)
@@ -120,17 +120,17 @@ namespace mrv
 
             std_any any = settings->getValue<std_any>(key);
             float v = std_any_empty(any) ? 12.F : std_any_cast<float>(any);
-            
+
             s->default_value(12.f);
             s->value(v);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     float value = w->value();
                     settings->setValue("Waveform/HDRMaxValue", value);
                     _r->waveform->setHDRMaxValue(value);
                 });
-            
+
             // Get current value
             key = "Waveform/HDRLogScale";
             any = settings->getValue<std_any>(key);
@@ -142,13 +142,13 @@ namespace mrv
             cB->value(bV);
             r.hdrLogScale = cB;
             cB->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     bool value = w->value();
                     settings->setValue("Waveform/HDRLogScale", value);
                     _r->waveform->setHDRLogScale(value);
                 });
-                            
+
             g->resizable(r.waveform);
         }
 

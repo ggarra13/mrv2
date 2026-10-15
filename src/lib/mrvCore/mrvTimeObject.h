@@ -10,8 +10,6 @@
 
 namespace mrv
 {
-    namespace otime = opentime::OPENTIME_VERSION;
-
     //! Time units.
     enum class TimeUnits {
         Frames,
@@ -32,11 +30,11 @@ namespace mrv
 
     //! Convert a time value to text.
     void
-    timeToText(char* out, const otime::RationalTime&, const TimeUnits) noexcept;
+    timeToText(char* out, const OTIO_NS::RationalTime&, const TimeUnits) noexcept;
 
     //! Convert text to a time value.
-    otime::RationalTime textToTime(
+    OTIO_NS::RationalTime textToTime(
         const string::String& text, double rate, TimeUnits,
-        otime::ErrorStatus*);
+        opentime::ErrorStatus*);
 
 } // namespace mrv

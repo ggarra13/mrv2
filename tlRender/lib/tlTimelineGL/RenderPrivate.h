@@ -53,6 +53,7 @@ namespace tl
         std::string differenceFragmentSource();
         std::string addFragmentSource();
         std::string multiplyFragmentSource();
+        std::string butterflyFragmentSource();
 
         std::vector<std::shared_ptr<gl::Texture> > getTextures(
             const image::Info&, const timeline::ImageFilters&,

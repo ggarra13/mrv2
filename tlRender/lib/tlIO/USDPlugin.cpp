@@ -10,46 +10,43 @@ namespace tl
 {
     namespace usd
     {
-        struct Plugin::Private
+        struct ReadPlugin::Private
         {
             int64_t id = -1;
             std::mutex mutex;
             std::shared_ptr<Render> render;
         };
 
-        void Plugin::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        void ReadPlugin::_init(
+            const std::shared_ptr<log::System>& logSystem)
         {
-            IPlugin::_init(
+            IReadPlugin::_init(
                 "USD",
                 {{".usd", io::FileType::Sequence},
                  {".usda", io::FileType::Sequence},
                  {".usdc", io::FileType::Sequence},
-                 {".usdz", io::FileType::Sequence}},
-                cache, logSystem);
+                 {".usdz", io::FileType::Sequence}}, logSystem);
             TLRENDER_P();
-            p.render = Render::create(cache, logSystem);
+            p.render = Render::create(logSystem);
         }
 
-        Plugin::Plugin() :
+        ReadPlugin::ReadPlugin() :
             _p(new Private)
         {
         }
 
-        Plugin::~Plugin() {}
+        ReadPlugin::~ReadPlugin() {}
 
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(cache, logSystem);
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::shared_ptr<io::IVideoRead>
+        ReadPlugin::videoRead(const file::Path& path, const io::Options& options)
         {
             TLRENDER_P();
             int64_t id = -1;
@@ -58,11 +55,10 @@ namespace tl
                 ++(p.id);
                 id = p.id;
             }
-            return Read::create(
-                id, p.render, path, options, _cache, _logSystem);
+            return Read::create(id, p.render, path, options, _logSystem.lock());
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
+        std::shared_ptr<io::IVideoRead> ReadPlugin::videoRead(
             const file::Path& path, const std::vector<file::MemoryRead>& memory,
             const io::Options& options)
         {
@@ -73,20 +69,7 @@ namespace tl
                 ++(p.id);
                 id = p.id;
             }
-            return Read::create(
-                id, p.render, path, options, _cache, _logSystem);
-        }
-
-        image::Info
-        Plugin::getWriteInfo(const image::Info&, const io::Options&) const
-        {
-            return image::Info();
-        }
-
-        std::shared_ptr<io::IWrite>
-        Plugin::write(const file::Path&, const io::Info&, const io::Options&)
-        {
-            return nullptr;
+            return Read::create(id, p.render, path, options, _logSystem.lock());
         }
     } // namespace usd
 } // namespace tl

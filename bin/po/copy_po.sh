@@ -26,5 +26,5 @@ then
     $PYTHON -m pip install polib
 fi
 
-$PYTHON bin/python/copy_po.py $*
+$PYTHON bin/python/copy_po.py en
 

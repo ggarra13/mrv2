@@ -61,10 +61,10 @@ namespace tl
             observeSize() const = 0;
 
             //! Get the output device frame rate.
-            virtual const otime::RationalTime& getFrameRate() const = 0;
+            virtual const OTIO_NS::RationalTime& getFrameRate() const = 0;
 
             //! Observe the output device frame rate.
-            virtual std::shared_ptr<observer::IValue<otime::RationalTime> >
+            virtual std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
             observeFrameRate() const = 0;
 
             //! Set the view.

@@ -21,7 +21,7 @@ namespace tl
         {
         public:
             Annotation() {};
-            Annotation(const otime::RationalTime& frame, const bool allFrames);
+            Annotation(const OTIO_NS::RationalTime& frame, const bool allFrames);
             ~Annotation();
 
             //! Returns true if the current canvas will be empty.
@@ -38,7 +38,7 @@ namespace tl
             void redo();
 
         public:
-            otime::RationalTime time = time::invalidTime;
+            OTIO_NS::RationalTime time = time::invalidTime;
             std::vector< std::shared_ptr< Shape > > shapes;
             std::vector< std::shared_ptr< Shape > > undo_shapes;
             bool allFrames = false;

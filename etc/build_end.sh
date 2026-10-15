@@ -3,21 +3,6 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-vcpkg_ARCH=x64
-if [[ $ARCH == *amd64* ]]; then
-    vcpkg_ARCH=x64
-elif [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
-    vcpkg_ARCH=arm64
-fi
-vcpkg_TRIPLET=${vcpkg_ARCH}-windows
-vcpkg_DIR=$BUILD_DIR/deps/vcpkg/src/vcpkg/installed/$vcpkg_TRIPLET
-	
-if [[ $KERNEL == *Windows* ]]; then
-    if [[ -d $vcpkg_DIR ]]; then
-	echo "Copying $vcpkg_DIR/bin/*.dll"
-	cp -rf $vcpkg_DIR/bin/*.dll $BUILD_DIR/install/bin
-    fi
-fi
 
 if [[ "$CMAKE_TARGET" == "package" ]]; then
 
@@ -39,13 +24,12 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
 	. etc/windows/signing_installer.sh
     elif [[ $KERNEL == *Darwin* ]]; then
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Darwin-${ARCH}.dmg"
-	VK_ARG=""
-	if [[ "$MRV2_VK" == "ON" || "$MRV2_VK" == "1" ]]; then
-	    VK_ARG='-vk'
-	fi
-	etc/macos/codesign_notarize.sh sign-dmg ${VK_ARG}
-	etc/macos/codesign_notarize.sh notarize ${VK_ARG}
-	etc/macos/codesign_notarize.sh staple ${VK_ARG}
+	# Use the same flag that named the DMG above (mrv2_ARG, derived from
+	# MRV2_BACKEND) so codesign_notarize.sh looks in the matching build
+	# tree for the matching app/DMG names.
+	etc/macos/codesign_notarize.sh sign-dmg ${mrv2_ARG}
+	etc/macos/codesign_notarize.sh notarize ${mrv2_ARG}
+	etc/macos/codesign_notarize.sh staple ${mrv2_ARG}
     elif [[ $KERNEL == *Linux* ]]; then
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Linux-${ARCH}.deb"
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Linux-${ARCH}.rpm"

@@ -39,6 +39,12 @@ namespace mrv
         Fl_Button* button() { return _button; }
         void layout();
 
+        // Open/close the widget
+        void open();
+        void close();
+        // Is widget open?
+        bool is_open() const { return _contents->visible() ? true : false; }
+
     protected:
         Fl_Button* _button;
         Pack* _contents;
@@ -46,14 +52,6 @@ namespace mrv
         static void toggle_tab_cb(Fl_Button* w, void* data);
         void relabel_button();
         void toggle_tab(Fl_Button* w);
-        // void draw() FL_OVERRIDE;
-
-    public: // added these -erco
-        // Open/close the widget
-        void open();
-        void close();
-        // Is widget open?
-        bool is_open() const { return _contents->visible() ? true : false; }
     };
 
 } // namespace mrv

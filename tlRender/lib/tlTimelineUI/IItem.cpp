@@ -32,6 +32,8 @@ namespace tl
                    tracks == other.tracks && trackInfo == other.trackInfo &&
                    clipInfo == other.clipInfo &&
                    thumbnails == other.thumbnails &&
+                   waveforms == other.waveforms &&
+                   effects   == other.effects &&
                    thumbnailHeight == other.thumbnailHeight &&
                    waveformWidth == other.waveformWidth &&
                    waveformHeight == other.waveformHeight &&
@@ -50,7 +52,7 @@ namespace tl
             return !(*this == other);
         }
 
-        std::vector<Marker> getMarkers(const otio::Item* item)
+        std::vector<Marker> getMarkers(const OTIO_NS::Item* item)
         {
             std::vector<Marker> out;
             for (const auto& marker : item->markers())
@@ -65,20 +67,6 @@ namespace tl
         image::Color4f getMarkerColor(const std::string& value)
         {
             const std::map<std::string, image::Color4f> colors = {
-                //! \bug The OTIO marker variables are causing undefined
-                //! symbol errors on Linux and macOS.
-                /*{otio::Marker::Color::pink, image::Color4f(1.F, .752F,
-                .796F)}, { otio::Marker::Color::red, image::Color4f(1.F, 0.F,
-                0.F) }, { otio::Marker::Color::orange, image::Color4f(1.F, .75F,
-                0.F) }, { otio::Marker::Color::yellow, image::Color4f(1.F, 1.F,
-                0.F) }, { otio::Marker::Color::green, image::Color4f(0.F, 1.F,
-                0.F) }, { otio::Marker::Color::cyan,
-                image::Color4f(0.F, 1.F, 1.F) }, { otio::Marker::Color::blue,
-                image::Color4f(0.F, 0.F, 1.F) }, { otio::Marker::Color::purple,
-                image::Color4f(0.5F, 0.F, .5F) }, {
-                otio::Marker::Color::magenta, image::Color4f(1.F, 0.F, 1.F) },
-                { otio::Marker::Color::black, image::Color4f(0.F, 0.F, 0.F) },
-                { otio::Marker::Color::white, image::Color4f(1.F, 1.F, 1.F) }*/
                 {"PINK", image::Color4f(1.F, .752F, .796F)},
                 {"RED", image::Color4f(1.F, 0.F, 0.F)},
                 {"ORANGE", image::Color4f(1.F, .75F, 0.F)},
@@ -113,8 +101,9 @@ namespace tl
         };
 
         void IItem::_init(
-            const std::string& objectName, const otime::TimeRange& timeRange,
-            const otime::TimeRange& trimmedRange, double scale,
+            const std::string& objectName, const OTIO_NS::TimeRange& timeRange,
+            const OTIO_NS::TimeRange& trimmedRange,
+            const OTIO_NS::TimeRange& availableRange, double scale,
             const ItemOptions& options, const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& data,
             const std::shared_ptr<system::Context>& context,
@@ -125,6 +114,7 @@ namespace tl
 
             _timeRange = timeRange;
             _trimmedRange = trimmedRange;
+            _availableRange = availableRange;
             _scale = scale;
             _options = options;
             _displayOptions = displayOptions;
@@ -142,12 +132,12 @@ namespace tl
 
         IItem::~IItem() {}
 
-        const otime::TimeRange& IItem::getTimeRange() const
+        const OTIO_NS::TimeRange& IItem::getTimeRange() const
         {
             return _timeRange;
         }
 
-        void IItem::setTimeRange(const otime::TimeRange& value)
+        void IItem::setTimeRange(const OTIO_NS::TimeRange& value)
         {
             if (_timeRange == value)
                 return;
@@ -155,13 +145,13 @@ namespace tl
             _updates |= ui::Update::Size;
             _updates |= ui::Update::Draw;
         }
-        
-        const otime::TimeRange& IItem::getTrimmedRange() const
+
+        const OTIO_NS::TimeRange& IItem::getTrimmedRange() const
         {
             return _trimmedRange;
         }
 
-        void IItem::setTrimmedRange(const otime::TimeRange& value)
+        void IItem::setTrimmedRange(const OTIO_NS::TimeRange& value)
         {
             if (_trimmedRange == value)
                 return;
@@ -207,9 +197,9 @@ namespace tl
             _updates |= ui::Update::Draw;
         }
 
-        otime::RationalTime IItem::posToTime(float value) const
+        OTIO_NS::RationalTime IItem::posToTime(float value) const
         {
-            otime::RationalTime out = time::invalidTime;
+            OTIO_NS::RationalTime out = time::invalidTime;
             if (_geometry.w() > 0)
             {
                 const double normalized =
@@ -217,9 +207,9 @@ namespace tl
                     static_cast<double>(
                         _timeRange.duration().rescaled_to(1.0).value() *
                         _scale);
-                out = otime::RationalTime(
+                out = OTIO_NS::RationalTime(
                           _timeRange.start_time() +
-                          otime::RationalTime(
+                          OTIO_NS::RationalTime(
                               _timeRange.duration().value() * normalized,
                               _timeRange.duration().rate()))
                           .round();
@@ -230,9 +220,9 @@ namespace tl
             return out;
         }
 
-        int IItem::timeToPos(const otime::RationalTime& value) const
+        int IItem::timeToPos(const OTIO_NS::RationalTime& value) const
         {
-            const otime::RationalTime t = value - _timeRange.start_time();
+            const OTIO_NS::RationalTime t = value - _timeRange.start_time();
             return _geometry.min.x + t.rescaled_to(1.0).value() * _scale;
         }
 
@@ -247,9 +237,9 @@ namespace tl
             return out;
         }
 
-        std::string IItem::_getDurationLabel(const otime::RationalTime& value)
+        std::string IItem::_getDurationLabel(const OTIO_NS::RationalTime& value)
         {
-            const otime::RationalTime rescaled =
+            const OTIO_NS::RationalTime rescaled =
                 value.rescaled_to(_data->speed);
             return string::Format("{0}").arg(
                 _data->timeUnitsModel->getLabel(rescaled));
@@ -268,12 +258,14 @@ namespace tl
             j.at("inputEnabled").get_to(value.inputEnabled);
             j.at("editAssociatedClips").get_to(value.editAssociatedClips);
         }
-        
+
         void to_json(nlohmann::json& j, const DisplayOptions& value)
         {
             j["trackInfo"] = value.trackInfo;
             j["clipInfo"] = value.clipInfo;
             j["thumbnails"] = value.thumbnails;
+            j["waveforms"] = value.waveforms;
+            j["effects"] = value.effects;
             j["thumbnailHeight"] = value.thumbnailHeight;
             j["waveformWidth"] = value.waveformHeight;
             j["waveformHeight"] = value.waveformHeight;
@@ -286,6 +278,11 @@ namespace tl
             j.at("trackInfo").get_to(value.trackInfo);
             j.at("clipInfo").get_to(value.clipInfo);
             j.at("thumbnails").get_to(value.thumbnails);
+            value.waveforms = true;
+            if (j.contains("waveforms"))
+                j.at("waveforms").get_to(value.waveforms);
+            if (j.contains("effects"))
+                j.at("effects").get_to(value.effects);
             j.at("thumbnailHeight").get_to(value.thumbnailHeight);
             j.at("waveformWidth").get_to(value.waveformWidth);
             j.at("waveformHeight").get_to(value.waveformHeight);

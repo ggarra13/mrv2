@@ -10,10 +10,10 @@ namespace tl
 {
     namespace system
     {
-        void ISystem::_init(
-            const std::string& name, const std::shared_ptr<Context>& context)
+        ISystem::ISystem(const std::shared_ptr<Context>& context,
+                         const std::string& name)
         {
-            ICoreSystem::_init(name, context);
+            ICoreSystem::_init(context, name);
 
             _logSystem = context->getSystem<log::System>();
 
@@ -22,8 +22,6 @@ namespace tl
                 logSystem->print(name, "Create");
             }
         }
-
-        ISystem::ISystem() {}
 
         ISystem::~ISystem()
         {

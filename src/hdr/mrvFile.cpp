@@ -7,6 +7,8 @@
 #include "mrvFile.h"
 #include "mrvHome.h"
 
+#include <tlCore/Path.h>
+
 #include <regex>
 #include <fstream>
 #include <filesystem>
@@ -29,16 +31,16 @@ namespace mrv
             std::replace(normalized.begin(), normalized.end(), '\\', '/');
             return normalized;
         }
-        
+
 
         bool exists(const fs::path& filePath)
         {
             return fs::exists(filePath);
         }
-        
+
         bool isReadable(const fs::path& p)
         {
-            const std::string& filePath = p.u8string();
+            const std::string& filePath = tl::file::fromFileSystem(p);
             if (filePath.empty())
                 return false;
 

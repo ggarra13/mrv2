@@ -12,21 +12,21 @@ namespace tl
     {
         ReadAudio::ReadAudio(
             const std::string& fileName,
-            const std::vector<file::MemoryRead>& memory, double videoRate,
-            const Options& options) :
+            const std::vector<file::MemoryRead>& memory,
+            const ReadOptions& options) :
             _fileName(fileName),
             _options(options)
         {
+            _avFormatContext = avformat_alloc_context();
+            if (!_avFormatContext)
+            {
+                throw std::runtime_error(
+                    string::Format("{0}: Cannot allocate format context")
+                    .arg(fileName));
+            }
+
             if (!memory.empty())
             {
-                _avFormatContext = avformat_alloc_context();
-                if (!_avFormatContext)
-                {
-                    throw std::runtime_error(
-                        string::Format("{0}: Cannot allocate format context")
-                            .arg(fileName));
-                }
-
                 _avIOBufferData = AVIOBufferData(memory[0].p, memory[0].size);
                 _avIOContextBuffer =
                     static_cast<uint8_t*>(av_malloc(avIOContextBufferSize));
@@ -44,23 +44,28 @@ namespace tl
                 _avFormatContext->pb = _avIOContext;
             }
 
+            _avFormatContext->interrupt_callback.callback = interruptCb;
+            _avFormatContext->interrupt_callback.opaque   = this;
+
             int r = avformat_open_input(
                 &_avFormatContext,
-                !_avFormatContext ? fileName.c_str() : nullptr, nullptr,
+                memory.empty() ? fileName.c_str() : nullptr, nullptr,
                 nullptr);
             if (r < 0)
             {
-                throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(fileName)
-                                             .arg(getErrorLabel(r)));
+                throw std::runtime_error(
+                    string::Format("avformat_open_input {0}: {1}")
+                    .arg(fileName)
+                    .arg(getErrorLabel(r)));
             }
 
             r = avformat_find_stream_info(_avFormatContext, 0);
             if (r < 0)
             {
-                throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(fileName)
-                                             .arg(getErrorLabel(r)));
+                throw std::runtime_error(
+                    string::Format("avformat_find_stream_info {0}: {1}")
+                    .arg(fileName)
+                    .arg(getErrorLabel(r)));
             }
 
             // Count the tracks and get the metadata for each audio track
@@ -114,6 +119,26 @@ namespace tl
                     _info.audioInfo.push_back(info);
                 }
             }
+
+            // The video rate is needed only to parse the timecode tag
+            // into a start time below, and is read from this reader's own
+            // format context: the audio does not depend on a video reader
+            // existing. A file with no video has no rate to parse the
+            // timecode against.
+            // Negative, so that from_timecode() below rejects it and
+            // leaves the start time alone.
+            double videoRate = -1.0;
+            const int avVideoStream = findStream(
+                _avFormatContext,
+                AVMEDIA_TYPE_VIDEO);
+            if (avVideoStream != -1)
+            {
+                videoRate = av_q2d(av_guess_frame_rate(
+                                       _avFormatContext,
+                                       _avFormatContext->streams[avVideoStream],
+                                       nullptr));
+            }
+
 
             // If user selected specific track, use it.
             if (options.audioTrack >= 0)
@@ -169,6 +194,18 @@ namespace tl
                 // av_dump_format(_avFormatContext, _avStream, fileName.c_str(),
                 // 0);
 
+                // Only the video stream is read: the demuxer then skips the
+                // others' data rather than handing it over to be thrown away.
+                // The timecode and the other streams' parameters are
+                // metadata, found already.
+                for (unsigned int i = 0; i < _avFormatContext->nb_streams; ++i)
+                {
+                    if (static_cast<int>(i) != _avStream)
+                    {
+                        _avFormatContext->streams[i]->discard = AVDISCARD_ALL;
+                    }
+                }
+
                 auto avAudioStream = _avFormatContext->streams[_avStream];
                 auto avAudioCodecParameters = avAudioStream->codecpar;
                 auto avAudioCodec =
@@ -193,9 +230,10 @@ namespace tl
                     _avCodecParameters[_avStream], avAudioCodecParameters);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_parameters_copy {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
                 _avCodecContext[_avStream] =
                     avcodec_alloc_context3(avAudioCodec);
@@ -209,18 +247,20 @@ namespace tl
                     _avCodecContext[_avStream], _avCodecParameters[_avStream]);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_parameters_to_context {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
                 _avCodecContext[_avStream]->thread_count = options.threadCount;
                 _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME;
                 r = avcodec_open2(_avCodecContext[_avStream], avAudioCodec, 0);
                 if (r < 0)
                 {
-                    throw std::runtime_error(string::Format("{0}: {1}")
-                                                 .arg(fileName)
-                                                 .arg(getErrorLabel(r)));
+                    throw std::runtime_error(
+                        string::Format("avcodec_open2 {0}: {1}")
+                        .arg(fileName)
+                        .arg(getErrorLabel(r)));
                 }
 
                 const size_t fileChannelCount =
@@ -269,7 +309,7 @@ namespace tl
                         _avFormatContext->duration, av_get_time_base_q(), r);
                 }
 
-                otime::RationalTime timeReference = time::invalidTime;
+                OTIO_NS::RationalTime timeReference = time::invalidTime;
                 image::Tags tags;
                 AVDictionaryEntry* tag = nullptr;
                 while (
@@ -289,19 +329,19 @@ namespace tl
                                  key, "time_reference",
                                  string::Compare::CaseInsensitive))
                     {
-                        timeReference = otime::RationalTime(
+                        timeReference = OTIO_NS::RationalTime(
                             std::atoi(value.c_str()), sampleRate);
                     }
                 }
 
-                otime::RationalTime startTime(0.0, sampleRate);
+                OTIO_NS::RationalTime startTime(0.0, sampleRate);
                 if (!timecode.empty())
                 {
-                    otime::ErrorStatus errorStatus;
-                    const otime::RationalTime time =
-                        otime::RationalTime::from_timecode(
+                    opentime::ErrorStatus errorStatus;
+                    const OTIO_NS::RationalTime time =
+                        OTIO_NS::RationalTime::from_timecode(
                             timecode, videoRate, &errorStatus);
-                    if (!otime::is_error(errorStatus))
+                    if (!opentime::is_error(errorStatus))
                     {
                         startTime = time.rescaled_to(sampleRate).floor();
                         // std::cout << fileName << " start time: " << startTime
@@ -312,8 +352,8 @@ namespace tl
                 {
                     startTime = timeReference;
                 }
-                _timeRange = otime::TimeRange(
-                    startTime, otime::RationalTime(sampleCount, sampleRate));
+                _timeRange = OTIO_NS::TimeRange(
+                    startTime, OTIO_NS::RationalTime(sampleCount, sampleRate));
 
                 for (const auto& i : tags)
                 {
@@ -357,6 +397,7 @@ namespace tl
                         avcodec_get_name(_avCodecContext[_avStream]->codec_id);
                 }
             }
+
         }
 
         ReadAudio::~ReadAudio()
@@ -401,7 +442,7 @@ namespace tl
             return _info;
         }
 
-        const otime::TimeRange& ReadAudio::getTimeRange() const
+        const OTIO_NS::TimeRange& ReadAudio::getTimeRange() const
         {
             return _timeRange;
         }
@@ -442,7 +483,7 @@ namespace tl
             }
         }
 
-        void ReadAudio::seek(const otime::RationalTime& time)
+        void ReadAudio::seek(const OTIO_NS::RationalTime& time)
         {
             // std::cout << "audio seek: " << time << std::endl;
 
@@ -474,7 +515,7 @@ namespace tl
         }
 
         bool ReadAudio::process(
-            const otime::RationalTime& currentTime, size_t sampleCount)
+            const OTIO_NS::RationalTime& currentTime, size_t sampleCount)
         {
             bool out = false;
             const size_t bufferSampleCount = audio::getSampleCount(_buffer);
@@ -571,7 +612,7 @@ namespace tl
             audio::move(_buffer, out, sampleCount);
         }
 
-        int ReadAudio::_decode(const otime::RationalTime& currentTime)
+        int ReadAudio::_decode(const OTIO_NS::RationalTime& currentTime)
         {
             int out = 0;
             while (0 == out)
@@ -590,7 +631,7 @@ namespace tl
                 AVRational r;
                 r.num = 1;
                 r.den = _info.sampleRate;
-                const auto time = otime::RationalTime(
+                const auto time = OTIO_NS::RationalTime(
                     _timeRange.start_time().value() +
                         av_rescale_q(
                             timestamp,

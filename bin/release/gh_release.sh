@@ -14,7 +14,7 @@ cd releases/beta
 rm -rf $OUTPUT_FILE
 
 #
-# Add opengl last
+# Add opengl first
 #
 files=""
 for i in opengl/*$1*; do
@@ -22,11 +22,23 @@ for i in opengl/*$1*; do
 done
 
 #
-# Add Vulkan first
+# Add Vulkan last
 #
 for i in vulkan/*$1*; do
-    files="$i $files"
+    files="$files $i"
 done
+
+#
+# Read and count files
+#
+read -ra items <<< "$files"
+count=${#items[@]}
+
+if [[ $count != 22 ]]; then
+    echo "Not all files in beta release are there!"
+    echo "COUNT=${count}"
+    exit 1
+fi
 
 for file in $files; do
     echo "Adding checksum for $file..."
@@ -39,6 +51,8 @@ sed -i 's#vulkan/##' $OUTPUT_FILE
 files="${OUTPUT_FILE} ${files}"
 
 echo $files
+
+
 
 gh release upload $1 $files --clobber 
 

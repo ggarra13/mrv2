@@ -102,6 +102,9 @@ namespace mrv
         opengl::Lines lines;
     };
 
+    void to_json(nlohmann::json& json, const GLPolygonShape& value);
+    void from_json(const nlohmann::json& json, GLPolygonShape& value);
+
     class GLFilledPolygonShape : public GLPolygonShape
     {
     public:
@@ -218,7 +221,7 @@ namespace mrv
         virtual ~GLLinkShape() {};
 
         const math::Box2f getBBox(float scale) const;
-        
+
         virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
@@ -226,7 +229,7 @@ namespace mrv
         void open();
         bool edit();
         int handle(int event);
-        
+
     public:
         std::string url;
         std::string title;
@@ -237,7 +240,7 @@ namespace mrv
     void to_json(nlohmann::json& json, const GLLinkShape& value);
     void from_json(const nlohmann::json& json, GLLinkShape& value);
 
-    
+
     class GLErasePathShape : public GLPathShape
     {
     public:
@@ -259,10 +262,10 @@ namespace mrv
 
     typedef std::vector< std::shared_ptr< draw::Shape > > ShapeList;
 
-    
-    /** 
+
+    /**
      * Auxiliary class used to draw a voice over icon.
-     * 
+     *
      */
     class GLVoiceOverShape
     {
@@ -271,10 +274,10 @@ namespace mrv
             {
             };
         ~GLVoiceOverShape() {};
-        
+
         void draw(const std::shared_ptr<timeline::IRender>&,
                   const voice::MouseData& mouse);
-        
+
         voice::RecordStatus status;
         math::Vector2f center;
         float mult = 1.F;

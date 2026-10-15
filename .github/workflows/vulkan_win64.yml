@@ -17,6 +17,9 @@ jobs:
   windows-vulkan-full-build:
     runs-on: windows-2022
 
+    env:
+      MRV2_WINDOWS_SIGNING_PASSWORD: ${{ secrets.MRV2_WINDOWS_SIGNING_PASSWORD }}
+      
     defaults:
       run:
         shell: msys2 {0}
@@ -27,11 +30,7 @@ jobs:
           submodules: recursive
           fetch-depth: 1    
 
-      # Deprecated:
-      # - name: Setup environment
-      #   uses: ilammy/msvc-dev-cmd@v1
-
-      - name: Setup environment
+      - name: Install MSVC
         uses: TheMrMilchmann/setup-msvc-dev@v4
         with:
           arch: amd64
@@ -178,10 +177,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-cargo-
     
-      - name: Get machine name
-        run: |
-          echo "Machine name: $RUNNER_NAME"
-
       # Install Vulkan SDK
       - name: Install Vulkan SDK
         env:
@@ -214,6 +209,13 @@ jobs:
             # Convert to Windows path for WINDOWS_VULKAN_SDK
             WINDOWS_PATH=$(cygpath -w "$VULKAN_DIR")
 
+            echo "VULKAN_SDK=${VULKAN_DIR}"
+            echo "Directory contains:"
+            ls ${VULKAN_DIR}
+            
+            echo "Include Directory contains:"
+            ls ${VULKAN_DIR}/include
+            
             echo "VULKAN_SDK=$VULKAN_DIR" >> $GITHUB_ENV
             echo "WINDOWS_VULKAN_SDK=$WINDOWS_PATH" >> $GITHUB_ENV
             echo "$VULKAN_DIR/bin" >> $GITHUB_PATH
@@ -248,22 +250,12 @@ jobs:
               exit 1
           }
 
-      # - name: Verify Vulkan
-      #   run: ${VULKAN_SDK}/Bin/vulkaninfoSDK.exe
-
       - name: Setup environment
         run: mkdir -p ssh
 
       - name: Decode SSH key
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
         shell: bash
-
-      # - name: Decode FLTK SSH key
-      #   run: |
-      #       mkdir -p ~/.ssh
-      #       echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-      #       chmod 600 ~/.ssh/id_ed25519
-      #       ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Set permissions on SSH key
         shell: cmd
@@ -278,8 +270,8 @@ jobs:
 
       - name: Set executable permissions
         run: |
-          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
-
+          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh ./certificates/*.sh
+          
       - name: Install MSYS2 Dependencies
         run: |
           pacman -S --noconfirm rsync coreutils
@@ -301,6 +293,7 @@ jobs:
           TLRENDER_JPEG: ON
           TLRENDER_NDI: OFF
           TLRENDER_NET: ON
+          TLRENDER_OAPV: ON
           TLRENDER_OPENJPH: ON
           TLRENDER_RAW: ON
           TLRENDER_SGI: ON

@@ -1,6 +1,7 @@
 set(HEADERS
     Cache.h
     Cineon.h
+    Decode.h
     DPX.h
     IO.h
     IOInline.h
@@ -8,12 +9,17 @@ set(HEADERS
     PPM.h
     Plugin.h
     PluginInline.h
+    Read.h
     SGI.h
+    SeqDecode.h
     SequenceIO.h
     STB.h
+    SVG.h
     System.h
-    SystemInline.h)
+    SystemInline.h
+    Write.h)
 set(HEADERS_PRIVATE
+    IOMacros.h
     SequenceIOReadPrivate.h)
 
 set(SOURCE
@@ -21,6 +27,7 @@ set(SOURCE
     CineonRead.cpp
     CineonWrite.cpp
     Cineon.cpp
+    Decode.cpp
     DPXRead.cpp
     DPXWrite.cpp
     DPX.cpp
@@ -31,19 +38,25 @@ set(SOURCE
     PPMRead.cpp
     PPMWrite.cpp
     Plugin.cpp
+    Read.cpp
+    SeqDecode.cpp
+    SequenceIO.cpp
+    SequenceIOWrite.cpp
     SGI.cpp
     SGIRead.cpp
     SGIWrite.cpp
     STB.cpp
     STBRead.cpp
     STBWrite.cpp
-    SequenceIORead.cpp
-    SequenceIOWrite.cpp
+    SVG.cpp
+    SVGRead.cpp
     System.cpp
+    Write.cpp
 )
 
+find_package(lunasvg REQUIRED)
 set(LIBRARIES)
-set(LIBRARIES_PRIVATE)
+set(LIBRARIES_PRIVATE lunasvg::lunasvg)
 if(TLRENDER_JPEG)
     list(APPEND HEADERS_PRIVATE JPEG.h)
     list(APPEND SOURCE JPEG.cpp JPEGRead.cpp JPEGWrite.cpp)
@@ -52,7 +65,7 @@ endif()
 if(TLRENDER_TIFF)
     list(APPEND HEADERS_PRIVATE TIFF.h)
     list(APPEND SOURCE TIFF.cpp TIFFRead.cpp TIFFWrite.cpp)
-    list(APPEND LIBRARIES_PRIVATE TIFF)
+    list(APPEND LIBRARIES_PRIVATE TIFF::TIFF)
 endif()
 if(TLRENDER_STB)
     list(APPEND HEADERS_PRIVATE STB.h)
@@ -70,7 +83,7 @@ if(TLRENDER_EXR)
     list(APPEND LIBRARIES_PRIVATE OpenEXR::OpenEXR)
 endif()
 if(TLRENDER_FFMPEG)
-    list(APPEND HEADERS FFmpeg.h FFmpegMacros.h FFmpegReadPrivate.h)
+    list(APPEND HEADERS FFmpeg.h FFmpegReadPrivate.h)
     list(APPEND SOURCE FFmpeg.cpp FFmpegRead.cpp FFmpegReadAudio.cpp
         FFmpegReadVideo.cpp FFmpegWrite.cpp)
     list(APPEND LIBRARIES_PRIVATE FFmpeg)
@@ -98,10 +111,12 @@ if(TLRENDER_RAW)
     list(APPEND LIBRARIES_PRIVATE LibRaw)
 endif()
 if(TLRENDER_NDI AND TLRENDER_FFMPEG)
+    list(APPEND HEADERS NDIUtil.h)
     list(APPEND HEADERS_PRIVATE NDI.h)
-    list(APPEND SOURCE NDI.cpp NDIRead.cpp NDIReadVideo.cpp NDIReadAudio.cpp )
+    list(APPEND SOURCE
+ 	NDI.cpp NDIRead.cpp NDIReadVideo.cpp NDIReadAudio.cpp NDIUtil.cpp )
     list(APPEND LIBRARIES_PRIVATE NDI)
-endif()
+ endif()
 if(TLRENDER_ZFILE)
     list(APPEND SOURCE ZFile.cpp ZFileRead.cpp)
     list(APPEND HEADERS_PRIVATE ZFile.h)
@@ -134,6 +149,12 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
     if(MRV2_BACKEND STREQUAL "VK")
 	target_compile_definitions(tlIO PRIVATE VULKAN_BACKEND)
     endif()
+endif()
+
+if (APPLE)
+    target_link_libraries(tlIO PRIVATE 
+	"-framework VideoToolBox"
+	"-framework CoreMedia")
 endif()
     
 install(TARGETS tlIO

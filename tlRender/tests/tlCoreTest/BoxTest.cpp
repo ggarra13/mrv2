@@ -53,34 +53,6 @@ namespace tl
                 TLRENDER_ASSERT(0.F == b.max.y);
             }
             {
-                const Box2i b(Vector2i(1, 2));
-                TLRENDER_ASSERT(1 == b.min.x);
-                TLRENDER_ASSERT(2 == b.min.y);
-                TLRENDER_ASSERT(1 == b.max.x);
-                TLRENDER_ASSERT(2 == b.max.y);
-            }
-            {
-                const Box2f b(Vector2f(1.F, 2.F));
-                TLRENDER_ASSERT(1.F == b.min.x);
-                TLRENDER_ASSERT(2.F == b.min.y);
-                TLRENDER_ASSERT(1.F == b.max.x);
-                TLRENDER_ASSERT(2.F == b.max.y);
-            }
-            {
-                const Box2i b(Size2i(2, 3));
-                TLRENDER_ASSERT(0 == b.min.x);
-                TLRENDER_ASSERT(0 == b.min.y);
-                TLRENDER_ASSERT(1 == b.max.x);
-                TLRENDER_ASSERT(2 == b.max.y);
-            }
-            {
-                const Box2f b(Size2f(2.F, 3.F));
-                TLRENDER_ASSERT(0.F == b.min.x);
-                TLRENDER_ASSERT(0.F == b.min.y);
-                TLRENDER_ASSERT(2.F == b.max.x);
-                TLRENDER_ASSERT(3.F == b.max.y);
-            }
-            {
                 const Box2i b(Vector2i(1, 2), Vector2i(3, 4));
                 TLRENDER_ASSERT(1 == b.min.x);
                 TLRENDER_ASSERT(2 == b.min.y);
@@ -132,19 +104,17 @@ namespace tl
             }
             {
                 Box2i b(1, 2, 3, 4);
-                b.zero();
-                TLRENDER_ASSERT(0 == b.min.x);
-                TLRENDER_ASSERT(0 == b.min.y);
-                TLRENDER_ASSERT(0 == b.max.x);
-                TLRENDER_ASSERT(0 == b.max.y);
+                TLRENDER_ASSERT(1 == b.min.x);
+                TLRENDER_ASSERT(2 == b.min.y);
+                TLRENDER_ASSERT(3 == b.max.x);
+                TLRENDER_ASSERT(4 == b.max.y);
             }
             {
                 Box2i b(1.F, 2.F, 3.F, 4.F);
-                b.zero();
-                TLRENDER_ASSERT(0.F == b.min.x);
-                TLRENDER_ASSERT(0.F == b.min.y);
-                TLRENDER_ASSERT(0.F == b.max.x);
-                TLRENDER_ASSERT(0.F == b.max.y);
+                TLRENDER_ASSERT(1.F == b.min.x);
+                TLRENDER_ASSERT(2.F == b.min.y);
+                TLRENDER_ASSERT(3.F == b.max.x);
+                TLRENDER_ASSERT(4.F == b.max.y);
             }
         }
 
@@ -158,7 +128,7 @@ namespace tl
             {
                 Box2f b(1.F, 2.F, 3.F, 4.F);
                 TLRENDER_ASSERT(Size2f(3.F, 4.F) == b.getSize());
-                const auto c = b.getCenter();
+                const auto c = center(b);
                 TLRENDER_ASSERT(Vector2f(2.5F, 4.F) == c);
             }
         }
@@ -233,22 +203,22 @@ namespace tl
         {
             {
                 Box2i b(0, 1, 2, 3);
-                b.expand(Box2i(4, 5, 6, 7));
+                b = expand(b, Box2i(4, 5, 6, 7));
                 TLRENDER_ASSERT(Box2i(0, 1, 10, 11) == b);
             }
             {
                 Box2f b(0.F, 1.F, 2.F, 3.F);
-                b.expand(Box2f(4.F, 5.F, 6.F, 7.F));
+                b = expand(b, Box2f(4.F, 5.F, 6.F, 7.F));
                 TLRENDER_ASSERT(Box2f(0.F, 1.F, 10.F, 11.F) == b);
             }
             {
                 Box2i b(0, 1, 2, 3);
-                b.expand(Vector2i(6, 7));
+                b = expand(b, Vector2i(6, 7));
                 TLRENDER_ASSERT(Box2i(0, 1, 7, 7) == b);
             }
             {
                 Box2f b(0.F, 1.F, 2.F, 3.F);
-                b.expand(Vector2f(6.F, 7.F));
+                b = expand(b, Vector2f(6.F, 7.F));
                 TLRENDER_ASSERT(Box2f(0.F, 1.F, 6.F, 6.F) == b);
             }
         }
@@ -257,10 +227,10 @@ namespace tl
         {
             {
                 TLRENDER_ASSERT(
-                    Box2i(0, 1, 2, 3).margin(Vector2i(1, 2)) ==
+                    margin(Box2i(0, 1, 2, 3), Vector2i(1, 2)) ==
                     Box2i(-1, -1, 4, 7));
                 TLRENDER_ASSERT(
-                    Box2f(0.F, 1.F, 2.F, 3.F).margin(Vector2f(1.F, 2.F)) ==
+                    margin(Box2f(0.F, 1.F, 2.F, 3.F), Vector2f(1.F, 2.F)) ==
                     Box2f(-1.F, -1.F, 4.F, 7.F));
             }
             {
@@ -271,14 +241,14 @@ namespace tl
                     Box2f(-1.F, 0.F, 4.F, 5.F));
             }
             {
-                const auto b = Box2i(0, 1, 2, 3).margin(1, 2, 3, 4);
+                const auto b = margin(Box2i(0, 1, 2, 3), 1, 2, 3, 4);
                 TLRENDER_ASSERT(
-                    Box2i(0, 1, 2, 3).margin(1, 2, 3, 4) ==
+                    margin(Box2i(0, 1, 2, 3), 1, 2, 3, 4) ==
                     Box2i(-1, -1, 6, 9));
                 const auto b2 =
-                    Box2f(0.F, 1.F, 2.F, 3.F).margin(1.F, 2.F, 3.F, 4.F);
+                    margin(Box2f(0.F, 1.F, 2.F, 3.F), 1.F, 2.F, 3.F, 4.F);
                 TLRENDER_ASSERT(
-                    Box2f(0.F, 1.F, 2.F, 3.F).margin(1.F, 2.F, 3.F, 4.F) ==
+                    margin(Box2f(0.F, 1.F, 2.F, 3.F), 1.F, 2.F, 3.F, 4.F) ==
                     Box2f(-1.F, -1.F, 6.F, 9.F));
             }
         }
@@ -292,12 +262,6 @@ namespace tl
                     Box2f(0.F, 1.F, 2.F, 3.F) == Box2f(0.F, 1.F, 2.F, 3.F));
                 TLRENDER_ASSERT(
                     Box2f(0.F, 1.F, 2.F, 3.F) != Box2f(3.F, 2.F, 1.F, 0.F));
-            }
-            {
-                const auto b = Box2i(0, 1, 2, 3) * 2.F;
-                TLRENDER_ASSERT(b == Box2i(0, 2, 3, 5));
-                const auto b2 = Box2f(0.F, 1.F, 2.F, 3.F) * 2.F;
-                TLRENDER_ASSERT(b2 == Box2f(0.F, 2.F, 4.F, 6.F));
             }
         }
 

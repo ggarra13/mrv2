@@ -51,7 +51,7 @@ namespace mrv
             VKShape(),
             radius(1.0) {};
         virtual ~VKCircleShape() {};
-        
+
         virtual void draw(
             const std::shared_ptr<timeline_vlk::Render>&,
             const std::shared_ptr<vulkan::Lines> lines) override;
@@ -100,6 +100,9 @@ namespace mrv
             const std::shared_ptr<timeline_vlk::Render>&,
             const std::shared_ptr<vulkan::Lines> lines) override;
     };
+
+    void to_json(nlohmann::json& json, const VKPolygonShape& value);
+    void from_json(const nlohmann::json& json, VKPolygonShape& value);
 
     class VKFilledPolygonShape : public VKPolygonShape
     {
@@ -163,13 +166,13 @@ namespace mrv
         virtual ~VKTextShape() {};
 
         int accept();
-        
+
         int handle(int event);
-        
+
         virtual void draw(
             const std::shared_ptr<timeline_vlk::Render>&,
             const std::shared_ptr<vulkan::Lines> lines) override;
-        
+
         int handle_mouse_click(int event, const math::Vector2i& pos);
 
     protected:
@@ -200,7 +203,7 @@ namespace mrv
         unsigned current_line();
         unsigned current_column();
         const char* advance_to_column(unsigned start, unsigned column);
-        
+
     public:
         std::string fontPath;
         std::string text;
@@ -233,7 +236,7 @@ namespace mrv
         int handle(int event);
 
         const math::Box2f getBBox(float mult) const;
-        
+
         virtual void draw(
             const std::shared_ptr<timeline_vlk::Render>&,
             const std::shared_ptr<vulkan::Lines> lines) override;
@@ -247,7 +250,7 @@ namespace mrv
 
     void to_json(nlohmann::json& json, const VKLinkShape& value);
     void from_json(const nlohmann::json& json, VKLinkShape& value);
-    
+
     class VKErasePathShape : public VKPathShape
     {
     public:
@@ -270,9 +273,9 @@ namespace mrv
     typedef std::vector< std::shared_ptr< draw::Shape > > ShapeList;
 
 #ifdef TLRENDER_FFMPEG
-    /** 
+    /**
      * Auxiliary class used to draw a voice over icon.
-     * 
+     *
      */
     class VKVoiceOverShape
     {
@@ -281,10 +284,10 @@ namespace mrv
             {
             };
         ~VKVoiceOverShape() {};
-        
+
         void draw(const std::shared_ptr<timeline_vlk::Render>&,
                   const voice::MouseData& mouse);
-        
+
         voice::RecordStatus status;
         math::Vector2f center;
         float mult = 1;

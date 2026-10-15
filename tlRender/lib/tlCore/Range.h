@@ -22,17 +22,17 @@ namespace tl
             constexpr Range(T min, T max);
 
             //! Get the minimum value.
-            constexpr T getMin() const;
+            constexpr T min() const;
 
             //! Get the maximum value.
-            constexpr T getMax() const;
+            constexpr T max() const;
 
             //! Set the range minimum and maximum to zero.
             void zero();
 
             //! Does the range contain the given number?
             constexpr bool equal() const;
-            
+
             //! Does the range contain the given number?
             constexpr bool contains(T) const;
 
@@ -55,7 +55,7 @@ namespace tl
 
         //! This typedef provides an integer range.
         typedef Range<int> IntRange;
-        
+
         //! This typedef provides an integer range.
         typedef Range<int64_t> Int64Range;
 
@@ -79,11 +79,11 @@ namespace tl
         //! Expand the range to include the given number.
         template<typename T>
         Range<T> expand(const Range<T>&, T);
-        
+
         //! Expand the range to include the given range.
         template<typename T>
         Range<T> expand(const Range<T>&, const Range<T>&);
-        
+
         //! \name Serialize
         ///@{
 

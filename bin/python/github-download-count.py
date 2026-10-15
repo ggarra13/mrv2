@@ -87,7 +87,7 @@ def parse_and_process_dates(args):
 
     beta_start_dt = start_dt + timedelta(days=1)
 
-    print(" START DATE:", start_dt.strftime("%Y-%m-%d %H:%M:%S %Z"))
+    print("  START DATE:", start_dt.strftime("%Y-%m-%d %H:%M:%S %Z"))
     print("    END DATE:", end_dt.strftime("%Y-%m-%d %H:%M:%S %Z"))
     diff = end_dt - start_dt
     print(f' DIFFERENCE: {diff.days} days, {diff.seconds//3600} hours, {(diff.seconds//60)%60} minutes')
@@ -357,8 +357,8 @@ if __name__ == "__main__":
     # Run the three queries using plain requests)
     for folder, date_start in [
         (tag, start_date_str),                     # released (detailed)
-        ("beta/opengl", start_date_str),
-        ("beta/vulkan", start_date_str)
+        ("beta/opengl", beta_start_date_str),
+        ("beta/vulkan", beta_start_date_str)
     ]:
         (mrv2_sf, vmrv2_sf,
          mrv2_win_sf, vmrv2_win_sf,
@@ -395,5 +395,8 @@ if __name__ == "__main__":
     print("-----------------------------------------------------------------------")
     total = mrv2_grand_total + vmrv2_grand_total
     print(f'{format_number(total, 5)} Grand Total (GitHub + SourceForge)')
-    per_hour = round(total / (diff.days * 24 + diff.seconds//3600), 2)
+    hours = diff.days * 24 + diff.seconds//3600
+    if hours < 1:
+        hours = 1
+    per_hour = round(total / hours, 2)
     print(f'{format_number(per_hour,5)} Total Downloads Per Hour')

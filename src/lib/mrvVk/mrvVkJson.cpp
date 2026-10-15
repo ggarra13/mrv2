@@ -11,11 +11,11 @@
 namespace mrv
 {
     using namespace tl::draw;
-    
+
 #if defined(VULKAN_BACKEND)
     std::shared_ptr< Shape > messageToShape(const nlohmann::json& json)
     {
-        std::string type = json["type"];
+        const std::string type = json["type"];
         if (type == "DrawPath")
         {
             auto shape = std::make_shared< VKPathShape >();
@@ -82,7 +82,7 @@ namespace mrv
             json.get_to(*shape.get());
             return shape;
         }
-        else if ( type == "Text" )
+        else if ( type == "Text" || type == "GL2Text" )
         {
             auto shape = std::make_shared< VKTextShape >();
             json.get_to( *shape.get() );
@@ -169,7 +169,7 @@ namespace mrv
 namespace tl
 {
     namespace draw
-    {   
+    {
         void to_json(nlohmann::json& json, const Annotation& value)
         {
             nlohmann::json shapes;
@@ -187,16 +187,7 @@ namespace tl
         void from_json(const nlohmann::json& json, Annotation& value)
         {
             json.at("all_frames").get_to(value.allFrames);
-            if (json.contains("time"))
-            {
-                json.at("time").get_to(value.time);
-            }
-            else
-            {
-                int64_t frame;
-                json.at("frame").get_to(frame);
-                value.time = otime::RationalTime(frame, 24.0);
-            }
+            json.at("time").get_to(value.time);
             const nlohmann::json& shapes = json["shapes"];
             for (auto& shape : shapes)
             {
@@ -204,7 +195,6 @@ namespace tl
             }
         }
 #endif // VULKAN_BACKEND
-        
+
     } // namespace draw
 } // namespace tl
-

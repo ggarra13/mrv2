@@ -18,7 +18,7 @@ namespace tl
         protected:
             void _init(
                 ui::ColorRole,
-                const otio::SerializableObject::Retainer<otio::Gap>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Gap>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<system::Context>&,
@@ -32,7 +32,7 @@ namespace tl
             //! Create a new item.
             static std::shared_ptr<GapItem> create(
                 ui::ColorRole,
-                const otio::SerializableObject::Retainer<otio::Gap>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Gap>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<system::Context>&,

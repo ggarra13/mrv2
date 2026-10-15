@@ -10,7 +10,7 @@ set(libdatachannel_REPOSITORY "https://github.com/paullouisageneau/libdatachanne
 set(libdatachannel_GIT_TAG 0400bc1e0452f62be14025eabde2bbf83bb1cad6)
 
 set(libdatachannel_DEPENDENCIES )
-list(APPEND libdatachannel_DEPENDENCIES ${OpenSSL_DEP} nlohmann_json)
+list(APPEND libdatachannel_DEPENDENCIES ${OpenSSL_DEP} ${nlohmann-json_DEP})
 message(STATUS "libdatachannel DEPENDENCIES=${libdatachannel_DEPENDENCIES}")
 
 set(libdatachannel_UPDATE_CMD

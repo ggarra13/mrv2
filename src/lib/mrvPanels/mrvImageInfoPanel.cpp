@@ -609,7 +609,7 @@ namespace mrv
             refresh_media_cb(nullptr, nullptr);
             info->m_update = true;
         }
-        
+
         static void change_xlevel_cb(HorSlider* w, ImageInfoPanel* info)
         {
             int f = w->value();
@@ -618,7 +618,7 @@ namespace mrv
             refresh_media_cb(nullptr, nullptr);
             info->m_update = true;
         }
-        
+
         static void change_ylevel_cb(HorSlider* w, ImageInfoPanel* info)
         {
             int f = w->value();
@@ -663,6 +663,7 @@ namespace mrv
 
             float pixelRatio = w->value();
             view->setPixelAspectRatio(pixelRatio);
+            view->redrawWindows();
         }
 
         double
@@ -784,7 +785,7 @@ namespace mrv
         {
             if (!m_update)
                 return;
-            
+
             Fl_Group* orig = Fl_Group::current();
 
             hide_tabs();
@@ -1398,7 +1399,7 @@ namespace mrv
 
         void ImageInfoPanel::add_time(
             const char* name, const char* tooltip,
-            const otime::RationalTime& content, const bool editable)
+            const OTIO_NS::RationalTime& content, const bool editable)
         {
             char buf[128];
 
@@ -1750,7 +1751,7 @@ namespace mrv
                     int mipmapMode = Imf::LevelMode::ONE_LEVEL;
                     int roundingMode = Imf::LevelRoundingMode::ROUND_DOWN;
 #endif
-                    
+
                     if (!tagData.empty())
                     {
                         auto it = tagData.find("Video Codec");
@@ -1783,7 +1784,7 @@ namespace mrv
                             s >> yLevels;
                         }
 #endif
-                        
+
                         it = tagData.find("Video Rotation");
                         if (it != tagData.end())
                         {
@@ -1844,7 +1845,7 @@ namespace mrv
                     add_float(
                         _("Pixel Ratio"), _("Pixel ratio of clip"),
                         pixelAspectRatio, true, true,
-                        (Fl_Callback*)change_pixel_ratio_cb, 0.0f, 8.0f,
+                        (Fl_Callback*)change_pixel_ratio_cb, 0.01f, 8.0f,
                         FL_WHEN_ENTER_KEY | FL_WHEN_CHANGED);
 
 #ifdef TLRENDER_EXR
@@ -1882,7 +1883,7 @@ namespace mrv
                         ++group;
                     }
 #endif
-                            
+
                     if (rotation != 0.F)
                         add_float(_("Rotation"), _("Video Rotation"), rotation);
 
@@ -1990,13 +1991,13 @@ namespace mrv
                         add_text(
                             _("HDR Red Primaries"), _("HDR Red Primaries"),
                             buf);
-                    
+
                         v = hdr.primaries[image::HDRPrimaries::Green];
                         snprintf(buf, 256, "(%g) (%g)", v.x, v.y);
                         add_text(
                             _("HDR Green Primaries"), _("HDR Green Primaries"),
                             buf);
-                            
+
                         v = hdr.primaries[image::HDRPrimaries::Blue];
                         snprintf(buf, 256, "(%g) (%g)", v.x, v.y);
                         add_text(
@@ -2012,8 +2013,8 @@ namespace mrv
                         const math::FloatRange& luminance =
                             hdr.displayMasteringLuminance;
                         snprintf(
-                            buf, 256, "min: %g max: %g", luminance.getMin(),
-                            luminance.getMax());
+                            buf, 256, "min: %g max: %g", luminance.min(),
+                            luminance.max());
                         add_text(
                             _("HDR Display Mastering Luminance"),
                             _("HDR Display Mastering Luminance"), buf);
@@ -2030,7 +2031,7 @@ namespace mrv
                                      hdr.sceneMax[0],
                                      hdr.sceneMax[1], hdr.sceneMax[2]);
                             add_text(_("HDR10+ sceneMax"), _("HDR10+ sceneMax"), buf);
-                            
+
                             snprintf(buf, 256, "%g", hdr.sceneAvg);
                             add_text(_("HDR10+ sceneAvg"), _("HDR10+ sceneAvg"), buf);
                         }
@@ -2038,7 +2039,7 @@ namespace mrv
                         {
                             snprintf(buf, 256, "%g", hdr.maxPQY);
                             add_text(_("Dolby maxPQY"), _("Dolby maxPQY"), buf);
-                            
+
                             snprintf(buf, 256, "%g", hdr.avgPQY);
                             add_text(_("Dolby avgPQY"), _("Dolby avgPQY"), buf);
                         }
@@ -2067,7 +2068,7 @@ namespace mrv
                         for (const auto& tag : tagData)
                         {
                             std::string key = tag.first;
-                            
+
                             auto i = key.find(match);
                             if (i != std::string::npos)
                             {
@@ -2108,7 +2109,7 @@ namespace mrv
             const auto& directory = path.getDirectory();
 
             const auto& audioPath = player->audioPath();
-            const otime::RationalTime& time = player->currentTime();
+            const OTIO_NS::RationalTime& time = player->currentTime();
 
             const auto& fullname = createStringFromPathAndTime(path, time);
 
@@ -2149,7 +2150,7 @@ namespace mrv
                 false);
             add_time(_("End Time"), _("Ending frame of clip"), endTime, false);
 
-            const otime::TimeRange& iorange = player->inOutRange();
+            const OTIO_NS::TimeRange& iorange = player->inOutRange();
             int64_t first = iorange.start_time().to_frames();
             int64_t last = iorange.end_time_inclusive().to_frames();
 
@@ -2482,19 +2483,19 @@ namespace mrv
             }
 
             const auto view = _p->ui->uiView;
-            const auto videoData = view->getVideoData();
+            const auto videoFrame = view->getVideoFrame();
 
             // Then add image tags
-            if (!videoData.empty() && !videoData[0].layers.empty() &&
-                videoData[0].layers[0].image)
+            if (!videoFrame.empty() && !videoFrame[0].layers.empty() &&
+                videoFrame[0].layers[0].image)
             {
                 const image::Tags& tags =
-                    videoData[0].layers[0].image->getTags();
+                    videoFrame[0].layers[0].image->getTags();
                 for (const auto& tag : tags)
                 {
                     tagData[tag.first] = tag.second;
                 }
-                auto hdrData = videoData[0].layers[0].image->getHDR();
+                auto hdrData = videoFrame[0].layers[0].image->getHDR();
                 if (hdrData)
                     hdr = *hdrData;
                 else

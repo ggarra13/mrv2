@@ -38,14 +38,14 @@ namespace mrv
         }
 
         // m_depth (optionally) -> creates m_renderPass
-        void VkWindow::prepare_render_pass() 
+        void VkWindow::prepare_render_pass()
         {
             if (m_renderPass != VK_NULL_HANDLE &&
                 _oldRenderPassFormat == ctx.format)
             {
                 return;
             }
-            
+
             bool has_depth = mode() & FL_DEPTH;
             bool has_stencil = mode() & FL_STENCIL;
 
@@ -58,7 +58,14 @@ namespace mrv
             attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
             attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; // Start undefined
-            attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
+            if (headless())
+            {
+                attachments[0].finalLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+            }
+            else
+            {
+                attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            }
 
             attachments[1] = VkAttachmentDescription();
 
@@ -66,11 +73,11 @@ namespace mrv
             VkAttachmentReference color_reference = {};
             color_reference.attachment = 0;
             color_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    
+
             VkAttachmentReference depth_reference = {};
             depth_reference.attachment = 1;
             depth_reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-    
+
             VkSubpassDescription subpass = {};
             subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
             subpass.flags = 0;
@@ -99,7 +106,7 @@ namespace mrv
                     VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 attachments[1].finalLayout =
                     VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-    
+
                 subpass.pDepthStencilAttachment = &depth_reference;
                 subpass.preserveAttachmentCount = 0;
                 subpass.pPreserveAttachments = NULL;
@@ -134,7 +141,7 @@ namespace mrv
             rp_info.pSubpasses = &subpass;
             rp_info.dependencyCount = 2;
             rp_info.pDependencies = dependencies;
-                    
+
             VkResult result;
             result = vkCreateRenderPass(device(), &rp_info, NULL, &m_renderPass);
             VK_CHECK(result);
@@ -161,5 +168,5 @@ namespace mrv
 
     }
 
-    
+
 } // namespace mrv

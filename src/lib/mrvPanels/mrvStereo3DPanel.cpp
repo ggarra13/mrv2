@@ -112,11 +112,12 @@ namespace mrv
 
             auto player = p.ui->uiView->getTimelinePlayer();
 
-            otio::RationalTime time = otio::RationalTime(0.0, 1.0);
+            OTIO_NS::RationalTime time = OTIO_NS::RationalTime(0.0, 1.0);
             if (player)
                 time = player->currentTime();
 
-            size = panel::calculateImageSize();
+            int thumbnailType = p.ui->uiPrefs->Stereo3DPanelThumbnails->value();
+            size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
 
@@ -140,7 +141,7 @@ namespace mrv
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
                 const std::string file = path.getFileName(listdir);
-                
+
                 auto bW = new Widget<ClipButton>(
                     g->x(), g->y() + 20 + i * 68, g->w(), 68);
                 ClipButton* b = bW;
@@ -152,7 +153,7 @@ namespace mrv
                 {
                     layerId = p.ui->uiColorChannel->value();
                 }
-                
+
                 if (stereoIndex == i)
                 {
                     b->value(1);
@@ -162,7 +163,7 @@ namespace mrv
                     b->value(0);
                 }
                 bW->callback(
-                    [=](auto b)
+                    [=, this](auto b)
                     {
                         WidgetIndices::const_iterator it = _r->indices.find(b);
                         if (it == _r->indices.end())
@@ -176,20 +177,25 @@ namespace mrv
 
                 _r->map.insert(std::make_pair(i, b));
 
+
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
-                    const std::string layer = getLayerName(media, layerId);
-                    label = protocol + dir + "\n" + file + layer;
+                    label = protocol + dir + "\n" + file + "\n" + _("Color");
                 }
                 else
                 {
                     label = file;
                 }
                 b->copy_label(label.c_str());
-                
-                _createThumbnail(b, path, time, layerId);
+
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
+                _createThumbnail(b, media, time, layerId,
+                                 media->mediaReferenceKey);
             }
 
             Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -241,7 +247,7 @@ namespace mrv
             // m->add(_("Horizontal"));
             // m->add(_("Vertical"));
             pW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     Stereo3DOptions o = model->observeStereo3DOptions()->get();
                     o.input = static_cast<Stereo3DInput>(w->value());
@@ -269,7 +275,7 @@ namespace mrv
                 m->add(_("Graphics Card"));
 
             pW->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     Stereo3DOptions o = model->observeStereo3DOptions()->get();
                     o.output = static_cast<Stereo3DOutput>(w->value());
@@ -321,7 +327,7 @@ namespace mrv
             s->default_value(0.0f);
             s->value(o.eyeSeparation);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto model = App::app->filesModel();
                     Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -340,7 +346,7 @@ namespace mrv
             c->align(FL_ALIGN_LEFT);
             c->value(o.swapEyes);
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto model = App::app->filesModel();
                     Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -366,13 +372,14 @@ namespace mrv
 
             TLRENDER_P();
 
-            otio::RationalTime time = otio::RationalTime(0.0, 1.0);
+            OTIO_NS::RationalTime time = OTIO_NS::RationalTime(0.0, 1.0);
 
             const auto player = p.ui->uiView->getTimelinePlayer();
             if (!player)
                 return;
 
-            size = panel::calculateImageSize();
+            int thumbnailType = p.ui->uiPrefs->Stereo3DPanelThumbnails->value();
+            image::Size size = panel::calculateImageSize(thumbnailType);
 
             const auto& model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
@@ -389,7 +396,7 @@ namespace mrv
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
                 const std::string file = path.getFileName(listdir);
-                
+
                 ClipButton* b = m.second;
 
                 uint16_t layerId = media->videoLayer;
@@ -399,7 +406,7 @@ namespace mrv
                     layerId = p.ui->uiColorChannel->value();
                     found = true;
                 }
-                
+
                 if (stereoIndex != i)
                 {
                     b->value(0);
@@ -418,10 +425,9 @@ namespace mrv
                 {
                     time = media->currentTime;
                 }
-                
+
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     const std::string layer = getLayerName(media, layerId);
                     label = protocol + dir + "\n" + file + layer;
@@ -432,7 +438,14 @@ namespace mrv
                 }
                 b->copy_label(label.c_str());
 
-                _createThumbnail(b, path, time, layerId);
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
+
+                _createThumbnail(b, media, time, layerId,
+                                 media->mediaReferenceKey);
             }
         }
 

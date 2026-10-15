@@ -44,6 +44,10 @@ target_link_libraries(license_helper PUBLIC ${LIBRARIES}
 target_link_directories(license_helper
     BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib )
 
+if (APPLE)
+    fix_dylib_rpath(license_helper intl "")
+endif()
+
 install(TARGETS license_helper
     RUNTIME DESTINATION bin COMPONENT applications
     LIBRARY DESTINATION lib COMPONENT libraries

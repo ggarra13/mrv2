@@ -118,7 +118,7 @@ elseif(WIN32)
     
     # For Python, Poco, USD, FLTK, NDI, MSVC runtimes and FFmpeg
     file(GLOB HDR_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*.dll"  )
-    
+
     install(FILES ${HDR_DLLS}
 	DESTINATION bin/
 	COMPONENT applications )

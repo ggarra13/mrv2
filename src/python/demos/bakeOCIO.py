@@ -14,12 +14,10 @@
 import mrv2
 from mrv2 import cmd
 
-args = cmd.args()
-if len(args) != 1:
-    print("bakeOCIO.py 'outmov'")
-    exit(1)
-
-out      = args[0]
-cmd.save(fileName=out)
-
-print('Saving done.')
+args = sys.argv
+if len(args) != 2:
+    print("mrv2 -ics 'ACEScg' -od 'sRGB - Display' -ps bakeOCIO.py -pa 'out.mov'")
+else:
+    out      = sys.argv[1]
+    cmd.save(fileName=out)
+    print('Saving done.')

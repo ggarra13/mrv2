@@ -43,28 +43,29 @@ namespace tl
             };
             DrawData draw;
 
-            const otio::Item* otioItem = nullptr;
+            const OTIO_NS::Item* otioItem = nullptr;
         };
 
         void IBasicItem::_init(
             const std::string& label, ui::ColorRole colorRole,
             const std::string& objectName,
-            const otio::SerializableObject::Retainer<otio::Item>& item,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Item>& item,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
-            otime::TimeRange timeRange = time::invalidTimeRange;
+            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
             const auto timeRangeOpt = item->trimmed_range_in_parent();
             if (timeRangeOpt.has_value())
             {
                 timeRange = timeRangeOpt.value();
             }
-            const otime::TimeRange trimmedRange = item->trimmed_range();
+            const OTIO_NS::TimeRange trimmedRange = item->trimmed_range();
+            const OTIO_NS::TimeRange availableRange = item->available_range();
             IItem::_init(
-                objectName, timeRange, trimmedRange, scale, options,
+                objectName, timeRange, trimmedRange, availableRange, scale, options,
                 displayOptions, itemData, context, parent);
             TLRENDER_P();
 
@@ -88,11 +89,11 @@ namespace tl
             return _p->label;
         }
 
-        const otio::Item* IBasicItem::getOtioItem() const
+        const OTIO_NS::Item* IBasicItem::getOtioItem() const
         {
             return _p->otioItem;
         }
-        
+
         void IBasicItem::setDisplayOptions(const DisplayOptions& value)
         {
             const bool changed = value != _displayOptions;
@@ -195,7 +196,7 @@ namespace tl
             const timeline::ClipRectState clipRectState(event.render);
             event.render->setClipRectEnabled(true);
             event.render->setClipRect(math::intersect(g2, drawRect));
-            
+
             std::vector<timeline::TextInfo> textInfos;
 
             if (_displayOptions.clipInfo)
@@ -211,7 +212,7 @@ namespace tl
                             p.label, p.size.fontInfo);
                     }
 
-                    
+
                     event.render->appendText(
                         textInfos,
                         p.draw.labelGlyphs,
@@ -311,13 +312,13 @@ namespace tl
                     y += p.size.fontMetrics.lineHeight + p.size.margin * 2;
                 }
             }
-            
+
             for (const auto& textInfo : textInfos)
             {
                 event.render->drawText(textInfo, math::Vector2i(),
                                        event.style->getColorRole(ui::ColorRole::Text));
             }
-            
+
         }
 
         int IBasicItem::_getMargin() const
@@ -328,6 +329,15 @@ namespace tl
         int IBasicItem::_getLineHeight() const
         {
             return _p->size.fontMetrics.lineHeight;
+        }
+
+        int IBasicItem::_getEffectsHeight() const
+        {
+            TLRENDER_P();
+
+            int num  = p.otioItem->effects().size();
+            int size = p.size.fontMetrics.lineHeight;
+            return num > 1 ? (num - 1) * size : 0;
         }
 
         math::Box2i IBasicItem::_getInsideGeometry() const

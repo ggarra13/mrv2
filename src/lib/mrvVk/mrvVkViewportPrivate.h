@@ -24,8 +24,8 @@ namespace mrv
         struct Viewport::VKPrivate
         {
             std::weak_ptr<system::Context> context;
-            
-            // Main command buffer, stored for convenience.
+
+            //! Main command buffer, stored for convenience.
             VkCommandBuffer  cmd = VK_NULL_HANDLE;
 
             //! Boolean to for creating an overlay offscreenBuffer for
@@ -35,7 +35,7 @@ namespace mrv
             //! Boolean used to turn on dynamic read pixels.
             //! We must not read pixels when vk.buffer is just created.
             bool readPixels = false;
-            
+
             //! This is for compositing pipelines
             VkRenderPass     loadRenderPass = VK_NULL_HANDLE;
             VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
@@ -45,10 +45,10 @@ namespace mrv
 
             image::PixelType colorBufferType = image::PixelType::RGBA_F32;
 
-            //! Offscreen renderers
+            //! The one and only offscreen renderer.  It draws the video,
+            //! the viewport annotations and the output-device overlay
+            //! (see timeline_vlk::Render::beginPass).
             std::shared_ptr<timeline_vlk::Render> render;
-            std::shared_ptr<timeline_vlk::Render> annotationRender;
-            std::shared_ptr<timeline_vlk::Render> overlayRender;
 
             //! Offscreen buffers
             std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
@@ -68,13 +68,13 @@ namespace mrv
             //! Annotation mesh
             std::shared_ptr<vlk::VBO> avbo;
             std::shared_ptr<vlk::VAO> avao;
-            
+
             //! Lines drawn into the rendered annotations.
             std::shared_ptr<vulkan::Lines> lines;
 
             //! Lines drawn into the viewport (safe areas, selection, cursor).
             std::shared_ptr<vulkan::Lines> viewport;
-            
+
             bool init_debug = false;
         };
 

@@ -36,11 +36,17 @@ namespace tl
         //! Timeline player cache options.
         struct PlayerCacheOptions
         {
-            //! Cache read ahead.
-            otime::RationalTime readAhead = otime::RationalTime(5.0, 1.0);
+            //! Video cache size in gigabytes.
+            float videoGB = 4.F;
+
+            //! Audio cache size in gigabytes.
+            float audioGB = .5F;
+
+            //! Cache read ahead (not used by Darby).
+            OTIO_NS::RationalTime readAhead = OTIO_NS::RationalTime(5.0, 1.0);
 
             //! Cache read behind.
-            otime::RationalTime readBehind = otime::RationalTime(0.5, 1.0);
+            OTIO_NS::RationalTime readBehind = OTIO_NS::RationalTime(0.5, 1.0);
 
             bool operator==(const PlayerCacheOptions&) const;
             bool operator!=(const PlayerCacheOptions&) const;
@@ -67,7 +73,7 @@ namespace tl
                 std::chrono::milliseconds(5);
 
             //! Current time.
-            otime::RationalTime currentTime = time::invalidTime;
+            OTIO_NS::RationalTime currentTime = time::invalidTime;
 
             //! Start playback direction.
             Playback playback = Playback::Forward;

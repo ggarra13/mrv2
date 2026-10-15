@@ -2,14 +2,14 @@
 // Copyright (c) 2024 Gonzalo Garramuño
 // All rights reserved.
 
-#include <tlIO/FFmpegMacros.h>
+#include <tlIO/IOMacros.h>
 #include <tlIO/NDIReadPrivate.h>
 
 #include <tlCore/StringFormat.h>
 
 namespace
 {
-    const char* kModule = "ndi";
+    const char* kModule = "ndia";
 }
 
 namespace tl
@@ -18,37 +18,27 @@ namespace tl
     {
 
         ReadAudio::ReadAudio(
-            const std::string& fileName, const NDIlib_source_t& NDIsource,
+            const NDIlib_recv_create_t& recv_desc,
             const NDIlib_audio_frame_t& audio_frame,
             const std::weak_ptr<log::System>& logSystem,
             const Options& options) :
-            _fileName(fileName),
             _logSystem(logSystem),
             _options(options)
         {
-
-            // We now have at least one source,
-            // so we create a receiver to look at it.
-            NDIlib_recv_create_t recv_desc;
-            recv_desc.color_format = NDIlib_recv_color_format_fastest;
-            recv_desc.bandwidth = NDIlib_recv_bandwidth_highest;
-            recv_desc.allow_video_fields = false;
-            recv_desc.source_to_connect_to = NDIsource;
-
-            NDI_recv = NDIlib_recv_create(&recv_desc);
-            if (!NDI_recv)
-                throw std::runtime_error("Could not create NDI audio receiver");
-
             _from_ndi(audio_frame);
             _info.dataType = audio::DataType::F32;
 
             double startTime = 0.0;
             double lastTime = kNDI_MOVIE_DURATION;
-            _timeRange = otime::TimeRange(
-                otime::RationalTime(startTime, 1.0)
+            _timeRange = OTIO_NS::TimeRange(
+                OTIO_NS::RationalTime(startTime, 1.0)
                     .rescaled_to(_info.sampleRate),
-                otime::RationalTime(lastTime, 1.0)
+                OTIO_NS::RationalTime(lastTime, 1.0)
                     .rescaled_to(_info.sampleRate));
+
+            NDI_recv = NDIlib_recv_create(&recv_desc);
+            if (!NDI_recv)
+                throw std::runtime_error("Could not create NDI audio receiver");
         }
 
         ReadAudio::~ReadAudio()
@@ -65,28 +55,23 @@ namespace tl
 
         void ReadAudio::start() {}
 
-        const bool ReadAudio::isValid() const
-        {
-            return NDI_recv;
-        }
-
         const audio::Info& ReadAudio::getInfo() const
         {
             return _info;
         }
 
-        const otime::TimeRange& ReadAudio::getTimeRange() const
+        const OTIO_NS::TimeRange& ReadAudio::getTimeRange() const
         {
             return _timeRange;
         }
 
-        void ReadAudio::seek(const otime::RationalTime& time)
+        void ReadAudio::seek(const OTIO_NS::RationalTime& time)
         {
             _buffer.clear();
         }
 
         bool ReadAudio::process(
-            const otime::RationalTime& currentTime, size_t sampleCount)
+            const OTIO_NS::RationalTime& currentTime, size_t sampleCount)
         {
             bool out = true;
             const size_t bufferSampleCount = getBufferSize();
@@ -113,15 +98,18 @@ namespace tl
             _buffer.push_back(tmp);
         }
 
-        int ReadAudio::_decode(const otime::RationalTime& time)
+        int ReadAudio::_decode(const OTIO_NS::RationalTime& time)
         {
             int out = 0;
             NDIlib_audio_frame_t a;
             NDIlib_frame_type_e type;
 
-            while (out == 0)
+            while (out == 0 && NDI_recv)
             {
-                type = NDIlib_recv_capture(NDI_recv, nullptr, &a, nullptr, 50);
+                {
+                    std::unique_lock<std::mutex> lock(NDI_recv_mutex);
+                    type = NDIlib_recv_capture(NDI_recv, nullptr, &a, nullptr, 50);
+                }
                 if (type == NDIlib_frame_type_error)
                 {
                     out = -1;
@@ -130,7 +118,10 @@ namespace tl
                 else if (type == NDIlib_frame_type_audio)
                 {
                     _from_ndi(a);
-                    NDIlib_recv_free_audio(NDI_recv, &a);
+                    {
+                        std::unique_lock<std::mutex> lock(NDI_recv_mutex);
+                        NDIlib_recv_free_audio(NDI_recv, &a);
+                    }
                     out = 1;
                 }
                 else if (type == NDIlib_frame_type_status_change)

@@ -30,7 +30,7 @@ find_library(NDI_LIBRARY NAMES
     ndi
     Processing.NDI.Lib.x64
     
-    PATHS
+    HINTS
     ${TLRENDER_NDI_SDK}/lib/macOS
     ${TLRENDER_NDI_SDK}/lib/${NDI_SDK_ARCH}
     ${TLRENDER_NDI_SDK}/lib/x86_64-linux-gnu

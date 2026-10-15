@@ -38,6 +38,7 @@ namespace mrv
             Fl_Check_Button* lutOn = nullptr;
             Input* lutFilename = nullptr;
             Fl_Choice* lutOrder = nullptr;
+            Fl_Choice* lutDirection = nullptr;
 
             Fl_Check_Button* colorOn = nullptr;
             HorSlider* addSlider = nullptr;
@@ -149,7 +150,7 @@ namespace mrv
             c->value(lutOptions.enabled);
             c->labelsize(12);
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     auto o = App::app->lutOptions();
                     o.enabled = w->value();
@@ -166,7 +167,7 @@ namespace mrv
                 g->x() + X, 40, g->w() - X - 30, 20, _("Filename"));
             i = _r->lutFilename = iW;
             iW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     auto lutOptions = App::app->lutOptions();
                     lutOptions.fileName = o->value();
@@ -178,7 +179,7 @@ namespace mrv
             b = bW;
             b->align(FL_ALIGN_INSIDE | FL_ALIGN_CENTER);
             bW->callback(
-                [=](auto t)
+                [=, this](auto t)
                 {
                     std::string file = open_lut_file(_r->lutFilename->value());
                     if (!file.empty())
@@ -193,6 +194,27 @@ namespace mrv
             gb = new Fl_Group(g->x(), 20, g->w(), 20);
             gb->begin();
             auto mW = new Widget< Fl_Choice >(
+                g->x() + 100, 21, g->w() - 100, 20, _("Direction"));
+            m = _r->lutDirection = mW;
+            m->labelsize(12);
+            m->align(FL_ALIGN_LEFT);
+            m->add("Forward");
+            m->add("Inverse");
+            m->value(0);
+            mW->callback(
+                [=, this](auto o)
+                {
+                    timeline::LUTDirection direction = (timeline::LUTDirection)o->value();
+                    auto lutOptions = App::app->lutOptions();
+                    lutOptions.direction = direction;
+                    App::app->setLUTOptions(lutOptions);
+                });
+
+            gb->end();
+
+            gb = new Fl_Group(g->x(), 20, g->w(), 20);
+            gb->begin();
+            mW = new Widget< Fl_Choice >(
                 g->x() + 100, 21, g->w() - 100, 20, _("Order"));
             m = _r->lutOrder = mW;
             m->labelsize(12);
@@ -201,7 +223,7 @@ namespace mrv
             m->add("PreColorConfig");
             m->value(0);
             mW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     timeline::LUTOrder order = (timeline::LUTOrder)o->value();
                     auto lutOptions = App::app->lutOptions();
@@ -256,7 +278,7 @@ namespace mrv
             c->value(o.color.enabled);
             c->labelsize(12);
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     o.color.enabled = w->value();
@@ -270,7 +292,7 @@ namespace mrv
             s->default_value(0.0f);
             s->value(o.color.add.x);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     float f = w->value();
@@ -285,7 +307,7 @@ namespace mrv
             s->default_value(1.0f);
             s->value(o.color.contrast.x);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     float f = w->value();
@@ -301,12 +323,13 @@ namespace mrv
             s->default_value(1.0f);
             s->value(o.color.saturation.x);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     float f = w->value();
                     o.color.enabled = true;
                     o.color.saturation = math::Vector3f(f, f, f);
+                    p.ui->uiSaturation->value(f);
                     App::app->setDisplayOptions(o);
                 });
 
@@ -317,7 +340,7 @@ namespace mrv
             s->default_value(0.0f);
             s->value(o.color.tint);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     o.color.enabled = true;
@@ -331,7 +354,7 @@ namespace mrv
             c->labelsize(12);
             c->value(o.color.invert);
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     o.color.enabled = true;
@@ -381,7 +404,7 @@ namespace mrv
             c->value(o.levels.enabled);
             c->labelsize(12);
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     o.levels.enabled = w->value();
@@ -395,7 +418,7 @@ namespace mrv
             s->default_value(0.0f);
             s->value(o.levels.inLow);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     o.levels.enabled = true;
@@ -410,7 +433,7 @@ namespace mrv
             s->default_value(1.0f);
             s->value(o.levels.inHigh);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     o.levels.enabled = true;
@@ -426,7 +449,7 @@ namespace mrv
             s->value(p.ui->uiGamma->value());
 
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     float f = w->value();
@@ -444,7 +467,7 @@ namespace mrv
             s->default_value(0.0f);
             s->value(o.levels.outLow);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     o.levels.enabled = true;
@@ -459,7 +482,7 @@ namespace mrv
             s->default_value(1.0f);
             s->value(o.levels.outHigh);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     o.levels.enabled = true;
@@ -507,7 +530,7 @@ namespace mrv
             c->labelsize(12);
             c->value(o.softClip.enabled);
             cV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     o.softClip.enabled = w->value();
@@ -522,7 +545,7 @@ namespace mrv
             s->default_value(0.0f);
             s->value(o.softClip.value);
             sV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     timeline::DisplayOptions o = App::app->displayOptions();
                     o.softClip.enabled = true;

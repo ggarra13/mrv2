@@ -27,7 +27,7 @@
 #
 # * tlRender
 
-set(tlRender_VERSION 0.0.1)
+set(TLRENDER_VERSION 0.23.0)
 
 #
 # Use this variable to debug where libraries are found
@@ -41,6 +41,7 @@ find_package(OpenTimelineIO REQUIRED CONFIG)
 find_package(PNG REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(RtAudio)
+find_package(lunasvg REQUIRED)
 
 #
 # These may be installed in cmake or not installed if the setting is off
@@ -87,6 +88,7 @@ set(tlRender_INCLUDE_DIRS
     ${nlohmann_json_INCLUDE_DIRS}
     ${harfbuzz_INCLUDE_DIRS}
     ${FREETYPE_INCLUDE_DIRS}
+    ${lunasvg_INCLUDE_DIRS}
     ${OTIO_INCLUDE_DIRS}
     ${glfw3_INCLUDE_DIRS})
 
@@ -115,6 +117,9 @@ if(PNG_FOUND)
     list(APPEND tlRender_INCLUDE_DIRS ${PNG_INCLUDE_DIRS})
 endif()
 if(RtAudio_FOUND)
+    list(APPEND tlRender_INCLUDE_DIRS ${RtAudio_INCLUDE_DIRS})
+endif()
+if(lunasvg_FOUND)
     list(APPEND tlRender_INCLUDE_DIRS ${RtAudio_INCLUDE_DIRS})
 endif()
 if(TIFF_FOUND)
@@ -210,8 +215,11 @@ if (RtAudio_FOUND)
     list(APPEND tlRender_tlCore_LIBRARIES RtAudio)
 endif()
 set(tlRender_tlIO_LIBRARIES )
+if (lunasvg_FOUND)
+    list(APPEND tlRender_tlIO_LIBRARIES lunasvg::lunasvg)
+endif()
 if (libjpeg-turbo_FOUND)
-    list(APPEND tlRender_tlIO_LIBRARIES libjpeg-turbo::turbojpeg-static )
+    list(APPEND tlRender_tlIO_LIBRARIES libjpeg-turbo::turbojpeg-static)
 endif()
 if (libplacebo_FOUND)
     list(APPEND tlRender_tlTimelineGL_LIBRARIES "libplacebo::libplacebo")
@@ -221,7 +229,7 @@ if (PNG_FOUND)
     list(APPEND tlRender_tlIO_LIBRARIES PNG)
 endif()
 if (TIFF_FOUND)
-    list(APPEND tlRender_tlIO_LIBRARIES TIFF)
+    list(APPEND tlRender_tlIO_LIBRARIES TIFF::TIFF)
 endif()
 if (OpenEXR_FOUND)
     list(APPEND tlRender_tlIO_LIBRARIES OpenEXR::OpenEXR)

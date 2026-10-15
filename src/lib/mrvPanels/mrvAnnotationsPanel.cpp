@@ -144,7 +144,7 @@ namespace mrv
             c->value(font);
             c->tooltip(_("Selects the current font from the list"));
             cW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     int font = o->value();
                     auto view = p.ui->uiView;
@@ -170,16 +170,16 @@ namespace mrv
                         return;
                     const Fl_Menu_Item* item = c->mvalue();
                     std::string selectedFontName = item->label();
-                    
+
                     const std::vector<fs::path>& fontList = image::discoverSystemFonts();
                     if (fontList.empty())
                     {
                         LOG_ERROR("No fonts installed on this system.");
                         return;
                     }
-                    
+
                     fs::path out = fontList[0];
-            
+
                     for (const auto& path : fontList)
                     {
                         auto u8 = path.filename().u8string();
@@ -194,7 +194,7 @@ namespace mrv
                             break;
                         }
                     }
-                    
+
                     auto u8 = out.u8string();
                     w->fontPath = std::string(u8.begin(), u8.end());
 #endif
@@ -204,12 +204,12 @@ namespace mrv
             auto sV =
                 new Widget< HorSlider >(X, Y + 50, g->w(), 20, _("Size:"));
             s = sV;
-            s->range(12, 100);
+            s->range(8, 100);
             s->step(1);
             s->tooltip(_("Selects the current font size."));
             s->default_value(settings->getValue<int>(kFontSize));
             sV->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     settings->setValue(kFontSize, static_cast<int>(o->value()));
                     const auto& renderSize = p.ui->uiView->getRenderSize();
@@ -221,17 +221,18 @@ namespace mrv
 #ifdef OPENGL_BACKEND
                     int fontSize = o->value() * pct * p.ui->uiView->viewZoom()
                                    * pixels_per_unit;
-                    
+
                     w->textsize(fontSize);
                     w->redraw();
 #endif
 
 #ifdef VULKAN_BACKEND
                     if (pct < 1.F) pct = 1.F;
-                    int fontSize = o->value() * pct * pixels_per_unit;
+                    int fontSize = o->value() * pct * p.ui->uiView->viewZoom()
+                                   * pixels_per_unit;
                     w->fontSize = fontSize;
 #endif
-                    
+
                     p.ui->uiView->redrawWindows();
                 });
 
@@ -281,7 +282,7 @@ namespace mrv
                           "disappear a second after drawn."));
             cb->value(settings->getValue<bool>(kLaser));
             cB->callback(
-                [=](auto w)
+                [=, this](auto w)
                 { settings->setValue(kLaser, static_cast<int>(w->value())); });
 
             b = penColor = new Fl_Button(X + 100, Y, 25, 25, _("Color:"));
@@ -308,7 +309,7 @@ namespace mrv
             }
 
             bW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     settings->setValue(kSoftBrush, 0);
                     redraw();
@@ -327,7 +328,7 @@ namespace mrv
             }
 
             bW->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     settings->setValue(kSoftBrush, 1);
                     redraw();
@@ -343,7 +344,7 @@ namespace mrv
             s->tooltip(_("Selects the current pen size."));
             s->default_value(settings->getValue<int>(kPenSize));
             sV->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     settings->setValue(kPenSize, static_cast<int>(o->value()));
                     p.ui->uiView->redrawWindows();
@@ -400,7 +401,7 @@ namespace mrv
                          "frame of the annotation."));
             d->value(settings->getValue<int>(kGhostPrevious));
             dV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     settings->setValue(
                         kGhostPrevious, static_cast<int>(w->value()));
@@ -427,7 +428,7 @@ namespace mrv
                   "of the annotation."));
             d->value(settings->getValue<int>(kGhostNext));
             dV->callback(
-                [=](auto w)
+                [=, this](auto w)
                 {
                     settings->setValue(
                         kGhostNext, static_cast<int>(w->value()));
@@ -482,7 +483,7 @@ namespace mrv
                          "show on this frame only."));
             r->value(std_any_empty(value) ? 1 : !std_any_cast< int >(value));
             rV->callback(
-                [=](auto w) {
+                [=, this](auto w) {
                     settings->setValue(
                         kAllFrames, static_cast<int>(!w->value()));
                 });
@@ -495,7 +496,7 @@ namespace mrv
             value = settings->getValue<std::any>(kAllFrames);
             r->value(std_any_empty(value) ? 0 : std_any_cast< int >(value));
             rV->callback(
-                [=](auto w) {
+                [=, this](auto w) {
                     settings->setValue(
                         kAllFrames, static_cast<int>(w->value()));
                 });
@@ -511,24 +512,43 @@ namespace mrv
                 cg->close();
 
 
-            cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Notes"));
+            cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Frame Note"));
             b = cg->button();
             b->labelsize(14);
             b->size(b->w(), 18);
+            b->callback(
+                [](Fl_Widget* w, void* d)
+                {
+                    CollapsibleGroup* cg = static_cast<CollapsibleGroup*>(d);
+                    if (cg->is_open())
+                        cg->close();
+                    else
+                        cg->open();
+
+                    const std::string& prefix = annotationsPanel->tab_prefix();
+                    const std::string key = prefix + "Notes";
+
+                    App* app = App::ui->app;
+                    auto settings = app->settings();
+                    settings->setValue(key, static_cast<int>(cg->is_open()));
+
+                    annotationsPanel->refresh();
+                },
+                cg);
             cg->begin();
-            
+
             Fl_Group* ng = new Fl_Group(X, 25, cg->w(), 200);
             ng->begin();
-            
+
             auto nV = new Widget<Fl_Multiline_Input>(X, 25, cg->w(), 180);
             notes = nV;
             notes->cursor_color(FL_RED);
-            notes->textsize(16);
+            notes->textsize(14);
             notes->textcolor(FL_BLACK);
             notes->wrap(true);
             notes->when(FL_WHEN_CHANGED);
             nV->callback(
-                [=](auto o)
+                [=, this](auto o)
                 {
                     const std::string& text = o->value();
                     if (text.empty())
@@ -541,7 +561,7 @@ namespace mrv
                     }
                 });
             ng->end();
-            
+
             cg->end();
 
             key = prefix + "Notes";

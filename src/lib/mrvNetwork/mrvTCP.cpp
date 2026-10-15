@@ -60,7 +60,7 @@ namespace mrv
     TCP* tcp = nullptr;
 
     std::mutex TCP::m_receiveMutex;
-    std::list< Message > TCP::m_receive;
+    std::deque< Message > TCP::m_receive;
 
     TCP::TCP() {}
 
@@ -107,6 +107,12 @@ namespace mrv
             return;
         std::lock_guard lk(m_sendMutex);
         m_send.push_back(message);
+    }
+
+    void TCP::pushToPeer(const std::string& peerId,
+                         const Message& message)
+    {
+        pushMessage(message);
     }
 
     void TCP::pushMessage(const std::string& command, bool value)
@@ -173,7 +179,7 @@ namespace mrv
     }
 
     void TCP::pushMessage(
-        const std::string& command, const otime::RationalTime& value)
+        const std::string& command, const OTIO_NS::RationalTime& value)
     {
         nlohmann::json j(value);
         Message message = {{"command", command}, {"value", j}};
@@ -182,7 +188,7 @@ namespace mrv
     }
 
     void
-    TCP::pushMessage(const std::string& command, const otime::TimeRange& value)
+    TCP::pushMessage(const std::string& command, const OTIO_NS::TimeRange& value)
     {
         nlohmann::json j(value);
         Message message = {{"command", command}, {"value", j}};

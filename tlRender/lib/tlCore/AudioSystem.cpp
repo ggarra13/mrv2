@@ -40,7 +40,6 @@ namespace tl
 
         void System::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::audio::System", context);
             TLRENDER_P();
 
 #if defined(TLRENDER_AUDIO)
@@ -64,9 +63,12 @@ namespace tl
 #endif
         }
 
-        System::System() :
+        System::System(
+            const std::shared_ptr<system::Context>& context) :
+            system::ISystem(context, "tl::time::TimerSystem"),
             _p(new Private)
         {
+            _init(context);
         }
 
         System::~System() {}
@@ -77,8 +79,7 @@ namespace tl
             auto out = context->getSystem<System>();
             if (!out)
             {
-                out = std::shared_ptr<System>(new System);
-                out->_init(context);
+                out = std::shared_ptr<System>(new System(context));
             }
             return out;
         }
@@ -97,10 +98,10 @@ namespace tl
         {
             TLRENDER_P();
             size_t out = 0;
-            
+
 #if defined(TLRENDER_AUDIO)
             out = p.rtAudio->getDefaultInputDevice();
-            
+
 #  if RTAUDIO_VERSION_MAJOR >= 6
             // Get info for the default device to check its suitability.
             RtAudio::DeviceInfo info = p.rtAudio->getDeviceInfo(out);
@@ -144,7 +145,7 @@ namespace tl
                 }
             }
 #  endif
-            
+
 #endif // TLRENDER_AUDIO
             return out;
         }
@@ -154,11 +155,11 @@ namespace tl
             TLRENDER_P();
             size_t out = 0;
 
-            
+
 #if defined(TLRENDER_AUDIO)
 
             out = p.rtAudio->getDefaultOutputDevice();
-            
+
 #  if RTAUDIO_VERSION_MAJOR >= 6
             // Get info for the default device to check its suitability.
             RtAudio::DeviceInfo info = p.rtAudio->getDeviceInfo(out);
@@ -402,17 +403,17 @@ namespace tl
         void System::_getDevices()
         {
             TLRENDER_P();
-            
+
 #if defined(TLRENDER_AUDIO)
             try
             {
 #  if RTAUDIO_VERSION_MAJOR >= 6
                 // Create RtAudio instance with the current API
                 p.rtAudio.reset(new RtAudio(static_cast<RtAudio::Api>(p.currentApi)));
-                
+
                 std::vector<std::string> log;
                 log.push_back("Audio API: " + std::string(RtAudio::getApiDisplayName(static_cast<RtAudio::Api>(p.currentApi))));
-                
+
                 // Get list of device IDs
                 const std::vector<unsigned int> deviceIds = p.rtAudio->getDeviceIds();
                 if (deviceIds.empty())
@@ -425,7 +426,7 @@ namespace tl
                 for (unsigned int id : deviceIds)
                 {
                     RtAudio::DeviceInfo rtInfo = p.rtAudio->getDeviceInfo(id);
-                    
+
                     Device device;
                     device.name = rtInfo.name;
                     device.outputChannels = rtInfo.outputChannels;
@@ -436,7 +437,7 @@ namespace tl
                         device.sampleRates.push_back(j);
                     }
                     device.preferredSampleRate = rtInfo.preferredSampleRate;
-                
+
                     if (rtInfo.nativeFormats & RTAUDIO_SINT8)
                     {
                         device.nativeFormats.push_back(DeviceFormat::S8);

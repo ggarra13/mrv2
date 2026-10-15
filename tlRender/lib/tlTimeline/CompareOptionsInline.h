@@ -11,7 +11,8 @@ namespace tl
         {
             return mode == other.mode && wipeCenter == other.wipeCenter &&
                    wipeRotation == other.wipeRotation &&
-                   overlay == other.overlay;
+                   overlay == other.overlay &&
+                   fitToA == other.fitToA;
         }
 
         inline bool

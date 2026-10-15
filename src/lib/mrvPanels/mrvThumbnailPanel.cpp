@@ -11,6 +11,8 @@
 #include "mrvCore/mrvFile.h"
 #include "mrvFLTK/mrvWait.h"
 
+#include <tlTimeline/Timeline.h>
+
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl_Widget.H>
@@ -20,6 +22,8 @@
 #    include <pybind11/embed.h>
 namespace py = pybind11;
 #endif
+
+#include <random>
 
 namespace
 {
@@ -93,7 +97,7 @@ namespace mrv
                             {
                                 std::memset(d, 255, w * h * depth);
                             }
-                            
+
                             i->first->bind_image(rgbImage);
                             i->first->redraw();
                         }
@@ -108,50 +112,63 @@ namespace mrv
             Fl::repeat_timeout(
                 kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
         }
-        
-        void ThumbnailPanel::_createThumbnail(
-            Fl_Widget* widget, const file::Path& path,
-            const otime::RationalTime& currentTime, const int layerId)
-        {
-            TLRENDER_P();
 
+        void ThumbnailPanel::_createThumbnail(
+            Fl_Widget* widget, const std::shared_ptr<FilesModelItem>& item,
+            const OTIO_NS::RationalTime& time, const int layerId,
+            const std::string& mediaReferenceKey)
+        {
             static Fl_SVG_Image* NDIimage = MRV2_LOAD_SVG(NDI);
 
-            if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                kThumbnailNone)
-            {
-                widget->bind_image(nullptr);
-                return;
-            }
-
-            if (file::isTemporaryNDI(path))
+            if (file::isTemporaryNDI(item->path))
             {
                 widget->bind_image(NDIimage->copy());
                 return;
             }
 
+            if (item->timeline)
+            {
+                _createThumbnail(widget, item->path, item->timeline,
+                                 time, layerId, mediaReferenceKey);
+            }
+            else
+            {
+                // Needed as path is changed by Timeline class
+                file::Path path(item->path);
+
+                const auto context = App::app->getContext();
+                const auto timeline = timeline::Timeline::create(context, path);
+                item->timeline = timeline;
+                _clearCache = true;
+
+                _createThumbnail(widget, path, timeline, time, layerId,
+                                 mediaReferenceKey);
+            }
+        }
+
+        void ThumbnailPanel::_createThumbnail(
+            Fl_Widget* widget,
+            const file::Path& path,
+            const std::shared_ptr<timeline::Timeline>& timeline,
+            const OTIO_NS::RationalTime& currentTime, const int layerId,
+            const std::string& mediaReferenceKey)
+        {
+            TLRENDER_P();
+
             try
             {
                 const auto context = App::app->getContext();
-#ifdef OPENGL_BACKEND
                 auto thumbnailSystem =
-                    context->getSystem<timelineui::ThumbnailSystem>();
-#endif
-#ifdef VULKAN_BACKEND
-                auto thumbnailSystem =
-                    context->getSystem<timelineui_vk::ThumbnailSystem>();
-#endif
+                    context->getSystem<TIMELINEUI::ThumbnailSystem>();
 
 #ifdef MRV2_PYBIND11
                 // Only release the GIL if this thread currently holds it
                 std::unique_ptr<py::gil_scoped_release> release;
-                if (PyGILState_Check()) 
+                if (PyGILState_Check())
                 {
                     release = std::make_unique<py::gil_scoped_release>();
                 }
 #endif
-                const auto& timeline =
-                    timeline::Timeline::create(path, context);
                 const auto& timeRange = timeline->getTimeRange();
 
                 auto time = currentTime;
@@ -159,7 +176,7 @@ namespace mrv
                 if (file::isMovie(path))
                 {
                     double start = p.ui->uiPrefs->uiStartTimeOffset->value();
-                    time -= otime::RationalTime(start, time.rate());
+                    time -= OTIO_NS::RationalTime(start, time.rate());
                 }
 
                 if (time::isValid(timeRange))
@@ -184,14 +201,16 @@ namespace mrv
                 io::Options options;
                 if (_clearCache)
                 {
-                    options["ClearCache"] = string::Format("{0}").arg(rand());
+                    std::random_device rd;
+                    options["ClearCache"] = string::Format("{0}").arg(rd());
                     _clearCache = false;
                 }
 
                 options["Layer"] = string::Format("{0}").arg(layerId);
-                
+
                 thumbnailRequests[widget] =
-                    thumbnailSystem->getThumbnail(path, size.h, time, options);
+                    thumbnailSystem->getThumbnail(path, size.h, time,
+                                                  mediaReferenceKey, options);
             }
             catch (const std::exception& e)
             {
@@ -207,14 +226,7 @@ namespace mrv
         void ThumbnailPanel::_cancelRequests()
         {
             const auto context = App::app->getContext();
-#ifdef OPENGL_BACKEND
-            auto thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
-#endif
-
-#ifdef VULKAN_BACKEND
-            auto thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
-#endif
-
+            auto thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
             std::vector<uint64_t> ids;
             for (const auto& i : thumbnailRequests)
             {

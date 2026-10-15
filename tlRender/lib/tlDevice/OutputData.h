@@ -19,7 +19,7 @@ namespace tl
         {
             std::string name;
             math::Size2i size;
-            otime::RationalTime frameRate;
+            OTIO_NS::RationalTime frameRate;
 
             bool operator==(const DisplayMode&) const;
         };
@@ -123,6 +123,6 @@ namespace tl
         TLRENDER_ENUM_SERIALIZE(HDRMode);
 
         //! Get HDR data from timeline video data.
-        std::shared_ptr<image::HDRData> getHDRData(const timeline::VideoData&);
+        std::shared_ptr<image::HDRData> getHDRData(const timeline::VideoFrame&);
     } // namespace device
 } // namespace tl

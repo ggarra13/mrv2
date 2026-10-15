@@ -27,12 +27,24 @@ namespace tl
         TLRENDER_ENUM(LUTOrder);
         TLRENDER_ENUM_SERIALIZE(LUTOrder);
 
+        //! LUT direction.
+        enum class LUTDirection {
+            Forward,
+            Inverse,
+
+            Count,
+            First = Forward
+        };
+        TLRENDER_ENUM(LUTDirection);
+        TLRENDER_ENUM_SERIALIZE(LUTDirection);
+
         //! LUT options.
         struct LUTOptions
         {
-            bool enabled = false;
+            bool enabled           = false;
             std::string fileName;
-            LUTOrder order = LUTOrder::First;
+            LUTOrder         order = LUTOrder::First;
+            LUTDirection direction = LUTDirection::First;
 
             bool operator==(const LUTOptions&) const;
             bool operator!=(const LUTOptions&) const;
@@ -41,7 +53,7 @@ namespace tl
         void to_json(nlohmann::json& j, const LUTOptions& value);
 
         void from_json(const nlohmann::json& j, LUTOptions& value);
-        
+
         //! Get the list of LUT format names.
         std::vector<std::string> getLUTFormatNames();
 

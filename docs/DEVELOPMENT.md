@@ -11,10 +11,17 @@ Build System
 	runmeq.sh
 		Main script to build just mrv2 once runme.sh was run.
 		Fast way to do iterations on mrv2's source code.
-	runmet.sh
+	runme2.sh
+		Main script to build mrv2 and tlRender.
+        runme3.sh
 		Main script to build mrv2, tlRender and FLTK all of
 		which change often.  In order to use this script, you
-		must manually use git to pull the latest tlRender or FLTK (or
+		must manually use git to pull the latest FLTK (or
+		whatever tag you want to build against).	
+        runme4.sh
+		Main script to build mrv2, tlRender, FLTK and pyFLTK all of
+		which change often.  In order to use this script, you
+		must manually use git to pull the latest FLTK (or
 		whatever tag you want to build against).		
 
 	CMakeLists.txt
@@ -110,7 +117,7 @@ src/icons
 
 tlRender/lib/
 	tlCore		   - Core tlRender classes.
-	tlDevice  	   - Device classes (NDI)
+	tlDevice  	   - Device classes (NDI Output)
 	tlDraw        	   - Annotation Drawing classes.
 	tlGL	       	   - Base OpenGL classes
 	tlIO	       	   - I/O Plugin classes.
@@ -118,7 +125,7 @@ tlRender/lib/
 	tlTimelineGL	   - OpenGL Timeline drawing and tonemapping classes.
 	tlTimelineUI	   - OpenGL and Vulkan Timeline drawing/editing classes.
 	tlTimelineVK	   - Vulkan Timeline drawing and HDR classes.
-	tlUI               - Legacy GLFW drawing classes (may be removed)
+	tlUI               - Legacy Darby's drawing layout classes.
 	tlVk		   - Base Vulkan classes
 	
 
@@ -260,7 +267,7 @@ src/lib:
 	mrvOS		- OS functions common to all platforms.
 
   			  mrvEnv.*              - Windows wchar versions of Unix
-					         setenv and unsetenv.
+			 		          setenv and unsetenv.
 			  mrvFileManager.*      - Open files in default file manager.
 			  mrvI8N.h	        - Handle internationalization with
 			  		          gettext / libintl
@@ -274,13 +281,13 @@ src/lib:
 			  mrvSignalHandler.h    - Installs signal handler
 			  mrvStackTrace.h       - Spit out a stack trace
 			  
-			  mrvMemory.h           - Function used to determine used
-			  		          and virtual memory on all
-					         OSes.
+			  mrvMemory.h           - Function used to determine
+			  			  used and virtual memory on all
+					          OSes. 
 			  mrvOS.h               - Common functions like execv on
 			  		          all platforms.  (Split and
-					         refactor between mrvOS/ and
-					         mrvUI/)
+					          refactor between mrvOS/ and
+					          mrvUI/)
 			
 	mrvPy		- Python (pybind11) code.  Must remove mrv2 namespace.
 			  Keep as is.  Some files renaming perhasp.
@@ -304,7 +311,7 @@ src/lib:
 src/hdr:
 	Main entry point for 'hdr' NDI utility.
 
-src/main:
+src/mrv2:
 	main.cpp     - Main entry point and python module initialization.
 		       
 
@@ -312,3 +319,41 @@ src/main:
 Files with horrible code:
 
       All of mrvFLU 
+
+
+1. Player Cache (tl::timeline::Player)
+   Layer: High-level playback management layer.
+   Cached Content: Fully processed and composited output frames ready for immediate display and audio playback (VideoFrame and AudioFrame).
+   Strategy & Invalidation:
+   	    - Playhead-Centric Window: Dynamically buffers frames around the current playhead time (currentTime) using readAhead and readBehind settings, adjusted for playback direction (Forward or Reverse).
+	    - Playback Aware: Accounts for loop modes (Loop, Once, Ping-Pong), in/out ranges (inOutRange), active video layers (videoLayer), and multi-timeline comparison layouts (compare).
+	    - Lifecycle: Flushed whenever playback options change (such as toggling video layers, modifying compare modes, or seeking).
+
+2. Timeline Cache (tl::timeline::Timeline)
+   Layer: Low-level composition and media I/O evaluation layer.
+   Cached Content: Underlying I/O media resources, file/sequence reader instances, and raw clip-level image or audio buffers before final player composition.
+   Strategy & Invalidation:
+   	    - Resource/LRU Bounded: Managed using memory capacity limits (such as videoGB and audioGB set via setCacheOptions) or LRU eviction to prevent costly re-opening of media files and re-decoding of clip segments.
+	    - Non-Playhead Dependent: Retains clip-level decodes and I/O contexts across arbitrary timeline evaluations regardless of playhead direction or loop settings.
+
+Summary Comparison
+
+Feature			Player Cache			Timeline Cache
+-------                 ------------			--------------
+Pipeline Level		Playback Engine (Player)    Media Evaluation & I/O (Timeline)
+
+Data Type		Rendered VideoFrame &       Raw I/O buffers, clip readers, 
+     			AudioFrame lists 	    & decodes
+
+Buffering Model		Directional time window     Capacity-bounded LRU cache
+	  		around playhead             based on memory limits 
+			(readAhead / readBehind)    (videoGB / audioGB)
+			
+Multi-Track /
+Comparison		Stores composite frames	    Stores individual clip/track
+			across stacked or compared   media reads independently
+			timelines
+
+Invalidation Trigger	Playhead shifts, layer       Media reader reconfiguration or 
+	     		switches, or compare mode    global cache option updates
+			changes

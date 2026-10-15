@@ -55,6 +55,58 @@ namespace tl
             return !(*this == other);
         }
 
+        inline
+        AspectRatio::AspectRatio(float num, float den) :
+            num(num),
+            den(den)
+        {}
+
+        inline
+        bool AspectRatio::isValid() const
+        {
+            return num > 0.F && den > 0.F;
+        }
+
+        inline
+        AspectRatio::operator float() const
+        {
+            return den > 0.F ? (num / den) : 0.F;
+        }
+
+        inline
+        bool AspectRatio::operator == (const AspectRatio& other) const
+        {
+            return
+                num == other.num &&
+                den == other.den;
+        }
+
+        inline
+        bool AspectRatio::operator != (const AspectRatio& other) const
+        {
+            return !(*this == other);
+        }
+
+        inline
+        AspectRatioOptions::AspectRatioOptions(const AspectRatio& value, AspectRatioType type) :
+            value(value),
+            type(type)
+        {}
+
+        inline
+        bool AspectRatioOptions::operator == (const AspectRatioOptions& other) const
+        {
+            return
+                value == other.value &&
+                type == other.type;
+        }
+
+        inline
+        bool AspectRatioOptions::operator != (const AspectRatioOptions& other) const
+        {
+            return !(*this == other);
+        }
+
         inline bool Normalize::operator==(const Normalize& other) const
         {
             return enabled == other.enabled && minimum == other.minimum &&
