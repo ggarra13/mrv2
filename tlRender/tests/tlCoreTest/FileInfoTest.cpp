@@ -79,14 +79,14 @@ namespace tl
                 f.sequence(FileInfo(Path("test.0001.exr")));
                 f.sequence(FileInfo(Path("test.0002.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getFrames().value() == math::Int64Range(0, 0));
+                    f.getPath().getFrames().value() == math::Int64Range(0, 2));
             }
             {
                 FileInfo f(Path("test.0000.exr"));
                 f.sequence(FileInfo(Path("test.1.exr")));
                 f.sequence(FileInfo(Path("test.2.exr")));
                 TLRENDER_ASSERT(
-                    f.getPath().getFrames().value() == math::Int64Range(0, 0));
+                    f.getPath().getFrames().value() == math::Int64Range(0, 2));
             }
             {
                 FileInfo f(Path("test.0.exr"));
@@ -103,8 +103,7 @@ namespace tl
             {
                 FileInfo f(Path("test.exr"));
                 f.sequence(FileInfo(Path("test3.exr")));
-                TLRENDER_ASSERT(
-                    f.getPath().getFrames().value() == math::Int64Range(0, 0));
+                TLRENDER_ASSERT(!f.getPath().getFrames().has_value());
             }
             {
                 FileInfo f(Path("test3.exr"));
@@ -159,7 +158,7 @@ namespace tl
                 options.sequence = true;
                 options.sequenceExtensions = {".exr", ".tif"};
                 file::list(tmp, list, options);
-                TLRENDER_ASSERT(7 == list.size());
+                TLRENDER_ASSERT(6 == list.size());
                 for (size_t i = 0; i < list.size(); ++i)
                 {
                     const auto& path = list[i].getPath();
@@ -176,7 +175,7 @@ namespace tl
                         list.begin(), list.end(),
                         [i](const FileInfo& value) {
                             return i ==
-                                value.getPath().get();
+                                value.getPath().getFileName();
                         });
                     TLRENDER_ASSERT(j != list.end());
                 }

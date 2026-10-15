@@ -93,7 +93,7 @@ namespace tl
                     _print(string::Format("Size: {0}").arg(size));
                     const auto boxes =
                         fontSystem->getBox(text[i], fi, maxLineWidth[i]);
-                    TLRENDER_ASSERT(text[i].size() == boxes.size());
+                    TLRENDER_ASSERT(text[i].size() == boxes.size()); // <--asserts
                     for (size_t j = 0; j < text[i].size(); ++j)
                     {
                         _print(string::Format("Box '{0}': {1}")
