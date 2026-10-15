@@ -27,5 +27,5 @@ fi
 cd -
 
 export LD_LIBRARY_PATH=/home/gga/code/applications/mrv2/Linux-vulkan-amd64/Debug/install/lib:$LD_LIBRARY_PATH
-cd /home/gga/code/applications/mrv2/Linux-vulkan-amd64/Debug/deps/tlRender/src/tlRender-build/tests/tltest/
+cd $BUILD_DIR/deps/tlRender/src/tlRender-build/tests/tltest/
 ctest --output-on-failure
