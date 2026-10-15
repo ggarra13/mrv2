@@ -1671,7 +1671,7 @@ namespace tl
                     _timeRange.start_time().value() +
                     av_rescale_q(
                         timestamp, avVideoStream->time_base,
-                        swap(_avSpeed),
+                        swap(_avSpeed)),
                     _timeRange.duration().rate());
 
                 if (time >= targetTime || backwards ||

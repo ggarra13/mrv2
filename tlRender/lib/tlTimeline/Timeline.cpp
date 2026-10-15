@@ -1652,7 +1652,7 @@ namespace tl
                  }
                  while (!p.mutex.videoRequests.empty() &&
                         (p.thread.videoRequestsInProgress.size() +
-                         newVideoRequests.size()) < p.options.videoRequestMax)
+                         newVideoRequests.size()) < getVideoRequestMax())
                 {
                     newVideoRequests.push_back(p.mutex.videoRequests.front());
                     p.mutex.videoRequests.pop_front();
