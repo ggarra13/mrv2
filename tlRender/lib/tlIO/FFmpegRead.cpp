@@ -408,7 +408,9 @@ namespace tl
             // Fixed once the file is probed, so it is read here rather than
             // per request. A file with no video stream reads nothing, so the
             // empty range it falls back to is never used.
-            p.videoThread.currentTime = p.info.videoTime->start_time();
+            p.videoThread.currentTime = p.info.videoTime.has_value() ?
+                                        p.info.videoTime->start_time() :
+                                        OTIO_NS::RationalTime(0.F, 24.F);
             p.readVideo->start();
             p.videoThread.logTimer = std::chrono::steady_clock::now();
             while (p.videoThread.running)
