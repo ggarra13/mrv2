@@ -11,6 +11,7 @@ fi
 sed -i 's#namespace ftk#namespace tl#g' "$@"
 sed -i 's#FTK_API_TYPE ##g' "$@"
 sed -i 's#FTK_API##g' "$@"
+sed -i 's#FTK_CHECK#TLRENDER_ASSERT#g' "$@"
 sed -i 's#FTK_NON_COPYABLE#TLRENDER_NON_COPYABLE#g' "$@"
 sed -i 's#FTK_P();#TLRENDER_P();#g' "$@"
 sed -i 's#FTK_ENUM#TLRENDER_ENUM#' "$@"

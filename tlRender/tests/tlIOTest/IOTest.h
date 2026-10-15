@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2024 Darby Johnston
-// All rights reserved.
+// Copyright Contributors to the tlRender project.
 
 #pragma once
 
@@ -10,20 +9,24 @@ namespace tl
 {
     namespace io_tests
     {
-        class IOTest : public tests::ITest
+        class IOTest : public tl::tests::ITest
         {
         protected:
             IOTest(const std::shared_ptr<system::Context>&);
 
         public:
-            static std::shared_ptr<IOTest>
-            create(const std::shared_ptr<system::Context>&);
+            static std::shared_ptr<IOTest> create(const std::shared_ptr<system::Context>&);
 
             void run() override;
 
         private:
             void _videoData();
             void _ioSystem();
+            void _decode();
+            void _seqDecode();
+            void _missingFrames();
+            void _seqRange();
+            void _structural();
         };
-    } // namespace io_tests
-} // namespace tl
+    }
+}

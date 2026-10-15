@@ -32,7 +32,7 @@ namespace tl
         namespace
         {
             void write(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IWritePlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, const image::Info& imageInfo)
             {
@@ -46,7 +46,7 @@ namespace tl
             }
 
             void read(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, bool memoryIO)
             {
@@ -60,17 +60,14 @@ namespace tl
                     memoryData.resize(fileIO->getSize());
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
-                        file::MemoryRead(memoryData.data(), memoryData.size()));
-                    read = plugin->read(path, memory);
+                        file::MemoryRead(fileIO, memoryData.data(), memoryData.size()));
                 }
-                else
-                {
-                    read = plugin->read(path);
-                }
+                auto decode = plugin->decode();
+                TLRENDER_ASSERT(decode);
                 const auto ioInfo = read->getInfo().get();
                 TLRENDER_ASSERT(!ioInfo.video.empty());
                 const auto videoData =
-                    read->readVideo(otime::RationalTime(0.0, 24.0)).get();
+                    decode->readVideo(otime::RationalTime(0.0, 24.0)).get();
                 TLRENDER_ASSERT(videoData.image);
                 TLRENDER_ASSERT(videoData.image->getSize() == image->getSize());
                 //! \todo Compare image data.
@@ -81,9 +78,10 @@ namespace tl
             }
 
             void readError(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
-                const file::Path& path, bool memoryIO)
+                const file::Path& path, bool memoryIO,
+                const io::Options& options)
             {
                 {
                     auto fileIO =
@@ -103,16 +101,28 @@ namespace tl
                     memory.push_back(
                         file::MemoryRead(memoryData.data(), memoryData.size()));
                 }
-                auto read = plugin->read(path, memory);
-                const auto videoData =
-                    read->readVideo(otime::RationalTime(0.0, 24.0)).get();
+                // The file has been truncated, so this is expected to fail;
+                // a reader swallowed that, a decoder reports it.
+                try
+                {
+                    auto decode = plugin->decode();
+                    decode->readVideo(
+                        path.get(),
+                        !memory.empty() ? &memory[0] : nullptr,
+                        OTIO_NS::RationalTime(0.0, 24.0),
+                        options);
+                }
+                catch (const std::exception&)
+                {}
             }
         } // namespace
 
         void PNGTest::run()
         {
-            auto system = _context->getSystem<System>();
-            auto plugin = system->getPlugin<png::Plugin>();
+            auto readSystem = _context->getSystem<ReadSystem>();
+            auto readPlugin = readSystem->getPlugin<png::ReadPlugin>();
+            auto writeSystem = _context->getSystem<WriteSystem>();
+            auto writePlugin = writeSystem->getPlugin<png::WritePlugin>();
 
             const std::vector<std::string> fileNames = {"PNGTest", "大平原"};
             const std::vector<bool> memoryIOList = {false, true};
@@ -144,15 +154,16 @@ namespace tl
                                 image->zero();
                                 try
                                 {
-                                    write(plugin, image, path, imageInfo);
-                                    read(plugin, image, path, memoryIO);
+                                    write(writePlugin, image, path, imageInfo);
+                                    read(readPlugin, image, path, memoryIO);
                                     system->getCache()->clear();
-                                    readError(plugin, image, path, memoryIO);
+                                    readError(readPlugin, image, path,
+                                              memoryIO);
                                     system->getCache()->clear();
                                 }
                                 catch (const std::exception& e)
                                 {
-                                    _printError(e.what());
+                                    _error(e.what());
                                 }
                             }
                         }

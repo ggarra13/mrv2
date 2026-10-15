@@ -23,11 +23,10 @@ namespace tl
 
         private:
             void _enums();
-            void _tests();
-
-            std::string _fileName;
-            std::string _text;
-            std::string _text2;
+            void _members();
+            void _readAt();
+            void _functions();
+            void _operators();
         };
     } // namespace core_tests
 } // namespace tl

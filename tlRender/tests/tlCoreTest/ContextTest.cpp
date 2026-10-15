@@ -31,15 +31,17 @@ namespace tl
                 TLRENDER_NON_COPYABLE(TestSystem);
 
             protected:
-                void _init(const std::shared_ptr<system::Context>& context)
+                void _init()
                 {
-                    ISystem::_init("TestSystem", context);
                     _log("Hello world!");
                     _log("Hello world!", log::Type::Warning);
                     _log("Hello world!", log::Type::Error);
                 }
 
-                TestSystem() {}
+                TestSystem(const std::shared_ptr<system::Context>& context) :
+                    ISystem(context, "TestSystem")
+                    {
+                    }
 
             public:
                 virtual ~TestSystem()
@@ -52,8 +54,8 @@ namespace tl
                 static std::shared_ptr<TestSystem>
                 create(const std::shared_ptr<system::Context>& context)
                 {
-                    auto out = std::shared_ptr<TestSystem>(new TestSystem);
-                    out->_init(context);
+                    auto out = std::shared_ptr<TestSystem>(new TestSystem(context));
+                    out->_init();
                     return out;
                 }
 

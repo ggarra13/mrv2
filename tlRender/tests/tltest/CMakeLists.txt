@@ -5,11 +5,14 @@ set(SOURCE
 
 set(LIBRARIES
     tlCoreTest
-    tlGLTest
     tlIOTest
     tlTimelineTest
     tlDevice
 )
+
+if(NOT MRV2_BACKEND STREQUAL "VK")
+    list(APPEND LIBRARIES tlGLTest)
+endif()
 
 find_package(NDI)
 

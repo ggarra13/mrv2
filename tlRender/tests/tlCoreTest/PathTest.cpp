@@ -94,8 +94,8 @@ namespace tl
                     std::string request;
                 };
                 const std::vector<Data> data = {
-                    {"", "", "", "", "", "", 0, "", ""},  // OK
-                    {"f", "", "", "f", "", "", 0, "", ""},  // OK
+                    {"", "", "", "", "", "", 0, "", ""},
+                    {"f", "", "", "f", "", "", 0, "", ""},
                     {"file", "", "", "file", "", "", 0, "", ""},
                     {"file.txt", "", "", "file", "", "", 0, ".txt", ""},
                     {"/tmp/file.txt", "", "/tmp/", "file", "", "", 0, ".txt", ""},
@@ -113,7 +113,7 @@ namespace tl
                     {"/tmp/.dotfile", "", "/tmp/", ".dotfile", "", "", 0, "", ""},
                     {"/tmp/.dotdir/.dotfile", "", "/tmp/.dotdir/", ".dotfile",
                      "", "", 0, "", ""},
-                    {"0", "", "", "", "", "0", 0, "", ""},
+                    {"0", "", "", "", "", "0", 1, "", ""},
                     {"0001", "", "", "", "", "0001", 4, "", ""},
                     {"/tmp/0001", "", "/tmp/", "", "", "0001", 4, "", ""},
                     {"/tmp/0001.exr", "", "/tmp/", "", "", "0001", 4, ".exr", ""},
@@ -123,7 +123,8 @@ namespace tl
                     {"C:/", "", "C:/", "", "", "", 0, "", ""},
                     {"C:/tmp/file.txt", "", "C:/tmp/", "file", "", "", 0, ".txt",
                      ""},
-                    {"file:/tmp/render.1.exr", "file:", "/tmp/", "render.", "", "1",
+                    {"file://", "file://", "", "", "", "", 0, "", ""},
+                    {"file:/tmp/render.1.exr", "", "file:/tmp/", "render.", "", "1",
                      0, ".exr", ""},
                     {"file://tmp/render.1.exr", "file://", "tmp/", "render.", "",
                      "1", 0, ".exr", ""},
@@ -159,7 +160,8 @@ namespace tl
                 p.setFrames(sequence);
                 TLRENDER_ASSERT(sequence == p.getFrames());
                 TLRENDER_ASSERT(p.isSequence());
-                TLRENDER_ASSERT("0001-0100" == p.getSequenceString());
+                TLRENDER_ASSERT(math::Int64Range(1, 100) ==
+                                p.getFrames().value());
                 TLRENDER_ASSERT(p.sequence(Path("render.0101.exr")));
                 TLRENDER_ASSERT(!p.sequence(Path("render.101.exr")));
             }
@@ -167,7 +169,8 @@ namespace tl
                 Path p("render.0001.exr");
                 const math::Int64Range sequence(1, 9999);
                 p.setFrames(sequence);
-                TLRENDER_ASSERT("0001-9999" == p.getSequenceString());
+                TLRENDER_ASSERT(math::Int64Range(1, 9999) ==
+                                p.getFrames().value());
                 TLRENDER_ASSERT(p.sequence(Path("render.0001.exr")));
                 TLRENDER_ASSERT(p.sequence(Path("render.1000.exr")));
                 //! \bug Handle frame numbers that exceed the zero padding.
@@ -207,7 +210,6 @@ namespace tl
                 Path a("/tmp/render.1.exr");
                 a.setProtocol("file://");
                 TLRENDER_ASSERT("file://" == a.getProtocol());
-                TLRENDER_ASSERT("file:" == a.getProtocolName());
                 TLRENDER_ASSERT(a.get() == "file:///tmp/render.1.exr");
                 a.setDirectory("/usr/tmp/");
                 TLRENDER_ASSERT("/usr/tmp/" == a.getDirectory());
@@ -219,7 +221,8 @@ namespace tl
                 TLRENDER_ASSERT("0010" == a.getNumber());
                 TLRENDER_ASSERT(a.get() == "file:///usr/tmp/comp.0010.exr");
                 TLRENDER_ASSERT(a.getPadding() == 4);
-                TLRENDER_ASSERT(a.getSequence() == math::IntRange(10, 10));
+                TLRENDER_ASSERT(a.getFrames().value() ==
+                                math::Int64Range(10, 10));
                 a.setExtension(".tif");
                 TLRENDER_ASSERT(".tif" == a.getExtension());
                 TLRENDER_ASSERT(a.get() == "file:///usr/tmp/comp.0010.tif");
@@ -233,10 +236,6 @@ namespace tl
 
         void PathTest::_util()
         {
-            {
-                TLRENDER_ASSERT(isPathSeparator('/'));
-                TLRENDER_ASSERT(isPathSeparator('\\'));
-            }
             {
                 std::string path = appendSeparator(std::string());
                 TLRENDER_ASSERT(path.empty());

@@ -3,8 +3,10 @@
 // All rights reserved.
 
 #include <tlTestLib/ITest.h>
+#include <tlCore/Path.h>
 
 #include <iostream>
+#include <sstream>
 
 namespace tl
 {
@@ -25,14 +27,44 @@ namespace tl
             return _name;
         }
 
-        void ITest::_print(const std::string& value)
+        size_t ITest::getFailureCount() const
         {
-            std::cout << "    " << value << std::endl;
+            return _failureCount;
         }
 
-        void ITest::_printError(const std::string& value)
+        const std::filesystem::path& ITest::_getTempDir()
         {
-            std::cout << "    ERROR: " << value << std::endl;
+            if (!_tmpDir)
+            {
+                _tmpDir = std::make_unique<file::TmpDir>();
+            }
+            return _tmpDir->getPath();
+        }
+
+        void ITest::_print(const std::string& value)
+        {
+            std::cout << _name << ": " << value << std::endl;
+        }
+
+        void ITest::_error(const std::string& value)
+        {
+            std::cout << _name << " ERROR: " << value << std::endl;
+        }
+
+        void ITest::_fail(const std::string& value)
+        {
+            ++_failureCount;
+            std::cout << _name << " FAIL: " << value << std::endl;
+        }
+
+        void ITest::_checkFailed(
+            const char* expression,
+            const char* file,
+            int line)
+        {
+            std::stringstream ss;
+            ss << expression << " (" << file << ":" << line << ")";
+            _fail(ss.str());
         }
     } // namespace tests
 } // namespace tl

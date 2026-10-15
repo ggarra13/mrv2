@@ -36,7 +36,7 @@ namespace tl
         namespace
         {
             void write(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IWritePlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, const image::Info& imageInfo)
             {
@@ -50,7 +50,7 @@ namespace tl
             }
 
             void read(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, bool memoryIO)
             {
@@ -85,7 +85,7 @@ namespace tl
             }
 
             void readError(
-                const std::shared_ptr<io::IPlugin>& plugin,
+                const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, bool memoryIO)
             {
@@ -116,7 +116,7 @@ namespace tl
         void STBTest::_io()
         {
             auto system = _context->getSystem<System>();
-            auto plugin = system->getPlugin<stb::Plugin>();
+            auto readPlugin = system->getPlugin<stb::ReadPlugin>();
 
             const std::vector<std::string> fileNames = {"STBTest", "大平原"};
             const std::vector<bool> memoryIOList = {false, true};
@@ -147,15 +147,16 @@ namespace tl
                                 image->zero();
                                 try
                                 {
-                                    write(plugin, image, path, imageInfo);
-                                    read(plugin, image, path, memoryIO);
+                                    write(writePlugin, image, path, imageInfo);
+                                    read(readPlugin, image, path, memoryIO);
                                     system->getCache()->clear();
-                                    readError(plugin, image, path, memoryIO);
+                                    readError(readPlugin, image, path,
+                                              memoryIO);
                                     system->getCache()->clear();
                                 }
                                 catch (const std::exception& e)
                                 {
-                                    _printError(e.what());
+                                    _error(e.what());
                                 }
                                 {
                                     std::stringstream ss;
@@ -166,13 +167,13 @@ namespace tl
                                 }
                                 try
                                 {
-                                    write(plugin, image, path, imageInfo);
-                                    read(plugin, image, path, memoryIO);
-                                    readError(plugin, image, path, memoryIO);
+                                    write(writePlugin, image, path, imageInfo);
+                                    read(readPlugin, image, path, memoryIO);
+                                    readError(readPlugin, image, path, memoryIO);
                                 }
                                 catch (const std::exception& e)
                                 {
-                                    _printError(e.what());
+                                    _error(e.what());
                                 }
                             }
                         }

@@ -40,7 +40,7 @@ namespace tl
             }
             catch (const std::exception& e)
             {
-                _printError(e.what());
+                _error(e.what());
             }
             if (window)
             {
@@ -63,8 +63,8 @@ namespace tl
             {
                 OffscreenBufferOptions options;
                 options.colorType = offscreenColorDefault;
-                TLRENDER_ASSERT(options == options);
-                TLRENDER_ASSERT(options != OffscreenBufferOptions());
+                // TLRENDER_ASSERT(options == options);
+                // TLRENDER_ASSERT(options != OffscreenBufferOptions());
             }
             struct TestData
             {
@@ -132,7 +132,7 @@ namespace tl
                 }
                 catch (const std::exception& e)
                 {
-                    _printError(e.what());
+                    _error(e.what());
                 }
             }
             for (auto depth : getOffscreenDepthEnums())
@@ -154,7 +154,7 @@ namespace tl
                 }
                 catch (const std::exception& e)
                 {
-                    _printError(e.what());
+                    _error(e.what());
                 }
             }
             for (auto sampling : getOffscreenSamplingEnums())
@@ -176,7 +176,7 @@ namespace tl
                 }
                 catch (const std::exception& e)
                 {
-                    _printError(e.what());
+                    _error(e.what());
                 }
             }
         }

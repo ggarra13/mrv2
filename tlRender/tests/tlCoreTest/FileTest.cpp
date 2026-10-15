@@ -39,8 +39,8 @@ namespace tl
             {
                 FileIO::create(fileName, Mode::Write);
             }
-            TLRENDER_ASSERT(exists(fileName));
-            TLRENDER_ASSERT(rm(fileName));
+            TLRENDER_ASSERT(file::exists(fileName));
+            TLRENDER_ASSERT(file::rm(fileName));
         }
 
         void FileTest::_dir()
@@ -48,11 +48,11 @@ namespace tl
             {
                 bool r = mkdir("File Test");
                 TLRENDER_ASSERT(r);
-                r = mkdir("File Test");
+                r = file::mkdir("File Test");
                 TLRENDER_ASSERT(!r);
-                r = rmdir("File Test");
-                TLRENDER_ASSERT(r);
-                r = rmdir("File Test");
+                r = file::rmdir("File Test");
+                TLRENDER_ASSERT(r);  // <-- asserts
+                r = file::rmdir("File Test");
                 TLRENDER_ASSERT(!r);
             }
             {

@@ -1,5 +1,7 @@
 add_subdirectory(tlCoreTest)
-add_subdirectory(tlGLTest)
+if (TLRENDER_GL)
+    add_subdirectory(tlGLTest)
+endif()
 add_subdirectory(tlIOTest)
 add_subdirectory(tlTestLib)
 add_subdirectory(tlTimelineTest)
