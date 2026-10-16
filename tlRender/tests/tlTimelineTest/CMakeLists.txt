@@ -13,7 +13,7 @@ set(HEADERS
     UtilTest.h)
 
 set(SOURCE
-    # CompareOptionsTest.cpp
+    CompareOptionsTest.cpp
     DisplayOptionsTest.cpp
     # EditTest.cpp
     IRenderTest.cpp
