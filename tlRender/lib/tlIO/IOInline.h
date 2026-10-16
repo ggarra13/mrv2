@@ -10,8 +10,10 @@ namespace tl
         {
             return video == other.video &&
                    time::compareExact(videoTime, other.videoTime) &&
+                   videoSource == other.videoSource &&
                    audio == other.audio &&
                    time::compareExact(audioTime, other.audioTime) &&
+                   audioSource == other.audioSource &&
                    tags == other.tags;
         }
 

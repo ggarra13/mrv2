@@ -25,6 +25,7 @@ namespace tl
             io::Info out = video;
             out.audio = audio.audio;
             out.audioTime = audio.audioTime;
+            out.audioSource = audio.audioSource;
             for (const auto& tag : audio.tags)
             {
                 out.tags[tag.first] = tag.second;
