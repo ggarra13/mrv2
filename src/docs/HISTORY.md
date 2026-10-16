@@ -5,7 +5,6 @@ ChangeLog
 ---------
 
 - UI: Added options to **Preferences->Edit** to hide or show effects, waveforms and thumbnails.
-- UI: Fixed tooltips for AutoICS now showing with color space was selected and why.
 - UI/Core: Fixed moving the primary display window between an HDR and SDR monitor on Windows, which could sometimes not update the HDR Display properly.
 
 - UI/Edit: **Edit->Time->Slice** now supports selected items to only slice on the selection.
@@ -19,11 +18,14 @@ ChangeLog
 Fixes
 -----
 
+- UI: Fixed tooltips for AutoICS now showing with color space was selected and why.
 - Edit/Core: Moving a clip with annotations in an .otio timeline with a global_start_time() > 0 would not offset the annotation correctly.
 
 - UI/Thumbnails: Refreshing the thumbnails would only refresh the first thumbnail in the Panels.
 
 - UI/Core: Fixed a potential Linux Wayland crash when saving a clip and stopping it mid-way with the Esc hotkey.
+
+- Compiling/Core: Fixed unit tests.
 
 
 v1.8.2
