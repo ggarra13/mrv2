@@ -218,6 +218,12 @@ namespace tl
                     {
                         if (!pngScanline(_png.p, p))
                         {
+                            throw std::runtime_error(
+                                string::Format("{0}: {1}").
+                                arg(fileName).
+                                arg(_error.message.empty() ?
+                                    "Cannot read" : _error.message));
+
                             break;
                         }
                     }

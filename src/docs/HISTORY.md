@@ -13,6 +13,8 @@ ChangeLog
 
 - UI/Thumbnails: They now support HDR and OpenColorIO in both Panels and the Timeline Viewport, on both backends.
 
+- Core/MacOS: More support for hardware decoding of more codecs, HDR, seeking forwards and backwards and memory I/O on MacBooks Pro Intel and M1+ with a python unit test for quality checking. PR #540.  Courtesy of @CatPetrova.
+
 
 Fixes
 -----

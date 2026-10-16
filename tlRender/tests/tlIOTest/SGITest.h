@@ -22,6 +22,7 @@ namespace tl
             void run() override;
 
         private:
+            void _enums();
             void _io();
         };
     } // namespace io_tests

@@ -142,8 +142,11 @@ namespace tl
                 // the decoder leaves the time range alone.
                 TLRENDER_ASSERT(!decodeInfo.videoTime.has_value());
 
-                const auto viaDecode = decode->readVideo(path.get(), nullptr, time);
-                const auto viaMem = decode->readVideo(path.get(), &memFile, time);
+                // Vulkan reads RGBA by default, se we force it to read RGB.
+                io::Options options;
+                options["OpenEXR/UseRGBOnly"] = "1";
+                const auto viaDecode = decode->readVideo(path.get(), nullptr, time, options);
+                const auto viaMem = decode->readVideo(path.get(), &memFile, time, options);
 
                 // The image that was written is the oracle, and the two
                 // decode paths have to agree with it and with each other.
@@ -163,12 +166,13 @@ namespace tl
                 for (size_t i = 0; i < 8; ++i)
                 {
                     threads.push_back(std::thread(
-                        [decode, path, &memFile, time, image, byteCount, &ok]
+                                          [decode, path, &memFile, time,
+                                           image, byteCount, options, &ok]
                         {
                             for (size_t j = 0; j < 8; ++j)
                             {
                                 const auto v = decode->readVideo(
-                                    path.get(), &memFile, time);
+                                    path.get(), &memFile, time, options);
                                 if (!v.image || 0 != memcmp(
                                     v.image->getData(),
                                     image->getData(),
