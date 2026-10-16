@@ -53,15 +53,6 @@ namespace tl
                 const OTIO_NS::RationalTime&,
                 const io::Options& = io::Options()) override;
             double getSpeed(const io::Info&, double defaultSpeed) const override;
-
-        private:
-            ChannelGrouping _channelGrouping = ChannelGrouping::Known;
-            bool _useRGBOnly = false;
-            bool _ignoreDisplayWindow = false;
-            bool _ignoreChromaticities = false;
-            bool _autoNormalize = false;
-            int  _xLevel = -1;
-            int  _yLevel = -1;
         };
 
 

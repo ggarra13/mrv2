@@ -20,6 +20,10 @@ namespace tl
             create(const std::shared_ptr<system::Context>&);
 
             void run() override;
+
+        private:
+            void _enums();
+            void _io();
         };
     } // namespace io_tests
 } // namespace tl

@@ -29,17 +29,27 @@ namespace tl
             return std::shared_ptr<TIFFTest>(new TIFFTest(context));
         }
 
+        void TIFFTest::run()
+        {
+            _enums();
+            _io();
+        }
+
+        void TIFFTest::_enums()
+        {
+        }
+
         namespace
         {
             void write(
                 const std::shared_ptr<io::IWritePlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, const image::Info& imageInfo,
-                const image::Tags& tags)
+                const image::Tags& tags, const io::Options& options)
             {
                 Info info;
                 info.video.push_back(imageInfo);
-                info.videOTIO_NS = OTIO_NS::TimeRange(
+                info.videoTime = OTIO_NS::TimeRange(
                     OTIO_NS::RationalTime(0.0, 24.0),
                     OTIO_NS::RationalTime(1.0, 24.0));
                 info.tags = tags;
@@ -50,11 +60,11 @@ namespace tl
             void read(
                 const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
-                const file::Path& path, bool memoryIO, const image::Tags& tags)
+                const file::Path& path, bool memoryIO, const image::Tags& tags,
+                const Options options)
             {
                 std::vector<uint8_t> memoryData;
                 std::vector<file::MemoryRead> memory;
-                std::shared_ptr<io::IRead> read;
                 if (memoryIO)
                 {
                     auto fileIO =
@@ -62,13 +72,18 @@ namespace tl
                     memoryData.resize(fileIO->getSize());
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
-                        file::MemoryRead(memoryData.data(), memoryData.size()));
+                        file::MemoryRead(nullptr,
+                                         memoryData.data(), memoryData.size()));
                 }
-                auto decode = plugin->decode();
-                const auto ioInfo = read->getInfo().get();
+                auto decode = plugin->decode(options);
+                TLRENDER_ASSERT(decode);
+                const file::MemoryRead* mem = !memory.empty() ?
+                                              &memory[0] : nullptr;
+                const auto ioInfo = decode->getInfo(path.get(), mem);
                 TLRENDER_ASSERT(!ioInfo.video.empty());
-                const auto videoData =
-                    decode>readVideo(OTIO_NS::RationalTime(0.0, 24.0)).get();
+                const auto videoData = decode->readVideo(
+                    path.get(), mem,
+                    OTIO_NS::RationalTime(0.0, 24.0), options);
                 TLRENDER_ASSERT(videoData.image);
                 TLRENDER_ASSERT(videoData.image->getSize() == image->getSize());
                 //! \todo Compare image data.
@@ -88,14 +103,15 @@ namespace tl
             void readError(
                 const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
-                const file::Path& path, bool memoryIO)
+                const file::Path& path, bool memoryIO,
+                const Options& options = io::Options())
             {
                 {
                     auto fileIO =
                         file::FileIO::create(path.get(), file::Mode::Read);
                     const size_t size = fileIO->getSize();
                     fileIO.reset();
-                    file::truncate(path.get(), size / 2);
+                    file::truncateFile(path.get(), size / 2);
                 }
                 std::vector<uint8_t> memoryData;
                 std::vector<file::MemoryRead> memory;
@@ -106,8 +122,9 @@ namespace tl
                     memoryData.resize(fileIO->getSize());
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
-                        file::MemoryRead(memoryData.data(), memoryData.size()));
+                        file::MemoryRead(nullptr, memoryData.data(), memoryData.size()));
                 }
+
                 // The file has been truncated, so this is expected to fail;
                 // a reader swallowed that, a decoder reports it.
                 try
@@ -124,10 +141,12 @@ namespace tl
             }
         } // namespace
 
-        void TIFFTest::run()
+        void TIFFTest::_io()
         {
-            auto system = _context->getSystem<System>();
-            auto plugin = system->getPlugin<tiff::Plugin>();
+            auto readSystem = _context->getSystem<ReadSystem>();
+            auto readPlugin = readSystem->getPlugin<tiff::ReadPlugin>();
+            auto writeSystem = _context->getSystem<WriteSystem>();
+            auto writePlugin = writeSystem->getPlugin<tiff::WritePlugin>();
 
             const image::Tags tags = {
                 {"Creator", "Creator"},
@@ -138,6 +157,10 @@ namespace tl
             const std::vector<bool> memoryIOList = {false, true};
             const std::vector<image::Size> sizes = {
                 image::Size(16, 16), image::Size(1, 1), image::Size(0, 0)};
+            const std::vector<io::Options> optionsList =
+            {
+                {},
+            };
 
             for (const auto& fileName : fileNames)
             {
@@ -147,32 +170,34 @@ namespace tl
                     {
                         for (const auto& pixelType : image::getPixelTypeEnums())
                         {
-                            const auto imageInfo = plugin->getWriteInfo(
-                                image::Info(size, pixelType));
-                            if (imageInfo.isValid())
+                            for (const auto& options : optionsList)
                             {
-                                file::Path path;
+                                const auto imageInfo = writePlugin->getInfo(
+                                    image::Info(size, pixelType));
+                                if (imageInfo.isValid())
                                 {
-                                    std::stringstream ss;
-                                    ss << fileName << '_' << size << '_'
-                                       << pixelType << ".0.tif";
-                                    _print(ss.str());
-                                    path = file::Path(ss.str());
-                                }
-                                auto image = image::Image::create(imageInfo);
-                                image->zero();
-                                image->setTags(tags);
-                                try
-                                {
-                                    write(plugin, image, path, imageInfo, tags);
-                                    read(plugin, image, path, memoryIO, tags);
-                                    system->getCache()->clear();
-                                    readError(plugin, image, path, memoryIO);
-                                    system->getCache()->clear();
-                                }
-                                catch (const std::exception& e)
-                                {
-                                    _printError(e.what());
+                                    file::Path path;
+                                    {
+                                        std::stringstream ss;
+                                        ss << fileName << '_' << size << '_'
+                                           << pixelType << ".0.tif";
+                                        _print(ss.str());
+                                        path = file::Path(ss.str());
+                                    }
+                                    auto image = image::Image::create(imageInfo);
+                                    image->zero();
+                                    image->setTags(tags);
+                                    try
+                                    {
+                                        write(writePlugin,
+                                              image, path, imageInfo, tags, options);
+                                        read(readPlugin, image, path, memoryIO, tags, options);
+                                        readError(readPlugin, image, path, memoryIO, options);
+                                    }
+                                    catch (const std::exception& e)
+                                    {
+                                        _error(e.what());
+                                    }
                                 }
                             }
                         }

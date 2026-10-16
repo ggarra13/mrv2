@@ -45,21 +45,24 @@ namespace tl
                 const std::shared_ptr<io::IWritePlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
                 const file::Path& path, const image::Info& imageInfo,
-                const Options& options)
+                const image::Tags& tags,
+                const io::Options& options = io::Options())
             {
                 Info info;
                 info.video.push_back(imageInfo);
-                info.videoTime = otime::TimeRange(
-                    otime::RationalTime(0.0, 24.0),
-                    otime::RationalTime(1.0, 24.0));
-                auto write = plugin->write(path, info, options);
-                write->writeVideo(otime::RationalTime(0.0, 24.0), image);
+                info.videoTime = OTIO_NS::TimeRange(
+                    OTIO_NS::RationalTime(0.0, 24.0),
+                    OTIO_NS::RationalTime(1.0, 24.0));
+                info.tags = tags;
+                auto write = plugin->write(path, info);
+                write->writeVideo(OTIO_NS::RationalTime(0.0, 24.0), image);
             }
 
             void read(
                 const std::shared_ptr<io::IReadPlugin>& plugin,
                 const std::shared_ptr<image::Image>& image,
-                const file::Path& path, bool memoryIO, const Options& options)
+                const file::Path& path, bool memoryIO, const image::Tags& tags,
+                const Options options)
             {
                 std::vector<uint8_t> memoryData;
                 std::vector<file::MemoryRead> memory;
@@ -70,19 +73,18 @@ namespace tl
                     memoryData.resize(fileIO->getSize());
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
-                        file::MemoryRead(fileIO,
+                        file::MemoryRead(nullptr,
                                          memoryData.data(), memoryData.size()));
                 }
                 auto decode = plugin->decode(options);
                 TLRENDER_ASSERT(decode);
-                const auto ioInfo = decode->getInfo().get();
+                const file::MemoryRead* mem = !memory.empty() ?
+                                              &memory[0] : nullptr;
+                const auto ioInfo = decode->getInfo(path.get(), mem);
                 TLRENDER_ASSERT(!ioInfo.video.empty());
-                const auto videoData =
-                    decode->readVideo(
-                        path.get(),
-                        !memory.empty() ? &memory[0] : nullptr,
-                        OTIO_NS::RationalTime(0.0, 24.0),
-                        options);
+                const auto videoData = decode->readVideo(
+                    path.get(), mem,
+                    OTIO_NS::RationalTime(0.0, 24.0), options);
                 TLRENDER_ASSERT(videoData.image);
                 TLRENDER_ASSERT(videoData.image->getSize() == image->getSize());
                 //! \todo Compare image data.
@@ -90,6 +92,13 @@ namespace tl
                 //     videoData.image->getData(),
                 //     image->getData(),
                 //     image->getDataByteCount()));
+                const auto frameTags = videoData.image->getTags();
+                for (const auto& j : tags)
+                {
+                    const auto k = frameTags.find(j.first);
+                    TLRENDER_ASSERT(k != frameTags.end());
+                    TLRENDER_ASSERT(k->second == j.second);
+                }
             }
 
             void readError(
@@ -102,7 +111,7 @@ namespace tl
                         file::FileIO::create(path.get(), file::Mode::Read);
                     const size_t size = fileIO->getSize();
                     fileIO.reset();
-                    file::truncate(path.get(), size / 2);
+                    file::truncateFile(path.get(), size / 2);
                 }
                 std::vector<uint8_t> memoryData;
                 std::vector<file::MemoryRead> memory;
@@ -113,8 +122,9 @@ namespace tl
                     memoryData.resize(fileIO->getSize());
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
-                        file::MemoryRead(fileIO, memoryData.data(), memoryData.size()));
+                        file::MemoryRead(nullptr, memoryData.data(), memoryData.size()));
                 }
+
                 // The file has been truncated, so this is expected to fail;
                 // a reader swallowed that, a decoder reports it.
                 try
@@ -133,15 +143,18 @@ namespace tl
 
         void PPMTest::_io()
         {
-            auto system = _context->getSystem<io::ReadSystem>();
-            auto plugin = system->getPlugin<ppm::ReadPlugin>();
+            auto readSystem = _context->getSystem<ReadSystem>();
+            auto readPlugin = readSystem->getPlugin<ppm::ReadPlugin>();
+            auto writeSystem = _context->getSystem<WriteSystem>();
+            auto writePlugin = writeSystem->getPlugin<ppm::WritePlugin>();
 
             const std::vector<std::string> fileNames = {"PPMTest", "大平原"};
             const std::vector<bool> memoryIOList = {false, true};
             const std::vector<image::Size> sizes = {
                 image::Size(16, 16), image::Size(1, 1), image::Size(0, 0)};
-            const std::vector<std::pair<std::string, std::string> > options = {
+            const std::vector<std::pair<std::string, std::string> > optionsList = {
                 {"PPM/Data", "Binary"}, {"PPM/Data", "ASCII"}};
+            const image::Tags tags = {};
 
             for (const auto& fileName : fileNames)
             {
@@ -151,12 +164,12 @@ namespace tl
                     {
                         for (const auto& pixelType : image::getPixelTypeEnums())
                         {
-                            for (const auto& option : options)
+                            for (const auto& option : optionsList)
                             {
                                 Options options;
                                 options[option.first] = option.second;
-                                const auto imageInfo = plugin->getWriteInfo(
-                                    image::Info(size, pixelType), options);
+                                const auto imageInfo = writePlugin->getInfo(
+                                    image::Info(size, pixelType));
                                 if (imageInfo.isValid())
                                 {
                                     file::Path path;
@@ -167,24 +180,19 @@ namespace tl
                                         _print(ss.str());
                                         path = file::Path(ss.str());
                                     }
-                                    auto image =
-                                        image::Image::create(imageInfo);
+                                    auto image = image::Image::create(imageInfo);
                                     image->zero();
+                                    image->setTags(tags);
                                     try
                                     {
-                                        write(
-                                            plugin, image, path, imageInfo,
-                                            options);
-                                        read(
-                                            plugin, image, path, memoryIO,
-                                            options);
-                                        readError(
-                                            plugin, image, path, memoryIO,
-                                            options);
+                                        write(writePlugin,
+                                              image, path, imageInfo, tags, options);
+                                        read(readPlugin, image, path, memoryIO, tags, options);
+                                        readError(readPlugin, image, path, memoryIO, options);
                                     }
                                     catch (const std::exception& e)
                                     {
-                                        _printError(e.what());
+                                        _error(e.what());
                                     }
                                 }
                             }

@@ -136,9 +136,9 @@ namespace tl
 
             //! Get how many video requests the timeline keeps in flight.
             //!
-            //! Twice the decoding threads: enough that a thread finishing a frame
-            //! always has another waiting, without queueing work that a seek
-            //! would only throw away.
+            //! Twice the decoding threads: enough that a thread finishing a
+            //! frame always has another waiting, without queueing work that a
+            //! seek would only throw away.
             size_t getVideoRequestMax() const;
 
             //! Get how many sequence frames the timeline decodes at once.
@@ -260,9 +260,9 @@ namespace tl
             void cancelRequests(const std::vector<uint64_t>&);
 
             //! Set the time requests are served nearest to. Video requests at
-            //! and ahead of it, in the direction given, are served first, nearest
-            //! first; those behind it after, in order of time. Without it they
-            //! are served in the order they were made.
+            //! and ahead of it, in the direction given, are served first,
+            //! nearest first; those behind it after, in order of time. Without
+            //! it they are served in the order they were made.
             void setRequestPriority(
                 const OTIO_NS::RationalTime&,
                 bool reverse = false);

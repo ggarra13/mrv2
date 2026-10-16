@@ -235,7 +235,10 @@ namespace tl
                                         _tiff.p, (tdata_t*)scanline.data(), y,
                                         sample) == -1)
                                 {
-                                    break;
+                                    throw std::runtime_error(
+                                        string::Format("{0}: {1}").
+                                        arg(fileName).
+                                        arg("Cannot read"));
                                 }
                                 switch (_sampleDepth)
                                 {
@@ -291,7 +294,10 @@ namespace tl
                         {
                             if (TIFFReadScanline(_tiff.p, (tdata_t*)p, y) == -1)
                             {
-                                break;
+                                throw std::runtime_error(
+                                    string::Format("{0}: {1}").
+                                    arg(fileName).
+                                    arg("Cannot read"));
                             }
                         }
                     }

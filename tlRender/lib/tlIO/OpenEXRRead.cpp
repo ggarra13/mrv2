@@ -141,6 +141,58 @@ namespace tl
                 return data[value];
             }
 
+            struct DecodeSettings
+            {
+                ChannelGrouping channelGrouping = ChannelGrouping::Known;
+                bool useRGBOnly = false;
+                bool ignoreDisplayWindow = false;
+                bool ignoreChromaticities = false;
+                bool autoNormalize = false;
+                int xLevel = -1;
+                int yLevel = -1;
+            };
+
+            DecodeSettings getSettings(const io::Options& options)
+            {
+                DecodeSettings out;
+
+                auto i = options.find("OpenEXR/ChannelGrouping");
+                if (i != options.end())
+                {
+                    std::stringstream ss(i->second);
+                    ss >> out.channelGrouping;
+                }
+                i = options.find("OpenEXR/IgnoreDisplayWindow");
+                if (i != options.end())
+                    out.ignoreDisplayWindow = std::atoi(i->second.c_str()) != 0;
+                i = options.find("OpenEXR/UseRGBOnly");
+                if (i != options.end())
+                    out.useRGBOnly = std::atoi(i->second.c_str()) != 0;
+                i = options.find("AutoNormalize");
+                if (i != options.end())
+                    out.autoNormalize = std::atoi(i->second.c_str()) != 0;
+                i = options.find("IgnoreChromaticities");
+                if (i != options.end())
+                    out.ignoreChromaticities = std::atoi(i->second.c_str()) != 0;
+
+                // A read always asks for a level; info alone does not.
+                out.xLevel = -1;
+                i = options.find("X Level");
+                if (i != options.end())
+                {
+                    std::stringstream ss(i->second);
+                    ss >> out.xLevel;
+                }
+                out.yLevel = -1;
+                i = options.find("Y Level");
+                if (i != options.end())
+                {
+                    std::stringstream ss(i->second);
+                    ss >> out.yLevel;
+                }
+                return out;
+            }
+
             class File
             {
             protected:
@@ -1359,10 +1411,11 @@ namespace tl
             const std::string& fileName,
             const file::MemoryRead* memory)
         {
+            const DecodeSettings s;   // defaults, including levels of -1
             return File(
-                       fileName, memory, _channelGrouping, _ignoreDisplayWindow,
-                       _ignoreChromaticities, _autoNormalize, _useRGBOnly,
-                       _xLevel, _yLevel, _logSystem.lock())
+                fileName, memory, s.channelGrouping, s.ignoreDisplayWindow,
+                s.ignoreChromaticities, s.autoNormalize, s.useRGBOnly,
+                s.xLevel, s.yLevel, _logSystem.lock())
                 .getInfo();
         }
 
@@ -1372,60 +1425,11 @@ namespace tl
             const OTIO_NS::RationalTime& time,
             const io::Options& options)
         {
-            auto i = options.find("OpenEXR/ChannelGrouping");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> _channelGrouping;
-            }
-
-            i = options.find("OpenEXR/IgnoreDisplayWindow");
-            if (i != options.end())
-            {
-                _ignoreDisplayWindow =
-                    static_cast<bool>(std::atoi(i->second.c_str()));
-            }
-
-            i = options.find("OpenEXR/UseRGBOnly");
-            if (i != options.end())
-            {
-                _useRGBOnly =
-                    static_cast<bool>(std::atoi(i->second.c_str()));
-            }
-
-            i = options.find("AutoNormalize");
-            if (i != options.end())
-            {
-                _autoNormalize =
-                    static_cast<bool>(std::atoi(i->second.c_str()));
-            }
-
-            i = options.find("IgnoreChromaticities");
-            if (i != options.end())
-            {
-                _ignoreChromaticities =
-                    static_cast<bool>(std::atoi(i->second.c_str()));
-            }
-
-            _xLevel = 0;
-            i = options.find("X Level");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> _xLevel;
-            }
-
-            _yLevel = 0;
-            i = options.find("Y Level");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> _yLevel;
-            }
+            const DecodeSettings s = getSettings(options);
             return File(
-                       fileName, memory, _channelGrouping, _ignoreDisplayWindow,
-                       _ignoreChromaticities, _autoNormalize, _useRGBOnly,
-                       _xLevel, _yLevel, _logSystem.lock())
+                fileName, memory, s.channelGrouping, s.ignoreDisplayWindow,
+                s.ignoreChromaticities, s.autoNormalize, s.useRGBOnly,
+                s.xLevel, s.yLevel, _logSystem.lock())
                 .read(fileName, time, options);
         }
 

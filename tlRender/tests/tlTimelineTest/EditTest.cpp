@@ -227,8 +227,10 @@ namespace tl
                         otime::RationalTime(48000.0, 48000.0))));
 
                 std::vector<MoveData> moveData;
-                moveData.push_back({0, 2, 2, 0, 0, 0});
-                moveData.push_back({1, 2, 2, 1, 0, 0});
+                MoveData move1 = { MoveType::Clip, 0, 2, 2, 0, 0, 0};
+                MoveData move2 = { MoveType::Clip, 0, 2, 2, 0, 0, 0};
+                moveData.push_back(move1);
+                moveData.push_back(move2);
                 auto otioTimeline2 = move(otioTimeline, moveData);
                 TLRENDER_ASSERT(
                     "Video 2" == getChild(otioTimeline2, 0, 0)->name());
@@ -244,8 +246,8 @@ namespace tl
                     "Audio 1" == getChild(otioTimeline2, 1, 2)->name());
 
                 moveData.clear();
-                moveData.push_back({0, 1, 1, 0, 3, 3});
-                moveData.push_back({1, 1, 1, 1, 3, 3});
+                moveData.push_back({MoveType::Clip, 0, 1, 1, 0, 3, 3});
+                moveData.push_back({MoveType::Clip, 1, 1, 1, 1, 3, 3});
                 auto otioTimeline3 = move(otioTimeline2, moveData);
                 TLRENDER_ASSERT(
                     "Video 2" == getChild(otioTimeline3, 0, 0)->name());
@@ -296,13 +298,14 @@ namespace tl
                 TLRENDER_ASSERT(
                     "Video 0" == getChild(otioTimeline3, 0, 0)->name());
             }
-            for (const auto otio : {"SingleClip.otio", "SingleClipSeq.otio"})
+            for (const auto otio : {"SingleClip.otio", "MultipleClips.otio"})
             {
                 for (const auto toMemoryReference :
                      {ToMemoryReference::Shared, ToMemoryReference::Raw})
                 {
-                    auto otioTimeline = timeline::create(
-                        file::Path(TLRENDER_SAMPLE_DATA, otio), _context);
+                    file::Path path = file::Path(TLRENDER_SAMPLE_DATA, otio);
+                    auto timeline = Timeline::create(_context, path);
+                    auto otioTimeline = timeline->getTimeline();
                     auto track = dynamic_cast<otio::Track*>(
                         otioTimeline->tracks()->children()[0].value);
                     track->append_child(new otio::Clip(
@@ -370,10 +373,12 @@ namespace tl
                     }
                 }
             }
+
             for (const auto otioz : {"SingleClip.otioz", "SingleClipSeq.otioz"})
             {
-                auto otioTimeline = timeline::create(
-                    file::Path(TLRENDER_SAMPLE_DATA, otioz), _context);
+                file::Path path(file::Path(TLRENDER_SAMPLE_DATA, otioz));
+                auto timeline = Timeline::create(_context, path);
+                auto otioTimeline = timeline->getTimeline();
                 auto track = dynamic_cast<otio::Track*>(
                     otioTimeline->tracks()->children()[0].value);
                 track->append_child(new otio::Clip(

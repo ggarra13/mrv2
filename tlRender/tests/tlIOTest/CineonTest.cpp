@@ -118,6 +118,7 @@ namespace tl
                 }
                 std::vector<uint8_t> memoryData;
                 std::vector<file::MemoryRead> memory;
+
                 if (memoryIO)
                 {
                     auto fileIO =
