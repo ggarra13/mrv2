@@ -753,7 +753,7 @@ namespace mrv
         std::string err;
         if (compositor == "mutter")
         {
-            cmd = "gsettings get org.gnome.shell.extensions.tiling-assistant toggle-always-on-top";
+            // cmd = "gsettings get org.gnome.shell.extensions.tiling-assistant toggle-always-on-top";
         }
         else if (compositor == "kwin")
         {
@@ -789,18 +789,18 @@ namespace mrv
         std::string hotkey = kToggleFloatOnTop.to_s();
         if (hotkey.empty())
             return;
-        if (compositor == "gnome-shell")
-        {
-            size_t startPos = 0;
-            if (startPos = hotkey.find("Meta") != std::string::npos)
-            {
-                hotkey.replace(startPos, 4, "Super");
-            }
-            cmd = "gsettings set "
-                  "org.gnome.shell.extensions.tiling-assistant "
-                  "toggle-always-on-top \"['" +
-                  hotkey + "']\"";
-        }
+        // if (compositor == "gnome-shell")
+        // {
+        //     size_t startPos = 0;
+        //     if (startPos = hotkey.find("Meta") != std::string::npos)
+        //     {
+        //         hotkey.replace(startPos, 4, "Super");
+        //     }
+        //     cmd = "gsettings set "
+        //           "org.gnome.shell.extensions.tiling-assistant "
+        //           "toggle-always-on-top \"['" +
+        //           hotkey + "']\"";
+        // }
         // else if (compositor == "kwin")
         // {
         //     size_t startPos = 0;
