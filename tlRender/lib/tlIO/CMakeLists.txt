@@ -132,6 +132,11 @@ target_link_libraries(tlIO PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(tlIO PROPERTIES FOLDER lib)
 set_target_properties(tlIO PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
+if (WIN32 AND TLRENDER_USD)
+    target_compile_definitions(tlIO PRIVATE
+	_SILENCE_CXX20_OLD_SHARED_PTR_ATOMIC_SUPPORT_DEPRECATION_WARNING)
+endif()
+
 if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
     if (APPLE)
 	target_compile_options(tlIO PRIVATE
