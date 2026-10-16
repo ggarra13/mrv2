@@ -35,7 +35,7 @@ namespace tl
             _extensions();
             _ranges();
             _util();
-            _otioz();
+            // _otioz();
         }
 
         void UtilTest::_enums()
@@ -48,10 +48,10 @@ namespace tl
         void UtilTest::_extensions()
         {
             for (const auto& i : getExtensions(
+                     _context,
                      static_cast<int>(io::FileType::Movie) |
                          static_cast<int>(io::FileType::Sequence) |
-                         static_cast<int>(io::FileType::Audio),
-                     _context))
+                     static_cast<int>(io::FileType::Audio)))
             {
                 std::stringstream ss;
                 ss << "Timeline extension: " << i;
@@ -174,33 +174,13 @@ namespace tl
                 TLRENDER_ASSERT(otioTrack == getParent<otio::Track>(otioClip));
             }
             {
-                VideoData a;
+                io::VideoData a;
                 a.time = otime::RationalTime(1.0, 24.0);
-                VideoData b;
+                io::VideoData b;
                 b.time = otime::RationalTime(1.0, 24.0);
                 TLRENDER_ASSERT(isTimeEqual(a, b));
             }
         }
 
-        void UtilTest::_otioz()
-        {
-            std::vector<file::FileInfo> list;
-            file::list(TLRENDER_SAMPLE_DATA, list);
-            for (const auto& entry : list)
-            {
-                if (".otio" == entry.getPath().getExtension())
-                {
-                    otio::SerializableObject::Retainer<otio::Timeline> timeline(
-                        dynamic_cast<otio::Timeline*>(
-                            otio::Timeline::from_json_file(
-                                entry.getPath().get())));
-                    file::Path outputPath = entry.getPath();
-                    outputPath.setExtension(".otioz");
-                    writeOTIOZ(
-                        outputPath.get(), timeline,
-                        TLRENDER_SAMPLE_DATA);
-                }
-            }
-        }
     } // namespace timeline_tests
 } // namespace tl

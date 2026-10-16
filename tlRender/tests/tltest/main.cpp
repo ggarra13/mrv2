@@ -166,7 +166,7 @@ void timelineTests(
 {
     tests.push_back(timeline_tests::CompareOptionsTest::create(context));
     tests.push_back(timeline_tests::DisplayOptionsTest::create(context));
-    // tests.push_back(timeline_tests::EditTest::create(context));
+    tests.push_back(timeline_tests::EditTest::create(context));
     tests.push_back(timeline_tests::IRenderTest::create(context));
     tests.push_back(timeline_tests::ImageOptionsTest::create(context));
     tests.push_back(timeline_tests::LUTOptionsTest::create(context));
@@ -174,8 +174,8 @@ void timelineTests(
     tests.push_back(timeline_tests::OCIOOptionsTest::create(context));
     tests.push_back(timeline_tests::PlayerOptionsTest::create(context));
     // tests.push_back(timeline_tests::PlayerTest::create(context));
-    // tests.push_back(timeline_tests::TimelineTest::create(context));
-    // tests.push_back(timeline_tests::UtilTest::create(context));
+    tests.push_back(timeline_tests::TimelineTest::create(context));
+    tests.push_back(timeline_tests::UtilTest::create(context));
 }
 
 void appTests(

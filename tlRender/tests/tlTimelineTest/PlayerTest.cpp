@@ -201,7 +201,7 @@ namespace tl
         {
             otime::RationalTime offsetTime = otime::RationalTime(0, 24);
             // Test timeline players.
-            const std::vector<file::Path> paths = {
+            std::vector<file::Path> paths = {
                 file::Path(TLRENDER_SAMPLE_DATA, "BART_2021-02-07.m4v"),
                 file::Path(
                     TLRENDER_SAMPLE_DATA, "Seq/BART_2021-02-07.0001.jpg"),
@@ -209,38 +209,34 @@ namespace tl
                 file::Path(TLRENDER_SAMPLE_DATA, "TransitionGap.otio"),
                 file::Path(TLRENDER_SAMPLE_DATA, "SingleClip.otioz"),
                 file::Path(TLRENDER_SAMPLE_DATA, "SingleClipSeq.otioz")};
-            for (const auto& path : paths)
+            for (auto& path : paths)
             {
                 try
                 {
                     _print(string::Format("Timeline: {0}").arg(path.get()));
-                    auto timeline = Timeline::create(path.get(), _context, offsetTime);
+                    auto timeline = Timeline::create(_context, path);
                     auto player = Player::create(timeline, _context);
                     TLRENDER_ASSERT(player->getTimeline());
                     _player(player);
                 }
                 catch (const std::exception& e)
                 {
-                    _printError(e.what());
+                    _error(e.what());
                 }
             }
-            for (const auto& path : paths)
+            for (auto& path : paths)
             {
                 try
                 {
                     _print(
                         string::Format("Memory timeline: {0}").arg(path.get()));
-                    auto otioTimeline = timeline::create(path, _context, offsetTime);
-                    toMemoryReferences(
-                        otioTimeline, path.getDirectory(),
-                        ToMemoryReference::Shared);
-                    auto timeline = Timeline::create(otioTimeline, _context, offsetTime);
+                    auto timeline = Timeline::create(_context, path);
                     auto player = Player::create(timeline, _context);
                     _player(player);
                 }
                 catch (const std::exception& e)
                 {
-                    _printError(e.what());
+                    _error(e.what());
                 }
             }
         }
@@ -443,9 +439,9 @@ namespace tl
                 TLRENDER_ASSERT(cacheOptions == player->getCacheOptions());
 
                 auto currentVideoObserver =
-                    observer::ListObserver<timeline::VideoData>::create(
+                    observer::ListObserver<timeline::VideoFrame>::create(
                         player->observeCurrentVideo(),
-                        [this](const std::vector<timeline::VideoData>& value)
+                        [this](const std::vector<timeline::VideoFrame>& value)
                         {
                             std::stringstream ss;
                             ss << "Video time: ";
@@ -456,9 +452,9 @@ namespace tl
                             _print(ss.str());
                         });
                 auto currentAudioObserver =
-                    observer::ListObserver<timeline::AudioData>::create(
+                    observer::ListObserver<timeline::AudioFrame>::create(
                         player->observeCurrentAudio(),
-                        [this](const std::vector<timeline::AudioData>& value)
+                        [this](const std::vector<timeline::AudioFrame>& value)
                         {
                             for (const auto& i : value)
                             {

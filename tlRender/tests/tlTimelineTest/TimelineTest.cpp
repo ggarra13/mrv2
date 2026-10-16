@@ -24,6 +24,8 @@ namespace tl
 {
     namespace timeline_tests
     {
+        using namespace tl::timeline;
+
         TimelineTest::TimelineTest(
             const std::shared_ptr<system::Context>& context) :
             ITest("timeline_tests::TimelineTest", context)
@@ -50,15 +52,15 @@ namespace tl
 
         void TimelineTest::_enums()
         {
-            _enum<FileSequenceAudio>(
-                "FileSequenceAudio", getFileSequenceAudioEnums);
+            _enum<ImageSeqAudio>(
+                "ImageSeqAudio", getImageSeqAudioEnums);
             _enum<Transition>("Transition", getTransitionEnums);
         }
 
         void TimelineTest::_options()
         {
             Options a;
-            a.fileSequenceAudio = FileSequenceAudio::Directory;
+            a.imageSeqAudio = ImageSeqAudio::FileName;
             TLRENDER_ASSERT(a == a);
             TLRENDER_ASSERT(a != Options());
         }
@@ -84,7 +86,7 @@ namespace tl
                 TLRENDER_ASSERT(a != b);
             }
             {
-                VideoData a, b;
+                VideoFrame a, b;
                 TLRENDER_ASSERT(a == b);
                 a.time = otime::RationalTime(1.0, 24.0);
                 TLRENDER_ASSERT(a != b);
@@ -107,31 +109,13 @@ namespace tl
                 try
                 {
                     _print(string::Format("Timeline: {0}").arg(path.get()));
-                    auto timeline = Timeline::create(path, _context);
+                    file::Path inPath(path);
+                    auto timeline = Timeline::create(_context, inPath);
                     _timeline(timeline);
                 }
                 catch (const std::exception& e)
                 {
-                    _printError(e.what());
-                }
-            }
-            for (const auto& path : paths)
-            {
-                try
-                {
-                    _print(
-                        string::Format("Memory timeline: {0}").arg(path.get()));
-                    auto otioTimeline = timeline::create(path, _context);
-                    toMemoryReferences(
-                        otioTimeline, path.getDirectory(),
-                        ToMemoryReference::Shared);
-                    auto timeline =
-                        timeline::Timeline::create(otioTimeline, _context);
-                    _timeline(timeline);
-                }
-                catch (const std::exception& e)
-                {
-                    _printError(e.what());
+                    _error(e.what());
                 }
             }
         }
@@ -141,7 +125,7 @@ namespace tl
         {
             // Get video from the timeline.
             const otime::TimeRange& timeRange = timeline->getTimeRange();
-            std::vector<timeline::VideoData> videoData;
+            std::vector<timeline::VideoFrame> videoData;
             std::vector<timeline::VideoRequest> videoRequests;
             for (size_t i = 0;
                  i < static_cast<size_t>(timeRange.duration().value()); ++i)
@@ -179,7 +163,7 @@ namespace tl
             TLRENDER_ASSERT(videoRequests.empty());
 
             // Get audio from the timeline.
-            std::vector<timeline::AudioData> audioData;
+            std::vector<timeline::AudioFrame> audioData;
             std::vector<timeline::AudioRequest> audioRequests;
             for (size_t i = 0;
                  i < static_cast<size_t>(
@@ -257,102 +241,87 @@ namespace tl
                 const file::Path audioPath(
                     TLRENDER_SAMPLE_DATA, "BART_2021-02-07.m4v");
                 auto timeline =
-                    Timeline::create(path.get(), audioPath.get(), _context);
+                    Timeline::create(_context, path.get(), audioPath.get());
             }
             catch (const std::exception& e)
             {
-                _printError(e.what());
+                _error(e.what());
             }
             try
             {
-                const file::Path path(
+                file::Path path(
                     TLRENDER_SAMPLE_DATA, "Seq/BART_2021-02-07.0001.jpg");
-                const file::Path audioPath(
+                file::Path audioPath(
                     TLRENDER_SAMPLE_DATA, "BART_2021-02-07.m4v");
-                auto timeline = Timeline::create(path, audioPath, _context);
+                auto timeline = Timeline::create(_context, path, audioPath);
             }
             catch (const std::exception& e)
             {
-                _printError(e.what());
+                _error(e.what());
             }
             try
             {
-                const file::Path path(
+                file::Path path(
                     TLRENDER_SAMPLE_DATA, "Seq/BART_2021-02-07.0001.jpg");
                 _print(string::Format("Path: {0}").arg(path.get()));
                 Options options;
-                options.fileSequenceAudio = FileSequenceAudio::kNone;
-                auto timeline = Timeline::create(path, _context, offsetTime, options);
+                options.imageSeqAudio = ImageSeqAudio::kNone;
+                auto timeline = Timeline::create(_context, path, options);
                 const file::Path& audioPath = timeline->getAudioPath();
                 TLRENDER_ASSERT(audioPath.isEmpty());
                 _print(string::Format("Audio path: {0}").arg(audioPath.get()));
             }
             catch (const std::exception& e)
             {
-                _printError(e.what());
+                _error(e.what());
             }
             try
             {
-                const file::Path path(
+                file::Path path(
                     TLRENDER_SAMPLE_DATA, "Seq/BART_2021-02-07.0001.jpg");
                 _print(string::Format("Path: {0}").arg(path.get()));
                 Options options;
-                options.fileSequenceAudio = FileSequenceAudio::BaseName;
-                auto timeline = Timeline::create(path, _context, offsetTime, options);
+                options.imageSeqAudio = ImageSeqAudio::Ext;
+                auto timeline = Timeline::create(_context, path, options);
                 const file::Path& audioPath = timeline->getAudioPath();
                 TLRENDER_ASSERT(!audioPath.isEmpty());
                 _print(string::Format("Audio path: {0}").arg(audioPath.get()));
             }
             catch (const std::exception& e)
             {
-                _printError(e.what());
+                _error(e.what());
             }
             try
             {
-                const file::Path path(
+                file::Path path(
                     TLRENDER_SAMPLE_DATA, "Seq/BART_2021-02-07.0001.jpg");
                 _print(string::Format("Path: {0}").arg(path.get()));
                 Options options;
-                options.fileSequenceAudio = FileSequenceAudio::FileName;
-                options.fileSequenceAudioFileName =
+                options.imageSeqAudio = ImageSeqAudio::FileName;
+                options.imageSeqAudioFileName =
                     file::Path(TLRENDER_SAMPLE_DATA, "AudioToneStereo.wav")
                         .get();
-                auto timeline = Timeline::create(path, _context, offsetTime, options);
+                auto timeline = Timeline::create(_context, path, options);
                 const file::Path& audioPath = timeline->getAudioPath();
                 TLRENDER_ASSERT(!audioPath.isEmpty());
                 _print(string::Format("Audio path: {0}").arg(audioPath.get()));
             }
             catch (const std::exception& e)
             {
-                _printError(e.what());
-            }
-            try
-            {
-                const file::Path path(
-                    TLRENDER_SAMPLE_DATA, "Seq/BART_2021-02-07.0001.jpg");
-                _print(string::Format("Path: {0}").arg(path.get()));
-                Options options;
-                options.fileSequenceAudio = FileSequenceAudio::Directory;
-                options.fileSequenceAudioDirectory = "";
-                auto timeline = Timeline::create(path, _context, options);
-                const file::Path& audioPath = timeline->getAudioPath();
-                TLRENDER_ASSERT(!audioPath.isEmpty());
-                _print(string::Format("Audio path: {0}").arg(audioPath.get()));
-            }
-            catch (const std::exception& e)
-            {
-                _printError(e.what());
+                _error(e.what());
             }
 #endif // TLRENDER_FFMPEG
         }
 
         void TimelineTest::_setTimeline()
         {
-            auto timeline = Timeline::create(
-                file::Path(TLRENDER_SAMPLE_DATA, "SingleClip.otio"), _context);
-            auto otioTimeline = timeline::create(
-                file::Path(TLRENDER_SAMPLE_DATA, "SingleClipSeq.otio"),
-                _context);
+            file::Path singleClip = file::Path(TLRENDER_SAMPLE_DATA,
+                                             "SingleClip.otio");
+            file::Path singleClipSeq = file::Path(TLRENDER_SAMPLE_DATA,
+                                             "SingleClipSeq.otio");
+            auto timeline = Timeline::create(_context, singleClip);
+            auto timeline2 = Timeline::create(_context, singleClipSeq);
+            auto otioTimeline = timeline2->getTimeline();
             timeline->setTimeline(otioTimeline);
             TLRENDER_ASSERT(
                 otioTimeline.value == timeline->getTimeline().value);
