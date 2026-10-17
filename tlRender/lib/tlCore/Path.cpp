@@ -232,6 +232,94 @@ namespace tl
             return out;
         }
 
+        std::vector<FrameSeq> getMissing(const std::vector<FrameSeq>& value)
+        {
+            // Flatten to closed intervals. A stepped sequence covers isolated
+            // frames, so each one becomes its own interval (the gaps between
+            // them are what we want to report).
+            std::vector<std::pair<int64_t, int64_t> > covered;
+            for (const auto& seq : value)
+            {
+                const int64_t min = seq.range.min();
+                const int64_t max = seq.range.max();
+                if (seq.inc > 1)
+                {
+                    for (int64_t f = min; f <= max; f += seq.inc)
+                    {
+                        covered.push_back({ f, f });
+                    }
+                }
+                else
+                {
+                    covered.push_back({ min, max });
+                }
+            }
+            std::sort(covered.begin(), covered.end());
+
+            // Sweep, reporting the space between the end of what we have seen
+            // so far and the start of the next interval.
+            std::vector<FrameSeq> out;
+            if (!covered.empty())
+            {
+                int64_t end = covered[0].second;
+                for (size_t i = 1; i < covered.size(); ++i)
+                {
+                    if (covered[i].first > end + 1)
+                    {
+                        out.push_back(FrameSeq(end + 1, covered[i].first - 1));
+                    }
+                    end = std::max(end, covered[i].second);
+                }
+            }
+            return out;
+        }
+
+        std::vector<FrameSeq> getMissing(
+            const std::vector<FrameSeq>& value,
+            const math::Int64Range& within)
+        {
+            std::vector<std::pair<int64_t, int64_t> > covered;
+            for (const auto& seq : value)
+            {
+                const int64_t min = seq.range.min();
+                const int64_t max = seq.range.max();
+                if (seq.inc > 1)
+                {
+                    for (int64_t f = min; f <= max; f += seq.inc)
+                    {
+                        if (f < within.min() || f > within.max()) continue;
+                        covered.push_back({ f, f });
+                    }
+                }
+                else
+                {
+                    const int64_t clampedMin = std::max(min, within.min());
+                    const int64_t clampedMax = std::min(max, within.max());
+                    if (clampedMin <= clampedMax)
+                    {
+                        covered.push_back({ clampedMin, clampedMax });
+                    }
+                }
+            }
+            std::sort(covered.begin(), covered.end());
+
+            std::vector<FrameSeq> out;
+            int64_t end = within.min() - 1;
+            for (const auto& c : covered)
+            {
+                if (c.first > end + 1)
+                {
+                    out.push_back(FrameSeq(end + 1, c.first - 1));
+                }
+                end = std::max(end, c.second);
+            }
+            if (end < within.max())
+            {
+                out.push_back(FrameSeq(end + 1, within.max()));
+            }
+            return out;
+        }
+
         std::string getLabel(const FrameSeq& value, int pad)
         {
             std::stringstream ss;

@@ -8,12 +8,14 @@
 
 #include <tlIO/Cache.h>
 #include <tlIO/Plugin.h>
+#include <tlIO/SeqWatch.h>
 
 #include <tlCore/LRUCache.h>
 
 #include <opentimelineio/clip.h>
 
 #include <atomic>
+#include <chrono>
 #include <list>
 #include <mutex>
 #include <thread>
@@ -272,6 +274,12 @@ namespace tl
             {
                 OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
                 bool otioTimelineChanged = false;
+                // Written under this mutex by pollSeqWatches(), called from
+                // the request thread's _tick(); drained and turned into a
+                // framesFound->setAlways() by tick(), called on the main
+                // thread the same way otioTimelineChanged already is.
+                std::vector<OTIO_NS::TimeRange> foundFrames;
+
                 std::list<std::shared_ptr<PendingVideoRequest> > videoRequests;
                 std::list<std::shared_ptr<PendingAudioRequest> > audioRequests;
                 bool stopped = false;
@@ -387,6 +395,48 @@ namespace tl
             std::vector<OTIO_NS::Composable*> getTrackChildrenAt(
                 const OTIO_NS::Track*,
                 const OTIO_NS::RationalTime&) const;
+
+            //! Sequences read as MissingFrames::Hold or MissingFrames::Black
+            //! that had gaps when the timeline was last indexed, each tied to
+            //! the clip whose own trimmed media window they were built from
+            //! (not the whole asset -- a clip that only uses part of a longer
+            //! render shouldn't be flagged for gaps outside the part it
+            //! plays). Never populated for a bundle (.otioz), which is read
+            //! as it was baked, or for Error/Skip/Gaps: Error
+            //! throws rather than standing a frame in, and Skip/Gaps already
+            //! decided the clip structure around what was there at open, so
+            //! there's no "missing" left for a read to quietly paper over.
+            struct SeqWatchEntry
+            {
+                const OTIO_NS::Clip* clip = nullptr;
+                io::SeqWatch watch;
+            };
+            std::vector<SeqWatchEntry> seqWatches;
+            size_t seqWatchCursor = 0;
+            std::chrono::steady_clock::time_point seqWatchTimer;
+
+            //! Floor on how often any one watch is rechecked -- round robin
+            //! means a list of N watches is walked no faster than N times this.
+            std::chrono::milliseconds seqWatchInterval{1000};
+
+            //! Rebuild seqWatches from the current otioTimeline. Called right
+            //! after indexTimeline(), everywhere indexTimeline() is called; a
+            //! no-op for a bundle or for any policy but Hold/Black. Costs one
+            //! findSeq() per sequence clip, the same per-clip cost
+            //! indexTimeline()'s Skip/Gaps sibling (getRuns(), in the
+            //! anonymous namespace above) already pays.
+            void findSeqWatches();
+
+            //! Poll one watch -- one per call, so a long watch list never
+            //! costs more than a single findSeq() on any one _tick(). Returns
+            //! the composed time ranges that gained frames, coalescing
+            //! consecutive found frames into a range apiece rather than
+            //! reporting one per frame.
+            std::vector<OTIO_NS::TimeRange> pollSeqWatches();
+
+            //! The observable side of the above; see
+            //! Timeline::observeFramesFound().
+            std::shared_ptr<observer::List<OTIO_NS::TimeRange> > framesFound;
         };
     } // namespace timeline
 } // namespace tl

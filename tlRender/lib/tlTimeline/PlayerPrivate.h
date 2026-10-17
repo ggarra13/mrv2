@@ -39,6 +39,7 @@ namespace tl
             size_t getVideoCacheMax() const;
             size_t getAudioCacheMax() const;
             void cacheUpdate();
+            void invalidateVideoCache(const std::vector<OTIO_NS::TimeRange>&);
 
             void finishedVideoRequests();
             void finishedAudioRequests();
@@ -93,6 +94,8 @@ namespace tl
             std::shared_ptr<observer::Value<PlayerCacheOptions> > cacheOptions;
             std::shared_ptr<observer::Value<PlayerCacheInfo> > cacheInfo;
             std::shared_ptr<observer::ValueObserver<bool> > timelineObserver;
+            std::shared_ptr<observer::ListObserver<OTIO_NS::TimeRange> >
+            framesFoundObserver;
 
             struct Mutex
             {
@@ -114,6 +117,12 @@ namespace tl
                 CacheDirection cacheDirection = CacheDirection::Forward;
                 PlayerCacheOptions cacheOptions;
                 PlayerCacheInfo cacheInfo;
+                // Composed time ranges the timeline reported as found since
+                // the last time this was drained, written under this mutex by
+                // the framesFoundObserver callback (main thread) and drained
+                // by the player's own thread each loop.
+                std::vector<OTIO_NS::TimeRange> framesFound;
+
                 std::mutex mutex;
             };
             Mutex mutex;

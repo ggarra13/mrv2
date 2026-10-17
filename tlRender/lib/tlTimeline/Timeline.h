@@ -16,6 +16,7 @@
 #include <tlCore/Context.h>
 #include <tlCore/Path.h>
 #include <tlCore/ValueObserver.h>
+#include <tlCore/ListObserver.h>
 
 #include <opentimelineio/timeline.h>
 #include <opentimelineio/mediaReference.h>
@@ -116,6 +117,19 @@ namespace tl
             //! Observe timeline changes.
             std::shared_ptr<observer::IValue<bool> >
             observeTimelineChanges() const;
+
+            //! Observe time ranges whose frames were missing and have since
+            //! been found on disk. Fires only for a sequence opened with
+            //! MissingFrames::Hold or MissingFrames::Black that had gaps when
+            //! the timeline was indexed; empty for every .otioz, and for
+            //! anything read with Error, Skip or Gaps.
+            //!
+            //! Player observes this to invalidate exactly the cache entries
+            //! that were standing in for a frame that is there now, rather
+            //! than the whole cache -- see
+            //! Player::Private::invalidateVideoCache().
+            std::shared_ptr<observer::IList<OTIO_NS::TimeRange> >
+            observeFramesFound() const;
 
             //! Set the timeline.
             void setTimeline(

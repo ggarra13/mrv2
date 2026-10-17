@@ -13,6 +13,7 @@ set(HEADERS
     SGI.h
     SeqDecode.h
     SequenceIO.h
+    SeqWatch.h
     STB.h
     SVG.h
     System.h
@@ -42,6 +43,7 @@ set(SOURCE
     SeqDecode.cpp
     SequenceIO.cpp
     SequenceIOWrite.cpp
+    SeqWatch.cpp
     SGI.cpp
     SGIRead.cpp
     SGIWrite.cpp

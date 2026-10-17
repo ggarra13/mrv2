@@ -820,6 +820,7 @@ namespace tl
             p.otioTimeline = otioTimeline;
             p.frameCache = io::Cache::create();
             p.timelineChanges = observer::Value<bool>::create(false);
+            p.framesFound = observer::List<OTIO_NS::TimeRange>::create();
             const auto i = otioTimeline->metadata().find("tlRender");
             if (i != otioTimeline->metadata().end())
             {
@@ -853,6 +854,7 @@ namespace tl
             // no duration is zero length rather than unset, so that everything
             // downstream has a range to work in.
             p.indexTimeline();
+            p.findSeqWatches();
             for (const auto& i : p.otioTimeline.value->tracks()->children())
             {
                 if (auto otioTrack = dynamic_cast<const OTIO_NS::Track*>(i.value))
@@ -1035,6 +1037,12 @@ namespace tl
             return _p->timelineChanges;
         }
 
+        std::shared_ptr<observer::IList<OTIO_NS::TimeRange> >
+        Timeline::observeFramesFound() const
+        {
+            return _p->framesFound;
+        }
+
         void Timeline::setTimeline(
             const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& value)
         {
@@ -1093,6 +1101,7 @@ namespace tl
             // and media references of whichever timeline was previously set.
             p.otioTimeline = value;
             p.indexTimeline();
+            p.findSeqWatches();
             if (p.otioTimeline.value)
             {
                 _timelineUpdate();
@@ -1562,14 +1571,21 @@ namespace tl
         {
             TLRENDER_P();
             bool otioTimelineChanged = false;
+            std::vector<OTIO_NS::TimeRange> foundFrames;
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
                 otioTimelineChanged = p.mutex.otioTimelineChanged;
                 p.mutex.otioTimelineChanged = false;
+                foundFrames = std::move(p.mutex.foundFrames);
+                p.mutex.foundFrames.clear();
             }
             if (otioTimelineChanged)
             {
                 p.timelineChanges->setAlways(true);
+            }
+            if (!foundFrames.empty())
+            {
+                p.framesFound->setAlways(foundFrames);
             }
         }
 
@@ -1580,6 +1596,13 @@ namespace tl
             const auto t0 = std::chrono::steady_clock::now();
 
             _requests();
+
+            if (const auto found = p.pollSeqWatches(); !found.empty())
+            {
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.mutex.foundFrames.insert(
+                    p.mutex.foundFrames.end(), found.begin(), found.end());
+            }
 
             // Logging.
             auto t1 = std::chrono::steady_clock::now();
@@ -2676,6 +2699,123 @@ namespace tl
                     }
                 }
             }
+        }
+
+        void Timeline::Private::findSeqWatches()
+        {
+            seqWatches.clear();
+            seqWatchCursor = 0;
+            if (zipReader || !otioTimeline.value)
+            {
+                // A bundle is read as it was baked; nothing here changes
+                // underfoot, so there is nothing to watch.
+                return;
+            }
+            const io::MissingFrames policy = io::getMissingFrames(options.ioOptions);
+            if (io::MissingFrames::Hold != policy && io::MissingFrames::Black != policy)
+            {
+                return;
+            }
+            for (const auto& otioClip : otioTimeline.value->find_children<OTIO_NS::Clip>())
+            {
+                auto* mediaReference = otioClip->media_reference();
+                auto* imageSeqReference =
+                    dynamic_cast<OTIO_NS::ImageSequenceReference*>(mediaReference);
+                if (!imageSeqReference ||
+                    imageSeqReference->number_of_images_in_sequence() <= 0)
+                {
+                    continue;
+                }
+
+                // The window this clip actually plays from the media, not the
+                // whole asset the reference describes -- a clip only trimming
+                // out the first half of a longer render has no business being
+                // flagged for gaps in the second half.
+                const OTIO_NS::TimeRange trimmed = otioClip->trimmed_range();
+                const int64_t start =
+                    static_cast<int64_t>(trimmed.start_time().round().value());
+                const int64_t count =
+                    static_cast<int64_t>(trimmed.duration().round().value());
+                const math::Int64Range frames(start, start + count - 1);
+
+                file::Path mediaPath = timeline::getPath(
+                    mediaReference, path.getDirectory(), options.pathOptions);
+                mediaPath.setFrames(frames);
+
+                io::SeqWatch watch(mediaPath, options.pathOptions);
+                if (watch.hasMissing())
+                {
+                    seqWatches.push_back({ otioClip, std::move(watch) });
+                }
+            }
+            seqWatchTimer = std::chrono::steady_clock::now();
+        }
+
+        std::vector<OTIO_NS::TimeRange> Timeline::Private::pollSeqWatches()
+        {
+            std::vector<OTIO_NS::TimeRange> out;
+            if (seqWatches.empty())
+            {
+                return out;
+            }
+            const auto now = std::chrono::steady_clock::now();
+            if (now - seqWatchTimer < seqWatchInterval)
+            {
+                return out;
+            }
+            seqWatchTimer = now;
+
+            if (seqWatchCursor >= seqWatches.size())
+            {
+                seqWatchCursor = 0;
+            }
+            auto& entry = seqWatches[seqWatchCursor];
+            const std::vector<int64_t> found = entry.watch.poll();
+            if (!found.empty())
+            {
+                if (const auto range = getTrimmedRangeInParent(entry.clip))
+                {
+                    const OTIO_NS::TimeRange mediaRange = entry.clip->trimmed_range();
+                    const double mediaRate = mediaRange.start_time().rate();
+                    const double composedRate = range->start_time().rate();
+
+                    // found is sorted; coalesce consecutive frames into one
+                    // range apiece.
+                    size_t i = 0;
+                    while (i < found.size())
+                    {
+                        size_t j = i;
+                        while (j + 1 < found.size() && found[j + 1] == found[j] + 1)
+                        {
+                            ++j;
+                        }
+                        const OTIO_NS::RationalTime mediaOffset(
+                            static_cast<double>(found[i]) - mediaRange.start_time().value(),
+                            mediaRate);
+                        const OTIO_NS::RationalTime composedStart =
+                            range->start_time() + mediaOffset.rescaled_to(composedRate);
+                        const OTIO_NS::RationalTime composedDuration =
+                            OTIO_NS::RationalTime(
+                                static_cast<double>(found[j] - found[i] + 1), mediaRate)
+                            .rescaled_to(composedRate);
+                        out.push_back(OTIO_NS::TimeRange(composedStart, composedDuration));
+                        i = j + 1;
+                    }
+                }
+            }
+            if (!entry.watch.hasMissing())
+            {
+                // Complete: nothing left to find until the declared range grows,
+                // which only a fresh index can do.
+                seqWatches.erase(seqWatches.begin() + seqWatchCursor);
+                // Leave the cursor where it is -- erase() shifted the next entry
+                // into this slot.
+            }
+            else
+            {
+                ++seqWatchCursor;
+            }
+            return out;
         }
 
         void Timeline::Private::indexTimeline()

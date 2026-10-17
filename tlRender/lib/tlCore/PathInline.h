@@ -221,6 +221,11 @@ namespace tl
             return false;
         }
 
+        inline std::vector<FrameSeq> Path::getMissingSeq() const
+        {
+            return getMissing(_seq);
+        }
+
         inline bool Path::operator == (const Path& other) const
         {
             return _path == other._path && _frames == other._frames;

@@ -141,6 +141,25 @@ namespace tl
         //! Get the range spanned by a list of frame sequences.
         std::optional<math::Int64Range> getRange(const std::vector<FrameSeq>&);
 
+        //! Get the frames missing from a list of frame sequences, that is the
+        //! gaps between the first and last frame covered. Frames outside that
+        //! span are not reported. The result is sorted and merged (inc == 1).
+        //!
+        //! For example, {1-3, 7-9, 12} gives {4-6, 10-11}. A sequence with an
+        //! increment, {1-10 inc 3}, covers 1, 4, 7, 10 and gives
+        //! {2-3, 5-6, 8-9}.
+        //!
+        //! The input may be unsorted or overlapping.
+        std::vector<FrameSeq> getMissing(const std::vector<FrameSeq>&);
+
+        //! Get the frames missing from a list of frame sequences within \p
+        //! within, including before the first frame found and after the last —
+        //! unlike the single-argument overload, which only reports what's
+        //! between them. Frames outside \p within are not this call's business.
+        std::vector<FrameSeq> getMissing(
+            const std::vector<FrameSeq>&,
+            const math::Int64Range& within);
+
         //! Convert a frame sequence to a label.
         std::string getLabel(const FrameSeq&, int pad = 0);
 
@@ -226,6 +245,9 @@ namespace tl
 
             //! Get the frames in the sequence.
             const std::vector<FrameSeq>& getSeq() const;
+
+            //! Get the frames missing within the range of this sequence.
+            std::vector<FrameSeq> getMissingSeq() const;
 
             //! Set the frames in the sequence. The list should be sorted and
             //! merged, as returned by toFrameSeq().

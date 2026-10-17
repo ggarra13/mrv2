@@ -155,6 +155,50 @@ namespace tl
             }
         }
 
+        void Player::Private::invalidateVideoCache(
+            const std::vector<OTIO_NS::TimeRange>& ranges)
+        {
+            const OTIO_NS::RationalTime inc(
+                1.0, timeline->getTimeRange().duration().rate());
+            for (const auto& range : ranges)
+            {
+                for (auto time = range.start_time();
+                     time < range.end_time_exclusive();
+                     time += inc)
+                {
+                    const auto i = thread.videoCache.find(time);
+                    if (i == thread.videoCache.end())
+                    {
+                        continue;
+                    }
+                    // Only re-request what was actually standing in for a
+                    // missing frame. Anything else here is already correct, and
+                    // the composed-time math above can be off by a frame at the
+                    // edges, so this is the real guard against re-reading
+                    // something that was already fine.
+                    bool wasMissing = false;
+                    for (const auto& frame : i->second)
+                    {
+                        for (const auto& layer : frame.layers)
+                        {
+                            if (layer.missing)
+                            {
+                                wasMissing = true;
+                                break;
+                            }
+                        }
+                        if (wasMissing) break;
+                    }
+                    if (!wasMissing)
+                    {
+                        continue;
+                    }
+                    thread.videoCache.erase(i);
+                    forwardRequests(time, time, inc, true);
+                }
+            }
+        }
+
         size_t Player::Private::getVideoCacheMax() const
         {
             // This function returns the approximate number of video frames

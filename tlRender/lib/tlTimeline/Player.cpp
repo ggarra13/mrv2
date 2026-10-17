@@ -156,6 +156,19 @@ namespace tl
                         player->clearCache();
                     }
                 });
+            p.framesFoundObserver =
+                observer::ListObserver<OTIO_NS::TimeRange>::create(
+                    p.timeline->observeFramesFound(),
+                    [weak](const std::vector<OTIO_NS::TimeRange>& value)
+                        {
+                            if (auto player = weak.lock())
+                            {
+                                auto& pp = *player->_p;
+                                std::unique_lock<std::mutex> lock(pp.mutex.mutex);
+                                pp.mutex.framesFound.insert(
+                                    pp.mutex.framesFound.end(), value.begin(), value.end());
+                            }
+                        });
 
             // Create a new thread.
             if (playerOptions.playback == Playback::Reverse)
@@ -265,6 +278,7 @@ namespace tl
                         std::vector<std::shared_ptr<Timeline> > compare;
                         bool clearRequests = false;
                         bool clearCache = false;
+                        std::vector<OTIO_NS::TimeRange> framesFound;
                         {
                             std::unique_lock<std::mutex> lock(p.mutex.mutex);
                             p.thread.playback = p.mutex.playback;
@@ -281,6 +295,8 @@ namespace tl
                             p.mutex.clearRequests = false;
                             clearCache = p.mutex.clearCache;
                             p.mutex.clearCache = false;
+                            framesFound = std::move(p.mutex.framesFound);
+                            p.mutex.framesFound.clear();
                             p.thread.cacheDirection = p.mutex.cacheDirection;
                             p.thread.cacheOptions = p.mutex.cacheOptions;
                         }
@@ -296,6 +312,13 @@ namespace tl
                         if (clearCache)
                         {
                             p.clearCache();
+                        }
+
+                        // Pick up frames the timeline found that were missing
+                        // before.
+                        if (!framesFound.empty())
+                        {
+                            p.invalidateVideoCache(framesFound);
                         }
 
                         // Update the cache.
