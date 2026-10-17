@@ -31,6 +31,8 @@ namespace mrv
         void set_end(int64_t end);
 
     protected:
+        void cleanup();
+
         //! Convert a long long in milliseconds to hour, minutes, seconds and
         //! milliseconds remainder.
         void

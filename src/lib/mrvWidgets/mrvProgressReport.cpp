@@ -70,13 +70,7 @@ namespace mrv
 
     ProgressReport::~ProgressReport()
     {
-        delete w;
-        w = nullptr;
-        progress = nullptr;
-        fps = nullptr;
-        remain = nullptr;
-        elapsed = nullptr;
-        tcp->unlock();
+        cleanup();
     }
 
     void ProgressReport::set_start(int64_t value)
@@ -175,14 +169,7 @@ namespace mrv
 
         if (w && !w->visible())
         {
-            delete w;
-            w = nullptr;
-            progress = nullptr;
-            fps = nullptr;
-            remain = nullptr;
-            elapsed = nullptr;
-            tcp->unlock();
-            return false;
+            cleanup();
         }
 
         ++_frame;
@@ -190,4 +177,14 @@ namespace mrv
         return true;
     }
 
+    void ProgressReport::cleanup()
+    {
+        delete w;
+        w = nullptr;
+        progress = nullptr;
+        fps = nullptr;
+        remain = nullptr;
+        elapsed = nullptr;
+        tcp->unlock();
+    }
 } // namespace mrv
