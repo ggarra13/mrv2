@@ -14,6 +14,7 @@ ChangeLog
 
 - Core/MacOS: More support for hardware decoding of more codecs, HDR, seeking forwards and backwards and memory I/O on MacBooks Pro Intel and M1+ with a python unit test for quality checking. PR #540.  Courtesy of @CatPetrova.
 
+- Core: Missing frames from a, usually, rendered sequence are now polled on disk and loaded on demand when they are found, taking very little resources.
 
 Fixes
 -----
