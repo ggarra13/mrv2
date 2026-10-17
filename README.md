@@ -79,6 +79,10 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
   Click on the More Information text and a Button that says Run anyway or
   similar should appear.  Click on it and follow the standard instructions
   to any Windows installer.
+  Currently, the Windows application is not code signed.  Even with code
+  signing, it would not prevent the Windows SmartScreen warning.
+  Another way to avoid the SmartScreen is to install from the .zip file, but
+  shortcuts and extension links is up to the user in that case.
 
 
 - On Linux, in order to install the .rpm or .deb packages requires your user to
@@ -142,6 +146,9 @@ Currently supported:
 - Pen and Tablet support on all platforms
 - OpenGL and Vulkan backends
 - Linux and Windows aarch64
+- Video Toolbox support for decoding and encoding under some Macs (Mac Book
+  Pros, etc).
+
 
 # Tutorials
 

@@ -8,7 +8,7 @@ if (NOT PNG_FOUND)
     include(ExternalProject)
 
     set(PNG_GIT_REPOSITORY "https://github.com/pnggroup/libpng.git")
-    set(PNG_GIT_TAG "v1.6.58") # was v1.6.44
+    set(PNG_GIT_TAG "v1.6.59") # was v1.6.58
     
     set(PNG_DEPENDENCIES ${ZLIB_DEP})
     message(STATUS "PNG DEPENDENCIES=${PNG_DEPENDENCIES}")
