@@ -1436,6 +1436,7 @@ Core
 Darby Johnston                                (original tlRender library)
 Gonzalo Garramuño                             (mrv2 and rewrite of mrViewer)
 Sam Richards                                  (FFmpeg encoding guidelines)
+CatPetrova                                    (macBook hardware decoding)
 
 FLTK
 ----
@@ -1467,6 +1468,7 @@ OpenRV  developers                            (idea for reverse playback)
 Translations
 ------------
 bovirus                                       (Italian)
+coolvitto                                     (Japanese)
 
 Icons
 -----
@@ -1494,7 +1496,6 @@ c0nvexo                                       (Color Pipeline on Missing
 Christoph Lohr                                (Color Pipeline Debugging,
                                                UI improvements,
                                                MKV Support idea)
-coolvitto                                     (Japanese translations)
 danbradham                                    (UI debugging)
 darkvertext                                   (Environment mapping support)
 dchabashvili                                  (Annotations exporting to movs)
