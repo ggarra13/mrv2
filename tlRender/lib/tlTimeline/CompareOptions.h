@@ -111,6 +111,22 @@ namespace tl
             const OTIO_NS::RationalTime& sourceTime,
             const OTIO_NS::TimeRange& sourceTimeRange,
             const OTIO_NS::TimeRange& compareTimeRange, CompareTimeMode);
+
+        inline bool isShown(CompareMode compare, size_t index)
+        {
+            bool out = true;
+            switch (compare)
+            {
+            case CompareMode::A:
+                out = 0 == index;
+                break;
+            case CompareMode::B:
+                out = 1 == index;
+                break;
+            default: break;
+            }
+            return out;
+        }
     } // namespace timeline
 } // namespace tl
 

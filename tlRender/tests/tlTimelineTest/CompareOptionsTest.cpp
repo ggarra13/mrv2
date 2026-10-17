@@ -91,8 +91,8 @@ namespace tl
 
                 // The boxes exist for every source; isShown() says which
                 // of them the mode draws.
-                TLRENDER_ASSERT(isShown(timeline::CompareMode::None, 0));
-                TLRENDER_ASSERT(!isShown(timeline::CompareMode::None, 1));
+                TLRENDER_ASSERT(isShown(timeline::CompareMode::A, 0));
+                TLRENDER_ASSERT(!isShown(timeline::CompareMode::A, 1));
                 TLRENDER_ASSERT(!isShown(timeline::CompareMode::B, 0));
                 TLRENDER_ASSERT(isShown(timeline::CompareMode::B, 1));
                 TLRENDER_ASSERT(!isShown(timeline::CompareMode::B, 2));

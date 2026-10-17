@@ -178,7 +178,7 @@ namespace tl
                 a.time = otime::RationalTime(1.0, 24.0);
                 io::VideoData b;
                 b.time = otime::RationalTime(1.0, 24.0);
-                TLRENDER_ASSERT(isTimeEqual(a, b));
+                TLRENDER_ASSERT(a.time.strictly_equal(b.time));
             }
         }
 
