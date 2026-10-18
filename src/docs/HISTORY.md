@@ -5,10 +5,11 @@ ChangeLog
 ---------
 
 
+
 Libraries
 ---------
-	PNG library to 1.6.59 dated 28-Sep-2026.
-	FLTK Vulkan Branch v2.6.7
+	- PNG library to 1.6.59 dated 28-Sep-2026.
+	- FLTK Vulkan Branch v2.7.0
 
 
 v1.8.3
