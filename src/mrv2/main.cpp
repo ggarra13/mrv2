@@ -11,6 +11,11 @@
 
 #include <string>
 #include <iostream>
+#ifdef __APPLE__
+#    include <cstdlib>
+#    include <filesystem>
+#    include "mrvOS/mrvRoot.h"
+#endif
 
 #include <FL/fl_utf8.h>
 
@@ -54,6 +59,24 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
 int main(int argc, char* argv[])
 {
     int r = 1;
+#ifdef __APPLE__
+    mrv::set_root_path(argc, argv);
+    const std::filesystem::path resources(mrv::g_root_path);
+    if (resources.filename() == "Resources" &&
+        resources.parent_path().filename() == "Contents")
+    {
+        setenv("PYTHONDONTWRITEBYTECODE", "1", 1);
+#    ifdef MRV2_PYBIND11
+        const std::string pythonVersion = "python" +
+            std::to_string(PY_MAJOR_VERSION) + "." + std::to_string(PY_MINOR_VERSION);
+        if (std::filesystem::is_directory(resources / "lib" / pythonVersion))
+            setenv("PYTHONHOME", resources.c_str(), 1);
+#    endif
+        const auto icd = resources / "etc/vulkan/icd.d/MoltenVK_icd.json";
+        if (std::filesystem::is_regular_file(icd))
+            setenv("VK_ICD_FILENAMES", icd.c_str(), 0);
+    }
+#endif
 #ifdef MRV2_PYBIND11
     // start the interpreter and keep it alive
     py::scoped_interpreter guard{};

@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <algorithm>
 #include <fstream>
 #include <sstream>
 
@@ -273,8 +274,22 @@ namespace mrv
     bool App::unsaved_edits = false;
 
     std::vector<std::string > OSXfiles;
+#ifdef __APPLE__
+    void init_macos(const std::shared_ptr<tl::system::Context>&);
+#endif
+    static void osx_open_files_cb(void*)
+    {
+        if (!App::app || !App::app->isRunning() || OSXfiles.empty())
+            return;
+        std::vector<std::string> files;
+        files.swap(OSXfiles);
+        App::app->open(files);
+    }
+
     void osx_open_cb(const char* filename)
     {
+        if (OSXfiles.empty() && App::app && App::app->isRunning())
+            Fl::add_timeout(0.0, osx_open_files_cb);
         OSXfiles.push_back(filename);
     }
 
@@ -320,7 +335,11 @@ namespace mrv
 
         // Establish MRV2_ROOT environment variable
         set_root_path(argc, argv);
+#ifdef __APPLE__
+        init_macos(context);
+#else
         mrv::init(context);
+#endif
 
 #ifdef __linux__
 
@@ -537,12 +556,6 @@ namespace mrv
         if (exitCode != 0)
             return;
 
-#ifdef __APPLE__
-        // For macOS, to read command-line arguments
-        fl_open_callback(osx_open_cb);
-#endif
-
-
         file::Path lastPath;
         const auto& unusedArgs = getUnusedArgs();
         for (const auto& unused : unusedArgs)
@@ -725,16 +738,19 @@ namespace mrv
         Preferences prefs(p.options.resetSettings, p.options.resetHotkeys);
 
         //
-        // I don't think this is used, as we pass command-line arguments
-        // through a launcher program anyway.
+        // Files delivered by Launch Services while the UI was starting.
         //
-        if (!OSXfiles.empty())
+        for (const auto& fileName : OSXfiles)
         {
-            if (p.options.fileNames.empty())
+            // Launch Services can deliver a command-line file again as a
+            // document event. Merge both sources without opening it twice.
+            if (std::find(p.options.fileNames.begin(), p.options.fileNames.end(),
+                          fileName) == p.options.fileNames.end())
             {
-                p.options.fileNames = OSXfiles;
+                p.options.fileNames.push_back(fileName);
             }
         }
+        OSXfiles.clear();
 
 #ifdef MRV2_NETWORK
         if (ui->uiPrefs->SingleInstance->value())
@@ -1357,7 +1373,11 @@ namespace mrv
     {
         TLRENDER_P();
 
+        p.running = false;
+        Fl::remove_timeout(osx_open_files_cb);
+        OSXfiles.clear();
         cleanResources();
+        App::app = nullptr;
     }
 
     const std::shared_ptr<timeline::TimeUnitsModel>& App::timeUnitsModel() const
@@ -1727,6 +1747,9 @@ namespace mrv
         if (!ui)
             return 0;
 
+        p.running = true;
+        osx_open_files_cb(nullptr);
+
         // Open the viewer window by calling Fl::flush
         Fl::flush();
 
@@ -1755,8 +1778,6 @@ namespace mrv
 #endif
             }
         }
-        p.running = true;
-
         return Fl::run();
     }
 

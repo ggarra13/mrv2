@@ -225,6 +225,10 @@ namespace mrv
             fs::path rootdir(binpath);
             fs::path parent = rootdir.parent_path(); // skip executable
             rootdir = parent.parent_path();          // skip bin/ directory
+#ifdef __APPLE__
+            if (parent.filename() == "MacOS" && rootdir.filename() == "Contents")
+                rootdir /= "Resources";
+#endif
 
             std::string root_string = tl::file::fromFileSystem(rootdir);
             setenv("MRV2_ROOT", root_string.c_str(), 1);
