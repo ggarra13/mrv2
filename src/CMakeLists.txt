@@ -20,8 +20,14 @@ if(APPLE)
     else()
         set(_HOMEBREW_LIB "/usr/local/lib")
     endif()
+    
+    # Do NOT let CMake append the sandbox link dirs to the RPATH.
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
+
     set(CMAKE_INSTALL_RPATH
-        "@executable_path/../lib;${_HOMEBREW_LIB}")
+        "@executable_path/../Resources/lib"   # inside the .app
+        "@executable_path/../lib"             # plain install tree
+        "${_HOMEBREW_LIB}")
 endif()
 
 # Build the executable with the final CMAKE_INSTALL_RPATH from the very beginning.
