@@ -10,6 +10,11 @@ ChangeLog
 - Core: Consolidated size of Thumbnail and Waveform Sizes in a single location.
 - Core: Improved floating licenses security.
 
+Fixes
+-----
+
+- Fixed dragging, file associations and open -a mrv2.app and vmrv2.app on macOS.  Now you can work with both applications just like Mac Users like.
+
 
 v1.8.3
 ======

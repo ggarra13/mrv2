@@ -1352,7 +1352,9 @@ namespace mrv
             tcp = nullptr;
         }
 
+#ifdef MRV2_NETWORK
         Poco::Net::uninitializeNetwork();
+#endif
     }
 
     App::~App()
