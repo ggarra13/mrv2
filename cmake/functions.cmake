@@ -622,6 +622,7 @@ function( fixup_macos_rpath APP_LIB_DIR )
 
         # Rewrite absolute dependency references
         _fixup_macos_dep_refs( "${_lib}" )
+	_strip_absolute_rpaths( "${_lib}" )
 	
 	# After _fixup_macos_dep_refs, for each executable:
 	execute_process(
@@ -673,6 +674,7 @@ function( fixup_macos_rpath APP_LIB_DIR )
 	endif()
 
         _fixup_macos_dep_refs( "${_exe}" )
+	_strip_absolute_rpaths( "${_exe}" )
 
 	# After _fixup_macos_dep_refs, for each executable:
 	execute_process(

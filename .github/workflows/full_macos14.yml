@@ -167,6 +167,9 @@ jobs:
       - name: Install Python dependencies
         run: brew install libb2 libffi readline sqlite3 xz zlib
 
+      - name: Remove unneeded dependencies
+        run: brew remove imath openexr jpeg
+
       - name: Install pyFLTK dependencies
         run: |
           brew install swig pcre bison

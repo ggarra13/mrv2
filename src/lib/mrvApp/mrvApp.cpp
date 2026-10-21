@@ -275,6 +275,8 @@ namespace mrv
     std::vector<std::string > OSXfiles;
     void osx_open_cb(const char* filename)
     {
+        std::cerr << filename << std::endl;
+        std::cout << filename << std::endl;
         OSXfiles.push_back(filename);
     }
 
@@ -318,6 +320,12 @@ namespace mrv
     {
         TLRENDER_P();
 
+#ifdef __APPLE__
+        // For macOS, to read command-line arguments, filename
+        // associations and double clicks on files.
+        fl_open_callback(osx_open_cb);
+#endif
+        
         // Establish MRV2_ROOT environment variable
         set_root_path(argc, argv);
         mrv::init(context);
@@ -536,12 +544,6 @@ namespace mrv
         const int exitCode = getExit();
         if (exitCode != 0)
             return;
-
-#ifdef __APPLE__
-        // For macOS, to read command-line arguments
-        fl_open_callback(osx_open_cb);
-#endif
-
 
         file::Path lastPath;
         const auto& unusedArgs = getUnusedArgs();

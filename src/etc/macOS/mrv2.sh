@@ -22,9 +22,6 @@ BIN_DIR="$RESOURCES_DIR/bin"
 LIB_DIR="$RESOURCES_DIR/lib"
 
 # --- Environment setup ---
-export DYLD_LIBRARY_PATH="$LIB_DIR:${DYLD_LIBRARY_PATH:-}"
-export DYLD_FALLBACK_LIBRARY_PATH="$LIB_DIR"
-
 # Vulkan / MoltenVK setup
 export VK_ICD_FILENAMES="$RESOURCES_DIR/etc/vulkan/icd.d/MoltenVK_icd.json${VK_ICD_FILENAMES:+:$VK_ICD_FILENAMES}"
 export MVK_CONFIG_LOG_LEVEL=0
