@@ -2,6 +2,38 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+# Absolute RPATHs that must survive packaging.
+set(MRV2_KEEP_RPATHS
+    "/usr/local/lib"      # Homebrew, Intel
+    "/opt/homebrew/lib"   # Homebrew, Apple Silicon
+    # "/Library/NDI Advanced SDK for Apple/lib/macOS"   # uncomment to keep NDI
+)
+
+# Remove every absolute LC_RPATH that is not in MRV2_KEEP_RPATHS.
+function(_strip_absolute_rpaths BINARY)
+    execute_process(COMMAND otool -l "${BINARY}"
+        OUTPUT_VARIABLE _out ERROR_QUIET)
+    string(REGEX MATCHALL "cmd LC_RPATH[^\n]*\n[^\n]*\n[ \t]*path [^\n]+ \\(offset [0-9]+\\)"
+        _blocks "${_out}")
+    foreach(_b ${_blocks})
+        string(REGEX REPLACE ".*path ([^\n]+) \\(offset [0-9]+\\)$" "\\1" _p "${_b}")
+        if(NOT IS_ABSOLUTE "${_p}")
+            continue()      # @rpath / @loader_path / @executable_path: keep
+        endif()
+        if("${_p}" IN_LIST MRV2_KEEP_RPATHS)
+            continue()
+        endif()
+        execute_process(
+            COMMAND install_name_tool -delete_rpath "${_p}" "${BINARY}"
+            RESULT_VARIABLE _rc ERROR_VARIABLE _err)
+        if(_rc EQUAL 0)
+            message(STATUS "  rpath removed from ${BINARY}: ${_p}")
+        else()
+            message(WARNING "  could not remove rpath ${_p} from ${BINARY}: ${_err}")
+        endif()
+    endforeach()
+endfunction()
+
 #
 # Function used to take .fl files (GUI creator into .cxx / .h files.
 #
