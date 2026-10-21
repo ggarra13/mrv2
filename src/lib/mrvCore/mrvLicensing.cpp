@@ -818,13 +818,17 @@ namespace mrv
                                   master_key);
 
         if (master_key.empty())
-            return License::kInvalid;
+        {
+            return false;
+        }
 
 
         // --- Build JSON request (carries a fresh nonce) ---
         FloatingRequest request;
         if (!build_floating_request(machine_ids, master_key, "", request))
+        {
             return License::kInvalid;
+        }
 
         // --- HTTP POST to /checkout_license ---
         nlohmann::json json_data = post_request(serverHost, serverPort,

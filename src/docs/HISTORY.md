@@ -8,6 +8,8 @@ ChangeLog
 - UI: Added dividers to several of the menus to improve readability.
 
 - Core: Consolidated size of Thumbnail and Waveform Sizes in a single location.
+- Core: Improved floating licenses security.
+
 
 v1.8.3
 ======
