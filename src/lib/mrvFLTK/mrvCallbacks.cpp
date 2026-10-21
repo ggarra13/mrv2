@@ -4612,8 +4612,8 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = 50 * ui->uiView->pixels_per_unit();
-        options.waveformHeight = options.thumbnailHeight / 2;
+        options.thumbnailHeight = TIMELINEUI::kThumbnailSmall *
+                                  ui->uiView->pixels_per_unit();
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
@@ -4640,8 +4640,8 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = 75 * ui->uiView->pixels_per_unit();;
-        options.waveformHeight = options.thumbnailHeight / 2;
+        options.thumbnailHeight = TIMELINEUI::kThumbnailMedium *
+                                  ui->uiView->pixels_per_unit();
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
@@ -4668,8 +4668,8 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = 100 * ui->uiView->pixels_per_unit();;
-        options.waveformHeight = options.thumbnailHeight / 2;
+        options.thumbnailHeight = TIMELINEUI::kThumbnailLarge *
+                                  ui->uiView->pixels_per_unit();
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
@@ -4680,6 +4680,107 @@ namespace mrv
             set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
+
+
+    void timeline_waveforms_small_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Set Small Waveforms in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        auto options = ui->uiTimeline->getDisplayOptions();
+        options.waveforms = true;
+        options.waveformHeight = TIMELINEUI::kWaveformSmall *
+                                 ui->uiView->pixels_per_unit();
+        Message msg;
+        msg["command"] = "setTimelineDisplayOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setDisplayOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void timeline_waveforms_medium_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Set Medium Waveforms in Timeline Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        auto options = ui->uiTimeline->getDisplayOptions();
+        options.waveforms = true;
+        options.waveformHeight = TIMELINEUI::kWaveformMedium *
+                                 ui->uiView->pixels_per_unit();
+        Message msg;
+        msg["command"] = "setTimelineDisplayOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setDisplayOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void timeline_waveforms_large_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Set Large Waveforms in Timeline "
+                                       "Viewport."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        auto options = ui->uiTimeline->getDisplayOptions();
+        options.waveforms = true;
+        options.waveformHeight = TIMELINEUI::kWaveformLarge *
+                                 ui->uiView->pixels_per_unit();
+        Message msg;
+        msg["command"] = "setTimelineDisplayOptions";
+        msg["value"] = options;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
+        ui->uiTimeline->setDisplayOptions(options);
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     void update_pen_color(
         Fl_Color c, uint8_t r, uint8_t g, uint8_t b, uint8_t a, ViewerUI* ui)

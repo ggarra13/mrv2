@@ -828,6 +828,8 @@ namespace mrv
             idx = menu->add(
                 _("Render/Rotate/-90 Degrees"), kRotateMinus90.hotkey(),
                 (Fl_Callback*)rotate_minus_90_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx - 1]);
+            item->flags = item->flags | FL_MENU_DIVIDER;
 
             idx = menu->add(
                 _("Render/Rotate/+90 Degrees"), kRotatePlus90.hotkey(),
@@ -878,6 +880,9 @@ namespace mrv
             idx = menu->add(
                 _("Render/Alpha Blend/None"), kAlphaBlendNone.hotkey(),
                 (Fl_Callback*)alpha_blend_none_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx - 1]);
+            item->flags = item->flags | FL_MENU_DIVIDER;
+
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (imageOptions.alphaBlend == timeline::AlphaBlend::kNone)
                 item->set();
@@ -911,7 +916,7 @@ namespace mrv
             idx = menu->add(_("Render/HDR/Enable Peak Detection"),
                             kToggleHDRPeakDetection.hotkey(),
                             (Fl_Callback*) toggle_hdr_peak_detection_cb, ui,
-                            mode);
+                            mode | FL_MENU_DIVIDER);
             if (hdrOptions.peak_detection)
             {
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
@@ -953,6 +958,11 @@ namespace mrv
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                 if (gammut == selected)
                     item->set();
+                if (gammut == 0)
+                {
+                    item = (Fl_Menu_Item*)&(menu->menu()[idx - 1]);
+                    item->flags = item->flags | FL_MENU_DIVIDER;
+                }
                 ++gammut;
             }
 
@@ -963,6 +973,9 @@ namespace mrv
             idx = menu->add(
                 _("Render/HDR Data/From File"), kHDRDataFromFile.hotkey(),
                 (Fl_Callback*)hdr_data_from_file_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx - 1]);
+            item->flags = item->flags | FL_MENU_DIVIDER;
+
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (displayOptions.hdrInfo == timeline::HDRInformation::FromFile)
                 item->set();
@@ -1004,6 +1017,9 @@ namespace mrv
             idx = menu->add(
                 _("Render/Debanding/None"), kDebandingNone.hotkey(),
                 (Fl_Callback*)debanding_none_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx - 1]);
+            item->flags = item->flags | FL_MENU_DIVIDER;
+
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (shaderOptions.debanding == timeline::Debanding::kNone)
                 item->set();
@@ -1356,7 +1372,7 @@ namespace mrv
         idx = menu->add(
             _("Timeline/Scroll To Current Frame"),
             kToggleTimelineScrollToCurrentFrame.hotkey(),
-            (Fl_Callback*)toggle_timeline_scroll_to_current_frame_cb, ui, mode);
+            (Fl_Callback*)toggle_timeline_scroll_to_current_frame_cb, ui, mode | FL_MENU_DIVIDER);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         bool boolValue =
             settings->getValue<bool>("Timeline/ScrollToCurrentFrame");
@@ -1372,7 +1388,8 @@ namespace mrv
 
         idx = menu->add(
             _("Timeline/Clip Info"), kToggleTimelineClipInfo.hotkey(),
-            (Fl_Callback*)toggle_timeline_clip_info_cb, ui, mode);
+            (Fl_Callback*)toggle_timeline_clip_info_cb, ui, mode |
+            FL_MENU_DIVIDER);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (displayOptions.clipInfo)
             item->set();
@@ -1411,7 +1428,8 @@ namespace mrv
 
         idx = menu->add(
             _("Timeline/Markers"), kToggleTimelineMarkers.hotkey(),
-            (Fl_Callback*)toggle_timeline_markers_cb, ui, mode);
+            (Fl_Callback*)toggle_timeline_markers_cb, ui,
+            mode | FL_MENU_DIVIDER);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (displayOptions.markers)
             item->set();
@@ -1421,27 +1439,52 @@ namespace mrv
             mode |= FL_MENU_INACTIVE;
 
         const float kPixels_per_unit = ui->uiView->pixels_per_unit();
-        const int kSmall = 50 * kPixels_per_unit;
-        const int kMedium = 75 * kPixels_per_unit;
-        const int kLarge = 100 * kPixels_per_unit;
+        const int kTSmall = TIMELINEUI::kThumbnailSmall * kPixels_per_unit;
+        const int kTMedium = TIMELINEUI::kThumbnailMedium * kPixels_per_unit;
+        const int kTLarge = TIMELINEUI::kThumbnailLarge * kPixels_per_unit;
+
+        const int kWSmall = TIMELINEUI::kWaveformSmall * kPixels_per_unit;
+        const int kWMedium = TIMELINEUI::kWaveformMedium * kPixels_per_unit;
+        const int kWLarge = TIMELINEUI::kWaveformLarge * kPixels_per_unit;
+
 
         idx = menu->add(
             _("Timeline/Thumbnails Size/Small"), 0,
             (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnailHeight == kSmall)
+        if (displayOptions.thumbnailHeight == kTSmall)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails Size/Medium"), 0,
             (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnailHeight == kMedium)
+        if (displayOptions.thumbnailHeight == kTMedium)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails Size/Large"), 0,
             (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == kLarge)
+        if (displayOptions.thumbnailHeight == kTLarge)
+            item->set();
+
+
+        idx = menu->add(
+            _("Timeline/Waveforms Size/Small"), 0,
+            (Fl_Callback*)timeline_waveforms_small_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.waveformHeight == kWSmall)
+            item->set();
+        idx = menu->add(
+            _("Timeline/Waveforms Size/Medium"), 0,
+            (Fl_Callback*)timeline_waveforms_medium_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.waveformHeight == kWMedium)
+            item->set();
+        idx = menu->add(
+            _("Timeline/Waveforms Size/Large"), 0,
+            (Fl_Callback*)timeline_waveforms_large_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (displayOptions.waveformHeight == kWLarge)
             item->set();
 
         std::vector<std::string> tracks;

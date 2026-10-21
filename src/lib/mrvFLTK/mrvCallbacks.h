@@ -224,9 +224,17 @@ namespace mrv
     void toggle_timeline_transitions_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_timeline_thumbnails_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_timeline_waveforms_cb(Fl_Menu_*, ViewerUI* ui);
+
+    void toggle_timeline_compare_cb(Fl_Menu_*, ViewerUI* ui);
+
     void timeline_thumbnails_small_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_thumbnails_medium_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_thumbnails_large_cb(Fl_Menu_*, ViewerUI* ui);
+
+    void timeline_waveforms_small_cb(Fl_Menu_*, ViewerUI* ui);
+    void timeline_waveforms_medium_cb(Fl_Menu_*, ViewerUI* ui);
+    void timeline_waveforms_large_cb(Fl_Menu_*, ViewerUI* ui);
+
     void toggle_timeline_editable_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_timeline_edit_associated_clips_cb(Fl_Menu_*, ViewerUI* ui);
     void timeline_frame_view_cb(Fl_Menu_*, ViewerUI* ui);

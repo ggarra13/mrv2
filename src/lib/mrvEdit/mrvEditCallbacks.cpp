@@ -3899,7 +3899,7 @@ namespace mrv
         const int kMarkerHeight = 24;
         const int kEffectsHeight = 26;
 
-        const int kVideoHeight = displayOptions.thumbnailHeight;
+        const int kVideoHeight = displayOptions.thumbnailHeight + kMargin;
         const int kAudioHeight = displayOptions.waveformHeight + kMargin;
 
         int H = kMinEditModeH; // timeline height

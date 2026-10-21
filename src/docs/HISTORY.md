@@ -1,3 +1,14 @@
+v1.8.4
+======
+
+ChangeLog
+---------
+
+- UI: Added menu options to switch the size of waveforms between small, medium and large individually, instead of resizing with the thumbnails' sizes.
+- UI: Added dividers to several of the menus to improve readability.
+
+- Core: Consolidated size of Thumbnail and Waveform Sizes in a single location.
+
 v1.8.3
 ======
 

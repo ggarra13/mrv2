@@ -55,6 +55,15 @@ namespace tl
 
         void from_json(const nlohmann::json& j, ItemOptions& value);
 
+        //! Constants
+        static int kThumbnailSmall = 25;
+        static int kThumbnailMedium = 50;
+        static int kThumbnailLarge = 75;
+
+        static int kWaveformSmall = 12;
+        static int kWaveformMedium = 25;
+        static int kWaveformLarge = 50;
+
         //! Display options.
         struct DisplayOptions
         {

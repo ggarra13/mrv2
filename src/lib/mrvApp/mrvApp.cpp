@@ -2322,6 +2322,7 @@ namespace mrv
             p.activeFiles[0]->currentTime = p.player->currentTime();
             p.activeFiles[0]->inOutRange = p.player->inOutRange();
             p.activeFiles[0]->audioOffset = p.player->audioOffset();
+            p.activeFiles[0]->mediaReferenceKey = p.player->getMediaReferenceKey();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
             p.activeFiles[0]->voiceAnnotations = p.player->getAllVoiceAnnotations();
             p.activeFiles[0]->ocioIcs = ocio::ics();
