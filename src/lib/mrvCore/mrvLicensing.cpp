@@ -42,6 +42,7 @@
 #    include <openssl/bio.h>
 #    include <openssl/buffer.h>
 #    include <openssl/err.h>
+#    include <openssl/rand.h>
 #    include <openssl/ssl.h>
 #    include <openssl/x509_vfy.h>
 #endif
@@ -194,12 +195,32 @@ namespace
             return false;
         }
     }
+
+    // -------------------------
+    // Random nonce: 192 random bits, base64 (32 chars).
+    //
+    // It is sent with every floating request and the server returns it inside
+    // the SIGNED reply.  A fake server therefore cannot replay an old reply.
+    // -------------------------
+    std::string make_nonce() {
+        unsigned char buf[24];
+        if (RAND_bytes(buf, sizeof(buf)) != 1) {
+            LOG_ERROR("OpenSSL Error: Could not generate a random nonce.");
+            return "";
+        }
+        return base64_encode(buf, sizeof(buf));
+    }
 #else
     bool verify_ed25519(const std::string& pubkey_b64,
                         const std::string& message,
                         const std::string& signature_b64)
     {
         return false;
+    }
+
+    std::string make_nonce()
+    {
+        return "";
     }
 #endif
 
@@ -300,6 +321,120 @@ namespace
         out.erase(remove(out.begin(), out.end(), ' '), out.end());
         return out;
     }
+
+    /**
+     * Mirror of the server's _clean_id(): the server only keeps
+     * [A-Za-z0-9._:{}-] (anything else becomes '_'), at most 128 chars, and
+     * "unknown" if nothing is left.  We send the already-cleaned id and then
+     * compare it with what the (signed) reply says.
+     */
+    std::string sanitize_machine_id(const std::string& id)
+    {
+        std::string out;
+        for (const char c : id)
+        {
+            if (out.size() >= 128)
+                break;
+            const bool ok = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+                            (c >= '0' && c <= '9') || c == '.' || c == '_' ||
+                            c == ':' || c == '{' || c == '}' || c == '-';
+            out += ok ? c : '_';
+        }
+        if (out.empty())
+            out = "unknown";
+        return out;
+    }
+
+    //! Read a string member of a JSON object ("" if missing or not a string).
+    std::string json_string(const nlohmann::json& j, const char* key)
+    {
+        const auto it = j.find(key);
+        if (it == j.end() || !it->is_string())
+            return std::string();
+        return it->get<std::string>();
+    }
+
+    //! Read an integer member of a JSON object (0 if missing or not a number).
+    int json_int(const nlohmann::json& j, const char* key)
+    {
+        const auto it = j.find(key);
+        if (it == j.end() || !it->is_number_integer())
+            return 0;
+        return it->get<int>();
+    }
+
+    /**
+     * Everything a floating request needs, built in one place so checkout,
+     * heartbeat, release and WebRTC tickets all behave the same.
+     */
+    struct FloatingRequest
+    {
+        std::string body;        //!< JSON body to POST.
+        std::string nonce;       //!< Fresh random nonce included in the body.
+        std::string machine_id;  //!< machine_id exactly as the server stores it.
+        std::string facility_id; //!< facility_id found in the master key.
+    };
+
+    bool build_floating_request(const std::vector<std::string>& machine_ids,
+                                const std::string& master_key,
+                                const std::string& session_id,
+                                FloatingRequest& out)
+    {
+        // parse(..., false): do not throw if the license file is damaged.
+        nlohmann::json key = nlohmann::json::parse(master_key, nullptr, false);
+        if (key.is_discarded() || !key.is_object() ||
+            !key.contains("payload") || !key["payload"].is_object() ||
+            json_string(key["payload"], "facility_id").empty())
+        {
+            LOG_ERROR(_("Invalid floating license file."));
+            return false;
+        }
+
+        out.nonce = make_nonce();
+        if (out.nonce.empty())
+            return false;
+
+        out.facility_id = json_string(key["payload"], "facility_id");
+        out.machine_id = sanitize_machine_id(
+            machine_ids.empty() ? std::string() : machine_ids[0]);
+
+        nlohmann::json body;
+        body["machine_id"] = out.machine_id;
+        body["session_id"] = session_id;
+        body["nonce"] = out.nonce;
+        body["master_key"] = key;
+        out.body = body.dump();
+        return true;
+    }
+
+    /**
+     * Check the Ed25519 signature of a server reply shaped like
+     * {"payload": {...}, "signature": "..."} and return the payload.
+     *
+     * nlohmann::json keeps object keys sorted and dump(-1) is compact, which
+     * is exactly the canonical form the server signs
+     * (json.dumps(sort_keys=True, separators=(',', ':'))).
+     */
+    bool verify_signed_reply(const nlohmann::json& reply,
+                             nlohmann::json& payload)
+    {
+        try
+        {
+            if (!reply.is_object() || !reply.contains("payload") ||
+                !reply.contains("signature") || !reply["payload"].is_object() ||
+                !reply["signature"].is_string())
+                return false;
+
+            payload = reply["payload"];
+            return verify_ed25519(verify_key_b64, payload.dump(-1),
+                                  reply["signature"].get<std::string>());
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            LOG_ERROR("Malformed license reply: " << e.what());
+            return false;
+        }
+    }
 }
 
 namespace mrv
@@ -380,7 +515,12 @@ namespace mrv
                                    std::vector<std::string>& machine_ids,
                                    std::string& master_key)
     {
+        server.clear();
+#if !defined(NDEBUG) || defined(MRV2_ALLOW_LICENSE_SERVER_OVERRIDE)
+        // Only for development.  In release builds the server is fixed, so
+        // an environment variable cannot point the client to a fake server.
         server = os::sgetenv("MRV2_LICENSE_SERVER");
+#endif
         if (server.empty())
         {
             //server = "srv1037957.hstgr.cloud";
@@ -625,35 +765,39 @@ namespace mrv
         if (master_key.empty())
             return false;
 
-        // --- Build JSON request ---
-
-        // Build the request object programmatically.
-        nlohmann::json request_body_json;
-
-        // Add the machine_id and session_id
-        request_body_json["machine_id"] = machine_ids[0];
-        request_body_json["session_id"] = app::session_id;
-
-        // Parse the corrected master key string and add it as a nested object
-        request_body_json["master_key"] = nlohmann::json::parse(master_key);
-
-        // 4. Dump the final, complete object into a string
-        // The library handles all formatting and escaping correctly.
-        const std::string requestBody = request_body_json.dump();
-
-        // --- HTTP POST to /request_license ---
-        nlohmann::json json_data = post_request(serverHost, serverPort,
-                                                "/heartbeat", requestBody);
-        if (json_data.is_null() || !json_data.contains("status"))
+        // --- Build JSON request (carries a fresh nonce) ---
+        FloatingRequest request;
+        if (!build_floating_request(machine_ids, master_key, app::session_id,
+                                    request))
             return false;
 
-        if (json_data["status"] == "renewed")
+        // --- HTTP POST to /heartbeat ---
+        nlohmann::json json_data = post_request(serverHost, serverPort,
+                                                "/heartbeat", request.body);
+        if (!json_data.is_object())
+            return false;  // The error was already logged in post_request.
+
+        // The reply must be signed by the server...
+        nlohmann::json payload;
+        if (!verify_signed_reply(json_data, payload))
         {
-            LOG_INFO("Renewed license");
-            return true;
+            LOG_ERROR("❌ Invalid signature on heartbeat");
+            return false;
         }
 
-        return false;
+        // ...and must answer THIS request (the nonce is fresh each time, so
+        // a recorded reply from a fake server cannot be replayed).
+        if (json_string(payload, "status") != "renewed" ||
+            json_string(payload, "nonce") != request.nonce ||
+            json_string(payload, "session_id") != app::session_id ||
+            json_string(payload, "facility_id") != request.facility_id)
+        {
+            LOG_ERROR("Heartbeat reply does not match our request.");
+            return false;
+        }
+
+        LOG_INFO("Renewed license");
+        return true;
     }
 
     /**
@@ -677,59 +821,65 @@ namespace mrv
             return License::kInvalid;
 
 
-        // Build the request object programmatically.
-        nlohmann::json request_body_json;
-
-        // Add the machine_id
-        request_body_json["machine_id"] = machine_ids[0];
-        request_body_json["session_id"] = "";
-
-        // Parse the corrected master key string and add it as a nested object
-        request_body_json["master_key"] = nlohmann::json::parse(master_key);
-
-        // 4. Dump the final, complete object into a string
-        // The library handles all formatting and escaping correctly.
-        const std::string requestBody = request_body_json.dump();
+        // --- Build JSON request (carries a fresh nonce) ---
+        FloatingRequest request;
+        if (!build_floating_request(machine_ids, master_key, "", request))
+            return License::kInvalid;
 
         // --- HTTP POST to /checkout_license ---
-        nlohmann::ordered_json json_data = post_request(serverHost, serverPort,
-                                                        "/checkout_license",
-                                                        requestBody);
-        if (json_data.is_null() || !json_data.contains("signature"))
+        nlohmann::json json_data = post_request(serverHost, serverPort,
+                                                "/checkout_license",
+                                                request.body);
+        if (!json_data.is_object())
         {
             // The error message was already logged inside post_request.
             // We just need to stop here.
             return License::kInvalid;
         }
 
-        // Extract the 'signature' string
-        const std::string signature = json_data.at("signature").get<std::string>();
+        // -------------------------
+        // Verify license.  Nothing from the reply is used before this.
+        // -------------------------
+        nlohmann::json payload;
+        if (!verify_signed_reply(json_data, payload))
+        {
+            LOG_ERROR("❌ Invalid signature");
+            return License::kInvalid;
+        }
 
-        // Get the 'payload' object with ordered keys
-        const nlohmann::ordered_json& payload_json = json_data.at("payload");
-        const std::string expires_at = payload_json.at("expires_at").get<std::string>();
-        const std::string plan = payload_json.at("plan").get<std::string>();
-        const int active_seats = payload_json.at("active_seats").get<int>();
-        const int license_limit = payload_json.at("license_limit").get<int>();
-        app::session_id = payload_json.at("session_id").get<std::string>();
+        // The reply must answer THIS request: same nonce (no replays), same
+        // facility and same machine.
+        if (json_string(payload, "status") != "granted" ||
+            json_string(payload, "nonce") != request.nonce ||
+            json_string(payload, "facility_id") != request.facility_id ||
+            json_string(payload, "machine_id") != request.machine_id)
+        {
+            LOG_ERROR("License reply does not match our request.");
+            return License::kInvalid;
+        }
+
+        const std::string session_id = json_string(payload, "session_id");
+        const std::string expires_at = json_string(payload, "expires_at");
+        const std::string plan = json_string(payload, "plan");
+        if (session_id.empty() || expires_at.empty() || plan.empty())
+        {
+            LOG_ERROR("Incomplete license reply.");
+            return License::kInvalid;
+        }
+
+        // We do not compare expires_at with the local clock here: the server
+        // already refused expired licenses, and a wrong time zone or clock
+        // would only reject paying users.
+
+        const int active_seats = json_int(payload, "active_seats");
+        const int license_limit = json_int(payload, "license_limit");
 
         std::string msg = string::Format(_("{0} Active Licenses from {1}.")).
                           arg(active_seats).
                           arg(license_limit);
         LOG_STATUS(msg);
 
-        // -------------------------
-        // Verify license
-        // -------------------------
-        const std::string verify_json = payload_json.dump(-1);
-        bool valid = verify_ed25519(verify_key_b64, verify_json, signature);
-
-        if (!valid)
-        {
-            LOG_ERROR("❌ Invalid signature");
-            return License::kInvalid;
-        }
-
+        app::session_id = session_id;
         expiration_date = expires_at;
 
         // Activate the options based on Plan.
@@ -750,29 +900,41 @@ namespace mrv
         if (master_key.empty())
             return "";
 
-        // Build the request object programmatically.
-        nlohmann::json request_body_json;
+        // --- Build JSON request.  We now send our session, so the server
+        //     only hands tickets to clients that hold a seat. ---
+        FloatingRequest request;
+        if (!build_floating_request(machine_ids, master_key, app::session_id,
+                                    request))
+            return "";
 
-        // Add the machine_id
-        request_body_json["machine_id"] = machine_ids[0];
-        request_body_json["session_id"] = "";
-
-        // Parse the corrected master key string and add it as a nested object
-        request_body_json["master_key"] = nlohmann::json::parse(master_key);
-
-        // 4. Dump the final, complete object into a string
-        // The library handles all formatting and escaping correctly.
-        const std::string requestBody = request_body_json.dump();
-
-        // --- HTTP POST to /checkout_license ---
-        nlohmann::ordered_json json_data = post_request(
+        // --- HTTP POST to /webrtc_ticket_floating ---
+        nlohmann::json json_data = post_request(
             serverHost, serverPort,
             "/webrtc_ticket_floating",
-            requestBody);
-        if (json_data.is_null() || !json_data.contains("signature"))
+            request.body);
+        if (!json_data.is_object())
         {
             // The error message was already logged inside post_request.
             // We just need to stop here.
+            return "";
+        }
+
+        // -------------------------
+        // Verify server signature locally (Prevents spoofing)
+        // -------------------------
+        nlohmann::json payload;
+        if (!verify_signed_reply(json_data, payload))
+        {
+            LOG_ERROR("❌ Invalid signature on WebRTC ticket");
+            return "";
+        }
+
+        if (json_string(payload, "purpose") != "webrtc_sync" ||
+            json_string(payload, "nonce") != request.nonce ||
+            json_string(payload, "facility_id") != request.facility_id ||
+            json_string(payload, "machine_id") != request.machine_id)
+        {
+            LOG_ERROR("WebRTC ticket mismatch (machine_id, facility, nonce or purpose invalid).");
             return "";
         }
 
@@ -783,8 +945,6 @@ namespace mrv
         std::string raw_token_json = json_data.dump(-1);
 
         // Base64 encode it so it safely passes through the URL query parameter
-        // NOTE: Replace `base64_encode` with whatever base64 encoding utility
-        // you currently use in your C++ codebase.
         std::string base64_token = base64_encode(raw_token_json);
 
         return base64_token;
@@ -999,31 +1159,22 @@ namespace mrv
         if (master_key.empty())
             return false;
 
-        // Build the request object programmatically.
-        nlohmann::json request_body_json;
+        FloatingRequest request;
+        if (!build_floating_request(machine_ids, master_key, app::session_id,
+                                    request))
+            return false;
 
-        // Add the machine_id
-        request_body_json["machine_id"] = machine_ids[0];
-        request_body_json["session_id"] = app::session_id;
-
-        // Parse the corrected master key string and add it as a nested object
-        request_body_json["master_key"] = nlohmann::json::parse(master_key);
-
-        // 4. Dump the final, complete object into a string
-        // The library handles all formatting and escaping correctly.
-        const std::string requestBody = request_body_json.dump();
-
-        // --- HTTP POST to /checkout_license ---
-        nlohmann::ordered_json json_data = post_request(serverHost, serverPort,
-                                                        "/release_license",
-                                                        requestBody);
-        if (json_data.is_null() || !json_data.contains("status"))
+        // --- HTTP POST to /release_license ---
+        nlohmann::json json_data = post_request(serverHost, serverPort,
+                                                "/release_license",
+                                                request.body);
+        if (json_string(json_data, "status").empty())
         {
             LOG_ERROR(_("Could not release floating license"));
             return false;
         }
 
-        if (json_data["status"] == "released")
+        if (json_string(json_data, "status") == "released")
         {
             LOG_STATUS(_("Released Floating License"));
             return true;
