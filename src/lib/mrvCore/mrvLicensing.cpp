@@ -819,7 +819,7 @@ namespace mrv
 
         if (master_key.empty())
         {
-            return false;
+            return License::kInvalid;
         }
 
 
