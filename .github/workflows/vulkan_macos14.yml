@@ -207,6 +207,9 @@ jobs:
       - name: Install curl dependencies
         run: brew install libidn2
         
+      - name: Remove unneeded dependencies if they exist
+        run: brew remove imath openexr jpeg libjpeg jpeg-turbo
+        
       # Install Vulkan SDK manually
       - name: Install/Build Vulkan SDK
         env:

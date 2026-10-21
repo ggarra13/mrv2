@@ -167,8 +167,8 @@ jobs:
       - name: Install Python dependencies
         run: brew install libb2 libffi readline sqlite3 xz zlib
 
-      - name: Remove unneeded dependencies
-        run: brew remove imath openexr jpeg
+      - name: Remove unneeded dependencies if they exist
+        run: brew remove imath openexr jpeg libjpeg jpeg-turbo
 
       - name: Install pyFLTK dependencies
         run: |
