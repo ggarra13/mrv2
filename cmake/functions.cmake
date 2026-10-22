@@ -577,7 +577,7 @@ endfunction()
 #
 #   fixup_macos_rpath( APP_LIB_DIR [EXECUTABLES exe1 exe2 …] )
 #
-#   APP_LIB_DIR   – path to Contents/Resources/lib; every real .dylib
+#   APP_LIB_DIR   – path to Contents/Resources/lib; every real .dylib and .so
 #                   in this tree gets its LC_ID_DYLIB set to
 #                   @rpath/<name> and all absolute load cmds rewritten.
 #
@@ -683,6 +683,32 @@ function( fixup_macos_rpath APP_LIB_DIR )
 	execute_process(
 	    COMMAND install_name_tool -add_rpath "@loader_path/../lib" "${_exe}"
 	)
+    endforeach()
+    
+    file(GLOB_RECURSE _all_sos "${APP_LIB_DIR}/*.so")
+    foreach(_so ${_all_sos})
+	if(IS_SYMLINK "${_so}")
+            continue()
+	endif()
+	
+	_fixup_macos_dep_refs("${_so}")
+	_strip_absolute_rpaths("${_so}")
+
+	# Let the module find the bundled dylibs in Resources/lib, wherever it sits
+	# (python3.x/site-packages/fltk14/_fltk14.so, lib-dynload/*.so, ...).
+	get_filename_component(_so_dir "${_so}" DIRECTORY)
+	file(RELATIVE_PATH _rel "${_so_dir}" "${APP_LIB_DIR}")
+	if("${_rel}" STREQUAL "")
+            set(_rpath "@loader_path")
+	else()
+            set(_rpath "@loader_path/${_rel}")
+	endif()
+	execute_process(
+            COMMAND install_name_tool -add_rpath "${_rpath}" "${_so}"
+            RESULT_VARIABLE _rc ERROR_VARIABLE _err)
+	if(NOT _rc EQUAL 0 AND NOT _err MATCHES "already")
+            message(WARNING "add_rpath ${_rpath} failed for ${_so}: ${_err}")
+	endif()
     endforeach()
 endfunction()
 

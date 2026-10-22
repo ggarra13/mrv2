@@ -8,12 +8,14 @@ ChangeLog
 - UI: Added dividers to several of the menus to improve readability.
 
 - Core: Consolidated size of Thumbnail and Waveform Sizes in a single location.
-- Core: Improved floating licenses security.
+- Core/Web: Improved floating licenses security.
 
 Fixes
 -----
 
-- Fixed dragging, file associations and open -a mrv2.app and vmrv2.app on macOS.  Now you can work with both applications just like Mac Users like.
+- UI/Mac: Fixed dragging, file associations and open -a mrv2.app and vmrv2.app on macOS.  Now you can work with both applications just like Mac Users like.
+
+- Core: Fixed macOS duplication of libraries when compiling directory and install directory were present in the same computer.
 
 
 v1.8.3
