@@ -337,6 +337,9 @@ namespace mrv
         gui.get("timeline_edit_thumbnails", tmp, 1);
         uiPrefs->EditThumbnails->value(tmp);
 
+        gui.get("timeline_edit_waveforms", tmp, 1);
+        uiPrefs->EditWaveforms->value(tmp);
+
         gui.get("timeline_edit_transitions", tmp, 1);
         uiPrefs->ShowTransitions->value(tmp);
 
@@ -1516,6 +1519,9 @@ namespace mrv
         gui.set(
             "timeline_edit_thumbnails",
             uiPrefs->EditThumbnails->value());
+        gui.set(
+            "timeline_edit_waveforms",
+            uiPrefs->EditWaveforms->value());
         gui.set(
             "timeline_edit_transitions",
             uiPrefs->ShowTransitions->value());
