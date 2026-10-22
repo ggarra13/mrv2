@@ -16,6 +16,7 @@ Fixes
 - UI/Mac: Fixed dragging, file associations and open -a mrv2.app and vmrv2.app on macOS.  Now you can work with both applications just like Mac Users like.
 
 - Core: Fixed macOS duplication of libraries when compiling directory and install directory were present in the same computer.
+- Core: Some bug fixes provided in a patch by @CatPetrova.
 
 
 v1.8.3
