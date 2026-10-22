@@ -275,8 +275,6 @@ namespace mrv
     std::vector<std::string > OSXfiles;
     void osx_open_cb(const char* filename)
     {
-        std::cerr << filename << std::endl;
-        std::cout << filename << std::endl;
         OSXfiles.push_back(filename);
     }
 
