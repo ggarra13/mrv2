@@ -850,23 +850,83 @@ function(copy_pdbs DIR INSTALL_DIR)
 endfunction()
 
 function(install_ndi)
-    # ---------------------------------------------------------------------------
+    # -----------------------------------------------------------------------
     # NDI install
-    # ---------------------------------------------------------------------------
-    if(TLRENDER_NDI)
-	if(WIN32)
-            if(TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
-		set(_NDI_DLL
-                    "${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    # NDI SDK architecture detection (Linux only)
+    # For embedded/cross-compiled targets (HiSilicon, Rockchip, Sigma Star, etc.)
+    # set NDI_SDK_ARCH manually in your toolchain file or on the cmake command line.
+    # Desktop architectures are auto-detected from CMAKE_SYSTEM_PROCESSOR.
+    # -------------------------------------------------------------------------
+    if(UNIX AND NOT APPLE AND NOT DEFINED NDI_SDK_ARCH)
+	if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|AMD64|amd64)$")
+            set(NDI_SDK_ARCH "x86_64-linux-gnu")
+
+	elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
+            # Distinguish Raspberry Pi 4 (64-bit) from generic aarch64 desktop
+            # (e.g. aarch64-newtek-linux-gnu covers Jetson, Apple M1 Linux, etc.)
+            if(EXISTS "/proc/device-tree/model")
+		file(READ "/proc/device-tree/model" _NDI_BOARD_MODEL)
+		if(_NDI_BOARD_MODEL MATCHES "Raspberry Pi 4")
+                    set(NDI_SDK_ARCH "aarch64-rpi4-linux-gnueabi")
+		elseif(_NDI_BOARD_MODEL MATCHES "Rockchip")
+                    set(NDI_SDK_ARCH "aarch64-rockchip-linux-gnu")
+		else()
+                    set(NDI_SDK_ARCH "aarch64-newtek-linux-gnu")
+		endif()
+		unset(_NDI_BOARD_MODEL)
             else()
-		set(_NDI_DLL
-                    "${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll")
+		set(NDI_SDK_ARCH "aarch64-newtek-linux-gnu")
             endif()
-            install(FILES "${_NDI_DLL}"
+
+	elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(armv7l|armv7|armhf|arm)$")
+            # Distinguish common 32-bit ARM desktop/SBC variants
+            if(EXISTS "/proc/device-tree/model")
+		file(READ "/proc/device-tree/model" _NDI_BOARD_MODEL)
+		if(_NDI_BOARD_MODEL MATCHES "Raspberry Pi 4")
+                    set(NDI_SDK_ARCH "arm-rpi4-linux-gnueabihf")
+		elseif(_NDI_BOARD_MODEL MATCHES "Raspberry Pi 3")
+                    set(NDI_SDK_ARCH "arm-rpi3-linux-gnueabihf")
+		elseif(_NDI_BOARD_MODEL MATCHES "Raspberry Pi 2")
+                    set(NDI_SDK_ARCH "arm-rpi2-linux-gnueabihf")
+		elseif(_NDI_BOARD_MODEL MATCHES "Raspberry Pi")
+                    set(NDI_SDK_ARCH "arm-rpi1-linux-gnueabihf")
+		elseif(_NDI_BOARD_MODEL MATCHES "Rockchip")
+                    set(NDI_SDK_ARCH "arm-rockchip-linux-gnueabihf")
+		else()
+                    set(NDI_SDK_ARCH "arm-newtek-linux-gnueabihf")
+		endif()
+		unset(_NDI_BOARD_MODEL)
+            else()
+		set(NDI_SDK_ARCH "arm-newtek-linux-gnueabihf")
+            endif()
+
+	else()
+            message(WARNING
+		"NDI: Unrecognised architecture '${CMAKE_SYSTEM_PROCESSOR}'. "
+		"Falling back to x86_64-linux-gnu. "
+		"For embedded targets (HiSilicon himix/hisiv, Sigma Star, etc.) "
+		"set -DNDI_SDK_ARCH=<dir> on the cmake command line.")
+            set(NDI_SDK_ARCH "x86_64-linux-gnu")
+	endif()
+
+	message(STATUS "NDI SDK arch directory: ${NDI_SDK_ARCH}")
+    endif()
+
+    if(WIN32)
+      if(TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
+	set(_NDI_DLL
+            "${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll")
+        else()
+	    set(_NDI_DLL
+                "${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll")
+        endif()
+        install(FILES "${_NDI_DLL}"
 		DESTINATION bin
 		COMPONENT applications)
-
-	elseif(APPLE)
+    elseif(APPLE)
             install(CODE "
             file(GLOB _NDI_DYLIBS
                 \"${TLRENDER_NDI_SDK}/lib/macOS/*.dylib*\")
@@ -877,7 +937,7 @@ function(install_ndi)
             endforeach()
         " COMPONENT applications)
 
-	elseif(UNIX)
+    elseif(UNIX)
             install(CODE "
             file(GLOB _NDI_DSOS
                 \"${TLRENDER_NDI_SDK}/lib/${NDI_SDK_ARCH}/*.so*\")
@@ -887,8 +947,6 @@ function(install_ndi)
                     FOLLOW_SYMLINK_CHAIN)
             endforeach()
         " COMPONENT applications)
-
-	endif()
     endif()
 endfunction()
 
