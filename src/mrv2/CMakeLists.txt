@@ -150,8 +150,10 @@ endif()
 #
 # Install NDI for the platform (on Linux tries to detect architecture)
 #
-install_ndi()
-    
+if (TLRENDER_NDI)
+    install_ndi()
+endif()
+
 if ( APPLE )
 
     if(MRV2_PYBIND11)

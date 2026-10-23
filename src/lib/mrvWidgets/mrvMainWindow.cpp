@@ -1111,61 +1111,49 @@ namespace mrv
         {
             cairo_t* cr = fl_wl_gc();
 
-            float scale = 1.F;
-            int screen = 0;
-            int valid_scaling = Fl::screen_scaling_supported();
-            if (valid_scaling == 2)
-                screen = screen_num();  // scale different on each window.
-            else if (valid_scaling == 1)
-                scale = Fl::screen_scale(0);  // scale same for all windows.
-            else if (valid_scaling == 0)
-                scale = 1.F;  // scale not supported
+            // Total logical->buffer-pixel factor, same as make_current() uses.
+            const float f = Fl::screen_scale(screen_num());
+            const int   wld = fl_wl_buffer_scale(this);
+            const double s = f;  // NOT * wld.
 
-            // 1. Make an offscreen surface bigger for antialiasing.
-            p.offscreen = fl_create_offscreen(w()*4*scale, h()*4*scale);
+            const int pw = int(w() * f) * wld; // same size as the window buffer
+            const int ph = int(h() * f) * wld;
 
-            // 2. Draw child widgets to an offscreen buffer
+            // 1. Offscreen at physical size.
+            p.offscreen = fl_create_offscreen(pw, ph);
+
+            // 2. Draw children into it, scaled like the real window.
             fl_begin_offscreen(p.offscreen);
-            Fl_Double_Window::draw_children(); // Draw all the window's children
-                                               // (widgets)
+            cairo_scale((cairo_t*)p.offscreen, s, s);
+            Fl_Double_Window::draw_children();
             fl_end_offscreen();
 
-            // 3. Get the offscreen Cairo context
-            cairo_t* offscreen_cr = (cairo_t*)p.offscreen;
+            cairo_surface_t* offscreen_surface =
+                cairo_get_target((cairo_t*)p.offscreen);
 
-            // 4. Create a surface from the offscreen
-            cairo_surface_t* offscreen_surface = cairo_get_target(offscreen_cr);
-
-
-            // 5. Clear the canvas (needed as FLTK seems to accumulate
-            //    transparency)
-            cairo_set_source_rgba(cr, 0, 0, 0, 0);
+            // 3. Composite 1:1 into the window buffer.
+            cairo_save(cr);
+            cairo_identity_matrix(cr);               // drop the f*wld scale
             cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+            cairo_set_source_rgba(cr, 0, 0, 0, 0);
             cairo_paint(cr);
 
-            // 6. Paint with alpha channel the offscreen widgets
             cairo_set_source_surface(cr, offscreen_surface, 0, 0);
-            cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-
-            const double alpha = (double)win_alpha / 255.0;
-            cairo_paint_with_alpha(cr, alpha);
+            cairo_paint_with_alpha(cr, (double)win_alpha / 255.0);
+            cairo_restore(cr);
 
             fl_delete_offscreen(p.offscreen);
-
             clear_damage();
         }
         else
-        {
             DropWindow::draw();
-        }
-#  else  // !FLTK_USE_WAYLAND
+#  else
         DropWindow::draw();
-#  endif  // FLTK_USE_WAYLAND
-#else  // ! __linux__
+#  endif
+#else
         DropWindow::draw();
-#endif // ! __linux__
+#endif
     }
-
     void MainWindow::set_alpha(int new_alpha)
     {
         int minAlpha = 95;
