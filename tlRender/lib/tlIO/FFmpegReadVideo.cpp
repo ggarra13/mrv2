@@ -1795,6 +1795,7 @@ namespace tl
                 (canCopy(pixelFormat, _avOutputPixelFormat, _fastYUV420PConversion) ||
                  outputDesc->comp[1].plane == outputDesc->comp[2].plane))
             {
+                // Path 1.
                 const uint8_t* planes[3] = {avFrame->data[0], avFrame->data[1], avFrame->data[2]};
                 image = image::Image::create(_info, avFrame, planes, avFrame->linesize);
                 return;
@@ -1805,6 +1806,7 @@ namespace tl
                     _avInputPixelFormat, _avOutputPixelFormat,
                     _fastYUV420PConversion))
             {
+                // Path 2.
                 const uint8_t* const data0 = avFrame->data[0];
                 const int linesize0 = avFrame->linesize[0];
                 switch (_avInputPixelFormat)
@@ -1835,34 +1837,6 @@ namespace tl
                             data + w * 4 * i, data0 + linesize0 * i, w * 4);
                     }
                     break;
-                case AV_PIX_FMT_YUVJ420P:
-                case AV_PIX_FMT_YUV420P:
-                case AV_PIX_FMT_YUV422P:
-                case AV_PIX_FMT_YUV444P:
-                case AV_PIX_FMT_YUV420P10LE:
-                case AV_PIX_FMT_YUV422P10LE:
-                case AV_PIX_FMT_YUV444P10LE:
-                case AV_PIX_FMT_YUV420P12LE:
-                case AV_PIX_FMT_YUV422P12LE:
-                case AV_PIX_FMT_YUV444P12LE:
-                case AV_PIX_FMT_YUV420P16LE:
-                case AV_PIX_FMT_YUV422P16LE:
-                case AV_PIX_FMT_YUV444P16LE:
-                {
-                    const uint8_t* planes[3] = {
-                        avFrame->data[0],
-                        avFrame->data[1],
-                        avFrame->data[2]
-                    };
-                    int linesize[3] = {
-                        avFrame->linesize[0],
-                        avFrame->linesize[1],
-                        avFrame->linesize[2]
-                    };
-                    image = image::Image::create(_info, avFrame,
-                                                 planes, linesize);
-                    break;
-                }
                 default:
                     break;
                 }
@@ -1877,6 +1851,7 @@ namespace tl
                 AVFrame* destination = _avFrame2;
                 if (planar)
                 {
+                    // Path 3.
                     converted = std::shared_ptr<AVFrame>(
                         av_frame_alloc(), [](AVFrame* f) { av_frame_free(&f); });
                     if (!converted)
@@ -1891,6 +1866,7 @@ namespace tl
                 }
                 else
                 {
+                    // Path 4.
                     image = image::Image::create(_info);
                     data = image->getData();
                     av_image_fill_arrays(
@@ -1898,6 +1874,7 @@ namespace tl
                         _avOutputPixelFormat, w, h, 1);
                 }
 
+                // Path 5.
                 const int r = sws_scale(
                     _swsContext, (uint8_t const* const*)avFrame->data,
                     avFrame->linesize, 0,
