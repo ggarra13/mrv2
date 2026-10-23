@@ -633,8 +633,8 @@ namespace tl
         void
         ReadPlugin::_logCallback(void* avcl, int level, const char* fmt, va_list vl)
         {
-            // Filter out verbose messages early
-            if (level == AV_LOG_VERBOSE || !fmt)
+            // Filter out debug, trace and verbose messages early
+            if (level > AV_LOG_INFO || !fmt)
                 return;
 
             if (auto logSystem = _logSystemWeak.lock())
