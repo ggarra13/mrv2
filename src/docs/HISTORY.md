@@ -13,7 +13,9 @@ ChangeLog
 - Core: Fixed macOS duplication of libraries when compiling directory and install directory were present in the same computer.
 - Core: Consolidated size of Thumbnail and Waveform Sizes in a single location (Preferences->Thumbnails).
 - Core/Web: Improved floating licenses security.
-- Core: Some bug fixes provided in a patch by @CatPetrova.
+- Core: Some bug fixes provided in a large but rejected PR by @CatPetrova.
+- Core: Performance improvements when seeking in HW.
+- Core: Performance improvements to audio reading.
 
 Libraries
 ---------
