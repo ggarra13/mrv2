@@ -11,8 +11,8 @@ set(SOURCE
 )
 if("${TLRENDER_API}" STREQUAL "GL_4_1" OR "${TLRENDER_API}" STREQUAL "GL_4_1_Debug")
     list(APPEND SOURCE RenderShaders_GL_4_1.cpp)
-elseif("${TLRENDER_API}" STREQUAL "GLES_2")
-    list(APPEND SOURCE RenderShaders_GLES_2.cpp)
+elseif("${TLRENDER_API}" STREQUAL "GLES_3")
+    list(APPEND SOURCE RenderShaders_GLES_3.cpp)
 endif()
 
 set(LIBRARIES_PRIVATE )
