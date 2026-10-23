@@ -194,7 +194,7 @@ namespace tl
                 // av_dump_format(_avFormatContext, _avStream, fileName.c_str(),
                 // 0);
 
-                // Only the video stream is read: the demuxer then skips the
+                // Only the audio stream is read: the demuxer then skips the
                 // others' data rather than handing it over to be thrown away.
                 // The timecode and the other streams' parameters are
                 // metadata, found already.
