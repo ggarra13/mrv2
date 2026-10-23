@@ -656,12 +656,21 @@ namespace tl
                         (const uint8_t**)_avFrame->data, _avFrame->nb_samples);
                     // std::cout << "swrOutputCount: " << swrOutputCount <<
                     // std::endl << std::endl;
-                    auto tmp = audio::Audio::create(
-                        _info, swrOutputCount > 0 ? swrOutputCount : 0);
-                    memcpy(
-                        tmp->getData(), swrOutputBuffer->getData(),
-                        tmp->getByteCount());
-                    _buffer.push_back(tmp);
+                    // swr_get_out_samples() is an upper bound. When nothing is
+                    // being resampled the output fills the buffer exactly, and
+                    // it is handed over as it is; only a short result (for
+                    // example while a sample rate converter is still filling)
+                    // is copied into a buffer of the right size.
+                    std::shared_ptr<audio::Audio> converted = swrOutputBuffer;
+                    if (swrOutputCount != swrOutputSamples)
+                    {
+                        converted = audio::Audio::create(
+                            _info, swrOutputCount > 0 ? swrOutputCount : 0);
+                        memcpy(
+                            converted->getData(), swrOutputBuffer->getData(),
+                            converted->getByteCount());
+                    }
+                    _buffer.push_back(converted);
                     out = 1;
                     break;
                 }
