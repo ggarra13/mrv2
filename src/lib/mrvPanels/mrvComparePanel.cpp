@@ -258,7 +258,6 @@ namespace mrv
 
             Y += 30;
 
-            // \@todo \bug: Implement this
             auto cFitA = new Widget< Fl_Check_Button >(X + 10, Y, 30, 30,
                                                        _("Fit to A"));
             cB = cFitA;

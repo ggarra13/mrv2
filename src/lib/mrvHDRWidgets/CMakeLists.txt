@@ -22,8 +22,6 @@ set(LIBRARIES ${FLTK_vk_LIBRARY} Vulkan::Vulkan ${FLTK_LIBRARIES} ${Intl_LIBRARI
 if( APPLE )
     set(OSX_FRAMEWORKS "-framework IOKit")
     list(APPEND LIBRARIES ${OSX_FRAMEWORKS})
-    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
 endif()
 
 add_library(mrvHDRWidgets ${SOURCES} ${HEADERS})

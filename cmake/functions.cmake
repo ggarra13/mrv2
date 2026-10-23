@@ -2,6 +2,38 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+# Absolute RPATHs that must survive packaging.
+set(MRV2_KEEP_RPATHS
+    "/usr/local/lib"      # Homebrew, Intel
+    "/opt/homebrew/lib"   # Homebrew, Apple Silicon
+    # "/Library/NDI Advanced SDK for Apple/lib/macOS"   # uncomment to keep NDI
+)
+
+# Remove every absolute LC_RPATH that is not in MRV2_KEEP_RPATHS.
+function(_strip_absolute_rpaths BINARY)
+    execute_process(COMMAND otool -l "${BINARY}"
+        OUTPUT_VARIABLE _out ERROR_QUIET)
+    string(REGEX MATCHALL "cmd LC_RPATH[^\n]*\n[^\n]*\n[ \t]*path [^\n]+ \\(offset [0-9]+\\)"
+        _blocks "${_out}")
+    foreach(_b ${_blocks})
+        string(REGEX REPLACE ".*path ([^\n]+) \\(offset [0-9]+\\)$" "\\1" _p "${_b}")
+        if(NOT IS_ABSOLUTE "${_p}")
+            continue()      # @rpath / @loader_path / @executable_path: keep
+        endif()
+        if("${_p}" IN_LIST MRV2_KEEP_RPATHS)
+            continue()
+        endif()
+        execute_process(
+            COMMAND install_name_tool -delete_rpath "${_p}" "${BINARY}"
+            RESULT_VARIABLE _rc ERROR_VARIABLE _err)
+        if(_rc EQUAL 0)
+            message(STATUS "  rpath removed from ${BINARY}: ${_p}")
+        else()
+            message(WARNING "  could not remove rpath ${_p} from ${BINARY}: ${_err}")
+        endif()
+    endforeach()
+endfunction()
+
 #
 # Function used to take .fl files (GUI creator into .cxx / .h files.
 #
@@ -545,7 +577,7 @@ endfunction()
 #
 #   fixup_macos_rpath( APP_LIB_DIR [EXECUTABLES exe1 exe2 …] )
 #
-#   APP_LIB_DIR   – path to Contents/Resources/lib; every real .dylib
+#   APP_LIB_DIR   – path to Contents/Resources/lib; every real .dylib and .so
 #                   in this tree gets its LC_ID_DYLIB set to
 #                   @rpath/<name> and all absolute load cmds rewritten.
 #
@@ -590,6 +622,7 @@ function( fixup_macos_rpath APP_LIB_DIR )
 
         # Rewrite absolute dependency references
         _fixup_macos_dep_refs( "${_lib}" )
+	_strip_absolute_rpaths( "${_lib}" )
 	
 	# After _fixup_macos_dep_refs, for each executable:
 	execute_process(
@@ -641,6 +674,7 @@ function( fixup_macos_rpath APP_LIB_DIR )
 	endif()
 
         _fixup_macos_dep_refs( "${_exe}" )
+	_strip_absolute_rpaths( "${_exe}" )
 
 	# After _fixup_macos_dep_refs, for each executable:
 	execute_process(
@@ -649,6 +683,32 @@ function( fixup_macos_rpath APP_LIB_DIR )
 	execute_process(
 	    COMMAND install_name_tool -add_rpath "@loader_path/../lib" "${_exe}"
 	)
+    endforeach()
+    
+    file(GLOB_RECURSE _all_sos "${APP_LIB_DIR}/*.so")
+    foreach(_so ${_all_sos})
+	if(IS_SYMLINK "${_so}")
+            continue()
+	endif()
+	
+	_fixup_macos_dep_refs("${_so}")
+	_strip_absolute_rpaths("${_so}")
+
+	# Let the module find the bundled dylibs in Resources/lib, wherever it sits
+	# (python3.x/site-packages/fltk14/_fltk14.so, lib-dynload/*.so, ...).
+	get_filename_component(_so_dir "${_so}" DIRECTORY)
+	file(RELATIVE_PATH _rel "${_so_dir}" "${APP_LIB_DIR}")
+	if("${_rel}" STREQUAL "")
+            set(_rpath "@loader_path")
+	else()
+            set(_rpath "@loader_path/${_rel}")
+	endif()
+	execute_process(
+            COMMAND install_name_tool -add_rpath "${_rpath}" "${_so}"
+            RESULT_VARIABLE _rc ERROR_VARIABLE _err)
+	if(NOT _rc EQUAL 0 AND NOT _err MATCHES "already")
+            message(WARNING "add_rpath ${_rpath} failed for ${_so}: ${_err}")
+	endif()
     endforeach()
 endfunction()
 
@@ -790,23 +850,83 @@ function(copy_pdbs DIR INSTALL_DIR)
 endfunction()
 
 function(install_ndi)
-    # ---------------------------------------------------------------------------
+    # -----------------------------------------------------------------------
     # NDI install
-    # ---------------------------------------------------------------------------
-    if(TLRENDER_NDI)
-	if(WIN32)
-            if(TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
-		set(_NDI_DLL
-                    "${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll")
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    # NDI SDK architecture detection (Linux only)
+    # For embedded/cross-compiled targets (HiSilicon, Rockchip, Sigma Star, etc.)
+    # set NDI_SDK_ARCH manually in your toolchain file or on the cmake command line.
+    # Desktop architectures are auto-detected from CMAKE_SYSTEM_PROCESSOR.
+    # -------------------------------------------------------------------------
+    if(UNIX AND NOT APPLE AND NOT DEFINED NDI_SDK_ARCH)
+	if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|AMD64|amd64)$")
+            set(NDI_SDK_ARCH "x86_64-linux-gnu")
+
+	elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
+            # Distinguish Raspberry Pi 4 (64-bit) from generic aarch64 desktop
+            # (e.g. aarch64-newtek-linux-gnu covers Jetson, Apple M1 Linux, etc.)
+            if(EXISTS "/proc/device-tree/model")
+		file(READ "/proc/device-tree/model" _NDI_BOARD_MODEL)
+		if(_NDI_BOARD_MODEL MATCHES "Raspberry Pi 4")
+                    set(NDI_SDK_ARCH "aarch64-rpi4-linux-gnueabi")
+		elseif(_NDI_BOARD_MODEL MATCHES "Rockchip")
+                    set(NDI_SDK_ARCH "aarch64-rockchip-linux-gnu")
+		else()
+                    set(NDI_SDK_ARCH "aarch64-newtek-linux-gnu")
+		endif()
+		unset(_NDI_BOARD_MODEL)
             else()
-		set(_NDI_DLL
-                    "${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll")
+		set(NDI_SDK_ARCH "aarch64-newtek-linux-gnu")
             endif()
-            install(FILES "${_NDI_DLL}"
+
+	elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(armv7l|armv7|armhf|arm)$")
+            # Distinguish common 32-bit ARM desktop/SBC variants
+            if(EXISTS "/proc/device-tree/model")
+		file(READ "/proc/device-tree/model" _NDI_BOARD_MODEL)
+		if(_NDI_BOARD_MODEL MATCHES "Raspberry Pi 4")
+                    set(NDI_SDK_ARCH "arm-rpi4-linux-gnueabihf")
+		elseif(_NDI_BOARD_MODEL MATCHES "Raspberry Pi 3")
+                    set(NDI_SDK_ARCH "arm-rpi3-linux-gnueabihf")
+		elseif(_NDI_BOARD_MODEL MATCHES "Raspberry Pi 2")
+                    set(NDI_SDK_ARCH "arm-rpi2-linux-gnueabihf")
+		elseif(_NDI_BOARD_MODEL MATCHES "Raspberry Pi")
+                    set(NDI_SDK_ARCH "arm-rpi1-linux-gnueabihf")
+		elseif(_NDI_BOARD_MODEL MATCHES "Rockchip")
+                    set(NDI_SDK_ARCH "arm-rockchip-linux-gnueabihf")
+		else()
+                    set(NDI_SDK_ARCH "arm-newtek-linux-gnueabihf")
+		endif()
+		unset(_NDI_BOARD_MODEL)
+            else()
+		set(NDI_SDK_ARCH "arm-newtek-linux-gnueabihf")
+            endif()
+
+	else()
+            message(WARNING
+		"NDI: Unrecognised architecture '${CMAKE_SYSTEM_PROCESSOR}'. "
+		"Falling back to x86_64-linux-gnu. "
+		"For embedded targets (HiSilicon himix/hisiv, Sigma Star, etc.) "
+		"set -DNDI_SDK_ARCH=<dir> on the cmake command line.")
+            set(NDI_SDK_ARCH "x86_64-linux-gnu")
+	endif()
+
+	message(STATUS "NDI SDK arch directory: ${NDI_SDK_ARCH}")
+    endif()
+
+    if(WIN32)
+      if(TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
+	set(_NDI_DLL
+            "${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll")
+        else()
+	    set(_NDI_DLL
+                "${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll")
+        endif()
+        install(FILES "${_NDI_DLL}"
 		DESTINATION bin
 		COMPONENT applications)
-
-	elseif(APPLE)
+    elseif(APPLE)
             install(CODE "
             file(GLOB _NDI_DYLIBS
                 \"${TLRENDER_NDI_SDK}/lib/macOS/*.dylib*\")
@@ -817,7 +937,7 @@ function(install_ndi)
             endforeach()
         " COMPONENT applications)
 
-	elseif(UNIX)
+    elseif(UNIX)
             install(CODE "
             file(GLOB _NDI_DSOS
                 \"${TLRENDER_NDI_SDK}/lib/${NDI_SDK_ARCH}/*.so*\")
@@ -827,8 +947,6 @@ function(install_ndi)
                     FOLLOW_SYMLINK_CHAIN)
             endforeach()
         " COMPONENT applications)
-
-	endif()
     endif()
 endfunction()
 

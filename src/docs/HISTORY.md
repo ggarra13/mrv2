@@ -4,7 +4,19 @@ v1.8.4
 ChangeLog
 ---------
 
+- UI: Added menu options to switch the size of waveforms between small, medium and large individually, instead of resizing with the thumbnails' sizes.
+- UI: Added dividers to several of the menus to improve readability.
 
+- Core: Consolidated size of Thumbnail and Waveform Sizes in a single location (Preferences->Thumbnails).
+- Core/Web: Improved floating licenses security.
+
+Fixes
+-----
+
+- UI/Mac: Fixed dragging, file associations and open -a mrv2.app and vmrv2.app on macOS.  Now you can work with both applications just like Mac Users like.
+
+- Core: Fixed macOS duplication of libraries when compiling directory and install directory were present in the same computer.
+- Core: Some bug fixes provided in a patch by @CatPetrova.
 
 Libraries
 ---------

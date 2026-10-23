@@ -96,8 +96,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double hide resizable
-      code3 {main = m;} non_modal size_range {847 449 0 0}
+      xywh {0 0 847 449} type Double resizable
+      code3 {main = m;} non_modal size_range {847 449 0 0} visible
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
@@ -677,8 +677,8 @@ o->redraw();}
               }
             }
             Fl_Group {} {
-              label Positioning
-              xywh {288 37 555 360} box EMBOSSED_BOX hide
+              label Positioning selected
+              xywh {288 37 555 360} box EMBOSSED_BOX
             } {
               Fl_Group {} {
                 label Positioning open
@@ -832,7 +832,7 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
               }
             }
             Fl_Group {} {
-              label Thumbnails
+              label Thumbnails open
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -859,7 +859,7 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                 }
                 Fl_Choice ComparePanelThumbnails {
                   label {Compare Panel} open
-                  tooltip {How to display timeline thumbnails in Compare Panel.} xywh {398 142 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  tooltip {How to display timeline thumbnails in Compare Panel.} xywh {398 127 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code3 {o->value(1);}
                 } {
                   MenuItem {} {
@@ -877,7 +877,7 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                 }
                 Fl_Choice Stereo3DPanelThumbnails {
                   label {Stereo Panel} open
-                  tooltip {How to display timeline thumbnails in Stereo Panel.} xywh {398 200 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  tooltip {How to display timeline thumbnails in Stereo Panel.} xywh {398 170 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code3 {o->value(1);}
                 } {
                   MenuItem {} {
@@ -895,13 +895,9 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                 }
                 Fl_Choice EditThumbnails {
                   label {Edit Viewport} open
-                  tooltip {How to display timeline thumbnails by default.} xywh {398 258 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  tooltip {How to display timeline thumbnails by default.} xywh {398 213 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code3 {o->value(1);}
                 } {
-                  MenuItem {} {
-                    label None
-                    xywh {35 35 100 20}
-                  }
                   MenuItem {} {
                     label Small
                     xywh {35 35 100 20}
@@ -913,6 +909,24 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                   MenuItem {} {
                     label Large
                     xywh {45 45 100 20}
+                  }
+                }
+                Fl_Choice EditWaveforms {
+                  label {Edit Viewport Waveforms} open
+                  tooltip {How to display timeline waveforms by default.} xywh {398 256 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
+                  code3 {o->value(1);}
+                } {
+                  MenuItem {} {
+                    label Small
+                    xywh {45 45 100 20}
+                  }
+                  MenuItem {} {
+                    label Medium
+                    xywh {45 45 100 20}
+                  }
+                  MenuItem {} {
+                    label Large
+                    xywh {55 55 100 20}
                   }
                 }
                 Fl_Check_Button TimelineThumbnails {
@@ -1322,7 +1336,7 @@ v->FPS->value( g );}
             }
             Fl_Group {} {
               label Edit open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Edit Viewport} open
@@ -1347,7 +1361,7 @@ v->FPS->value( g );}
                     }
                   }
                   Fl_Check_Button ShowTransitions {
-                    label {Show Transitions} selected
+                    label {Show Transitions}
                     tooltip {Show Transitions in Edit Viewport} xywh {411 156 15 20} down_box DOWN_BOX value 1 align 8
                   }
                   Fl_Check_Button ShowMarkers {

@@ -13,7 +13,7 @@ set(CMAKE_FIND_FRAMEWORK LAST)
 set(CMAKE_SKIP_RPATH FALSE)
 
 # Avoid warnings of overshadowing system libraries.
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 if(APPLE)
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
         set(_HOMEBREW_LIB "/opt/homebrew/lib")
@@ -21,7 +21,7 @@ if(APPLE)
         set(_HOMEBREW_LIB "/usr/local/lib")
     endif()
     set(CMAKE_INSTALL_RPATH
-        "@executable_path/../lib;${_HOMEBREW_LIB}")
+        "@executable_path/../Resources/lib;@executable_path/../lib;${_HOMEBREW_LIB}")
 endif()
 
 # Build the executable with the final CMAKE_INSTALL_RPATH from the very beginning.
@@ -48,8 +48,8 @@ if ( UNIX )
     add_compile_options( -fvisibility=hidden )
     if (NOT APPLE)
 	link_directories(${CMAKE_INSTALL_PREFIX}/lib64)
+	link_directories(${CMAKE_INSTALL_PREFIX}/lib)
     endif()
-    link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")

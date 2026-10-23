@@ -318,6 +318,12 @@ namespace mrv
     {
         TLRENDER_P();
 
+#ifdef __APPLE__
+        // For macOS, to read command-line arguments, filename
+        // associations and double clicks on files.
+        fl_open_callback(osx_open_cb);
+#endif
+        
         // Establish MRV2_ROOT environment variable
         set_root_path(argc, argv);
         mrv::init(context);
@@ -536,12 +542,6 @@ namespace mrv
         const int exitCode = getExit();
         if (exitCode != 0)
             return;
-
-#ifdef __APPLE__
-        // For macOS, to read command-line arguments
-        fl_open_callback(osx_open_cb);
-#endif
-
 
         file::Path lastPath;
         const auto& unusedArgs = getUnusedArgs();
@@ -1350,7 +1350,9 @@ namespace mrv
             tcp = nullptr;
         }
 
+#ifdef MRV2_NETWORK
         Poco::Net::uninitializeNetwork();
+#endif
     }
 
     App::~App()
@@ -2322,6 +2324,7 @@ namespace mrv
             p.activeFiles[0]->currentTime = p.player->currentTime();
             p.activeFiles[0]->inOutRange = p.player->inOutRange();
             p.activeFiles[0]->audioOffset = p.player->audioOffset();
+            p.activeFiles[0]->mediaReferenceKey = p.player->getMediaReferenceKey();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
             p.activeFiles[0]->voiceAnnotations = p.player->getAllVoiceAnnotations();
             p.activeFiles[0]->ocioIcs = ocio::ics();

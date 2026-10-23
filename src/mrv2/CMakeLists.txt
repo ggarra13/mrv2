@@ -194,10 +194,15 @@ if ( APPLE )
     #
     # Fix cmake_install_prefix libs next
     #
-    foreach(_LIB
-	    avcodec dovi avdevice avformat avutil placebo
-	    python${MRV2_PYTHON_VERSION}
-	    swresample swscale vulkan)
+    set(_LIBS avcodec avdevice avformat avutil placebo
+	python${MRV2_PYTHON_VERSION}
+	swresample swscale vulkan)
+
+    if (MRV2_BACKEND STREQUAL "VK")
+	list(APPEND _LIBS dovi)
+    endif()
+
+    foreach(_LIB ${_LIBS})
 	fix_dylib_rpath(mrv2 "${_LIB}" "${CMAKE_INSTALL_PREFIX}/lib")
     endforeach()
     

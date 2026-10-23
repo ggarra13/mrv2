@@ -17,7 +17,7 @@
     <key>CFBundleVersion</key>
     <string>@mrv2_VERSION@</string>
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright (c) 2022-Present Film Aura, LLC.</string>
+    <string>Copyright contributors to the mrv2 project.</string>
     <key>NSHighResolutionCapable</key>
 	<true/>
   </dict>
