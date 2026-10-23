@@ -9,6 +9,7 @@ ChangeLog
 
 - UI: Added menu options to switch the size of waveforms between small, medium and large individually, instead of resizing with the thumbnails' sizes.
 - UI: Added dividers to several of the menus to improve readability.
+- UI/Linux: File requester now allows double clicking on a file while saving instead of forcing the artist to go to click OK.
 
 - Core: Fixed macOS duplication of libraries when compiling directory and install directory were present in the same computer.
 - Core: Consolidated size of Thumbnail and Waveform Sizes in a single location (Preferences->Thumbnails).

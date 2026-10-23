@@ -459,7 +459,9 @@ int Flu_Entry::handle(int event)
                     (static_cast<int>(chooser->type()) &
                      static_cast<int>(ChooserType::DIRECTORY)) ||
                     (static_cast<int>(chooser->type()) &
-                     static_cast<int>(ChooserType::STDFILE)))
+                     static_cast<int>(ChooserType::STDFILE)) ||
+                    (static_cast<int>(chooser->type()) &
+                     static_cast<int>(ChooserType::SAVING)))
                 {
                     Fl::event_clicks(0);
                     Flu_File_Chooser::selectCB(chooser);
