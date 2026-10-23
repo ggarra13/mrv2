@@ -252,7 +252,7 @@ namespace tl
                         .arg(fileName)
                         .arg(getErrorLabel(r)));
                 }
-                _avCodecContext[_avStream]->thread_count = options.threadCount;
+                _avCodecContext[_avStream]->thread_count = 1;
                 _avCodecContext[_avStream]->thread_type = FF_THREAD_FRAME;
                 r = avcodec_open2(_avCodecContext[_avStream], avAudioCodec, 0);
                 if (r < 0)
