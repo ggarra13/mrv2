@@ -499,6 +499,31 @@ namespace mrv
         return out;
     }
 
+    std::string open_master_key(const std::string& license_file)
+    {
+        std::string out;
+
+        // Open the file for reading
+        std::ifstream file_stream(license_file);
+
+        // Check if the file was successfully opened
+        if (!file_stream.is_open())
+        {
+            LOG_ERROR("Error: Failed to open file: " << license_file);
+            return out;
+        }
+
+        // Slurp file.
+        std::stringstream buffer;
+        buffer << file_stream.rdbuf();
+        out = buffer.str();
+
+        // Fix the string to be valid JSON by replacing single quotes
+        std::replace(out.begin(), out.end(), '\'', '\"');
+
+        return out;
+    }
+
     /**
      * Common function to return:
      *
@@ -533,8 +558,8 @@ namespace mrv
         machine_ids = get_machine_ids();
         master_key = ""; // Only used on floating licenses
 
-        const std::string path = licensepath();
-        const std::string license_file = path + "/mrv2_licenses.lic";
+        std::string path = licensepath();
+        std::string license_file = path + "/mrv2_licenses.lic";
 
         if (file::isReadable(license_file))
         {
@@ -542,23 +567,7 @@ namespace mrv
                               .arg(license_file);
             LOG_INFO(msg);
 
-            // Open the file for reading
-            std::ifstream file_stream(license_file);
-
-            // Check if the file was successfully opened
-            if (!file_stream.is_open())
-            {
-                LOG_ERROR("Error: Failed to open file: " << license_file);
-                return;
-            }
-
-            // Slurp file.
-            std::stringstream buffer;
-            buffer << file_stream.rdbuf();
-            master_key = buffer.str();
-
-            // Fix the string to be valid JSON by replacing single quotes
-            std::replace(master_key.begin(), master_key.end(), '\'', '\"');
+            master_key = open_master_key(license_file);
         }
         else
         {
@@ -567,6 +576,15 @@ namespace mrv
                 std::string msg = string::Format(_("Did not find floating license at '{0}'"))
                                   .arg(path);
                 LOG_STATUS(msg);
+            }
+            else
+            {
+                path = homepath();
+                license_file = path + "/mrv2_licenses.lic";
+                if (file::isReadable(license_file))
+                {
+                    master_key = open_master_key(license_file);
+                }
             }
         }
     }
