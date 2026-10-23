@@ -1608,8 +1608,33 @@ namespace tl
                 {
                     return out;
                 }
+                // Work out the frame's time, and whether it is wanted, before
+                // touching its pixels. After a seek the decoder runs forward
+                // from the previous keyframe, and every frame before the
+                // target is discarded: a hardware surface downloaded for one
+                // of those is a GPU to CPU transfer thrown away.
+                const int64_t timestamp = _avFrame->pts != AV_NOPTS_VALUE
+                                          ? _avFrame->pts
+                                          : _avFrame->pkt_dts;
+                // std::cout << "video timestamp: " << timestamp << std::endl;
+                const auto& avVideoStream =
+                    _avFormatContext->streams[_avStream];
+
+                const OTIO_NS::RationalTime time(
+                    _timeRange.start_time().value() +
+                    av_rescale_q(
+                        timestamp, avVideoStream->time_base,
+                        swap(_avSpeed)),
+                    _timeRange.duration().rate());
+
+                const bool wanted = time >= targetTime || backwards ||
+                                    (_avFrame->duration == 0 && _useAudioOnly);
+
                 AVFrame* frame = _avFrame;
-                const bool hardware = _hwAccel && _avFrame->format == _hwPixelFormat;
+                // A frame that will be discarded is never downloaded, and
+                // none of the hardware bookkeeping below applies to it.
+                const bool hardware = wanted && _hwAccel &&
+                                      _avFrame->format == _hwPixelFormat;
                 if (hardware)
                 {
                     // Download the hardware surface to a CPU frame.
@@ -1660,22 +1685,7 @@ namespace tl
                     const auto format = av_get_pix_fmt_name(static_cast<AVPixelFormat>(frame->format));
                     _tags["FFmpeg Pixel Format"] = format ? format : "Unknown";
                 }
-                const int64_t timestamp = _avFrame->pts != AV_NOPTS_VALUE
-                                          ? _avFrame->pts
-                                          : _avFrame->pkt_dts;
-                // std::cout << "video timestamp: " << timestamp << std::endl;
-                const auto& avVideoStream =
-                    _avFormatContext->streams[_avStream];
-
-                const OTIO_NS::RationalTime time(
-                    _timeRange.start_time().value() +
-                    av_rescale_q(
-                        timestamp, avVideoStream->time_base,
-                        swap(_avSpeed)),
-                    _timeRange.duration().rate());
-
-                if (time >= targetTime || backwards ||
-                    (_avFrame->duration == 0 && _useAudioOnly))
+                if (wanted)
                 {
                     // Use actual time of frame when possible, except when
                     // going backwards.
