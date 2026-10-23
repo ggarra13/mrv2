@@ -580,7 +580,7 @@ namespace mrv
             else
             {
                 path = homepath();
-                license_file = path + "/mrv2_licenses.lic";
+                license_file = path + "/.filmaura/mrv2_licenses.lic";
                 if (file::isReadable(license_file))
                 {
                     master_key = open_master_key(license_file);
