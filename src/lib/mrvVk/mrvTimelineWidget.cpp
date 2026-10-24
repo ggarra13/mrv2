@@ -952,10 +952,13 @@ namespace mrv
                                 }
                             }
                         }
+                        else
+                        {
 #ifdef VULKAN_BACKEND
-                        ocioOptions = TIMELINEUI::toSDR(ocioOptions);
+                            ocioOptions = TIMELINEUI::toSDR(ocioOptions);
 #endif
-                        p.render->setOCIOOptions(ocioOptions);
+                            p.render->setOCIOOptions(ocioOptions);
+                        }
 
                         const auto& lutOptions = p.ui->uiView->lutOptions();
                         p.render->setLUTOptions(lutOptions);
