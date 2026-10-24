@@ -121,6 +121,10 @@ namespace tl
                 context, ui::ScrollType::Both, shared_from_this());
             p.scrollWidget->setScrollEventsEnabled(false);
             p.scrollWidget->setBorder(false);
+
+            p.layout = ui::VerticalLayout::create(context);
+            p.layout->setSpacingRole(ui::SizeRole::kNone);
+            p.scrollWidget->setWidget(p.layout);
         }
 
         TimelineWidget::~TimelineWidget() {}
@@ -811,10 +815,9 @@ namespace tl
             auto out = std::make_shared<ItemData>();
             out->speed = timeline->getTimeRange().duration().rate();
             out->options = timeline->getOptions();
-            // \@bug: \@todo:
-            // out->timeUnitsModel = p.timeUnitsModel;
-            // out->dir = timeline->getPath().getProtocol() +
-            //            timeline->getPath().getDirectory();
+            out->timeUnitsModel = p.timeUnitsModel;
+            out->directory = timeline->getPath().getProtocol() +
+                             timeline->getPath().getDirectory();
 
             // \@bug: \@todo:
             // Only where media times are one number for the whole timeline.
