@@ -427,6 +427,7 @@ namespace tl
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
             _createBindingSet(wipeShader);
+            color = image::Color4f(0.F, 0.F, 0.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                wipeShader->getPushStageFlags(), 0,
                                sizeof(color), &color);
@@ -609,7 +610,7 @@ namespace tl
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
             _createBindingSet(wipeShader);
-            color = image::Color4f(0.F, 1.F, 0.F);
+            color = image::Color4f(0.F, 0.F, 0.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                wipeShader->getPushStageFlags(), 0,
                                sizeof(color), &color);

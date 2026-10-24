@@ -8,6 +8,7 @@ Fixes
 -----
 
 - OTIO in Timeline Viewport was using OCIO on .otio files even when **Preferences->OCIO Not on Videos** was set on the Vulkan backend.
+- Vulkan Backend Wipe comparison would render green if there was no video attached.
 
 
 v1.8.4
