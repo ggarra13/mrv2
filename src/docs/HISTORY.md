@@ -1,3 +1,14 @@
+v1.8.5
+======
+
+ChangeLog
+---------
+
+Fixes
+-----
+
+- OTIO timelines were using OCIO even when it was disabled.
+
 v1.8.4
 ======
 

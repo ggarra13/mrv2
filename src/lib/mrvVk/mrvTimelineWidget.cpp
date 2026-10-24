@@ -944,7 +944,9 @@ namespace mrv
                                 auto path = p.player->path();
                                 auto ext = path.getExtension();
                                 if (file::isMovie(ext) ||
-                                    file::isSRGB(ext))
+                                    file::isSRGB(ext) ||
+                                    file::isOTIO(path) ||
+                                    file::isOTIOZ(path))
                                 {
                                     ocioOptions = timeline::OCIOOptions();
                                 }
