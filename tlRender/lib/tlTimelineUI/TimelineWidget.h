@@ -183,7 +183,7 @@ namespace tl
             ///@}
 
             //! Get timeline item geometry.
-            const math::Box2i& getTimelineItemGeometry() const;
+            const math::Box2i getTimelineItemGeometry() const;
 
             //! Get timeline scale.
             double getScale() const;
@@ -217,9 +217,14 @@ namespace tl
 #endif
 
         private:
+            std::vector<std::shared_ptr<timeline::Timeline> > _getCompare() const;
+
             void _setViewZoom(
                 double zoomNew, double zoomPrev, const math::Vector2i& focus,
                 const math::Vector2i& scrollPos);
+
+            std::shared_ptr<ItemData> _getItemData(
+                const std::shared_ptr<timeline::Timeline>& timeline) const;
 
             double _getTimelineScale() const;
             double _getTimelineScaleMax() const;
