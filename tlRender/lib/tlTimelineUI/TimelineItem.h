@@ -34,6 +34,7 @@ namespace tl
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<timeline::Timeline>&,
                 const std::shared_ptr<timeline::Player>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
                 double scale,
                 const ItemOptions&,
                 const DisplayOptions&,
@@ -79,6 +80,7 @@ namespace tl
             static std::shared_ptr<TimelineItem> create(
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<timeline::Timeline>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
                 double scale,
                 const ItemOptions&,
                 const DisplayOptions&,

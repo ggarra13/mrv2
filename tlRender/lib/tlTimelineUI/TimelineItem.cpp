@@ -170,42 +170,6 @@ namespace tl
 
             _tracksUpdate();
             _textUpdate();
-
-            if (p.player)
-            {
-                p.currentTimeObserver =
-                    observer::ValueObserver<OTIO_NS::RationalTime>::create(
-                        p.player->observeCurrentTime(),
-                        [this](const OTIO_NS::RationalTime& value)
-                            {
-                                _p->currentTime = value;
-                                _updates |= ui::Update::Draw;
-                            });
-
-                p.inOutRangeObserver =
-                    observer::ValueObserver<OTIO_NS::TimeRange>::create(
-                        p.player->observeInOutRange(),
-                        [this](const OTIO_NS::TimeRange value)
-                            {
-                                _p->inOutRange = value;
-                                _updates |= ui::Update::Draw;
-                            });
-
-                p.cacheInfoObserver =
-                    observer::ValueObserver<timeline::PlayerCacheInfo>::create(
-                        p.player->observeCacheInfo(),
-                        [this](const timeline::PlayerCacheInfo& value)
-                            {
-                                _p->cacheInfo = value;
-                                _updates |= ui::Update::Draw;
-                            });
-            }
-            else
-            {
-                p.currentTimeObserver.reset();
-                p.inOutRangeObserver.reset();
-                p.cacheInfoObserver.reset();
-            }
         }
 
         TimelineItem::~TimelineItem()
@@ -230,7 +194,11 @@ namespace tl
         {
             auto out = std::shared_ptr<TimelineItem>(new TimelineItem);
             out->_init(
-                context, player->timeline(), player, stack, scale, options, displayOptions,
+                context,
+                player->getTimeline(),
+                player, stack,
+                scale, options,
+                displayOptions,
                 itemData, window, parent);
             return out;
         }
@@ -247,8 +215,16 @@ namespace tl
         {
             auto out = std::shared_ptr<TimelineItem>(new TimelineItem);
             out->_init(
-                context, timeline, nullptr, stack, scale, options, displayOptions,
-                itemData, window, parent);
+                context,
+                timeline,
+                nullptr,
+                stack,
+                scale,
+                options,
+                displayOptions,
+                itemData,
+                window,
+                parent);
             return out;
         }
 #endif
@@ -320,15 +296,6 @@ namespace tl
         TimelineItem::observeTimeScrub() const
         {
             return _p->timeScrub;
-        }
-
-        void TimelineItem::setFrameMarkers(const std::vector<int>& value)
-        {
-            TLRENDER_P();
-            if (value == p.frameMarkers)
-                return;
-            p.frameMarkers = value;
-            _updates |= ui::Update::Draw;
         }
 
         int TimelineItem::getMinimumHeight() const
@@ -518,27 +485,10 @@ namespace tl
             IItem::drawOverlayEvent(drawRect, event);
             TLRENDER_P();
 
-            const math::Box2i& g = _geometry;
-
-            int y = p.size.scrollPos.y + g.min.y;
-            int h = p.size.margin + p.size.fontMetrics.lineHeight +
-                    p.size.margin + p.size.border * 4;
-            event.render->drawRect(
-                math::Box2i(g.min.x, y, g.w(), h),
-                event.style->getColorRole(ui::ColorRole::Window));
-
-            y = y + h;
-            h = p.size.border;
-            event.render->drawRect(
-                math::Box2i(g.min.x, y, g.w(), h),
-                event.style->getColorRole(ui::ColorRole::Border));
-
-            _drawInOutPoints(drawRect, event); // draws in-out points
-            _drawTimeTicks(drawRect, event);   // draws time ticks
-            _drawFrameMarkers(drawRect, event);  // draws optional markers
-            _drawTimeLabels(drawRect, event);  // draws labels next to time ticks
-            _drawCacheInfo(drawRect, event);     // draws audio and video cache
-            _drawCurrentTime(drawRect, event);   // draws red line and frame text
+            // The ruler strip (in/out points, ticks, markers, labels, cache
+            // and current time) is drawn by TimelineRuler. The space for it
+            // is still reserved above the tracks in sizeHintEvent() and
+            // setGeometry().
 
             if (p.mouse.currentDropTarget >= 0 &&
                 p.mouse.currentDropTarget < p.mouse.dropTargets.size())
@@ -890,399 +840,6 @@ namespace tl
                        _displayOptions.tracks.begin(),
                        _displayOptions.tracks.end(),
                        index) != _displayOptions.tracks.end();
-        }
-
-        void TimelineItem::_drawInOutPoints(
-            const math::Box2i& drawRect, const ui::DrawEvent& event)
-        {
-            TLRENDER_P();
-            if (!time::compareExact(_p->inOutRange, time::invalidTimeRange) &&
-                !time::compareExact(_p->inOutRange, _timeRange))
-            {
-                const math::Box2i& g = _geometry;
-
-                switch (_displayOptions.inOutDisplay)
-                {
-                case InOutDisplay::InsideRange:
-                {
-                    const int x0 = timeToPos(_p->inOutRange.start_time());
-                    const int x1 =
-                        timeToPos(_p->inOutRange.end_time_exclusive());
-                    const math::Box2i box(
-                        x0, p.size.scrollPos.y + g.min.y, x1 - x0 + 1,
-                        p.size.margin + p.size.fontMetrics.lineHeight +
-                            p.size.margin);
-                    event.render->drawRect(
-                        box, event.style->getColorRole(ui::ColorRole::InOut));
-                    break;
-                }
-                case InOutDisplay::OutsideRange:
-                {
-                    int x0 = timeToPos(_timeRange.start_time());
-                    int x1 = timeToPos(_p->inOutRange.start_time());
-                    math::Box2i box(
-                        x0, p.size.scrollPos.y + g.min.y, x1 - x0 + 1,
-                        p.size.margin + p.size.fontMetrics.lineHeight +
-                            p.size.margin);
-                    event.render->drawRect(
-                        box, event.style->getColorRole(ui::ColorRole::InOut));
-                    x0 = timeToPos(_p->inOutRange.end_time_exclusive());
-                    x1 = timeToPos(_timeRange.end_time_exclusive());
-                    box = math::Box2i(
-                        x0, p.size.scrollPos.y + g.min.y, x1 - x0 + 1,
-                        p.size.margin + p.size.fontMetrics.lineHeight +
-                            p.size.margin);
-                    event.render->drawRect(
-                        box, event.style->getColorRole(ui::ColorRole::InOut));
-                    break;
-                }
-                default:
-                    break;
-                }
-            }
-        }
-
-        math::Size2i TimelineItem::_getLabelMaxSize(
-            const std::shared_ptr<image::FontSystem>& fontSystem) const
-        {
-            TLRENDER_P();
-            const std::string labelMax =
-                _data->timeUnitsModel->getLabel(_timeRange.duration());
-            const math::Size2i labelMaxSize =
-                fontSystem->getSize(labelMax, p.size.fontInfo);
-            return labelMaxSize;
-        }
-
-        void TimelineItem::_getTimeTicks(
-            const std::shared_ptr<image::FontSystem>& fontSystem,
-            double& seconds, int& tick)
-        {
-            TLRENDER_P();
-            const int w = _sizeHint.w;
-            const float duration =
-                _timeRange.duration().rescaled_to(1.0).value();
-            const int secondsTick = 1.0 / duration * w;
-            const int minutesTick = 60.0 / duration * w;
-            const int hoursTick = 3600.0 / duration * w;
-            const math::Size2i labelMaxSize = _getLabelMaxSize(fontSystem);
-            const int distanceMin =
-                p.size.border + p.size.margin + labelMaxSize.w;
-            seconds = 0.0;
-            tick = 0;
-            if (secondsTick >= distanceMin)
-            {
-                seconds = 1.0;
-                tick = secondsTick;
-            }
-            else if (minutesTick >= distanceMin)
-            {
-                seconds = 60.0;
-                tick = minutesTick;
-            }
-            else if (hoursTick >= distanceMin)
-            {
-                seconds = 3600.0;
-                tick = hoursTick;
-            }
-        }
-
-        void TimelineItem::_drawTimeTicks(
-            const math::Box2i& drawRect, const ui::DrawEvent& event)
-        {
-            TLRENDER_P();
-            if (_timeRange != time::invalidTimeRange)
-            {
-                const math::Box2i& g = _geometry;
-                const int w = _sizeHint.w;
-                const float duration =
-                    _timeRange.duration().rescaled_to(1.0).value();
-                const int frameTick = 1.0 / _timeRange.duration().value() * w;
-                if (frameTick >= p.size.handle)
-                {
-                    geom::TriangleMesh2 mesh;
-                    size_t i = 1;
-                    for (double t = 0.0; t < duration;
-                         t += 1.0 / _timeRange.duration().rate())
-                    {
-                        const math::Box2i box(
-                            g.min.x + t / duration * w,
-                            p.size.scrollPos.y + g.min.y + p.size.margin +
-                                p.size.fontMetrics.lineHeight,
-                            p.size.border, p.size.margin + p.size.border * 4);
-                        if (math::intersects(box, drawRect))
-                        {
-                            mesh.v.push_back(
-                                math::Vector2f(box.min.x, box.min.y));
-                            mesh.v.push_back(
-                                math::Vector2f(box.max.x + 1, box.min.y));
-                            mesh.v.push_back(
-                                math::Vector2f(box.max.x + 1, box.max.y + 1));
-                            mesh.v.push_back(
-                                math::Vector2f(box.min.x, box.max.y + 1));
-                            mesh.triangles.push_back({i + 0, i + 1, i + 2});
-                            mesh.triangles.push_back({i + 2, i + 3, i + 0});
-                            i += 4;
-                        }
-                    }
-                    if (!mesh.v.empty())
-                    {
-                        event.render->drawMesh(
-                            mesh, math::Vector2i(),
-                            event.style->getColorRole(ui::ColorRole::Button));
-                    }
-                }
-
-                double seconds = 0;
-                int tick = 0;
-                _getTimeTicks(event.fontSystem, seconds, tick);
-                if (seconds > 0.0 && tick > 0)
-                {
-                    geom::TriangleMesh2 mesh;
-                    size_t i = 1;
-                    for (double t = 0.0; t < duration; t += seconds)
-                    {
-                        const math::Box2i box(
-                            g.min.x + t / duration * w,
-                            p.size.scrollPos.y + g.min.y, p.size.border,
-                            p.size.margin + p.size.fontMetrics.lineHeight +
-                                p.size.margin + p.size.border * 4);
-                        if (math::intersects(box, drawRect))
-                        {
-                            mesh.v.push_back(
-                                math::Vector2f(box.min.x, box.min.y));
-                            mesh.v.push_back(
-                                math::Vector2f(box.max.x + 1, box.min.y));
-                            mesh.v.push_back(
-                                math::Vector2f(box.max.x + 1, box.max.y + 1));
-                            mesh.v.push_back(
-                                math::Vector2f(box.min.x, box.max.y + 1));
-                            mesh.triangles.push_back({i + 0, i + 1, i + 2});
-                            mesh.triangles.push_back({i + 2, i + 3, i + 0});
-                            i += 4;
-                        }
-                    }
-                    if (!mesh.v.empty())
-                    {
-                        event.render->drawMesh(
-                            mesh, math::Vector2i(),
-                            event.style->getColorRole(ui::ColorRole::Button),
-                            "timeticks");
-                    }
-                }
-            }
-        }
-
-        void TimelineItem::_drawFrameMarkers(
-            const math::Box2i& drawRect, const ui::DrawEvent& event)
-        {
-            TLRENDER_P();
-            const math::Box2i& g = _geometry;
-            const double rate = _timeRange.duration().rate();
-            for (const auto& frameMarker : p.frameMarkers)
-            {
-                const math::Box2i g2(
-                    timeToPos(OTIO_NS::RationalTime(frameMarker, rate)),
-                    p.size.scrollPos.y + g.min.y, p.size.border * 2,
-                    p.size.margin + p.size.fontMetrics.lineHeight +
-                        p.size.margin + p.size.border * 4);
-                if (math::intersects(g2, drawRect))
-                {
-                    event.render->drawRect(
-                        g2,
-                        event.style->getColorRole(ui::ColorRole::FrameMarker));
-                }
-            }
-        }
-
-        void TimelineItem::_drawTimeLabels(
-            const math::Box2i& drawRect, const ui::DrawEvent& event)
-        {
-            TLRENDER_P();
-            if (_timeRange != time::invalidTimeRange)
-            {
-                const math::Box2i& g = _geometry;
-                const int w = _sizeHint.w;
-                const float duration =
-                    _timeRange.duration().rescaled_to(1.0).value();
-                double seconds = 0;
-                int tick = 0;
-                _getTimeTicks(event.fontSystem, seconds, tick);
-                if (seconds > 0.0 && tick > 0)
-                {
-                    if (p.size.textInfos.empty())
-                    {
-                        const math::Size2i labelMaxSize =
-                            _getLabelMaxSize(event.fontSystem);
-                        for (double t = 0.0; t < duration; t += seconds)
-                        {
-                            const OTIO_NS::RationalTime time =
-                                _timeRange.start_time() +
-                                OTIO_NS::RationalTime(t, 1.0).rescaled_to(
-                                    _timeRange.duration().rate());
-                            const math::Box2i box(
-                                g.min.x + t / duration * w + p.size.border +
-                                p.size.margin,
-                                p.size.scrollPos.y + g.min.y + p.size.margin,
-                                labelMaxSize.w, p.size.fontMetrics.lineHeight);
-                            if (time != p.currentTime && math::intersects(box, drawRect))
-                            {
-                                const std::string label =
-                                    _data->timeUnitsModel->getLabel(time);
-                                event.render->appendText(p.size.textInfos,
-                                                         event.fontSystem->getGlyphs(
-                                                             label, p.size.fontInfo),
-                                                         math::Vector2i(
-                                                             box.min.x,
-                                                             box.min.y + p.size.fontMetrics.ascender));
-                            }
-                        }
-                    }
-                    for (const auto& textInfo : p.size.textInfos)
-                    {
-                        event.render->drawText(textInfo, math::Vector2i(),
-                                               event.style->getColorRole(
-                                                   ui::ColorRole::TextDisabled));
-                    }
-                }
-            }
-        }
-
-        void TimelineItem::_drawCacheInfo(
-            const math::Box2i& drawRect, const ui::DrawEvent& event)
-        {
-            TLRENDER_P();
-
-            const math::Box2i& g = _geometry;
-
-            if (CacheDisplay::VideoAndAudio == _displayOptions.cacheDisplay ||
-                CacheDisplay::VideoOnly == _displayOptions.cacheDisplay)
-            {
-                geom::TriangleMesh2 mesh;
-                size_t i = 1;
-                for (const auto& t : p.cacheInfo.videoFrames)
-                {
-                    const int x0 = timeToPos(t.start_time());
-                    const int x1 = timeToPos(t.end_time_exclusive());
-                    const int h = CacheDisplay::VideoAndAudio ==
-                                          _displayOptions.cacheDisplay
-                                      ? p.size.border * 2
-                                      : p.size.border * 4;
-                    const math::Box2i box(
-                        x0,
-                        p.size.scrollPos.y + g.min.y + p.size.margin +
-                            p.size.fontMetrics.lineHeight + p.size.margin,
-                        x1 - x0 + 1, h);
-                    if (math::intersects(box, drawRect))
-                    {
-                        mesh.v.push_back(math::Vector2f(box.min.x, box.min.y));
-                        mesh.v.push_back(
-                            math::Vector2f(box.max.x + 1, box.min.y));
-                        mesh.v.push_back(
-                            math::Vector2f(box.max.x + 1, box.max.y + 1));
-                        mesh.v.push_back(
-                            math::Vector2f(box.min.x, box.max.y + 1));
-                        mesh.triangles.push_back({i + 0, i + 1, i + 2});
-                        mesh.triangles.push_back({i + 2, i + 3, i + 0});
-                        i += 4;
-                    }
-                }
-                if (!mesh.v.empty())
-                {
-                    event.render->drawMesh(
-                        mesh, math::Vector2i(),
-                        event.style->getColorRole(ui::ColorRole::VideoCache),
-                        "video cache");
-                }
-            }
-
-            if (CacheDisplay::VideoAndAudio == _displayOptions.cacheDisplay)
-            {
-                geom::TriangleMesh2 mesh;
-                size_t i = 1;
-                for (const auto& t : p.cacheInfo.audioFrames)
-                {
-                    const int x0 = timeToPos(t.start_time());
-                    const int x1 = timeToPos(t.end_time_exclusive());
-                    const math::Box2i box(
-                        x0,
-                        p.size.scrollPos.y + g.min.y + p.size.margin +
-                            p.size.fontMetrics.lineHeight + p.size.margin +
-                            p.size.border * 2,
-                        x1 - x0 + 1, p.size.border * 2);
-                    if (math::intersects(box, drawRect))
-                    {
-                        mesh.v.push_back(math::Vector2f(box.min.x, box.min.y));
-                        mesh.v.push_back(
-                            math::Vector2f(box.max.x + 1, box.min.y));
-                        mesh.v.push_back(
-                            math::Vector2f(box.max.x + 1, box.max.y + 1));
-                        mesh.v.push_back(
-                            math::Vector2f(box.min.x, box.max.y + 1));
-                        mesh.triangles.push_back({i + 0, i + 1, i + 2});
-                        mesh.triangles.push_back({i + 2, i + 3, i + 0});
-                        i += 4;
-                    }
-                }
-                if (!mesh.v.empty())
-                {
-                    event.render->drawMesh(
-                        mesh, math::Vector2i(),
-                        event.style->getColorRole(ui::ColorRole::AudioCache),
-                        "audio cache");
-                }
-            }
-        }
-
-        void TimelineItem::_drawCurrentTime(
-            const math::Box2i& drawRect, const ui::DrawEvent& event)
-        {
-            TLRENDER_P();
-
-            const math::Box2i& g = _geometry;
-
-            if (!p.currentTime.is_invalid_time())
-            {
-                const math::Vector2i pos(
-                    timeToPos(p.currentTime), p.size.scrollPos.y + g.min.y);
-
-                event.render->drawRect(
-                    math::Box2i(pos.x, pos.y, p.size.border * 2, g.h()),
-                    event.style->getColorRole(ui::ColorRole::Red));
-
-                const std::string label =
-                    _data->timeUnitsModel->getLabel(p.currentTime);
-
-                math::Vector2i labelPos(
-                    pos.x + p.size.border * 2 + p.size.margin,
-                    pos.y + p.size.margin + p.size.fontMetrics.ascender);
-
-                // Re-position time label to the left it its size would go out of
-                // the window.
-                const math::Size2i labelSize = event.fontSystem->getSize(label, p.size.fontInfo);
-                if (labelPos.x + labelSize.w > g.max.x)
-                {
-                    const math::Vector2i labelPos2(
-                        pos.x - p.size.border * 2 - p.size.margin - labelSize.w,
-                        pos.y + p.size.margin + p.size.fontMetrics.ascender);
-                    if (labelPos2.x > g.min.x)
-                    {
-                        labelPos = labelPos2;
-                    }
-                }
-
-                std::vector<timeline::TextInfo> textInfos;
-                event.render->appendText(textInfos,
-                                         event.fontSystem->getGlyphs(
-                                             label, p.size.fontInfo),
-                                         labelPos);
-
-                for (const auto& textInfo : textInfos)
-                {
-                    event.render->drawText(textInfo, math::Vector2i(),
-                                           event.style->getColorRole(
-                                               ui::ColorRole::Text));
-                }
-            }
         }
 
         void TimelineItem::_tracksUpdate()

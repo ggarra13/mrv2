@@ -4,6 +4,8 @@
 
 #include <TimelineWidget.h>
 
+#include "TimelineRuler.h"
+
 #include <tlUI/ScrollWidget.h>
 #include <tlUI/RowLayout.h>
 
@@ -61,6 +63,13 @@ namespace tl
 #ifdef OPENGL_BACKEND
             std::shared_ptr<gl::GLFWWindow> window;
 #endif
+
+            //! The ruler is held once, outside of the layout, and is attached
+            //! to this widget's parent so it is drawn over the timeline.
+            std::shared_ptr<TimelineRuler> ruler;
+            std::shared_ptr<observer::ValueObserver<bool> > rulerScrubObserver;
+            std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
+                rulerTimeScrubObserver;
 
             std::shared_ptr<ui::ScrollWidget> scrollWidget;
             std::vector<std::shared_ptr<TimelineItem> > timelineItems;
@@ -125,9 +134,35 @@ namespace tl
             p.layout = ui::VerticalLayout::create(context);
             p.layout->setSpacingRole(ui::SizeRole::kNone);
             p.scrollWidget->setWidget(p.layout);
+
+            // Attached to our parent (so it is a sibling, drawn after us).
+            // With no parent it is a child of this widget instead.
+            p.ruler = TimelineRuler::create(
+                timeUnitsModel, context, parent ? parent : shared_from_this());
+            p.ruler->setVisible(false);
+
+            p.rulerScrubObserver = observer::ValueObserver<bool>::create(
+                p.ruler->observeScrub(),
+                [this](bool value)
+                {
+                    _p->scrub->setIfChanged(value);
+                    _scrollUpdate();
+                });
+            p.rulerTimeScrubObserver =
+                observer::ValueObserver<otime::RationalTime>::create(
+                    p.ruler->observeTimeScrub(),
+                    [this](const OTIO_NS::RationalTime& value)
+                    { _p->timeScrub->setIfChanged(value); });
         }
 
-        TimelineWidget::~TimelineWidget() {}
+        TimelineWidget::~TimelineWidget()
+        {
+            // The ruler lives in our parent, so it would outlive us.
+            if (_p && _p->ruler)
+            {
+                _p->ruler->setParent(nullptr);
+            }
+        }
 
 #ifdef OPENGL_BACKEND
         TimelineWidget::TimelineWidget() :
@@ -197,6 +232,8 @@ namespace tl
             p.compareObserver.reset();
 
             p.player = player;
+            p.ruler->setPlayer(player);
+            p.ruler->setVisible(player != nullptr);
             p.compare = _getCompare();
             p.scale = _getTimelineScale();
 
@@ -414,6 +451,7 @@ namespace tl
             TLRENDER_P();
             if (p.stopOnScrub->setIfChanged(value))
             {
+                p.ruler->setStopOnScrub(value);
                 if (!p.timelineItems.empty())
                 {
                     p.timelineItems.front()->setStopOnScrub(value);
@@ -444,10 +482,7 @@ namespace tl
             if (value == p.frameMarkers)
                 return;
             p.frameMarkers = value;
-            if (!p.timelineItems.empty())
-            {
-                p.timelineItems.front()->setFrameMarkers(value);
-            }
+            p.ruler->setFrameMarkers(value);
         }
 
         const ItemOptions& TimelineWidget::getItemOptions() const
@@ -466,6 +501,7 @@ namespace tl
             TLRENDER_P();
             if (p.itemOptions->setIfChanged(value))
             {
+                p.ruler->setItemOptions(value);
                 for (auto& item : p.timelineItems)
                 {
                     _setItemOptions(item, value);
@@ -495,6 +531,7 @@ namespace tl
                     data->thumbnails.clear();
                     data->waveforms.clear();
                 }
+                p.ruler->setDisplayOptions(value);
                 for (auto& item : p.timelineItems)
                 {
                     _setDisplayOptions(item, value);
@@ -519,6 +556,7 @@ namespace tl
             {
                 setFrameView(true);
             }
+            _rulerUpdate();
         }
 
         void TimelineWidget::tickEvent(
@@ -526,6 +564,8 @@ namespace tl
             const ui::TickEvent& event)
         {
             IWidget::tickEvent(parentsVisible, parentsEnabled, event);
+            // Scrolling and zooming change where the ruler's marks go.
+            _rulerUpdate();
         }
 
         void TimelineWidget::sizeHintEvent(const ui::SizeHintEvent& event)
@@ -743,6 +783,7 @@ namespace tl
             {
                 _setItemScale(item, p.scale);
             }
+            _rulerUpdate();
         }
 
         void TimelineWidget::_setItemScale(
@@ -852,6 +893,9 @@ namespace tl
 
             const math::Vector2i scrollPos = p.scrollWidget->getScrollPos();
 
+            p.ruler->setTimeRange(
+                p.player ? p.player->getTimeRange() : time::invalidTimeRange);
+
             p.scrubObserver.reset();
             p.timeScrubObserver.reset();
             p.scrollWidget->setWidget(nullptr);
@@ -879,13 +923,14 @@ namespace tl
                         p.player,
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
-                        p.itemData, p.window, p.layout);
+                        p.itemData.back(), p.window, p.layout));
                     for (const auto& timeline : p.compare)
                     {
                         p.itemData.push_back(_getItemData(timeline));
                         p.timelineItems.push_back(TimelineItem::create(
                             context,
                             timeline,
+                            timeline->getTimeline()->tracks(),
                             p.scale,
                             p.itemOptions->get(),
                             p.displayOptions->get(),
@@ -900,12 +945,11 @@ namespace tl
                         p.player,
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
-                        p.itemData.front(), ctx, p.layout));
+                        p.itemData.back(), ctx, p.layout));
                     p.timelineItems.back()->setEditable(p.editable->get());
                     p.timelineItems.back()->setEditMode(p.editMode->get());
                     p.timelineItems.back()->setStopOnScrub(p.stopOnScrub->get());
                     p.timelineItems.back()->setMoveCallback(p.moveCallback);
-                    p.timelineItems.back()->setFrameMarkers(p.frameMarkers);
                     for (const auto& timeline : p.compare)
                     {
                         p.itemData.push_back(_getItemData(timeline));
@@ -924,7 +968,6 @@ namespace tl
                         p.timelineItems.back()->setEditMode(p.editMode->get());
                         p.timelineItems.back()->setStopOnScrub(p.stopOnScrub->get());
                         p.timelineItems.back()->setMoveCallback(p.moveCallback);
-                        p.timelineItems.back()->setFrameMarkers(p.frameMarkers);
                     }
 #endif
 
@@ -946,6 +989,22 @@ namespace tl
                             { _p->timeScrub->setIfChanged(value); });
                 }
             }
+            _rulerUpdate();
+        }
+
+        void TimelineWidget::_rulerUpdate()
+        {
+            TLRENDER_P();
+            if (!p.ruler)
+                return;
+            // Taken from the scroll widget rather than from the items'
+            // geometry: the items are only laid out on the next update, so
+            // their geometry would lag the scroll position by a frame.
+            const math::Box2i viewport = p.scrollWidget->getViewport();
+            const math::Vector2i scrollPos = p.scrollWidget->getScrollPos();
+            p.ruler->setScale(p.scale);
+            p.ruler->setTimelineOrigin(viewport.min.x - scrollPos.x);
+            p.ruler->setViewport(viewport);
         }
 
         std::vector<timeline::MoveData>

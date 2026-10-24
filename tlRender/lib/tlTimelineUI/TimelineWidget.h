@@ -237,8 +237,8 @@ namespace tl
             void _setDisplayOptions(
                 const std::shared_ptr<IWidget>&, const DisplayOptions&);
 
-            void _fixScrollHole();
             void _scrollUpdate();
+            void _rulerUpdate();
             void _timelineUpdate();
 
             TLRENDER_PRIVATE();
