@@ -1,3 +1,15 @@
+v1.8.5
+======
+
+ChangeLog
+---------
+
+Fixes
+-----
+
+- OTIO in Timeline Viewport was using OCIO on .otio files even when it was disabled on the Vulkan backend.
+
+
 v1.8.4
 ======
 

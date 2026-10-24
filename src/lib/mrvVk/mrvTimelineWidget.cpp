@@ -944,16 +944,21 @@ namespace mrv
                                 auto path = p.player->path();
                                 auto ext = path.getExtension();
                                 if (file::isMovie(ext) ||
-                                    file::isSRGB(ext))
+                                    file::isSRGB(ext) ||
+                                    file::isOTIO(path) ||
+                                    file::isOTIOZ(path))
                                 {
                                     ocioOptions = timeline::OCIOOptions();
                                 }
                             }
                         }
+                        else
+                        {
 #ifdef VULKAN_BACKEND
-                        ocioOptions = TIMELINEUI::toSDR(ocioOptions);
+                            ocioOptions = TIMELINEUI::toSDR(ocioOptions);
 #endif
-                        p.render->setOCIOOptions(ocioOptions);
+                            p.render->setOCIOOptions(ocioOptions);
+                        }
 
                         const auto& lutOptions = p.ui->uiView->lutOptions();
                         p.render->setLUTOptions(lutOptions);
