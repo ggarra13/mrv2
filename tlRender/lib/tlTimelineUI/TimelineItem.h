@@ -26,7 +26,6 @@ namespace tl
 
         //! Timeline item.
         //!
-        //! \todo Add support for dragging clips to different tracks.
         class TimelineItem : public IItem
         {
         protected:

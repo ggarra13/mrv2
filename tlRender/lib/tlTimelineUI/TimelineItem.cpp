@@ -171,32 +171,41 @@ namespace tl
             _tracksUpdate();
             _textUpdate();
 
-            p.currentTimeObserver =
-                observer::ValueObserver<OTIO_NS::RationalTime>::create(
-                    p.player->observeCurrentTime(),
-                    [this](const OTIO_NS::RationalTime& value)
-                    {
-                        _p->currentTime = value;
-                        _updates |= ui::Update::Draw;
-                    });
+            if (p.player)
+            {
+                p.currentTimeObserver =
+                    observer::ValueObserver<OTIO_NS::RationalTime>::create(
+                        p.player->observeCurrentTime(),
+                        [this](const OTIO_NS::RationalTime& value)
+                            {
+                                _p->currentTime = value;
+                                _updates |= ui::Update::Draw;
+                            });
 
-            p.inOutRangeObserver =
-                observer::ValueObserver<OTIO_NS::TimeRange>::create(
-                    p.player->observeInOutRange(),
-                    [this](const OTIO_NS::TimeRange value)
-                    {
-                        _p->inOutRange = value;
-                        _updates |= ui::Update::Draw;
-                    });
+                p.inOutRangeObserver =
+                    observer::ValueObserver<OTIO_NS::TimeRange>::create(
+                        p.player->observeInOutRange(),
+                        [this](const OTIO_NS::TimeRange value)
+                            {
+                                _p->inOutRange = value;
+                                _updates |= ui::Update::Draw;
+                            });
 
-            p.cacheInfoObserver =
-                observer::ValueObserver<timeline::PlayerCacheInfo>::create(
-                    p.player->observeCacheInfo(),
-                    [this](const timeline::PlayerCacheInfo& value)
-                    {
-                        _p->cacheInfo = value;
-                        _updates |= ui::Update::Draw;
-                    });
+                p.cacheInfoObserver =
+                    observer::ValueObserver<timeline::PlayerCacheInfo>::create(
+                        p.player->observeCacheInfo(),
+                        [this](const timeline::PlayerCacheInfo& value)
+                            {
+                                _p->cacheInfo = value;
+                                _updates |= ui::Update::Draw;
+                            });
+            }
+            else
+            {
+                p.currentTimeObserver.reset();
+                p.inOutRangeObserver.reset();
+                p.cacheInfoObserver.reset();
+            }
         }
 
         TimelineItem::~TimelineItem()

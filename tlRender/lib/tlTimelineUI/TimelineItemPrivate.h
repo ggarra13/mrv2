@@ -24,7 +24,7 @@ namespace tl
             OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
             timeline::PlayerCacheInfo cacheInfo;
             bool editable = false;
-            timeline::EditMode editMode = timeline::EditMode::Count;
+            timeline::EditMode editMode = timeline::EditMode::Move;
             bool stopOnScrub = true;
             std::function<void(const std::vector<timeline::MoveData>&)>
             moveCallback;

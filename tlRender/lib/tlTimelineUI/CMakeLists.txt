@@ -11,6 +11,7 @@ set(HEADERS
     # StackItem.h
     ThumbnailSystem.h
     TimelineItem.h
+    TimelineRuler.h
     TimelineWidget.h
     TransitionItem.h
     VideoClipItem.h)
@@ -37,6 +38,7 @@ set(SOURCE
     TimelineItemSlide.cpp
     TimelineItemSlip.cpp
     TimelineItemTrim.cpp
+    TimelineRuler.cpp
     TimelineWidget.cpp
     TransitionItem.cpp
     VideoClipItem.cpp)

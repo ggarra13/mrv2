@@ -856,12 +856,22 @@ namespace tl
             p.timeScrubObserver.reset();
             p.scrollWidget->setWidget(nullptr);
             p.timelineItems.clear();
+            p.itemData.clear();
+
+            // The layout holds its own references to the old items; detach them,
+            // otherwise they linger as rows with a frozen scale and inflate the
+            // layout's width.
+            const auto stale = p.layout->getChildren();   // copy: setParent edits the list
+            for (const auto& child : stale)
+            {
+                child->setParent(nullptr);
+            }
 
             if (p.player)
             {
                 if (auto context = _context.lock())
                 {
-#if 1
+
                     p.itemData.push_back(_getItemData(p.player->getTimeline()));
 #ifdef OPENGL_BACKEND
                     p.timelineItems.push_back(TimelineItem::create(
@@ -891,6 +901,11 @@ namespace tl
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
                         p.itemData.front(), ctx, p.layout));
+                    p.timelineItems.back()->setEditable(p.editable->get());
+                    p.timelineItems.back()->setEditMode(p.editMode->get());
+                    p.timelineItems.back()->setStopOnScrub(p.stopOnScrub->get());
+                    p.timelineItems.back()->setMoveCallback(p.moveCallback);
+                    p.timelineItems.back()->setFrameMarkers(p.frameMarkers);
                     for (const auto& timeline : p.compare)
                     {
                         p.itemData.push_back(_getItemData(timeline));
@@ -903,17 +918,18 @@ namespace tl
                             p.displayOptions->get(),
                             p.itemData.back(),
                             ctx, p.layout));
+
+                        // \@todo: \@bug?: is this correct?
+                        p.timelineItems.back()->setEditable(p.editable->get());
+                        p.timelineItems.back()->setEditMode(p.editMode->get());
+                        p.timelineItems.back()->setStopOnScrub(p.stopOnScrub->get());
+                        p.timelineItems.back()->setMoveCallback(p.moveCallback);
+                        p.timelineItems.back()->setFrameMarkers(p.frameMarkers);
                     }
 #endif
 
-                    p.timelineItems.front()->setEditable(p.editable->get());
-                    p.timelineItems.front()->setEditMode(p.editMode->get());
-                    p.timelineItems.front()->setStopOnScrub(p.stopOnScrub->get());
-                    p.timelineItems.front()->setMoveCallback(p.moveCallback);
-                    p.timelineItems.front()->setFrameMarkers(p.frameMarkers);
                     p.scrollWidget->setScrollPos(scrollPos);
                     p.scrollWidget->setWidget(p.layout);
-#endif
 
                     p.scrubObserver = observer::ValueObserver<bool>::create(
                         p.timelineItems.front()->observeScrub(),

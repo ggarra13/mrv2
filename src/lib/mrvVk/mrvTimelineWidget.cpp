@@ -418,7 +418,7 @@ namespace mrv
             const int Y = _toUI(Fl::event_y());
             const int X = _toUI(Fl::event_x());
             if ((Y < maxY && !p.timelineWidget->isDraggingClip()) ||
-                !p.timelineWidget->isEditable())
+                !p.timelineWidget->isEditable() && p.player)
             {
                 p.timeRange = p.player->player()->getTimeRange();
                 const auto& info = p.player->ioInfo();

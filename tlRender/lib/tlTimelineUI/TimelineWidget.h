@@ -226,6 +226,7 @@ namespace tl
             std::shared_ptr<ItemData> _getItemData(
                 const std::shared_ptr<timeline::Timeline>& timeline) const;
 
+            double _getDuration() const;
             double _getTimelineScale() const;
             double _getTimelineScaleMax() const;
 
@@ -236,6 +237,7 @@ namespace tl
             void _setDisplayOptions(
                 const std::shared_ptr<IWidget>&, const DisplayOptions&);
 
+            void _fixScrollHole();
             void _scrollUpdate();
             void _timelineUpdate();
 
