@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-25 18:10-0300\n"
+"POT-Creation-Date: 2026-10-25 20:28-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -85,7 +85,7 @@ msgid ""
 "Contains all functions related to the timeline control.\n"
 msgstr ""
 "\n"
-"Mòdulo de Línea de Tiempo.\n"
+"Mòdulo de Línea de tiempo.\n"
 "\n"
 "Contiene todas las funciones y enums relacionados con la línea de tiempo.\n"
 
@@ -105,42 +105,42 @@ msgid "Seek to a second in timeline."
 msgstr "Saltar a los segundos dados en la línea de tiempo."
 
 msgid "Time range of the timeline."
-msgstr "Rango de tiempo de la línea de tiempo."
+msgstr "Rango de Tiempo de la línea de tiempo."
 
 msgid "Selected time range of the timeline."
-msgstr "Rango de tiempo seleccionado en la línea de tiempo."
+msgstr "Rango de Tiempo seleccionado en la línea de tiempo."
 
 msgid "Set the selected time range of the timeline."
-msgstr "Setear el rango de tiempo seleccionado en la línea de tiempo."
+msgstr "Setear el rango de Tiempo seleccionado en la línea de tiempo."
 
 msgid "Set the in time of the selected time range of the timeline."
 msgstr ""
-"Setea el tiempo de entrada del rango de tiempo seleccionado en la línea de "
+"Setea el tiempo de entrada del rango de Tiempo seleccionado en la línea de "
 "tiempo."
 
 msgid "Set the in frame of the selected time range of the timeline."
 msgstr ""
-"Setea el cuadro de entrada del rango de tiempo seleccionado en la línea de "
+"Setea el cuadro de entrada del rango de Tiempo seleccionado en la línea de "
 "tiempo."
 
 msgid "Set the in seconds of the selected time range of the timeline."
 msgstr ""
-"Setea los segundos de entrada del rango de tiempo seleccionado en la línea "
-"de tiempo."
+"Setea los segundos de entrada del rango de Tiempo seleccionado en la línea "
+"de Tiempo."
 
 msgid "Set the out time of the selected time range of the timeline."
 msgstr ""
-"Setea el tiempo de salida del rango de tiempo seleccionado en la línea de "
+"Setea el tiempo de salida del rango de Tiempo seleccionado en la línea de "
 "tiempo."
 
 msgid "Set the out frame of the selected time range of the timeline."
 msgstr ""
-"Setea el cuadro de salida del rango de tiempo seleccionado en la línea de "
+"Setea el cuadro de salida del rango de Tiempo seleccionado en la línea de "
 "tiempo."
 
 msgid "Set the out seconds of the selected time range of the timeline."
 msgstr ""
-"Setea los segundos de salida del rango de tiempo seleccionado en la línea de"
+"Setea los segundos de salida del rango de Tiempo seleccionado en la línea de"
 " tiempo."
 
 msgid "Current time in timeline."
@@ -900,7 +900,7 @@ msgid "Audio path :class:`mrv2.Path` to the File Media if any."
 msgstr "Archivo :class:`mrv2.Path` opcional de audio para una File Media."
 
 msgid "Time range :class:`mrv2.TimeRange` of the File Media."
-msgstr "Rango de tiempoe :class:`mrv2.TimeRange` de la File Media."
+msgstr "Rango de Tiempoe :class:`mrv2.TimeRange` de la File Media."
 
 msgid "Speed (FPS) of the File Media."
 msgstr "Velocidad (FPS) de la File Media."
@@ -916,7 +916,7 @@ msgid "Current time :class:`mrv2.RationalTime` of the File Media."
 msgstr "Tiempo actual :class:`mrv2.RationalTime` de la File Media."
 
 msgid "In/Out range :class:`mrv2.TimeRange` of the File Media."
-msgstr "Rango de tiempo :class:`mrv2.TimeRange` de la File Media."
+msgstr "Rango de Tiempo :class:`mrv2.TimeRange` de la File Media."
 
 msgid "Video layer of the File Media."
 msgstr "Capa de vídeo de la File Media."
@@ -1166,11 +1166,11 @@ msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Canales: {1} {2} {3}"
 
 msgid "Play timelines, movies, and image sequences."
-msgstr "Reproducir líneas de tiempo, películas y secuencias de imágenes."
+msgstr "Reproducir líneas de Tiempo, películas y secuencias de imágenes."
 
 msgid "Timelines, movies, image sequences, USD assets or folders."
 msgstr ""
-"Líneas de tiempo, película, secuencia de imágenes, escena USD o carpeta."
+"Líneas de Tiempo, película, secuencia de imágenes, escena USD o carpeta."
 
 msgid "Debugging:"
 msgstr "Depuración:"
@@ -3531,7 +3531,7 @@ msgid "Choose Movie or Sequence"
 msgstr "Elegir película o secuencia"
 
 msgid "Save OTIO timeline"
-msgstr "Guardar Línea de Tiempo OTIO"
+msgstr "Guardar Línea de tiempo OTIO"
 
 msgid "Save Python Script"
 msgstr "Guardar Script de Python"
@@ -3938,7 +3938,7 @@ msgid "Toggle Pixel Bar."
 msgstr "Alternar Barra de Píxel."
 
 msgid "Toggle Timeline Bar."
-msgstr "Alternar Línea de Tiempo."
+msgstr "Alternar Línea de tiempo."
 
 msgid "Toggle Status Bar (this bar)."
 msgstr "Alternar Barra de Estátus (esta barra)."
@@ -4151,13 +4151,13 @@ msgid "Set Large Thumbnails in Timeline Viewport."
 msgstr "Setear Miniaturas Grandes en la Ventana de Edición."
 
 msgid "Set Small Waveforms in Timeline Viewport."
-msgstr "Establecer Formas de Onda Pequeñas en la Línea de Tiempo"
+msgstr "Establecer Formas de Onda Pequeñas en la Línea de tiempo"
 
 msgid "Set Medium Waveforms in Timeline Viewport."
-msgstr "Establecer Formas de Onda Medias en la Línea de Tiempo"
+msgstr "Establecer Formas de Onda Medias en la Línea de tiempo"
 
 msgid "Set Large Waveforms in Timeline Viewport."
-msgstr "Establecer Formas de Onda Grandes en la Línea de Tiempo"
+msgstr "Establecer Formas de Onda Grandes en la Línea de tiempo"
 
 msgid "Pick Color"
 msgstr "Elegir Color"
@@ -4205,7 +4205,7 @@ msgid "Pan And Zoom"
 msgstr "Paneo y Zoom"
 
 msgid "Timeline"
-msgstr "Línea de Tiempo"
+msgstr "Línea de tiempo"
 
 msgid "Toggle Receive Elements."
 msgstr "Alternar Elementos de Recibir en conección WebRTC"
@@ -4676,7 +4676,7 @@ msgid "File/Save/Frames to Folder"
 msgstr "&Archivo/&Guardar/Cuadros a Car&peta"
 
 msgid "File/Save/OTIO EDL Timeline"
-msgstr "&Archivo/&Guardar/Línea de Tiempo &OTIO"
+msgstr "&Archivo/&Guardar/Línea de tiempo &OTIO"
 
 msgid "File/Save/Annotations Only"
 msgstr "Archivo/Guardar/Sólo anotaciones"
@@ -4743,7 +4743,7 @@ msgid "View/Tool Bars/Toggle Pixel Bar"
 msgstr "Vista/Barras/Alternar Barra de Pixel"
 
 msgid "View/Tool Bars/Toggle Timeline Bar"
-msgstr "Vista/Barras/Alternar Línea de Tiempo"
+msgstr "Vista/Barras/Alternar Línea de tiempo"
 
 msgid "View/Tool Bars/Toggle Status Bar"
 msgstr "Vista/Barras/Alternar Barra de Estatus"
@@ -4960,28 +4960,28 @@ msgid "View/Hud"
 msgstr "Vista/Hud"
 
 msgid "Timeline/Cache/Clear"
-msgstr "Línea de Tiempo/Cache/Borrar"
+msgstr "Línea de tiempo/Cache/Borrar"
 
 msgid "Timeline/Cache/Update Frame"
-msgstr "Línea de Tiempo/Cache/Actualizar Cuadro Actual"
+msgstr "Línea de tiempo/Cache/Actualizar Cuadro Actual"
 
 msgid "Timeline/Editable"
-msgstr "Línea de Tiempo/Editable"
+msgstr "Línea de tiempo/Editable"
 
 msgid "Timeline/Frame View"
-msgstr "Línea de Tiempo/Enmarcar Vista"
+msgstr "Línea de tiempo/Enmarcar Vista"
 
 msgid "Timeline/Scroll To Current Frame"
-msgstr "Línea de Tiempo/Panear al Cuadro Actual"
+msgstr "Línea de tiempo/Panear al Cuadro Actual"
 
 msgid "Timeline/Compare Timelines"
 msgstr "Línea de tiempo/Comparar líneas de tiempo"
 
 msgid "Timeline/Track Info"
-msgstr "Línea de Tiempo/Info de Pista"
+msgstr "Línea de tiempo/Info de Pista"
 
 msgid "Timeline/Clip Info"
-msgstr "Línea de Tiempo/Info de Clip"
+msgstr "Línea de tiempo/Info de Clip"
 
 msgid "Timeline/Thumbnails"
 msgstr "Línea de tiempo/Miniaturas"
@@ -4990,13 +4990,13 @@ msgid "Timeline/Waveforms"
 msgstr "Línea de tiempo/Formas de onda"
 
 msgid "Timeline/Transitions"
-msgstr "Línea de Tiempo/Transiciones"
+msgstr "Línea de tiempo/Transiciones"
 
 msgid "Timeline/Effects"
 msgstr "Línea de tiempo/Efectos"
 
 msgid "Timeline/Markers"
-msgstr "Línea de Tiempo/Marcadores"
+msgstr "Línea de tiempo/Marcadores"
 
 msgid "Timeline/Thumbnails Size/Small"
 msgstr "Línea de tiempo/Tamaño de miniaturas/Pequeño"
@@ -5018,11 +5018,11 @@ msgstr "Línea de tiempo/Formas de onda/Grandes"
 
 #, c++-format
 msgid "Timeline/Visible Tracks/{0}"
-msgstr "Línea de Tiempo/Pistas Visibles/{0}"
+msgstr "Línea de tiempo/Pistas Visibles/{0}"
 
 #, c++-format
 msgid "Timeline/Media Reference/{0}"
-msgstr "Línea de Tiempo/Referencia de medios/{0}"
+msgstr "Línea de tiempo/Referencia de medios/{0}"
 
 msgid "Image/Next"
 msgstr "Imagen/Siguiente"
@@ -5199,7 +5199,7 @@ msgid "Sync/Send/Color"
 msgstr "Sincronizar/Enviar/Color"
 
 msgid "Sync/Send/Timeline"
-msgstr "Sincronizar/Enviar/Línea de Tiempo"
+msgstr "Sincronizar/Enviar/Línea de tiempo"
 
 msgid "Sync/Send/Annotations"
 msgstr "Sincronizar/Enviar/Anotaciones"
@@ -5220,7 +5220,7 @@ msgid "Sync/Accept/Color"
 msgstr "Sincronizar/Aceptar/Color"
 
 msgid "Sync/Accept/Timeline"
-msgstr "Sincronizar/Aceptar/Línea de Tiempo"
+msgstr "Sincronizar/Aceptar/Línea de tiempo"
 
 msgid "Sync/Accept/Annotations"
 msgstr "Sincronizar/Aceptar/Anotaciones"
@@ -7644,10 +7644,10 @@ msgstr ""
 "predeterminada."
 
 msgid "Preview Thumbnails above Timeline"
-msgstr "Miniaturas sobre la Línea de Tiempo"
+msgstr "Miniaturas sobre la Línea de tiempo"
 
 msgid "Preview Thumbnails in a rectangle above Timeline"
-msgstr "Miniaturas en un recuadro sobre la Línea de Tiempo"
+msgstr "Miniaturas en un recuadro sobre la Línea de tiempo"
 
 msgid "Refresh Thumbnails on Panels Manuallly"
 msgstr "Refrescar Miniaturas en Paneles Manualmente"
@@ -8330,7 +8330,7 @@ msgid "User Interface/Thumbnails"
 msgstr "Interfaz del Usuario/Miniaturas"
 
 msgid "User Interface/Timeline"
-msgstr "Interfaz del Usuario/Línea de Tiempo"
+msgstr "Interfaz del Usuario/Línea de tiempo"
 
 msgid "No Audio was Compiled"
 msgstr "Ningún Audio fue Compilado"
@@ -8700,7 +8700,7 @@ msgid "Save Frames To Folder"
 msgstr "Guardar Cuadros a Carpeta"
 
 msgid "Save OTIO Timeline"
-msgstr "Guardar Línea de Tiempo OTIO"
+msgstr "Guardar Línea de tiempo OTIO"
 
 msgid "Save Annotations Only"
 msgstr "Guardar solo las anotaciones"
@@ -9057,7 +9057,7 @@ msgid "Toggle Pixel Bar"
 msgstr "Alternar Barra de Píxel"
 
 msgid "Toggle Timeline"
-msgstr "Alternar Línea de Tiempo"
+msgstr "Alternar Línea de tiempo"
 
 msgid "Toggle Status Bar"
 msgstr "Alternar Barra de Estátus"
@@ -9099,37 +9099,37 @@ msgid "Toggle Edit Mode"
 msgstr "Alternar Modo de Edición"
 
 msgid "Toggle Timeline Editable"
-msgstr "Alternar Línea de Tiempo Editable"
+msgstr "Alternar Línea de tiempo Editable"
 
 msgid "Toggle Edit Associated Clips"
 msgstr "Alternar Editar Clips Asociados"
 
 msgid "Timeline Frame View"
-msgstr "Enmarcar Vista en Línea de Tiempo"
+msgstr "Enmarcar Vista en Línea de tiempo"
 
 msgid "Toggle Timeline Scroll To Current Frame"
-msgstr "Alternar Panear al Cuadro Actual en Línea de Tiempo"
+msgstr "Alternar Panear al Cuadro Actual en Línea de tiempo"
 
 msgid "Toggle Timeline Track Info"
-msgstr "Alternar Info de Pista en Línea de Tiempo"
+msgstr "Alternar Info de Pista en Línea de tiempo"
 
 msgid "Toggle Timeline Clip Info"
-msgstr "Alternar Info de Clip en Línea de Tiempo"
+msgstr "Alternar Info de Clip en Línea de tiempo"
 
 msgid "Toggle Timeline Effects"
 msgstr "Alternar efectos de la línea de tiempo"
 
 msgid "Toggle Timeline Thumbnails"
-msgstr "Alternar Miniaturas de la Línea de Tiempo"
+msgstr "Alternar Miniaturas de la Línea de tiempo"
 
 msgid "Toggle Timeline Transitions"
-msgstr "Alternar Transiciones de la Línea de Tiempo"
+msgstr "Alternar Transiciones de la Línea de tiempo"
 
 msgid "Toggle Timeline Waveforms"
 msgstr "Alternar formas de onda de la línea de tiempo"
 
 msgid "Toggle Timeline Markers"
-msgstr "Alternar Marcadores en la Línea de Tiempo"
+msgstr "Alternar Marcadores en la Línea de tiempo"
 
 msgid "Reset Gain/Gamma"
 msgstr "Resetear Gain y Gama"
@@ -9411,7 +9411,7 @@ msgstr "task info falló"
 #~ msgstr "LLeve un clip aquí para crear una lista de reproducción."
 
 #~ msgid "Create an empty timeline with a video and audio track."
-#~ msgstr "Crear una línear de tiempo vacía con una pista de vídeo y de audio."
+#~ msgstr "Crear una línear de Tiempo vacía con una pista de vídeo y de audio."
 
 #~ msgid "Create a timeline from the selected clip."
 #~ msgstr "Crear una línea de tiempo desde el clip seleccionado."
@@ -9524,14 +9524,14 @@ msgstr "task info falló"
 
 #~ msgid "Returns the time value for time converted to new_rate."
 #~ msgstr ""
-#~ "Retorna el valor de tiempo por tiempo convertido a nueva razón (new_rate)."
+#~ "Retorna el valor de Tiempo por tiempo convertido a nueva razón (new_rate)."
 
 #~ msgid "Returns the time for time converted to new_rate."
 #~ msgstr "Retorna el tiempo por tiempo convertido a nueva razón (new_rate)."
 
 #~ msgid "Returns the time value for \"self\" converted to new_rate."
 #~ msgstr ""
-#~ "Retorna el valor de tiempo para 'sí mismo' convertido a nueva razón "
+#~ "Retorna el valor de Tiempo para 'sí mismo' convertido a nueva razón "
 #~ "(new_rate)."
 
 #~ msgid ""
@@ -9598,8 +9598,8 @@ msgstr "task info falló"
 #~ ":meth:`end_time_exclusive` can be computed.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "La clase TimeRange representa un rango de tiempo. Codifica el tiempo de comienzo (start_time) y la duración,\n"
-#~ "significando que :meth:`end_time_inclusive` (última porción de una muestra en el rango de tiempo) y que\n"
+#~ "La clase TimeRange representa un rango de Tiempo. Codifica el tiempo de comienzo (start_time) y la duración,\n"
+#~ "significando que :meth:`end_time_inclusive` (última porción de una muestra en el rango de Tiempo) y que\n"
 #~ ":meth:`end_time_exclusive` puede ser calculado.\n"
 
 #~ msgid ""
@@ -9615,12 +9615,12 @@ msgstr "task info falló"
 #~ "In other words, the last frame with data, even if the last frame is fractional.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "El tiempo de la última muestra contiene datos en el rango de tiempo.\n"
+#~ "El tiempo de la última muestra contiene datos en el rango de Tiempo.\n"
 #~ "\n"
-#~ "Si el rango de tiempo comienza a (0, 24) con duración (10, 24), esto será\n"
+#~ "Si el rango de Tiempo comienza a (0, 24) con duración (10, 24), esto será\n"
 #~ "(9, 24)\n"
 #~ "\n"
-#~ "Si el rango de tiempo comienza a  (0, 24) con duraciòn (10.5, 24):\n"
+#~ "Si el rango de Tiempo comienza a  (0, 24) con duraciòn (10.5, 24):\n"
 #~ "(10, 24)\n"
 #~ "\n"
 #~ "En otras palabras, el último cuadro con datos, incluso si el ultimo cuadro es fraccional.\n"
@@ -9636,7 +9636,7 @@ msgstr "task info falló"
 #~ "15.5, because the last time with data in this range is 15.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Tiempo de la primera muestra fuera del rango de tiempo.\n"
+#~ "Tiempo de la primera muestra fuera del rango de Tiempo.\n"
 #~ "\n"
 #~ "Si el cuadro de comienzo ( start frame ) es 10 y la duración es 5, entonces end_time_exclusive es 15,\n"
 #~ "porque el último tiempo con datos en este rango es 14.\n"
@@ -9933,7 +9933,7 @@ msgstr "task info falló"
 #~ msgstr "Introduzca una URL."
 
 #~ msgid "Timeline/Edit Associated Clips"
-#~ msgstr "Línea de Tiempo/Editar Clips Asociados"
+#~ msgstr "Línea de tiempo/Editar Clips Asociados"
 
 #~ msgid "Edit/Remove"
 #~ msgstr "Editar/Remover"
