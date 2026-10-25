@@ -601,8 +601,18 @@ namespace mrv
 
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         bool value = item->value();
+
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        if (o.mode == timeline::CompareMode::A ||
+            o.mode == timeline::CompareMode::B)
+        {
+            value = false;
+        }
         ui->uiTimeline->setCompareTimelines(value);
         ui->uiTimeline->redraw();
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
