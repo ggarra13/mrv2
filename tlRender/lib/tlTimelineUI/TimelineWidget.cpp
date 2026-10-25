@@ -219,6 +219,9 @@ namespace tl
         {
             TLRENDER_P();
             math::Box2i out;
+            // \@bug: this is currently wrong. We should iterate through all
+            //        children recursively and add run math::expand on each
+            //        one.
             out = math::expand(p.ruler->getGeometry(), p.layout->getGeometry());
             return out;
         }

@@ -54,6 +54,7 @@ namespace tl
 
                 math::Size2i size;
                 int clipHeight = 0;
+                int transitionHeight = 0;
             };
             std::vector<Track> tracks;
 

@@ -373,11 +373,9 @@ namespace tl
                 {
                     y += track.size.h;
 
-                    int transitionH = 0;
                     for (const auto& item : track.transitions)
                     {
                         const math::Size2i& sizeHint = item->getSizeHint();
-                        transitionH = sizeHint.h;
 
                         const auto i = std::find_if(
                             p.mouse.items.begin(), p.mouse.items.end(),
@@ -398,7 +396,7 @@ namespace tl
                             y, sizeHint.w, sizeHint.h));
                     }
 
-                    y += transitionH;
+                    y += track.transitionHeight;
                 }
             }
 
@@ -445,6 +443,7 @@ namespace tl
                     track.timeRange.duration().rescaled_to(1.0).value() *
                     _scale;
                 track.size.h = 0;
+                track.transitionHeight = 0;
                 track.clipHeight = 0;
                 if (visible)
                 {
@@ -460,7 +459,12 @@ namespace tl
                             track.label->getSizeHint().h,
                             track.durationLabel->getSizeHint().h);
                     }
-                    tracksHeight += track.size.h;
+                    for (const auto& item : track.transitions)
+                    {
+                        track.transitionHeight =
+                            std::max(track.transitionHeight, item->getSizeHint().h);
+                    }
+                    tracksHeight += track.size.h + track.transitionHeight;
                     if (minimumTrackHeightInit)
                     {
                         minimumTrackHeightInit = false;
@@ -852,6 +856,10 @@ namespace tl
                 track.durationLabel->setVisible(
                     _displayOptions.trackInfo && visible);
                 for (const auto& item : track.items)
+                {
+                    item->setVisible(visible);
+                }
+                for (const auto& item : track.transitions)
                 {
                     item->setVisible(visible);
                 }
