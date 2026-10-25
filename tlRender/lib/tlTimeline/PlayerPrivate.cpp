@@ -20,6 +20,24 @@ namespace tl
             }
         } // namespace
 
+        void Player::Private::updateTimeRange()
+        {
+            const OTIO_NS::TimeRange& main = timeline->getTimeRange();
+            const double rate = main.duration().rate();
+            OTIO_NS::RationalTime start = main.start_time();
+            OTIO_NS::RationalTime duration = main.duration();
+            for (const auto& i : compare->get())
+            {
+                if (!i)
+                    continue;
+                const OTIO_NS::TimeRange& range = i->getTimeRange();
+                start = std::min(start, range.start_time().rescaled_to(rate));
+                duration =
+                    std::max(duration, range.duration().rescaled_to(rate));
+            }
+            timeRange = OTIO_NS::TimeRange(start, duration);
+        }
+
         OTIO_NS::RationalTime
         Player::Private::loopPlayback(const OTIO_NS::RationalTime& time)
         {
@@ -751,12 +769,14 @@ namespace tl
 
             // Get mutex protected values.
             OTIO_NS::RationalTime currentTime = time::invalidTime;
+            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
             OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
             io::Options ioOptions;
             PlayerCacheInfo cacheInfo;
             {
                 std::unique_lock<std::mutex> lock(mutex.mutex);
                 currentTime = mutex.currentTime;
+                timeRange = mutex.timeRange;
                 inOutRange = mutex.inOutRange;
                 ioOptions = mutex.ioOptions;
                 cacheInfo = mutex.cacheInfo;
@@ -768,7 +788,6 @@ namespace tl
             }
 
             // Create an array of characters to draw the timeline.
-            const auto& timeRange = timeline->getTimeRange();
             const size_t lineLength = 80;
             std::string currentTimeDisplay(lineLength, '.');
             double n = (currentTime - timeRange.start_time()).value() /
