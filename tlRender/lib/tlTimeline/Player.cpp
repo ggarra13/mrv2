@@ -512,16 +512,6 @@ namespace tl
             return _p->timeRange;
         }
 
-        void Player::Private::setTimeRange(const OTIO_NS::TimeRange& value)
-        {
-            if (timeRange->setIfChanged(value))
-            {
-                std::unique_lock<std::mutex> lock(mutex.mutex);
-                mutex.timeRange = value;
-                mutex.clearRequests = true;
-            }
-        }
-
         const io::Info& Player::getIOInfo() const
         {
             return _p->ioInfo;
