@@ -181,10 +181,8 @@ namespace tl
             p.layout->setMarginRole(ui::SizeRole::kNone);
             p.scrollWidget->setWidget(p.layout);
 
-            // Attached to our parent (so it is a sibling, drawn after us).
-            // With no parent it is a child of this widget instead.
-            p.ruler = TimelineRuler::create(
-                timeUnitsModel, context, parent ? parent : shared_from_this());
+            p.ruler = TimelineRuler::create(timeUnitsModel, context,
+                                            shared_from_this());
             p.ruler->setVisible(false);
 
             p.rulerScrubObserver = observer::ValueObserver<bool>::create(
@@ -986,6 +984,11 @@ namespace tl
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
                         p.itemData.back(), p.window, p.layout));
+                    p.timelineItems.back()->setRulerSpace(true);
+                    p.timelineItems.back()->setEditable(p.editable->get());
+                    p.timelineItems.back()->setEditMode(p.editMode->get());
+                    p.timelineItems.back()->setStopOnScrub(p.stopOnScrub->get());
+                    p.timelineItems.back()->setMoveCallback(p.moveCallback);
                     for (const auto& timeline : p.compare)
                     {
                         p.itemData.push_back(_getItemData(timeline));
@@ -999,6 +1002,11 @@ namespace tl
                             p.itemData.back(),
                             p.window,
                             p.layout));
+                        p.timelineItems.back()->setRulerSpace(false);
+                        p.timelineItems.back()->setEditable(p.editable->get());
+                        p.timelineItems.back()->setEditMode(p.editMode->get());
+                        p.timelineItems.back()->setStopOnScrub(p.stopOnScrub->get());
+                        p.timelineItems.back()->setMoveCallback(p.moveCallback);
                     }
 #endif
 #ifdef VULKAN_BACKEND
@@ -1008,6 +1016,7 @@ namespace tl
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
                         p.itemData.back(), ctx, p.layout));
+                    p.timelineItems.back()->setRulerSpace(true);
                     p.timelineItems.back()->setEditable(p.editable->get());
                     p.timelineItems.back()->setEditMode(p.editMode->get());
                     p.timelineItems.back()->setStopOnScrub(p.stopOnScrub->get());
@@ -1025,6 +1034,7 @@ namespace tl
                             p.itemData.back(),
                             ctx, p.layout));
 
+                        p.timelineItems.back()->setRulerSpace(false);
                         p.timelineItems.back()->setEditable(p.editable->get());
                         p.timelineItems.back()->setEditMode(p.editMode->get());
                         p.timelineItems.back()->setStopOnScrub(p.stopOnScrub->get());

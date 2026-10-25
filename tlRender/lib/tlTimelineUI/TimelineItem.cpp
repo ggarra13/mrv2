@@ -315,15 +315,27 @@ namespace tl
             }
         }
 
+        void TimelineItem::setRulerSpace(bool value)
+        {
+            TLRENDER_P();
+            if (value == p.rulerSpace)
+                return;
+            p.rulerSpace = value;
+            _updates |= ui::Update::Size;
+            _updates |= ui::Update::Draw;
+        }
+
         void TimelineItem::setGeometry(const math::Box2i& value)
         {
             IWidget::setGeometry(value);
             TLRENDER_P();
 
             const math::Box2i& g = _geometry;
-            float y = p.size.margin + p.size.fontMetrics.lineHeight +
-                      p.size.margin + p.size.border * 4 + p.size.border +
-                      g.min.y;
+            const int rulerH = p.rulerSpace
+                               ? p.size.margin + p.size.fontMetrics.lineHeight +
+                               p.size.margin + p.size.border * 5
+                               : 0;
+            float y = rulerH + g.min.y;
             for (const auto& track : p.tracks)
             {
                 const bool visible = _isTrackVisible(track.index);
@@ -473,14 +485,16 @@ namespace tl
                 }
             }
 
+            const int rulerH = p.rulerSpace
+                               ? p.size.margin + p.size.fontMetrics.lineHeight +
+                               p.size.margin + p.size.border * 5
+                               : 0;
+
             _sizeHint = math::Size2i(
                 _timeRange.duration().rescaled_to(1.0).value() * _scale,
-                p.size.margin + p.size.fontMetrics.lineHeight + p.size.margin +
-                    p.size.border * 4 + p.size.border + tracksHeight);
+                rulerH + tracksHeight);
 
-            p.minimumHeight = p.size.margin + p.size.fontMetrics.lineHeight +
-                              p.size.margin + p.size.border * 4 +
-                              p.size.border + minimumTrackHeight;
+            p.minimumHeight = rulerH + minimumTrackHeight;
         }
 
         void TimelineItem::drawOverlayEvent(

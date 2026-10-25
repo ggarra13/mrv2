@@ -32,6 +32,7 @@ namespace tl
             std::shared_ptr<observer::Value<otime::RationalTime> > timeScrub;
             std::vector<int> frameMarkers;
             int minimumHeight = 0;
+            bool rulerSpace = true;
             std::shared_ptr<ThumbnailSystem> thumbnailSystem;
             std::unordered_map<std::string,
                                std::vector<std::shared_ptr<image::Glyph>> > labelsCache;

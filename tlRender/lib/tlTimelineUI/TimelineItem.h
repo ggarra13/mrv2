@@ -148,6 +148,11 @@ namespace tl
 
             void setDisplayOptions(const DisplayOptions&) override;
 
+            //! Set whether the item reserves room at the top for the ruler.
+            //! Only the first item in a TimelineWidget should; the ruler is
+            //! drawn once over the top of the viewport.
+            void setRulerSpace(bool);
+
             void setGeometry(const math::Box2i&) override;
             void sizeHintEvent(const ui::SizeHintEvent&) override;
             void
