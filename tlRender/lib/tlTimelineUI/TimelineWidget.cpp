@@ -133,6 +133,7 @@ namespace tl
 
             p.layout = ui::VerticalLayout::create(context);
             p.layout->setSpacingRole(ui::SizeRole::kNone);
+            p.layout->setMarginRole(ui::SizeRole::kNone);
             p.scrollWidget->setWidget(p.layout);
 
             // Attached to our parent (so it is a sibling, drawn after us).
