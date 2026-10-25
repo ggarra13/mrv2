@@ -800,11 +800,13 @@ namespace tl
 
             // The line runs down over the tracks, to the bottom of the
             // viewport.
+            event.render->setClipRectEnabled(false);
             event.render->drawRect(
                 math::Box2i(
                     pos.x, pos.y, p.size.border * 2,
                     p.viewport.max.y - pos.y + 1),
                 event.style->getColorRole(ui::ColorRole::Red));
+            event.render->setClipRectEnabled(true);
 
             const std::string label =
                 p.timeUnitsModel->getLabel(p.currentTime);

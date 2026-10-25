@@ -3949,18 +3949,6 @@ namespace mrv
             ui->uiTimeline->getDisplayOptions();
 #endif
 
-#if 0
-        std::cerr << " trackInfo=" << displayOptions.trackInfo << std::endl;
-        std::cerr << "  clipInfo=" << displayOptions.clipInfo << std::endl;
-        std::cerr << "thumbnails=" << displayOptions.thumbnails << std::endl;
-        std::cerr << "thumbnailsHeight="
-                  << displayOptions.thumbnailHeight << std::endl;
-        std::cerr << "waveformHeight=" << displayOptions.waveformHeight << std::endl;
-        std::cerr << "      fontSize=" << displayOptions.fontSize << std::endl;
-        std::cerr << " clipRectScale=" << displayOptions.clipRectScale << std::endl;
-        std::cerr << "   transitions=" << displayOptions.transitions << std::endl;
-        std::cerr << "       markers=" << displayOptions.markers << std::endl;
-#endif
 
         // This specifies whether to show Video Only or Video and Audio.
         const int editView = ui->uiPrefs->EditView->value();
@@ -3992,7 +3980,7 @@ namespace mrv
         if (!player)
             return H;
 
-#if 0
+#if 1
         // Accumulated variables counting total height of each track.
         int videoHeight = 0;
         int audioHeight = 0;
