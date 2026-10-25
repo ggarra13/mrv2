@@ -616,15 +616,15 @@ namespace mrv
             TLRENDER_P();
 
             const auto player = p.player;
-            if (file::isTemporaryNDI(player->path()))
+            if (!player)
                 return;
 
-            const auto& t = player->currentTime();
+            const auto t = player->currentTime();
             auto time = t + OTIO_NS::RationalTime(dx, t.rate());
 
             // Stop at end/beginning if not looping.
             int behavior = p.ui->uiPrefs->ScrubbingLoopMode->value();
-            const auto& range = player->inOutRange();
+            const auto range = player->inOutRange();
             const auto loop = player->loop();
             if ((behavior == kScrubLoopButton &&
                  loop == timeline::Loop::Once) ||
@@ -638,7 +638,7 @@ namespace mrv
                 return;
             }
 
-            const auto& info = player->ioInfo();
+            const auto info = player->ioInfo();
             bool isMuted = player->isMuted();
             if (!info.audio.isValid())
                 isMuted = true;

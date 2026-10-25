@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-25 18:10-0300\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -3646,6 +3646,10 @@ msgstr "सूचीबद्ध फ़ाइल पर जाएँ।"
 msgid "Select B File."
 msgstr "B फ़ाइल चुनें।"
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr ""
+"क्लिप की तुलना करते समय एडिट व्यूपोर्ट में टाइमलाइन की तुलना टॉगल करें।"
+
 msgid "Toggle A and B comparison."
 msgstr "A और B तुलना को चालू/बंद करें।"
 
@@ -4896,6 +4900,9 @@ msgstr "टाइम-लाइन/फ्रेम दृश्य"
 
 msgid "Timeline/Scroll To Current Frame"
 msgstr "टाइम-लाइन/ स्क्रॉल को मौज़ूदा फ्रेम में"
+
+msgid "Timeline/Compare Timelines"
+msgstr "टाइमलाइन/टाइमलाइन की तुलना करें"
 
 msgid "Timeline/Track Info"
 msgstr "टाइम-लाइन/ट्रैक सूचना"
@@ -7532,6 +7539,12 @@ msgstr "संपादन"
 msgid "How to display timeline thumbnails by default."
 msgstr "मूलभूत रूप से समयरेखा को कैसे दिखाएँ."
 
+msgid "Edit Viewport Waveforms"
+msgstr "एडिट व्यूपोर्ट वेवफ़ॉर्म"
+
+msgid "How to display timeline waveforms by default."
+msgstr "डिफ़ॉल्ट रूप से टाइमलाइन वेवफ़ॉर्म कैसे दिखाएँ।"
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "ऊपर की लघु छवि का पूर्वावलोकन"
 
@@ -8666,6 +8679,9 @@ msgstr "HDR वर्तनीमैप टॉगल करें"
 msgid "Toggle HDR Peak Detection"
 msgstr "HDR पीक डिटेक्शन चालू/बंद करें"
 
+msgid "Toggle Compare Timelines"
+msgstr "टाइमलाइन की तुलना टॉगल करें"
+
 msgid "Compare None"
 msgstr "तुलना करें कोई नहीं"
 
@@ -9193,9 +9209,6 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid "View/Compare/Vertical"
 #~ msgstr "दृश्य/तुलना/ऊर्ध्वाधर"
-
-#~ msgid "View/Compare/Tile"
-#~ msgstr "दृश्य/तुलना/टाइल"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "वर्तमान समय पर ऑडियो गैप हटाएँ।"

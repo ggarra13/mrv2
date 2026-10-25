@@ -5,6 +5,8 @@ ChangeLog
 ---------
 
 - UI: Allow artists using the Demo version of the players to see the timeline in full by dragging the separator without requesting an Edit license.
+- UI/Core: Allow scrubbing (with audio) while in Compare Mode.
+- UI: Allow timelines to be compared.
 
 
 Fixes

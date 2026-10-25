@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-25 18:10-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -3718,6 +3718,11 @@ msgstr "Ir al Archivo Listado."
 msgid "Select B File."
 msgstr "Seleccione la imagen B."
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr ""
+"Alternar la comparación de líneas de tiempo en el visor de edición al "
+"comparar clips."
+
 msgid "Toggle A and B comparison."
 msgstr "Modo de comparación A/B."
 
@@ -4968,6 +4973,9 @@ msgstr "Línea de Tiempo/Enmarcar Vista"
 
 msgid "Timeline/Scroll To Current Frame"
 msgstr "Línea de Tiempo/Panear al Cuadro Actual"
+
+msgid "Timeline/Compare Timelines"
+msgstr "Línea de tiempo/Comparar líneas de tiempo"
 
 msgid "Timeline/Track Info"
 msgstr "Línea de Tiempo/Info de Pista"
@@ -7627,6 +7635,14 @@ msgstr "Ventana de Edición"
 msgid "How to display timeline thumbnails by default."
 msgstr "Como mostrar la miniatura de la línea de tiempo estándar."
 
+msgid "Edit Viewport Waveforms"
+msgstr "Formas de onda del visor de edición"
+
+msgid "How to display timeline waveforms by default."
+msgstr ""
+"Cómo mostrar las formas de onda de la línea de tiempo de forma "
+"predeterminada."
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Miniaturas sobre la Línea de Tiempo"
 
@@ -8773,6 +8789,9 @@ msgstr "Alternar mapeo de tonos de HDR"
 msgid "Toggle HDR Peak Detection"
 msgstr "Permutar Detección de Umbral de HDR"
 
+msgid "Toggle Compare Timelines"
+msgstr "Alternar la comparación de líneas de tiempo"
+
 msgid "Compare None"
 msgstr "Comparar Nada"
 
@@ -9302,9 +9321,6 @@ msgstr "task info falló"
 
 #~ msgid "View/Compare/Vertical"
 #~ msgstr "Vista/Comparar/Vertical"
-
-#~ msgid "View/Compare/Tile"
-#~ msgstr "Vista/Comparar/Mosaico"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "Eliminar hueco(s) de audio en el cuadro actual."

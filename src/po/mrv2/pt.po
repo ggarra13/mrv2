@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-25 18:10-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: pt\n"
@@ -3659,6 +3659,11 @@ msgstr "Ir para o arquivo listado."
 msgid "Select B File."
 msgstr "Selecionar o arquivo B."
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr ""
+"Alternar a comparação de linhas do tempo na janela de edição ao comparar "
+"clipes."
+
 msgid "Toggle A and B comparison."
 msgstr "Alternar a comparação entre A e B."
 
@@ -4924,6 +4929,9 @@ msgstr "Linha Do Tempo/Visualizao do Quadro"
 
 msgid "Timeline/Scroll To Current Frame"
 msgstr "Linha Do Tempo/Deslocar para o Quadro Atual"
+
+msgid "Timeline/Compare Timelines"
+msgstr "Linha do tempo/Comparar linhas do tempo"
 
 msgid "Timeline/Track Info"
 msgstr "Linha Do Tempo/Informaes da Faixa"
@@ -7588,6 +7596,12 @@ msgstr "Editar a Viso"
 msgid "How to display timeline thumbnails by default."
 msgstr "Como exibir miniaturas de linha de tempo por padro."
 
+msgid "Edit Viewport Waveforms"
+msgstr "Formas de onda da janela de edição"
+
+msgid "How to display timeline waveforms by default."
+msgstr "Como exibir as formas de onda da linha do tempo por padrão."
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Previsualizar as miniaturas acima da linha de tempo"
 
@@ -8733,6 +8747,9 @@ msgstr "Comutar o mapa de tons do HDR"
 msgid "Toggle HDR Peak Detection"
 msgstr "Ativar/desativar a detecção de pico HDR"
 
+msgid "Toggle Compare Timelines"
+msgstr "Alternar a comparação de linhas do tempo"
+
 msgid "Compare None"
 msgstr "Comparar Nenhuna"
 
@@ -9262,9 +9279,6 @@ msgstr "Falhou a informao da tarefa"
 
 #~ msgid "View/Compare/Vertical"
 #~ msgstr "Visualizar/Comparar/Vertical"
-
-#~ msgid "View/Compare/Tile"
-#~ msgstr "Visualizar/Comparar/Azulejo"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "Remover intervalo(s) de áudio no tempo atual."

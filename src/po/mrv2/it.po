@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-25 18:10-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: it\n"
@@ -3685,6 +3685,11 @@ msgstr "Vai al file elencato."
 msgid "Select B File."
 msgstr "Seleziona il file B."
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr ""
+"Attiva/disattiva il confronto delle timeline nel viewport di montaggio "
+"durante il confronto delle clip."
+
 msgid "Toggle A and B comparison."
 msgstr "Attiva/disattiva il confronto A e B."
 
@@ -4955,6 +4960,9 @@ msgstr "Timeline/Visualizza fotogramma"
 
 msgid "Timeline/Scroll To Current Frame"
 msgstr "Timeline/Scorri verso la cornice corrente"
+
+msgid "Timeline/Compare Timelines"
+msgstr "Timeline/Confronta timeline"
 
 msgid "Timeline/Track Info"
 msgstr "Timeline/Informazioni sulla traccia"
@@ -7625,6 +7633,14 @@ msgid "How to display timeline thumbnails by default."
 msgstr ""
 "Come visualizzare le miniature della timeline per impostazione predefinita."
 
+msgid "Edit Viewport Waveforms"
+msgstr "Forme d'onda del viewport di montaggio"
+
+msgid "How to display timeline waveforms by default."
+msgstr ""
+"Come visualizzare le forme d'onda della timeline per impostazione "
+"predefinita."
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Anteprima Thumbnails sopra Timeline"
 
@@ -8781,6 +8797,9 @@ msgstr "Commuta mappa tonale HDR"
 msgid "Toggle HDR Peak Detection"
 msgstr "Attiva/disattiva il rilevamento del picco HDR"
 
+msgid "Toggle Compare Timelines"
+msgstr "Attiva/disattiva il confronto delle timeline"
+
 msgid "Compare None"
 msgstr "Confronta Nessuna"
 
@@ -9310,9 +9329,6 @@ msgstr "Informazione dell'attività non riuscita"
 
 #~ msgid "View/Compare/Vertical"
 #~ msgstr "Visualizza/Confronta/Verticale"
-
-#~ msgid "View/Compare/Tile"
-#~ msgstr "Visualizza/Confronta/Titolo"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "Rimuovi gli spazi audio presenti al tempo corrente."

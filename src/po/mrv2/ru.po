@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-25 18:10-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: ru\n"
@@ -3687,6 +3687,9 @@ msgstr "Перейти к файлу из списка."
 msgid "Select B File."
 msgstr "Выбрать файл B."
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr "Переключить сравнение таймлайнов в окне монтажа при сравнении клипов."
+
 msgid "Toggle A and B comparison."
 msgstr "Переключить сравнение A и B."
 
@@ -4939,6 +4942,9 @@ msgstr "Таймлайн/Покадровый вид"
 
 msgid "Timeline/Scroll To Current Frame"
 msgstr "Таймлайн/Прокрутить к текущему кадру"
+
+msgid "Timeline/Compare Timelines"
+msgstr "Таймлайн/Сравнить таймлайны"
 
 msgid "Timeline/Track Info"
 msgstr "Таймлайн/Информация о дорожке"
@@ -7597,6 +7603,12 @@ msgstr "Правка Просмотра"
 msgid "How to display timeline thumbnails by default."
 msgstr "Как отображать хронологию ногтей по умолчанию."
 
+msgid "Edit Viewport Waveforms"
+msgstr "Волновые формы в окне монтажа"
+
+msgid "How to display timeline waveforms by default."
+msgstr "Как отображать волновые формы таймлайна по умолчанию."
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Просмотр миниатюрных пальцев над временной линией"
 
@@ -8743,6 +8755,9 @@ msgstr "Скриншот"
 msgid "Toggle HDR Peak Detection"
 msgstr "Включить/выключить определение пиков HDR"
 
+msgid "Toggle Compare Timelines"
+msgstr "Переключить сравнение таймлайнов"
+
 msgid "Compare None"
 msgstr "сравнить ни один"
 
@@ -9272,9 +9287,6 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "View/Compare/Vertical"
 #~ msgstr "Вид/Сравнение/Вертикальная передача"
-
-#~ msgid "View/Compare/Tile"
-#~ msgstr "Вид/Сравнение/Плитка"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "Удалить аудиоразрыв(ы) в текущий момент времени."

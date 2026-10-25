@@ -1062,6 +1062,10 @@ namespace mrv
                     _updateMonitorDisplayView(screen, ocio);
 
                     timeline::BackgroundOptions backgroundOptions = getBackgroundOptions();
+                    if (backgroundOptions.type == timeline::Background::Transparent)
+                    {
+                        backgroundOptions.color0 = image::Color4f(r, g, b, 1.F);
+                    }
                     vk.render->setShaderOptions(p.shaderOptions);
                     vk.render->setLUTOptions(p.lutOptions);
                     vk.render->setHDROptions(p.hdrOptions);

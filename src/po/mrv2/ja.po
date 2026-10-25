@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-25 18:10-0300\n"
 "PO-Revision-Date: 2026-09-29 22:48+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -3610,6 +3610,9 @@ msgstr "一覧表示されたファイルに移動します。"
 msgid "Select B File."
 msgstr "Bファイルを選択します。"
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr "クリップの比較時に編集ビューポートでタイムラインの比較を切り替えます。"
+
 msgid "Toggle A and B comparison."
 msgstr "A と B の比較を切り替えます。"
 
@@ -4837,6 +4840,9 @@ msgstr "タイムライン/フレームビュー"
 
 msgid "Timeline/Scroll To Current Frame"
 msgstr "タイムライン/現在のフレームにスクロール"
+
+msgid "Timeline/Compare Timelines"
+msgstr "タイムライン/タイムラインを比較"
 
 msgid "Timeline/Track Info"
 msgstr "タイムライン/トラック情報"
@@ -7430,6 +7436,12 @@ msgstr "編集ビューポート"
 msgid "How to display timeline thumbnails by default."
 msgstr "タイムラインサムネイルのデフォルトの表示方法。"
 
+msgid "Edit Viewport Waveforms"
+msgstr "編集ビューポートの波形"
+
+msgid "How to display timeline waveforms by default."
+msgstr "タイムラインの波形をデフォルトで表示する方法。"
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "タイムラインの上にサムネイルをプレビュー"
 
@@ -8513,6 +8525,9 @@ msgstr "HDR トーンマップの切り替え"
 msgid "Toggle HDR Peak Detection"
 msgstr "HDR ピーク検出の切り替え"
 
+msgid "Toggle Compare Timelines"
+msgstr "タイムラインの比較を切り替え"
+
 msgid "Compare None"
 msgstr "比較なし"
 
@@ -9040,9 +9055,6 @@ msgstr "タスク情報の取得に失敗しました"
 
 #~ msgid "View/Compare/Vertical"
 #~ msgstr "表示/比較/垂直"
-
-#~ msgid "View/Compare/Tile"
-#~ msgstr "表示/比較/タイル"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "現在の時刻にあるオーディオギャップを削除します。"

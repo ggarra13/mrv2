@@ -123,7 +123,7 @@ namespace mrv
             bool getCompareTimelines();
 
             //! Get timeline geometry.
-            const math::Size2i getGeometry() const;
+            const math::Box2i getGeometry() const;
 
             int mousePressEvent(int button, bool, int modifiers);
             int mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);

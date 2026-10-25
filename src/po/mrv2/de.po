@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v0.7.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-25 18:10-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -3678,6 +3678,11 @@ msgstr "Zur aufgelisteten Datei wechseln."
 msgid "Select B File."
 msgstr "B-Datei auswählen."
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr ""
+"Zeitleistenvergleich im Bearbeitungs-Viewport beim Vergleichen von Clips "
+"umschalten."
+
 msgid "Toggle A and B comparison."
 msgstr "A/B-Vergleich umschalten."
 
@@ -4938,6 +4943,9 @@ msgstr "Zeitleiste/Rahmenansicht"
 
 msgid "Timeline/Scroll To Current Frame"
 msgstr "Zeitleiste/Scroll zum aktuellen Frame"
+
+msgid "Timeline/Compare Timelines"
+msgstr "Zeitleiste/Zeitleisten vergleichen"
 
 msgid "Timeline/Track Info"
 msgstr "Zeitleiste/Titelinformationen"
@@ -7606,6 +7614,12 @@ msgstr "Ansicht bearbeiten"
 msgid "How to display timeline thumbnails by default."
 msgstr "Wie werden standardmig Timeline-Vorschaubilder angezeigt?"
 
+msgid "Edit Viewport Waveforms"
+msgstr "Wellenformen im Bearbeitungs-Viewport"
+
+msgid "How to display timeline waveforms by default."
+msgstr "Wie Wellenformen in der Zeitleiste standardmäßig angezeigt werden."
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Vorschau Thumbnails ber Timeline"
 
@@ -8755,6 +8769,9 @@ msgstr "HDR-Tonkarte umschalten"
 msgid "Toggle HDR Peak Detection"
 msgstr "HDR-Peak-Erkennung umschalten"
 
+msgid "Toggle Compare Timelines"
+msgstr "Zeitleistenvergleich umschalten"
+
 msgid "Compare None"
 msgstr "Vergleich Keine"
 
@@ -9284,9 +9301,6 @@ msgstr "Task-Info fehlgeschlagen"
 
 #~ msgid "View/Compare/Vertical"
 #~ msgstr "Sicht/Vergleichen Sie/Vertikal"
-
-#~ msgid "View/Compare/Tile"
-#~ msgstr "Sicht/Vergleichen Sie/Kachel"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "Audiolücke(n) an der aktuellen Zeit entfernen."

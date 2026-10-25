@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.8.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-25 18:10-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3451,6 +3451,9 @@ msgstr ""
 msgid "Select B File."
 msgstr ""
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr ""
+
 msgid "Toggle A and B comparison."
 msgstr ""
 
@@ -4662,6 +4665,9 @@ msgid "Timeline/Frame View"
 msgstr ""
 
 msgid "Timeline/Scroll To Current Frame"
+msgstr ""
+
+msgid "Timeline/Compare Timelines"
 msgstr ""
 
 msgid "Timeline/Track Info"
@@ -7111,6 +7117,12 @@ msgstr ""
 msgid "How to display timeline thumbnails by default."
 msgstr ""
 
+msgid "Edit Viewport Waveforms"
+msgstr ""
+
+msgid "How to display timeline waveforms by default."
+msgstr ""
+
 msgid "Preview Thumbnails above Timeline"
 msgstr ""
 
@@ -8163,6 +8175,9 @@ msgid "Toggle HDR tonemap"
 msgstr ""
 
 msgid "Toggle HDR Peak Detection"
+msgstr ""
+
+msgid "Toggle Compare Timelines"
 msgstr ""
 
 msgid "Compare None"

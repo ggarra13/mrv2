@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-25 18:10-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: fr\n"
@@ -3682,6 +3682,11 @@ msgstr "Aller au fichier listé."
 msgid "Select B File."
 msgstr "Sélectionner le fichier B."
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr ""
+"Activer/désactiver la comparaison des timelines dans la fenêtre de montage "
+"lors de la comparaison de clips."
+
 msgid "Toggle A and B comparison."
 msgstr "Activer/désactiver la comparaison A et B."
 
@@ -4971,6 +4976,9 @@ msgstr "Timeline/Affichage du cadre"
 
 msgid "Timeline/Scroll To Current Frame"
 msgstr "Timeline/Faites défiler vers le cadre actuel"
+
+msgid "Timeline/Compare Timelines"
+msgstr "Timeline/Comparer les timelines"
 
 msgid "Timeline/Track Info"
 msgstr "Timeline/Informations sur la piste"
@@ -7651,6 +7659,12 @@ msgstr "Édition le point de vue"
 msgid "How to display timeline thumbnails by default."
 msgstr "Comment afficher les miniatures de la chronologie par défaut."
 
+msgid "Edit Viewport Waveforms"
+msgstr "Formes d’onde de la fenêtre de montage"
+
+msgid "How to display timeline waveforms by default."
+msgstr "Comment afficher les formes d’onde de la timeline par défaut."
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Aperçu des miniatures ci-dessus Chronologie"
 
@@ -8818,6 +8832,9 @@ msgstr "Commutation de la carte de tons HDR"
 msgid "Toggle HDR Peak Detection"
 msgstr "Activer/désactiver la détection de pic HDR"
 
+msgid "Toggle Compare Timelines"
+msgstr "Activer/désactiver la comparaison des timelines"
+
 msgid "Compare None"
 msgstr "Comparer Aucun"
 
@@ -9347,9 +9364,6 @@ msgstr "l'information de la tâche a échoué"
 
 #~ msgid "View/Compare/Vertical"
 #~ msgstr "Vue/Comparer/Vertical"
-
-#~ msgid "View/Compare/Tile"
-#~ msgstr "Vue/Comparer/Tile"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "Supprimer le ou les espaces audio à l'instant actuel."

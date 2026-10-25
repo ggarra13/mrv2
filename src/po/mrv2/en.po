@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-25 18:10-0300\n"
 "PO-Revision-Date: 2024-05-09 12:13-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -3653,6 +3653,9 @@ msgstr "Go to Listed File."
 msgid "Select B File."
 msgstr "Select B File."
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+
 msgid "Toggle A and B comparison."
 msgstr "Toggle A and B comparison."
 
@@ -4892,6 +4895,9 @@ msgstr "Timeline/Frame View"
 
 msgid "Timeline/Scroll To Current Frame"
 msgstr "Timeline/Scroll To Current Frame"
+
+msgid "Timeline/Compare Timelines"
+msgstr "Timeline/Compare Timelines"
 
 msgid "Timeline/Track Info"
 msgstr "Timeline/Track Info"
@@ -7541,6 +7547,12 @@ msgstr "Edit Viewport"
 msgid "How to display timeline thumbnails by default."
 msgstr "How to display timeline thumbnails by default."
 
+msgid "Edit Viewport Waveforms"
+msgstr "Edit Viewport Waveforms"
+
+msgid "How to display timeline waveforms by default."
+msgstr "How to display timeline waveforms by default."
+
 msgid "Preview Thumbnails above Timeline"
 msgstr "Preview Thumbnails above Timeline"
 
@@ -8674,6 +8686,9 @@ msgstr "Toggle HDR tonemap"
 msgid "Toggle HDR Peak Detection"
 msgstr "Toggle HDR Peak Detection"
 
+msgid "Toggle Compare Timelines"
+msgstr "Toggle Compare Timelines"
+
 msgid "Compare None"
 msgstr "Compare None"
 
@@ -9201,9 +9216,6 @@ msgstr "task info failed"
 
 #~ msgid "View/Compare/Vertical"
 #~ msgstr "View/Compare/Vertical"
-
-#~ msgid "View/Compare/Tile"
-#~ msgstr "View/Compare/Tile"
 
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "Remove audio gap(s) at the ones at current time."
