@@ -3938,17 +3938,9 @@ namespace mrv
     }
 
     int calculate_edit_viewport_size(ViewerUI* ui)
-    { //
-#ifdef OPENGL_BACKEND
-        const timelineui::DisplayOptions& displayOptions =
+    {
+        const TIMELINEUI::DisplayOptions& displayOptions =
             ui->uiTimeline->getDisplayOptions();
-#endif
-
-#ifdef VULKAN_BACKEND
-        const timelineui_vk::DisplayOptions& displayOptions =
-            ui->uiTimeline->getDisplayOptions();
-#endif
-
 
         // This specifies whether to show Video Only or Video and Audio.
         const int editView = ui->uiPrefs->EditView->value();
@@ -3958,17 +3950,9 @@ namespace mrv
         // const float pixels_unit = ui->uiTimeline->pixels_per_unit();
         const float pixels_unit = ui->uiView->pixels_per_unit();
 
-        // Some constants, as Darby does not yet expose this in tlRender.
-        const int kMargin = 4;
-        const int kTrackInfoHeight = 20 + kMargin;
-        const int kClipInfoHeight = 16 + kMargin;
-        const int kTransitionsHeight = 30;
-        const int kAudioGapOnlyHeight = 20;
-        const int kMarkerHeight = 24;
-        const int kEffectsHeight = 26;
-
-        const int kVideoHeight = displayOptions.thumbnailHeight + kMargin;
-        const int kAudioHeight = displayOptions.waveformHeight + kMargin;
+        // Sanity check... make sure we don't go bigger than the max.
+        const Fl_Tile* tile = ui->uiTileGroup;
+        const int tileH = tile->h();
 
         int H = kMinEditModeH; // timeline height
         if (editMode == EditMode::kTimeline)
@@ -3980,175 +3964,29 @@ namespace mrv
         if (!player)
             return H;
 
-#if 1
-        // Accumulated variables counting total height of each track.
-        int videoHeight = 0;
-        int audioHeight = 0;
-        int markersHeight = 0;
-        int effectsHeight = 0;
-        int transitionsHeight = 0;
+        int W = ui->uiTimeline->w();
 
-        auto timeline = player->getTimeline();
-        if (!timeline)
-            return H;
-
-        // Check first if the timeline is an audio only timeline.
-        bool audioOnly = true;
-        for (const auto& child : timeline->tracks()->children())
-        {
-            if (const auto* track = dynamic_cast<OTIO_NS::Track*>(child.value))
-            {
-                if (OTIO_NS::Track::Kind::video == track->kind())
-                {
-                    audioOnly = false;
-                    break;
-                }
-            }
-        }
-
-        for (const auto& child : timeline->tracks()->children())
-        {
-            if (const auto* track = dynamic_cast<OTIO_NS::Track*>(child.value))
-            {
-                if (!track->enabled())
-                    continue;
-
-                bool visibleTrack = false;
-                if (OTIO_NS::Track::Kind::video == track->kind())
-                {
-                    if (displayOptions.trackInfo)
-                        videoHeight += kTrackInfoHeight;
-                    if (displayOptions.clipInfo)
-                        videoHeight += kClipInfoHeight;
-                    if (displayOptions.thumbnails)
-                        videoHeight += kVideoHeight / pixels_unit;
-                    visibleTrack = true;
-                }
-                else if (
-                    OTIO_NS::Track::Kind::audio == track->kind() &&
-                    (editView >= 1 || audioOnly))
-                {
-                    if (track->children().size() > 0)
-                    {
-                        if (displayOptions.trackInfo)
-                            audioHeight += kTrackInfoHeight;
-                        if (displayOptions.clipInfo)
-                            audioHeight += kClipInfoHeight;
-                        if (displayOptions.waveforms)
-                        {
-                            bool hasWaveform = false;
-                            for (const auto& trackChild : track->children())
-                            {
-                                if (const auto& clip =
-                                        OTIO_NS::dynamic_retainer_cast<Clip>(
-                                            trackChild))
-                                {
-                                    hasWaveform = true;
-                                    break;
-                                }
-                            }
-                            if (hasWaveform)
-                                audioHeight += kAudioHeight / pixels_unit;
-                            else
-                                audioHeight +=
-                                    kAudioGapOnlyHeight / pixels_unit;
-                        }
-
-                        visibleTrack = true;
-                    }
-                }
-                // Handle Markers
-                if (displayOptions.markers && visibleTrack)
-                {
-                    int markerSizeForTrack = 0;
-                    for (const auto& child : track->children())
-                    {
-                        auto item = OTIO_NS::dynamic_retainer_cast<Item>(child);
-                        if (!item)
-                            continue;
-
-                        int markerSizeForItem = 0;
-                        for (const auto& marker : item->markers())
-                        {
-                            markerSizeForItem += kMarkerHeight;
-                        }
-                        if (markerSizeForItem > markerSizeForTrack)
-                            markerSizeForTrack = markerSizeForItem;
-                    }
-                    markersHeight += markerSizeForTrack;
-                }
-                // Handle Effects
-                if (displayOptions.effects && visibleTrack)
-                {
-                    int effectsSizeForTrack = 0;
-                    for (const auto& child : track->children())
-                    {
-                        auto item = OTIO_NS::dynamic_retainer_cast<Item>(child);
-                        if (!item)
-                            continue;
-
-                        int effectsSizeForItem = 0;
-                        for (const auto& effect : item->effects())
-                        {
-                            effectsSizeForItem += kEffectsHeight;
-                        }
-                        if (effectsSizeForItem > effectsSizeForTrack)
-                            effectsSizeForTrack = effectsSizeForItem;
-                    }
-                    effectsHeight += effectsSizeForTrack;
-                }
-                // Handle transitions
-                if (displayOptions.transitions && visibleTrack)
-                {
-                    bool found = false;
-                    for (const auto& child : track->children())
-                    {
-                        if (const auto& transition =
-                                dynamic_cast<OTIO_NS::Transition*>(child.value))
-                        {
-                            bool visibleTrack = false;
-                            if (OTIO_NS::Track::Kind::video == track->kind())
-                            {
-                                visibleTrack = true;
-                            }
-                            else if (
-                                OTIO_NS::Track::Kind::audio == track->kind() &&
-                                (editView >= 1 || audioOnly))
-                            {
-                                if (track->children().size() > 0)
-                                {
-                                    visibleTrack = true;
-                                }
-                            }
-                            if (visibleTrack)
-                            {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (found)
-                    {
-                        transitionsHeight += kTransitionsHeight;
-                    }
-                }
-            }
-        }
-
-        // Now add up all heights divided by the pixels unit.
-        H += videoHeight + audioHeight + markersHeight + effectsHeight +
-             transitionsHeight;
-
-#else
-        H  = ui->uiTimeline->getGeometry().h() + 16;  // why + 16 is needed?
-        H /= ui->uiTimeline->pixels_per_unit();
-#endif
-        // Sanity check... make sure we don't go bigger than the max.
-        const Fl_Tile* tile = ui->uiTileGroup;
-        const int tileH = tile->h();
         // Shift the view up to see the video thumbnails and audio waveforms.
-        // We need to substrac dragbar and timeline to leave room.
+        // We need to substract dragbar and timeline to leave room.
         const int maxTileHeight = tileH - kMinEditModeH;
+
+        // Force a resize of the timeline to refresh its sizes calling
+        // TIMELINEUI::TimelineWidget's _sizeHintEvent recursively.
+        H  = ui->uiTimeline->getGeometry().h();
+        H /= pixels_unit;
+        if (H >= maxTileHeight)
+        {
+            H = maxTileHeight;
+        }
+        ui->uiTimeline->size(W, H);
+
+        if (H >= maxTileHeight)
+        {
+            H = maxTileHeight;
+        }
+        H = ui->uiTimeline->getGeometry().h() + 16; // + 16 is needed
+        H /= pixels_unit;
+        ui->uiTimeline->size(W, H);
 
         if (H >= maxTileHeight)
         {
@@ -4193,6 +4031,8 @@ namespace mrv
             }
             else
             {
+                ui->uiEditGroup->hide();
+                ui->uiActionGroup->show();
             }
         }
         else

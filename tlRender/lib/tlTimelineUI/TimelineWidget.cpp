@@ -5,6 +5,8 @@
 #include <TimelineWidget.h>
 
 #include "TimelineRuler.h"
+#include "EffectItem.h"
+#include "TransitionItem.h"
 
 #include <tlUI/ScrollWidget.h>
 #include <tlUI/RowLayout.h>
@@ -23,6 +25,49 @@ namespace tl
             const float marginPercentage = .1F;
         }
 
+        namespace
+        {
+            //! Is this widget one of the kinds a DisplayOptions flag turns off?
+            bool hiddenByOptions(
+                const std::shared_ptr<ui::IWidget>& widget,
+                const DisplayOptions& options)
+            {
+                if (std::dynamic_pointer_cast<EffectItem>(widget))
+                    return !options.effects;
+                if (std::dynamic_pointer_cast<TransitionItem>(widget))
+                    return !options.transitions;
+                return false;
+            }
+
+            //! Expand 'out' by the geometry of the widget and its visible
+            //! descendants.
+            void expandVisible(
+                const std::shared_ptr<ui::IWidget>& widget,
+                const DisplayOptions& options, math::Box2i& out, bool& found)
+            {
+                // A hidden widget hides its whole subtree.
+                if (!widget->isVisible(false) || hiddenByOptions(widget, options))
+                    return;
+
+                // Layouts only contain things: their own rectangle can be bigger
+                // than what they hold (for example, stretched to the viewport).
+                if (!std::dynamic_pointer_cast<ui::RowLayout>(widget))
+                {
+                    const math::Box2i& g = widget->getGeometry();
+                    // Items that are turned off (thumbnails, waveforms, markers,
+                    // clip info, track info, hidden tracks) have no size hint, so
+                    // they end up empty and are skipped here.
+                    if (g.w() > 0 && g.h() > 0)
+                    {
+                        out = found ? math::expand(out, g) : g;
+                        found = true;
+                    }
+                }
+
+                for (const auto& child : widget->getChildren())
+                    expandVisible(child, options, out, found);
+            }
+        }
         struct TimelineWidget::Private
         {
             std::shared_ptr<timeline::ITimeUnitsModel> timeUnitsModel;
@@ -218,12 +263,17 @@ namespace tl
         const math::Box2i TimelineWidget::getAllGeometry() const
         {
             TLRENDER_P();
+
+            const DisplayOptions& options = p.displayOptions->get();
+
             math::Box2i out;
-            // \@bug: this is currently wrong. We should iterate through all
-            //        children recursively and add run math::expand on each
-            //        one.
-            out = math::expand(p.ruler->getGeometry(), p.layout->getGeometry());
-            return out;
+            bool found = false;
+            if (p.ruler)
+                expandVisible(p.ruler, options, out, found);
+            if (p.layout)
+                expandVisible(p.layout, options, out, found);
+
+            return found ? out : _geometry;
         }
 
         void TimelineWidget::setPlayer(
