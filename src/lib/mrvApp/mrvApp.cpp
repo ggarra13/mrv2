@@ -323,7 +323,7 @@ namespace mrv
         // associations and double clicks on files.
         fl_open_callback(osx_open_cb);
 #endif
-        
+
         // Establish MRV2_ROOT environment variable
         set_root_path(argc, argv);
         mrv::init(context);
@@ -2218,9 +2218,9 @@ namespace mrv
 
         // Handle FileSequence options
         options.imageSeqAudio = static_cast<timeline::ImageSeqAudio>(
-            p.settings->getValue<int>("FileSequence/Audio"));
+            p.settings->getValue<int>("ImageSequence/Audio"));
         options.imageSeqAudioFileName =
-            p.settings->getValue<std::string>("FileSequence/AudioFileName");
+            p.settings->getValue<std::string>("ImageSequence/AudioFileName");
 
         // Handle OTIO options
         options.spatial = static_cast<timeline::Spatial>(p.settings->getValue<int>("OTIO/Spatial"));

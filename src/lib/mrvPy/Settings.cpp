@@ -108,7 +108,7 @@ namespace mrv2
         void setFileSequenceAudio(const timeline::ImageSeqAudio value)
         {
             mrv::settings()->setValue(
-                "FileSequence/Audio", static_cast<int>(value));
+                "ImageSequence/Audio", static_cast<int>(value));
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
@@ -116,7 +116,7 @@ namespace mrv2
         timeline::ImageSeqAudio fileSequenceAudio()
         {
             return static_cast<timeline::ImageSeqAudio>(
-                mrv::settings()->getValue<int>("FileSequence/Audio"));
+                mrv::settings()->getValue<int>("ImageSequence/Audio"));
         }
 
         /**
@@ -126,7 +126,7 @@ namespace mrv2
          */
         void setFileSequenceAudioFileName(const std::string& value)
         {
-            mrv::settings()->setValue("FileSequence/AudioFileName", value);
+            mrv::settings()->setValue("ImageSequence/AudioFileName", value);
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
@@ -139,7 +139,7 @@ namespace mrv2
         std::string fileSequenceAudioFileName()
         {
             return mrv::settings()->getValue<std::string>(
-                "FileSequence/AudioFileName");
+                "ImageSequence/AudioFileName");
         }
 
         /**
