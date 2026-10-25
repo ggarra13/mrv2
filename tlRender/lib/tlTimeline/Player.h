@@ -117,6 +117,10 @@ namespace tl
             //! Get the time range.
             const OTIO_NS::TimeRange& getTimeRange() const;
 
+            //! Observe the time range.
+            std::shared_ptr<observer::IValue<OTIO_NS::TimeRange> >
+            observeTimeRange() const;
+
             //! Get the I/O information. This information is retrieved from
             //! the first clip in the timeline.
             const io::Info& getIOInfo() const;

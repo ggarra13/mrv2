@@ -54,13 +54,13 @@ namespace tl
         {
             std::shared_ptr<timeline::ITimeUnitsModel> timeUnitsModel;
             std::shared_ptr<timeline::Player> player;
+            OTIO_NS::TimeRange timeRange;
 
             ItemOptions itemOptions;
             DisplayOptions displayOptions;
 
-            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
-            OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
-            OTIO_NS::RationalTime currentTime = time::invalidTime;
+            std::optional<OTIO_NS::TimeRange> inOutRange;
+            std::optional<OTIO_NS::RationalTime> currentTime;
             timeline::PlayerCacheInfo cacheInfo;
             std::vector<int> frameMarkers;
 
@@ -101,6 +101,8 @@ namespace tl
             std::shared_ptr<observer::ValueObserver<bool> > timeUnitsObserver;
             std::shared_ptr<observer::ValueObserver<OTIO_NS::RationalTime> >
                 currentTimeObserver;
+            std::shared_ptr<observer::ValueObserver<OTIO_NS::TimeRange> >
+                timeRangeObserver;
             std::shared_ptr<observer::ValueObserver<OTIO_NS::TimeRange> >
                 inOutRangeObserver;
             std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
@@ -150,8 +152,13 @@ namespace tl
             TLRENDER_P();
 
             p.currentTimeObserver.reset();
+            p.timeRangeObserver.reset();
             p.inOutRangeObserver.reset();
             p.cacheInfoObserver.reset();
+            p.currentTime.reset();
+            p.inOutRange.reset();
+            p.cacheInfo = timeline::PlayerCacheInfo();
+            p.timeRange = OTIO_NS::TimeRange();
 
             if (p.scrubbing)
             {
@@ -160,15 +167,11 @@ namespace tl
             }
 
             p.player = value;
-            p.currentTime = time::invalidTime;
-            p.inOutRange = time::invalidTimeRange;
-            p.cacheInfo = timeline::PlayerCacheInfo();
-            p.timeRange = p.player ? p.player->getTimeRange()
-                                   : time::invalidTimeRange;
             p.labels.valid = false;
 
             if (p.player)
             {
+                p.timeRange = p.player->getTimeRange();
                 p.currentTimeObserver =
                     observer::ValueObserver<OTIO_NS::RationalTime>::create(
                         p.player->observeCurrentTime(),
@@ -187,6 +190,15 @@ namespace tl
                             _updates |= ui::Update::Draw;
                         });
 
+                p.timeRangeObserver =
+                    observer::ValueObserver<OTIO_NS::TimeRange>::create(
+                        p.player->observeTimeRange(),
+                        [this](const OTIO_NS::TimeRange& value)
+                        {
+                            _p->timeRange = value;
+                            _updates |= ui::Update::Draw;
+                        });
+
                 p.cacheInfoObserver =
                     observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                         p.player->observeCacheInfo(),
@@ -197,6 +209,7 @@ namespace tl
                         });
             }
             _updates |= ui::Update::Draw;
+            _updates |= ui::Update::Size;
         }
 
         void TimelineRuler::setTimeRange(const OTIO_NS::TimeRange& value)
@@ -481,8 +494,8 @@ namespace tl
             const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
             TLRENDER_P();
-            if (!time::compareExact(p.inOutRange, time::invalidTimeRange) &&
-                !time::compareExact(p.inOutRange, p.timeRange))
+            if (p.inOutRange.has_value() &&
+                !time::compareExact(*p.inOutRange, p.timeRange))
             {
                 const int y = _geometry.min.y;
                 const int h = p.size.margin + p.size.fontMetrics.lineHeight +
@@ -494,9 +507,9 @@ namespace tl
                 {
                 case InOutDisplay::InsideRange:
                 {
-                    const int x0 = timeToPos(p.inOutRange.start_time());
+                    const int x0 = timeToPos(p.inOutRange->start_time());
                     const int x1 =
-                        timeToPos(p.inOutRange.end_time_exclusive());
+                        timeToPos(p.inOutRange->end_time_exclusive());
                     event.render->drawRect(
                         math::Box2i(x0, y, x1 - x0 + 1, h), color);
                     break;
@@ -504,10 +517,10 @@ namespace tl
                 case InOutDisplay::OutsideRange:
                 {
                     int x0 = timeToPos(p.timeRange.start_time());
-                    int x1 = timeToPos(p.inOutRange.start_time());
+                    int x1 = timeToPos(p.inOutRange->start_time());
                     event.render->drawRect(
                         math::Box2i(x0, y, x1 - x0 + 1, h), color);
-                    x0 = timeToPos(p.inOutRange.end_time_exclusive());
+                    x0 = timeToPos(p.inOutRange->end_time_exclusive());
                     x1 = timeToPos(p.timeRange.end_time_exclusive());
                     event.render->drawRect(
                         math::Box2i(x0, y, x1 - x0 + 1, h), color);
@@ -675,7 +688,7 @@ namespace tl
                 cache.clip = drawRect;
                 cache.originX = p.originX;
                 cache.scale = p.scale;
-                cache.currentTime = p.currentTime;
+                cache.currentTime = *p.currentTime;
 
                 const double duration =
                     p.timeRange.duration().rescaled_to(1.0).value();
@@ -792,11 +805,11 @@ namespace tl
             const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
             TLRENDER_P();
-            if (p.currentTime.is_invalid_time())
+            if (!p.currentTime.has_value())
                 return;
 
             const math::Vector2i pos(
-                timeToPos(p.currentTime), _geometry.min.y);
+                timeToPos(*p.currentTime), _geometry.min.y);
 
             // The line runs down over the tracks, to the bottom of the
             // viewport.
@@ -809,7 +822,7 @@ namespace tl
             event.render->setClipRectEnabled(true);
 
             const std::string label =
-                p.timeUnitsModel->getLabel(p.currentTime);
+                p.timeUnitsModel->getLabel(*p.currentTime);
 
             math::Vector2i labelPos(
                 pos.x + p.size.border * 2 + p.size.margin,

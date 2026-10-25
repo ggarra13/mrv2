@@ -68,6 +68,8 @@ namespace tl
 
             void log(const std::shared_ptr<system::Context>&);
 
+            void setTimeRange(const OTIO_NS::TimeRange&);
+
             PlayerOptions playerOptions;
             std::shared_ptr<Timeline> timeline;
             io::Info ioInfo;
@@ -76,7 +78,7 @@ namespace tl
             // longest duration of the main timeline and the compare
             // timelines, at the main timeline's rate. Main thread only; the
             // player's thread uses its own copy in thread.timeRange.
-            OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
+            std::shared_ptr<observer::Value<OTIO_NS::TimeRange> > timeRange;
 
             // The audio format of the media, found when the timeline was read.
             // This is stable across media reference keys, because the timeline

@@ -35,7 +35,17 @@ namespace tl
                 duration =
                     std::max(duration, range.duration().rescaled_to(rate));
             }
-            timeRange = OTIO_NS::TimeRange(start, duration);
+            setTimeRange(OTIO_NS::TimeRange(start, duration));
+        }
+
+        void Player::Private::setTimeRange(const OTIO_NS::TimeRange& value)
+        {
+            if (timeRange->setIfChanged(value))
+            {
+                std::unique_lock<std::mutex> lock(mutex.mutex);
+                mutex.timeRange = value;
+                mutex.clearRequests = true;
+            }
         }
 
         OTIO_NS::RationalTime
