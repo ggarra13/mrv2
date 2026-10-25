@@ -57,6 +57,16 @@ namespace tl
             //! Set the timeline player.
             void setPlayer(const std::shared_ptr<timeline::Player>&);
 
+            //! Set the timelines drawn beside the player's own.
+            //!
+            //! Unset, they are the player's comparison timelines, which is
+            //! what a player comparing pictures is showing. Set, they are
+            //! whatever is given: for drawing the structure of timelines the
+            //! picture is not comparing, which the player has no reason to
+            //! know about.
+            void setTimelines(
+                const std::optional<std::vector<std::shared_ptr<timeline::Timeline> > >& value);
+
             //! \name Editing
             ///@{
 

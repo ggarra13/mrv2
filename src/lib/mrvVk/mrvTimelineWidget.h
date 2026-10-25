@@ -120,6 +120,10 @@ namespace mrv
             //! Toggle timeline editable
             void setEditable(bool);
 
+            //! Toggle between displaying compare timelines.
+            void setCompareTimelines(bool value);
+            bool getCompareTimelines();
+
             int mousePressEvent(int button, bool, int modifiers);
             int
             mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);

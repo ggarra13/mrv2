@@ -1008,6 +1008,19 @@ namespace tl
             p.ruler->setViewport(viewport);
         }
 
+        void TimelineWidget::setTimelines(
+            const std::optional<std::vector<std::shared_ptr<timeline::Timeline> > >& value)
+        {
+            TLRENDER_P();
+            if (value == p.timelines)
+                return;
+            p.timelines = value;
+            p.compare = _getCompare();
+            _timelineUpdate();
+            _updates |= ui::Update::Size;
+            _updates |= ui::Update::Draw;
+        }
+
         std::vector<timeline::MoveData>
         TimelineWidget::getSelectedItems() const
         {

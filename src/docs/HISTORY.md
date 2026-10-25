@@ -4,6 +4,9 @@ v1.8.5
 ChangeLog
 ---------
 
+- UI: Allow demo users to see the timeline in full by dragging the separator without requesting an Edit license.
+
+
 Fixes
 -----
 

@@ -41,6 +41,7 @@
 #include <FL/Fl.H>
 #include <FL/names.h>
 
+#include <optional>
 
 namespace mrv
 {
@@ -191,6 +192,7 @@ namespace mrv
             VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
 
             //! Flags
+            bool compareTimelines = false;
             bool draggingClip = false;
             bool continueReversePlaying = false;
             timeline::EditMode editMode = timeline::EditMode::Move;
@@ -259,6 +261,7 @@ namespace mrv
                 std::bind(
                     &mrv::vulkan::TimelineWidget::moveCallback, this,
                     std::placeholders::_1));
+            p.timelineWidget->setTimelines(std::vector<std::shared_ptr<timeline::Timeline> >());
 
             p.timelineWidget->setParent(p.timelineWindow);
 
@@ -323,6 +326,29 @@ namespace mrv
         void TimelineWidget::setEditable(bool value)
         {
             _p->timelineWidget->setEditable(value);
+        }
+
+        bool TimelineWidget::getCompareTimelines()
+        {
+            return _p->compareTimelines;
+        }
+
+        void TimelineWidget::setCompareTimelines(bool value)
+        {
+            TLRENDER_P();
+
+            if (value == p.compareTimelines)
+                return;
+            p.compareTimelines = value;
+
+            if (value)
+            {
+                p.timelineWidget->setTimelines(std::optional<std::vector<std::shared_ptr<timeline::Timeline> > >());
+            }
+            else
+            {
+                p.timelineWidget->setTimelines(std::vector<std::shared_ptr<timeline::Timeline> >());
+            }
         }
 
         void TimelineWidget::setEditMode(const timeline::EditMode value)

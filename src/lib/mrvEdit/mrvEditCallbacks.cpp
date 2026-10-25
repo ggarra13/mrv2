@@ -4120,11 +4120,6 @@ namespace mrv
             }
             else
             {
-                if (!feature_needs_edit_or_later())
-                {
-                    ui->uiEditGroup->hide();
-                    ui->uiActionGroup->show();
-                }
             }
         }
         else
@@ -4261,6 +4256,7 @@ namespace mrv
         if (desktop::XWayland() || desktop::Wayland())
             TimelineGroup->redraw();
 
+
         // Change the edit button status
         set_edit_button(editMode, ui);
 
@@ -4272,6 +4268,14 @@ namespace mrv
             msg["value"] = mode;
             msg["height"] = H / ui->uiView->pixels_per_unit();
             tcp->pushMessage(msg);
+        }
+
+        bool active = (editMode == EditMode::kFull || editMode == EditMode::kSaved);
+
+        if (active && !feature_needs_edit_or_later())
+        {
+            ui->uiEditGroup->hide();
+            ui->uiActionGroup->show();
         }
     }
 

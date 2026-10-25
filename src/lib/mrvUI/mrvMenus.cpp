@@ -1379,6 +1379,15 @@ namespace mrv
         if (boolValue)
             item->set();
 
+
+        idx = menu->add(
+            _("Timeline/Compare Timelines"),
+            kToggleCompareTimelines.hotkey(),
+            (Fl_Callback*)toggle_compare_timelines_cb, ui, mode | FL_MENU_DIVIDER);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        if (ui->uiTimeline->getCompareTimelines())
+            item->set();
+
         idx = menu->add(
             _("Timeline/Track Info"), kToggleTimelineTrackInfo.hotkey(),
             (Fl_Callback*)toggle_timeline_track_info_cb, ui, mode);

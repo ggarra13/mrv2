@@ -37,6 +37,8 @@
 
 #include "mrViewer.h"
 
+#include <optional>
+
 namespace mrv
 {
     namespace
@@ -176,6 +178,7 @@ namespace mrv
             std::chrono::steady_clock::time_point mouseWheelTimer;
 
             //! Flags
+            bool compareTimelines = false;
             bool draggingClip = false;
             bool continueReversePlaying = false;
             timeline::EditMode editMode = timeline::EditMode::Move;
@@ -250,6 +253,7 @@ namespace mrv
             p.timelineWidget->setScrollBarsVisible(false);
             p.timelineWidget->setMoveCallback(std::bind(
                                                   &mrv::opengl::TimelineWidget::moveCallback, this, std::placeholders::_1));
+            p.timelineWidget->setTimelines(std::vector<std::shared_ptr<timeline::Timeline> >());
 
             timelineui::DisplayOptions displayOptions;
             displayOptions.trackInfo =
@@ -1735,6 +1739,29 @@ namespace mrv
             p.shader.reset();
             p.vbo.reset();
             p.vao.reset();
+        }
+
+        bool TimelineWidget::getCompareTimelines()
+        {
+            return _p->compareTimelines;
+        }
+
+        void TimelineWidget::setCompareTimelines(bool value)
+        {
+            TLRENDER_P();
+
+            if (value == p.compareTimelines)
+                return;
+            p.compareTimelines = value;
+
+            if (value)
+            {
+                p.timelineWidget->setTimelines(std::optional<std::vector<std::shared_ptr<timeline::Timeline> > >());
+            }
+            else
+            {
+                p.timelineWidget->setTimelines(std::vector<std::shared_ptr<timeline::Timeline> >());
+            }
         }
 
         void TimelineWidget::setUnits(TimeUnits value)
