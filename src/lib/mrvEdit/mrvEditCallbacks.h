@@ -146,7 +146,13 @@ namespace mrv
     void save_edit_mode_state(ViewerUI* ui);
     void set_edit_button(EditMode mode, ViewerUI* ui);
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui);
-    int calculate_edit_viewport_size(ViewerUI* ui);
+
+    //! Calculate the size of the edit viewport based on
+    //! loaded timelines.
+    int  calculate_edit_viewport_size(ViewerUI* ui);
+
+    //! Resize the edit viewport to fit.
+    void resize_edit_viewport_to_fit(ViewerUI* ui);
 
     const std::vector<file::Path> getOtioTimelinePaths(
         const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& otioTimeline,

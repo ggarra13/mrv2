@@ -4,14 +4,14 @@ v1.8.5
 ChangeLog
 ---------
 
-- UI: Allow demo users to see the timeline in full by dragging the separator without requesting an Edit license.
+- UI: Allow artists using the Demo version of the players to see the timeline in full by dragging the separator without requesting an Edit license.
 
 
 Fixes
 -----
 
 - OTIO in Timeline Viewport was using OCIO on .otio files even when **Preferences->OCIO Not on Videos** was set on the Vulkan backend.
-- Vulkan Wipe comparison would render green if there was no video attached.
+- Vulkan Wipe comparison would render green if there was no video at the current time.
 
 
 v1.8.4

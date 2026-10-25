@@ -3857,6 +3857,86 @@ namespace mrv
         }
     }
 
+    void resize_edit_viewport_to_fit(ViewerUI* ui)
+    {
+        // This is the main tile position.
+        Fl_Tile* tileGroup = ui->uiTileGroup;
+        int tileGroupY = tileGroup->y();
+        int tileGroupH = tileGroup->h();
+
+        // This is the timeline group within the tile.
+        Fl_Group* TimelineGroup = ui->uiTimelineGroup;
+        int oldY = TimelineGroup->y();
+
+        // This is the main viewport with the action items.
+        Fl_Flex* viewGroup = ui->uiViewGroup;
+
+        // \@bug:
+        // This mess is to work around macOS issues.  Unhiding TimelineGroup
+        // should be enough to also unhide the timeline, but it seemed not
+        // to work on macOS.
+        if (ui->uiMain->visible())
+        {
+            if (ui->uiBottomBar->visible())
+            {
+                if (!ui->uiTimelineGroup->visible())
+                {
+                    TimelineGroup->show();
+                }
+                if (!ui->uiTimeline->visible())
+                {
+                    ui->uiTimeline->show();
+                }
+            }
+            else
+            {
+                if (ui->uiTimeline->visible())
+                {
+                    ui->uiTimeline->hide();
+                }
+                if (ui->uiTimelineGroup->visible())
+                    TimelineGroup->hide();
+            }
+        }
+
+        int H = calculate_edit_viewport_size(ui);
+        int viewGroupH = tileGroupH - H;  // max. viewport with timeline
+        int newY = tileGroupY + viewGroupH;
+
+        // \@note: We do a resize instead of a move_intersection as:
+        //         it is faster and we must avoid collapsing the timeline group
+        //         to 0 when going into presentation mode (we internally keep
+        //         it as kMinEditModeH.
+        viewGroup->resize(
+            viewGroup->x(), viewGroup->y(), viewGroup->w(), viewGroupH);
+        TimelineGroup->resize(TimelineGroup->x(), newY, TimelineGroup->w(), H);
+
+        viewGroup->layout();
+
+        tileGroup->init_sizes();
+
+        ui->uiRegion->layout();
+
+        ui->uiView->valid(0);
+        ui->uiView->refresh();
+        if (ui->uiTimeline->shown())
+        {
+            ui->uiTimeline->valid(0);
+            ui->uiTimeline->refresh();
+        }
+        if (ui->uiSecondary && ui->uiSecondary->viewport())
+        {
+            auto view = ui->uiSecondary->viewport();
+            view->valid(0);
+            view->refresh();
+        }
+
+        // This is needed as XWayland and Wayland would leave traces of the
+        // toolbar icons.
+        if (desktop::XWayland() || desktop::Wayland())
+            TimelineGroup->redraw();
+    }
+
     int calculate_edit_viewport_size(ViewerUI* ui)
     { //
 #ifdef OPENGL_BACKEND
@@ -3912,6 +3992,7 @@ namespace mrv
         if (!player)
             return H;
 
+#if 0
         // Accumulated variables counting total height of each track.
         int videoHeight = 0;
         int audioHeight = 0;
@@ -4070,6 +4151,10 @@ namespace mrv
         H += videoHeight + audioHeight + markersHeight + effectsHeight +
              transitionsHeight;
 
+#else
+        H  = ui->uiTimeline->getGeometry().h() + 16;  // why + 16 is needed?
+        H /= ui->uiTimeline->pixels_per_unit();
+#endif
         // Sanity check... make sure we don't go bigger than the max.
         const Fl_Tile* tile = ui->uiTileGroup;
         const int tileH = tile->h();
@@ -4270,7 +4355,8 @@ namespace mrv
             tcp->pushMessage(msg);
         }
 
-        bool active = (editMode == EditMode::kFull || editMode == EditMode::kSaved);
+        bool active = (editMode == EditMode::kFull ||
+                       editMode == EditMode::kSaved);
 
         if (active && !feature_needs_edit_or_later())
         {

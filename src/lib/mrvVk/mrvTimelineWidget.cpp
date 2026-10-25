@@ -328,6 +328,11 @@ namespace mrv
             _p->timelineWidget->setEditable(value);
         }
 
+        const math::Box2i TimelineWidget::getGeometry() const
+        {
+            return _p->timelineWidget->getAllGeometry();
+        }
+
         bool TimelineWidget::getCompareTimelines()
         {
             return _p->compareTimelines;

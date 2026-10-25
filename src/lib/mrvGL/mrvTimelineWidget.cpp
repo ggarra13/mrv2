@@ -1741,6 +1741,11 @@ namespace mrv
             p.vao.reset();
         }
 
+        const math::Box2i TimelineWidget::getGeometry() const
+        {
+            return _p->timelineWidget->getAllGeometry();
+        }
+
         bool TimelineWidget::getCompareTimelines()
         {
             return _p->compareTimelines;

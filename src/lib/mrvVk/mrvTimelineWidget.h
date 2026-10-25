@@ -124,6 +124,8 @@ namespace mrv
             void setCompareTimelines(bool value);
             bool getCompareTimelines();
 
+            const math::Box2i getGeometry() const;
+
             int mousePressEvent(int button, bool, int modifiers);
             int
             mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);

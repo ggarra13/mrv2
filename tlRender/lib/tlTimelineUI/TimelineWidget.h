@@ -133,6 +133,10 @@ namespace tl
             //! Set the mouse wheel scale.
             void setMouseWheelScale(float);
 
+            //! Get the timeline's widget all geometry including rulers and
+            //! timelines.
+            const math::Box2i getAllGeometry() const;
+
             ///@}
 
             //! \name Scrubbing

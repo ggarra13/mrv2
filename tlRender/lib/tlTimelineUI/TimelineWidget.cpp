@@ -215,6 +215,14 @@ namespace tl
             return math::Box2i(0, 0, 1, 1);
         }
 
+        const math::Box2i TimelineWidget::getAllGeometry() const
+        {
+            TLRENDER_P();
+            math::Box2i out;
+            out = math::expand(p.ruler->getGeometry(), p.layout->getGeometry());
+            return out;
+        }
+
         void TimelineWidget::setPlayer(
             const std::shared_ptr<timeline::Player>& player)
         {
@@ -903,10 +911,10 @@ namespace tl
             p.timelineItems.clear();
             p.itemData.clear();
 
-            // The layout holds its own references to the old items; detach them,
-            // otherwise they linger as rows with a frozen scale and inflate the
-            // layout's width.
-            const auto stale = p.layout->getChildren();   // copy: setParent edits the list
+            // The layout holds its own references to the old items;
+            // detach them, otherwise they linger as rows with a frozen scale
+            // and inflate the layout's width.
+            const auto stale = p.layout->getChildren();
             for (const auto& child : stale)
             {
                 child->setParent(nullptr);
@@ -964,7 +972,6 @@ namespace tl
                             p.itemData.back(),
                             ctx, p.layout));
 
-                        // \@todo: \@bug?: is this correct?
                         p.timelineItems.back()->setEditable(p.editable->get());
                         p.timelineItems.back()->setEditMode(p.editMode->get());
                         p.timelineItems.back()->setStopOnScrub(p.stopOnScrub->get());
