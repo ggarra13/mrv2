@@ -2,6 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include <cstddef>
+#include <string>
+
 namespace mrv
 {
 
