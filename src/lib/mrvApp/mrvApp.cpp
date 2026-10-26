@@ -324,8 +324,6 @@ namespace mrv
         fl_open_callback(osx_open_cb);
 #endif
 
-        // Establish MRV2_ROOT environment variable
-        set_root_path(argc, argv);
         mrv::init(context);
 
 #ifdef __linux__
