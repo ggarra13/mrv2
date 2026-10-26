@@ -10,6 +10,8 @@ ChangeLog
 - UI: Reordered Window->Preferences into a more logical order, without changing names so as to remain backwards compatible.
 - UI: Updated translations.
 
+- Core: Improved accuracy of FPS and dropped frames counters.
+
 Fixes
 -----
 
