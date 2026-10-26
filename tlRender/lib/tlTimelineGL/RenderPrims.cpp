@@ -236,6 +236,9 @@ namespace tl
                         const auto& min = box.min;
                         const auto& max = box.max;
 
+                        lastTextInfo.box = math::expand(lastTextInfo.box,
+                                                        box);
+
                         mesh.v.push_back(math::Vector2f(min.x, min.y));
                         mesh.v.push_back(math::Vector2f(max.x + 1, min.y));
                         mesh.v.push_back(math::Vector2f(max.x + 1, max.y + 1));

@@ -1021,10 +1021,7 @@ namespace mrv
             const float alpha) const noexcept
         {
             TLRENDER_P();
-
-            const image::Color4f shadowColor(0.F, 0.F, 0.F, 1.0F);
-            const math::Vector2i shadowPos1{ 1, 1 };
-            const math::Vector2i shadowPos2{ -1, -1 };
+            MRV2_GL();
 
             Fl_Color c = p.ui->uiPrefs->ViewHud->color();
             uint8_t r, g, b;
@@ -1032,8 +1029,12 @@ namespace mrv
             const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
             const math::Vector2i labelPos;
 
-            _drawText(textInfos, shadowPos1, shadowColor);
-            _drawText(textInfos, shadowPos2, shadowColor);
+            image::Color4f boxColor(0.F, 0.F, 0.F, 0.3F);
+            for (auto& textInfo : textInfos)
+            {
+                const math::Box2i shadowBox = math::margin(textInfo.box, 8);
+                gl.render->drawRect(shadowBox, boxColor);
+            }
             _drawText(textInfos, labelPos, labelColor);
         }
 
@@ -1148,7 +1149,8 @@ namespace mrv
                 frame = range.start_time().to_frames();
                 const int64_t last_frame = range.end_time_inclusive().to_frames();
                 snprintf(
-                    buf, 512, " Range: %" PRId64 " -  %" PRId64, frame, last_frame);
+                    buf, 512, " Range: %" PRId64 " -  %" PRId64 " ",
+                    frame, last_frame);
                 tmp += buf;
             }
 

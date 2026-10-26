@@ -605,12 +605,12 @@ namespace mrv
                         lineHeight);
         }
 
-        void Viewport::_drawText(const std::vector<timeline::TextInfo>& textInfos,
-                                 const math::Vector2i& pos,
-                                 const image::Color4f& color) const
+        void Viewport::_drawText(
+            const std::vector<timeline::TextInfo>& textInfos,
+            const math::Vector2i& pos,
+            const image::Color4f& color) const
         {
             MRV2_VK();
-
             for (auto& textInfo : textInfos)
             {
                 vk.render->drawText(textInfo, pos, color);
@@ -763,10 +763,9 @@ namespace mrv
             const float alpha) const noexcept
         {
             TLRENDER_P();
+            MRV2_VK();
 
-            const image::Color4f shadowColor(0.F, 0.F, 0.F, 1.F);
-            const math::Vector2i shadowPos1{ 1, 1 };
-            const math::Vector2i shadowPos2{ -1, -1 };
+            const image::Color4f shadowColor(0.3F, 0.3F, 0.3F, 1.F);
 
             Fl_Color c = p.ui->uiPrefs->ViewHud->color();
             uint8_t r, g, b;
@@ -774,9 +773,14 @@ namespace mrv
             const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
             const math::Vector2i labelPos;
 
-            _drawText(textInfos, shadowPos1, shadowColor);
-            _drawText(textInfos, shadowPos2, shadowColor);
 
+            image::Color4f boxColor(0.F, 0.F, 0.F, 0.3F);
+            for (auto& textInfo : textInfos)
+            {
+                const math::Box2i shadowBox = math::margin(textInfo.box, 8);
+                vk.render->drawRectViewport("hud",
+                                            shadowBox, boxColor);
+            }
             _drawText(textInfos, labelPos, labelColor);
         }
 
