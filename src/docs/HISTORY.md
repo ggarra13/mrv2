@@ -15,7 +15,6 @@ ChangeLog
 
 - Core: Fixed pre-caching of movies that could make it drop several frames at the start of playback.
 
-
 Fixes
 -----
 
