@@ -13,6 +13,9 @@ ChangeLog
 
 - UI/Core: Improved accuracy of FPS and dropped frames counters.
 
+- Core: Fixed pre-caching of movies that could make it drop several frames at the start of playback.
+
+
 Fixes
 -----
 
