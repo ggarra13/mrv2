@@ -225,7 +225,18 @@ namespace mrv
             fs::path rootdir(binpath);
             fs::path parent = rootdir.parent_path(); // skip executable
             rootdir = parent.parent_path();          // skip bin/ directory
-
+            
+#    ifdef __APPLE__
+            // When running from an installed .app bundle, the executable
+            // lives in <name>.app/Contents/MacOS/<exe>.  The root of our
+            // installation is then <name>.app/Contents/Resources.
+            if (parent.filename() == "MacOS" &&
+                rootdir.filename() == "Contents")
+            {
+                rootdir /= "Resources";
+            }
+#    endif
+            
             std::string root_string = tl::file::fromFileSystem(rootdir);
             setenv("MRV2_ROOT", root_string.c_str(), 1);
             g_root_path = root_string;

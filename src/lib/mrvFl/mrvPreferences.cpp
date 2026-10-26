@@ -1680,12 +1680,15 @@ namespace mrv
         //
         Fl_Preferences colors(gui, "colors");
         colors.set("scheme", Fl::scheme());
-        colors.set("theme", uiPrefs->uiColorTheme->text());
+        std::string theme = "Black";
+        const char* ctheme = uiPrefs->uiColorTheme->text();
+        if (strlen(ctheme) > 0)
+            theme = ctheme;
+        colors.set("theme", theme.c_str());
         colors.set("background_color", bgcolor);
         colors.set("text_color", textcolor);
         colors.set("selection_color", selectioncolor);
         colors.set("selection_text_color", selectiontextcolor);
-        colors.set("theme", uiPrefs->uiColorTheme->text());
 
         Fl_Preferences flu(gui, "file_requester");
         flu.set("quick_folder_travel", uiPrefs->FileReqFolder->value());
