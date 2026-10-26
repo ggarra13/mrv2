@@ -200,22 +200,35 @@ _sign_macho() {
     local target="$1"
     local ents="${2:-}"
 
-    local args=(
-        --force
-        --options runtime
-        --sign "${DEVELOPER_ID}"
-        --timestamp
-    )
-
-    [[ -n "${ents}" && -f "${ents}" ]] &&
-        args+=(--entitlements "${ents}")
+    local args=(--force --options runtime --sign "${DEVELOPER_ID}" --timestamp)
+    [[ -n "${ents}" && -f "${ents}" ]] && args+=(--entitlements "${ents}")
 
     local output
     if ! output=$(codesign "${args[@]}" "${target}" 2>&1); then
-        warn "codesign reported an issue signing: ${target}"
-        [[ -n "${output}" ]] && echo "${output}"
+        echo "${output}" >&2
+        die "codesign failed for: ${target}"
     fi
 }
+# _sign_macho() {
+#     local target="$1"
+#     local ents="${2:-}"
+
+#     local args=(
+#         --force
+#         --options runtime
+#         --sign "${DEVELOPER_ID}"
+#         --timestamp
+#     )
+
+#     [[ -n "${ents}" && -f "${ents}" ]] &&
+#         args+=(--entitlements "${ents}")
+
+#     local output
+#     if ! output=$(codesign "${args[@]}" "${target}" 2>&1); then
+#         warn "codesign reported an issue signing: ${target}"
+#         [[ -n "${output}" ]] && echo "${output}"
+#     fi
+# }
 
 # Sign a plain file (shell script, resource) — no hardened-runtime flag needed.
 _sign_plain() {
@@ -248,29 +261,29 @@ sign_bundle() {
     # a failure here shouldn't abort the run.
     chmod -R u+rwX "${bundle}" 2>/dev/null || true
 
-    # ── 1. Individual .dylib files ────────────────────────────────────────────
-    info "Signing .dylib files…"
-    while IFS= read -r -d '' lib; do
-        info "  dylib: ${lib#"${bundle}/"}"
-        _sign_macho "${lib}"
-    done < <(find "${bundle}" -name "*.dylib" -print0)
+        # ── 1-3. Every Mach-O file inside the bundle, deepest paths first ─────────
+    info "Signing all nested Mach-O binaries…"
+    while IFS= read -r -d '' f; do
+        [[ -L "${f}" ]] && continue
+        # Main executables get entitlements later; skip them here.
+        case "${f}" in
+            "${bundle}/Contents/MacOS/"*) continue ;;
+        esac
+        if _is_macho "${f}"; then
+            info "  macho: ${f#"${bundle}/"}"
+            _sign_macho "${f}"
+        fi
+    done < <(find "${bundle}" -type f -print0 | sort -rz)
 
-    # ── 2. Native extension modules (.so) — Python, Qt plugins, etc. ─────────
-    info "Signing .so extension modules…"
-    while IFS= read -r -d '' so; do
-        info "  so:    ${so#"${bundle}/"}"
-        _sign_macho "${so}"
-    done < <(find "${bundle}" -name "*.so" -print0)
-
-    # ── 3. Frameworks (sign the whole framework bundle, not just the binary) ──
-    # Process deepest first to avoid signing a framework that contains
-    # an already-signed sub-framework.
-    info "Signing frameworks…"
+    # Frameworks: sign the bundle wrapper after its contents. Not fatal if the
+    # framework is non-standard, since its binary is already signed above.
+    info "Signing framework wrappers…"
     while IFS= read -r -d '' fw; do
         info "  fw:    ${fw#"${bundle}/"}"
-        _sign_macho "${fw}"
-    done < <(find "${bundle}" -name "*.framework" -print0 | sort -rz)
-
+        codesign --force --options runtime --sign "${DEVELOPER_ID}" --timestamp "${fw}" \
+            || warn "Could not seal framework wrapper (non-standard layout?): ${fw}"
+    done < <(find "${bundle}" -name "*.framework" -type d -print0 | sort -rz)
+    
     # ── 4. Python stdlib and extension binaries ───────────────────────────────
     #    Python .pyc / .py files are not signed; only compiled .so modules
     #    (already handled above) and the Python interpreter itself matter.
