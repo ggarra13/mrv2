@@ -1450,11 +1450,6 @@ namespace mrv
 #endif
     }
 
-    static void start_playback_cb(App* app)
-    {
-        app->startPlayback();
-    }
-
     void App::_calculateCacheTimes(OTIO_NS::RationalTime& startTime,
                                    OTIO_NS::RationalTime& endTime)
     {
@@ -1507,10 +1502,12 @@ namespace mrv
         if (endTime > timeRange.end_time_exclusive()) endTime = timeRange.end_time_exclusive();
     }
 
-#if 0
     void App::startPlayback()
     {
         TLRENDER_P();
+
+        if (!p.player)
+            return;
 
         bool isLocked = tcp->isLocked();
 
@@ -1541,35 +1538,29 @@ namespace mrv
         OTIO_NS::RationalTime startTime, endTime;
         _calculateCacheTimes(startTime, endTime);
 
-        const timeline::Playback& playback = p.options.playback;
+        const timeline::Playback playback = p.options.playback;
 
         // Calculate the total duration we are waiting for
         // We use the rate of the startTime to ensure we are working in frame
         // units
         double totalFrames = (endTime - startTime).to_frames();
 
-        if (!p.progress)
+        if (use_progress && !p.progress)
         {
             p.progress = new ProgressReport(ui->uiMain,
                                             0, totalFrames,
                                             _("Caching..."));
         }
-        else
+        else if (use_progress)
         {
             p.progress->set_start(0);
             p.progress->set_end(totalFrames);
         }
+
         if (use_progress)
         {
             p.progress->show();
             Fl::flush();
-        }
-        else
-        {
-            // Start playback right away.
-            if (!isLocked)
-                tcp->unlock();
-            ui->uiView->setPlayback(playback);
         }
 
         if (use_progress &&
@@ -1630,11 +1621,6 @@ namespace mrv
                             {
                                 delete p.progress;
                                 p.progress = nullptr;
-                                ui->uiView->setPlayback(playback);
-                                p.cacheInfoObserver.reset();
-                                if (!isLocked)
-                                    tcp->unlock();
-                                return;
                             }
                         });
         }
@@ -1703,214 +1689,27 @@ namespace mrv
                                 p.progress->set_start(0);
                                 p.progress->set_end(static_cast<int64_t>(totalFrames));
                                 p.progress->set_value(static_cast<int64_t>(cachedFramesInRange));
-                                Fl::check();
                             }
 
-                            // If the number of cached frames meets or exceeds the requested range
                             if (cachedFramesInRange >= totalFrames)
                             {
                                 delete p.progress;
                                 p.progress = nullptr;
-                                ui->uiView->setPlayback(playback);
-                                p.cacheInfoObserver.reset();
-                                if (!isLocked)
-                                    tcp->unlock();
                                 return;
                             }
                         });
         }
 
+        while (use_progress && p.progress && p.progress->window()->shown())
+        {
+            Fl::check();
+        }
+
+        if (!isLocked)
+            tcp->unlock();
+        p.cacheInfoObserver.reset();
+        ui->uiView->setPlayback(playback);
     }
-#else
-void App::startPlayback()
-    {
-        TLRENDER_P();
-
-        bool isLocked = tcp->isLocked();
-
-        tcp->lock();
-        p.player->setPlayback(timeline::Playback::Stop);
-
-        //
-        // Check if loading 4K or a movie of more than 180 seconds.
-        //
-        bool use_progress = false;
-        auto info = p.player->ioInfo();
-        if (!info.video.empty())
-        {
-            auto video = info.video[0];
-            const OTIO_NS::RationalTime duration = info.videoTime->duration();
-            if (duration.to_seconds() > 180.0)
-                use_progress = true;
-            if (video.size.w > 2048)
-                use_progress = true;
-            const auto player = p.player->player();
-            const auto extension = string::toUpper(player->getPath().getExtension());
-            if (extension == ".NDI")
-                use_progress = false;
-        }
-
-        const auto player = p.player->player();
-        const auto extension = string::toUpper(player->getPath().getExtension());
-        bool isNDI = (extension == ".NDI" || file::isTemporaryNDI(p.player->path()));
-
-        // Calculate start and end time used in progress report / cache window
-        OTIO_NS::RationalTime startTime, endTime;
-        _calculateCacheTimes(startTime, endTime);
-
-        const timeline::Playback& playback = p.options.playback;
-
-        // Calculate the total duration we are waiting for
-        double totalFrames = (endTime - startTime).to_frames();
-
-        if (use_progress)
-        {
-            if (!p.progress)
-            {
-                p.progress = new ProgressReport(ui->uiMain,
-                                                0, totalFrames,
-                                                _("Caching..."));
-            }
-            else
-            {
-                p.progress->set_start(0);
-                p.progress->set_end(totalFrames);
-            }
-            p.progress->show();
-            Fl::flush();
-        }
-
-        if (!isNDI && (playback == timeline::Playback::Forward ||
-                       playback == timeline::Playback::Stop))
-        {
-            tcp->lock();
-
-            p.cacheInfoObserver =
-                observer::ValueObserver<timeline::PlayerCacheInfo>::create(
-                    p.player->player()->observeCacheInfo(),
-                    [this, playback, isLocked, use_progress]
-                    (const timeline::PlayerCacheInfo& value)
-                        {
-                            TLRENDER_P();
-
-                            OTIO_NS::RationalTime startTime, endTime;
-                            _calculateCacheTimes(startTime, endTime);
-
-                            double totalFrames = (endTime - startTime).to_frames();
-
-                            double cachedFramesInRange = 0;
-                            for (const auto& t : value.videoFrames)
-                            {
-                                OTIO_NS::TimeRange cachedRange = t;
-                                if (cachedRange.start_time() <= startTime) {
-                                    auto diff = startTime - cachedRange.start_time();
-                                    cachedRange = OTIO_NS::TimeRange(startTime, cachedRange.duration() - diff);
-                                }
-                                if (cachedRange.end_time_exclusive() >= endTime) {
-                                    auto newDuration = endTime - cachedRange.start_time();
-                                    cachedRange = OTIO_NS::TimeRange(cachedRange.start_time(), newDuration);
-                                }
-
-                                if (cachedRange.duration().value() > 0) {
-                                    cachedFramesInRange += cachedRange.duration().to_frames();
-                                }
-                            }
-
-                            if (use_progress && p.progress) {
-                                p.progress->set_start(0);
-                                p.progress->set_end(static_cast<int64_t>(totalFrames));
-                                p.progress->set_value(static_cast<int64_t>(cachedFramesInRange));
-                            }
-
-                            if (cachedFramesInRange >= totalFrames)
-                            {
-                                if (p.progress) {
-                                    delete p.progress;
-                                    p.progress = nullptr;
-                                }
-                                ui->uiView->setPlayback(playback);
-                                p.cacheInfoObserver.reset();
-                                if (!isLocked)
-                                    tcp->unlock();
-                                return;
-                            }
-                        });
-        }
-        else if (!isNDI && playback == timeline::Playback::Reverse)
-        {
-            tcp->lock();
-
-            p.cacheInfoObserver =
-                observer::ValueObserver<timeline::PlayerCacheInfo>::create(
-                    p.player->player()->observeCacheInfo(),
-                    [this, playback, isLocked, use_progress]
-                    (const timeline::PlayerCacheInfo& value)
-                        {
-                            TLRENDER_P();
-
-                            OTIO_NS::RationalTime startTime, endTime;
-                            _calculateCacheTimes(startTime, endTime);
-
-                            double totalFrames = std::abs((endTime - startTime).to_frames());
-                            if (totalFrames == 0) totalFrames = 1;
-
-                            OTIO_NS::TimeRange targetRange = opentime::TimeRange::range_from_start_end_time(
-                                std::min(startTime, endTime),
-                                std::max(startTime, endTime)
-                            );
-
-                            std::vector<OTIO_NS::TimeRange> searchRanges;
-                            if (startTime <= endTime) {
-                                searchRanges.push_back(OTIO_NS::TimeRange::range_from_start_end_time(startTime, endTime));
-                            } else {
-                                const auto& timeRange = p.player->inOutRange();
-                                searchRanges.push_back(OTIO_NS::TimeRange::range_from_start_end_time(timeRange.start_time(), endTime));
-                                searchRanges.push_back(OTIO_NS::TimeRange::range_from_start_end_time(startTime, timeRange.end_time_exclusive()));
-                            }
-
-                            double cachedFramesInRange = 0;
-                            for (const auto& targetRange : searchRanges) {
-                                for (const auto& t : value.videoFrames) {
-                                    if (t.intersects(targetRange)) {
-                                        auto overlapStart = std::max(t.start_time(), targetRange.start_time());
-                                        auto overlapEnd = std::min(t.end_time_exclusive(), targetRange.end_time_exclusive());
-
-                                        if (overlapEnd > overlapStart) {
-                                            cachedFramesInRange += (overlapEnd - overlapStart).to_frames();
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (use_progress && p.progress) {
-                                p.progress->set_start(0);
-                                p.progress->set_end(static_cast<int64_t>(totalFrames));
-                                p.progress->set_value(static_cast<int64_t>(cachedFramesInRange));
-                                Fl::check();
-                            }
-
-                            if (cachedFramesInRange >= totalFrames)
-                            {
-                                if (p.progress) {
-                                    delete p.progress;
-                                    p.progress = nullptr;
-                                }
-                                ui->uiView->setPlayback(playback);
-                                p.cacheInfoObserver.reset();
-                                if (!isLocked)
-                                    tcp->unlock();
-                                return;
-                            }
-                        });
-        }
-        else
-        {
-            if (!isLocked)
-                tcp->unlock();
-            ui->uiView->setPlayback(playback);
-        }
-    }
-#endif
 
     int App::run()
     {
@@ -1936,14 +1735,7 @@ void App::startPlayback()
                 if (p.options.playback == timeline::Playback::Count)
                     p.options.playback = timeline::Playback::Forward;
 
-#ifdef __linux__
-                // Must be 0.75 to prevent display not showing up.
-                Fl::add_timeout(
-                    0.75, (Fl_Timeout_Handler)start_playback_cb, this);
-#else
-                Fl::add_timeout(
-                    0.01, (Fl_Timeout_Handler)start_playback_cb, this);
-#endif
+                startPlayback();
             }
         }
         p.running = true;
@@ -2504,6 +2296,7 @@ void App::startPlayback()
             }
         }
 
+        bool startAutoPlayback = false;
         std::shared_ptr<TimelinePlayer> player;
         if (!p.activeFiles.empty() && isRunning() && p.player)
         {
@@ -2529,9 +2322,8 @@ void App::startPlayback()
             }
             else
             {
-
-                auto i =
-                    std::find(p.files.begin(), p.files.end(), activeFiles[0]);
+                auto i = std::find(p.files.begin(), p.files.end(),
+                                   activeFiles[0]);
                 if (i != p.files.end())
                 {
                     const auto& item = *i;
@@ -2605,8 +2397,7 @@ void App::startPlayback()
                                 }
 
                                 p.options.playback = timeline::Playback::Forward;
-                                Fl::add_timeout(
-                                    0.0, (Fl_Timeout_Handler)start_playback_cb, this);
+                                startAutoPlayback = true;
                             }
 
                             // Add the new file to recent files, unless it is
@@ -2761,6 +2552,8 @@ void App::startPlayback()
 
         _audioUpdate();
 
+        if (startAutoPlayback && p.player)
+            startPlayback();
     }
 
     OTIO_NS::RationalTime App::_cacheReadAhead() const
