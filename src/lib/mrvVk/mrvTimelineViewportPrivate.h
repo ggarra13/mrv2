@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <deque>
-
 #include "mrvUI/mrvMonitor.h"
 
 #include "mrvOS/mrvString.h"
@@ -17,6 +15,9 @@
 
 #include <tlDraw/Annotation.h>
 
+#include <chrono>
+#include <deque>
+#include <cstdint>
 
 class ViewerUI;
 class Fl_Menu_Button;
@@ -153,11 +154,79 @@ namespace mrv
             //! Masking
             static float masking;
 
-            //! Last frame shown
-            static int64_t lastFrame;
+            //! Playback statistics for the HUD (FPS and DF).  Static so every
+            //! viewport (main, secondary) shares one measurement.
+            struct PlaybackStats
+            {
+                using Clock = std::chrono::steady_clock;
 
-            //! Skipped frames
-            static uint64_t droppedFrames;
+                uint64_t droppedFrames = 0;
+                double fps = 0.0;
+
+                //! Forget the baseline (play, stop, seek, scrub, step, ...).
+                void restart(bool clearDropped = false)
+                    {
+                        _valid = false;
+                        _shown.clear();
+                        fps = 0.0;
+                        if (clearDropped)
+                            droppedFrames = 0;
+                    }
+
+                //! Call for every draw while playing.
+                void update(int64_t frame, double speed, bool forward,
+                            int64_t loopFrames, Clock::time_point now)
+                    {
+                        bool continuous = false;
+                        if (_valid && forward == _forward)
+                        {
+                            if (frame == _frame)
+                                return;  // same frame redrawn (mouse move, zoom, 2nd viewport)
+
+                            int64_t advance = forward ? frame - _frame : _frame - frame;
+                            if (advance < 1 && loopFrames > 0)
+                                advance += loopFrames;  // wrapped around the loop
+
+                            const double dt = std::chrono::duration<double>(now - _time).count();
+                            const double expected = dt * speed;  // what the clock allows
+                            if (advance >= 1 && advance <= expected + kJitterFrames)
+                            {
+                                droppedFrames += advance - 1;
+                                continuous = true;
+                            }
+                        }
+                        if (!continuous)
+                            _shown.clear();  // seek / direction change / first frame
+
+                        _valid = true;
+                        _frame = frame;
+                        _forward = forward;
+                        _time = now;
+
+                        _shown.push_back(now);
+                        while (_shown.size() > 2 &&
+                               now - _shown.front() > std::chrono::seconds(1))
+                            _shown.pop_front();
+
+                        if (_shown.size() >= 2)
+                        {
+                            const double span =
+                                std::chrono::duration<double>(_shown.back() - _shown.front())
+                                .count();
+                            if (span > 0.0)
+                                fps = (_shown.size() - 1) / span;
+                        }
+                    }
+
+            private:
+                static constexpr double kJitterFrames = 2.0;
+                bool _valid = false;
+                bool _forward = true;
+                int64_t _frame = 0;
+                Clock::time_point _time;
+                std::deque<Clock::time_point> _shown;
+            };
+            static PlaybackStats stats;
 
             //! Whether any view is in presentation mode (full screen with no
             //! menus, bars or dock tools).

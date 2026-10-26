@@ -129,8 +129,8 @@ namespace mrv
             timeline::Playback::Stop;
         bool TimelineViewport::Private::isScrubbing = false;
         float TimelineViewport::Private::masking = 0.F;
-        int64_t TimelineViewport::Private::lastFrame;
-        uint64_t TimelineViewport::Private::droppedFrames = 0;
+        TimelineViewport::Private::PlaybackStats
+        TimelineViewport::Private::stats;
         bool TimelineViewport::Private::presentation = false;
         float TimelineViewport::Private::rotation = 0.F;
         bool TimelineViewport::Private::resizeWindow = true;
@@ -783,7 +783,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            p.droppedFrames = 0;
+            p.stats.restart(true);
 
             if (!p.player)
                 return;
@@ -808,7 +808,7 @@ namespace mrv
         void TimelineViewport::framePrev() noexcept
         {
             TLRENDER_P();
-            p.droppedFrames = 0;
+            p.stats.restart(true);
 
             if (!p.player)
                 return;
@@ -822,7 +822,7 @@ namespace mrv
         void TimelineViewport::frameNext() noexcept
         {
             TLRENDER_P();
-            p.droppedFrames = 0;
+            p.stats.restart(true);
 
             if (!p.player)
                 return;
@@ -836,7 +836,7 @@ namespace mrv
         void TimelineViewport::endFrame() noexcept
         {
             TLRENDER_P();
-            p.droppedFrames = 0;
+            p.stats.restart(true);
 
             if (!p.player)
                 return;
@@ -871,7 +871,7 @@ namespace mrv
                 _hidePixelBar();
 
             if (value != timeline::Playback::Stop)
-                p.droppedFrames = 0;
+                p.stats.restart(true);
 
             p.player->setPlayback(value);
 
@@ -906,7 +906,7 @@ namespace mrv
             p.player->togglePlayback();
 
             if (p.player->playback() != timeline::Playback::Stop)
-                p.droppedFrames = 0;
+                p.stats.restart(true);
 
             updatePlaybackButtons();
             p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -1516,7 +1516,7 @@ namespace mrv
                     frameView();
 
                 p.switchClip = false;
-                p.droppedFrames = 0;
+                p.stats.restart(true);
             }
 
             _getTags();

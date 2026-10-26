@@ -14,7 +14,6 @@
 #ifdef __APPLE__
 #    include <cstdlib>
 #    include <filesystem>
-#    include "mrvOS/mrvRoot.h"
 #endif
 
 #include <FL/fl_utf8.h>
@@ -28,6 +27,8 @@ namespace py = pybind11;
 #endif
 
 #include "mrvCore/mrvHome.h"
+
+#include "mrvOS/mrvRoot.h"
 
 #include "mrvApp/mrvApp.h"
 
@@ -60,8 +61,8 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
 int main(int argc, char* argv[])
 {
     int r = 1;
-#ifdef __APPLE__
     mrv::set_root_path(argc, argv);
+#ifdef __APPLE__
     const std::filesystem::path resources(mrv::g_root_path);
     if (resources.filename() == "Resources" &&
         resources.parent_path().filename() == "Contents")
