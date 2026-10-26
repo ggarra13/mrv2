@@ -74,6 +74,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
         const char* language = _(kLanguages[uiIndex].name);
 
         /* xgettext:c++-format */
+#ifdef _WIN32
         std::string question =
             tl::string::Format(
                 _("Need to reboot mrv2 to change language to {0}.  "
@@ -81,6 +82,9 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
                 .arg(language);
 
         int ok = fl_choice(question.c_str(), _("No"), _("Yes"), NULL, NULL);
+#else
+        int ok = true;
+#endif
         if (ok)
         {
             language_index = uiIndex;
@@ -114,7 +118,10 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
             mrv::session::save(session);
 
             app->cleanResources();
-            
+
+            // Release the floating license if any.
+            mrv::release_license();
+
             mrv::os::execv("", session);
         }
         else
@@ -332,7 +339,7 @@ namespace mrv
         const std::string& defaultLocale = getDefaultLocale();
         if (!defaultLocale.empty())
             language = defaultLocale.c_str();
-        
+
         // Load ui language preferences to see if user chose a different
         // language than the OS one.
         Fl_Preferences base(
