@@ -270,6 +270,10 @@ function(install_vulkan_layers APPNAME)
     endif()
 endfunction()
 
+file(COPY ${CPACK_PREPACKAGE}/bin/mrv2.sh
+    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
+file(COPY ${CPACK_PREPACKAGE}/bin/mrv2
+    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
 file(COPY ${CPACK_PREPACKAGE}/bin/license_helper
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
 file(COPY ${CPACK_PREPACKAGE}/bin/environment.sh
@@ -419,7 +423,7 @@ endif()
 set(_mrv2_bundle_lib_dir "${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib")
 set(_mrv2_bundle_bin_dir "${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin")
 file(GLOB _mrv2_bundle_bin_candidates "${_mrv2_bundle_bin_dir}/*")
-set(_mrv2_bundle_exes "${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/${mrv2_NAME}")
+set(_mrv2_bundle_exes)
 foreach(_f ${_mrv2_bundle_bin_candidates})
     if (NOT IS_DIRECTORY "${_f}")
 	list(APPEND _mrv2_bundle_exes "${_f}")

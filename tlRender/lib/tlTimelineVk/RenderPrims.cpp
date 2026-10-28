@@ -467,6 +467,8 @@ namespace tl
                             pos.x + x + offset.x, pos.y - offset.y,
                             glyph->image->getWidth(),
                             glyph->image->getHeight());
+                        lastTextInfo.box = math::expand(lastTextInfo.box,
+                                                        box);
                         const auto& min = box.min;
                         const auto& max = box.max;
 

@@ -8,7 +8,12 @@ ChangeLog
 - UI/Core: Allow scrubbing (with audio) while in Compare Mode.
 - UI: Allow timelines to be compared.
 - UI: Reordered Window->Preferences into a more logical order, without changing names so as to remain backwards compatible.
+- UI: Improved the readability of the HUD by using a transparent rectangle instead of text shadow.  This also improves performance a tad on the Vulkan backend.
 - UI: Updated translations.
+
+- UI/Core: Improved accuracy of FPS and dropped frames counters.
+
+- Core: Improved pre-caching of movies that could make it drop several frames at the start of playback.
 
 Fixes
 -----

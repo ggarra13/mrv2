@@ -44,11 +44,7 @@ namespace tl
         {
             OTIO_NS::RationalTime startTime = time::invalidTime;
             bool yuvToRGBConversion = false;
-#if defined(__APPLE__)
-            bool hwAccel = true;
-#else
             bool hwAccel = false;
-#endif
             std::string hwDriver = "";
             bool fastYUV420PConversion = true;
             audio::Info audioConvertInfo;

@@ -133,10 +133,14 @@ if(APPLE)
      	${MRV2_DIR}/etc/macOS/mrv2.plist.in
      	${MRV2_BUNDLE_DIR}/Contents/Info.plist )
 
-    # The actual executable must live in Contents/MacOS so Cocoa can find
-    # the bundle's document types when Launch Services opens a movie.
-    # Remove launchers left by an earlier configuration of this build tree.
-    file(REMOVE ${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME})
+    # Copy the shell script into the MacOS bundle and make them executable
+    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
+	${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME}
+	FILE_PERMISSIONS
+	OWNER_READ OWNER_EXECUTE
+	GROUP_READ GROUP_EXECUTE
+	WORLD_READ WORLD_EXECUTE
+	COPYONLY)
     
     # Install mrv2.app / vmrv2.app bundle dir
     install(DIRECTORY ${MRV2_BUNDLE_DIR}
@@ -144,10 +148,6 @@ if(APPLE)
 	USE_SOURCE_PERMISSIONS
 	COMPONENT applications
     )
-    install(PROGRAMS $<TARGET_FILE:mrv2>
-        DESTINATION ${mrv2_NAME}.app/Contents/MacOS
-        RENAME ${mrv2_NAME}
-        COMPONENT applications)
 
     if (EXISTS ${CMAKE_INSTALL_PREFIX}/bin/hdr)
 	
