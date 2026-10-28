@@ -125,6 +125,7 @@ The core of the playback engine is a custom version of tlRender (www.github.com/
 Currently supported:
 
 - Movie files (H264, MP4, VPX, WEBM, AV1, etc.)
+- Forward and Reverse Playback of both movies and image sequences.
 - Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP, PSD)
 - RAW Camera Formats (CR2, CR3, X3F, etc).
 - Multi-channel audio
