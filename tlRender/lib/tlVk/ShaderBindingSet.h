@@ -10,10 +10,11 @@
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Vk.h>
 
+#include <algorithm>
 #include <map>
-#include <vector>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace tl
 {
@@ -97,7 +98,7 @@ namespace tl
                 Fl_Vk_Context& ctx,
                 const std::string& name,
                 const uint8_t* data,
-                const std::size_t size,
+                const VkDeviceSize size,
                 const uint32_t frameIndex)
                 {
                     auto it = storageBuffers.find(name);
