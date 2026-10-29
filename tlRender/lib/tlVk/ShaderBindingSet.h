@@ -100,37 +100,44 @@ namespace tl
                 const std::size_t size,
                 const uint32_t frameIndex)
                 {
-                    auto it = storageBuffers.find(name); // You'll need to define this map in ShaderBindingSet
-                    if (it == storageBuffers.end()) throw std::runtime_error("Storage Buffer not found: " + name);
+                    auto it = storageBuffers.find(name);
+                    if (it == storageBuffers.end())
+                        throw std::runtime_error("Storage Buffer not found: " + name);
 
                     auto& param = it->second;
 
-                    // 1. Check if we need to (re)allocate
-                    if (!param.buffers[frameIndex] ||
-                        param.currentSizes[frameIndex] < size)
-                    {
-                        // Recreate the buffer with the new, larger size
-                        param.buffers[frameIndex] = vlk::Buffer::create(ctx, size);
-                        param.currentSizes[frameIndex] = size;
+                    // Grow with a factor so we don't reallocate constantly
+                    const VkDeviceSize currentSize = param.currentSizes[frameIndex];
+                    const bool needsRealloc =
+                        !param.buffers[frameIndex] || currentSize < size;
 
-                        // 2. CRITICAL: Because the VkBuffer handle changed,
-                        // we MUST update the Descriptor Set for this frame.
+                    if (needsRealloc)
+                    {
+                        // Simple growth strategy (you can tune this)
+                        VkDeviceSize newSize = size;
+                        if (currentSize > 0)
+                            newSize = std::max(size, currentSize + currentSize / 2); // 1.5x
+
+                        param.buffers[frameIndex] = vlk::Buffer::create(ctx, newSize);
+                        param.currentSizes[frameIndex] = newSize;
+
+                        // Only update the descriptor when the VkBuffer handle actually changed
                         VkDescriptorBufferInfo bufferInfo{};
                         bufferInfo.buffer = param.buffers[frameIndex]->getBuffer();
                         bufferInfo.offset = 0;
-                        bufferInfo.range  = size; // Or VK_WHOLE_SIZE
+                        bufferInfo.range  = newSize;          // or VK_WHOLE_SIZE
 
-                        VkWriteDescriptorSet write = { VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
-                        write.dstSet = descriptorSets[frameIndex];
-                        write.dstBinding = param.binding;
-                        write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+                        VkWriteDescriptorSet write{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+                        write.dstSet          = descriptorSets[frameIndex];
+                        write.dstBinding      = param.binding;
+                        write.descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
                         write.descriptorCount = 1;
-                        write.pBufferInfo = &bufferInfo;
+                        write.pBufferInfo     = &bufferInfo;
 
                         vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
                     }
 
-                    // 3. Upload the data (this handles the map/memcpy/unmap internally)
+                    // Upload (your Buffer::upload already handles map/memcpy/unmap)
                     param.buffers[frameIndex]->upload(data);
                 }
 
@@ -177,26 +184,6 @@ namespace tl
                     allocator, it->second.allocation[frameIndex], &mapped);
                 memcpy(mapped, data, size);
                 vmaUnmapMemory(allocator, it->second.allocation[frameIndex]);
-
-                // We need to update the bufferInfo in the descriptor set for the
-                // current frame.  Alternatively, you could use dynamic uniform
-                // buffers.
-
-                auto descriptorSet = descriptorSets[frameIndex]; // Update the set for this frame
-                // For this approach, we re-write the descriptor set for this
-                // binding and frame
-                VkDescriptorBufferInfo bufferInfo = it->second.infos[frameIndex];
-
-                VkWriteDescriptorSet write{};
-                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                write.dstSet = descriptorSet;
-                write.dstBinding = it->second.layoutBinding.binding;
-                write.dstArrayElement = 0;
-                write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                write.descriptorCount = 1;
-                write.pBufferInfo = &bufferInfo;
-
-                vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
             }
 
             void updateSSBO(
@@ -221,24 +208,6 @@ namespace tl
                     memcpy(mapped, data, size);
                     vmaUnmapMemory(allocator,
                                    it->second.allocation[frameIndex]);
-
-                    auto descriptorSet = descriptorSets[frameIndex];
-
-                    // Update the set for this frame
-                    // For this approach, we re-write the descriptor set for this
-                    // binding and frame
-                    VkDescriptorBufferInfo bufferInfo = it->second.infos[frameIndex];
-
-                    VkWriteDescriptorSet write{};
-                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                    write.dstSet = descriptorSet;
-                    write.dstBinding = it->second.layoutBinding.binding;
-                    write.dstArrayElement = 0;
-                    write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-                    write.descriptorCount = 1;
-                    write.pBufferInfo = &bufferInfo;
-
-                    vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
                 }
 
             void updateTexture(
