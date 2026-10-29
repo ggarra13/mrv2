@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.8\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-28 21:11-0300\n"
+"POT-Creation-Date: 2026-10-29 03:56-0300\n"
 "PO-Revision-Date: 2026-09-29 22:48+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -6735,6 +6735,93 @@ msgstr "内容"
 msgid "OpenEXR's Contents to Save"
 msgstr "保存する OpenEXR の内容"
 
+msgid "On Demand From Help Menu"
+msgstr "ヘルプメニューからオンデマンド"
+
+msgid "At Start Up"
+msgstr "起動時"
+
+msgid "Inactive"
+msgstr "非アクティブ"
+
+msgid "Active"
+msgstr "アクティブ"
+
+msgid "Do Nothing"
+msgstr "何もしない"
+
+msgid "Open Logs on Dock"
+msgstr "ログをドックで開く"
+
+msgid "Open Logs on Window"
+msgstr "ログをウィンドウで開く"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "gleam"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Pick View Background Color"
+msgstr "ビューの背景色を選択"
+
+msgid "Pick View Text Overlay Color"
+msgstr "ビューのテキストオーバーレイ色を選択"
+
+msgid "Pick View Selection Color"
+msgstr "ビューの選択色を選択"
+
+msgid "Pick HUD Color"
+msgstr "HUD の色を選択"
+
+msgid "OpenGL only"
+msgstr "OpenGL のみ"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan と OpenGL"
+
+msgid "Float Values"
+msgstr "浮動小数点値"
+
+msgid "Hex Values"
+msgstr "16進数値"
+
+msgid "8-bit Values"
+msgstr "8ビット値"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "フルLUT、ガンマ、ゲイン"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "ガンマ、ゲイン、LUT なしのオリジナル"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "Small"
+msgstr "小"
+
+msgid "Normal"
+msgstr "通常"
+
+msgid "Medium"
+msgstr "中速"
+
+msgid "Large"
+msgstr "大"
+
 msgid "0.00 None"
 msgstr "0.00 なし"
 
@@ -6783,62 +6870,47 @@ msgstr "4.00 ポリビジョン"
 msgid "Slow"
 msgstr "低速"
 
-msgid "Medium"
-msgstr "中速"
-
 msgid "Fast"
 msgstr "高速"
 
-msgid "base"
-msgstr "base"
+msgid "Loop"
+msgstr "ループ"
 
-msgid "plastic"
-msgstr "plastic"
+msgid "Ping Pong"
+msgstr "ピンポン"
 
-msgid "gtk+"
-msgstr "gtk+"
+msgid "29.97"
+msgstr "29.97"
 
-msgid "gleam"
-msgstr "gleam"
+msgid "14.985"
+msgstr "14.985"
 
-msgid "oxy"
-msgstr "oxy"
+msgid "Button"
+msgstr "ボタン"
 
-msgid "Pick View Background Color"
-msgstr "ビューの背景色を選択"
+msgid "Video Only"
+msgstr "ビデオのみ"
 
-msgid "Pick View Text Overlay Color"
-msgstr "ビューのテキストオーバーレイ色を選択"
+msgid "Video and Audio"
+msgstr "ビデオとオーディオ"
 
-msgid "Pick View Selection Color"
-msgstr "ビューの選択色を選択"
+msgid "Always"
+msgstr "常に"
 
-msgid "Pick HUD Color"
-msgstr "HUD の色を選択"
+msgid "Presentation Mode"
+msgstr "プレゼンテーションモード"
 
-msgid "Float Values"
-msgstr "浮動小数点値"
+msgid "Automatic"
+msgstr "自動"
 
-msgid "Hex Values"
-msgstr "16進数値"
+msgid "Half Float"
+msgstr "ハーフフロート"
 
-msgid "8-bit Values"
-msgstr "8ビット値"
+msgid "Full Float (Accurate)"
+msgstr "フルフロート (高精度)"
 
-msgid "Full Lut, Gamma and Gain"
-msgstr "フルLUT、ガンマ、ゲイン"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "ガンマ、ゲイン、LUT なしのオリジナル"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "Small"
-msgstr "小"
+msgid "GPU 0"
+msgstr "GPU 0"
 
 msgid "High"
 msgstr "高"
@@ -6861,12 +6933,6 @@ msgstr "プリマルチプライ"
 msgid "Nearest"
 msgstr "ニアレストネイバー"
 
-msgid "Normal"
-msgstr "通常"
-
-msgid "Large"
-msgstr "大"
-
 msgid "Use RGBA"
 msgstr "RGBA を使用"
 
@@ -6878,12 +6944,6 @@ msgstr "無視"
 
 msgid "Apply"
 msgstr "適用"
-
-msgid "Inactive"
-msgstr "非アクティブ"
-
-msgid "Active"
-msgstr "アクティブ"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6936,33 +6996,6 @@ msgstr "暗くする"
 msgid "Highlight"
 msgstr "ハイライト"
 
-msgid "OpenGL only"
-msgstr "OpenGL のみ"
-
-msgid "Vulkan and OpenGL"
-msgstr "Vulkan と OpenGL"
-
-msgid "29.97"
-msgstr "29.97"
-
-msgid "14.985"
-msgstr "14.985"
-
-msgid "Loop"
-msgstr "ループ"
-
-msgid "Ping Pong"
-msgstr "ピンポン"
-
-msgid "Button"
-msgstr "ボタン"
-
-msgid "Video Only"
-msgstr "ビデオのみ"
-
-msgid "Video and Audio"
-msgstr "ビデオとオーディオ"
-
 msgid "CG"
 msgstr "CG"
 
@@ -6986,24 +7019,6 @@ msgstr "ギャップフレーム"
 
 msgid "Pick Scratch Color"
 msgstr "欠落フレームの色を選択"
-
-msgid "Always"
-msgstr "常に"
-
-msgid "Presentation Mode"
-msgstr "プレゼンテーションモード"
-
-msgid "Automatic"
-msgstr "自動"
-
-msgid "Half Float"
-msgstr "ハーフフロート"
-
-msgid "Full Float (Accurate)"
-msgstr "フルフロート (高精度)"
-
-msgid "GPU 0"
-msgstr "GPU 0"
 
 msgid "X 2"
 msgstr "×2"
@@ -7029,28 +7044,13 @@ msgstr "ホームディレクトリ"
 msgid "Temp Directory"
 msgstr "一時ディレクトリ"
 
-msgid "Do Nothing"
-msgstr "何もしない"
-
-msgid "Open Logs on Dock"
-msgstr "ログをドックで開く"
-
-msgid "Open Logs on Window"
-msgstr "ログをウィンドウで開く"
-
-msgid "On Demand From Help Menu"
-msgstr "ヘルプメニューからオンデマンド"
-
-msgid "At Start Up"
-msgstr "起動時"
-
 msgid ""
 "This will reset all your preferences to their default values.  Are you sure "
 "you want to continue?"
 msgstr "すべての設定をデフォルト値にリセットします。続行してもよろしいですか？"
 
-msgid "User Interface"
-msgstr "ユーザーインターフェース"
+msgid "General"
+msgstr "一般"
 
 msgid "Window Behavior"
 msgstr "ウィンドウの動作"
@@ -7075,16 +7075,6 @@ msgid ""
 msgstr ""
 "選択すると、mrv2 のインスタンスは 1つだけに制限されます。\n"
 "異なる画像で複数の mrv2 を開こうとした場合、それらの画像は既に開いている mrv2 に送信されます。"
-
-msgid "Auto Refit Image"
-msgstr "画像を自動リフィット"
-
-msgid ""
-"When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectively means the video will be resized automatically based on the "
-"size of the window."
-msgstr ""
-"選択すると、mrv2 は再生される各ビデオに画像フィット操作を適用します。つまり、ビデオがウィンドウサイズに基づいて自動的にリサイズされます。"
 
 msgid "Raise on Enter"
 msgstr "マウス侵入時に前面へ"
@@ -7118,222 +7108,28 @@ msgstr "最大化"
 msgid "When selected, mrv2 will start in a maximized window."
 msgstr "選択すると、mrv2 は最大化されたウィンドウで起動します。"
 
-msgid "User Interface Elements"
-msgstr "ユーザーインターフェース要素"
+msgid "Behavior"
+msgstr "動作"
 
-msgid "UI Elements"
-msgstr "UI 要素"
-
-msgid "Tooltips"
-msgstr "ツールチップ"
-
-msgid "Choose whether to show tooltips or not."
-msgstr "ツールチップを表示するかどうかを選択します。"
-
-msgid "Menu Bar"
-msgstr "メニューバー"
-
-msgid "When selected, mrv2 will start with the menu bar already shown."
-msgstr "選択すると、mrv2はメニューバーを表示した状態で起動します。"
-
-msgid "Topbar"
-msgstr "トップバー"
+msgid "Check for Updates"
+msgstr "更新を確認"
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar "
-"visible."
-msgstr "選択すると、mrv2はカラーチャンネル、ゲイン、ガンマのツールバーを表示した状態で起動します。"
+"Allows you to automatically download updates of mrv2 when it starts up."
+msgstr "mrv2 起動時に自動的に更新をダウンロードすることを許可します。"
 
-msgid "Pixel Toolbar"
-msgstr "ピクセルツールバー"
-
-msgid "When selected, mrv2 will start with the pixel toolbar shown."
-msgstr "選択すると、mrv2はピクセルツールバーを表示した状態で起動します。"
-
-msgid "When selected, mrv2 will start with the timeline shown."
-msgstr "選択すると、mrv2 はタイムラインを表示した状態で起動します。"
-
-msgid "macOS Menus"
-msgstr "macOS  メニュー"
+msgid "Allow Screen Saver"
+msgstr "スクリーンセーバーを許可"
 
 msgid ""
-"This is a macOS setting only.  When selected the menus will appear on the "
-"system toolbar instead of the mrv2 toolbar."
-msgstr "これは macOS 専用の設定です。選択すると、メニューは mrv2 ツールバーではなくシステムツールバーに表示されます。"
+"This setting controls whether mrv2 will block the screen saver when running."
+msgstr "この設定は、mrv2 実行中にスクリーンセーバーをブロックするかどうかを制御します。"
 
-msgid "Tool Dock"
-msgstr "ツールドック"
+msgid "Window Position"
+msgstr "ウィンドウの位置"
 
-msgid "When selected, mrv2 will start with the action tool dock already open."
-msgstr "選択すると、mrv2 はアクションツールドックを開いた状態で起動します。"
-
-msgid "Status Bar"
-msgstr "ステータスバー"
-
-msgid "When selected, mrv2 will start with the status bar visible."
-msgstr "選択すると、mrv2 はステータスバーを表示した状態で起動します。"
-
-msgid "Only One Panel"
-msgstr "パネルを 1つだけ"
-
-msgid ""
-"When selected, mrv2 will start with the only one panel option selected."
-msgstr "選択すると、mrv2 は「パネルを1つだけ」オプションが選択された状態で起動します。"
-
-msgid "View Window"
-msgstr "ビューウィンドウ"
-
-msgid "Defaults"
-msgstr "デフォルト"
-
-msgid "Sets the default gain when mrv2 starts."
-msgstr "mrv2 起動時のデフォルトゲインを設定します。"
-
-msgid "Sets the default gamma when mrv2 starts."
-msgstr "mrv2 起動時のデフォルトガンマを設定します。"
-
-msgid "Crop"
-msgstr "トリミング"
-
-msgid "Allows you to select a standard cropping area around image."
-msgstr "画像周辺の標準的なトリミング領域を選択できます。"
-
-msgid "Auto Frame"
-msgstr "自動フレーミング"
-
-msgid "When this is on, View/Auto Frame will be active."
-msgstr "このオプションがオンの場合、表示＞自動フレームが有効になります。"
-
-msgid "Safe Areas"
-msgstr "セーフエリア"
-
-msgid "When mrv2 starts, the safe area display will be active by default."
-msgstr "mrv2 起動時に、セーフエリア表示がデフォルトで有効になります。"
-
-msgid "OCIO in Top Bar"
-msgstr "トップバーに OCIO を表示"
-
-msgid ""
-"When mrv2 starts, OCIO should start in the top bar instead of color "
-"adjustments."
-msgstr "mrv2 起動時に、カラー調整の代わりに OCIO がトップバーに表示されます。"
-
-msgid "Zoom Speed"
-msgstr "ズーム速度"
-
-msgid "HUD"
-msgstr "HUD"
-
-msgid ""
-"This area specifies which elements should be shown as a HUD overlay on the "
-"view screen."
-msgstr "この項目では、ビュー画面に HUD オーバーレイとして表示する要素を指定します。"
-
-msgid "Frame"
-msgstr "フレーム"
-
-msgid "Frame Range"
-msgstr "フレーム範囲"
-
-msgid "Frame Count"
-msgstr "フレーム数"
-
-msgid "Attributes"
-msgstr "属性"
-
-msgid "Font Size"
-msgstr "フォントサイズ"
-
-msgid "File Requester"
-msgstr "ファイル選択ダイアログ"
-
-msgid "Single Click to Travel Drawers"
-msgstr "シングルクリックでフォルダーを開く"
-
-msgid ""
-"When using mrv2's file chooser, a single click on a folder will open it."
-msgstr "mrv2 のファイル選択ダイアログで、フォルダーをシングルクリックすると開きます。"
-
-msgid "Thumbnails Active"
-msgstr "サムネイルを有効"
-
-msgid "Show thumbnails for known files."
-msgstr "既知のファイルのサムネイルを表示します。"
-
-msgid "USD Thumbnails"
-msgstr "USD サムネイル"
-
-msgid "Show Thumbnails for USD files (can be slow if they are big)"
-msgstr "USD ファイルのサムネイルを表示します (ファイルが大きい場合は遅くなる可能性があります)"
-
-msgid "Use Native File Chooser"
-msgstr "ネイティブファイル選択を使用"
-
-msgid ""
-"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
-"standard file chooser will be used."
-msgstr "選択するとネイティブのファイル選択ダイアログが使用されます。選択されていない場合は、mrv2 標準のファイル選択ダイアログが使用されます。"
-
-msgid "Fonts"
-msgstr "フォント"
-
-msgid "Menus"
-msgstr "メニュー"
-
-msgid "Sets the font to use in menus."
-msgstr "メニューで使用するフォントを設定します。"
-
-msgid "Panels"
-msgstr "パネル"
-
-msgid "Sets the font to use in panels. (Not yet working)"
-msgstr "パネルで使用するフォントを設定します。 (未実装)"
-
-msgid "Language and Colors"
-msgstr "言語と色"
-
-msgid "Scheme"
-msgstr "スキーム"
-
-msgid "Color Theme"
-msgstr "カラーテーマ"
-
-msgid "Reload Theme"
-msgstr "テーマを再読み込み"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr "mrv2.colors ファイルからカラーテーマを再読み込みし、色の変更を反映します"
-
-msgid "Selects the background color of areas outside the current image."
-msgstr "現在の画像の外側の領域の背景色を選択します。"
-
-msgid "Text Overlay"
-msgstr "テキストオーバーレイ"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr "現在の画像上に重ねて表示されるテキストオーバーレイの色を選択します。"
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr "現在の画像上に表示される選択矩形の色を選択します。"
-
-msgid "Selects the color of HUD overlays."
-msgstr "HUD オーバーレイの色を選択します。"
-
-msgid "RGBA Display"
-msgstr "RGBA 表示"
-
-msgid "Pixel Values"
-msgstr "ピクセル値"
-
-msgid "Secondary Display"
-msgstr "二次表示"
-
-msgid "Luminance"
-msgstr "輝度"
-
-msgid "Positioning"
-msgstr "位置設定"
+msgid "Position and Size"
+msgstr "位置とサイズ"
 
 msgid "Always Save on Exit"
 msgstr "終了時に常に保存"
@@ -7377,6 +7173,9 @@ msgstr "W :"
 msgid "H:"
 msgstr "H :"
 
+msgid "Screen:"
+msgstr "画面 :"
+
 msgid "Take Current Window Values"
 msgstr "現在のウィンドウ値を取得"
 
@@ -7388,26 +7187,149 @@ msgstr ""
 "ビューアの現在の値で、固定位置と固定サイズの値を入力します。\n"
 "保存したい内容に応じて、「位置を固定」および／または「サイズを固定」のチェックボックスも忘れずにオンにしてください。"
 
-msgid "Screen:"
-msgstr "画面 :"
+msgid "Interface"
+msgstr "インターフェース"
 
-msgid "Render"
-msgstr "レンダリング"
+msgid "UI Elements"
+msgstr "UI 要素"
 
-msgid "Debanding (Vulkan)"
-msgstr "バンディング除去 (Vulkan)"
+msgid "Menu Bar"
+msgstr "メニューバー"
 
-msgid "Makes gradients smoother on video files."
-msgstr "動画ファイルのグラデーションをより滑らかにします。"
+msgid "When selected, mrv2 will start with the menu bar already shown."
+msgstr "選択すると、mrv2はメニューバーを表示した状態で起動します。"
 
-msgid "Alpha Blend"
-msgstr "アルファブレンド"
+msgid "Topbar"
+msgstr "トップバー"
 
-msgid "Minify Filter"
-msgstr "縮小フィルタ"
+msgid ""
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
+msgstr "選択すると、mrv2はカラーチャンネル、ゲイン、ガンマのツールバーを表示した状態で起動します。"
 
-msgid "Magnify Filter"
-msgstr "拡大フィルタ"
+msgid "Pixel Toolbar"
+msgstr "ピクセルツールバー"
+
+msgid "When selected, mrv2 will start with the pixel toolbar shown."
+msgstr "選択すると、mrv2はピクセルツールバーを表示した状態で起動します。"
+
+msgid "When selected, mrv2 will start with the timeline shown."
+msgstr "選択すると、mrv2 はタイムラインを表示した状態で起動します。"
+
+msgid "Status Bar"
+msgstr "ステータスバー"
+
+msgid "When selected, mrv2 will start with the status bar visible."
+msgstr "選択すると、mrv2 はステータスバーを表示した状態で起動します。"
+
+msgid "Tool Dock"
+msgstr "ツールドック"
+
+msgid "When selected, mrv2 will start with the action tool dock already open."
+msgstr "選択すると、mrv2 はアクションツールドックを開いた状態で起動します。"
+
+msgid "Only One Panel"
+msgstr "パネルを 1つだけ"
+
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
+msgstr "選択すると、mrv2 は「パネルを1つだけ」オプションが選択された状態で起動します。"
+
+msgid "Tooltips"
+msgstr "ツールチップ"
+
+msgid "Choose whether to show tooltips or not."
+msgstr "ツールチップを表示するかどうかを選択します。"
+
+msgid "macOS Menus"
+msgstr "macOS  メニュー"
+
+msgid ""
+"This is a macOS setting only.  When selected the menus will appear on the "
+"system toolbar instead of the mrv2 toolbar."
+msgstr "これは macOS 専用の設定です。選択すると、メニューは mrv2 ツールバーではなくシステムツールバーに表示されます。"
+
+msgid "On FFmpeg Error"
+msgstr "FFmpeg エラー発生時"
+
+msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
+msgstr "FFmpeg  エラー発生時のログウィンドウの動作を調整します。"
+
+msgid "On Error"
+msgstr "エラー発生時"
+
+msgid "Adjusts how Log Window behaves in case of error."
+msgstr "エラー発生時のログウィンドウの動作を調整します。"
+
+msgid "Appearance"
+msgstr "外観"
+
+msgid "Language and Theme"
+msgstr "言語とテーマ"
+
+msgid "Scheme"
+msgstr "スキーム"
+
+msgid "Color Theme"
+msgstr "カラーテーマ"
+
+msgid "Reload Theme"
+msgstr "テーマを再読み込み"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr "mrv2.colors ファイルからカラーテーマを再読み込みし、色の変更を反映します"
+
+msgid "Fonts"
+msgstr "フォント"
+
+msgid "Menus"
+msgstr "メニュー"
+
+msgid "Sets the font to use in menus."
+msgstr "メニューで使用するフォントを設定します。"
+
+msgid "Panels"
+msgstr "パネル"
+
+msgid "Sets the font to use in panels. (Not yet working)"
+msgstr "パネルで使用するフォントを設定します。 (未実装)"
+
+msgid "View Colors"
+msgstr "ビューの色"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "現在の画像の外側の領域の背景色を選択します。"
+
+msgid "Text Overlay"
+msgstr "テキストオーバーレイ"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "現在の画像上に重ねて表示されるテキストオーバーレイの色を選択します。"
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr "現在の画像上に表示される選択矩形の色を選択します。"
+
+msgid "HUD"
+msgstr "HUD"
+
+msgid "Selects the color of HUD overlays."
+msgstr "HUD オーバーレイの色を選択します。"
+
+msgid "Auto Hide Pixel Bar"
+msgstr "ピクセルバーを自動的に隠す"
+
+msgid "RGBA Display"
+msgstr "RGBA 表示"
+
+msgid "Pixel Values"
+msgstr "ピクセル値"
+
+msgid "Secondary Display"
+msgstr "二次表示"
+
+msgid "Luminance"
+msgstr "輝度"
 
 msgid "Thumbnails"
 msgstr "サムネイル"
@@ -7430,6 +7352,25 @@ msgstr "ステレオパネル"
 msgid "How to display timeline thumbnails in Stereo Panel."
 msgstr "ステレオパネルでタイムラインのサムネイルを表示する方法。"
 
+msgid "Refresh Thumbnails on Panels Manuallly"
+msgstr "パネルのサムネイルを手動で更新"
+
+msgid ""
+"When this option is on, thumbnails in panels won't be refreshed "
+"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+msgstr ""
+"このオプションが有効な場合、パネル内のサムネイルは自動的に更新されません。\n"
+"サムネイル上で右クリック→「サムネイルを更新」を使用する必要があります。"
+
+msgid "Timeline and Edit Viewport"
+msgstr "タイムラインと編集ビューポート"
+
+msgid "Preview Thumbnails above Timeline"
+msgstr "タイムラインの上にサムネイルをプレビュー"
+
+msgid "Preview Thumbnails in a rectangle above Timeline"
+msgstr "タイムライン上の矩形領域にサムネイルをプレビュー"
+
 msgid "Edit Viewport"
 msgstr "編集ビューポート"
 
@@ -7442,104 +7383,73 @@ msgstr "編集ビューポートの波形"
 msgid "How to display timeline waveforms by default."
 msgstr "タイムラインの波形をデフォルトで表示する方法。"
 
-msgid "Preview Thumbnails above Timeline"
-msgstr "タイムラインの上にサムネイルをプレビュー"
+msgid "Defaults"
+msgstr "デフォルト"
 
-msgid "Preview Thumbnails in a rectangle above Timeline"
-msgstr "タイムライン上の矩形領域にサムネイルをプレビュー"
+msgid "Sets the default gain when mrv2 starts."
+msgstr "mrv2 起動時のデフォルトゲインを設定します。"
 
-msgid "Refresh Thumbnails on Panels Manuallly"
-msgstr "パネルのサムネイルを手動で更新"
+msgid "Sets the default gamma when mrv2 starts."
+msgstr "mrv2 起動時のデフォルトガンマを設定します。"
+
+msgid "Crop"
+msgstr "トリミング"
+
+msgid "Allows you to select a standard cropping area around image."
+msgstr "画像周辺の標準的なトリミング領域を選択できます。"
+
+msgid "Zoom Speed"
+msgstr "ズーム速度"
+
+msgid "Auto Frame"
+msgstr "自動フレーミング"
+
+msgid "When this is on, View/Auto Frame will be active."
+msgstr "このオプションがオンの場合、表示＞自動フレームが有効になります。"
+
+msgid "Safe Areas"
+msgstr "セーフエリア"
+
+msgid "When mrv2 starts, the safe area display will be active by default."
+msgstr "mrv2 起動時に、セーフエリア表示がデフォルトで有効になります。"
+
+msgid "Auto Refit Image"
+msgstr "画像を自動リフィット"
 
 msgid ""
-"When this option is on, thumbnails in panels won't be refreshed "
-"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+"When selected, mrv2 will apply a fit image operation on each video played.  "
+"This effectively means the video will be resized automatically based on the "
+"size of the window."
 msgstr ""
-"このオプションが有効な場合、パネル内のサムネイルは自動的に更新されません。\n"
-"サムネイル上で右クリック→「サムネイルを更新」を使用する必要があります。"
+"選択すると、mrv2 は再生される各ビデオに画像フィット操作を適用します。つまり、ビデオがウィンドウサイズに基づいて自動的にリサイズされます。"
 
-msgid "Display"
-msgstr "表示"
-
-msgid "How to display timeline by default."
-msgstr "タイムラインのデフォルトの表示方法。"
-
-msgid "Start in Edit mode"
-msgstr "編集モードで開始"
-
-msgid "Editing viewport will be visible at start up."
-msgstr "起動時に編集ビューポートが表示されます。"
-
-msgid "Remove EDLs in Temporary Folder on Exit"
-msgstr "終了時に一時フォルダの EDL を削除"
+msgid "OCIO in Top Bar"
+msgstr "トップバーに OCIO を表示"
 
 msgid ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary"
-" folder."
-msgstr "選択すると、一時的な EDL (プレイリスト)が一時フォルダーから削除されます。"
-
-msgid "Video Start Frame"
-msgstr "ビデオ開始フレーム"
-
-msgid "Start value in the timeline where video starts."
-msgstr "タイムライン上でビデオが開始されるフレーム値。"
-
-msgid "Prefer RGB (Vulkan)"
-msgstr "RGB を優先 (Vulkan)"
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+msgstr "mrv2 起動時に、カラー調整の代わりに OCIO がトップバーに表示されます。"
 
 msgid ""
-"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
-"and convert them with a compute shader.  When is off, Vulkan will decode "
-"RGBA_F16 and RGBA_F32 frames."
-msgstr ""
-"この設定がオンの場合、Vulkan は RGB_F16 および RGB_F32 をそのまま使用し、コンピュートシェーダーで変換しようとします。\n"
-"オフの場合、Vulkan は RGBA_F16 および RGBA_F32 フレームをデコードします。"
+"This area specifies which elements should be shown as a HUD overlay on the "
+"view screen."
+msgstr "この項目では、ビュー画面に HUD オーバーレイとして表示する要素を指定します。"
 
-msgid "Chromaticities"
-msgstr "色度"
+msgid "Frame"
+msgstr "フレーム"
 
-msgid "HDR Data"
-msgstr "HDR データ"
+msgid "Frame Range"
+msgstr "フレーム範囲"
 
-msgid "Tonemap Algorithm"
-msgstr "トーンマップアルゴリズム"
+msgid "Frame Count"
+msgstr "フレーム数"
 
-msgid "Gamut Mapping"
-msgstr "色域マッピング"
+msgid "Attributes"
+msgstr "属性"
 
-msgid "HDR Peak Detection"
-msgstr "HDR ピーク検出"
-
-msgid ""
-"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
-" per frame."
-msgstr "ビデオクリップが HDR10+ や Dolby Vision でない場合に、フレームごとに動的なしきい値を許可します。"
-
-msgid "HDR Percentile"
-msgstr "HDR パーセンタイル"
-
-msgid ""
-"When less than 100, helps find the peak brightness ignoring the top 1 "
-"percent outliers."
-msgstr "100未満の場合、上位 1％の外れ値を無視してピーク輝度を見つけるのに役立ちます。"
-
-msgid "Smoothing Period"
-msgstr "平滑化期間"
-
-msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
-msgstr "輝度検出が新しいシーンに追従するまでにかかる時間。"
-
-msgid "Low Peak Detection"
-msgstr "低ピーク検出"
-
-msgid "Low Limit to smooth out frames in the same scene."
-msgstr "同一シーン内のフレームを平滑化するための下限値。"
-
-msgid "High Peak Detection Limit"
-msgstr "高ピーク検出上限"
-
-msgid "High Limit to determine scene change."
-msgstr "シーン変更を判定するための上限値。"
+msgid "Font Size"
+msgstr "フォントサイズ"
 
 msgid "Playback"
 msgstr "再生"
@@ -7557,8 +7467,11 @@ msgid ""
 "Start Playback when single clicking the left mouse button on the view window"
 msgstr "ビューウィンドウで左クリックしたときに再生を開始します"
 
-msgid "Auto Hide Pixel Bar"
-msgstr "ピクセルバーを自動的に隠す"
+msgid "Looping Mode"
+msgstr "ループモード"
+
+msgid "Select default looping mode in timeline."
+msgstr "タイムラインのデフォルトのループモードを選択します。"
 
 msgid "Sequences"
 msgstr "シーケンス"
@@ -7569,12 +7482,6 @@ msgstr "速度"
 msgid "Frames Per Second value for sequences that don't have embedded speed."
 msgstr "埋め込み速度情報がないシーケンスのフレームレート値。"
 
-msgid "Looping Mode"
-msgstr "ループモード"
-
-msgid "Select default looping mode in timeline."
-msgstr "タイムラインのデフォルトのループモードを選択します。"
-
 msgid "Sensitivity"
 msgstr "感度"
 
@@ -7583,11 +7490,6 @@ msgid ""
 " mouse move jump more frames while higher values does the opposite."
 msgstr "この設定はスクラブ (左右ドラッグ)の感度を制御します。小さい値はマウス移動に対して多くのフレームを飛ばし、大きい値はその逆になります。"
 
-msgid ""
-"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
-"less smooth."
-msgstr "スクラブ中に再生を開始して音声を聞けるようにします。スクラブの動作はやや滑らかでなくなることがあります。"
-
 msgid "Alt Sensitivity"
 msgstr "Alt キー感度"
 
@@ -7595,6 +7497,31 @@ msgid ""
 "When using ALT + Left Mouse Button, this setting controls the multiplier "
 "used for slowing the scrubbing."
 msgstr "Alt + 左マウスボタンを使用する際、スクラブを遅くするための倍率を制御します。"
+
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr "スクラブ中に再生を開始して音声を聞けるようにします。スクラブの動作はやや滑らかでなくなることがあります。"
+
+msgid "Display"
+msgstr "表示"
+
+msgid "How to display timeline by default."
+msgstr "タイムラインのデフォルトの表示方法。"
+
+msgid "Video Start Frame"
+msgstr "ビデオ開始フレーム"
+
+msgid "Start value in the timeline where video starts."
+msgstr "タイムライン上でビデオが開始されるフレーム値。"
+
+msgid "Remove EDLs in Temporary Folder on Exit"
+msgstr "終了時に一時フォルダの EDL を削除"
+
+msgid ""
+"When selected, temporary EDLs (Playlists) will be removed from the temporary"
+" folder."
+msgstr "選択すると、一時的な EDL (プレイリスト)が一時フォルダーから削除されます。"
 
 msgid "Default View"
 msgstr "デフォルトビュー"
@@ -7611,17 +7538,17 @@ msgstr "マーカーを表示"
 msgid "Show Markers in Edit Viewport"
 msgstr "編集ビューポートにマーカーを表示"
 
-msgid "Show Effects"
-msgstr "エフェクトを表示"
-
-msgid "Show Effects in Edit Viewport"
-msgstr "編集ビューポートにエフェクトを表示"
-
 msgid "Show Waveforms"
 msgstr "波形を表示"
 
 msgid "Show Waveforms in Edit Viewport"
 msgstr "編集ビューポートに波形を表示"
+
+msgid "Show Effects"
+msgstr "エフェクトを表示"
+
+msgid "Show Effects in Edit Viewport"
+msgstr "編集ビューポートにエフェクトを表示"
 
 msgid "Show Thunbnails"
 msgstr "サムネイルを表示"
@@ -7629,14 +7556,11 @@ msgstr "サムネイルを表示"
 msgid "Show Thumbnails in Edit Viewport"
 msgstr "編集ビューポートにサムネイルを表示"
 
-msgid "Behavior"
-msgstr "動作"
+msgid "Start in Edit mode"
+msgstr "編集モードで開始"
 
-msgid "Edit Associated Clips"
-msgstr "関連クリップを編集"
-
-msgid "Edit Associated Clips."
-msgstr "関連するクリップを編集します。"
+msgid "Editing viewport will be visible at start up."
+msgstr "起動時に編集ビューポートが表示されます。"
 
 msgid "Editable"
 msgstr "編集可能"
@@ -7644,215 +7568,14 @@ msgstr "編集可能"
 msgid "Editable Timeline Viewport."
 msgstr "編集可能なタイムラインビューポート。"
 
-msgid "OCIO"
-msgstr "OCIO"
+msgid "Edit Associated Clips"
+msgstr "関連クリップを編集"
 
-msgid "OCIO Config File"
-msgstr "OCIO 設定ファイル"
+msgid "Edit Associated Clips."
+msgstr "関連するクリップを編集します。"
 
-msgid ""
-"This is the path to your config.ocio file.  It can be set with the "
-"environment variable OCIO, which takes precedence over any saved setting."
-msgstr "config.ocio ファイルへのパスです。環境変数 OCIO で設定することもでき、保存された設定よりも優先されます。"
-
-msgid "Built-in Configs"
-msgstr "組み込み設定"
-
-msgid "Pick a config.ocio file from disk."
-msgstr "ディスクから config.ocio ファイルを選択します。"
-
-msgid "Set Auto ICS as default"
-msgstr "自動 ICS をデフォルトに設定"
-
-msgid ""
-"Set Auto ICS as a default so that Input Color Space is selected from file "
-"name or OpenEXR metadata.."
-msgstr ""
-"自動 ICS をデフォルトに設定し、ファイル名または OpenEXR メタデータから\n"
-"入力カラースペースが選択されるようにします。"
-
-msgid "Use Default Display and View"
-msgstr "デフォルトのディスプレイとビューを使用"
-
-msgid ""
-"When this option is on, and your config.ocio has a default display and view,"
-" it will be used to be set as default."
-msgstr ""
-"このオプションが有効で、config.ocio にデフォルトのディスプレイとビューが設定されている場合、それがデフォルトとして使用されます。"
-
-msgid "No OCIO on Videos or sRGB/BT709 data"
-msgstr "動画または sRGB/BT709データ で OCIO を無効にする"
-
-msgid ""
-"If playing a video or showing an SDR image, OCIO will be turned off "
-"automatically."
-msgstr "動画を再生中または SDR 画像を表示している場合、OCIO は自動的に無効になります。"
-
-msgid "Use Active Views and Active Displays"
-msgstr "アクティブビューとアクティブディスプレイを使用"
-
-msgid ""
-"When this option is off, OCIO files with active_views: and active_displays: "
-"are not taken into account."
-msgstr ""
-"このオプションがオフの場合、active_views: および active_displays: が指定された OCIO ファイルは考慮されません。"
-
-msgid "OCIO Defaults"
-msgstr "OCIOのデフォルト設定"
-
-msgid "8-bits"
-msgstr "8ビット"
-
-msgid ""
-"The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
-"etc)."
-msgstr "8ビット画像 (jpg、bmpなど)に対する OCIO デフォルト画像カラースペースの名前。"
-
-msgid "16-bits"
-msgstr "16ビット"
-
-msgid ""
-"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
-" etc.)"
-msgstr "16ビット画像 (cin、tiffなど) に対する OCIO デフォルト画像カラースペースの名前"
-
-msgid "32-bits"
-msgstr "32ビット"
-
-msgid ""
-"The name of the OCIO default image color space for 32-bit int images "
-"(openexr integers, etc.)"
-msgstr "32ビット整数画像 (OpenEXR 整数など) に対する OCIO デフォルト画像カラースペースの名前"
-
-msgid "half"
-msgstr "half"
-
-msgid ""
-"The name of the OCIO default image color space for OpenEXR half images."
-msgstr "OpenEXR half 画像に対する OCIO デフォルト画像カラースペースの名前。"
-
-msgid "float"
-msgstr "float"
-
-msgid ""
-"The name of the OCIO default image color space for half and float images "
-"(OpenEXR, hdr, dpx, etc.)"
-msgstr "half および float画像 (OpenEXR、hdr、dpxなど) に対する OCIO デフォルト画像カラースペースの名前"
-
-msgid "Default Look"
-msgstr "デフォルトルック"
-
-msgid "Display / View"
-msgstr "ディスプレイ / ビュー"
-
-msgid "Default Display / View"
-msgstr "デフォルトディスプレイ / ビュー"
-
-msgid "Loading"
-msgstr "読み込み"
-
-msgid "Version Regex"
-msgstr "バージョン正規表現"
-
-msgid ""
-"Regular Expression used to match clip versions.  Must group three things "
-"(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with"
-" _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
-msgstr ""
-"クリップバージョンに一致させるための正規表現。プレフィックス、番号、サフィックスの3つをグループ化する必要があります。デフォルト値 "
-"(_v)のままにすると、ファイル名やディレクトリ名 (またはその両方)に_vで定義されたバージョンに一致する正規表現が自動的に生成されます。例 : "
-"gizmo_v001.0001.exr"
-
-msgid "Maximum Images Apart"
-msgstr "最大バージョン間隔"
-
-msgid ""
-"When searching for a version, this value is the maximum version apart from "
-"each other when searching the first or last version."
-msgstr "バージョンを検索する際に、最初または最後のバージョンを探すときに互いに離れていてもよい最大バージョン数。"
-
-msgid "Missing Frame"
-msgstr "欠落フレーム"
-
-msgid "Black Frame"
-msgstr "黒フレーム"
-
-msgid ""
-"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
-"\t* Error Frame\t   - Reports an error.\n"
-"\t* Hold Frame\t   - Holds the last frame read.\n"
-"\t* Scratched Frame  - Holds the last frame read\n"
-"                             but draws a red cross.\n"
-"\t* Black Frame\t   - Replaces current frame with black.\n"
-"\t* Skip Frame\t   - Skips the current frame.\n"
-"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
-msgstr ""
-"画像を読み込む際、この設定で欠落したフレームの処理方法を指定します（シーケンスの再読み込みまたはクローンが必要になる場合があります）：\n"
-"\t* エラーフレーム\t   - エラーを報告します。\n"
-"\t* フレームを保持\t   - 最後に読み込んだフレームを保持します。\n"
-"\t* 傷付きフレーム  - 最後に読み込んだフレームを保持しますが、\n"
-"                             赤い十字を描画します。\n"
-"\t* 黒フレーム\t   - 現在のフレームを黒で置き換えます。\n"
-"\t* フレームをスキップ\t   - 現在のフレームをスキップします。\n"
-"\t* ギャップフレーム\t   - 欠落したフレームに対して .otio Gap を追加します。"
-
-msgid "Scratch Frame"
-msgstr "欠落フレーム"
-
-msgid "When this is on, missing frames will have a cross on them."
-msgstr "これを有効にすると、欠落フレームに×印が表示されます。"
-
-msgid "Scratch Color"
-msgstr "欠落フレームの色"
-
-msgid "Scratch Lines Color."
-msgstr "欠落フレームの線の色。"
-
-msgid "Scratch Width"
-msgstr "欠落フレームの線の幅"
-
-msgid "Scratch Lines Width."
-msgstr "欠落フレームの線の幅。"
-
-msgid "Path Mappings"
-msgstr "パスマッピング"
-
-msgid ""
-"Use Up and Down arrows to move the selected line up and down.  Double click "
-"to change item.  Click on an empty area to unselect."
-msgstr "上下矢印を使用して選択行を移動します。ダブルクリックで項目を変更します。空の領域をクリックして選択を解除します。"
-
-msgid "Add Paths"
-msgstr "パスを追加"
-
-msgid "Add a new remote mapping."
-msgstr "新しいリモートマッピングを追加します。"
-
-msgid "Remove Paths"
-msgstr "パスを削除"
-
-msgid "Remove the currently selected path mapping."
-msgstr "現在選択されているパスマッピングを削除します。"
-
-msgid "Send"
-msgstr "送信"
-
-msgid "Accept"
-msgstr "適用"
-
-msgid "UI Control"
-msgstr "UI 制御"
-
-msgid "Pan and Zoom"
-msgstr "パンとズーム"
-
-msgid "Color Control"
-msgstr "カラー制御"
-
-msgid "Audio Control"
-msgstr "オーディオ制御"
+msgid "Graphics"
+msgstr "グラフィックス"
 
 msgid "Monitor VSync"
 msgstr "モニター VSync"
@@ -7897,10 +7620,326 @@ msgid ""
 msgstr ""
 "タイムラインはブリット方式またはシェーダー方式で描画できます。グラフィックカードや OS によって、どちらかの方式がより良いパフォーマンスを発揮します。"
 
+msgid "Rendering"
+msgstr "レンダリング"
+
+msgid "Image Rendering"
+msgstr "画像のレンダリング"
+
+msgid "Debanding (Vulkan)"
+msgstr "バンディング除去 (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "動画ファイルのグラデーションをより滑らかにします。"
+
+msgid "Alpha Blend"
+msgstr "アルファブレンド"
+
+msgid "Minify Filter"
+msgstr "縮小フィルタ"
+
+msgid "Magnify Filter"
+msgstr "拡大フィルタ"
+
+msgid "HDR Processing"
+msgstr "HDR処理"
+
+msgid "Prefer RGB (Vulkan)"
+msgstr "RGB を優先 (Vulkan)"
+
 msgid ""
-"For changes to take effect, you will need to re-open any movies already "
-"playing or reload mrv2."
-msgstr "変更を有効にするには、再生中のムービーを再度開くか、mrv2 を再起動する必要があります。"
+"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
+"and convert them with a compute shader.  When is off, Vulkan will decode "
+"RGBA_F16 and RGBA_F32 frames."
+msgstr ""
+"この設定がオンの場合、Vulkan は RGB_F16 および RGB_F32 をそのまま使用し、コンピュートシェーダーで変換しようとします。\n"
+"オフの場合、Vulkan は RGBA_F16 および RGBA_F32 フレームをデコードします。"
+
+msgid "Chromaticities"
+msgstr "色度"
+
+msgid "HDR Data"
+msgstr "HDR データ"
+
+msgid "Tonemap Algorithm"
+msgstr "トーンマップアルゴリズム"
+
+msgid "Gamut Mapping"
+msgstr "色域マッピング"
+
+msgid "Peak Detection"
+msgstr "ピーク検出"
+
+msgid "HDR Peak Detection"
+msgstr "HDR ピーク検出"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr "ビデオクリップが HDR10+ や Dolby Vision でない場合に、フレームごとに動的なしきい値を許可します。"
+
+msgid "HDR Percentile"
+msgstr "HDR パーセンタイル"
+
+msgid ""
+"When less than 100, helps find the peak brightness ignoring the top 1 "
+"percent outliers."
+msgstr "100未満の場合、上位 1％の外れ値を無視してピーク輝度を見つけるのに役立ちます。"
+
+msgid "Smoothing Period"
+msgstr "平滑化期間"
+
+msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
+msgstr "輝度検出が新しいシーンに追従するまでにかかる時間。"
+
+msgid "Low Peak Detection"
+msgstr "低ピーク検出"
+
+msgid "Low Limit to smooth out frames in the same scene."
+msgstr "同一シーン内のフレームを平滑化するための下限値。"
+
+msgid "High Peak Detection Limit"
+msgstr "高ピーク検出上限"
+
+msgid "High Limit to determine scene change."
+msgstr "シーン変更を判定するための上限値。"
+
+msgid "OCIO"
+msgstr "OCIO"
+
+msgid "Configuration"
+msgstr "設定"
+
+msgid "Built-in Configs"
+msgstr "組み込み設定"
+
+msgid "OCIO Config File"
+msgstr "OCIO 設定ファイル"
+
+msgid ""
+"This is the path to your config.ocio file.  It can be set with the "
+"environment variable OCIO, which takes precedence over any saved setting."
+msgstr "config.ocio ファイルへのパスです。環境変数 OCIO で設定することもでき、保存された設定よりも優先されます。"
+
+msgid "Pick a config.ocio file from disk."
+msgstr "ディスクから config.ocio ファイルを選択します。"
+
+msgid "Options"
+msgstr "オプション"
+
+msgid "Set Auto ICS as default"
+msgstr "自動 ICS をデフォルトに設定"
+
+msgid ""
+"Set Auto ICS as a default so that Input Color Space is selected from file "
+"name or OpenEXR metadata.."
+msgstr ""
+"自動 ICS をデフォルトに設定し、ファイル名または OpenEXR メタデータから\n"
+"入力カラースペースが選択されるようにします。"
+
+msgid "Use Default Display and View"
+msgstr "デフォルトのディスプレイとビューを使用"
+
+msgid ""
+"When this option is on, and your config.ocio has a default display and view,"
+" it will be used to be set as default."
+msgstr ""
+"このオプションが有効で、config.ocio にデフォルトのディスプレイとビューが設定されている場合、それがデフォルトとして使用されます。"
+
+msgid "Use Active Views and Active Displays"
+msgstr "アクティブビューとアクティブディスプレイを使用"
+
+msgid ""
+"When this option is off, OCIO files with active_views: and active_displays: "
+"are not taken into account."
+msgstr ""
+"このオプションがオフの場合、active_views: および active_displays: が指定された OCIO ファイルは考慮されません。"
+
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "動画または sRGB/BT709データ で OCIO を無効にする"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr "動画を再生中または SDR 画像を表示している場合、OCIO は自動的に無効になります。"
+
+msgid "8-bits"
+msgstr "8ビット"
+
+msgid ""
+"The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
+"etc)."
+msgstr "8ビット画像 (jpg、bmpなど)に対する OCIO デフォルト画像カラースペースの名前。"
+
+msgid "16-bits"
+msgstr "16ビット"
+
+msgid ""
+"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
+" etc.)"
+msgstr "16ビット画像 (cin、tiffなど) に対する OCIO デフォルト画像カラースペースの名前"
+
+msgid "32-bits"
+msgstr "32ビット"
+
+msgid ""
+"The name of the OCIO default image color space for 32-bit int images "
+"(openexr integers, etc.)"
+msgstr "32ビット整数画像 (OpenEXR 整数など) に対する OCIO デフォルト画像カラースペースの名前"
+
+msgid "half"
+msgstr "half"
+
+msgid ""
+"The name of the OCIO default image color space for OpenEXR half images."
+msgstr "OpenEXR half 画像に対する OCIO デフォルト画像カラースペースの名前。"
+
+msgid "float"
+msgstr "float"
+
+msgid ""
+"The name of the OCIO default image color space for half and float images "
+"(OpenEXR, hdr, dpx, etc.)"
+msgstr "half および float画像 (OpenEXR、hdr、dpxなど) に対する OCIO デフォルト画像カラースペースの名前"
+
+msgid "Look and View"
+msgstr "外観と表示"
+
+msgid "Default Look"
+msgstr "デフォルトルック"
+
+msgid "Display / View"
+msgstr "ディスプレイ / ビュー"
+
+msgid "Default Display / View"
+msgstr "デフォルトディスプレイ / ビュー"
+
+msgid "Loading"
+msgstr "読み込み"
+
+msgid "Missing Frames"
+msgstr "欠落フレーム"
+
+msgid "Missing Frame"
+msgstr "欠落フレーム"
+
+msgid "Black Frame"
+msgstr "黒フレーム"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"画像を読み込む際、この設定で欠落したフレームの処理方法を指定します（シーケンスの再読み込みまたはクローンが必要になる場合があります）：\n"
+"\t* エラーフレーム\t   - エラーを報告します。\n"
+"\t* フレームを保持\t   - 最後に読み込んだフレームを保持します。\n"
+"\t* 傷付きフレーム  - 最後に読み込んだフレームを保持しますが、\n"
+"                             赤い十字を描画します。\n"
+"\t* 黒フレーム\t   - 現在のフレームを黒で置き換えます。\n"
+"\t* フレームをスキップ\t   - 現在のフレームをスキップします。\n"
+"\t* ギャップフレーム\t   - 欠落したフレームに対して .otio Gap を追加します。"
+
+msgid "Scratch Frame"
+msgstr "欠落フレーム"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr "これを有効にすると、欠落フレームに×印が表示されます。"
+
+msgid "Scratch Color"
+msgstr "欠落フレームの色"
+
+msgid "Scratch Lines Color."
+msgstr "欠落フレームの線の色。"
+
+msgid "Scratch Width"
+msgstr "欠落フレームの線の幅"
+
+msgid "Scratch Lines Width."
+msgstr "欠落フレームの線の幅。"
+
+msgid "Versions"
+msgstr "バージョン"
+
+msgid "Version Regex"
+msgstr "バージョン正規表現"
+
+msgid ""
+"Regular Expression used to match clip versions.  Must group three things "
+"(prefix, number and suffix). If left on its default value (_v), it will "
+"automatically be created a regular expression to match versions defined with"
+" _v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
+msgstr ""
+"クリップバージョンに一致させるための正規表現。プレフィックス、番号、サフィックスの3つをグループ化する必要があります。デフォルト値 "
+"(_v)のままにすると、ファイル名やディレクトリ名 (またはその両方)に_vで定義されたバージョンに一致する正規表現が自動的に生成されます。例 : "
+"gizmo_v001.0001.exr"
+
+msgid "Maximum Images Apart"
+msgstr "最大バージョン間隔"
+
+msgid ""
+"When searching for a version, this value is the maximum version apart from "
+"each other when searching the first or last version."
+msgstr "バージョンを検索する際に、最初または最後のバージョンを探すときに互いに離れていてもよい最大バージョン数。"
+
+msgid "File Requester"
+msgstr "ファイル選択ダイアログ"
+
+msgid "Use Native File Chooser"
+msgstr "ネイティブファイル選択を使用"
+
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr "選択するとネイティブのファイル選択ダイアログが使用されます。選択されていない場合は、mrv2 標準のファイル選択ダイアログが使用されます。"
+
+msgid "Single Click to Travel Drawers"
+msgstr "シングルクリックでフォルダーを開く"
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr "mrv2 のファイル選択ダイアログで、フォルダーをシングルクリックすると開きます。"
+
+msgid "Thumbnails Active"
+msgstr "サムネイルを有効"
+
+msgid "Show thumbnails for known files."
+msgstr "既知のファイルのサムネイルを表示します。"
+
+msgid "USD Thumbnails"
+msgstr "USD サムネイル"
+
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr "USD ファイルのサムネイルを表示します (ファイルが大きい場合は遅くなる可能性があります)"
+
+msgid "Path Mappings"
+msgstr "パスマッピング"
+
+msgid ""
+"Use Up and Down arrows to move the selected line up and down.  Double click "
+"to change item.  Click on an empty area to unselect."
+msgstr "上下矢印を使用して選択行を移動します。ダブルクリックで項目を変更します。空の領域をクリックして選択を解除します。"
+
+msgid "Add Paths"
+msgstr "パスを追加"
+
+msgid "Add a new remote mapping."
+msgstr "新しいリモートマッピングを追加します。"
+
+msgid "Remove Paths"
+msgstr "パスを削除"
+
+msgid "Remove the currently selected path mapping."
+msgstr "現在選択されているパスマッピングを削除します。"
+
+msgid "Audio Output"
+msgstr "音声出力"
 
 msgid "API"
 msgstr "API"
@@ -7914,11 +7953,19 @@ msgstr "出力デバイス"
 msgid "Output Device to use for audio playback."
 msgstr "オーディオ再生に使用する出力デバイス。"
 
+msgid ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+msgstr "変更を有効にするには、再生中のムービーを再度開くか、mrv2 を再起動する必要があります。"
+
 msgid "Voice Annotations"
 msgstr "音声注釈"
 
 msgid "Voice Annotation Preferences."
 msgstr "音声注釈の設定。"
+
+msgid "Voice Over"
+msgstr "ボイスオーバー"
 
 msgid "Save Path"
 msgstr "保存パス"
@@ -7935,24 +7982,32 @@ msgstr "マイク"
 msgid "Volume"
 msgstr "音量"
 
-msgid "ComfyUI"
-msgstr "ComfyUI"
+msgid "Send and Accept"
+msgstr "送信と承認"
 
-msgid ""
-"Here are the current settings to interact with ComfyUI.  It requires "
-"installation of mrv2's comfyUI nodes."
-msgstr "ComfyUI と連携するための現在の設定です。mrv2 用の ComfyUI ノードのインストールが必要です。"
+msgid "Send"
+msgstr "送信"
 
-msgid "Use ComfyUI Pipe"
-msgstr "ComfyUI パイプを使用"
+msgid "Accept"
+msgstr "適用"
 
-msgid ""
-"This setting opens a pipe to communicate with ComfyUI's "
-"mrv2_save_exr_node.py"
-msgstr "この設定は、ComfyUI の mrv2_save_exr_node.py と通信するためのパイプを開きます"
+msgid "UI Control"
+msgstr "UI 制御"
+
+msgid "Pan and Zoom"
+msgstr "パンとズーム"
+
+msgid "Color Control"
+msgstr "カラー制御"
+
+msgid "Audio Control"
+msgstr "オーディオ制御"
 
 msgid "WebRTC settings"
 msgstr "WebRTC 設定"
+
+msgid "Connection"
+msgstr "接続"
 
 msgid "WebRTC Presets"
 msgstr "WebRTC プリセット"
@@ -7996,31 +8051,21 @@ msgstr "キャッシュディレクトリ"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "WebRTC のダウンロードファイルを保存するディレクトリ。"
 
-msgid "On FFmpeg Error"
-msgstr "FFmpeg エラー発生時"
-
-msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
-msgstr "FFmpeg  エラー発生時のログウィンドウの動作を調整します。"
-
-msgid "On Error"
-msgstr "エラー発生時"
-
-msgid "Adjusts how Log Window behaves in case of error."
-msgstr "エラー発生時のログウィンドウの動作を調整します。"
-
-msgid "Check for Updates"
-msgstr "更新を確認"
+msgid "ComfyUI"
+msgstr "ComfyUI"
 
 msgid ""
-"Allows you to automatically download updates of mrv2 when it starts up."
-msgstr "mrv2 起動時に自動的に更新をダウンロードすることを許可します。"
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
+msgstr "ComfyUI と連携するための現在の設定です。mrv2 用の ComfyUI ノードのインストールが必要です。"
 
-msgid "Allow Screen Saver"
-msgstr "スクリーンセーバーを許可"
+msgid "Use ComfyUI Pipe"
+msgstr "ComfyUI パイプを使用"
 
 msgid ""
-"This setting controls whether mrv2 will block the screen saver when running."
-msgstr "この設定は、mrv2 実行中にスクリーンセーバーをブロックするかどうかを制御します。"
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
+msgstr "この設定は、ComfyUI の mrv2_save_exr_node.py と通信するためのパイプを開きます"
 
 msgid "Reset settings to the default."
 msgstr "設定をデフォルトにリセットします。"
@@ -8039,35 +8084,44 @@ msgstr "設定を適用しますが、保存はしません。プログラム終
 msgid "Module"
 msgstr "モジュール"
 
-msgid "User Interface/Elements"
-msgstr "ユーザーインターフェース/要素"
+msgid "General/Window Position"
+msgstr "一般/ウィンドウの位置"
 
-msgid "User Interface/View Window"
-msgstr "ユーザーインターフェース/ビューウィンドウ"
+msgid "Interface/Appearance"
+msgstr "インターフェース/外観"
 
-msgid "User Interface/File Requester"
-msgstr "ユーザーインターフェース/ファイル選択ダイアログ"
-
-msgid "User Interface/Fonts"
-msgstr "ユーザーインターフェース/フォント"
-
-msgid "User Interface/Language and Colors"
-msgstr "ユーザーインターフェース/言語とカラー"
-
-msgid "User Interface/Pixel Toolbar"
+msgid "Interface/Pixel Toolbar"
 msgstr "ユーザーインターフェース/ピクセルツールバー"
 
-msgid "User Interface/Positioning"
-msgstr "ユーザーインターフェース/位置設定"
-
-msgid "User Interface/Render"
-msgstr "ユーザーインターフェース/レンダリング"
-
-msgid "User Interface/Thumbnails"
+msgid "Interface/Thumbnails"
 msgstr "ユーザーインターフェース/サムネイル"
 
-msgid "User Interface/Timeline"
-msgstr "ユーザーインターフェース/タイムライン"
+msgid "Timeline/Edit"
+msgstr "タイムライン/編集"
+
+msgid "Graphics/Rendering"
+msgstr "グラフィックス/レンダリング"
+
+msgid "Graphics/HDR"
+msgstr "グラフィックス/HDR"
+
+msgid "OCIO/Defaults"
+msgstr "OCIO/デフォルト設定"
+
+msgid "Loading/File Requester"
+msgstr "読み込み/ファイル選択ダイアログ"
+
+msgid "Loading/Path Mappings"
+msgstr "読み込み/パスのマッピング"
+
+msgid "Audio/Voice Annotations"
+msgstr "音声/音声注釈"
+
+msgid "Network/WebRTC"
+msgstr "ネットワーク/WebRTC"
+
+msgid "Network/ComfyUI"
+msgstr "ネットワーク/ComfyUI"
 
 msgid "No Audio was Compiled"
 msgstr "オーディオがコンパイルされていません"
@@ -8987,6 +9041,45 @@ msgstr "host_statistics64 に失敗しました"
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました"
 
+#~ msgid "User Interface"
+#~ msgstr "ユーザーインターフェース"
+
+#~ msgid "User Interface Elements"
+#~ msgstr "ユーザーインターフェース要素"
+
+#~ msgid "View Window"
+#~ msgstr "ビューウィンドウ"
+
+#~ msgid "Language and Colors"
+#~ msgstr "言語と色"
+
+#~ msgid "Render"
+#~ msgstr "レンダリング"
+
+#~ msgid "User Interface/Elements"
+#~ msgstr "ユーザーインターフェース/要素"
+
+#~ msgid "User Interface/View Window"
+#~ msgstr "ユーザーインターフェース/ビューウィンドウ"
+
+#~ msgid "User Interface/File Requester"
+#~ msgstr "ユーザーインターフェース/ファイル選択ダイアログ"
+
+#~ msgid "User Interface/Fonts"
+#~ msgstr "ユーザーインターフェース/フォント"
+
+#~ msgid "User Interface/Language and Colors"
+#~ msgstr "ユーザーインターフェース/言語とカラー"
+
+#~ msgid "User Interface/Positioning"
+#~ msgstr "ユーザーインターフェース/位置設定"
+
+#~ msgid "User Interface/Render"
+#~ msgstr "ユーザーインターフェース/レンダリング"
+
+#~ msgid "User Interface/Timeline"
+#~ msgstr "ユーザーインターフェース/タイムライン"
+
 #~ msgid "Complexity"
 #~ msgstr "複雑さ"
 
@@ -9027,99 +9120,6 @@ msgstr "タスク情報の取得に失敗しました"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "テキスト描画用の無効なフォント"
-
-#~ msgid "General"
-#~ msgstr "一般"
-
-#~ msgid "Window Position"
-#~ msgstr "ウィンドウの位置"
-
-#~ msgid "Interface"
-#~ msgstr "インターフェース"
-
-#~ msgid "Appearance"
-#~ msgstr "外観"
-
-#~ msgid "Language and Theme"
-#~ msgstr "言語とテーマ"
-
-#~ msgid "View Colors"
-#~ msgstr "ビューの色"
-
-#~ msgid "Timeline and Edit Viewport"
-#~ msgstr "タイムラインと編集ビューポート"
-
-#~ msgid "Graphics"
-#~ msgstr "グラフィックス"
-
-#~ msgid "Rendering"
-#~ msgstr "レンダリング"
-
-#~ msgid "Image Rendering"
-#~ msgstr "画像のレンダリング"
-
-#~ msgid "HDR Processing"
-#~ msgstr "HDR処理"
-
-#~ msgid "Peak Detection"
-#~ msgstr "ピーク検出"
-
-#~ msgid "Configuration"
-#~ msgstr "設定"
-
-#~ msgid "Options"
-#~ msgstr "オプション"
-
-#~ msgid "Look and View"
-#~ msgstr "外観と表示"
-
-#~ msgid "Missing Frames"
-#~ msgstr "欠落フレーム"
-
-#~ msgid "Versions"
-#~ msgstr "バージョン"
-
-#~ msgid "Audio Output"
-#~ msgstr "音声出力"
-
-#~ msgid "Voice Over"
-#~ msgstr "ボイスオーバー"
-
-#~ msgid "Send and Accept"
-#~ msgstr "送信と承認"
-
-#~ msgid "Connection"
-#~ msgstr "接続"
-
-#~ msgid "General/Window Position"
-#~ msgstr "一般/ウィンドウの位置"
-
-#~ msgid "Interface/Appearance"
-#~ msgstr "インターフェース/外観"
-
-#~ msgid "Timeline/Edit"
-#~ msgstr "タイムライン/編集"
-
-#~ msgid "Graphics/Rendering"
-#~ msgstr "グラフィックス/レンダリング"
-
-#~ msgid "Graphics/HDR"
-#~ msgstr "グラフィックス/HDR"
-
-#~ msgid "Loading/File Requester"
-#~ msgstr "読み込み/ファイル選択ダイアログ"
-
-#~ msgid "Loading/Path Mappings"
-#~ msgstr "読み込み/パスのマッピング"
-
-#~ msgid "Audio/Voice Annotations"
-#~ msgstr "音声/音声注釈"
-
-#~ msgid "Network/WebRTC"
-#~ msgstr "ネットワーク/WebRTC"
-
-#~ msgid "Network/ComfyUI"
-#~ msgstr "ネットワーク/ComfyUI"
 
 #, c++-format
 #~ msgid "Show {0} Window."

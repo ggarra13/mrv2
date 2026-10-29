@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-28 21:11-0300\n"
+"POT-Creation-Date: 2026-10-29 03:56-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: pt\n"
@@ -6858,6 +6858,93 @@ msgstr "Conteúdo"
 msgid "OpenEXR's Contents to Save"
 msgstr "Conteúdo do OpenEXR para Salvar"
 
+msgid "On Demand From Help Menu"
+msgstr "A pedido do menu Ajuda"
+
+msgid "At Start Up"
+msgstr "No incio"
+
+msgid "Inactive"
+msgstr "Inativo"
+
+msgid "Active"
+msgstr "Ativo"
+
+msgid "Do Nothing"
+msgstr "No faas nada"
+
+msgid "Open Logs on Dock"
+msgstr "Abrir os registos na Dock"
+
+msgid "Open Logs on Window"
+msgstr "Abrir registos na janela"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "Brilho"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Pick View Background Color"
+msgstr "Selecionar cor de fundo da visualização"
+
+msgid "Pick View Text Overlay Color"
+msgstr "Selecionar cor do texto sobreposto da visualização"
+
+msgid "Pick View Selection Color"
+msgstr "Selecionar cor de seleção da visualização"
+
+msgid "Pick HUD Color"
+msgstr "Selecionar cor do HUD"
+
+msgid "OpenGL only"
+msgstr "Somente OpenGL"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan e OpenGL"
+
+msgid "Float Values"
+msgstr "Valores de flutuao"
+
+msgid "Hex Values"
+msgstr "Valores de Hexadecime"
+
+msgid "8-bit Values"
+msgstr "Valores de 8 bits"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Lot completo, Gamma e Gain"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Original sem Gamma, Gain ou Lut"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "Small"
+msgstr "Pequeno"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Medium"
+msgstr "Mdia"
+
+msgid "Large"
+msgstr "Grandes"
+
 msgid "0.00 None"
 msgstr "0,00 Nenhuma"
 
@@ -6906,62 +6993,47 @@ msgstr "4.00 Poliviso"
 msgid "Slow"
 msgstr "Devagar"
 
-msgid "Medium"
-msgstr "Mdia"
-
 msgid "Fast"
 msgstr "Rpido"
 
-msgid "base"
-msgstr "base"
+msgid "Loop"
+msgstr "Loop"
 
-msgid "plastic"
-msgstr "plastic"
+msgid "Ping Pong"
+msgstr "Ping Pong"
 
-msgid "gtk+"
-msgstr "gtk+"
+msgid "29.97"
+msgstr "29.97"
 
-msgid "gleam"
-msgstr "Brilho"
+msgid "14.985"
+msgstr "14.985"
 
-msgid "oxy"
-msgstr "oxy"
+msgid "Button"
+msgstr "Botão"
 
-msgid "Pick View Background Color"
-msgstr "Selecionar cor de fundo da visualização"
+msgid "Video Only"
+msgstr "Apenas vdeo"
 
-msgid "Pick View Text Overlay Color"
-msgstr "Selecionar cor do texto sobreposto da visualização"
+msgid "Video and Audio"
+msgstr "Vdeo e udio"
 
-msgid "Pick View Selection Color"
-msgstr "Selecionar cor de seleção da visualização"
+msgid "Always"
+msgstr "Sempre"
 
-msgid "Pick HUD Color"
-msgstr "Selecionar cor do HUD"
+msgid "Presentation Mode"
+msgstr "Modo de apresentao"
 
-msgid "Float Values"
-msgstr "Valores de flutuao"
+msgid "Automatic"
+msgstr "Automtico"
 
-msgid "Hex Values"
-msgstr "Valores de Hexadecime"
+msgid "Half Float"
+msgstr "Metade flutuante"
 
-msgid "8-bit Values"
-msgstr "Valores de 8 bits"
+msgid "Full Float (Accurate)"
+msgstr "Flutuao total (apurado)"
 
-msgid "Full Lut, Gamma and Gain"
-msgstr "Lot completo, Gamma e Gain"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Original sem Gamma, Gain ou Lut"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "Small"
-msgstr "Pequeno"
+msgid "GPU 0"
+msgstr "GPU 0"
 
 msgid "High"
 msgstr "Alto"
@@ -6984,12 +7056,6 @@ msgstr "Pr-multiplicado"
 msgid "Nearest"
 msgstr "Mais perto"
 
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Large"
-msgstr "Grandes"
-
 msgid "Use RGBA"
 msgstr "Usar RGBA"
 
@@ -7001,12 +7067,6 @@ msgstr "Ignorar"
 
 msgid "Apply"
 msgstr "Aplicar"
-
-msgid "Inactive"
-msgstr "Inativo"
-
-msgid "Active"
-msgstr "Ativo"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -7059,33 +7119,6 @@ msgstr "Escurecer"
 msgid "Highlight"
 msgstr "Realçar"
 
-msgid "OpenGL only"
-msgstr "Somente OpenGL"
-
-msgid "Vulkan and OpenGL"
-msgstr "Vulkan e OpenGL"
-
-msgid "29.97"
-msgstr "29.97"
-
-msgid "14.985"
-msgstr "14.985"
-
-msgid "Loop"
-msgstr "Loop"
-
-msgid "Ping Pong"
-msgstr "Ping Pong"
-
-msgid "Button"
-msgstr "Botão"
-
-msgid "Video Only"
-msgstr "Apenas vdeo"
-
-msgid "Video and Audio"
-msgstr "Vdeo e udio"
-
 msgid "CG"
 msgstr "CG"
 
@@ -7109,24 +7142,6 @@ msgstr "Quadro de lacuna"
 
 msgid "Pick Scratch Color"
 msgstr "Escolher a cor dos quadros ausentes"
-
-msgid "Always"
-msgstr "Sempre"
-
-msgid "Presentation Mode"
-msgstr "Modo de apresentao"
-
-msgid "Automatic"
-msgstr "Automtico"
-
-msgid "Half Float"
-msgstr "Metade flutuante"
-
-msgid "Full Float (Accurate)"
-msgstr "Flutuao total (apurado)"
-
-msgid "GPU 0"
-msgstr "GPU 0"
 
 msgid "X 2"
 msgstr "× 2"
@@ -7152,21 +7167,6 @@ msgstr "Diretório pessoal"
 msgid "Temp Directory"
 msgstr "Diretório temporário"
 
-msgid "Do Nothing"
-msgstr "No faas nada"
-
-msgid "Open Logs on Dock"
-msgstr "Abrir os registos na Dock"
-
-msgid "Open Logs on Window"
-msgstr "Abrir registos na janela"
-
-msgid "On Demand From Help Menu"
-msgstr "A pedido do menu Ajuda"
-
-msgid "At Start Up"
-msgstr "No incio"
-
 msgid ""
 "This will reset all your preferences to their default values.  Are you sure "
 "you want to continue?"
@@ -7174,8 +7174,8 @@ msgstr ""
 "Isto ir redefinir todas as suas preferncias para os seus valores padro. Tem "
 "a certeza de que deseja continuar?"
 
-msgid "User Interface"
-msgstr "Interface do usuário"
+msgid "General"
+msgstr "Geral"
 
 msgid "Window Behavior"
 msgstr "Comportamento da Janela"
@@ -7203,18 +7203,6 @@ msgstr ""
 "Quando selecionado, apenas uma nica instncia mrv2  permitida. Se voc tentar "
 "abrir vrios mrv2s com imagens diferentes, todas estas imagens sero enviadas "
 "para o mrv2 j aberto."
-
-msgid "Auto Refit Image"
-msgstr "Imagem de Refinamento Automtico"
-
-msgid ""
-"When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectively means the video will be resized automatically based on the "
-"size of the window."
-msgstr ""
-"Quando selecionado, o mrv2 irá aplicar uma operação de imagem adequada a "
-"cada vídeo reproduzido. Isto significa efectivamente que o vídeo será "
-"redimensionado automaticamente com base no tamanho da janela."
 
 msgid "Raise on Enter"
 msgstr "Aumentar no Enter"
@@ -7252,243 +7240,32 @@ msgstr "Mximo"
 msgid "When selected, mrv2 will start in a maximized window."
 msgstr "Quando selecionado, o mrv2 comear numa janela maximizada."
 
-msgid "User Interface Elements"
-msgstr "Elementos da interface do usuário"
+msgid "Behavior"
+msgstr "Comportamento"
 
-msgid "UI Elements"
-msgstr "Elementos da UI"
-
-msgid "Tooltips"
-msgstr "Dicas de ferramenta"
-
-msgid "Choose whether to show tooltips or not."
-msgstr "Escolha se deseja mostrar as dicas de ferramenta ou não."
-
-msgid "Menu Bar"
-msgstr "Barra de menus"
-
-msgid "When selected, mrv2 will start with the menu bar already shown."
-msgstr "Quando selecionado, o mrv2 comear com a barra de menu j mostrada."
-
-msgid "Topbar"
-msgstr "Barra superior"
+msgid "Check for Updates"
+msgstr "Verificar as Atualizaes"
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar "
-"visible."
+"Allows you to automatically download updates of mrv2 when it starts up."
 msgstr ""
-"Quando selecionado, o mrv2 comear com seu canal, ganho, barra de ferramentas"
-" gama visvel."
+"Permite que voc baixe automaticamente as atualizaes do mrv2 quando ele "
+"comear."
 
-msgid "Pixel Toolbar"
-msgstr "Barra do Pixel"
-
-msgid "When selected, mrv2 will start with the pixel toolbar shown."
-msgstr ""
-"Quando selecionado, o mrv2 comear com a barra de ferramentas de pixels "
-"exibida."
-
-msgid "When selected, mrv2 will start with the timeline shown."
-msgstr "Quando selecionado, o mrv2 comear com a linha de tempo mostrada."
-
-msgid "macOS Menus"
-msgstr "Menus macOS"
+msgid "Allow Screen Saver"
+msgstr "Permitir protetor de tela"
 
 msgid ""
-"This is a macOS setting only.  When selected the menus will appear on the "
-"system toolbar instead of the mrv2 toolbar."
+"This setting controls whether mrv2 will block the screen saver when running."
 msgstr ""
-"Esta  apenas uma configurao macOS. Quando selecionado, os menus aparecero na"
-" barra de ferramentas do sistema em vez da barra de ferramentas mrv2."
+"Esta configuração controla se o mrv2 irá bloquear o protetor de tela quando "
+"estiver em execução."
 
-msgid "Tool Dock"
-msgstr "Dock da Ferramenta"
+msgid "Window Position"
+msgstr "Posição da janela"
 
-msgid "When selected, mrv2 will start with the action tool dock already open."
-msgstr ""
-"Quando selecionado, o mrv2 comear com o dock da ferramenta de ao j aberto."
-
-msgid "Status Bar"
-msgstr "Barra de Estado"
-
-msgid "When selected, mrv2 will start with the status bar visible."
-msgstr "Quando selecionado, o mrv2 comear com a barra de estado visvel."
-
-msgid "Only One Panel"
-msgstr "Apenas um painel"
-
-msgid ""
-"When selected, mrv2 will start with the only one panel option selected."
-msgstr ""
-"Quando selecionado, o mrv2 comear com a nica opo de painel selecionada."
-
-msgid "View Window"
-msgstr "Janela de Visualizao"
-
-msgid "Defaults"
-msgstr "Predefinies"
-
-msgid "Sets the default gain when mrv2 starts."
-msgstr "Define o ganho padro quando o mrv2 comea."
-
-msgid "Sets the default gamma when mrv2 starts."
-msgstr "Define a gama padro quando o mrv2 comear."
-
-msgid "Crop"
-msgstr "Cultivo"
-
-msgid "Allows you to select a standard cropping area around image."
-msgstr ""
-"Permite que voc selecione uma rea de recorte padro em torno da imagem."
-
-msgid "Auto Frame"
-msgstr "Quadro Automtico"
-
-msgid "When this is on, View/Auto Frame will be active."
-msgstr "Quando isto estiver ligado, o Quadro de Visualizao/Auto estar ativo."
-
-msgid "Safe Areas"
-msgstr "reas de Segurana"
-
-msgid "When mrv2 starts, the safe area display will be active by default."
-msgstr "Quando o mrv2 comear, o ecr de rea segura estar ativo por padro."
-
-msgid "OCIO in Top Bar"
-msgstr "OCIO no Top Bar"
-
-msgid ""
-"When mrv2 starts, OCIO should start in the top bar instead of color "
-"adjustments."
-msgstr ""
-"Quando o mrv2 comea, o OCIO deve comear na barra superior em vez de ajustes "
-"de cor."
-
-msgid "Zoom Speed"
-msgstr "Velocidade de zoom"
-
-msgid "HUD"
-msgstr "HUD"
-
-msgid ""
-"This area specifies which elements should be shown as a HUD overlay on the "
-"view screen."
-msgstr ""
-"Esta rea especifica quais elementos devem ser mostrados como uma superposio "
-"HUD na tela de visualizao."
-
-msgid "Frame"
-msgstr "Quadro"
-
-msgid "Frame Range"
-msgstr "Gama de molduras"
-
-msgid "Frame Count"
-msgstr "Contagem de Quadros"
-
-msgid "Attributes"
-msgstr "Atributos"
-
-msgid "Font Size"
-msgstr "Tamanho da fonte"
-
-msgid "File Requester"
-msgstr "Solicitante de Ficheiro"
-
-msgid "Single Click to Travel Drawers"
-msgstr "Clique apenas para tirar os desenhos de viagem"
-
-msgid ""
-"When using mrv2's file chooser, a single click on a folder will open it."
-msgstr ""
-"Ao usar o seletor de arquivos do mrv2, um nico clique em uma pasta ir abri-"
-"lo."
-
-msgid "Thumbnails Active"
-msgstr "Thumbnails Ativo"
-
-msgid "Show thumbnails for known files."
-msgstr "Mostrar miniaturas para ficheiros conhecidos."
-
-msgid "USD Thumbnails"
-msgstr "Thumbnails USD"
-
-msgid "Show Thumbnails for USD files (can be slow if they are big)"
-msgstr ""
-"Mostrar miniaturas para arquivos USD (pode ser lento se eles so grandes)"
-
-msgid "Use Native File Chooser"
-msgstr "Usar o Seletor de Ficheiros Nativo"
-
-msgid ""
-"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
-"standard file chooser will be used."
-msgstr ""
-"Se selecionado, ser usado o seletor de ficheiros natlve. Se no selecionado, "
-"o seletor de ficheiros padro do mrv2 ser usado."
-
-msgid "Fonts"
-msgstr "Fontes"
-
-msgid "Menus"
-msgstr "Menus"
-
-msgid "Sets the font to use in menus."
-msgstr "Define a fonte a usar nos menus."
-
-msgid "Panels"
-msgstr "Painis"
-
-msgid "Sets the font to use in panels. (Not yet working)"
-msgstr "Defina a fonte a usar em painis. (Ainda no est funcionando)"
-
-msgid "Language and Colors"
-msgstr "Idioma e cores"
-
-msgid "Scheme"
-msgstr "Regime"
-
-msgid "Color Theme"
-msgstr "Tema de cor"
-
-msgid "Reload Theme"
-msgstr "Recarregar o Tema"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr ""
-"Recarregar o tema de cores do arquivo mrv2.colors novamente para atualizar a"
-" mudana de cores"
-
-msgid "Selects the background color of areas outside the current image."
-msgstr "Seleciona a cor de fundo das reas fora da imagem atual."
-
-msgid "Text Overlay"
-msgstr "Sobreposio de texto"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr ""
-"Seleciona a cor das superfcies de texto impressas sobre a imagem atual."
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr "Seleciona a cor do retngulo de seleo sobre a imagem atual."
-
-msgid "Selects the color of HUD overlays."
-msgstr "Seleciona a cor das superposies HUD."
-
-msgid "RGBA Display"
-msgstr "Display RGBA"
-
-msgid "Pixel Values"
-msgstr "Valores do pixel"
-
-msgid "Secondary Display"
-msgstr "Apresentao secundria"
-
-msgid "Luminance"
-msgstr "Luminncia"
-
-msgid "Positioning"
-msgstr "Posicionamento"
+msgid "Position and Size"
+msgstr "Posição e tamanho"
 
 msgid "Always Save on Exit"
 msgstr "Salvar sempre na sada"
@@ -7536,6 +7313,9 @@ msgstr "W:"
 msgid "H:"
 msgstr "H:"
 
+msgid "Screen:"
+msgstr "Tela:"
+
 msgid "Take Current Window Values"
 msgstr "Aceitar os Valores da Janela Atual"
 
@@ -7548,26 +7328,161 @@ msgstr ""
 "visualizador. Lembre- se tambm de assinalar as caixas de Posio Fixa e/ou "
 "Tamanho Fixo dependendo do que deseja salvar."
 
-msgid "Screen:"
-msgstr "Tela:"
+msgid "Interface"
+msgstr "Interface"
 
-msgid "Render"
-msgstr "Renderização"
+msgid "UI Elements"
+msgstr "Elementos da UI"
 
-msgid "Debanding (Vulkan)"
-msgstr "Debanding (Vulkan)"
+msgid "Menu Bar"
+msgstr "Barra de menus"
 
-msgid "Makes gradients smoother on video files."
-msgstr "Torna os gradientes mais suaves em arquivos de vídeo."
+msgid "When selected, mrv2 will start with the menu bar already shown."
+msgstr "Quando selecionado, o mrv2 comear com a barra de menu j mostrada."
 
-msgid "Alpha Blend"
-msgstr "Mistura Alfa"
+msgid "Topbar"
+msgstr "Barra superior"
 
-msgid "Minify Filter"
-msgstr "Minimizar o Filtro"
+msgid ""
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
+msgstr ""
+"Quando selecionado, o mrv2 comear com seu canal, ganho, barra de ferramentas"
+" gama visvel."
 
-msgid "Magnify Filter"
-msgstr "Aumentar o Filtro"
+msgid "Pixel Toolbar"
+msgstr "Barra do Pixel"
+
+msgid "When selected, mrv2 will start with the pixel toolbar shown."
+msgstr ""
+"Quando selecionado, o mrv2 comear com a barra de ferramentas de pixels "
+"exibida."
+
+msgid "When selected, mrv2 will start with the timeline shown."
+msgstr "Quando selecionado, o mrv2 comear com a linha de tempo mostrada."
+
+msgid "Status Bar"
+msgstr "Barra de Estado"
+
+msgid "When selected, mrv2 will start with the status bar visible."
+msgstr "Quando selecionado, o mrv2 comear com a barra de estado visvel."
+
+msgid "Tool Dock"
+msgstr "Dock da Ferramenta"
+
+msgid "When selected, mrv2 will start with the action tool dock already open."
+msgstr ""
+"Quando selecionado, o mrv2 comear com o dock da ferramenta de ao j aberto."
+
+msgid "Only One Panel"
+msgstr "Apenas um painel"
+
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
+msgstr ""
+"Quando selecionado, o mrv2 comear com a nica opo de painel selecionada."
+
+msgid "Tooltips"
+msgstr "Dicas de ferramenta"
+
+msgid "Choose whether to show tooltips or not."
+msgstr "Escolha se deseja mostrar as dicas de ferramenta ou não."
+
+msgid "macOS Menus"
+msgstr "Menus macOS"
+
+msgid ""
+"This is a macOS setting only.  When selected the menus will appear on the "
+"system toolbar instead of the mrv2 toolbar."
+msgstr ""
+"Esta  apenas uma configurao macOS. Quando selecionado, os menus aparecero na"
+" barra de ferramentas do sistema em vez da barra de ferramentas mrv2."
+
+msgid "On FFmpeg Error"
+msgstr "No erro do FFmpeg"
+
+msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
+msgstr ""
+"Ajusta como a Janela de Registro se comporta em caso de erro do FFmpeg."
+
+msgid "On Error"
+msgstr "Em Erro"
+
+msgid "Adjusts how Log Window behaves in case of error."
+msgstr "Ajusta como a Janela de Registro se comporta em caso de erro."
+
+msgid "Appearance"
+msgstr "Aparência"
+
+msgid "Language and Theme"
+msgstr "Idioma e tema"
+
+msgid "Scheme"
+msgstr "Regime"
+
+msgid "Color Theme"
+msgstr "Tema de cor"
+
+msgid "Reload Theme"
+msgstr "Recarregar o Tema"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr ""
+"Recarregar o tema de cores do arquivo mrv2.colors novamente para atualizar a"
+" mudana de cores"
+
+msgid "Fonts"
+msgstr "Fontes"
+
+msgid "Menus"
+msgstr "Menus"
+
+msgid "Sets the font to use in menus."
+msgstr "Define a fonte a usar nos menus."
+
+msgid "Panels"
+msgstr "Painis"
+
+msgid "Sets the font to use in panels. (Not yet working)"
+msgstr "Defina a fonte a usar em painis. (Ainda no est funcionando)"
+
+msgid "View Colors"
+msgstr "Cores da visualização"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "Seleciona a cor de fundo das reas fora da imagem atual."
+
+msgid "Text Overlay"
+msgstr "Sobreposio de texto"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr ""
+"Seleciona a cor das superfcies de texto impressas sobre a imagem atual."
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr "Seleciona a cor do retngulo de seleo sobre a imagem atual."
+
+msgid "HUD"
+msgstr "HUD"
+
+msgid "Selects the color of HUD overlays."
+msgstr "Seleciona a cor das superposies HUD."
+
+msgid "Auto Hide Pixel Bar"
+msgstr "Ocultar automaticamente a barra de pixels"
+
+msgid "RGBA Display"
+msgstr "Display RGBA"
+
+msgid "Pixel Values"
+msgstr "Valores do pixel"
+
+msgid "Secondary Display"
+msgstr "Apresentao secundria"
+
+msgid "Luminance"
+msgstr "Luminncia"
 
 msgid "Thumbnails"
 msgstr "Thumbnails"
@@ -7590,6 +7505,26 @@ msgstr "Painel estéreo"
 msgid "How to display timeline thumbnails in Stereo Panel."
 msgstr "Como exibir as miniaturas da linha do tempo no painel estéreo."
 
+msgid "Refresh Thumbnails on Panels Manuallly"
+msgstr "Atualizar manualmente as miniaturas nos painéis"
+
+msgid ""
+"When this option is on, thumbnails in panels won't be refreshed "
+"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+msgstr ""
+"Quando esta opção está ativada, as miniaturas nos painéis não serão "
+"atualizadas automaticamente. Você precisará usar clique com o botão direito "
+"-> Atualizar miniatura na miniatura."
+
+msgid "Timeline and Edit Viewport"
+msgstr "Linha do tempo e área de visualização de edição"
+
+msgid "Preview Thumbnails above Timeline"
+msgstr "Previsualizar as miniaturas acima da linha de tempo"
+
+msgid "Preview Thumbnails in a rectangle above Timeline"
+msgstr "Anteviso Thumbnails em um retngulo acima da linha de tempo"
+
 msgid "Edit Viewport"
 msgstr "Editar a Viso"
 
@@ -7602,22 +7537,141 @@ msgstr "Formas de onda da janela de edição"
 msgid "How to display timeline waveforms by default."
 msgstr "Como exibir as formas de onda da linha do tempo por padrão."
 
-msgid "Preview Thumbnails above Timeline"
-msgstr "Previsualizar as miniaturas acima da linha de tempo"
+msgid "Defaults"
+msgstr "Predefinies"
 
-msgid "Preview Thumbnails in a rectangle above Timeline"
-msgstr "Anteviso Thumbnails em um retngulo acima da linha de tempo"
+msgid "Sets the default gain when mrv2 starts."
+msgstr "Define o ganho padro quando o mrv2 comea."
 
-msgid "Refresh Thumbnails on Panels Manuallly"
-msgstr "Atualizar manualmente as miniaturas nos painéis"
+msgid "Sets the default gamma when mrv2 starts."
+msgstr "Define a gama padro quando o mrv2 comear."
+
+msgid "Crop"
+msgstr "Cultivo"
+
+msgid "Allows you to select a standard cropping area around image."
+msgstr ""
+"Permite que voc selecione uma rea de recorte padro em torno da imagem."
+
+msgid "Zoom Speed"
+msgstr "Velocidade de zoom"
+
+msgid "Auto Frame"
+msgstr "Quadro Automtico"
+
+msgid "When this is on, View/Auto Frame will be active."
+msgstr "Quando isto estiver ligado, o Quadro de Visualizao/Auto estar ativo."
+
+msgid "Safe Areas"
+msgstr "reas de Segurana"
+
+msgid "When mrv2 starts, the safe area display will be active by default."
+msgstr "Quando o mrv2 comear, o ecr de rea segura estar ativo por padro."
+
+msgid "Auto Refit Image"
+msgstr "Imagem de Refinamento Automtico"
 
 msgid ""
-"When this option is on, thumbnails in panels won't be refreshed "
-"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+"When selected, mrv2 will apply a fit image operation on each video played.  "
+"This effectively means the video will be resized automatically based on the "
+"size of the window."
 msgstr ""
-"Quando esta opção está ativada, as miniaturas nos painéis não serão "
-"atualizadas automaticamente. Você precisará usar clique com o botão direito "
-"-> Atualizar miniatura na miniatura."
+"Quando selecionado, o mrv2 irá aplicar uma operação de imagem adequada a "
+"cada vídeo reproduzido. Isto significa efectivamente que o vídeo será "
+"redimensionado automaticamente com base no tamanho da janela."
+
+msgid "OCIO in Top Bar"
+msgstr "OCIO no Top Bar"
+
+msgid ""
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+msgstr ""
+"Quando o mrv2 comea, o OCIO deve comear na barra superior em vez de ajustes "
+"de cor."
+
+msgid ""
+"This area specifies which elements should be shown as a HUD overlay on the "
+"view screen."
+msgstr ""
+"Esta rea especifica quais elementos devem ser mostrados como uma superposio "
+"HUD na tela de visualizao."
+
+msgid "Frame"
+msgstr "Quadro"
+
+msgid "Frame Range"
+msgstr "Gama de molduras"
+
+msgid "Frame Count"
+msgstr "Contagem de Quadros"
+
+msgid "Attributes"
+msgstr "Atributos"
+
+msgid "Font Size"
+msgstr "Tamanho da fonte"
+
+msgid "Playback"
+msgstr "Reproduo"
+
+msgid "Auto Playback"
+msgstr "Reproduo automtica"
+
+msgid "Start Playback when opening files."
+msgstr "Iniciar a Reproduo ao abrir arquivos."
+
+msgid "Single Click Playback"
+msgstr "Reproduo de Single ClickName"
+
+msgid ""
+"Start Playback when single clicking the left mouse button on the view window"
+msgstr ""
+"Iniciar a reproduo quando clicar um s boto do mouse na janela da vista"
+
+msgid "Looping Mode"
+msgstr "Modo de Looping"
+
+msgid "Select default looping mode in timeline."
+msgstr "Selecione o modo de loop padro na linha do tempo."
+
+msgid "Sequences"
+msgstr "Sequncias"
+
+msgid "Speed"
+msgstr "Velocidade"
+
+msgid "Frames Per Second value for sequences that don't have embedded speed."
+msgstr ""
+"Quadros Por Segundo valor para sequncias que no tm velocidade incorporada."
+
+msgid "Sensitivity"
+msgstr "Sensibilidade"
+
+msgid ""
+"This setting controls the sensitivity of scrubbing.  Smaller values make the"
+" mouse move jump more frames while higher values does the opposite."
+msgstr ""
+"Esta configurao controla a sensibilidade da limpeza (SHIFT e, em seguida, o "
+"mouse  direita e  esquerda). Valores menores fazem com que o mouse mova pule"
+" mais molduras enquanto valores mais elevados fazem o oposto."
+
+msgid "Alt Sensitivity"
+msgstr "Alt Sensibilidade"
+
+msgid ""
+"When using ALT + Left Mouse Button, this setting controls the multiplier "
+"used for slowing the scrubbing."
+msgstr ""
+"Ao usar ALT + botão esquerdo do mouse, esta configuração controla o "
+"multiplicador usado para reduzir a velocidade da rolagem."
+
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+"Comece a reproduo ao limpar para que o udio possa ser ouvido. A esfregadeira"
+" pode ser menos suave."
 
 msgid "Display"
 msgstr "Apresentao"
@@ -7625,11 +7679,11 @@ msgstr "Apresentao"
 msgid "How to display timeline by default."
 msgstr "Como exibir a linha do tempo por padro."
 
-msgid "Start in Edit mode"
-msgstr "Iniciar no modo Editar"
+msgid "Video Start Frame"
+msgstr "Quadro de início de vídeo"
 
-msgid "Editing viewport will be visible at start up."
-msgstr "A edio do viewport ser visvel no arranque."
+msgid "Start value in the timeline where video starts."
+msgstr "Inicie o valor na linha de tempo onde o vídeo começa."
 
 msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr "Remover EDLs na pasta temporria na sada"
@@ -7641,11 +7695,131 @@ msgstr ""
 "Quando selecionado, os EDLs temporrios (Listas de Reproduo) sero removidos "
 "da pasta temporria."
 
-msgid "Video Start Frame"
-msgstr "Quadro de início de vídeo"
+msgid "Default View"
+msgstr "Visualizao padro"
 
-msgid "Start value in the timeline where video starts."
-msgstr "Inicie o valor na linha de tempo onde o vídeo começa."
+msgid "Show Transitions"
+msgstr "Mostrar Transies"
+
+msgid "Show Transitions in Edit Viewport"
+msgstr "Mostrar Transies no Visualizador de Editar"
+
+msgid "Show Markers"
+msgstr "Mostrar Marcadores"
+
+msgid "Show Markers in Edit Viewport"
+msgstr "Mostrar marcadores na visualizao de Editar"
+
+msgid "Show Waveforms"
+msgstr "Mostrar formas de onda"
+
+msgid "Show Waveforms in Edit Viewport"
+msgstr "Mostrar formas de onda na janela de edição"
+
+msgid "Show Effects"
+msgstr "Mostrar efeitos"
+
+msgid "Show Effects in Edit Viewport"
+msgstr "Mostrar efeitos na janela de edição"
+
+msgid "Show Thunbnails"
+msgstr "Mostrar miniaturas"
+
+msgid "Show Thumbnails in Edit Viewport"
+msgstr "Mostrar miniaturas na janela de edição"
+
+msgid "Start in Edit mode"
+msgstr "Iniciar no modo Editar"
+
+msgid "Editing viewport will be visible at start up."
+msgstr "A edio do viewport ser visvel no arranque."
+
+msgid "Editable"
+msgstr "Editvel"
+
+msgid "Editable Timeline Viewport."
+msgstr "Visualizao da linha de tempo editvel."
+
+msgid "Edit Associated Clips"
+msgstr "Editar Clips Associados"
+
+msgid "Edit Associated Clips."
+msgstr "Editar Clips Associados."
+
+msgid "Graphics"
+msgstr "Gráficos"
+
+msgid "Monitor VSync"
+msgstr "Monitorar VSync"
+
+msgid ""
+"Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
+"the cost of potential tearing in the image."
+msgstr ""
+"Liga e desliga o Vsync do Monitor. O VSync desliga pode exibir filmes mais "
+"rpido, ao custo de potencial rasgamento na imagem."
+
+msgid "Color Buffers' Accuracy"
+msgstr "Preciso dos bufers de cores"
+
+msgid ""
+"Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
+"all float information, Half Float preserves most float information and Fast "
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
+msgstr ""
+"Os filtros de cores podem ser flutuantes, meio flutuantes, rápidos ou "
+"automáticos. Float preserva todas as informações flutuantes, Half Float "
+"preserva a maioria das informações flutuantes e Fast trabalha em 8 bits. "
+"Automático seleciona a precisão com base na profundidade da imagem."
+
+msgid "Blit"
+msgstr "Blit"
+
+msgid ""
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics"
+" card and OS one can perform better then the other."
+msgstr ""
+"As janelas de visualização podem ser desenhadas com blitting ou com shaders."
+" Dependendo da placa gráfica e do sistema operacional, uma pode ter melhor "
+"desempenho que a outra."
+
+msgid "GPU"
+msgstr "GPU"
+
+msgid "Secondary Viewport"
+msgstr "Viewport secondario"
+
+msgid ""
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
+msgstr ""
+"A linha do tempo pode ser desenhada com blitting ou com shaders. Dependendo "
+"da placa gráfica e do sistema operacional, uma pode ter melhor desempenho "
+"que a outra."
+
+msgid "Rendering"
+msgstr "Renderização"
+
+msgid "Image Rendering"
+msgstr "Renderização de imagens"
+
+msgid "Debanding (Vulkan)"
+msgstr "Debanding (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "Torna os gradientes mais suaves em arquivos de vídeo."
+
+msgid "Alpha Blend"
+msgstr "Mistura Alfa"
+
+msgid "Minify Filter"
+msgstr "Minimizar o Filtro"
+
+msgid "Magnify Filter"
+msgstr "Aumentar o Filtro"
+
+msgid "HDR Processing"
+msgstr "Processamento HDR"
 
 msgid "Prefer RGB (Vulkan)"
 msgstr "Preferir RGB (Vulkan)"
@@ -7670,6 +7844,9 @@ msgstr "Algoritmo de Mapeamento de Tons"
 
 msgid "Gamut Mapping"
 msgstr "Mapeamento de Gamut"
+
+msgid "Peak Detection"
+msgstr "Detecção de picos"
 
 msgid "HDR Peak Detection"
 msgstr "Detecção de picos HDR"
@@ -7710,120 +7887,14 @@ msgstr "Limite superior de detecção de pico"
 msgid "High Limit to determine scene change."
 msgstr "Limite superior para determinar uma mudança de cena."
 
-msgid "Playback"
-msgstr "Reproduo"
-
-msgid "Auto Playback"
-msgstr "Reproduo automtica"
-
-msgid "Start Playback when opening files."
-msgstr "Iniciar a Reproduo ao abrir arquivos."
-
-msgid "Single Click Playback"
-msgstr "Reproduo de Single ClickName"
-
-msgid ""
-"Start Playback when single clicking the left mouse button on the view window"
-msgstr ""
-"Iniciar a reproduo quando clicar um s boto do mouse na janela da vista"
-
-msgid "Auto Hide Pixel Bar"
-msgstr "Ocultar automaticamente a barra de pixels"
-
-msgid "Sequences"
-msgstr "Sequncias"
-
-msgid "Speed"
-msgstr "Velocidade"
-
-msgid "Frames Per Second value for sequences that don't have embedded speed."
-msgstr ""
-"Quadros Por Segundo valor para sequncias que no tm velocidade incorporada."
-
-msgid "Looping Mode"
-msgstr "Modo de Looping"
-
-msgid "Select default looping mode in timeline."
-msgstr "Selecione o modo de loop padro na linha do tempo."
-
-msgid "Sensitivity"
-msgstr "Sensibilidade"
-
-msgid ""
-"This setting controls the sensitivity of scrubbing.  Smaller values make the"
-" mouse move jump more frames while higher values does the opposite."
-msgstr ""
-"Esta configurao controla a sensibilidade da limpeza (SHIFT e, em seguida, o "
-"mouse  direita e  esquerda). Valores menores fazem com que o mouse mova pule"
-" mais molduras enquanto valores mais elevados fazem o oposto."
-
-msgid ""
-"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
-"less smooth."
-msgstr ""
-"Comece a reproduo ao limpar para que o udio possa ser ouvido. A esfregadeira"
-" pode ser menos suave."
-
-msgid "Alt Sensitivity"
-msgstr "Alt Sensibilidade"
-
-msgid ""
-"When using ALT + Left Mouse Button, this setting controls the multiplier "
-"used for slowing the scrubbing."
-msgstr ""
-"Ao usar ALT + botão esquerdo do mouse, esta configuração controla o "
-"multiplicador usado para reduzir a velocidade da rolagem."
-
-msgid "Default View"
-msgstr "Visualizao padro"
-
-msgid "Show Transitions"
-msgstr "Mostrar Transies"
-
-msgid "Show Transitions in Edit Viewport"
-msgstr "Mostrar Transies no Visualizador de Editar"
-
-msgid "Show Markers"
-msgstr "Mostrar Marcadores"
-
-msgid "Show Markers in Edit Viewport"
-msgstr "Mostrar marcadores na visualizao de Editar"
-
-msgid "Show Effects"
-msgstr "Mostrar efeitos"
-
-msgid "Show Effects in Edit Viewport"
-msgstr "Mostrar efeitos na janela de edição"
-
-msgid "Show Waveforms"
-msgstr "Mostrar formas de onda"
-
-msgid "Show Waveforms in Edit Viewport"
-msgstr "Mostrar formas de onda na janela de edição"
-
-msgid "Show Thunbnails"
-msgstr "Mostrar miniaturas"
-
-msgid "Show Thumbnails in Edit Viewport"
-msgstr "Mostrar miniaturas na janela de edição"
-
-msgid "Behavior"
-msgstr "Comportamento"
-
-msgid "Edit Associated Clips"
-msgstr "Editar Clips Associados"
-
-msgid "Edit Associated Clips."
-msgstr "Editar Clips Associados."
-
-msgid "Editable"
-msgstr "Editvel"
-
-msgid "Editable Timeline Viewport."
-msgstr "Visualizao da linha de tempo editvel."
-
 msgid "OCIO"
 msgstr "OCIO"
+
+msgid "Configuration"
+msgstr "Configuração"
+
+msgid "Built-in Configs"
+msgstr "Condies incorporadas"
 
 msgid "OCIO Config File"
 msgstr "Ficheiro de Configurao OCIO"
@@ -7835,11 +7906,11 @@ msgstr ""
 "Este  o caminho para o ficheiro config.ocio. Pode ser definido com a varivel"
 " ambiente OCIO, que tem prioridade sobre qualquer configurao salva."
 
-msgid "Built-in Configs"
-msgstr "Condies incorporadas"
-
 msgid "Pick a config.ocio file from disk."
 msgstr "Escolha um arquivo config.ocio do disco."
+
+msgid "Options"
+msgstr "Opções"
 
 msgid "Set Auto ICS as default"
 msgstr "Definir ICS automático como padrão"
@@ -7861,16 +7932,6 @@ msgstr ""
 "Quando esta opção estiver ligada, e o seu config.ocio tiver uma visualização"
 " e visualização padrão, será usado para ser definido como padrão."
 
-msgid "No OCIO on Videos or sRGB/BT709 data"
-msgstr "Sem OCIO em vídeos ou dados sRGB/BT709"
-
-msgid ""
-"If playing a video or showing an SDR image, OCIO will be turned off "
-"automatically."
-msgstr ""
-"Se estiver reproduzindo um vídeo ou exibindo uma imagem SDR, o OCIO será "
-"desativado automaticamente."
-
 msgid "Use Active Views and Active Displays"
 msgstr "Usar Visualizaes Ativas e Displays Ativos"
 
@@ -7881,8 +7942,15 @@ msgstr ""
 "Quando esta opo est desativada, os arquivos OCIO com active_views: e "
 "active_displays: no so levados em conta."
 
-msgid "OCIO Defaults"
-msgstr "Configurações padrão do OCIO"
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "Sem OCIO em vídeos ou dados sRGB/BT709"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr ""
+"Se estiver reproduzindo um vídeo ou exibindo uma imagem SDR, o OCIO será "
+"desativado automaticamente."
 
 msgid "8-bits"
 msgstr "8 bits"
@@ -7933,6 +8001,9 @@ msgstr ""
 "O nome do espaço de cores padrão da imagem OCIO para metade e imagens "
 "flutuantes (OpenEXR, hdr, dpx, etc.)"
 
+msgid "Look and View"
+msgstr "Aparência e visualização"
+
 msgid "Default Look"
 msgstr "Prospeco predefinida"
 
@@ -7945,31 +8016,8 @@ msgstr "Apresentao padro/Visualizao"
 msgid "Loading"
 msgstr "Carregamento"
 
-msgid "Version Regex"
-msgstr "Verso Regex"
-
-msgid ""
-"Regular Expression used to match clip versions.  Must group three things "
-"(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with"
-" _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
-msgstr ""
-"Expressão regular usada para combinar as versões do clipe. Deve agrupar três"
-" coisas (prefixo, número e sufixo). Se for deixada no seu valor padrão (_v),"
-" será automaticamente criada uma expressão regular para combinar as versões "
-"definidas com _v no nome do arquivo, diretório ou ambos. Por exemplo: "
-"gizmo_v001.0001.exr"
-
-msgid "Maximum Images Apart"
-msgstr "Mximo de Imagens Aparte"
-
-msgid ""
-"When searching for a version, this value is the maximum version apart from "
-"each other when searching the first or last version."
-msgstr ""
-"Ao procurar uma verso, este valor  a verso mxima, alm um do outro, ao "
-"procurar a primeira ou a ltima verso."
+msgid "Missing Frames"
+msgstr "Quadros ausentes"
 
 msgid "Missing Frame"
 msgstr "Quadro Faltado"
@@ -8014,6 +8062,70 @@ msgstr "Largura das linhas dos quadros ausentes"
 msgid "Scratch Lines Width."
 msgstr "Largura das linhas dos quadros ausentes."
 
+msgid "Versions"
+msgstr "Versões"
+
+msgid "Version Regex"
+msgstr "Verso Regex"
+
+msgid ""
+"Regular Expression used to match clip versions.  Must group three things "
+"(prefix, number and suffix). If left on its default value (_v), it will "
+"automatically be created a regular expression to match versions defined with"
+" _v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
+msgstr ""
+"Expressão regular usada para combinar as versões do clipe. Deve agrupar três"
+" coisas (prefixo, número e sufixo). Se for deixada no seu valor padrão (_v),"
+" será automaticamente criada uma expressão regular para combinar as versões "
+"definidas com _v no nome do arquivo, diretório ou ambos. Por exemplo: "
+"gizmo_v001.0001.exr"
+
+msgid "Maximum Images Apart"
+msgstr "Mximo de Imagens Aparte"
+
+msgid ""
+"When searching for a version, this value is the maximum version apart from "
+"each other when searching the first or last version."
+msgstr ""
+"Ao procurar uma verso, este valor  a verso mxima, alm um do outro, ao "
+"procurar a primeira ou a ltima verso."
+
+msgid "File Requester"
+msgstr "Solicitante de Ficheiro"
+
+msgid "Use Native File Chooser"
+msgstr "Usar o Seletor de Ficheiros Nativo"
+
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr ""
+"Se selecionado, ser usado o seletor de ficheiros natlve. Se no selecionado, "
+"o seletor de ficheiros padro do mrv2 ser usado."
+
+msgid "Single Click to Travel Drawers"
+msgstr "Clique apenas para tirar os desenhos de viagem"
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr ""
+"Ao usar o seletor de arquivos do mrv2, um nico clique em uma pasta ir abri-"
+"lo."
+
+msgid "Thumbnails Active"
+msgstr "Thumbnails Ativo"
+
+msgid "Show thumbnails for known files."
+msgstr "Mostrar miniaturas para ficheiros conhecidos."
+
+msgid "USD Thumbnails"
+msgstr "Thumbnails USD"
+
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr ""
+"Mostrar miniaturas para arquivos USD (pode ser lento se eles so grandes)"
+
 msgid "Path Mappings"
 msgstr "Mapas do Caminho"
 
@@ -8036,6 +8148,57 @@ msgstr "Remover Caminhos"
 msgid "Remove the currently selected path mapping."
 msgstr "Remove o mapeamento de caminhos seleccionado atualmente."
 
+msgid "Audio Output"
+msgstr "Saída de áudio"
+
+msgid "API"
+msgstr "API"
+
+msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
+msgstr ""
+"API de udio para usar para plataformas que suportam vrias APIs (apenas "
+"Linux)"
+
+msgid "Output Device"
+msgstr "Dispositivo de sada"
+
+msgid "Output Device to use for audio playback."
+msgstr "Dispositivo de sada a usar para reproduo de udio."
+
+msgid ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+msgstr ""
+"Para que as alteraes entrem em vigor, voc precisar reabrir todos os filmes j"
+" reproduzidos ou recarregar mrv2."
+
+msgid "Voice Annotations"
+msgstr "Anotações de voz"
+
+msgid "Voice Annotation Preferences."
+msgstr "Preferências de anotações de voz."
+
+msgid "Voice Over"
+msgstr "Narração"
+
+msgid "Save Path"
+msgstr "Caminho de salvamento"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr "Escolha um diretório do disco para salvar as narrações."
+
+msgid "Playback Speed"
+msgstr "Velocidade de reprodução"
+
+msgid "Microphone"
+msgstr "Microfone"
+
+msgid "Volume"
+msgstr "Volume"
+
+msgid "Send and Accept"
+msgstr "Enviar e aceitar"
+
 msgid "Send"
 msgstr "Enviar"
 
@@ -8054,118 +8217,11 @@ msgstr "Controle de cores"
 msgid "Audio Control"
 msgstr "Controle de udio"
 
-msgid "Monitor VSync"
-msgstr "Monitorar VSync"
-
-msgid ""
-"Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
-"the cost of potential tearing in the image."
-msgstr ""
-"Liga e desliga o Vsync do Monitor. O VSync desliga pode exibir filmes mais "
-"rpido, ao custo de potencial rasgamento na imagem."
-
-msgid "Color Buffers' Accuracy"
-msgstr "Preciso dos bufers de cores"
-
-msgid ""
-"Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
-"all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy based on image depth."
-msgstr ""
-"Os filtros de cores podem ser flutuantes, meio flutuantes, rápidos ou "
-"automáticos. Float preserva todas as informações flutuantes, Half Float "
-"preserva a maioria das informações flutuantes e Fast trabalha em 8 bits. "
-"Automático seleciona a precisão com base na profundidade da imagem."
-
-msgid "Blit"
-msgstr "Blit"
-
-msgid ""
-"Viewports can be drawn with blitting or with shaders.  Depending on graphics"
-" card and OS one can perform better then the other."
-msgstr ""
-"As janelas de visualização podem ser desenhadas com blitting ou com shaders."
-" Dependendo da placa gráfica e do sistema operacional, uma pode ter melhor "
-"desempenho que a outra."
-
-msgid "GPU"
-msgstr "GPU"
-
-msgid "Secondary Viewport"
-msgstr "Viewport secondario"
-
-msgid ""
-"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
-"card and OS one can perform better than the other."
-msgstr ""
-"A linha do tempo pode ser desenhada com blitting ou com shaders. Dependendo "
-"da placa gráfica e do sistema operacional, uma pode ter melhor desempenho "
-"que a outra."
-
-msgid ""
-"For changes to take effect, you will need to re-open any movies already "
-"playing or reload mrv2."
-msgstr ""
-"Para que as alteraes entrem em vigor, voc precisar reabrir todos os filmes j"
-" reproduzidos ou recarregar mrv2."
-
-msgid "API"
-msgstr "API"
-
-msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
-msgstr ""
-"API de udio para usar para plataformas que suportam vrias APIs (apenas "
-"Linux)"
-
-msgid "Output Device"
-msgstr "Dispositivo de sada"
-
-msgid "Output Device to use for audio playback."
-msgstr "Dispositivo de sada a usar para reproduo de udio."
-
-msgid "Voice Annotations"
-msgstr "Anotações de voz"
-
-msgid "Voice Annotation Preferences."
-msgstr "Preferências de anotações de voz."
-
-msgid "Save Path"
-msgstr "Caminho de salvamento"
-
-msgid "Pick a directory from disk to save voice overs.."
-msgstr "Escolha um diretório do disco para salvar as narrações."
-
-msgid "Playback Speed"
-msgstr "Velocidade de reprodução"
-
-msgid "Microphone"
-msgstr "Microfone"
-
-msgid "Volume"
-msgstr "Volume"
-
-msgid "ComfyUI"
-msgstr "ComfyUI"
-
-msgid ""
-"Here are the current settings to interact with ComfyUI.  It requires "
-"installation of mrv2's comfyUI nodes."
-msgstr ""
-"Aqui esto as configuraes atuais para interagir com o ComfyUI. Ele requer a "
-"instalao dos ns confortveis do mrv2."
-
-msgid "Use ComfyUI Pipe"
-msgstr "Usar Tubo ComfyUI"
-
-msgid ""
-"This setting opens a pipe to communicate with ComfyUI's "
-"mrv2_save_exr_node.py"
-msgstr ""
-"Esta configurao abre um tubo para se comunicar com o mrv2_save_exr_node.py "
-"do ComfyUI"
-
 msgid "WebRTC settings"
 msgstr "Configurações do WebRTC"
+
+msgid "Connection"
+msgstr "Conexão"
 
 msgid "WebRTC Presets"
 msgstr "Predefinições do WebRTC"
@@ -8211,36 +8267,25 @@ msgstr "Diretório de cache"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "Diretório onde os downloads do WebRTC serão armazenados."
 
-msgid "On FFmpeg Error"
-msgstr "No erro do FFmpeg"
-
-msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
-msgstr ""
-"Ajusta como a Janela de Registro se comporta em caso de erro do FFmpeg."
-
-msgid "On Error"
-msgstr "Em Erro"
-
-msgid "Adjusts how Log Window behaves in case of error."
-msgstr "Ajusta como a Janela de Registro se comporta em caso de erro."
-
-msgid "Check for Updates"
-msgstr "Verificar as Atualizaes"
+msgid "ComfyUI"
+msgstr "ComfyUI"
 
 msgid ""
-"Allows you to automatically download updates of mrv2 when it starts up."
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
 msgstr ""
-"Permite que voc baixe automaticamente as atualizaes do mrv2 quando ele "
-"comear."
+"Aqui esto as configuraes atuais para interagir com o ComfyUI. Ele requer a "
+"instalao dos ns confortveis do mrv2."
 
-msgid "Allow Screen Saver"
-msgstr "Permitir protetor de tela"
+msgid "Use ComfyUI Pipe"
+msgstr "Usar Tubo ComfyUI"
 
 msgid ""
-"This setting controls whether mrv2 will block the screen saver when running."
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
 msgstr ""
-"Esta configuração controla se o mrv2 irá bloquear o protetor de tela quando "
-"estiver em execução."
+"Esta configurao abre um tubo para se comunicar com o mrv2_save_exr_node.py "
+"do ComfyUI"
 
 msgid "Reset settings to the default."
 msgstr "Reiniciar as configuraes para o padro."
@@ -8260,35 +8305,44 @@ msgstr ""
 msgid "Module"
 msgstr "Mdulo"
 
-msgid "User Interface/Elements"
-msgstr "Interface do Usuário/Elementos"
+msgid "General/Window Position"
+msgstr "Geral/Posição da janela"
 
-msgid "User Interface/View Window"
-msgstr "Interface do Usuário/Janela de Visualizao"
+msgid "Interface/Appearance"
+msgstr "Interface/Aparência"
 
-msgid "User Interface/File Requester"
-msgstr "Interface do Usuário/Solicitante de Ficheiro"
-
-msgid "User Interface/Fonts"
-msgstr "Interface do Usuário/Fontes"
-
-msgid "User Interface/Language and Colors"
-msgstr "Interface do Usuário/Idioma e cores"
-
-msgid "User Interface/Pixel Toolbar"
+msgid "Interface/Pixel Toolbar"
 msgstr "Interface do usuário/Barra de ferramentas de pixels"
 
-msgid "User Interface/Positioning"
-msgstr "Interface do Usuário/Posio"
-
-msgid "User Interface/Render"
-msgstr "Interface do usuário/Renderização"
-
-msgid "User Interface/Thumbnails"
+msgid "Interface/Thumbnails"
 msgstr "Interface do usuário/Miniaturas"
 
-msgid "User Interface/Timeline"
-msgstr "Interface do Usuário/Linha Do Tempo"
+msgid "Timeline/Edit"
+msgstr "Linha Do Tempo/Edição"
+
+msgid "Graphics/Rendering"
+msgstr "Gráficos/Renderização"
+
+msgid "Graphics/HDR"
+msgstr "Gráficos/HDR"
+
+msgid "OCIO/Defaults"
+msgstr "OCIO/Configurações padrão"
+
+msgid "Loading/File Requester"
+msgstr "Carregamento/Seletor de arquivos"
+
+msgid "Loading/Path Mappings"
+msgstr "Carregamento/Mapeamentos de caminhos"
+
+msgid "Audio/Voice Annotations"
+msgstr "Áudio/Anotações por voz"
+
+msgid "Network/WebRTC"
+msgstr "Rede/WebRTC"
+
+msgid "Network/ComfyUI"
+msgstr "Rede/ComfyUI"
 
 msgid "No Audio was Compiled"
 msgstr "Nenhum udio foi compilado"
@@ -9209,6 +9263,45 @@ msgstr "falhou o host_statistics64"
 msgid "task info failed"
 msgstr "Falhou a informao da tarefa"
 
+#~ msgid "User Interface"
+#~ msgstr "Interface do usuário"
+
+#~ msgid "User Interface Elements"
+#~ msgstr "Elementos da interface do usuário"
+
+#~ msgid "View Window"
+#~ msgstr "Janela de Visualizao"
+
+#~ msgid "Language and Colors"
+#~ msgstr "Idioma e cores"
+
+#~ msgid "Render"
+#~ msgstr "Renderização"
+
+#~ msgid "User Interface/Elements"
+#~ msgstr "Interface do Usuário/Elementos"
+
+#~ msgid "User Interface/View Window"
+#~ msgstr "Interface do Usuário/Janela de Visualizao"
+
+#~ msgid "User Interface/File Requester"
+#~ msgstr "Interface do Usuário/Solicitante de Ficheiro"
+
+#~ msgid "User Interface/Fonts"
+#~ msgstr "Interface do Usuário/Fontes"
+
+#~ msgid "User Interface/Language and Colors"
+#~ msgstr "Interface do Usuário/Idioma e cores"
+
+#~ msgid "User Interface/Positioning"
+#~ msgstr "Interface do Usuário/Posio"
+
+#~ msgid "User Interface/Render"
+#~ msgstr "Interface do usuário/Renderização"
+
+#~ msgid "User Interface/Timeline"
+#~ msgstr "Interface do Usuário/Linha Do Tempo"
+
 #~ msgid "Complexity"
 #~ msgstr "Complexidade"
 
@@ -9251,99 +9344,6 @@ msgstr "Falhou a informao da tarefa"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Fonte invlida para desenho de texto"
-
-#~ msgid "General"
-#~ msgstr "Geral"
-
-#~ msgid "Window Position"
-#~ msgstr "Posição da janela"
-
-#~ msgid "Interface"
-#~ msgstr "Interface"
-
-#~ msgid "Appearance"
-#~ msgstr "Aparência"
-
-#~ msgid "Language and Theme"
-#~ msgstr "Idioma e tema"
-
-#~ msgid "View Colors"
-#~ msgstr "Cores da visualização"
-
-#~ msgid "Timeline and Edit Viewport"
-#~ msgstr "Linha do tempo e área de visualização de edição"
-
-#~ msgid "Graphics"
-#~ msgstr "Gráficos"
-
-#~ msgid "Rendering"
-#~ msgstr "Renderização"
-
-#~ msgid "Image Rendering"
-#~ msgstr "Renderização de imagens"
-
-#~ msgid "HDR Processing"
-#~ msgstr "Processamento HDR"
-
-#~ msgid "Peak Detection"
-#~ msgstr "Detecção de picos"
-
-#~ msgid "Configuration"
-#~ msgstr "Configuração"
-
-#~ msgid "Options"
-#~ msgstr "Opções"
-
-#~ msgid "Look and View"
-#~ msgstr "Aparência e visualização"
-
-#~ msgid "Missing Frames"
-#~ msgstr "Quadros ausentes"
-
-#~ msgid "Versions"
-#~ msgstr "Versões"
-
-#~ msgid "Audio Output"
-#~ msgstr "Saída de áudio"
-
-#~ msgid "Voice Over"
-#~ msgstr "Narração"
-
-#~ msgid "Send and Accept"
-#~ msgstr "Enviar e aceitar"
-
-#~ msgid "Connection"
-#~ msgstr "Conexão"
-
-#~ msgid "General/Window Position"
-#~ msgstr "Geral/Posição da janela"
-
-#~ msgid "Interface/Appearance"
-#~ msgstr "Interface/Aparência"
-
-#~ msgid "Timeline/Edit"
-#~ msgstr "Linha Do Tempo/Edição"
-
-#~ msgid "Graphics/Rendering"
-#~ msgstr "Gráficos/Renderização"
-
-#~ msgid "Graphics/HDR"
-#~ msgstr "Gráficos/HDR"
-
-#~ msgid "Loading/File Requester"
-#~ msgstr "Carregamento/Seletor de arquivos"
-
-#~ msgid "Loading/Path Mappings"
-#~ msgstr "Carregamento/Mapeamentos de caminhos"
-
-#~ msgid "Audio/Voice Annotations"
-#~ msgstr "Áudio/Anotações por voz"
-
-#~ msgid "Network/WebRTC"
-#~ msgstr "Rede/WebRTC"
-
-#~ msgid "Network/ComfyUI"
-#~ msgstr "Rede/ComfyUI"
 
 #, c++-format
 #~ msgid "Show {0} Window."

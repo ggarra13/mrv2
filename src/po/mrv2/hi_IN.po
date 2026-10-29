@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-28 21:11-0300\n"
+"POT-Creation-Date: 2026-10-29 03:56-0300\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -6809,6 +6809,93 @@ msgstr "सामग्री"
 msgid "OpenEXR's Contents to Save"
 msgstr "OpenEXR की सामग्री सहेजने के लिए"
 
+msgid "On Demand From Help Menu"
+msgstr "मदद मेन्यू से मांग पर"
+
+msgid "At Start Up"
+msgstr "प्रारंभ में"
+
+msgid "Inactive"
+msgstr "निष्क्रिय"
+
+msgid "Active"
+msgstr "सक्रिय"
+
+msgid "Do Nothing"
+msgstr "कुछ नहीं करें"
+
+msgid "Open Logs on Dock"
+msgstr "डॉक पर लॉग खोलें"
+
+msgid "Open Logs on Window"
+msgstr "विंडो पर लॉग खोलें"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "गहरा लाल रंग"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Pick View Background Color"
+msgstr "दृश्य की पृष्ठभूमि का रंग चुनें"
+
+msgid "Pick View Text Overlay Color"
+msgstr "दृश्य के टेक्स्ट ओवरले का रंग चुनें"
+
+msgid "Pick View Selection Color"
+msgstr "दृश्य के चयन का रंग चुनें"
+
+msgid "Pick HUD Color"
+msgstr "HUD का रंग चुनें"
+
+msgid "OpenGL only"
+msgstr "केवल OpenGL"
+
+msgid "Vulkan and OpenGL"
+msgstr "वल्कन और OpenGL"
+
+msgid "Float Values"
+msgstr "फ्लोट मूल्य"
+
+msgid "Hex Values"
+msgstr "हेक्साक मान"
+
+msgid "8-bit Values"
+msgstr "8- बिट मूल्य"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "पूरा लूत, गामा और गेन"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "मूल बिना गामा, प्राप्ति या लूत के बगैर"
+
+msgid "CIE XYZ"
+msgstr "सीआई एक्सवाय"
+
+msgid "CIE xyY"
+msgstr "सीआईआई एक्सy"
+
+msgid "Small"
+msgstr "छोटा"
+
+msgid "Normal"
+msgstr "सामान्य"
+
+msgid "Medium"
+msgstr "मध्यम"
+
+msgid "Large"
+msgstr "बड़ा"
+
 msgid "0.00 None"
 msgstr "0.00 कुछ नहीं"
 
@@ -6857,62 +6944,47 @@ msgstr "4.00 बहुमुखी"
 msgid "Slow"
 msgstr "धीमा"
 
-msgid "Medium"
-msgstr "मध्यम"
-
 msgid "Fast"
 msgstr "तेज"
 
-msgid "base"
-msgstr "base"
+msgid "Loop"
+msgstr "पाश"
 
-msgid "plastic"
-msgstr "plastic"
+msgid "Ping Pong"
+msgstr "पिंग पांग"
 
-msgid "gtk+"
-msgstr "gtk+"
+msgid "29.97"
+msgstr "29.97"
 
-msgid "gleam"
-msgstr "गहरा लाल रंग"
+msgid "14.985"
+msgstr "14.985"
 
-msgid "oxy"
-msgstr "oxy"
+msgid "Button"
+msgstr "बटन"
 
-msgid "Pick View Background Color"
-msgstr "दृश्य की पृष्ठभूमि का रंग चुनें"
+msgid "Video Only"
+msgstr "सिर्फ वीडियो"
 
-msgid "Pick View Text Overlay Color"
-msgstr "दृश्य के टेक्स्ट ओवरले का रंग चुनें"
+msgid "Video and Audio"
+msgstr "वीडियो और ऑडियो"
 
-msgid "Pick View Selection Color"
-msgstr "दृश्य के चयन का रंग चुनें"
+msgid "Always"
+msgstr "हमेशा"
 
-msgid "Pick HUD Color"
-msgstr "HUD का रंग चुनें"
+msgid "Presentation Mode"
+msgstr "प्रस्तुतीकरण मोड"
 
-msgid "Float Values"
-msgstr "फ्लोट मूल्य"
+msgid "Automatic"
+msgstr "स्वचालित"
 
-msgid "Hex Values"
-msgstr "हेक्साक मान"
+msgid "Half Float"
+msgstr "अवैध फ्लोट"
 
-msgid "8-bit Values"
-msgstr "8- बिट मूल्य"
+msgid "Full Float (Accurate)"
+msgstr "पूरा फ्लोट (कम्परेट)"
 
-msgid "Full Lut, Gamma and Gain"
-msgstr "पूरा लूत, गामा और गेन"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "मूल बिना गामा, प्राप्ति या लूत के बगैर"
-
-msgid "CIE XYZ"
-msgstr "सीआई एक्सवाय"
-
-msgid "CIE xyY"
-msgstr "सीआईआई एक्सy"
-
-msgid "Small"
-msgstr "छोटा"
+msgid "GPU 0"
+msgstr "GPU 0"
 
 msgid "High"
 msgstr "उच्च"
@@ -6935,12 +7007,6 @@ msgstr "प्री- एम्प्टीज़"
 msgid "Nearest"
 msgstr "निकटस्थ"
 
-msgid "Normal"
-msgstr "सामान्य"
-
-msgid "Large"
-msgstr "बड़ा"
-
 msgid "Use RGBA"
 msgstr "RGBA का उपयोग करें"
 
@@ -6952,12 +7018,6 @@ msgstr "अनदेखा करें"
 
 msgid "Apply"
 msgstr "लागू करें"
-
-msgid "Inactive"
-msgstr "निष्क्रिय"
-
-msgid "Active"
-msgstr "सक्रिय"
 
 msgid "ST2094_40"
 msgstr "एसटी2094_40"
@@ -7010,33 +7070,6 @@ msgstr "गहरा करें"
 msgid "Highlight"
 msgstr "हाइलाइट करें"
 
-msgid "OpenGL only"
-msgstr "केवल OpenGL"
-
-msgid "Vulkan and OpenGL"
-msgstr "वल्कन और OpenGL"
-
-msgid "29.97"
-msgstr "29.97"
-
-msgid "14.985"
-msgstr "14.985"
-
-msgid "Loop"
-msgstr "पाश"
-
-msgid "Ping Pong"
-msgstr "पिंग पांग"
-
-msgid "Button"
-msgstr "बटन"
-
-msgid "Video Only"
-msgstr "सिर्फ वीडियो"
-
-msgid "Video and Audio"
-msgstr "वीडियो और ऑडियो"
-
 msgid "CG"
 msgstr "CG"
 
@@ -7060,24 +7093,6 @@ msgstr "गैप फ़्रेम"
 
 msgid "Pick Scratch Color"
 msgstr "गायब फ़्रेम का रंग चुनें"
-
-msgid "Always"
-msgstr "हमेशा"
-
-msgid "Presentation Mode"
-msgstr "प्रस्तुतीकरण मोड"
-
-msgid "Automatic"
-msgstr "स्वचालित"
-
-msgid "Half Float"
-msgstr "अवैध फ्लोट"
-
-msgid "Full Float (Accurate)"
-msgstr "पूरा फ्लोट (कम्परेट)"
-
-msgid "GPU 0"
-msgstr "GPU 0"
 
 msgid "X 2"
 msgstr "× 2"
@@ -7103,21 +7118,6 @@ msgstr "होम निर्देशिका"
 msgid "Temp Directory"
 msgstr "अस्थायी निर्देशिका"
 
-msgid "Do Nothing"
-msgstr "कुछ नहीं करें"
-
-msgid "Open Logs on Dock"
-msgstr "डॉक पर लॉग खोलें"
-
-msgid "Open Logs on Window"
-msgstr "विंडो पर लॉग खोलें"
-
-msgid "On Demand From Help Menu"
-msgstr "मदद मेन्यू से मांग पर"
-
-msgid "At Start Up"
-msgstr "प्रारंभ में"
-
 msgid ""
 "This will reset all your preferences to their default values.  Are you sure "
 "you want to continue?"
@@ -7125,8 +7125,8 @@ msgstr ""
 "यह आपकी सभी पसंद को उनके डिफ़ॉल्ट मान में रीसेट करेगा. क्या आप सुनिश्चित हैं"
 " कि आप जारी रखना चाहते हैं?"
 
-msgid "User Interface"
-msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
+msgid "General"
+msgstr "सामान्य"
 
 msgid "Window Behavior"
 msgstr "विंडो व्यवहार"
@@ -7154,18 +7154,6 @@ msgstr ""
 "जब चुना जाता है, केवल एक mrrv2 उदाहरण स्वीकार्य है. यदि आप भिन्न छवियों से "
 "कई mrv2 खोलने की कोशिश करते हैं, इन सभी छवियों को पहले से ही खुला mvv2 में "
 "भेजा जाएगा."
-
-msgid "Auto Refit Image"
-msgstr "छवि स्वचलित फिर से लोड करें"
-
-msgid ""
-"When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectively means the video will be resized automatically based on the "
-"size of the window."
-msgstr ""
-"जब चुना जाता है, mrv2 प्रत्येक वीडियो लोड पर फिट छवि ऑपरेशन लागू करेगा. इसका"
-" मतलब है कि वीडियो का आकार स्वचालित रूप से विंडो के आकार पर आधारित किया "
-"जाएगा."
 
 msgid "Raise on Enter"
 msgstr "एंटर चालू करें"
@@ -7201,236 +7189,31 @@ msgstr "अधिकतम"
 msgid "When selected, mrv2 will start in a maximized window."
 msgstr "जब चुना जाता है, mrv2 विंडो में शुरू होगा."
 
-msgid "User Interface Elements"
-msgstr "यूज़र इंटरफ़ेस तत्व"
+msgid "Behavior"
+msgstr "व्यवहार"
 
-msgid "UI Elements"
-msgstr "यूआई तत्व"
-
-msgid "Tooltips"
-msgstr "टूलटिप्स"
-
-msgid "Choose whether to show tooltips or not."
-msgstr "चुनें कि टूलटिप्स दिखानी हैं या नहीं।"
-
-msgid "Menu Bar"
-msgstr "मेन्यू पट्टी"
-
-msgid "When selected, mrv2 will start with the menu bar already shown."
-msgstr "जब चुना जाता है, mrv2 मेन्यू पट्टी द्वारा पहले से ही दिखाया गया है."
-
-msgid "Topbar"
-msgstr "शीर्षबार"
+msgid "Check for Updates"
+msgstr "अद्यतन के लिए जाँचें"
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar "
-"visible."
+"Allows you to automatically download updates of mrv2 when it starts up."
 msgstr ""
-"जब चयनित होता है, mrv2 इसके चैनल से शुरू होगा, प्राप्त करने के लिए गामा "
-"औज़ार दृश्य."
+"जब यह चालू होता है तो आपको एमरवी2 की अद्यतनों को स्वचालित डाउनलोड करने देता "
+"है."
 
-msgid "Pixel Toolbar"
-msgstr "पिक्सेल औज़ार पट्टी"
-
-msgid "When selected, mrv2 will start with the pixel toolbar shown."
-msgstr "जब चयनित होता है, mrv2 पिक्सेल टूलबार के साथ प्रारंभ होगा."
-
-msgid "When selected, mrv2 will start with the timeline shown."
-msgstr "जब चयनित होता है, mrv2 समय रेखा के साथ प्रारंभ होगा."
-
-msgid "macOS Menus"
-msgstr "MLOS मेन्यू"
+msgid "Allow Screen Saver"
+msgstr "स्क्रीन सेवर की अनुमति दें"
 
 msgid ""
-"This is a macOS setting only.  When selected the menus will appear on the "
-"system toolbar instead of the mrv2 toolbar."
+"This setting controls whether mrv2 will block the screen saver when running."
 msgstr ""
-"यह एक एमआईएस सेटिंग है. जब चयनित मेन्यू औज़ार पट्टियों के बजाय तंत्र औज़ार "
-"पट्टियों पर प्रकट होगा."
+"यह सेटिंग नियंत्रित करती है कि mrv2 के चलने पर क्या वह स्क्रीन सेवर को रोक "
+"देगा।"
 
-msgid "Tool Dock"
-msgstr "औजार डॉक"
+msgid "Window Position"
+msgstr "विंडो की स्थिति"
 
-msgid "When selected, mrv2 will start with the action tool dock already open."
-msgstr "जब चयनित होता है, mrv2 कार्रवाई औज़ार बंद करने के लिए प्रारंभ होगा."
-
-msgid "Status Bar"
-msgstr "स्थिति पट्टी"
-
-msgid "When selected, mrv2 will start with the status bar visible."
-msgstr "जब चयनित होता है, mrv2 स्थिति पट्टी दिखाई देगा."
-
-msgid "Only One Panel"
-msgstr "सिर्फ एक फलक"
-
-msgid ""
-"When selected, mrv2 will start with the only one panel option selected."
-msgstr "जब चयनित होता है, mrv2 सिर्फ एक फलक से शुरू होगा जो चुना गया है."
-
-msgid "View Window"
-msgstr "विंडो देखें"
-
-msgid "Defaults"
-msgstr "तयशुदा"
-
-msgid "Sets the default gain when mrv2 starts."
-msgstr "जब एमrv2 शुरू होता है तब डिफ़ॉल्ट प्राप्त नियत करता है."
-
-msgid "Sets the default gamma when mrv2 starts."
-msgstr "जब एमrv2 प्रारंभ होगा तो डिफ़ॉल्ट गामा सेट करता है."
-
-msgid "Crop"
-msgstr "काँट छाँट करें"
-
-msgid "Allows you to select a standard cropping area around image."
-msgstr "छवि के चारों ओर मानक फ़सलिंग क्षेत्र को चुनने देता है."
-
-msgid "Auto Frame"
-msgstr "फ्रेम स्वचालित फ्रेम"
-
-msgid "When this is on, View/Auto Frame will be active."
-msgstr "जब यह चालू होगा, दृश्य/AutoF> फ्रेम सक्रिय किया जाएगा."
-
-msgid "Safe Areas"
-msgstr "सुरक्षित क्षेत्र"
-
-msgid "When mrv2 starts, the safe area display will be active by default."
-msgstr ""
-"जब एमrv2 शुरू होता है, सुरक्षित क्षेत्र प्रदर्शित डिफ़ॉल्ट द्वारा सक्रिय "
-"किया जाएगा."
-
-msgid "OCIO in Top Bar"
-msgstr "ऊपरी बार में ओआईओ"
-
-msgid ""
-"When mrv2 starts, OCIO should start in the top bar instead of color "
-"adjustments."
-msgstr ""
-"जब mrv2 शुरू होता है, OCIO को रंग समायोजन के बजाए शीर्ष बार में प्रारंभ होना"
-" चाहिए."
-
-msgid "Zoom Speed"
-msgstr "ज़ूम गति"
-
-msgid "HUD"
-msgstr "HUD"
-
-msgid ""
-"This area specifies which elements should be shown as a HUD overlay on the "
-"view screen."
-msgstr ""
-"यह क्षेत्र निर्दिष्ट करता है कि कौन से तत्वों को दृश्य स्क्रीन पर HUDR के "
-"रूप में दिखाया जाए."
-
-msgid "Frame"
-msgstr "फ्रेम"
-
-msgid "Frame Range"
-msgstr "फ्रेम सीमा"
-
-msgid "Frame Count"
-msgstr "फ्रेम गणना"
-
-msgid "Attributes"
-msgstr "गुणधर्म"
-
-msgid "Font Size"
-msgstr "फ़ॉन्ट आकार"
-
-msgid "File Requester"
-msgstr "फ़ाइल निवेदनर"
-
-msgid "Single Click to Travel Drawers"
-msgstr "यात्रियों के लिए एक क्लिक करें"
-
-msgid ""
-"When using mrv2's file chooser, a single click on a folder will open it."
-msgstr ""
-"जब mrv2 का फ़ाइल चयनक इस्तेमाल किया जाता है, एक फ़ोल्डर पर एक क्लिक इसे खोल "
-"देगा."
-
-msgid "Thumbnails Active"
-msgstr "लघु छवि सक्रिय"
-
-msgid "Show thumbnails for known files."
-msgstr "ज्ञात फ़ाइलों के लिए लघु छवि दिखाएँ."
-
-msgid "USD Thumbnails"
-msgstr "यूएसडी लघु छवि"
-
-msgid "Show Thumbnails for USD files (can be slow if they are big)"
-msgstr ""
-"यूएसडी फ़ाइलों के लिए लघु छवि दिखाएँ (यदि वे बड़े हैं तो धीमा हो सकता है)"
-
-msgid "Use Native File Chooser"
-msgstr "नेटिव फ़ाइल चयनक इस्तेमाल करें"
-
-msgid ""
-"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
-"standard file chooser will be used."
-msgstr ""
-"यदि चयनित किया जाता है,lv फ़ाइल चयनक इस्तेमाल किया जाएगा. यदि नहीं चुना गया "
-"है, mrv2 का मानक फ़ाइल चयनक इस्तेमाल किया जाएगा."
-
-msgid "Fonts"
-msgstr "फ़ॉन्ट्स"
-
-msgid "Menus"
-msgstr "मेन्यू"
-
-msgid "Sets the font to use in menus."
-msgstr "मेन्यू में प्रयोग के लिए फ़ॉन्ट सेट करता है."
-
-msgid "Panels"
-msgstr "फलक"
-
-msgid "Sets the font to use in panels. (Not yet working)"
-msgstr "फलक में उपयोग हेतु फ़ॉन्ट सेट करता है. (अभी कार्य नहीं)"
-
-msgid "Language and Colors"
-msgstr "प्रयोक्ता अंतरफलक/भाषा तथा रंग"
-
-msgid "Scheme"
-msgstr "योजना"
-
-msgid "Color Theme"
-msgstr "रंग प्रसंग"
-
-msgid "Reload Theme"
-msgstr "प्रसंग फिर से लोड करें"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr "mrv2 से रंग प्रसंग फिर से लोड करें"
-
-msgid "Selects the background color of areas outside the current image."
-msgstr "वर्तमान छवि के बाहर के क्षेत्रों के पृष्ठभूमि रंग चुनता है."
-
-msgid "Text Overlay"
-msgstr "पाठ ड्रापिंग"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr "मौज़ूदा छवि पर छापी गई पाठ ब्रोशरों के रंग चुनता है."
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr "वर्तमान छवि के ऊपर चयन के रंग चुनता है."
-
-msgid "Selects the color of HUD overlays."
-msgstr "HUD ब्रोशरों के रंग चुनता है."
-
-msgid "RGBA Display"
-msgstr "आरजीबीए प्रदर्शक"
-
-msgid "Pixel Values"
-msgstr "पिक्सेल मान"
-
-msgid "Secondary Display"
-msgstr "द्वितीयक प्रदर्शक"
-
-msgid "Luminance"
-msgstr "संन्सन्सन"
-
-msgid "Positioning"
+msgid "Position and Size"
 msgstr "स्थिति और आकार"
 
 msgid "Always Save on Exit"
@@ -7479,6 +7262,9 @@ msgstr "W:"
 msgid "H:"
 msgstr "H:"
 
+msgid "Screen:"
+msgstr "स्क्रीन:"
+
 msgid "Take Current Window Values"
 msgstr "मौज़ूदा विंडो मान लें"
 
@@ -7491,26 +7277,154 @@ msgstr ""
 "the viewer. Remember to also check the boxes for Fixed Position and/or Fixed"
 " Size depending what you want to save."
 
-msgid "Screen:"
-msgstr "स्क्रीन:"
+msgid "Interface"
+msgstr "इंटरफ़ेस"
 
-msgid "Render"
-msgstr "रेंडरर"
+msgid "UI Elements"
+msgstr "यूआई तत्व"
 
-msgid "Debanding (Vulkan)"
-msgstr "डीबैंडिंग (Vulkan)"
+msgid "Menu Bar"
+msgstr "मेन्यू पट्टी"
 
-msgid "Makes gradients smoother on video files."
-msgstr "वीडियो फ़ाइलों में ग्रेडिएंट को अधिक स्मूथ बनाता है।"
+msgid "When selected, mrv2 will start with the menu bar already shown."
+msgstr "जब चुना जाता है, mrv2 मेन्यू पट्टी द्वारा पहले से ही दिखाया गया है."
 
-msgid "Alpha Blend"
-msgstr "अल्फा ब्लेंड"
+msgid "Topbar"
+msgstr "शीर्षबार"
 
-msgid "Minify Filter"
-msgstr "न्यूनतमीकरण फ़िल्टर"
+msgid ""
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
+msgstr ""
+"जब चयनित होता है, mrv2 इसके चैनल से शुरू होगा, प्राप्त करने के लिए गामा "
+"औज़ार दृश्य."
 
-msgid "Magnify Filter"
-msgstr "आवाही फ़िल्टर"
+msgid "Pixel Toolbar"
+msgstr "पिक्सेल औज़ार पट्टी"
+
+msgid "When selected, mrv2 will start with the pixel toolbar shown."
+msgstr "जब चयनित होता है, mrv2 पिक्सेल टूलबार के साथ प्रारंभ होगा."
+
+msgid "When selected, mrv2 will start with the timeline shown."
+msgstr "जब चयनित होता है, mrv2 समय रेखा के साथ प्रारंभ होगा."
+
+msgid "Status Bar"
+msgstr "स्थिति पट्टी"
+
+msgid "When selected, mrv2 will start with the status bar visible."
+msgstr "जब चयनित होता है, mrv2 स्थिति पट्टी दिखाई देगा."
+
+msgid "Tool Dock"
+msgstr "औजार डॉक"
+
+msgid "When selected, mrv2 will start with the action tool dock already open."
+msgstr "जब चयनित होता है, mrv2 कार्रवाई औज़ार बंद करने के लिए प्रारंभ होगा."
+
+msgid "Only One Panel"
+msgstr "सिर्फ एक फलक"
+
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
+msgstr "जब चयनित होता है, mrv2 सिर्फ एक फलक से शुरू होगा जो चुना गया है."
+
+msgid "Tooltips"
+msgstr "टूलटिप्स"
+
+msgid "Choose whether to show tooltips or not."
+msgstr "चुनें कि टूलटिप्स दिखानी हैं या नहीं।"
+
+msgid "macOS Menus"
+msgstr "MLOS मेन्यू"
+
+msgid ""
+"This is a macOS setting only.  When selected the menus will appear on the "
+"system toolbar instead of the mrv2 toolbar."
+msgstr ""
+"यह एक एमआईएस सेटिंग है. जब चयनित मेन्यू औज़ार पट्टियों के बजाय तंत्र औज़ार "
+"पट्टियों पर प्रकट होगा."
+
+msgid "On FFmpeg Error"
+msgstr "FFegge त्रुटि पर"
+
+msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
+msgstr "FFPGGe त्रुटि के मामले में लॉग विंडो बर्ताव कैसे समायोजित करें."
+
+msgid "On Error"
+msgstr "त्रुटि पर"
+
+msgid "Adjusts how Log Window behaves in case of error."
+msgstr ""
+"त्रुटि के मामले में लॉग विंडो बर्ताव कैसे दिखाता है यह एडजस्ट करता है."
+
+msgid "Appearance"
+msgstr "रूप-रंग"
+
+msgid "Language and Theme"
+msgstr "भाषा और थीम"
+
+msgid "Scheme"
+msgstr "योजना"
+
+msgid "Color Theme"
+msgstr "रंग प्रसंग"
+
+msgid "Reload Theme"
+msgstr "प्रसंग फिर से लोड करें"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr "mrv2 से रंग प्रसंग फिर से लोड करें"
+
+msgid "Fonts"
+msgstr "फ़ॉन्ट्स"
+
+msgid "Menus"
+msgstr "मेन्यू"
+
+msgid "Sets the font to use in menus."
+msgstr "मेन्यू में प्रयोग के लिए फ़ॉन्ट सेट करता है."
+
+msgid "Panels"
+msgstr "फलक"
+
+msgid "Sets the font to use in panels. (Not yet working)"
+msgstr "फलक में उपयोग हेतु फ़ॉन्ट सेट करता है. (अभी कार्य नहीं)"
+
+msgid "View Colors"
+msgstr "व्यू के रंग"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "वर्तमान छवि के बाहर के क्षेत्रों के पृष्ठभूमि रंग चुनता है."
+
+msgid "Text Overlay"
+msgstr "पाठ ड्रापिंग"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "मौज़ूदा छवि पर छापी गई पाठ ब्रोशरों के रंग चुनता है."
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr "वर्तमान छवि के ऊपर चयन के रंग चुनता है."
+
+msgid "HUD"
+msgstr "HUD"
+
+msgid "Selects the color of HUD overlays."
+msgstr "HUD ब्रोशरों के रंग चुनता है."
+
+msgid "Auto Hide Pixel Bar"
+msgstr "पिक्सेल पट्टी स्वतः छुपाएँ"
+
+msgid "RGBA Display"
+msgstr "आरजीबीए प्रदर्शक"
+
+msgid "Pixel Values"
+msgstr "पिक्सेल मान"
+
+msgid "Secondary Display"
+msgstr "द्वितीयक प्रदर्शक"
+
+msgid "Luminance"
+msgstr "संन्सन्सन"
 
 msgid "Thumbnails"
 msgstr "लघु छवि"
@@ -7533,6 +7447,25 @@ msgstr "स्टीरियो पैनल"
 msgid "How to display timeline thumbnails in Stereo Panel."
 msgstr "स्टीरियो पैनल में टाइमलाइन थंबनेल कैसे प्रदर्शित करें।"
 
+msgid "Refresh Thumbnails on Panels Manuallly"
+msgstr "पैनलों पर थंबनेल को मैन्युअल रूप से ताज़ा करें"
+
+msgid ""
+"When this option is on, thumbnails in panels won't be refreshed "
+"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+msgstr ""
+"जब यह विकल्प चालू होता है, तो पैनलों में थंबनेल स्वतः ताज़ा नहीं होंगे। आपको"
+" थंबनेल पर दाएँ क्लिक -> थंबनेल अद्यतन करें का उपयोग करना होगा।"
+
+msgid "Timeline and Edit Viewport"
+msgstr "टाइमलाइन और एडिट व्यूपोर्ट"
+
+msgid "Preview Thumbnails above Timeline"
+msgstr "ऊपर की लघु छवि का पूर्वावलोकन"
+
+msgid "Preview Thumbnails in a rectangle above Timeline"
+msgstr "ऊपर प्रयुक्त चतुर्भुज में लघु छवि पूर्वावलोकन दिखाता है"
+
 msgid "Edit Viewport"
 msgstr "संपादन"
 
@@ -7545,110 +7478,81 @@ msgstr "एडिट व्यूपोर्ट वेवफ़ॉर्म"
 msgid "How to display timeline waveforms by default."
 msgstr "डिफ़ॉल्ट रूप से टाइमलाइन वेवफ़ॉर्म कैसे दिखाएँ।"
 
-msgid "Preview Thumbnails above Timeline"
-msgstr "ऊपर की लघु छवि का पूर्वावलोकन"
+msgid "Defaults"
+msgstr "तयशुदा"
 
-msgid "Preview Thumbnails in a rectangle above Timeline"
-msgstr "ऊपर प्रयुक्त चतुर्भुज में लघु छवि पूर्वावलोकन दिखाता है"
+msgid "Sets the default gain when mrv2 starts."
+msgstr "जब एमrv2 शुरू होता है तब डिफ़ॉल्ट प्राप्त नियत करता है."
 
-msgid "Refresh Thumbnails on Panels Manuallly"
-msgstr "पैनलों पर थंबनेल को मैन्युअल रूप से ताज़ा करें"
+msgid "Sets the default gamma when mrv2 starts."
+msgstr "जब एमrv2 प्रारंभ होगा तो डिफ़ॉल्ट गामा सेट करता है."
+
+msgid "Crop"
+msgstr "काँट छाँट करें"
+
+msgid "Allows you to select a standard cropping area around image."
+msgstr "छवि के चारों ओर मानक फ़सलिंग क्षेत्र को चुनने देता है."
+
+msgid "Zoom Speed"
+msgstr "ज़ूम गति"
+
+msgid "Auto Frame"
+msgstr "फ्रेम स्वचालित फ्रेम"
+
+msgid "When this is on, View/Auto Frame will be active."
+msgstr "जब यह चालू होगा, दृश्य/AutoF> फ्रेम सक्रिय किया जाएगा."
+
+msgid "Safe Areas"
+msgstr "सुरक्षित क्षेत्र"
+
+msgid "When mrv2 starts, the safe area display will be active by default."
+msgstr ""
+"जब एमrv2 शुरू होता है, सुरक्षित क्षेत्र प्रदर्शित डिफ़ॉल्ट द्वारा सक्रिय "
+"किया जाएगा."
+
+msgid "Auto Refit Image"
+msgstr "छवि स्वचलित फिर से लोड करें"
 
 msgid ""
-"When this option is on, thumbnails in panels won't be refreshed "
-"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+"When selected, mrv2 will apply a fit image operation on each video played.  "
+"This effectively means the video will be resized automatically based on the "
+"size of the window."
 msgstr ""
-"जब यह विकल्प चालू होता है, तो पैनलों में थंबनेल स्वतः ताज़ा नहीं होंगे। आपको"
-" थंबनेल पर दाएँ क्लिक -> थंबनेल अद्यतन करें का उपयोग करना होगा।"
+"जब चुना जाता है, mrv2 प्रत्येक वीडियो लोड पर फिट छवि ऑपरेशन लागू करेगा. इसका"
+" मतलब है कि वीडियो का आकार स्वचालित रूप से विंडो के आकार पर आधारित किया "
+"जाएगा."
 
-msgid "Display"
-msgstr "प्रदर्शित करें"
-
-msgid "How to display timeline by default."
-msgstr "मूलभूत रूप से समय रेखा प्रदर्शित करने के लिए कैसे कार्य करना है."
-
-msgid "Start in Edit mode"
-msgstr "संपादन मोड में प्रारंभ करें"
-
-msgid "Editing viewport will be visible at start up."
-msgstr "संपादन व्यूपोर्ट शुरू होने पर दिखाई देगा."
-
-msgid "Remove EDLs in Temporary Folder on Exit"
-msgstr "बाहर होने पर अस्थाई फ़ोल्डर में EDL को मिटाएँ"
+msgid "OCIO in Top Bar"
+msgstr "ऊपरी बार में ओआईओ"
 
 msgid ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary"
-" folder."
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
 msgstr ""
-"जब चुना जाता है, अस्थायी EDL (Playlist) अस्थायी फ़ोल्डर से हटा दिया जाएगा."
-
-msgid "Video Start Frame"
-msgstr "वीडियो प्रारंभ फ्रेम"
-
-msgid "Start value in the timeline where video starts."
-msgstr "समय रेखा में आरंभ करें जहाँ वीडियो प्रारंभ होता है."
-
-msgid "Prefer RGB (Vulkan)"
-msgstr "RGB को प्राथमिकता दें (Vulkan)"
+"जब mrv2 शुरू होता है, OCIO को रंग समायोजन के बजाए शीर्ष बार में प्रारंभ होना"
+" चाहिए."
 
 msgid ""
-"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
-"and convert them with a compute shader.  When is off, Vulkan will decode "
-"RGBA_F16 and RGBA_F32 frames."
+"This area specifies which elements should be shown as a HUD overlay on the "
+"view screen."
 msgstr ""
-"जब यह सेटिंग चालू होती है, तो Vulkan RGB_F16 और RGB_F32 को जैसा है वैसा "
-"उपयोग करने की कोशिश करेगा और उन्हें एक कंप्यूट शेडर के साथ परिवर्तित करेगा। "
-"जब यह बंद होती है, तो Vulkan RGBA_F16 और RGBA_F32 फ्रेम्स को डिकोड करेगा।"
+"यह क्षेत्र निर्दिष्ट करता है कि कौन से तत्वों को दृश्य स्क्रीन पर HUDR के "
+"रूप में दिखाया जाए."
 
-msgid "Chromaticities"
-msgstr "रंगमिति"
+msgid "Frame"
+msgstr "फ्रेम"
 
-msgid "HDR Data"
-msgstr "HDR डेटा"
+msgid "Frame Range"
+msgstr "फ्रेम सीमा"
 
-msgid "Tonemap Algorithm"
-msgstr "टोनमैप एल्गोरिदम"
+msgid "Frame Count"
+msgstr "फ्रेम गणना"
 
-msgid "Gamut Mapping"
-msgstr "गेमट मैपिंग"
+msgid "Attributes"
+msgstr "गुणधर्म"
 
-msgid "HDR Peak Detection"
-msgstr "HDR पीक डिटेक्शन"
-
-msgid ""
-"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
-" per frame."
-msgstr ""
-"जब वीडियो क्लिप HDR10+ या Dolby Vision नहीं होता है, तो प्रति फ़्रेम "
-"डायनेमिक सीमा की अनुमति देता है।"
-
-msgid "HDR Percentile"
-msgstr "HDR प्रतिशतक"
-
-msgid ""
-"When less than 100, helps find the peak brightness ignoring the top 1 "
-"percent outliers."
-msgstr ""
-"जब यह 100 से कम हो, तो यह शीर्ष 1 प्रतिशत अपवादों को नज़रअंदाज़ करते हुए "
-"अधिकतम चमक खोजने में मदद करता है।"
-
-msgid "Smoothing Period"
-msgstr "स्मूदिंग अवधि"
-
-msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
-msgstr "चमक पहचान को नई दृश्य के अनुसार अनुकूलित होने में लगने वाला समय।"
-
-msgid "Low Peak Detection"
-msgstr "निम्न पीक पहचान"
-
-msgid "Low Limit to smooth out frames in the same scene."
-msgstr "एक ही दृश्य के भीतर फ़्रेमों को स्मूद करने के लिए न्यूनतम सीमा।"
-
-msgid "High Peak Detection Limit"
-msgstr "उच्च पीक पहचान सीमा"
-
-msgid "High Limit to determine scene change."
-msgstr "दृश्य परिवर्तन निर्धारित करने के लिए उच्च सीमा।"
+msgid "Font Size"
+msgstr "फ़ॉन्ट आकार"
 
 msgid "Playback"
 msgstr "प्लेबैक"
@@ -7667,8 +7571,11 @@ msgid ""
 msgstr ""
 "जब एकल माउस बटन को दृश्य विंडो में क्लिक करते हो तो प्लेबैक प्रारंभ करें"
 
-msgid "Auto Hide Pixel Bar"
-msgstr "पिक्सेल पट्टी स्वतः छुपाएँ"
+msgid "Looping Mode"
+msgstr "लूपिंग मोड"
+
+msgid "Select default looping mode in timeline."
+msgstr "समय रेखा में डिफ़ॉल्ट लूपिंग मोड चुनें."
 
 msgid "Sequences"
 msgstr "अनुक्रम"
@@ -7681,12 +7588,6 @@ msgstr ""
 "फ्रेम पर निर्भर करता है कि अनुक्रमों के लिए दूसरा मूल्य है जो एम्बेडेड गति "
 "नहीं है."
 
-msgid "Looping Mode"
-msgstr "लूपिंग मोड"
-
-msgid "Select default looping mode in timeline."
-msgstr "समय रेखा में डिफ़ॉल्ट लूपिंग मोड चुनें."
-
 msgid "Sensitivity"
 msgstr "संवेदनशीलता"
 
@@ -7698,13 +7599,6 @@ msgstr ""
 " करता है. छोटे मान माउस को अधिक फ्रेम बनाता है जबकि उच्चतर मान विपरीत होता "
 "है."
 
-msgid ""
-"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
-"less smooth."
-msgstr ""
-"प्लेबैक को रोकने के दौरान प्रारंभ करें ताकि ऑडियो सुना जा सके. स्क्रैबिंग कम"
-" नरम हो सकता है."
-
 msgid "Alt Sensitivity"
 msgstr "संवेदनशीलता"
 
@@ -7714,6 +7608,34 @@ msgid ""
 msgstr ""
 "जब ALT + बाएँ माउस बटन का उपयोग किया जाता है, तो यह सेटिंग स्क्रबिंग को धीमा"
 " करने के लिए प्रयुक्त गुणक को नियंत्रित करती है।"
+
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+"प्लेबैक को रोकने के दौरान प्रारंभ करें ताकि ऑडियो सुना जा सके. स्क्रैबिंग कम"
+" नरम हो सकता है."
+
+msgid "Display"
+msgstr "प्रदर्शित करें"
+
+msgid "How to display timeline by default."
+msgstr "मूलभूत रूप से समय रेखा प्रदर्शित करने के लिए कैसे कार्य करना है."
+
+msgid "Video Start Frame"
+msgstr "वीडियो प्रारंभ फ्रेम"
+
+msgid "Start value in the timeline where video starts."
+msgstr "समय रेखा में आरंभ करें जहाँ वीडियो प्रारंभ होता है."
+
+msgid "Remove EDLs in Temporary Folder on Exit"
+msgstr "बाहर होने पर अस्थाई फ़ोल्डर में EDL को मिटाएँ"
+
+msgid ""
+"When selected, temporary EDLs (Playlists) will be removed from the temporary"
+" folder."
+msgstr ""
+"जब चुना जाता है, अस्थायी EDL (Playlist) अस्थायी फ़ोल्डर से हटा दिया जाएगा."
 
 msgid "Default View"
 msgstr "डिफ़ॉल्ट दृश्य"
@@ -7730,17 +7652,17 @@ msgstr "मार्कर्स दिखाएं"
 msgid "Show Markers in Edit Viewport"
 msgstr "संपादन विकल्प में मार्कर्स दिखाएं"
 
-msgid "Show Effects"
-msgstr "प्रभाव दिखाएँ"
-
-msgid "Show Effects in Edit Viewport"
-msgstr "संपादन व्यूपोर्ट में प्रभाव दिखाएँ"
-
 msgid "Show Waveforms"
 msgstr "वेवफ़ॉर्म दिखाएँ"
 
 msgid "Show Waveforms in Edit Viewport"
 msgstr "संपादन व्यूपोर्ट में वेवफ़ॉर्म दिखाएँ"
+
+msgid "Show Effects"
+msgstr "प्रभाव दिखाएँ"
+
+msgid "Show Effects in Edit Viewport"
+msgstr "संपादन व्यूपोर्ट में प्रभाव दिखाएँ"
 
 msgid "Show Thunbnails"
 msgstr "थंबनेल दिखाएँ"
@@ -7748,14 +7670,11 @@ msgstr "थंबनेल दिखाएँ"
 msgid "Show Thumbnails in Edit Viewport"
 msgstr "संपादन व्यूपोर्ट में थंबनेल दिखाएँ"
 
-msgid "Behavior"
-msgstr "व्यवहार"
+msgid "Start in Edit mode"
+msgstr "संपादन मोड में प्रारंभ करें"
 
-msgid "Edit Associated Clips"
-msgstr "सम्बद्ध क्लिप्स संपादित करें"
-
-msgid "Edit Associated Clips."
-msgstr "सम्बद्ध क्लिप्स संपादित करें."
+msgid "Editing viewport will be visible at start up."
+msgstr "संपादन व्यूपोर्ट शुरू होने पर दिखाई देगा."
 
 msgid "Editable"
 msgstr "संशोधनीय"
@@ -7763,229 +7682,14 @@ msgstr "संशोधनीय"
 msgid "Editable Timeline Viewport."
 msgstr "संपादन गति पट्टी दृश्यport."
 
-msgid "OCIO"
-msgstr "OCIO"
+msgid "Edit Associated Clips"
+msgstr "सम्बद्ध क्लिप्स संपादित करें"
 
-msgid "OCIO Config File"
-msgstr "ओआईआईओ कॉन्फ़िग फ़ाइल"
+msgid "Edit Associated Clips."
+msgstr "सम्बद्ध क्लिप्स संपादित करें."
 
-msgid ""
-"This is the path to your config.ocio file.  It can be set with the "
-"environment variable OCIO, which takes precedence over any saved setting."
-msgstr ""
-"यह आपके कॉन्फ़िग फ़ाइल का पथ है. यह एनवायरनमेंट वेरिएबल ओआईओ के साथ सेट किया"
-" जा सकता है, जो किसी भी सहेजे गए विन्यास से ज़्यादा उपयुक्‍त बनाता है."
-
-msgid "Built-in Configs"
-msgstr "अंतर्निर्मित कॉन्फ़िग्स"
-
-msgid "Pick a config.ocio file from disk."
-msgstr "डिस्क से एक कॉन्फ़िग फ़ाइल चुनें."
-
-msgid "Set Auto ICS as default"
-msgstr "स्वचालित ICS को डिफ़ॉल्ट के रूप में सेट करें"
-
-msgid ""
-"Set Auto ICS as a default so that Input Color Space is selected from file "
-"name or OpenEXR metadata.."
-msgstr ""
-"स्वचालित ICS को डिफ़ॉल्ट के रूप में सेट करें, ताकि इनपुट कलर स्पेस को फ़ाइल "
-"नाम या OpenEXR मेटाडेटा से चुना जा सके।"
-
-msgid "Use Default Display and View"
-msgstr "डिफ़ॉल्ट प्रदर्शन व दृश्य इस्तेमाल करें"
-
-msgid ""
-"When this option is on, and your config.ocio has a default display and view,"
-" it will be used to be set as default."
-msgstr ""
-"जब यह विकल्प चालू होगा, आपके कॉन्फ़िग फ़ाइल को डिफ़ॉल्ट रूप में प्रदर्शित "
-"तथा देखें, यह डिफ़ॉल्ट रूप में नियत किया जाएगा."
-
-msgid "No OCIO on Videos or sRGB/BT709 data"
-msgstr "वीडियो या sRGB/BT709 डेटा पर OCIO नहीं"
-
-msgid ""
-"If playing a video or showing an SDR image, OCIO will be turned off "
-"automatically."
-msgstr ""
-"यदि कोई वीडियो चल रहा है या SDR छवि दिखाई जा रही है, तो OCIO स्वतः बंद कर "
-"दिया जाएगा।"
-
-msgid "Use Active Views and Active Displays"
-msgstr "सक्रिय दृश्य तथा सक्रिय प्रदर्शनों का प्रयोग करें"
-
-msgid ""
-"When this option is off, OCIO files with active_views: and active_displays: "
-"are not taken into account."
-msgstr ""
-"जब इस विकल्प को बन्द किया जाता है, OCO फ़ाइलें सक्रिय_ दृश्य के साथ बंद हो "
-"जाता है. तथा सक्रिय_hosts: हिसाब में नहीं लिया जाता है."
-
-msgid "OCIO Defaults"
-msgstr "OCIO/डिफ़ॉल्ट सेटिंग्स"
-
-msgid "8-bits"
-msgstr "8- बिट"
-
-msgid ""
-"The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
-"etc)."
-msgstr ""
-"ओसीआई छवि रंग जगह का नाम 8 बिट छवियों के लिए (सामान्य, एमम्प इत्यादि)."
-
-msgid "16-bits"
-msgstr "16-बिट"
-
-msgid ""
-"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
-" etc.)"
-msgstr "OCOIO छवि रंग जगह का नाम जो 16 बिट छवियों के लिए होता है (स्की, आदि.)"
-
-msgid "32-bits"
-msgstr "32- बिट"
-
-msgid ""
-"The name of the OCIO default image color space for 32-bit int images "
-"(openexr integers, etc.)"
-msgstr "OCIO छवि रंग जगह का नाम जो 32- बिट छवियों के लिए (krro, आदि)."
-
-msgid "half"
-msgstr "आधा"
-
-msgid ""
-"The name of the OCIO default image color space for OpenEXR half images."
-msgstr "ओसीआईओ डिफ़ॉल्ट छवि रंग जगह ओपनईएक्सआर छवियों के लिए."
-
-msgid "float"
-msgstr "फ्लोटिंग पाइंट"
-
-msgid ""
-"The name of the OCIO default image color space for half and float images "
-"(OpenEXR, hdr, dpx, etc.)"
-msgstr ""
-"OCOIO छवि रंग जगह का नाम आधे तथा फ्लोट छवियों के लिए (ओएक्सआर, hdr, आदि)."
-
-msgid "Default Look"
-msgstr "डिफ़ॉल्ट रूप"
-
-msgid "Display / View"
-msgstr "प्रदर्शित करें/दृश्य"
-
-msgid "Default Display / View"
-msgstr "डिफ़ॉल्ट प्रदर्शक/दृश्य"
-
-msgid "Loading"
-msgstr "लोड हो रहा है"
-
-msgid "Version Regex"
-msgstr "संस्करण रेगिक्स"
-
-msgid ""
-"Regular Expression used to match clip versions.  Must group three things "
-"(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with"
-" _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
-msgstr ""
-"क्लिप संस्करणों से मेल खाने के लिए उपयोग किया जाने वाला नियमित अभिव्यक्ति "
-"(रेगुलर एक्सप्रेशन)। इसमें तीन चीजें (प्रिफिक्स, संख्या, और सफिक्स) का समूह "
-"होना चाहिए। यदि इसे इसकी डिफ़ॉल्ट वैल्यू (_v) पर छोड़ा जाता है, तो यह स्वतः "
-"ही एक नियमित अभिव्यक्ति बनाएगा जो फ़ाइल, डायरेक्टरी या दोनों के नाम में _v "
-"के साथ परिभाषित संस्करणों से मेल खाएगा। उदाहरण के लिए: gizmo_v001.0001.exr"
-
-msgid "Maximum Images Apart"
-msgstr "अधिकतम छवियाँ इसके अलावा"
-
-msgid ""
-"When searching for a version, this value is the maximum version apart from "
-"each other when searching the first or last version."
-msgstr ""
-"संस्करण के लिए खोज रहा है, यह मान एक दूसरे से अलग है जब पहली या अंतिम "
-"संस्करण खोज रहा है."
-
-msgid "Missing Frame"
-msgstr "फ्रेम गुम है"
-
-msgid "Black Frame"
-msgstr "काला फ्रेम"
-
-msgid ""
-"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
-"\t* Error Frame\t   - Reports an error.\n"
-"\t* Hold Frame\t   - Holds the last frame read.\n"
-"\t* Scratched Frame  - Holds the last frame read\n"
-"                             but draws a red cross.\n"
-"\t* Black Frame\t   - Replaces current frame with black.\n"
-"\t* Skip Frame\t   - Skips the current frame.\n"
-"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
-msgstr ""
-"इमेज लोड करते समय, यह सेटिंग निर्धारित करती है कि अनुपलब्ध फ़्रेम के साथ क्या करना है (आपको सीक्वेंस को फिर से लोड या क्लोन करने की आवश्यकता हो सकती है):\n"
-"\t* त्रुटि फ़्रेम\t   - त्रुटि की सूचना देता है।\n"
-"\t* फ़्रेम रोकें\t   - पढ़े गए अंतिम फ़्रेम को बनाए रखता है।\n"
-"\t* खरोंच वाला फ़्रेम  - पढ़े गए अंतिम फ़्रेम को बनाए रखता है\n"
-"                             लेकिन उस पर लाल क्रॉस बनाता है।\n"
-"\t* काला फ़्रेम\t   - वर्तमान फ़्रेम को काले फ़्रेम से बदल देता है।\n"
-"\t* फ़्रेम छोड़ें\t   - वर्तमान फ़्रेम को छोड़ देता है।\n"
-"\t* गैप फ़्रेम\t   - अनुपलब्ध फ़्रेम के लिए एक .otio गैप जोड़ता है।"
-
-msgid "Scratch Frame"
-msgstr "गायब फ़्रेम"
-
-msgid "When this is on, missing frames will have a cross on them."
-msgstr "इसके सक्षम होने पर, गायब फ़्रेम पर एक क्रॉस दिखाई देगा।"
-
-msgid "Scratch Color"
-msgstr "गायब फ़्रेम का रंग"
-
-msgid "Scratch Lines Color."
-msgstr "गायब फ़्रेम की रेखाओं का रंग।"
-
-msgid "Scratch Width"
-msgstr "गायब फ़्रेम की रेखाओं की चौड़ाई"
-
-msgid "Scratch Lines Width."
-msgstr "गायब फ़्रेम की रेखाओं की चौड़ाई।"
-
-msgid "Path Mappings"
-msgstr "हटाएँ (R)"
-
-msgid ""
-"Use Up and Down arrows to move the selected line up and down.  Double click "
-"to change item.  Click on an empty area to unselect."
-msgstr ""
-"चुने गए पंक्तियों को ऊपर और नीचे ले जाने के लिये उपर और निचे तीर हटाएँ. "
-"वस्तू बदलने के लिये दो बार क्लिक करें. खाली जगहपर माउस का बटण दबाये."
-
-msgid "Add Paths"
-msgstr "पथ जोड़ें"
-
-msgid "Add a new remote mapping."
-msgstr "एक नया रिमोट फिल्टर जोड़ें."
-
-msgid "Remove Paths"
-msgstr "पथ मिटाएँ"
-
-msgid "Remove the currently selected path mapping."
-msgstr "वर्तमान में चयनित पथ फिल्टरों को मिटाएँ."
-
-msgid "Send"
-msgstr "भेजें"
-
-msgid "Accept"
-msgstr "स्वीकारें"
-
-msgid "UI Control"
-msgstr "यूआई नियंत्रण"
-
-msgid "Pan and Zoom"
-msgstr "पैन तथा ज़ूम"
-
-msgid "Color Control"
-msgstr "रंग नियंत्रण"
-
-msgid "Audio Control"
-msgstr "ऑडियो नियंत्रण"
+msgid "Graphics"
+msgstr "ग्राफ़िक्स"
 
 msgid "Monitor VSync"
 msgstr "मॉनीटर वी सिंक"
@@ -8032,12 +7736,350 @@ msgstr ""
 "टाइमलाइन ब्लिटिंग या शेडर्स के साथ बनाई जा सकती है। ग्राफिक्स कार्ड और "
 "ऑपरेटिंग सिस्टम के आधार पर एक तरीका दूसरे से बेहतर प्रदर्शन कर सकता है।"
 
+msgid "Rendering"
+msgstr "रेंडरिंग"
+
+msgid "Image Rendering"
+msgstr "इमेज रेंडरिंग"
+
+msgid "Debanding (Vulkan)"
+msgstr "डीबैंडिंग (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "वीडियो फ़ाइलों में ग्रेडिएंट को अधिक स्मूथ बनाता है।"
+
+msgid "Alpha Blend"
+msgstr "अल्फा ब्लेंड"
+
+msgid "Minify Filter"
+msgstr "न्यूनतमीकरण फ़िल्टर"
+
+msgid "Magnify Filter"
+msgstr "आवाही फ़िल्टर"
+
+msgid "HDR Processing"
+msgstr "HDR प्रोसेसिंग"
+
+msgid "Prefer RGB (Vulkan)"
+msgstr "RGB को प्राथमिकता दें (Vulkan)"
+
 msgid ""
-"For changes to take effect, you will need to re-open any movies already "
-"playing or reload mrv2."
+"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
+"and convert them with a compute shader.  When is off, Vulkan will decode "
+"RGBA_F16 and RGBA_F32 frames."
 msgstr ""
-"परिवर्तनों को प्रभाव में लाने के लिए, आपको पहले से ही किसी भी फिल्म को फिर "
-"से खोलना होगा या mrv2 को फिर से लोड करना होगा."
+"जब यह सेटिंग चालू होती है, तो Vulkan RGB_F16 और RGB_F32 को जैसा है वैसा "
+"उपयोग करने की कोशिश करेगा और उन्हें एक कंप्यूट शेडर के साथ परिवर्तित करेगा। "
+"जब यह बंद होती है, तो Vulkan RGBA_F16 और RGBA_F32 फ्रेम्स को डिकोड करेगा।"
+
+msgid "Chromaticities"
+msgstr "रंगमिति"
+
+msgid "HDR Data"
+msgstr "HDR डेटा"
+
+msgid "Tonemap Algorithm"
+msgstr "टोनमैप एल्गोरिदम"
+
+msgid "Gamut Mapping"
+msgstr "गेमट मैपिंग"
+
+msgid "Peak Detection"
+msgstr "पीक डिटेक्शन"
+
+msgid "HDR Peak Detection"
+msgstr "HDR पीक डिटेक्शन"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr ""
+"जब वीडियो क्लिप HDR10+ या Dolby Vision नहीं होता है, तो प्रति फ़्रेम "
+"डायनेमिक सीमा की अनुमति देता है।"
+
+msgid "HDR Percentile"
+msgstr "HDR प्रतिशतक"
+
+msgid ""
+"When less than 100, helps find the peak brightness ignoring the top 1 "
+"percent outliers."
+msgstr ""
+"जब यह 100 से कम हो, तो यह शीर्ष 1 प्रतिशत अपवादों को नज़रअंदाज़ करते हुए "
+"अधिकतम चमक खोजने में मदद करता है।"
+
+msgid "Smoothing Period"
+msgstr "स्मूदिंग अवधि"
+
+msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
+msgstr "चमक पहचान को नई दृश्य के अनुसार अनुकूलित होने में लगने वाला समय।"
+
+msgid "Low Peak Detection"
+msgstr "निम्न पीक पहचान"
+
+msgid "Low Limit to smooth out frames in the same scene."
+msgstr "एक ही दृश्य के भीतर फ़्रेमों को स्मूद करने के लिए न्यूनतम सीमा।"
+
+msgid "High Peak Detection Limit"
+msgstr "उच्च पीक पहचान सीमा"
+
+msgid "High Limit to determine scene change."
+msgstr "दृश्य परिवर्तन निर्धारित करने के लिए उच्च सीमा।"
+
+msgid "OCIO"
+msgstr "OCIO"
+
+msgid "Configuration"
+msgstr "कॉन्फ़िगरेशन"
+
+msgid "Built-in Configs"
+msgstr "अंतर्निर्मित कॉन्फ़िग्स"
+
+msgid "OCIO Config File"
+msgstr "ओआईआईओ कॉन्फ़िग फ़ाइल"
+
+msgid ""
+"This is the path to your config.ocio file.  It can be set with the "
+"environment variable OCIO, which takes precedence over any saved setting."
+msgstr ""
+"यह आपके कॉन्फ़िग फ़ाइल का पथ है. यह एनवायरनमेंट वेरिएबल ओआईओ के साथ सेट किया"
+" जा सकता है, जो किसी भी सहेजे गए विन्यास से ज़्यादा उपयुक्‍त बनाता है."
+
+msgid "Pick a config.ocio file from disk."
+msgstr "डिस्क से एक कॉन्फ़िग फ़ाइल चुनें."
+
+msgid "Options"
+msgstr "विकल्प"
+
+msgid "Set Auto ICS as default"
+msgstr "स्वचालित ICS को डिफ़ॉल्ट के रूप में सेट करें"
+
+msgid ""
+"Set Auto ICS as a default so that Input Color Space is selected from file "
+"name or OpenEXR metadata.."
+msgstr ""
+"स्वचालित ICS को डिफ़ॉल्ट के रूप में सेट करें, ताकि इनपुट कलर स्पेस को फ़ाइल "
+"नाम या OpenEXR मेटाडेटा से चुना जा सके।"
+
+msgid "Use Default Display and View"
+msgstr "डिफ़ॉल्ट प्रदर्शन व दृश्य इस्तेमाल करें"
+
+msgid ""
+"When this option is on, and your config.ocio has a default display and view,"
+" it will be used to be set as default."
+msgstr ""
+"जब यह विकल्प चालू होगा, आपके कॉन्फ़िग फ़ाइल को डिफ़ॉल्ट रूप में प्रदर्शित "
+"तथा देखें, यह डिफ़ॉल्ट रूप में नियत किया जाएगा."
+
+msgid "Use Active Views and Active Displays"
+msgstr "सक्रिय दृश्य तथा सक्रिय प्रदर्शनों का प्रयोग करें"
+
+msgid ""
+"When this option is off, OCIO files with active_views: and active_displays: "
+"are not taken into account."
+msgstr ""
+"जब इस विकल्प को बन्द किया जाता है, OCO फ़ाइलें सक्रिय_ दृश्य के साथ बंद हो "
+"जाता है. तथा सक्रिय_hosts: हिसाब में नहीं लिया जाता है."
+
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "वीडियो या sRGB/BT709 डेटा पर OCIO नहीं"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr ""
+"यदि कोई वीडियो चल रहा है या SDR छवि दिखाई जा रही है, तो OCIO स्वतः बंद कर "
+"दिया जाएगा।"
+
+msgid "8-bits"
+msgstr "8- बिट"
+
+msgid ""
+"The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
+"etc)."
+msgstr ""
+"ओसीआई छवि रंग जगह का नाम 8 बिट छवियों के लिए (सामान्य, एमम्प इत्यादि)."
+
+msgid "16-bits"
+msgstr "16-बिट"
+
+msgid ""
+"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
+" etc.)"
+msgstr "OCOIO छवि रंग जगह का नाम जो 16 बिट छवियों के लिए होता है (स्की, आदि.)"
+
+msgid "32-bits"
+msgstr "32- बिट"
+
+msgid ""
+"The name of the OCIO default image color space for 32-bit int images "
+"(openexr integers, etc.)"
+msgstr "OCIO छवि रंग जगह का नाम जो 32- बिट छवियों के लिए (krro, आदि)."
+
+msgid "half"
+msgstr "आधा"
+
+msgid ""
+"The name of the OCIO default image color space for OpenEXR half images."
+msgstr "ओसीआईओ डिफ़ॉल्ट छवि रंग जगह ओपनईएक्सआर छवियों के लिए."
+
+msgid "float"
+msgstr "फ्लोटिंग पाइंट"
+
+msgid ""
+"The name of the OCIO default image color space for half and float images "
+"(OpenEXR, hdr, dpx, etc.)"
+msgstr ""
+"OCOIO छवि रंग जगह का नाम आधे तथा फ्लोट छवियों के लिए (ओएक्सआर, hdr, आदि)."
+
+msgid "Look and View"
+msgstr "रूप-रंग और दृश्य"
+
+msgid "Default Look"
+msgstr "डिफ़ॉल्ट रूप"
+
+msgid "Display / View"
+msgstr "प्रदर्शित करें/दृश्य"
+
+msgid "Default Display / View"
+msgstr "डिफ़ॉल्ट प्रदर्शक/दृश्य"
+
+msgid "Loading"
+msgstr "लोड हो रहा है"
+
+msgid "Missing Frames"
+msgstr "गायब फ़्रेम"
+
+msgid "Missing Frame"
+msgstr "फ्रेम गुम है"
+
+msgid "Black Frame"
+msgstr "काला फ्रेम"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"इमेज लोड करते समय, यह सेटिंग निर्धारित करती है कि अनुपलब्ध फ़्रेम के साथ क्या करना है (आपको सीक्वेंस को फिर से लोड या क्लोन करने की आवश्यकता हो सकती है):\n"
+"\t* त्रुटि फ़्रेम\t   - त्रुटि की सूचना देता है।\n"
+"\t* फ़्रेम रोकें\t   - पढ़े गए अंतिम फ़्रेम को बनाए रखता है।\n"
+"\t* खरोंच वाला फ़्रेम  - पढ़े गए अंतिम फ़्रेम को बनाए रखता है\n"
+"                             लेकिन उस पर लाल क्रॉस बनाता है।\n"
+"\t* काला फ़्रेम\t   - वर्तमान फ़्रेम को काले फ़्रेम से बदल देता है।\n"
+"\t* फ़्रेम छोड़ें\t   - वर्तमान फ़्रेम को छोड़ देता है।\n"
+"\t* गैप फ़्रेम\t   - अनुपलब्ध फ़्रेम के लिए एक .otio गैप जोड़ता है।"
+
+msgid "Scratch Frame"
+msgstr "गायब फ़्रेम"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr "इसके सक्षम होने पर, गायब फ़्रेम पर एक क्रॉस दिखाई देगा।"
+
+msgid "Scratch Color"
+msgstr "गायब फ़्रेम का रंग"
+
+msgid "Scratch Lines Color."
+msgstr "गायब फ़्रेम की रेखाओं का रंग।"
+
+msgid "Scratch Width"
+msgstr "गायब फ़्रेम की रेखाओं की चौड़ाई"
+
+msgid "Scratch Lines Width."
+msgstr "गायब फ़्रेम की रेखाओं की चौड़ाई।"
+
+msgid "Versions"
+msgstr "संस्करण"
+
+msgid "Version Regex"
+msgstr "संस्करण रेगिक्स"
+
+msgid ""
+"Regular Expression used to match clip versions.  Must group three things "
+"(prefix, number and suffix). If left on its default value (_v), it will "
+"automatically be created a regular expression to match versions defined with"
+" _v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
+msgstr ""
+"क्लिप संस्करणों से मेल खाने के लिए उपयोग किया जाने वाला नियमित अभिव्यक्ति "
+"(रेगुलर एक्सप्रेशन)। इसमें तीन चीजें (प्रिफिक्स, संख्या, और सफिक्स) का समूह "
+"होना चाहिए। यदि इसे इसकी डिफ़ॉल्ट वैल्यू (_v) पर छोड़ा जाता है, तो यह स्वतः "
+"ही एक नियमित अभिव्यक्ति बनाएगा जो फ़ाइल, डायरेक्टरी या दोनों के नाम में _v "
+"के साथ परिभाषित संस्करणों से मेल खाएगा। उदाहरण के लिए: gizmo_v001.0001.exr"
+
+msgid "Maximum Images Apart"
+msgstr "अधिकतम छवियाँ इसके अलावा"
+
+msgid ""
+"When searching for a version, this value is the maximum version apart from "
+"each other when searching the first or last version."
+msgstr ""
+"संस्करण के लिए खोज रहा है, यह मान एक दूसरे से अलग है जब पहली या अंतिम "
+"संस्करण खोज रहा है."
+
+msgid "File Requester"
+msgstr "फ़ाइल निवेदनर"
+
+msgid "Use Native File Chooser"
+msgstr "नेटिव फ़ाइल चयनक इस्तेमाल करें"
+
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr ""
+"यदि चयनित किया जाता है,lv फ़ाइल चयनक इस्तेमाल किया जाएगा. यदि नहीं चुना गया "
+"है, mrv2 का मानक फ़ाइल चयनक इस्तेमाल किया जाएगा."
+
+msgid "Single Click to Travel Drawers"
+msgstr "यात्रियों के लिए एक क्लिक करें"
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr ""
+"जब mrv2 का फ़ाइल चयनक इस्तेमाल किया जाता है, एक फ़ोल्डर पर एक क्लिक इसे खोल "
+"देगा."
+
+msgid "Thumbnails Active"
+msgstr "लघु छवि सक्रिय"
+
+msgid "Show thumbnails for known files."
+msgstr "ज्ञात फ़ाइलों के लिए लघु छवि दिखाएँ."
+
+msgid "USD Thumbnails"
+msgstr "यूएसडी लघु छवि"
+
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr ""
+"यूएसडी फ़ाइलों के लिए लघु छवि दिखाएँ (यदि वे बड़े हैं तो धीमा हो सकता है)"
+
+msgid "Path Mappings"
+msgstr "हटाएँ (R)"
+
+msgid ""
+"Use Up and Down arrows to move the selected line up and down.  Double click "
+"to change item.  Click on an empty area to unselect."
+msgstr ""
+"चुने गए पंक्तियों को ऊपर और नीचे ले जाने के लिये उपर और निचे तीर हटाएँ. "
+"वस्तू बदलने के लिये दो बार क्लिक करें. खाली जगहपर माउस का बटण दबाये."
+
+msgid "Add Paths"
+msgstr "पथ जोड़ें"
+
+msgid "Add a new remote mapping."
+msgstr "एक नया रिमोट फिल्टर जोड़ें."
+
+msgid "Remove Paths"
+msgstr "पथ मिटाएँ"
+
+msgid "Remove the currently selected path mapping."
+msgstr "वर्तमान में चयनित पथ फिल्टरों को मिटाएँ."
+
+msgid "Audio Output"
+msgstr "ऑडियो आउटपुट"
 
 msgid "API"
 msgstr "API"
@@ -8053,11 +8095,21 @@ msgstr "आउटपुट उपकरण"
 msgid "Output Device to use for audio playback."
 msgstr "ऑडियो प्लेबैक के लिए प्रयोग करने के लिए आउटपुट उपकरण."
 
+msgid ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+msgstr ""
+"परिवर्तनों को प्रभाव में लाने के लिए, आपको पहले से ही किसी भी फिल्म को फिर "
+"से खोलना होगा या mrv2 को फिर से लोड करना होगा."
+
 msgid "Voice Annotations"
 msgstr "वॉइस टिप्पणियाँ"
 
 msgid "Voice Annotation Preferences."
 msgstr "वॉइस टिप्पणी प्राथमिकताएँ।"
+
+msgid "Voice Over"
+msgstr "वॉइस ओवर"
 
 msgid "Save Path"
 msgstr "सहेजने का पथ"
@@ -8074,28 +8126,32 @@ msgstr "माइक्रोफ़ोन"
 msgid "Volume"
 msgstr "आवाज़ की तीव्रता"
 
-msgid "ComfyUI"
-msgstr "ComfyUI"
+msgid "Send and Accept"
+msgstr "भेजें और स्वीकार करें"
 
-msgid ""
-"Here are the current settings to interact with ComfyUI.  It requires "
-"installation of mrv2's comfyUI nodes."
-msgstr ""
-"यहाँ कॉमफयूआई के साथ व्यवहार करने के लिए वर्तमान सेटिंग हैं. यह mrv2 के Brv2"
-" नोड्स की स्थापना की आवश्यकता है."
+msgid "Send"
+msgstr "भेजें"
 
-msgid "Use ComfyUI Pipe"
-msgstr "कॉमफयू वीआई पाइप इस्तेमाल करें"
+msgid "Accept"
+msgstr "स्वीकारें"
 
-msgid ""
-"This setting opens a pipe to communicate with ComfyUI's "
-"mrv2_save_exr_node.py"
-msgstr ""
-"यह सेटिंग कॉमफयूयू से संपर्क करने के लिए एक पाइप खोलती है मैं हूँ "
-"mrv2_und_und."
+msgid "UI Control"
+msgstr "यूआई नियंत्रण"
+
+msgid "Pan and Zoom"
+msgstr "पैन तथा ज़ूम"
+
+msgid "Color Control"
+msgstr "रंग नियंत्रण"
+
+msgid "Audio Control"
+msgstr "ऑडियो नियंत्रण"
 
 msgid "WebRTC settings"
 msgstr "WebRTC सेटिंग्स"
+
+msgid "Connection"
+msgstr "कनेक्शन"
 
 msgid "WebRTC Presets"
 msgstr "WebRTC प्रीसेट"
@@ -8142,36 +8198,25 @@ msgstr "कैश निर्देशिका"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "वह निर्देशिका जहाँ WebRTC डाउनलोड संग्रहीत किए जाएँगे।"
 
-msgid "On FFmpeg Error"
-msgstr "FFegge त्रुटि पर"
-
-msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
-msgstr "FFPGGe त्रुटि के मामले में लॉग विंडो बर्ताव कैसे समायोजित करें."
-
-msgid "On Error"
-msgstr "त्रुटि पर"
-
-msgid "Adjusts how Log Window behaves in case of error."
-msgstr ""
-"त्रुटि के मामले में लॉग विंडो बर्ताव कैसे दिखाता है यह एडजस्ट करता है."
-
-msgid "Check for Updates"
-msgstr "अद्यतन के लिए जाँचें"
+msgid "ComfyUI"
+msgstr "ComfyUI"
 
 msgid ""
-"Allows you to automatically download updates of mrv2 when it starts up."
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
 msgstr ""
-"जब यह चालू होता है तो आपको एमरवी2 की अद्यतनों को स्वचालित डाउनलोड करने देता "
-"है."
+"यहाँ कॉमफयूआई के साथ व्यवहार करने के लिए वर्तमान सेटिंग हैं. यह mrv2 के Brv2"
+" नोड्स की स्थापना की आवश्यकता है."
 
-msgid "Allow Screen Saver"
-msgstr "स्क्रीन सेवर की अनुमति दें"
+msgid "Use ComfyUI Pipe"
+msgstr "कॉमफयू वीआई पाइप इस्तेमाल करें"
 
 msgid ""
-"This setting controls whether mrv2 will block the screen saver when running."
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
 msgstr ""
-"यह सेटिंग नियंत्रित करती है कि mrv2 के चलने पर क्या वह स्क्रीन सेवर को रोक "
-"देगा।"
+"यह सेटिंग कॉमफयूयू से संपर्क करने के लिए एक पाइप खोलती है मैं हूँ "
+"mrv2_und_und."
 
 msgid "Reset settings to the default."
 msgstr "डिफ़ॉल्ट में सेटिंग फिर सेट करें."
@@ -8192,35 +8237,44 @@ msgstr ""
 msgid "Module"
 msgstr "मोड्यूल"
 
-msgid "User Interface/Elements"
-msgstr "प्रयोक्ता अंतरफलक/तत्व"
+msgid "General/Window Position"
+msgstr "सामान्य/विंडो की स्थिति"
 
-msgid "User Interface/View Window"
-msgstr "प्रयोक्ता अंतरफलक/विंडो देखें"
+msgid "Interface/Appearance"
+msgstr "इंटरफ़ेस/रूप-रंग"
 
-msgid "User Interface/File Requester"
-msgstr "प्रयोक्ता अंतरफलक/फ़ाइल निवेदनर"
+msgid "Interface/Pixel Toolbar"
+msgstr "यूज़र इंटरफ़ेस/पिक्सेल टूलबार"
 
-msgid "User Interface/Fonts"
-msgstr "प्रयोक्ता अंतरफलक/फ़ॉन्ट्स"
+msgid "Interface/Thumbnails"
+msgstr "यूज़र इंटरफ़ेस/थंबनेल"
 
-msgid "User Interface/Language and Colors"
-msgstr "प्रयोक्ता अंतरफलक/भाषा तथा रंग"
+msgid "Timeline/Edit"
+msgstr "टाइमलाइन/संपादन"
 
-msgid "User Interface/Pixel Toolbar"
-msgstr "इंटरफ़ेस/पिक्सेल टूलबार"
+msgid "Graphics/Rendering"
+msgstr "ग्राफ़िक्स/रेंडरिंग"
 
-msgid "User Interface/Positioning"
-msgstr "प्रयोक्ता अंतरफलक/अवस्थिति"
+msgid "Graphics/HDR"
+msgstr "ग्राफ़िक्स/HDR"
 
-msgid "User Interface/Render"
-msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
+msgid "OCIO/Defaults"
+msgstr "OCIO/डिफ़ॉल्ट सेटिंग्स"
 
-msgid "User Interface/Thumbnails"
-msgstr "इंटरफ़ेस/थंबनेल"
+msgid "Loading/File Requester"
+msgstr "लोडिंग/फ़ाइल चयनकर्ता"
 
-msgid "User Interface/Timeline"
-msgstr "प्रयोक्ता अंतरफलक/टाइम-लाइन"
+msgid "Loading/Path Mappings"
+msgstr "लोडिंग/पाथ मैपिंग"
+
+msgid "Audio/Voice Annotations"
+msgstr "ऑडियो/वॉइस टिप्पणियाँ"
+
+msgid "Network/WebRTC"
+msgstr "नेटवर्क/WebRTC"
+
+msgid "Network/ComfyUI"
+msgstr "नेटवर्क/ComfyUI"
 
 msgid "No Audio was Compiled"
 msgstr "कोई ऑडियो कम्पाइल नहीं किया गया"
@@ -9141,6 +9195,45 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
 
+#~ msgid "User Interface"
+#~ msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
+
+#~ msgid "User Interface Elements"
+#~ msgstr "यूज़र इंटरफ़ेस तत्व"
+
+#~ msgid "View Window"
+#~ msgstr "विंडो देखें"
+
+#~ msgid "Language and Colors"
+#~ msgstr "प्रयोक्ता अंतरफलक/भाषा तथा रंग"
+
+#~ msgid "Render"
+#~ msgstr "रेंडरर"
+
+#~ msgid "User Interface/Elements"
+#~ msgstr "प्रयोक्ता अंतरफलक/तत्व"
+
+#~ msgid "User Interface/View Window"
+#~ msgstr "प्रयोक्ता अंतरफलक/विंडो देखें"
+
+#~ msgid "User Interface/File Requester"
+#~ msgstr "प्रयोक्ता अंतरफलक/फ़ाइल निवेदनर"
+
+#~ msgid "User Interface/Fonts"
+#~ msgstr "प्रयोक्ता अंतरफलक/फ़ॉन्ट्स"
+
+#~ msgid "User Interface/Language and Colors"
+#~ msgstr "प्रयोक्ता अंतरफलक/भाषा तथा रंग"
+
+#~ msgid "User Interface/Positioning"
+#~ msgstr "प्रयोक्ता अंतरफलक/अवस्थिति"
+
+#~ msgid "User Interface/Render"
+#~ msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
+
+#~ msgid "User Interface/Timeline"
+#~ msgstr "प्रयोक्ता अंतरफलक/टाइम-लाइन"
+
 #~ msgid "Complexity"
 #~ msgstr "जटिलता"
 
@@ -9181,99 +9274,6 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
-
-#~ msgid "General"
-#~ msgstr "सामान्य"
-
-#~ msgid "Window Position"
-#~ msgstr "विंडो की स्थिति"
-
-#~ msgid "Interface"
-#~ msgstr "इंटरफ़ेस"
-
-#~ msgid "Appearance"
-#~ msgstr "रूप-रंग"
-
-#~ msgid "Language and Theme"
-#~ msgstr "भाषा और थीम"
-
-#~ msgid "View Colors"
-#~ msgstr "व्यू के रंग"
-
-#~ msgid "Timeline and Edit Viewport"
-#~ msgstr "टाइमलाइन और एडिट व्यूपोर्ट"
-
-#~ msgid "Graphics"
-#~ msgstr "ग्राफ़िक्स"
-
-#~ msgid "Rendering"
-#~ msgstr "रेंडरिंग"
-
-#~ msgid "Image Rendering"
-#~ msgstr "इमेज रेंडरिंग"
-
-#~ msgid "HDR Processing"
-#~ msgstr "HDR प्रोसेसिंग"
-
-#~ msgid "Peak Detection"
-#~ msgstr "पीक डिटेक्शन"
-
-#~ msgid "Configuration"
-#~ msgstr "कॉन्फ़िगरेशन"
-
-#~ msgid "Options"
-#~ msgstr "विकल्प"
-
-#~ msgid "Look and View"
-#~ msgstr "रूप-रंग और दृश्य"
-
-#~ msgid "Missing Frames"
-#~ msgstr "गायब फ़्रेम"
-
-#~ msgid "Versions"
-#~ msgstr "संस्करण"
-
-#~ msgid "Audio Output"
-#~ msgstr "ऑडियो आउटपुट"
-
-#~ msgid "Voice Over"
-#~ msgstr "वॉइस ओवर"
-
-#~ msgid "Send and Accept"
-#~ msgstr "भेजें और स्वीकार करें"
-
-#~ msgid "Connection"
-#~ msgstr "कनेक्शन"
-
-#~ msgid "General/Window Position"
-#~ msgstr "सामान्य/विंडो की स्थिति"
-
-#~ msgid "Interface/Appearance"
-#~ msgstr "इंटरफ़ेस/रूप-रंग"
-
-#~ msgid "Timeline/Edit"
-#~ msgstr "टाइमलाइन/संपादन"
-
-#~ msgid "Graphics/Rendering"
-#~ msgstr "ग्राफ़िक्स/रेंडरिंग"
-
-#~ msgid "Graphics/HDR"
-#~ msgstr "ग्राफ़िक्स/HDR"
-
-#~ msgid "Loading/File Requester"
-#~ msgstr "लोडिंग/फ़ाइल चयनकर्ता"
-
-#~ msgid "Loading/Path Mappings"
-#~ msgstr "लोडिंग/पाथ मैपिंग"
-
-#~ msgid "Audio/Voice Annotations"
-#~ msgstr "ऑडियो/वॉइस टिप्पणियाँ"
-
-#~ msgid "Network/WebRTC"
-#~ msgstr "नेटवर्क/WebRTC"
-
-#~ msgid "Network/ComfyUI"
-#~ msgstr "नेटवर्क/ComfyUI"
 
 #, c++-format
 #~ msgid "Show {0} Window."

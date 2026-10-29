@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-28 21:11-0300\n"
+"POT-Creation-Date: 2026-10-29 03:56-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Insecty <insecty_l@163.com>\n"
 "Language: zh-CN\n"
@@ -6725,6 +6725,93 @@ msgstr "内容"
 msgid "OpenEXR's Contents to Save"
 msgstr "OpenEXR 要保存的内容"
 
+msgid "On Demand From Help Menu"
+msgstr "On Demand From Help Menu"
+
+msgid "At Start Up"
+msgstr "启动时"
+
+msgid "Inactive"
+msgstr "未激活"
+
+msgid "Active"
+msgstr "活动"
+
+msgid "Do Nothing"
+msgstr "Do Nothing"
+
+msgid "Open Logs on Dock"
+msgstr "Open Logs on Dock"
+
+msgid "Open Logs on Window"
+msgstr "Open Logs on Window"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "gleam"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Pick View Background Color"
+msgstr "选择视图背景颜色"
+
+msgid "Pick View Text Overlay Color"
+msgstr "选择视图文本叠加颜色"
+
+msgid "Pick View Selection Color"
+msgstr "选择视图选择颜色"
+
+msgid "Pick HUD Color"
+msgstr "选择 HUD 颜色"
+
+msgid "OpenGL only"
+msgstr "仅 OpenGL"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan 和 OpenGL"
+
+msgid "Float Values"
+msgstr "Float Values"
+
+msgid "Hex Values"
+msgstr "Hex Values"
+
+msgid "8-bit Values"
+msgstr "8 位值"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Full Lut, Gamma and Gain"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Original without Gamma, Gain or Lut"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "Small"
+msgstr "Small"
+
+msgid "Normal"
+msgstr "普通"
+
+msgid "Medium"
+msgstr "中"
+
+msgid "Large"
+msgstr "Large"
+
 msgid "0.00 None"
 msgstr "0.00 None"
 
@@ -6773,62 +6860,47 @@ msgstr "4.00 Polyvision"
 msgid "Slow"
 msgstr "慢"
 
-msgid "Medium"
-msgstr "中"
-
 msgid "Fast"
 msgstr "快"
 
-msgid "base"
-msgstr "base"
+msgid "Loop"
+msgstr "Loop"
 
-msgid "plastic"
-msgstr "plastic"
+msgid "Ping Pong"
+msgstr "Ping Pong"
 
-msgid "gtk+"
-msgstr "gtk+"
+msgid "29.97"
+msgstr "29.977"
 
-msgid "gleam"
-msgstr "gleam"
+msgid "14.985"
+msgstr "14.985"
 
-msgid "oxy"
-msgstr "oxy"
+msgid "Button"
+msgstr "按钮"
 
-msgid "Pick View Background Color"
-msgstr "选择视图背景颜色"
+msgid "Video Only"
+msgstr "仅视频"
 
-msgid "Pick View Text Overlay Color"
-msgstr "选择视图文本叠加颜色"
+msgid "Video and Audio"
+msgstr "视频和音频"
 
-msgid "Pick View Selection Color"
-msgstr "选择视图选择颜色"
+msgid "Always"
+msgstr "总是"
 
-msgid "Pick HUD Color"
-msgstr "选择 HUD 颜色"
+msgid "Presentation Mode"
+msgstr "演示介绍模式"
 
-msgid "Float Values"
-msgstr "Float Values"
+msgid "Automatic"
+msgstr "自动"
 
-msgid "Hex Values"
-msgstr "Hex Values"
+msgid "Half Float"
+msgstr "Half Float"
 
-msgid "8-bit Values"
-msgstr "8 位值"
+msgid "Full Float (Accurate)"
+msgstr "Full Float (Accurate)"
 
-msgid "Full Lut, Gamma and Gain"
-msgstr "Full Lut, Gamma and Gain"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Original without Gamma, Gain or Lut"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "Small"
-msgstr "Small"
+msgid "GPU 0"
+msgstr "GPU 0"
 
 msgid "High"
 msgstr "高"
@@ -6851,12 +6923,6 @@ msgstr "Premultiplied"
 msgid "Nearest"
 msgstr "Nearest"
 
-msgid "Normal"
-msgstr "普通"
-
-msgid "Large"
-msgstr "Large"
-
 msgid "Use RGBA"
 msgstr "使用 RGBA"
 
@@ -6868,12 +6934,6 @@ msgstr "忽略"
 
 msgid "Apply"
 msgstr "应用"
-
-msgid "Inactive"
-msgstr "未激活"
-
-msgid "Active"
-msgstr "活动"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6926,33 +6986,6 @@ msgstr "变暗"
 msgid "Highlight"
 msgstr "高亮"
 
-msgid "OpenGL only"
-msgstr "仅 OpenGL"
-
-msgid "Vulkan and OpenGL"
-msgstr "Vulkan 和 OpenGL"
-
-msgid "29.97"
-msgstr "29.977"
-
-msgid "14.985"
-msgstr "14.985"
-
-msgid "Loop"
-msgstr "Loop"
-
-msgid "Ping Pong"
-msgstr "Ping Pong"
-
-msgid "Button"
-msgstr "按钮"
-
-msgid "Video Only"
-msgstr "仅视频"
-
-msgid "Video and Audio"
-msgstr "视频和音频"
-
 msgid "CG"
 msgstr "CG"
 
@@ -6976,24 +7009,6 @@ msgstr "间隔帧"
 
 msgid "Pick Scratch Color"
 msgstr "选择缺失帧的颜色"
-
-msgid "Always"
-msgstr "总是"
-
-msgid "Presentation Mode"
-msgstr "演示介绍模式"
-
-msgid "Automatic"
-msgstr "自动"
-
-msgid "Half Float"
-msgstr "Half Float"
-
-msgid "Full Float (Accurate)"
-msgstr "Full Float (Accurate)"
-
-msgid "GPU 0"
-msgstr "GPU 0"
 
 msgid "X 2"
 msgstr "×2"
@@ -7019,28 +7034,13 @@ msgstr "主目录"
 msgid "Temp Directory"
 msgstr "临时目录"
 
-msgid "Do Nothing"
-msgstr "Do Nothing"
-
-msgid "Open Logs on Dock"
-msgstr "Open Logs on Dock"
-
-msgid "Open Logs on Window"
-msgstr "Open Logs on Window"
-
-msgid "On Demand From Help Menu"
-msgstr "On Demand From Help Menu"
-
-msgid "At Start Up"
-msgstr "启动时"
-
 msgid ""
 "This will reset all your preferences to their default values.  Are you sure "
 "you want to continue?"
 msgstr "这将您所有的首选项重置为默认值。 您确定要继续吗?"
 
-msgid "User Interface"
-msgstr "用户界面"
+msgid "General"
+msgstr "常规"
 
 msgid "Window Behavior"
 msgstr "窗口行为"
@@ -7063,15 +7063,6 @@ msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
 "If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2."
 msgstr "选中时, 仅允许单个的 mrv2 实例。 如果您尝试用不同的图像打开多个 mrv2, 所有这些图像都会被发送到已经打开的 mrv2 中 。"
-
-msgid "Auto Refit Image"
-msgstr "自动缩放图像"
-
-msgid ""
-"When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectively means the video will be resized automatically based on the "
-"size of the window."
-msgstr "当选中时, drv2 将在播放的每段视频上应用一个适合的图像操作。 这实际上意味着视频将根据窗口大小自动调整大小 。"
 
 msgid "Raise on Enter"
 msgstr "进入时唤起"
@@ -7105,222 +7096,28 @@ msgstr "最大化"
 msgid "When selected, mrv2 will start in a maximized window."
 msgstr "选中时, mrv2 将在最大化窗口中启动 。"
 
-msgid "User Interface Elements"
-msgstr "用户界面元素"
+msgid "Behavior"
+msgstr "行为"
 
-msgid "UI Elements"
-msgstr "UU 要素"
-
-msgid "Tooltips"
-msgstr "工具提示"
-
-msgid "Choose whether to show tooltips or not."
-msgstr "选择是否显示工具提示。"
-
-msgid "Menu Bar"
-msgstr "菜单"
-
-msgid "When selected, mrv2 will start with the menu bar already shown."
-msgstr "选中时, mrv2 将从已显示的菜单栏开始 。"
-
-msgid "Topbar"
-msgstr "顶栏"
+msgid "Check for Updates"
+msgstr "检查更新"
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar "
-"visible."
-msgstr "选中时, mrv2 将从通道开始, gain Gamma 工具栏可见 。"
+"Allows you to automatically download updates of mrv2 when it starts up."
+msgstr "允许您在 mrv2 启动时自动下载更新 。"
 
-msgid "Pixel Toolbar"
-msgstr "像素工具栏"
-
-msgid "When selected, mrv2 will start with the pixel toolbar shown."
-msgstr "选中时, mrv2 将从显示的像素工具栏开始 。"
-
-msgid "When selected, mrv2 will start with the timeline shown."
-msgstr "选中时, mrv2 将从显示的时间轴开始 。"
-
-msgid "macOS Menus"
-msgstr "macOS 菜单"
+msgid "Allow Screen Saver"
+msgstr "允许屏幕保护程序"
 
 msgid ""
-"This is a macOS setting only.  When selected the menus will appear on the "
-"system toolbar instead of the mrv2 toolbar."
-msgstr "这只是一个 macOS 设置。 当选中时, 菜单将出现在系统工具栏上, 而不是在 mrv2 工具栏上 。"
+"This setting controls whether mrv2 will block the screen saver when running."
+msgstr "此设置控制 mrv2 在运行时是否会阻止屏幕保护程序。"
 
-msgid "Tool Dock"
-msgstr "Tool Dock"
+msgid "Window Position"
+msgstr "窗口位置"
 
-msgid "When selected, mrv2 will start with the action tool dock already open."
-msgstr "选中时, mrv2 将从Tool dock打开开始 。"
-
-msgid "Status Bar"
-msgstr "状态栏"
-
-msgid "When selected, mrv2 will start with the status bar visible."
-msgstr "选中时, mrv2 将显示状态栏开始 。"
-
-msgid "Only One Panel"
-msgstr "只有一个面板"
-
-msgid ""
-"When selected, mrv2 will start with the only one panel option selected."
-msgstr "选中时, mrv2 将使用唯一选中的一个面板选项开始 。"
-
-msgid "View Window"
-msgstr "视图窗口"
-
-msgid "Defaults"
-msgstr "默认"
-
-msgid "Sets the default gain when mrv2 starts."
-msgstr "设置 mrv2 启动时的默认gain值"
-
-msgid "Sets the default gamma when mrv2 starts."
-msgstr "设置 mrv2 启动时的默认gamma值"
-
-msgid "Crop"
-msgstr "裁剪"
-
-msgid "Allows you to select a standard cropping area around image."
-msgstr "允许您在图像周围选择一个标准裁剪区 。"
-
-msgid "Auto Frame"
-msgstr "自动帧"
-
-msgid "When this is on, View/Auto Frame will be active."
-msgstr "启动时, 视图/ 自动帧将激活 。"
-
-msgid "Safe Areas"
-msgstr "安全区"
-
-msgid "When mrv2 starts, the safe area display will be active by default."
-msgstr "当 mrv2 启动时, 默认情况下安全区域显示将会激活 。"
-
-msgid "OCIO in Top Bar"
-msgstr "OCIO 在顶栏"
-
-msgid ""
-"When mrv2 starts, OCIO should start in the top bar instead of color "
-"adjustments."
-msgstr "当 mrv2 启动时, OCIO 应该从顶部栏开始, 而不是颜色调整设置中"
-
-msgid "Zoom Speed"
-msgstr "缩速速度"
-
-msgid "HUD"
-msgstr "HUD"
-
-msgid ""
-"This area specifies which elements should be shown as a HUD overlay on the "
-"view screen."
-msgstr "此区域指定在视图屏幕上哪些元素应显示为 HUD 重叠 。"
-
-msgid "Frame"
-msgstr "帧"
-
-msgid "Frame Range"
-msgstr "帧范围"
-
-msgid "Frame Count"
-msgstr "帧计数"
-
-msgid "Attributes"
-msgstr "属性"
-
-msgid "Font Size"
-msgstr "字体大小"
-
-msgid "File Requester"
-msgstr "文件请求器"
-
-msgid "Single Click to Travel Drawers"
-msgstr "单击 travel drawers"
-
-msgid ""
-"When using mrv2's file chooser, a single click on a folder will open it."
-msgstr "当使用 mrv2 的文件选择器时, 只要点击一个文件夹就可以打开它 。"
-
-msgid "Thumbnails Active"
-msgstr "开启缩略图"
-
-msgid "Show thumbnails for known files."
-msgstr "显示已知文件的缩略图"
-
-msgid "USD Thumbnails"
-msgstr "USD缩略图"
-
-msgid "Show Thumbnails for USD files (can be slow if they are big)"
-msgstr "显示USD文件缩略图( 如果大的话会慢一些)"
-
-msgid "Use Native File Chooser"
-msgstr "使用本地文件选择器"
-
-msgid ""
-"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
-"standard file chooser will be used."
-msgstr "如果选中的话, 将使用 natlve 文件选择器。 如果未选中, 将使用 mrv2 的标准文件选择器 。"
-
-msgid "Fonts"
-msgstr "字体"
-
-msgid "Menus"
-msgstr "菜单"
-
-msgid "Sets the font to use in menus."
-msgstr "设置菜单中使用的字体。"
-
-msgid "Panels"
-msgstr "面板"
-
-msgid "Sets the font to use in panels. (Not yet working)"
-msgstr "设置要在面板中使用的字体。 (尚未工作)"
-
-msgid "Language and Colors"
-msgstr "语言和颜色"
-
-msgid "Scheme"
-msgstr "主题"
-
-msgid "Color Theme"
-msgstr "颜色主题"
-
-msgid "Reload Theme"
-msgstr "重新载入主题"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr "从 mrv2. colors 文件重新载入主题, 以刷新颜色变化"
-
-msgid "Selects the background color of areas outside the current image."
-msgstr "选择当前图像以外区域的背景颜色。"
-
-msgid "Text Overlay"
-msgstr "文本覆盖"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr "选择在当前图像上打印的文本覆盖颜色。"
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr "在当前图像上选择矩形的颜色。"
-
-msgid "Selects the color of HUD overlays."
-msgstr "选择 HUD 重叠的颜色。"
-
-msgid "RGBA Display"
-msgstr "RGBA 显示"
-
-msgid "Pixel Values"
-msgstr "像素值"
-
-msgid "Secondary Display"
-msgstr "次要显示"
-
-msgid "Luminance"
-msgstr "亮度"
-
-msgid "Positioning"
-msgstr "位置设置"
+msgid "Position and Size"
+msgstr "位置和大小"
 
 msgid "Always Save on Exit"
 msgstr "总是在退出时保存"
@@ -7360,6 +7157,9 @@ msgstr "W :"
 msgid "H:"
 msgstr "H:"
 
+msgid "Screen:"
+msgstr "屏幕:"
+
 msgid "Take Current Window Values"
 msgstr "使用当前窗口值"
 
@@ -7369,26 +7169,149 @@ msgid ""
 "Fixed Size depending what you want to save."
 msgstr "以当前值填充固定位置和固定大小值。 记住要检查固定位置和/ 或固定大小的框, 取决于您要保存的内容 。"
 
-msgid "Screen:"
-msgstr "屏幕:"
+msgid "Interface"
+msgstr "界面"
 
-msgid "Render"
-msgstr "渲染"
+msgid "UI Elements"
+msgstr "UU 要素"
 
-msgid "Debanding (Vulkan)"
-msgstr "去色带 (Vulkan)"
+msgid "Menu Bar"
+msgstr "菜单"
 
-msgid "Makes gradients smoother on video files."
-msgstr "使视频文件中的渐变更加平滑。"
+msgid "When selected, mrv2 will start with the menu bar already shown."
+msgstr "选中时, mrv2 将从已显示的菜单栏开始 。"
 
-msgid "Alpha Blend"
-msgstr "Alpha Blend"
+msgid "Topbar"
+msgstr "顶栏"
 
-msgid "Minify Filter"
-msgstr "Minify Filter"
+msgid ""
+"When selected, mrv2 will start with its channel, gain, gamma toolbar "
+"visible."
+msgstr "选中时, mrv2 将从通道开始, gain Gamma 工具栏可见 。"
 
-msgid "Magnify Filter"
-msgstr "Magnify Filter"
+msgid "Pixel Toolbar"
+msgstr "像素工具栏"
+
+msgid "When selected, mrv2 will start with the pixel toolbar shown."
+msgstr "选中时, mrv2 将从显示的像素工具栏开始 。"
+
+msgid "When selected, mrv2 will start with the timeline shown."
+msgstr "选中时, mrv2 将从显示的时间轴开始 。"
+
+msgid "Status Bar"
+msgstr "状态栏"
+
+msgid "When selected, mrv2 will start with the status bar visible."
+msgstr "选中时, mrv2 将显示状态栏开始 。"
+
+msgid "Tool Dock"
+msgstr "Tool Dock"
+
+msgid "When selected, mrv2 will start with the action tool dock already open."
+msgstr "选中时, mrv2 将从Tool dock打开开始 。"
+
+msgid "Only One Panel"
+msgstr "只有一个面板"
+
+msgid ""
+"When selected, mrv2 will start with the only one panel option selected."
+msgstr "选中时, mrv2 将使用唯一选中的一个面板选项开始 。"
+
+msgid "Tooltips"
+msgstr "工具提示"
+
+msgid "Choose whether to show tooltips or not."
+msgstr "选择是否显示工具提示。"
+
+msgid "macOS Menus"
+msgstr "macOS 菜单"
+
+msgid ""
+"This is a macOS setting only.  When selected the menus will appear on the "
+"system toolbar instead of the mrv2 toolbar."
+msgstr "这只是一个 macOS 设置。 当选中时, 菜单将出现在系统工具栏上, 而不是在 mrv2 工具栏上 。"
+
+msgid "On FFmpeg Error"
+msgstr "FFmpeg 错误"
+
+msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
+msgstr "调整日志窗口在出现 FFmpeg 错误时的行为 。"
+
+msgid "On Error"
+msgstr "发生错误"
+
+msgid "Adjusts how Log Window behaves in case of error."
+msgstr "调整日志窗口发生错误时的行为 。"
+
+msgid "Appearance"
+msgstr "外观"
+
+msgid "Language and Theme"
+msgstr "语言和主题"
+
+msgid "Scheme"
+msgstr "主题"
+
+msgid "Color Theme"
+msgstr "颜色主题"
+
+msgid "Reload Theme"
+msgstr "重新载入主题"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr "从 mrv2. colors 文件重新载入主题, 以刷新颜色变化"
+
+msgid "Fonts"
+msgstr "字体"
+
+msgid "Menus"
+msgstr "菜单"
+
+msgid "Sets the font to use in menus."
+msgstr "设置菜单中使用的字体。"
+
+msgid "Panels"
+msgstr "面板"
+
+msgid "Sets the font to use in panels. (Not yet working)"
+msgstr "设置要在面板中使用的字体。 (尚未工作)"
+
+msgid "View Colors"
+msgstr "视图颜色"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "选择当前图像以外区域的背景颜色。"
+
+msgid "Text Overlay"
+msgstr "文本覆盖"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "选择在当前图像上打印的文本覆盖颜色。"
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr "在当前图像上选择矩形的颜色。"
+
+msgid "HUD"
+msgstr "HUD"
+
+msgid "Selects the color of HUD overlays."
+msgstr "选择 HUD 重叠的颜色。"
+
+msgid "Auto Hide Pixel Bar"
+msgstr "自动隐藏像素栏"
+
+msgid "RGBA Display"
+msgstr "RGBA 显示"
+
+msgid "Pixel Values"
+msgstr "像素值"
+
+msgid "Secondary Display"
+msgstr "次要显示"
+
+msgid "Luminance"
+msgstr "亮度"
 
 msgid "Thumbnails"
 msgstr "缩略图"
@@ -7411,6 +7334,23 @@ msgstr "立体声面板"
 msgid "How to display timeline thumbnails in Stereo Panel."
 msgstr "如何在立体声面板中显示时间线缩略图。"
 
+msgid "Refresh Thumbnails on Panels Manuallly"
+msgstr "手动刷新面板中的缩略图"
+
+msgid ""
+"When this option is on, thumbnails in panels won't be refreshed "
+"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
+msgstr "启用此选项后，面板中的缩略图不会自动刷新。您需要在缩略图上右键单击 -> 更新缩略图。"
+
+msgid "Timeline and Edit Viewport"
+msgstr "时间线和剪辑视口"
+
+msgid "Preview Thumbnails above Timeline"
+msgstr "在时间线上预览缩略图"
+
+msgid "Preview Thumbnails in a rectangle above Timeline"
+msgstr "在时间线上矩形区域预览缩略图"
+
 msgid "Edit Viewport"
 msgstr "编辑视图"
 
@@ -7423,19 +7363,124 @@ msgstr "编辑视口波形"
 msgid "How to display timeline waveforms by default."
 msgstr "如何默认显示时间线波形。"
 
-msgid "Preview Thumbnails above Timeline"
-msgstr "在时间线上预览缩略图"
+msgid "Defaults"
+msgstr "默认"
 
-msgid "Preview Thumbnails in a rectangle above Timeline"
-msgstr "在时间线上矩形区域预览缩略图"
+msgid "Sets the default gain when mrv2 starts."
+msgstr "设置 mrv2 启动时的默认gain值"
 
-msgid "Refresh Thumbnails on Panels Manuallly"
-msgstr "手动刷新面板中的缩略图"
+msgid "Sets the default gamma when mrv2 starts."
+msgstr "设置 mrv2 启动时的默认gamma值"
+
+msgid "Crop"
+msgstr "裁剪"
+
+msgid "Allows you to select a standard cropping area around image."
+msgstr "允许您在图像周围选择一个标准裁剪区 。"
+
+msgid "Zoom Speed"
+msgstr "缩速速度"
+
+msgid "Auto Frame"
+msgstr "自动帧"
+
+msgid "When this is on, View/Auto Frame will be active."
+msgstr "启动时, 视图/ 自动帧将激活 。"
+
+msgid "Safe Areas"
+msgstr "安全区"
+
+msgid "When mrv2 starts, the safe area display will be active by default."
+msgstr "当 mrv2 启动时, 默认情况下安全区域显示将会激活 。"
+
+msgid "Auto Refit Image"
+msgstr "自动缩放图像"
 
 msgid ""
-"When this option is on, thumbnails in panels won't be refreshed "
-"automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
-msgstr "启用此选项后，面板中的缩略图不会自动刷新。您需要在缩略图上右键单击 -> 更新缩略图。"
+"When selected, mrv2 will apply a fit image operation on each video played.  "
+"This effectively means the video will be resized automatically based on the "
+"size of the window."
+msgstr "当选中时, drv2 将在播放的每段视频上应用一个适合的图像操作。 这实际上意味着视频将根据窗口大小自动调整大小 。"
+
+msgid "OCIO in Top Bar"
+msgstr "OCIO 在顶栏"
+
+msgid ""
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+msgstr "当 mrv2 启动时, OCIO 应该从顶部栏开始, 而不是颜色调整设置中"
+
+msgid ""
+"This area specifies which elements should be shown as a HUD overlay on the "
+"view screen."
+msgstr "此区域指定在视图屏幕上哪些元素应显示为 HUD 重叠 。"
+
+msgid "Frame"
+msgstr "帧"
+
+msgid "Frame Range"
+msgstr "帧范围"
+
+msgid "Frame Count"
+msgstr "帧计数"
+
+msgid "Attributes"
+msgstr "属性"
+
+msgid "Font Size"
+msgstr "字体大小"
+
+msgid "Playback"
+msgstr "播放"
+
+msgid "Auto Playback"
+msgstr "自动播放"
+
+msgid "Start Playback when opening files."
+msgstr "打开文件时开始播放"
+
+msgid "Single Click Playback"
+msgstr "点击播放"
+
+msgid ""
+"Start Playback when single clicking the left mouse button on the view window"
+msgstr "在视图窗口上单击鼠标左键时, 开始播放"
+
+msgid "Looping Mode"
+msgstr "循环模式"
+
+msgid "Select default looping mode in timeline."
+msgstr "在时间轴中选择默认循环模式 。"
+
+msgid "Sequences"
+msgstr "序列"
+
+msgid "Speed"
+msgstr "速度"
+
+msgid "Frames Per Second value for sequences that don't have embedded speed."
+msgstr "FPS"
+
+msgid "Sensitivity"
+msgstr "灵敏度"
+
+msgid ""
+"This setting controls the sensitivity of scrubbing.  Smaller values make the"
+" mouse move jump more frames while higher values does the opposite."
+msgstr "此设置控制了scrubbing的灵敏度( SHIFT+鼠标左右键) 。 小值会使鼠标移动更多的帧, 而高值则相反 。"
+
+msgid "Alt Sensitivity"
+msgstr "灵敏度"
+
+msgid ""
+"When using ALT + Left Mouse Button, this setting controls the multiplier "
+"used for slowing the scrubbing."
+msgstr "使用 ALT + 左键鼠标时，此设置控制用于减慢拖动的倍数。"
+
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr "在拖动时开始播放，以便可以听到音频。但拖动可能不够平滑。"
 
 msgid "Display"
 msgstr "显示"
@@ -7443,11 +7488,11 @@ msgstr "显示"
 msgid "How to display timeline by default."
 msgstr "如何默认显示时间轴"
 
-msgid "Start in Edit mode"
-msgstr "从编辑模式开始"
+msgid "Video Start Frame"
+msgstr "视频启动框架"
 
-msgid "Editing viewport will be visible at start up."
-msgstr "编辑视图在启动时将可见"
+msgid "Start value in the timeline where video starts."
+msgstr "开始在视频开始的时间线中开始值 。"
 
 msgid "Remove EDLs in Temporary Folder on Exit"
 msgstr "退出时删除临时文件夹中的 EDL"
@@ -7457,11 +7502,120 @@ msgid ""
 " folder."
 msgstr "选中时, 临时 EDL( 播放列表) 将从临时文件夹中删除 。"
 
-msgid "Video Start Frame"
-msgstr "视频启动框架"
+msgid "Default View"
+msgstr "默认视图"
 
-msgid "Start value in the timeline where video starts."
-msgstr "开始在视频开始的时间线中开始值 。"
+msgid "Show Transitions"
+msgstr "显示过渡"
+
+msgid "Show Transitions in Edit Viewport"
+msgstr "在编辑视图显示切换"
+
+msgid "Show Markers"
+msgstr "显示标记"
+
+msgid "Show Markers in Edit Viewport"
+msgstr "编辑视图中的显示标记"
+
+msgid "Show Waveforms"
+msgstr "显示波形"
+
+msgid "Show Waveforms in Edit Viewport"
+msgstr "在编辑视口中显示波形"
+
+msgid "Show Effects"
+msgstr "显示效果"
+
+msgid "Show Effects in Edit Viewport"
+msgstr "在编辑视口中显示效果"
+
+msgid "Show Thunbnails"
+msgstr "显示缩略图"
+
+msgid "Show Thumbnails in Edit Viewport"
+msgstr "在编辑视口中显示缩略图"
+
+msgid "Start in Edit mode"
+msgstr "从编辑模式开始"
+
+msgid "Editing viewport will be visible at start up."
+msgstr "编辑视图在启动时将可见"
+
+msgid "Editable"
+msgstr "可编辑"
+
+msgid "Editable Timeline Viewport."
+msgstr "可编辑的时线视图"
+
+msgid "Edit Associated Clips"
+msgstr "编辑关联片段"
+
+msgid "Edit Associated Clips."
+msgstr "编辑关联片段"
+
+msgid "Graphics"
+msgstr "图形"
+
+msgid "Monitor VSync"
+msgstr "监视器 VSync"
+
+msgid ""
+"Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
+"the cost of potential tearing in the image."
+msgstr "VSync关闭可以更快地放映片段"
+
+msgid "Color Buffers' Accuracy"
+msgstr "颜色缓冲器的精确度"
+
+msgid ""
+"Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
+"all float information, Half Float preserves most float information and Fast "
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
+msgstr ""
+"颜色缓冲器可以是浮点、 半浮点、 快速或自动。 浮点保存所有浮点信息, 半浮点保存大多数浮点信息, 快速工作为 8 位。 根据图像深度自动选择精度 。"
+
+msgid "Blit"
+msgstr "Blit"
+
+msgid ""
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics"
+" card and OS one can perform better then the other."
+msgstr "视口可以通过位块传输或着色器绘制。根据显卡和操作系统的不同，某种方式可能表现更佳。"
+
+msgid "GPU"
+msgstr "GPU"
+
+msgid "Secondary Viewport"
+msgstr "辅助视口"
+
+msgid ""
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
+msgstr "时间线可以通过位块传输或着色器绘制。根据显卡和操作系统的不同，某种方式可能表现更佳。"
+
+msgid "Rendering"
+msgstr "渲染"
+
+msgid "Image Rendering"
+msgstr "图像渲染"
+
+msgid "Debanding (Vulkan)"
+msgstr "去色带 (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "使视频文件中的渐变更加平滑。"
+
+msgid "Alpha Blend"
+msgstr "Alpha Blend"
+
+msgid "Minify Filter"
+msgstr "Minify Filter"
+
+msgid "Magnify Filter"
+msgstr "Magnify Filter"
+
+msgid "HDR Processing"
+msgstr "HDR 处理"
 
 msgid "Prefer RGB (Vulkan)"
 msgstr "优先使用 RGB（Vulkan）"
@@ -7485,6 +7639,9 @@ msgstr "色调映射算法"
 
 msgid "Gamut Mapping"
 msgstr "色域映射"
+
+msgid "Peak Detection"
+msgstr "峰值检测"
 
 msgid "HDR Peak Detection"
 msgstr "HDR 峰值检测"
@@ -7520,111 +7677,14 @@ msgstr "高峰值检测上限"
 msgid "High Limit to determine scene change."
 msgstr "用于判定场景切换的上限值。"
 
-msgid "Playback"
-msgstr "播放"
-
-msgid "Auto Playback"
-msgstr "自动播放"
-
-msgid "Start Playback when opening files."
-msgstr "打开文件时开始播放"
-
-msgid "Single Click Playback"
-msgstr "点击播放"
-
-msgid ""
-"Start Playback when single clicking the left mouse button on the view window"
-msgstr "在视图窗口上单击鼠标左键时, 开始播放"
-
-msgid "Auto Hide Pixel Bar"
-msgstr "自动隐藏像素栏"
-
-msgid "Sequences"
-msgstr "序列"
-
-msgid "Speed"
-msgstr "速度"
-
-msgid "Frames Per Second value for sequences that don't have embedded speed."
-msgstr "FPS"
-
-msgid "Looping Mode"
-msgstr "循环模式"
-
-msgid "Select default looping mode in timeline."
-msgstr "在时间轴中选择默认循环模式 。"
-
-msgid "Sensitivity"
-msgstr "灵敏度"
-
-msgid ""
-"This setting controls the sensitivity of scrubbing.  Smaller values make the"
-" mouse move jump more frames while higher values does the opposite."
-msgstr "此设置控制了scrubbing的灵敏度( SHIFT+鼠标左右键) 。 小值会使鼠标移动更多的帧, 而高值则相反 。"
-
-msgid ""
-"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
-"less smooth."
-msgstr "在拖动时开始播放，以便可以听到音频。但拖动可能不够平滑。"
-
-msgid "Alt Sensitivity"
-msgstr "灵敏度"
-
-msgid ""
-"When using ALT + Left Mouse Button, this setting controls the multiplier "
-"used for slowing the scrubbing."
-msgstr "使用 ALT + 左键鼠标时，此设置控制用于减慢拖动的倍数。"
-
-msgid "Default View"
-msgstr "默认视图"
-
-msgid "Show Transitions"
-msgstr "显示过渡"
-
-msgid "Show Transitions in Edit Viewport"
-msgstr "在编辑视图显示切换"
-
-msgid "Show Markers"
-msgstr "显示标记"
-
-msgid "Show Markers in Edit Viewport"
-msgstr "编辑视图中的显示标记"
-
-msgid "Show Effects"
-msgstr "显示效果"
-
-msgid "Show Effects in Edit Viewport"
-msgstr "在编辑视口中显示效果"
-
-msgid "Show Waveforms"
-msgstr "显示波形"
-
-msgid "Show Waveforms in Edit Viewport"
-msgstr "在编辑视口中显示波形"
-
-msgid "Show Thunbnails"
-msgstr "显示缩略图"
-
-msgid "Show Thumbnails in Edit Viewport"
-msgstr "在编辑视口中显示缩略图"
-
-msgid "Behavior"
-msgstr "行为"
-
-msgid "Edit Associated Clips"
-msgstr "编辑关联片段"
-
-msgid "Edit Associated Clips."
-msgstr "编辑关联片段"
-
-msgid "Editable"
-msgstr "可编辑"
-
-msgid "Editable Timeline Viewport."
-msgstr "可编辑的时线视图"
-
 msgid "OCIO"
 msgstr "OCIO"
+
+msgid "Configuration"
+msgstr "配置"
+
+msgid "Built-in Configs"
+msgstr "内建配置"
 
 msgid "OCIO Config File"
 msgstr "OCIO 配置文件"
@@ -7634,11 +7694,11 @@ msgid ""
 "environment variable OCIO, which takes precedence over any saved setting."
 msgstr "这是您配置的 ocio 文件的路径。 它可以设置为环境变量OCIO, 环境变量OCIO 优先于任何保存的设置 。"
 
-msgid "Built-in Configs"
-msgstr "内建配置"
-
 msgid "Pick a config.ocio file from disk."
 msgstr "从磁盘中选取config.ocio配置文件 。"
+
+msgid "Options"
+msgstr "选项"
 
 msgid "Set Auto ICS as default"
 msgstr "将自动 ICS 设置为默认值"
@@ -7658,14 +7718,6 @@ msgid ""
 " it will be used to be set as default."
 msgstr "当此选项打开时, 您的 config. ocio 有默认显示和视图时, 它将被设置为默认 。"
 
-msgid "No OCIO on Videos or sRGB/BT709 data"
-msgstr "视频或 sRGB/BT709 数据不使用 OCIO"
-
-msgid ""
-"If playing a video or showing an SDR image, OCIO will be turned off "
-"automatically."
-msgstr "如果正在播放视频或显示 SDR 图像，OCIO 将自动关闭。"
-
 msgid "Use Active Views and Active Displays"
 msgstr "使用活动视图和活动显示"
 
@@ -7674,8 +7726,13 @@ msgid ""
 "are not taken into account."
 msgstr "当此选项关闭时, OCIO 文件会带有活动视图: 活动显示: 不考虑 。"
 
-msgid "OCIO Defaults"
-msgstr "OCIO 默认设置"
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "视频或 sRGB/BT709 数据不使用 OCIO"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr "如果正在播放视频或显示 SDR 图像，OCIO 将自动关闭。"
 
 msgid "8-bits"
 msgstr "8 位"
@@ -7716,6 +7773,9 @@ msgid ""
 "(OpenEXR, hdr, dpx, etc.)"
 msgstr "半图像和浮动图像( OpenEXR、 hdr、 dpx 等) OCIO 默认图像颜色空间的名称"
 
+msgid "Look and View"
+msgstr "外观和显示"
+
 msgid "Default Look"
 msgstr "默认外观"
 
@@ -7728,25 +7788,8 @@ msgstr "默认显示/视图"
 msgid "Loading"
 msgstr "正在载入"
 
-msgid "Version Regex"
-msgstr "版本 Regex"
-
-msgid ""
-"Regular Expression used to match clip versions.  Must group three things "
-"(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with"
-" _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
-msgstr ""
-"用于匹配剪辑版本的正则表达式。必须分组三部分（前缀、数字和后缀）。如果保持默认值(_v)，它会自动创建一个正则表达式来匹配文件、目录或两者名称中带有_v定义的版本。例如：gizmo_v001.0001.exr"
-
-msgid "Maximum Images Apart"
-msgstr "最大图像版本差"
-
-msgid ""
-"When searching for a version, this value is the maximum version apart from "
-"each other when searching the first or last version."
-msgstr "搜索版本时, 此值是搜索第一个版本或最后一个版本时彼此不同的最大版本 。"
+msgid "Missing Frames"
+msgstr "缺失帧"
 
 msgid "Missing Frame"
 msgstr "缺失帧"
@@ -7791,6 +7834,59 @@ msgstr "缺失帧线条宽度"
 msgid "Scratch Lines Width."
 msgstr "缺失帧线条宽度。"
 
+msgid "Versions"
+msgstr "版本"
+
+msgid "Version Regex"
+msgstr "版本 Regex"
+
+msgid ""
+"Regular Expression used to match clip versions.  Must group three things "
+"(prefix, number and suffix). If left on its default value (_v), it will "
+"automatically be created a regular expression to match versions defined with"
+" _v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
+msgstr ""
+"用于匹配剪辑版本的正则表达式。必须分组三部分（前缀、数字和后缀）。如果保持默认值(_v)，它会自动创建一个正则表达式来匹配文件、目录或两者名称中带有_v定义的版本。例如：gizmo_v001.0001.exr"
+
+msgid "Maximum Images Apart"
+msgstr "最大图像版本差"
+
+msgid ""
+"When searching for a version, this value is the maximum version apart from "
+"each other when searching the first or last version."
+msgstr "搜索版本时, 此值是搜索第一个版本或最后一个版本时彼此不同的最大版本 。"
+
+msgid "File Requester"
+msgstr "文件请求器"
+
+msgid "Use Native File Chooser"
+msgstr "使用本地文件选择器"
+
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr "如果选中的话, 将使用 natlve 文件选择器。 如果未选中, 将使用 mrv2 的标准文件选择器 。"
+
+msgid "Single Click to Travel Drawers"
+msgstr "单击 travel drawers"
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr "当使用 mrv2 的文件选择器时, 只要点击一个文件夹就可以打开它 。"
+
+msgid "Thumbnails Active"
+msgstr "开启缩略图"
+
+msgid "Show thumbnails for known files."
+msgstr "显示已知文件的缩略图"
+
+msgid "USD Thumbnails"
+msgstr "USD缩略图"
+
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr "显示USD文件缩略图( 如果大的话会慢一些)"
+
 msgid "Path Mappings"
 msgstr "路径映射"
 
@@ -7811,6 +7907,53 @@ msgstr "删除路径"
 msgid "Remove the currently selected path mapping."
 msgstr "删除当前选中的路径映射"
 
+msgid "Audio Output"
+msgstr "音频输出"
+
+msgid "API"
+msgstr "API"
+
+msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
+msgstr "用于支持多个 API(仅Linux)平台的音频 API"
+
+msgid "Output Device"
+msgstr "输出设备"
+
+msgid "Output Device to use for audio playback."
+msgstr "用于音频播放的输出设备 。"
+
+msgid ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+msgstr "更改要生效, 您需要重新打开任何已经播放或重新装入 mrv2 的电影 。"
+
+msgid "Voice Annotations"
+msgstr "语音注释"
+
+msgid "Voice Annotation Preferences."
+msgstr "语音注释首选项。"
+
+msgid "Voice Over"
+msgstr "旁白录音"
+
+msgid "Save Path"
+msgstr "保存路径"
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr "从磁盘中选择一个目录来保存配音。"
+
+msgid "Playback Speed"
+msgstr "播放速度"
+
+msgid "Microphone"
+msgstr "麦克风"
+
+msgid "Volume"
+msgstr "音量"
+
+msgid "Send and Accept"
+msgstr "发送和接受"
+
 msgid "Send"
 msgstr "发送"
 
@@ -7829,99 +7972,11 @@ msgstr "色彩控制"
 msgid "Audio Control"
 msgstr "音频控制"
 
-msgid "Monitor VSync"
-msgstr "监视器 VSync"
-
-msgid ""
-"Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
-"the cost of potential tearing in the image."
-msgstr "VSync关闭可以更快地放映片段"
-
-msgid "Color Buffers' Accuracy"
-msgstr "颜色缓冲器的精确度"
-
-msgid ""
-"Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
-"all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy based on image depth."
-msgstr ""
-"颜色缓冲器可以是浮点、 半浮点、 快速或自动。 浮点保存所有浮点信息, 半浮点保存大多数浮点信息, 快速工作为 8 位。 根据图像深度自动选择精度 。"
-
-msgid "Blit"
-msgstr "Blit"
-
-msgid ""
-"Viewports can be drawn with blitting or with shaders.  Depending on graphics"
-" card and OS one can perform better then the other."
-msgstr "视口可以通过位块传输或着色器绘制。根据显卡和操作系统的不同，某种方式可能表现更佳。"
-
-msgid "GPU"
-msgstr "GPU"
-
-msgid "Secondary Viewport"
-msgstr "辅助视口"
-
-msgid ""
-"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
-"card and OS one can perform better than the other."
-msgstr "时间线可以通过位块传输或着色器绘制。根据显卡和操作系统的不同，某种方式可能表现更佳。"
-
-msgid ""
-"For changes to take effect, you will need to re-open any movies already "
-"playing or reload mrv2."
-msgstr "更改要生效, 您需要重新打开任何已经播放或重新装入 mrv2 的电影 。"
-
-msgid "API"
-msgstr "API"
-
-msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
-msgstr "用于支持多个 API(仅Linux)平台的音频 API"
-
-msgid "Output Device"
-msgstr "输出设备"
-
-msgid "Output Device to use for audio playback."
-msgstr "用于音频播放的输出设备 。"
-
-msgid "Voice Annotations"
-msgstr "语音注释"
-
-msgid "Voice Annotation Preferences."
-msgstr "语音注释首选项。"
-
-msgid "Save Path"
-msgstr "保存路径"
-
-msgid "Pick a directory from disk to save voice overs.."
-msgstr "从磁盘中选择一个目录来保存配音。"
-
-msgid "Playback Speed"
-msgstr "播放速度"
-
-msgid "Microphone"
-msgstr "麦克风"
-
-msgid "Volume"
-msgstr "音量"
-
-msgid "ComfyUI"
-msgstr "ComfyUI"
-
-msgid ""
-"Here are the current settings to interact with ComfyUI.  It requires "
-"installation of mrv2's comfyUI nodes."
-msgstr "这是与ComfyUI互动的当前设置。 它需要安装 ComfyUI 节点 。"
-
-msgid "Use ComfyUI Pipe"
-msgstr "使用ComfyUI 管道"
-
-msgid ""
-"This setting opens a pipe to communicate with ComfyUI's "
-"mrv2_save_exr_node.py"
-msgstr "此设置打开管道, 以便与 ComfyUI 的 drv2_ save_ exr_ node 进行通讯 。"
-
 msgid "WebRTC settings"
 msgstr "WebRTC 设置"
+
+msgid "Connection"
+msgstr "连接"
 
 msgid "WebRTC Presets"
 msgstr "WebRTC 预设"
@@ -7965,31 +8020,21 @@ msgstr "缓存目录"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "用于存放 WebRTC 下载内容的目录。"
 
-msgid "On FFmpeg Error"
-msgstr "FFmpeg 错误"
-
-msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
-msgstr "调整日志窗口在出现 FFmpeg 错误时的行为 。"
-
-msgid "On Error"
-msgstr "发生错误"
-
-msgid "Adjusts how Log Window behaves in case of error."
-msgstr "调整日志窗口发生错误时的行为 。"
-
-msgid "Check for Updates"
-msgstr "检查更新"
+msgid "ComfyUI"
+msgstr "ComfyUI"
 
 msgid ""
-"Allows you to automatically download updates of mrv2 when it starts up."
-msgstr "允许您在 mrv2 启动时自动下载更新 。"
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
+msgstr "这是与ComfyUI互动的当前设置。 它需要安装 ComfyUI 节点 。"
 
-msgid "Allow Screen Saver"
-msgstr "允许屏幕保护程序"
+msgid "Use ComfyUI Pipe"
+msgstr "使用ComfyUI 管道"
 
 msgid ""
-"This setting controls whether mrv2 will block the screen saver when running."
-msgstr "此设置控制 mrv2 在运行时是否会阻止屏幕保护程序。"
+"This setting opens a pipe to communicate with ComfyUI's "
+"mrv2_save_exr_node.py"
+msgstr "此设置打开管道, 以便与 ComfyUI 的 drv2_ save_ exr_ node 进行通讯 。"
 
 msgid "Reset settings to the default."
 msgstr "将设置重置为默认值。"
@@ -8008,35 +8053,44 @@ msgstr "接受设置但不要保存。 当退出程序时, 它们会被保存 �
 msgid "Module"
 msgstr "模块"
 
-msgid "User Interface/Elements"
-msgstr "用户界面/元素"
+msgid "General/Window Position"
+msgstr "常规/窗口位置"
 
-msgid "User Interface/View Window"
-msgstr "用户界面/查看窗口"
+msgid "Interface/Appearance"
+msgstr "界面/外观"
 
-msgid "User Interface/File Requester"
-msgstr "用户界面/文件请求器"
-
-msgid "User Interface/Fonts"
-msgstr "用户界面/字体"
-
-msgid "User Interface/Language and Colors"
-msgstr "用户界面/语言和颜色"
-
-msgid "User Interface/Pixel Toolbar"
+msgid "Interface/Pixel Toolbar"
 msgstr "用户界面/像素工具栏"
 
-msgid "User Interface/Positioning"
-msgstr "用户界面/定位位置"
-
-msgid "User Interface/Render"
-msgstr "用户界面/渲染"
-
-msgid "User Interface/Thumbnails"
+msgid "Interface/Thumbnails"
 msgstr "用户界面/缩略图"
 
-msgid "User Interface/Timeline"
-msgstr "用户界面/时间线"
+msgid "Timeline/Edit"
+msgstr "时间线/剪辑"
+
+msgid "Graphics/Rendering"
+msgstr "图形/渲染"
+
+msgid "Graphics/HDR"
+msgstr "图形/HDR"
+
+msgid "OCIO/Defaults"
+msgstr "OCIO/默认设置"
+
+msgid "Loading/File Requester"
+msgstr "加载/文件选择器"
+
+msgid "Loading/Path Mappings"
+msgstr "加载/路径映射"
+
+msgid "Audio/Voice Annotations"
+msgstr "音频/语音注释"
+
+msgid "Network/WebRTC"
+msgstr "网络/WebRTC"
+
+msgid "Network/ComfyUI"
+msgstr "网络/ComfyUI"
 
 msgid "No Audio was Compiled"
 msgstr "没有编译音频"
@@ -8956,6 +9010,45 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "任务信息失败"
 
+#~ msgid "User Interface"
+#~ msgstr "用户界面"
+
+#~ msgid "User Interface Elements"
+#~ msgstr "用户界面元素"
+
+#~ msgid "View Window"
+#~ msgstr "视图窗口"
+
+#~ msgid "Language and Colors"
+#~ msgstr "语言和颜色"
+
+#~ msgid "Render"
+#~ msgstr "渲染"
+
+#~ msgid "User Interface/Elements"
+#~ msgstr "用户界面/元素"
+
+#~ msgid "User Interface/View Window"
+#~ msgstr "用户界面/查看窗口"
+
+#~ msgid "User Interface/File Requester"
+#~ msgstr "用户界面/文件请求器"
+
+#~ msgid "User Interface/Fonts"
+#~ msgstr "用户界面/字体"
+
+#~ msgid "User Interface/Language and Colors"
+#~ msgstr "用户界面/语言和颜色"
+
+#~ msgid "User Interface/Positioning"
+#~ msgstr "用户界面/定位位置"
+
+#~ msgid "User Interface/Render"
+#~ msgstr "用户界面/渲染"
+
+#~ msgid "User Interface/Timeline"
+#~ msgstr "用户界面/时间线"
+
 #~ msgid "Complexity"
 #~ msgstr "复杂程度"
 
@@ -8996,99 +9089,6 @@ msgstr "任务信息失败"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "用于文本绘图的无效字体"
-
-#~ msgid "General"
-#~ msgstr "常规"
-
-#~ msgid "Window Position"
-#~ msgstr "窗口位置"
-
-#~ msgid "Interface"
-#~ msgstr "界面"
-
-#~ msgid "Appearance"
-#~ msgstr "外观"
-
-#~ msgid "Language and Theme"
-#~ msgstr "语言和主题"
-
-#~ msgid "View Colors"
-#~ msgstr "视图颜色"
-
-#~ msgid "Timeline and Edit Viewport"
-#~ msgstr "时间线和剪辑视口"
-
-#~ msgid "Graphics"
-#~ msgstr "图形"
-
-#~ msgid "Rendering"
-#~ msgstr "渲染"
-
-#~ msgid "Image Rendering"
-#~ msgstr "图像渲染"
-
-#~ msgid "HDR Processing"
-#~ msgstr "HDR 处理"
-
-#~ msgid "Peak Detection"
-#~ msgstr "峰值检测"
-
-#~ msgid "Configuration"
-#~ msgstr "配置"
-
-#~ msgid "Options"
-#~ msgstr "选项"
-
-#~ msgid "Look and View"
-#~ msgstr "外观和显示"
-
-#~ msgid "Missing Frames"
-#~ msgstr "缺失帧"
-
-#~ msgid "Versions"
-#~ msgstr "版本"
-
-#~ msgid "Audio Output"
-#~ msgstr "音频输出"
-
-#~ msgid "Voice Over"
-#~ msgstr "旁白录音"
-
-#~ msgid "Send and Accept"
-#~ msgstr "发送和接受"
-
-#~ msgid "Connection"
-#~ msgstr "连接"
-
-#~ msgid "General/Window Position"
-#~ msgstr "常规/窗口位置"
-
-#~ msgid "Interface/Appearance"
-#~ msgstr "界面/外观"
-
-#~ msgid "Timeline/Edit"
-#~ msgstr "时间线/剪辑"
-
-#~ msgid "Graphics/Rendering"
-#~ msgstr "图形/渲染"
-
-#~ msgid "Graphics/HDR"
-#~ msgstr "图形/HDR"
-
-#~ msgid "Loading/File Requester"
-#~ msgstr "加载/文件选择器"
-
-#~ msgid "Loading/Path Mappings"
-#~ msgstr "加载/路径映射"
-
-#~ msgid "Audio/Voice Annotations"
-#~ msgstr "音频/语音注释"
-
-#~ msgid "Network/WebRTC"
-#~ msgstr "网络/WebRTC"
-
-#~ msgid "Network/ComfyUI"
-#~ msgstr "网络/ComfyUI"
 
 #, c++-format
 #~ msgid "Show {0} Window."
