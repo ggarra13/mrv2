@@ -88,17 +88,22 @@ def download_with_best_mirror(file_url, output_path, filename):
 
     global num_downloads
     downloaded = False
+    temp_output_path = output_path + ".part"
+
     for latency, mirror, final_url in ranked:
         print(f"Trying mirror '{mirror}' ({latency:.2f}s)...")
         try:
-            # Check if file exists and get current size for resume            
+            # Check if final file already exists and is complete
+            # (Optional: you can also check remote size against output_path directly)
+            
+            # Check temp file size for resume
             resume_pos = (
-                os.path.getsize(output_path)
-                if os.path.exists(output_path)
+                os.path.getsize(temp_output_path)
+                if os.path.exists(temp_output_path)
                 else 0
             )
 
-            # Get the complete remote file size, following redirects.
+            # Get the complete remote file size
             head_response = requests.head(
                 final_url,
                 headers=headers,
@@ -114,19 +119,23 @@ def download_with_best_mirror(file_url, output_path, filename):
                 else 0
             )
 
+            if remote_size > 0 and os.path.exists(output_path):
+                if os.path.getsize(output_path) == remote_size:
+                    print(f"✓ Already complete: {filename} ({remote_size} bytes)")
+                    downloaded = True
+                    break
+
             if remote_size > 0 and resume_pos == remote_size:
-                print(
-                    f"✓ Already complete: {filename} "
-                    f"({remote_size} bytes)"
-                )
+                print(f"✓ Temp file already complete, finalizing: {filename}")
+                os.replace(temp_output_path, output_path)
                 downloaded = True
                 break
 
-            # Do not append if the remote size is unknown or the
-            # local file is larger than the remote file.
             if remote_size <= 0 or resume_pos > remote_size:
                 print(f"Restarting download: {filename}")
                 resume_pos = 0
+                if os.path.exists(temp_output_path):
+                    os.remove(temp_output_path)
 
             download_headers = headers.copy()
             if resume_pos > 0:
@@ -145,17 +154,13 @@ def download_with_best_mirror(file_url, output_path, filename):
                     content_range = response.headers.get("Content-Range", "")
                     expected_prefix = f"bytes {resume_pos}-"
 
-                    if resume_pos == 0 or not content_range.startswith(
-                        expected_prefix
-                    ):
+                    if resume_pos == 0 or not content_range.startswith(expected_prefix):
                         raise requests.exceptions.RequestException(
                             f"Unexpected Content-Range: {content_range}"
                         )
-
                     mode = "ab"
 
                 elif response.status_code == 200:
-                    # The server ignored Range or sent the entire file.
                     mode = "wb"
                     resume_pos = 0
 
@@ -165,21 +170,21 @@ def download_with_best_mirror(file_url, output_path, filename):
                         f"Unexpected HTTP status: {response.status_code}"
                     )
 
-                with open(output_path, mode) as f:
-                    for chunk in response.iter_content(
-                        chunk_size=4 * 1024 * 1024
-                    ):
+                with open(temp_output_path, mode) as f:
+                    for chunk in response.iter_content(chunk_size=4 * 1024 * 1024):
                         if chunk:
                             print("*", end="", flush=True)
                             f.write(chunk)
 
-            actual_size = os.path.getsize(output_path)
+            actual_size = os.path.getsize(temp_output_path)
 
             if remote_size > 0 and actual_size != remote_size:
                 raise requests.exceptions.RequestException(
-                    f"Size mismatch: got {actual_size}, "
-                    f"expected {remote_size}"
+                    f"Size mismatch: got {actual_size}, expected {remote_size}"
                 )
+
+            # Move temp file to final destination only after successful verification
+            os.replace(temp_output_path, output_path)
 
             print(
                 f"\n✓ Download complete: {os.path.abspath(output_path)} "
@@ -195,7 +200,7 @@ def download_with_best_mirror(file_url, output_path, filename):
         print(f"✗ ALL MIRRORS FAILED FOR: {filename}")
     else:
         num_downloads += 1
-    
+
 def parse_sourceforge_page(html_content, base_url):
     """
     Parse SourceForge page and extract file download links.
