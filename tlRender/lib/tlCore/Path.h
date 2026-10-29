@@ -6,6 +6,7 @@
 #include <tlCore/Range.h>
 #include <tlCore/Util.h>
 
+#include <cstdint>
 #include <filesystem>
 #include <iostream>
 #include <optional>
@@ -364,7 +365,7 @@ namespace tl
         {
             Path                            path;
             bool                            isDir = false;
-            size_t                          size = 0;
+            uintmax_t                       size = 0;
             std::filesystem::file_time_type time;
 
             bool operator == (const DirEntry&) const;
