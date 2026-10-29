@@ -422,10 +422,6 @@ namespace tl
             {
                 avformat_close_input(&_avFormatContext);
             }
-            if (_avIOContext && _avIOContext->buffer)
-            {
-                av_free(_avIOContext->buffer);
-            }
             if (_avIOContext)
             {
                 avio_context_free(&_avIOContext);
