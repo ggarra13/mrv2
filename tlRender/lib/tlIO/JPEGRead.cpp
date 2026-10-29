@@ -108,7 +108,15 @@ namespace tl
                     if (!jpegCreate(&_jpeg.decompress, &_error))
                     {
                         throw std::runtime_error(
-                            string::Format("{0}: Cannot open").arg(fileName));
+                            string::Format("{0}: Cannot open jpeg create: {1}")
+                            .arg(fileName)
+                            .arg(_error.messages.empty() ? std::string() : _error.messages.back()));
+                    }
+                    if (!jpegCreate(&_jpeg.decompress, &_error))
+                    {
+                        throw std::runtime_error(
+                            string::Format("{0}: Cannot open jpeg create").
+                            arg(fileName));
                     }
                     if (memory)
                     {
@@ -117,7 +125,7 @@ namespace tl
                                 &_error))
                         {
                             throw std::runtime_error(
-                                string::Format("{0}: Cannot open")
+                                string::Format("{0}: Cannot open jpeg from memory")
                                     .arg(fileName));
                         }
                     }
@@ -136,13 +144,13 @@ namespace tl
                         if (!_f.p)
                         {
                             throw std::runtime_error(
-                                string::Format("{0}: Cannot open")
+                                string::Format("{0}: Cannot open jpeg")
                                     .arg(fileName));
                         }
                         if (!jpegOpen(_f.p, &_jpeg.decompress, &_error))
                         {
                             throw std::runtime_error(
-                                string::Format("{0}: Cannot open")
+                                string::Format("{0}: Cannot open jpeg with function")
                                     .arg(fileName));
                         }
                     }
@@ -152,7 +160,7 @@ namespace tl
                     if (image::PixelType::kNone == pixelType)
                     {
                         throw std::runtime_error(
-                            string::Format("{0}: File not supported")
+                            string::Format("{0}: File not supported for jpeg")
                                 .arg(fileName));
                     }
 

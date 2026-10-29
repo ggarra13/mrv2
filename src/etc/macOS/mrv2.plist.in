@@ -23,11 +23,11 @@
     <key>CFBundleVersion</key>
     <string>@mrv2_VERSION@</string>
     <key>LSMinimumSystemVersion</key>
-    <string>10.15</string>
+    <string>12.00</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright (c) 2022-Present Film Aura, LLC.</string>
+    <string>Copyright (c) 2022-Present Contributors to the mrv2 project.</string>
     <key>NSHighResolutionCapable</key>
     <true/>
 

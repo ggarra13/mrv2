@@ -41,7 +41,7 @@ namespace tl
             std::map<std::string, io::FileType> exts;
             exts[".jpg"] = io::FileType::Sequence;
             exts[".jpeg"] = io::FileType::Sequence;
-            IReadPlugin::_init("STB", exts, logSystem);
+            IReadPlugin::_init("JPEG", exts, logSystem);
         }
 
         std::shared_ptr<ReadPlugin> ReadPlugin::create(
@@ -82,7 +82,7 @@ namespace tl
                  !_isCompatible(info.video[0], options)))
                 throw std::runtime_error(string::Format("{0}: {1}")
                                          .arg(path.get())
-                                         .arg("Unsupported video depth"));
+                                         .arg("Unsupported video depth for jpeg"));
             return Write::create(path, info, options, _logSystem.lock());
         }
 
