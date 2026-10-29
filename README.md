@@ -124,7 +124,7 @@ The core of the playback engine is a custom version of tlRender (www.github.com/
 
 Currently supported:
 
-- Movie files (H264, MP4, VPX, WEBM, AV1, etc.)
+- Movie files (H264, MP4, VPX, WEBM, AV1, etc.) without needing to install FFmpeg binaries.
 - Forward and Reverse Playback of both movies and image sequences.
 - Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP, PSD)
 - RAW Camera Formats (CR2, CR3, X3F, etc).
@@ -146,7 +146,9 @@ Currently supported:
 - Editing
 - Pen and Tablet support on all platforms
 - OpenGL and Vulkan backends
-- Linux and Windows aarch64
+- Linux and Windows aarch64 and macOS arm64
+- Link Annotations for attaching an image a description or AI prompt and access can be from Python.
+- Voice Annotations for faster review sessions and, in the future, for AI integration without the need for a prompt.
 - Video Toolbox support for decoding and encoding under some Macs (Mac Book
   Pros, etc).
 
