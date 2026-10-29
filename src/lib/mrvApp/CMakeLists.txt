@@ -17,6 +17,9 @@ set(SOURCES
     mrvMainControl.cpp
     mrvSettingsObject.cpp
 )
+if(APPLE)
+    list(APPEND SOURCES mrvApp_macOS.mm)
+endif()
 
 add_library(mrvApp ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
@@ -24,6 +27,9 @@ files_to_absolute_paths()
 
 set(LIBRARIES mrvBaseApp)
 list(APPEND LIBRARIES mrvPanels mrvOptions)
+if(APPLE)
+    list(APPEND LIBRARIES "-framework Cocoa")
+endif()
 
 if (TLRENDER_NDI)
     list(APPEND LIBRARIES tlRender::tlDevice)
