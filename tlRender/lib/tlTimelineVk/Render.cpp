@@ -1773,7 +1773,7 @@ namespace tl
 
             if (p.sdrOutput == value)
                 return;
-            
+
             p.sdrOutput = value;
 
             p.shaders["display"].reset();
@@ -3480,19 +3480,49 @@ namespace tl
 
             if (recreateShader)
             {
-                // Stage pipeline and pipeline layouts for cleanup.
-                if (p.pipelines.count("display") != 0)
+                // Stage the display pipelines and pipeline layout for cleanup.
+                //
+                // Pipelines are cached under "name" for the main target and
+                // "name@group" for every other target (see pipelineKey() in
+                // RenderVulkan.cpp), so looking up the plain "display" key
+                // only finds the main target's pipeline.  Grouped pipelines
+                // (annotations, overlay, ...) would stay in the cache holding
+                // a destroyed layout and a stale shader module.  Matching on
+                // the layout being retired catches all of them.
+                const VkPipelineLayout oldLayout = p.pipelineLayouts["display"];
+                if (oldLayout != VK_NULL_HANDLE)
                 {
-                    auto pair = p.pipelines["display"];
-                    p.garbage[p.frameIndex].pipelines.push_back(pair.second);
+                    for (auto it = p.pipelines.begin();
+                         it != p.pipelines.end();)
+                    {
+                        if (it->second.first.layout != oldLayout)
+                        {
+                            ++it;
+                            continue;
+                        }
 
-                    vlk::PipelineCreationState pipelineState;
-                    pair = std::make_pair(pipelineState, VK_NULL_HANDLE);
-                    p.pipelines["display"] = pair;
-                }
-                if (p.pipelineLayouts["display"])
-                {
-                    p.garbage[p.frameIndex].pipelineLayouts.push_back(std::move(p.pipelineLayouts["display"]));
+                        if (it->second.second != VK_NULL_HANDLE)
+                        {
+                            p.garbage[p.frameIndex].pipelines.push_back(
+                                it->second.second);
+                        }
+
+                        // Don't let usePipeline() skip the bind because the
+                        // cached key still looks current.
+                        if (p.currentPipeline == it->first)
+                            p.currentPipeline.clear();
+                        for (auto& outer : p.passStack)
+                        {
+                            if (outer.currentPipeline == it->first)
+                                outer.currentPipeline.clear();
+                        }
+
+                        // Erase instead of storing a null pipeline, so the
+                        // next createPipeline() takes the "new pipeline" path.
+                        it = p.pipelines.erase(it);
+                    }
+
+                    p.garbage[p.frameIndex].pipelineLayouts.push_back(oldLayout);
                     p.pipelineLayouts["display"] = VK_NULL_HANDLE;
                 }
 
