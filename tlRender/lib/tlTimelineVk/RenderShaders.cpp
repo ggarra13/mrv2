@@ -908,7 +908,7 @@ layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
 
-layout(binding = 0) uniform sampler2D textureSampler;
+layout(binding = 1) uniform sampler2D textureSampler;
 
 {0}
 
@@ -930,7 +930,7 @@ struct Levels
     float outHigh;
 };
 
-layout(set = 0, binding = 1, std140) uniform LevelsUBO
+layout(set = 0, binding = 2, std140) uniform LevelsUBO
 {
   Levels data;
 } uboLevels;
@@ -942,7 +942,7 @@ struct Normalize
     vec4 maximum;
 };
 
-layout(set = 0, binding = 2, std140) uniform NormalizeUBO
+layout(set = 0, binding = 3, std140) uniform NormalizeUBO
 {
   Normalize data;
 } uboNormalize;
@@ -955,7 +955,7 @@ struct Color
     bool  invert;
 };
 
-layout(set = 0, binding = 3, std140) uniform ColorUBO
+layout(set = 0, binding = 4, std140) uniform ColorUBO
 {
    Color data;
 } uboColor;
@@ -963,7 +963,7 @@ layout(set = 0, binding = 3, std140) uniform ColorUBO
 // Video Levels
 {1}
 
-layout(set = 0, binding = 4, std140) uniform UBO
+layout(set = 0, binding = 5, std140) uniform UBO
 {
     int        channels;
     int        mirrorX;

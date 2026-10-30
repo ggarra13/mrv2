@@ -141,7 +141,7 @@ namespace tl
             pc.color = color;
             vkCmdPushConstants(
                 p.cmd, pipelineLayout,
-                p.shaders["rect"]->getPushStageFlags(), 0,
+                shader->getPushStageFlags(), 0,
                 sizeof(pc), &pc);
             _bindDescriptorSets(pipelineLayoutName, shader);
             _vkDraw(meshName);
