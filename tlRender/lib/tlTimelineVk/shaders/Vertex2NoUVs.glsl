@@ -1,10 +1,12 @@
 #version 450
 layout(location = 0) in vec2 vPos;
-layout(set = 0, binding = 0, std140) uniform Transform {
+
+layout(push_constant) uniform PushConstants {
     mat4 mvp;
-} transform;
+    vec4 color;
+} pc;
 
 void main()
 {
-    gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
+    gl_Position = pc.mvp * vec4(vPos, 0.0, 1.0);
 }

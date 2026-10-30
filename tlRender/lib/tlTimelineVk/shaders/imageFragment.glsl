@@ -3,6 +3,11 @@
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
+
 // enum tl::image::PixelType
 const int PixelType_None              = 0;
 const int PixelType_L_U8              = 1;
