@@ -170,13 +170,6 @@ namespace tl
         };
 #endif
 
-        //! Struct used for PushConstants in most shaders
-        struct PushConstant
-        {
-            math::Matrix4x4f mvp;
-            image::Color4f color;
-        };
-
         struct Render::Private
         {
             // Vulkan variables
