@@ -12,6 +12,7 @@ ChangeLog
 
 - UI/Core: Allow scrubbing (with audio on the first clip) while in Compare Mode.
 - UI/Core: Improved accuracy of FPS and dropped frames counters, supporting seeks and reverse playback properly.
+- UI/Core: Improved reverse playback caching.
 
 - Vulkan/Core: Improved playback performance even more.
 - Core: Improved pre-caching of movies that could make it drop several frames at the start of playback.

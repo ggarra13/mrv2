@@ -470,16 +470,24 @@ namespace tl
 
             //! If we are at the start either playing backwards or stopping,
             //! we need to loop the cache read behind to the end (for looping).
+            //! We remember which range this is, so that it can be read
+            //! backwards below without mistaking other ranges that merely
+            //! happen to touch the end of the clip for it.
+            int loopEndIndex = -1;
             if (mutex.playback != Playback::Forward &&
-                loop->get() == Loop::Loop &&
+                loop->get() == Loop::Loop && videoRanges.size() > 1 &&
                 videoRanges[1].start_time() == thread.inOutRange.start_time())
             {
-                const auto& end = thread.inOutRange.end_time_inclusive();
-                const auto& start = end - readBehindRescaled;
-                videoRange =
+                const OTIO_NS::RationalTime end =
+                    thread.inOutRange.end_time_inclusive();
+                // Never reach before the start of the in/out range (short
+                // clips, or a read behind larger than the clip).
+                const OTIO_NS::RationalTime start = std::max(
+                    end - readBehindRescaled, thread.inOutRange.start_time());
+                videoRanges.push_back(
                     OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
-                        start, end);
-                videoRanges.push_back(videoRange);
+                        start, end));
+                loopEndIndex = static_cast<int>(videoRanges.size()) - 1;
             }
 
             // for (const auto& i : videoRanges)
@@ -589,21 +597,22 @@ namespace tl
             // Get uncached video.
             if (!ioInfo.video.empty())
             {
-                for (const auto& range : videoRanges)
+                for (size_t rangeIndex = 0; rangeIndex < videoRanges.size();
+                     ++rangeIndex)
                 {
+                    const auto& range = videoRanges[rangeIndex];
                     switch (thread.cacheDirection)
                     {
                     case CacheDirection::Forward:
                     {
-                        // If we are stopped, and we are looping, we have to
-                        // check the last video range we added at the end of
-                        // the timeline to read it backwards
-                        if (mutex.playback == Playback::Stop &&
-                            loop->get() == Loop::Loop &&
-                            range.start_time() !=
-                                thread.inOutRange.start_time() &&
-                            range.end_time_inclusive() ==
-                                thread.inOutRange.end_time_inclusive())
+                        // If we are stopped, and we are looping, the range we
+                        // added at the end of the timeline is read backwards
+                        // (from the last frame), so that playing in reverse
+                        // from the start is ready. Only that range is read
+                        // this way: the read ahead can also touch the end of
+                        // the timeline, and it must be read forwards so the
+                        // frames right after the current time come first.
+                        if (static_cast<int>(rangeIndex) == loopEndIndex)
                         {
                             const auto start = range.end_time_inclusive();
                             const auto end = range.start_time();
