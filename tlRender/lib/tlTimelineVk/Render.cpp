@@ -1180,8 +1180,9 @@ namespace tl
             g.textures.clear();
             g.buffers.clear();
 
-            const math::Matrix4x4f transform;
-            const image::Color4f color(1.F, 1.F, 1.F);
+            const PushConstant pc;
+            const vlk::ShaderFlags flags =
+                static_cast<vlk::ShaderFlags>(vlk::kShaderVertex | vlk::kShaderFragment);
 
             // Shader used to draw a 2D mesh with a texture * color
             //
@@ -1203,10 +1204,7 @@ namespace tl
                 p.shaders["rect"] = vlk::Shader::create(
                     ctx, vertex2NoUVsSource(), meshFragmentSource(), "rect");
 #endif
-                p.shaders["rect"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["rect"]->addPush(
-                    "color", color, vlk::kShaderFragment);
+                p.shaders["rect"]->addPush("pc", pc, flags);
                 _createBindingSet(p.shaders["rect"]);
             }
             p.shaders["wipe"] = p.shaders["rect"];
@@ -1225,10 +1223,7 @@ namespace tl
                 p.shaders["mesh"] = vlk::Shader::create(
                     ctx, vertexSource(), meshFragmentSource(), "mesh");
 #endif
-                p.shaders["mesh"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["mesh"]->addPush(
-                      "color", color, vlk::kShaderFragment);
+                p.shaders["mesh"]->addPush("pc", pc, flags);
                 _createBindingSet(p.shaders["mesh"]);
               }
 
@@ -1247,9 +1242,7 @@ namespace tl
                     ctx, colorMeshVertexSource(), colorMeshFragmentSource(),
                     "colorMesh");
 #endif
-                p.shaders["colorMesh"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["colorMesh"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["colorMesh"]->addPush("pc", pc, flags);
                 _createBindingSet(p.shaders["colorMesh"]);
             }
 
@@ -1267,11 +1260,8 @@ namespace tl
                 p.shaders["text"] = vlk::Shader::create(
                     ctx, vertex2Source(), textFragmentSource(), "text");
 #endif
-                p.shaders["text"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["text"]->addTexture("textureSampler");
-                p.shaders["text"]->addPush(
-                    "color", color, vlk::kShaderFragment);
+                p.shaders["text"]->addPush("pc", pc, flags);
 
                 _createBindingSet(p.shaders["text"]);
             }
@@ -1295,11 +1285,8 @@ namespace tl
                 p.shaders["texture"] = vlk::Shader::create(
                     ctx, vertexSource(), textureFragmentSource(), "texture");
 #endif
-                p.shaders["texture"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["texture"]->addTexture("textureSampler");
-                p.shaders["texture"]->addPush(
-                    "color", color, vlk::kShaderFragment);
+                p.shaders["texture"]->addPush("pc", pc, flags);
 
                 _createBindingSet(p.shaders["texture"]);
             }
@@ -1323,8 +1310,7 @@ namespace tl
                     "butterfly");
 #endif
 
-                p.shaders["butterfly"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["butterfly"]->addPush("pc", pc, flags);
                 p.shaders["butterfly"]->addTexture("textureSampler");
                 p.shaders["butterfly"]->addTexture("textureSamplerB");
 
@@ -1344,8 +1330,7 @@ namespace tl
                 p.shaders["image"] = vlk::Shader::create(
                     ctx, vertexSource(), imageFragmentSource(), "image");
 #endif
-                p.shaders["image"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["image"]->addPush("pc", pc, flags);
 
                 UBOTexture ubo;
                 p.shaders["image"]->createUniform("ubo", ubo);
@@ -1371,8 +1356,7 @@ namespace tl
                     "difference");
 #endif
 
-                p.shaders["difference"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["difference"]->addPush("pc", pc, flags);
                 p.shaders["difference"]->addTexture("textureSampler");
                 p.shaders["difference"]->addTexture("textureSamplerB");
 
@@ -1392,9 +1376,7 @@ namespace tl
                     ctx, vertexSource(), multiplyFragmentSource(),
                     "multiply");
 #endif
-
-                p.shaders["multiply"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["multiply"]->addPush("pc", pc, flags);
                 p.shaders["multiply"]->addTexture("textureSampler");
                 p.shaders["multiply"]->addTexture("textureSamplerB");
 
@@ -1415,8 +1397,7 @@ namespace tl
                     "add");
 #endif
 
-                p.shaders["add"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["add"]->addPush("pc", pc, flags);
                 p.shaders["add"]->addTexture("textureSampler");
                 p.shaders["add"]->addTexture("textureSamplerB");
 
@@ -1435,9 +1416,7 @@ namespace tl
                 p.shaders["hard"] = vlk::Shader::create(
                     ctx, vertex2Source(), hardFragmentSource(), "hard");
 #endif
-                p.shaders["hard"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["hard"]->addPush("color", color);
+                p.shaders["hard"]->addPush("pc", pc, flags);
                 _createBindingSet(p.shaders["hard"]);
             }
             if (!p.shaders["soft"])
@@ -1453,9 +1432,7 @@ namespace tl
                 p.shaders["soft"] = vlk::Shader::create(
                     ctx, vertex2Source(), softFragmentSource(), "soft");
 #endif
-                p.shaders["soft"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["soft"]->addPush("color", color);
+                p.shaders["soft"]->addPush("pc", pc, flags);
                 _createBindingSet(p.shaders["soft"]);
             }
             // "wipe" is set above, sharing the "rect" pipeline.
@@ -1464,9 +1441,7 @@ namespace tl
             {
                 p.shaders["dummy"] = vlk::Shader::create(
                     ctx, vertexDummy(), fragmentDummy(), "dummy");
-                p.shaders["dummy"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["dummy"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["dummy"]->addPush("pc", pc, flags);
                 _createBindingSet(p.shaders["dummy"]);
             }
 #endif
@@ -1921,10 +1896,6 @@ namespace tl
                 if (i.second)
                 {
                     i.second->bind(p.frameIndex);
-                    if (i.second->getName() == "pbr")
-                        continue;
-                    i.second->setUniform("transform.mvp", p.transform,
-                                         vlk::kShaderVertex);
                 }
             }
             for(auto& i : p.compute)

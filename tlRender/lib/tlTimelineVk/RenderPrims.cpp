@@ -136,10 +136,13 @@ namespace tl
             auto shader = p.shaders[shaderName];
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             shader->bind(p.frameIndex);
-            vkCmdPushConstants(p.cmd, pipelineLayout,
-                               shader->getPushStageFlags(), 0,
-                               sizeof(color), &color);
-            shader->setUniform("transform.mvp", transform);
+            PushConstant pc;
+            pc.mvp = transform;
+            pc.color = color;
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                p.shaders["rect"]->getPushStageFlags(), 0,
+                sizeof(pc), &pc);
             _bindDescriptorSets(pipelineLayoutName, shader);
             _vkDraw(meshName);
         }
@@ -150,7 +153,6 @@ namespace tl
             ++(p.currentStats.rects);
             _createBindingSet(p.shaders["rect"]);
             p.shaders["rect"]->bind(p.frameIndex);
-            p.shaders["rect"]->setUniform("transform.mvp", p.transform);
             if (p.vbos["rect"])
                 p.vbos["rect"]->copy(convert(geom::box(box), p.vbos["rect"]->getType()));
         }
@@ -300,8 +302,14 @@ namespace tl
                     math::Vector3f(position.x, position.y, 0.F));
 
             shader->bind(p.frameIndex);
-            shader->setUniform(
-                "transform.mvp", transform, vlk::kShaderVertex);
+            PushConstant pc;
+            pc.mvp = transform;
+            pc.color = color;
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                shader->getPushStageFlags(), 0,
+                sizeof(pc), &pc);
             _bindDescriptorSets(pipelineLayoutName, shader);
 
             // Upload the vertex data into the pool and draw immediately.
@@ -376,16 +384,18 @@ namespace tl
                            p.vbos["text"], cb, ds);
 
             shader->bind(p.frameIndex);
-            shader->setUniform("transform.mvp", transform);
             shader->setTexture("textureSampler",
-                                          textures[textureIndex]);
+                               textures[textureIndex]);
             _bindDescriptorSets("text", shader);
 
             VkPipelineLayout pipelineLayout = p.pipelineLayouts["text"];
+            PushConstant pc;
+            pc.mvp = transform;
+            pc.color = color;
             vkCmdPushConstants(
                 p.cmd, pipelineLayout,
                 shader->getPushStageFlags(), 0,
-                sizeof(color), &color);
+                sizeof(pc), &pc);
 
             _vkDraw("text");
         }
@@ -584,7 +594,6 @@ namespace tl
             _createBindingSet(shader);
 
             shader->bind(p.frameIndex);
-            shader->setUniform("transform.mvp", p.transform);
 
             UBOTexture ubo;
             ubo.color = color;
@@ -727,6 +736,17 @@ namespace tl
                            shaderName, meshName, enableBlending,
                            srcColorBlendFactor, dstColorBlendFactor,
                            srcAlphaBlendFactor, dstAlphaBlendFactor);
+
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+
+            PushConstant pc;
+            pc.mvp = p.transform;
+            pc.color = image::Color4f(1.F, 1.F, 1.F, 1.F);
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                shader->getPushStageFlags(), 0,
+                sizeof(pc), &pc);
+
             _bindDescriptorSets(pipelineLayoutName, p.shaders["image"]);
             fbo->setupViewportAndScissor(p.cmd);
 

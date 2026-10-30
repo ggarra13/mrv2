@@ -19,15 +19,16 @@ layout(location = 1) in vec3 vNormal;
 layout(location = 0) out vec3 fPosition;
 layout(location = 1) out vec3 fNormal;
 
-layout(set = 0, binding = 0, std140) uniform Transform {
-     mat4 mvp;
-} transform;
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
 
 void main()
 {
     fNormal = vNormal;
     fPosition = vPos;
-    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    gl_Position = pc.mvp * vec4(vPos, 1.0);
 })";
         }
 
@@ -38,6 +39,7 @@ layout(location = 0) in vec3 fPos;
 layout(location = 0) out vec4 outColor;
 
 layout(push_constant) uniform PushConstants {
+    mat4 mvp;
     vec4 color;
 } pc;
 
@@ -77,6 +79,11 @@ layout(location = 0) in vec3  a_Position;       // GL_HALF_FLOAT  → 6 bytes
 layout(location = 1) in int   a_NormalPacked;   // GL_INT_2_10_10_10_REV → 4 bytes
 layout(location = 2) in vec2  a_TexCoord;       // GL_HALF_FLOAT  → 4 bytes
 layout(location = 3) in int   a_TangentPacked;  // GL_INT_2_10_10_10_REV → 4 bytes
+
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
 
 // ─────────────────────────────────────────────
 //  Uniforms
@@ -149,13 +156,14 @@ layout(location = 1) in vec2 vTexture;
 layout(location = 0) out vec3 fPos;
 layout(location = 1) out vec2 fTexture;
 
-layout(set = 0, binding = 0, std140) uniform Transform {
-     mat4 mvp;
-} transform;
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
 
 void main()
 {
-    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    gl_Position = pc.mvp * vec4(vPos, 1.0);
     fTexture = vTexture;
     fPos = vPos;
 })";
@@ -177,6 +185,7 @@ layout(binding = 6) uniform sampler2D u_OpacityMap;
 layout(location = 0) out vec4 outColor;
 
 layout(push_constant) uniform PushConstants {
+    mat4 mvp;
     vec4 color;
 } pc;
 
@@ -336,15 +345,16 @@ layout(location = 1) in vec2 vTexture;
 layout(location = 0) out vec2 fTexture;
 layout(location = 1) out vec3 fragPosition;
 
-layout(set = 0, binding = 0, std140) uniform Transform {
-     mat4 mvp;
-} transform;
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
 
 void main()
 {
     fragPosition = vPos;
     fTexture = vTexture;
-    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    gl_Position = pc.mvp * vec4(vPos, 1.0);
 })";
         }
 
@@ -372,13 +382,15 @@ layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec2 vTexture;
 layout(location = 0) out vec2 fTexture;
 layout(location = 1) out vec3 fPos;
-layout(set = 0, binding = 0, std140) uniform Transform {
-     mat4 mvp;
-} transform;
+
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
 
 void main()
 {
-    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    gl_Position = pc.mvp * vec4(vPos, 1.0);
     fTexture = vTexture;
     fPos = vPos;
 })";
@@ -390,13 +402,15 @@ void main()
 layout(location = 0) in vec2 vPos;
 layout(location = 1) in vec2 vTexture;
 layout(location = 0) out vec2 fTexture;
-layout(set = 0, binding = 0, std140) uniform Transform {
+
+layout(push_constant) uniform PushConstants {
     mat4 mvp;
-} transform;
+    vec4 color;
+} pc;
 
 void main()
 {
-    gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
+    gl_Position = pc.mvp * vec4(vPos, 0.0, 1.0);
     fTexture = vTexture;
 })";
         }
@@ -406,13 +420,15 @@ void main()
         {
             return R"(#version 450
 layout(location = 0) in vec2 vPos;
-layout(set = 0, binding = 0, std140) uniform Transform {
+
+layout(push_constant) uniform PushConstants {
     mat4 mvp;
-} transform;
+    vec4 color;
+} pc;
 
 void main()
 {
-    gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
+    gl_Position = pc.mvp * vec4(vPos, 0.0, 1.0);
 })";
         }
 
@@ -424,6 +440,7 @@ layout(location = 0) in  vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
 layout(push_constant) uniform PushConstants {
+    mat4 mvp;
     vec4 color;
 } pc;
 
@@ -441,13 +458,14 @@ layout(location = 0) in vec2 vPos;
 layout(location = 1) in vec4 vColor;
 layout(location = 0) out vec4 fColor;
 
-layout(set = 0, binding = 0, std140) uniform TransformUBO {
+layout(push_constant) uniform PushConstants {
     mat4 mvp;
-} transform;
+    vec4 color;
+} pc;
 
 void main()
 {
-    gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
+    gl_Position = pc.mvp * vec4(vPos, 0.0, 1.0);
     fColor = vColor;
 })";
         }
@@ -460,6 +478,7 @@ layout(location = 0) in vec4 fColor;
 layout(location = 0) out vec4 outColor;
 
 layout(push_constant) uniform PushConstants {
+    mat4 mvp;
     vec4 color;
 } pc;
 
@@ -476,9 +495,10 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
-layout(binding = 1) uniform sampler2D textureSampler;
+layout(binding = 0) uniform sampler2D textureSampler;
 
 layout(push_constant) uniform PushConstants {
+    mat4 mvp;
     vec4 color;
 } pc;
 
@@ -498,9 +518,10 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
-layout(binding = 1) uniform sampler2D textureSampler;
+layout(binding = 0) uniform sampler2D textureSampler;
 
 layout(push_constant) uniform PushConstants {
+    mat4 mvp;
     vec4 color;
 } pc;
 
@@ -523,6 +544,11 @@ const int VideoLevels_LegalRange = 1;
 
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
+
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
 
 // enum tl::image::PixelType
 const int PixelType_None              = 0;
@@ -725,7 +751,7 @@ vec4 sampleTexture(
     return c;
 }
 
-layout(set = 0, binding = 1, std140) uniform UBO {
+layout(set = 0, binding = 0, std140) uniform UBO {
                                 vec4      yuvCoefficients;
                                 vec4      color;
                                 int       pixelType;
@@ -735,9 +761,9 @@ layout(set = 0, binding = 1, std140) uniform UBO {
                                 int       mirrorY;
 } ubo;
 
-layout(binding = 2) uniform sampler2D textureSampler0;
-layout(binding = 3) uniform sampler2D textureSampler1;
-layout(binding = 4) uniform sampler2D textureSampler2;
+layout(binding = 1) uniform sampler2D textureSampler0;
+layout(binding = 2) uniform sampler2D textureSampler1;
+layout(binding = 3) uniform sampler2D textureSampler2;
 
 void main()
 {
@@ -882,7 +908,7 @@ layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
 
-layout(binding = 1) uniform sampler2D textureSampler;
+layout(binding = 0) uniform sampler2D textureSampler;
 
 {0}
 
@@ -904,7 +930,7 @@ struct Levels
     float outHigh;
 };
 
-layout(set = 0, binding = 2, std140) uniform LevelsUBO
+layout(set = 0, binding = 1, std140) uniform LevelsUBO
 {
   Levels data;
 } uboLevels;
@@ -916,7 +942,7 @@ struct Normalize
     vec4 maximum;
 };
 
-layout(set = 0, binding = 3, std140) uniform NormalizeUBO
+layout(set = 0, binding = 2, std140) uniform NormalizeUBO
 {
   Normalize data;
 } uboNormalize;
@@ -929,7 +955,7 @@ struct Color
     bool  invert;
 };
 
-layout(set = 0, binding = 4, std140) uniform ColorUBO
+layout(set = 0, binding = 3, std140) uniform ColorUBO
 {
    Color data;
 } uboColor;
@@ -937,7 +963,7 @@ layout(set = 0, binding = 4, std140) uniform ColorUBO
 // Video Levels
 {1}
 
-layout(set = 0, binding = 5, std140) uniform UBO
+layout(set = 0, binding = 4, std140) uniform UBO
 {
     int        channels;
     int        mirrorX;
@@ -1146,8 +1172,13 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
-layout(binding = 1) uniform sampler2D textureSampler;
-layout(binding = 2) uniform sampler2D textureSamplerB;
+layout(binding = 0) uniform sampler2D textureSampler;
+layout(binding = 1) uniform sampler2D textureSamplerB;
+
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
 
 void main()
 {
@@ -1167,8 +1198,13 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
-layout(binding = 1) uniform sampler2D textureSampler;
-layout(binding = 2) uniform sampler2D textureSamplerB;
+layout(binding = 0) uniform sampler2D textureSampler;
+layout(binding = 1) uniform sampler2D textureSamplerB;
+
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
 
 void main()
 {
@@ -1188,8 +1224,8 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
-layout(binding = 1) uniform sampler2D textureSampler;
-layout(binding = 2) uniform sampler2D textureSamplerB;
+layout(binding = 0) uniform sampler2D textureSampler;
+layout(binding = 1) uniform sampler2D textureSamplerB;
 
 void main()
 {
@@ -1210,6 +1246,7 @@ layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
 
 layout(push_constant) uniform PushConstants {
+    mat4 mvp;
     vec4 color;
 } pc;
 
@@ -1233,6 +1270,7 @@ layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
 
 layout(push_constant) uniform PushConstants {
+    mat4 mvp;
     vec4 color;
 } pc;
 
@@ -1248,8 +1286,13 @@ void main()
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
-layout(binding = 1) uniform sampler2D textureSampler;
-layout(binding = 2) uniform sampler2D textureSamplerB;
+layout(binding = 0) uniform sampler2D textureSampler;
+layout(binding = 1) uniform sampler2D textureSamplerB;
+
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
 
 void main()
 {
