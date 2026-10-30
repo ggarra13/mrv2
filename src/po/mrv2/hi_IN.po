@@ -7946,7 +7946,7 @@ msgid "Default Display / View"
 msgstr "डिफ़ॉल्ट प्रदर्शक/दृश्य"
 
 msgid "Loading"
-msgstr "लोड हो रहा है"
+msgstr "लोडिंग"
 
 msgid "Missing Frames"
 msgstr "गायब फ़्रेम"

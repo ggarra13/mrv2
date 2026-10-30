@@ -8376,10 +8376,10 @@ msgid "OCIO/Defaults"
 msgstr "OCIO/Valores predeterminados"
 
 msgid "Loading/File Requester"
-msgstr "Carga/Selector de archivos"
+msgstr "Cargando/Selector de archivos"
 
 msgid "Loading/Path Mappings"
-msgstr "Carga/Asignaciones de rutas"
+msgstr "Cargando/Asignaciones de rutas"
 
 msgid "Audio/Voice Annotations"
 msgstr "Audio/Anotaciones de voz"
