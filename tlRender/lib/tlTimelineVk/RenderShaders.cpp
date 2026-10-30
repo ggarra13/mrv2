@@ -868,6 +868,24 @@ vec4 deband(sampler2D tex, vec2 pos) {
                 .arg(grain);
         }
 
+        std::string displayVertexSource()
+        {
+            return R"(#version 450
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec2 vTexture;
+layout(location = 0) out vec2 fTexture;
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    fTexture = vTexture;
+}
+)";
+        }
+
         std::string displayFragmentSource(
             const std::string& ocioICSDef, const std::string& ocioICS,
             const std::string& ocioDef, const std::string& ocio,

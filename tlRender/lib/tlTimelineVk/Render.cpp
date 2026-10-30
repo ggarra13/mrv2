@@ -3504,7 +3504,7 @@ namespace tl
                                         source, "display");
 #else
                 p.shaders["display"] =
-                    vlk::Shader::create(ctx, vertexSource(), source, "display");
+                    vlk::Shader::create(ctx, displayVertexSource(), source, "display");
 #endif
 
                 p.shaders["display"]->createUniform(

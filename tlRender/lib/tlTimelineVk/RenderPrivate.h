@@ -89,6 +89,7 @@ namespace tl
 
         // For display
         std::string imageFragmentSource();
+        std::string displayVertexSource();
         std::string displayFragmentSource(
             const std::string& ocioICSDef, const std::string& ocioICS,
             const std::string& ocioDef, const std::string& ocio,
