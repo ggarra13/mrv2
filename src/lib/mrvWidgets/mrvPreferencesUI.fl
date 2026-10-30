@@ -96,8 +96,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double resizable
-      code3 {main = m;} non_modal size_range {847 449 0 0} visible
+      xywh {0 0 847 449} type Double hide resizable
+      code3 {main = m;} non_modal size_range {847 449 0 0}
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
@@ -111,7 +111,7 @@ class PreferencesUI {open
           } {
             Fl_Group {} {
               label General
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Window Behavior} open
@@ -353,7 +353,7 @@ for (const auto& language : languages) { entry = _(language.c_str()); entry += "
                 } {}
                 Fl_Choice {} {
                   label Scheme
-                  xywh {440 109 160 25} down_box BORDER_BOX align 4
+                  xywh {440 109 160 25} down_box BORDER_BOX
                   class Fl_Scheme_Choice
                 } {
                   MenuItem {} {
@@ -400,7 +400,7 @@ TimelineClass* t = v->uiTimeWindow;
 t->redraw();
 v->uiTimeline->setStyle(style);
 v->refresh();} open
-                  xywh {440 143 160 25} down_box BORDER_BOX align 4
+                  xywh {440 143 160 25} down_box BORDER_BOX
                 } {}
                 Fl_Button {} {
                   label {Reload Theme}
@@ -738,7 +738,7 @@ o->redraw();}
                 Fl_Choice CropArea {
                   label Crop
                   user_data this user_data_type {PreferencesUI*}
-                  tooltip {Allows you to select a standard cropping area around image.} xywh {390 107 190 25} box THIN_DOWN_BOX down_box BORDER_BOX align 4
+                  tooltip {Allows you to select a standard cropping area around image.} xywh {390 107 190 25} box THIN_DOWN_BOX down_box BORDER_BOX
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -804,7 +804,7 @@ o->redraw();}
                 }
                 Fl_Choice ZoomSpeed {
                   label {Zoom Speed}
-                  xywh {680 107 100 25} down_box BORDER_BOX align 4
+                  xywh {680 107 100 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Slow
@@ -1797,8 +1797,8 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Loading
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Loading open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label {Missing Frames} open
@@ -1844,7 +1844,7 @@ v->uiOCIO_Display_View->do_callback();}
                 }
                 Fl_Check_Button ScratchFrame {
                   label {Scratch Frame}
-                  tooltip {When this is on, missing frames will have a cross on them.} xywh {496 109 20 20} down_box DOWN_BOX value 1 align 4
+                  tooltip {When this is on, missing frames will have a cross on them.} xywh {694 109 20 20} down_box DOWN_BOX value 1 align 4
                 }
                 Fl_Button ScratchColor {
                   label {Scratch Color}
@@ -1853,11 +1853,11 @@ Fl::get_color(o->color(),r,g,b);
 if (!fl_color_chooser(_("Pick Scratch Color"), r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
 o->redraw();}
-                  tooltip {Scratch Lines Color.} xywh {496 143 20 20} box EMBOSSED_BOX color 1 align 4
+                  tooltip {Scratch Lines Color.} xywh {694 143 20 20} box EMBOSSED_BOX color 1 align 4
                 }
                 Fl_Spinner ScratchWidth {
                   label {Scratch Width}
-                  tooltip {Scratch Lines Width.} xywh {496 177 50 25} box DOWN_BOX color 20 selection_color 15 minimum 2 maximum 16 value 4 textcolor 56
+                  tooltip {Scratch Lines Width.} xywh {694 177 50 25} box DOWN_BOX color 20 selection_color 15 minimum 2 maximum 16 value 4 textcolor 56
                 }
               }
               Fl_Group {} {
@@ -2294,7 +2294,7 @@ mrv::Preferences::load(false, false);}
               label OK
               user_data m user_data_type {ViewerUI*}
               callback {v->uiPrefs->uiMain->hide();
-mrv::Preferences::run();}
+mrv::Preferences::run();} selected
               tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {652 411 132 31}
             }
           }

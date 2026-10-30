@@ -8254,7 +8254,7 @@ msgid "Pick a directory from disk to save voice overs.."
 msgstr "Selecione una capeta del dico para grabas la voz."
 
 msgid "Playback Speed"
-msgstr "Velocidad de reproducción"
+msgstr "Velocidad"
 
 msgid "Microphone"
 msgstr "Micrófono"
