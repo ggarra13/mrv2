@@ -22,6 +22,7 @@ Fixes
 
 - UI: OTIO in Timeline Viewport was using OCIO on .otio files even when **Preferences->OCIO Not on Videos** was set on the Vulkan backend.
 - UI: Vulkan Wipe comparison would render green if there was no video at the current time.
+- UI: Some wrong translations and items in Window->Preferences.
 - Core: Made changing languages release a floating license previous to restarting.
 - Core: Fixed a potential compilation error on DirEntry's size.
 
