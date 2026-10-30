@@ -42,8 +42,6 @@ namespace tl
             const timeline::CompareOptions& compareOptions,
             const timeline::BackgroundOptions& backgroundOptions)
         {
-            TLRENDER_P();
-
             if (!videoFrame.empty() && !videoFrame.front().layers.empty())
             {
                 _drawBackground(boxes, backgroundOptions);

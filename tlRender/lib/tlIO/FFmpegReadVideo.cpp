@@ -30,9 +30,10 @@ namespace
 {
     const char* kModule = "ffmpeg";
 
-    //! How far ahead of the decoder (in seconds of video) a request can be
-    //! before seeking is cheaper than decoding and discarding frames.
-    constexpr double kMaxForwardSkipSeconds = 0.5;
+    // 0.25 s is a good default for scrubbing.  At 24 fps this is ~6 frames;
+    // at 60 fps ~15 frames.  The canDecodeForward() logic still floors at
+    // 2 frames so very low frame-rate material is not forced into tiny seeks.
+    constexpr double kMaxForwardSkipSeconds = 0.25;
 
     static constexpr std::array<double, 16> valid_timecode_rates{
         { 1.0,
@@ -1447,6 +1448,12 @@ namespace tl
             const double rate = _timeRange.duration().rate();
             const double delta =
                 (target.rescaled_to(rate) - current.rescaled_to(rate)).value();
+            
+            // Floor at 2 frames so we never seek for a single-frame hop.
+            // Cap at the configured seconds so long GOPs still prefer a seek
+            // when the jump is large.
+            const double maxFrames = std::max(2.0, rate * kMaxForwardSkipSeconds);
+            return delta > 0.0 && delta <= maxFrames;
             return delta > 0.0 &&
                    delta <= std::max(2.0, rate * kMaxForwardSkipSeconds);
         }
@@ -1629,7 +1636,7 @@ namespace tl
 
                 const bool wanted = time >= targetTime || backwards ||
                                     (_avFrame->duration == 0 && _useAudioOnly);
-
+                
                 AVFrame* frame = _avFrame;
                 // A frame that will be discarded is never downloaded, and
                 // none of the hardware bookkeeping below applies to it.

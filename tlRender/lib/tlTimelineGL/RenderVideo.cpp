@@ -22,8 +22,6 @@ namespace tl
             const timeline::CompareOptions& compareOptions,
             const timeline::BackgroundOptions& backgroundOptions)
         {
-            //! \todo Render the background only if there is valid video data
-            //! and a valid layer?
             if (!videoFrame.empty() && !videoFrame.front().layers.empty())
             {
                 _drawBackground(boxes, backgroundOptions);
