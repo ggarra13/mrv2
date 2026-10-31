@@ -169,7 +169,7 @@ jobs:
 
       - name: Install pyFLTK dependencies
         run: |
-          brew install swig pcre bison
+          brew install swig pcre2 bison
           brew uninstall turbo-jpeg 2>/dev/null || true
 
           echo "$(brew --prefix swig)/bin" >> "$GITHUB_PATH"
