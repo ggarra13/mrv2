@@ -24,18 +24,31 @@ namespace tl
         {
             const OTIO_NS::TimeRange& main = timeline->getTimeRange();
             const double rate = main.duration().rate();
+            const CompareTimeMode mode = compareTime->get();
+
             OTIO_NS::RationalTime start = main.start_time();
+            OTIO_NS::RationalTime end   = main.end_time_exclusive();
             OTIO_NS::RationalTime duration = main.duration();
+
             for (const auto& i : compare->get())
             {
-                if (!i)
-                    continue;
-                const OTIO_NS::TimeRange& range = i->getTimeRange();
-                start = std::min(start, range.start_time().rescaled_to(rate));
-                duration =
-                    std::max(duration, range.duration().rescaled_to(rate));
+                if (!i) continue;
+                const auto& r = i->getTimeRange();
+                if (CompareTimeMode::Relative == mode)
+                {
+                    // Time is A's time; B follows A, so only the length matters.
+                    duration = std::max(duration, r.duration().rescaled_to(rate));
+                }
+                else
+                {
+                    start = std::min(start, r.start_time().rescaled_to(rate));
+                    end   = std::max(end, r.end_time_exclusive().rescaled_to(rate));
+                }
             }
-            setTimeRange(OTIO_NS::TimeRange(start, duration));
+            if (CompareTimeMode::Relative == mode)
+                setTimeRange(OTIO_NS::TimeRange(main.start_time(), duration));
+            else
+                setTimeRange(OTIO_NS::TimeRange(start, end - start));
         }
 
         void Player::Private::setTimeRange(const OTIO_NS::TimeRange& value)
