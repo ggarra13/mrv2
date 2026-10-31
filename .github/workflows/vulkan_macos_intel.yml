@@ -46,7 +46,7 @@ jobs:
   # FULL BUILDS                     #
   #                                 #
   ###################################
-  macos-13-vulkan-full-build:
+  macos-vulkan-intel-build:
     runs-on: macos-15-intel
     # permissions:
     #   contents: write   # Needed to update releases

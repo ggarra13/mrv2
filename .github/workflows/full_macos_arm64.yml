@@ -46,8 +46,8 @@ jobs:
   # FULL BUILDS                     #
   #                                 #
   ###################################
-  macos-14-full-build:
-    runs-on: macos-14
+  macos-15-full-build:
+    runs-on: macos-15
     permissions:
       contents: write
     

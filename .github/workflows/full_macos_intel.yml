@@ -1,3 +1,4 @@
+
 # macOS Code Sign & Notarize — mrv2
 #
 # Required GitHub Actions secrets (Settings → Secrets and variables → Actions):
@@ -46,7 +47,7 @@ jobs:
   # FULL BUILDS                     #
   #                                 #
   ###################################
-  macos-full-build:
+  macos-full-intel:
     runs-on: macos-15-intel
     # permissions:
     #   contents: write   # Needed to update releases
