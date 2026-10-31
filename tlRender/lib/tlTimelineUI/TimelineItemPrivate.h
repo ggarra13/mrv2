@@ -24,7 +24,7 @@ namespace tl
             OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
             timeline::PlayerCacheInfo cacheInfo;
             bool editable = false;
-            timeline::EditMode editMode = timeline::EditMode::Count;
+            timeline::EditMode editMode = timeline::EditMode::Move;
             bool stopOnScrub = true;
             std::function<void(const std::vector<timeline::MoveData>&)>
             moveCallback;
@@ -32,6 +32,7 @@ namespace tl
             std::shared_ptr<observer::Value<otime::RationalTime> > timeScrub;
             std::vector<int> frameMarkers;
             int minimumHeight = 0;
+            bool rulerSpace = true;
             std::shared_ptr<ThumbnailSystem> thumbnailSystem;
             std::unordered_map<std::string,
                                std::vector<std::shared_ptr<image::Glyph>> > labelsCache;
@@ -54,6 +55,7 @@ namespace tl
 
                 math::Size2i size;
                 int clipHeight = 0;
+                int transitionHeight = 0;
             };
             std::vector<Track> tracks;
 

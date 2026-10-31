@@ -152,6 +152,7 @@ namespace mrv
 
     extern Hotkey kToggleBackground;
 
+    extern Hotkey kToggleCompareTimelines;
     extern Hotkey kCompareNone;
     extern Hotkey kCompareWipe;
     extern Hotkey kCompareOverlay;

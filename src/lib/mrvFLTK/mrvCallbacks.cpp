@@ -585,6 +585,29 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_compare_timelines_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Toggle Timelines Comparison in Edit Viewport when Comparing clips."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        bool value = item->value();
+        ui->uiTimeline->setCompareTimelines(value);
+        ui->uiTimeline->redraw();
+        if (editMode != EditMode::kTimeline)
+            set_edit_mode_cb(EditMode::kFull, ui);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void toggle_compare_a_and_b_cb(Fl_Widget* w, ViewerUI* ui)
     {
         switch(Fl::callback_reason())

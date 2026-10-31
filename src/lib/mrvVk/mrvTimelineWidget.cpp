@@ -26,7 +26,8 @@
 #include <tlTimelineUI/TimelineWidget.h>
 
 #include <tlTimelineVk/Render.h>
-#include <tlTimelineVk/RenderShadersBinary.h>
+#include <tlTimelineVk/RenderOptions.h>
+#include <tlTimelineVk/RenderStructs.h>
 
 #include <tlUI/IWindow.h>
 
@@ -41,6 +42,7 @@
 #include <FL/Fl.H>
 #include <FL/names.h>
 
+#include <optional>
 
 namespace mrv
 {
@@ -191,6 +193,7 @@ namespace mrv
             VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
 
             //! Flags
+            bool compareTimelines = false;
             bool draggingClip = false;
             bool continueReversePlaying = false;
             timeline::EditMode editMode = timeline::EditMode::Move;
@@ -259,6 +262,7 @@ namespace mrv
                 std::bind(
                     &mrv::vulkan::TimelineWidget::moveCallback, this,
                     std::placeholders::_1));
+            p.timelineWidget->setTimelines(std::vector<std::shared_ptr<timeline::Timeline> >());
 
             p.timelineWidget->setParent(p.timelineWindow);
 
@@ -323,6 +327,34 @@ namespace mrv
         void TimelineWidget::setEditable(bool value)
         {
             _p->timelineWidget->setEditable(value);
+        }
+
+        const math::Box2i TimelineWidget::getGeometry() const
+        {
+            return _p->timelineWidget->getAllGeometry();
+        }
+
+        bool TimelineWidget::getCompareTimelines()
+        {
+            return _p->compareTimelines;
+        }
+
+        void TimelineWidget::setCompareTimelines(bool value)
+        {
+            TLRENDER_P();
+
+            if (value == p.compareTimelines)
+                return;
+            p.compareTimelines = value;
+
+            if (value)
+            {
+                p.timelineWidget->setTimelines(std::optional<std::vector<std::shared_ptr<timeline::Timeline> > >());
+            }
+            else
+            {
+                p.timelineWidget->setTimelines(std::vector<std::shared_ptr<timeline::Timeline> >());
+            }
         }
 
         void TimelineWidget::setEditMode(const timeline::EditMode value)
@@ -418,7 +450,7 @@ namespace mrv
             const int Y = _toUI(Fl::event_y());
             const int X = _toUI(Fl::event_x());
             if ((Y < maxY && !p.timelineWidget->isDraggingClip()) ||
-                !p.timelineWidget->isEditable())
+                !p.timelineWidget->isEditable() && p.player)
             {
                 p.timeRange = p.player->player()->getTimeRange();
                 const auto& info = p.player->ioInfo();
@@ -723,11 +755,11 @@ namespace mrv
                             textureFragment_spv,
                             textureFragment_spv_len,
                             "timeline p.shader");
-                        math::Matrix4x4f pm;
-                        p.shader->createUniform(
-                            "transform.mvp", pm, vlk::kShaderVertex);
+                        timeline_vlk::PushConstants pc;
+                        const vlk::ShaderFlags flags =
+                            static_cast<vlk::ShaderFlags>(vlk::kShaderVertex | vlk::kShaderFragment);
+                        p.shader->addPush("pc", pc, flags);
                         p.shader->addTexture("textureSampler");
-                        p.shader->addPush("opacity", 1.0, vlk::kShaderFragment);
                         p.shader->createBindingSet();
                     }
                 }
@@ -944,16 +976,21 @@ namespace mrv
                                 auto path = p.player->path();
                                 auto ext = path.getExtension();
                                 if (file::isMovie(ext) ||
-                                    file::isSRGB(ext))
+                                    file::isSRGB(ext) ||
+                                    file::isOTIO(path) ||
+                                    file::isOTIOZ(path))
                                 {
                                     ocioOptions = timeline::OCIOOptions();
                                 }
                             }
                         }
+                        else
+                        {
 #ifdef VULKAN_BACKEND
-                        ocioOptions = TIMELINEUI::toSDR(ocioOptions);
+                            ocioOptions = TIMELINEUI::toSDR(ocioOptions);
 #endif
-                        p.render->setOCIOOptions(ocioOptions);
+                            p.render->setOCIOOptions(ocioOptions);
+                        }
 
                         const auto& lutOptions = p.ui->uiView->lutOptions();
                         p.render->setLUTOptions(lutOptions);
@@ -992,7 +1029,6 @@ namespace mrv
                 const auto pm = math::ortho(
                     0.F, static_cast<float>(renderSize.w),
                     0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
-                p.shader->setUniform("transform.mvp", pm, vlk::kShaderVertex);
                 p.shader->setFBO("textureSampler", p.buffer);
 
 #ifdef __APPLE__
@@ -1009,11 +1045,13 @@ namespace mrv
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0,
                     1, &descriptorSet, 0, nullptr);
 
-                const float opacity = 1.0;
+                timeline_vlk::PushConstants pc;
+                pc.mvp = pm;
+                pc.color = image::Color4f(1.F, 1.F, 1.F, 1.F);
                 vkCmdPushConstants(
                     cmd, p.pipeline_layout,
                     p.shader->getPushStageFlags(), 0,
-                    sizeof(float), &opacity);
+                    sizeof(pc), &pc);
 
                 VkViewport viewport = {};
                 viewport.x = 0.0f;

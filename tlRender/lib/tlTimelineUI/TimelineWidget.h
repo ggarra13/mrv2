@@ -57,6 +57,16 @@ namespace tl
             //! Set the timeline player.
             void setPlayer(const std::shared_ptr<timeline::Player>&);
 
+            //! Set the timelines drawn beside the player's own.
+            //!
+            //! Unset, they are the player's comparison timelines, which is
+            //! what a player comparing pictures is showing. Set, they are
+            //! whatever is given: for drawing the structure of timelines the
+            //! picture is not comparing, which the player has no reason to
+            //! know about.
+            void setTimelines(
+                const std::optional<std::vector<std::shared_ptr<timeline::Timeline> > >& value);
+
             //! \name Editing
             ///@{
 
@@ -123,6 +133,10 @@ namespace tl
             //! Set the mouse wheel scale.
             void setMouseWheelScale(float);
 
+            //! Get the timeline's widget all geometry including rulers and
+            //! timelines.
+            const math::Box2i getAllGeometry() const;
+
             ///@}
 
             //! \name Scrubbing
@@ -183,7 +197,7 @@ namespace tl
             ///@}
 
             //! Get timeline item geometry.
-            const math::Box2i& getTimelineItemGeometry() const;
+            const math::Box2i getTimelineItemGeometry() const;
 
             //! Get timeline scale.
             double getScale() const;
@@ -217,10 +231,16 @@ namespace tl
 #endif
 
         private:
+            std::vector<std::shared_ptr<timeline::Timeline> > _getCompare() const;
+
             void _setViewZoom(
                 double zoomNew, double zoomPrev, const math::Vector2i& focus,
                 const math::Vector2i& scrollPos);
 
+            std::shared_ptr<ItemData> _getItemData(
+                const std::shared_ptr<timeline::Timeline>& timeline) const;
+
+            double _getDuration() const;
             double _getTimelineScale() const;
             double _getTimelineScaleMax() const;
 
@@ -232,6 +252,7 @@ namespace tl
                 const std::shared_ptr<IWidget>&, const DisplayOptions&);
 
             void _scrollUpdate();
+            void _rulerUpdate();
             void _timelineUpdate();
 
             TLRENDER_PRIVATE();

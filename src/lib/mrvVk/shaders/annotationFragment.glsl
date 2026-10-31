@@ -1,21 +1,26 @@
 #version 450
-                  
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
 
-layout(binding = 1) uniform sampler2D textureSampler;
-                  
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
+
+layout(binding = 0) uniform sampler2D textureSampler;
+
 // enum tl::render::Channels
 const uint Channels_Color = 0;
 const uint Channels_Red   = 1;
 const uint Channels_Green = 2;
 const uint Channels_Blue  = 3;
 const uint Channels_Alpha = 4;
- 
-layout(set = 0, binding = 2) uniform ChannelsUBO {
+
+layout(set = 0, binding = 1) uniform ChannelsUBO {
      int value;
 } channels;
- 
+
 vec4 swizzleFunc(vec4 c, int channels)
 {
     // Swizzle for the channels display.
@@ -42,7 +47,7 @@ vec4 swizzleFunc(vec4 c, int channels)
      }
      return c;
  }
-                  
+
 void main()
 {
      fColor = texture(textureSampler, fTexture);

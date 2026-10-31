@@ -9,6 +9,7 @@ set(HEADERS
     Init.h
     Label.h
     LayoutUtil.h
+    RowLayout.h
     ScrollArea.h
     ScrollWidget.h
     ScrollBar.h
@@ -28,6 +29,7 @@ set(SOURCE
     Init.cpp
     Label.cpp
     LayoutUtil.cpp
+    RowLayout.cpp
     ScrollArea.cpp
     ScrollWidget.cpp
     ScrollBar.cpp

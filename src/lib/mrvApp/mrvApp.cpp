@@ -323,7 +323,7 @@ namespace mrv
         // associations and double clicks on files.
         fl_open_callback(osx_open_cb);
 #endif
-        
+
         // Establish MRV2_ROOT environment variable
         set_root_path(argc, argv);
         mrv::init(context);
@@ -1452,11 +1452,6 @@ namespace mrv
 #endif
     }
 
-    static void start_playback_cb(App* app)
-    {
-        app->startPlayback();
-    }
-
     void App::_calculateCacheTimes(OTIO_NS::RationalTime& startTime,
                                    OTIO_NS::RationalTime& endTime)
     {
@@ -1513,6 +1508,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+        if (!p.player)
+            return;
+
         bool isLocked = tcp->isLocked();
 
         tcp->lock();
@@ -1542,35 +1540,29 @@ namespace mrv
         OTIO_NS::RationalTime startTime, endTime;
         _calculateCacheTimes(startTime, endTime);
 
-        const timeline::Playback& playback = p.options.playback;
+        const timeline::Playback playback = p.options.playback;
 
         // Calculate the total duration we are waiting for
         // We use the rate of the startTime to ensure we are working in frame
         // units
         double totalFrames = (endTime - startTime).to_frames();
 
-        if (!p.progress)
+        if (use_progress && !p.progress)
         {
             p.progress = new ProgressReport(ui->uiMain,
                                             0, totalFrames,
                                             _("Caching..."));
         }
-        else
+        else if (use_progress)
         {
             p.progress->set_start(0);
             p.progress->set_end(totalFrames);
         }
+
         if (use_progress)
         {
             p.progress->show();
             Fl::flush();
-        }
-        else
-        {
-            // Start playback right away.
-            if (!isLocked)
-                tcp->unlock();
-            ui->uiView->setPlayback(playback);
         }
 
         if (use_progress &&
@@ -1631,11 +1623,6 @@ namespace mrv
                             {
                                 delete p.progress;
                                 p.progress = nullptr;
-                                ui->uiView->setPlayback(playback);
-                                p.cacheInfoObserver.reset();
-                                if (!isLocked)
-                                    tcp->unlock();
-                                return;
                             }
                         });
         }
@@ -1704,23 +1691,26 @@ namespace mrv
                                 p.progress->set_start(0);
                                 p.progress->set_end(static_cast<int64_t>(totalFrames));
                                 p.progress->set_value(static_cast<int64_t>(cachedFramesInRange));
-                                Fl::check();
                             }
 
-                            // If the number of cached frames meets or exceeds the requested range
                             if (cachedFramesInRange >= totalFrames)
                             {
                                 delete p.progress;
                                 p.progress = nullptr;
-                                ui->uiView->setPlayback(playback);
-                                p.cacheInfoObserver.reset();
-                                if (!isLocked)
-                                    tcp->unlock();
                                 return;
                             }
                         });
         }
 
+        while (use_progress && p.progress && p.progress->window()->shown())
+        {
+            Fl::check();
+        }
+
+        if (!isLocked)
+            tcp->unlock();
+        p.cacheInfoObserver.reset();
+        ui->uiView->setPlayback(playback);
     }
 
     int App::run()
@@ -1747,14 +1737,7 @@ namespace mrv
                 if (p.options.playback == timeline::Playback::Count)
                     p.options.playback = timeline::Playback::Forward;
 
-#ifdef __linux__
-                // Must be 0.75 to prevent display not showing up.
-                Fl::add_timeout(
-                    0.75, (Fl_Timeout_Handler)start_playback_cb, this);
-#else
-                Fl::add_timeout(
-                    0.01, (Fl_Timeout_Handler)start_playback_cb, this);
-#endif
+                startPlayback();
             }
         }
         p.running = true;
@@ -2218,9 +2201,9 @@ namespace mrv
 
         // Handle FileSequence options
         options.imageSeqAudio = static_cast<timeline::ImageSeqAudio>(
-            p.settings->getValue<int>("FileSequence/Audio"));
+            p.settings->getValue<int>("ImageSequence/Audio"));
         options.imageSeqAudioFileName =
-            p.settings->getValue<std::string>("FileSequence/AudioFileName");
+            p.settings->getValue<std::string>("ImageSequence/AudioFileName");
 
         // Handle OTIO options
         options.spatial = static_cast<timeline::Spatial>(p.settings->getValue<int>("OTIO/Spatial"));
@@ -2315,6 +2298,7 @@ namespace mrv
             }
         }
 
+        bool startAutoPlayback = false;
         std::shared_ptr<TimelinePlayer> player;
         if (!p.activeFiles.empty() && isRunning() && p.player)
         {
@@ -2340,9 +2324,8 @@ namespace mrv
             }
             else
             {
-
-                auto i =
-                    std::find(p.files.begin(), p.files.end(), activeFiles[0]);
+                auto i = std::find(p.files.begin(), p.files.end(),
+                                   activeFiles[0]);
                 if (i != p.files.end())
                 {
                     const auto& item = *i;
@@ -2416,8 +2399,7 @@ namespace mrv
                                 }
 
                                 p.options.playback = timeline::Playback::Forward;
-                                Fl::add_timeout(
-                                    0.0, (Fl_Timeout_Handler)start_playback_cb, this);
+                                startAutoPlayback = true;
                             }
 
                             // Add the new file to recent files, unless it is
@@ -2572,6 +2554,8 @@ namespace mrv
 
         _audioUpdate();
 
+        if (startAutoPlayback && p.player)
+            startPlayback();
     }
 
     OTIO_NS::RationalTime App::_cacheReadAhead() const

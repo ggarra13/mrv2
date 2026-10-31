@@ -346,22 +346,26 @@ namespace mrv
             }
         }
 
-        void TimelineViewport::_handleCompareOverlay() noexcept
+        int TimelineViewport::_handleCompareOverlay() noexcept
         {
             TLRENDER_P();
 
+            int ret = 0;
             if (Fl::event_alt())
             {
                 float dx = p.event_x / (float)w();
                 p.compareOptions.overlay = dx;
                 p.ui->app->filesModel()->setCompareOptions(p.compareOptions);
+                return 1;
             }
+            return ret;
         }
 
-        void TimelineViewport::_handleCompareWipe() noexcept
+        int TimelineViewport::_handleCompareWipe() noexcept
         {
             TLRENDER_P();
 
+            int ret = 0;
             if (Fl::event_alt())
             {
                 math::Vector2f pos = _getRasterf();
@@ -374,6 +378,7 @@ namespace mrv
                 p.compareOptions.wipeCenter.y = 1.0F - dy;
                 p.ui->app->filesModel()->setCompareOptions(p.compareOptions);
                 redrawWindows();
+                ret = 1;
             }
             else if (Fl::event_shift())
             {
@@ -381,24 +386,26 @@ namespace mrv
                 p.compareOptions.wipeRotation = dx;
                 p.ui->app->filesModel()->setCompareOptions(p.compareOptions);
                 redrawWindows();
+                ret = 1;
             }
+            return ret;
         }
 
         int TimelineViewport::_handleDragLeftMouseButton() noexcept
         {
             TLRENDER_P();
 
+            int ret = 0;
             if (p.compareOptions.mode == timeline::CompareMode::Wipe)
             {
-                _handleCompareWipe();
-                return 1;
+                ret = _handleCompareWipe();
             }
             else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
             {
-                _handleCompareOverlay();
-                return 1;
+                ret = _handleCompareOverlay();
             }
-            else
+
+            if (ret == 0)
             {
                 if (p.actionMode == ActionMode::kScrub ||
                     (p.actionMode == ActionMode::kRotate && _isEnvironmentMap()))
@@ -496,6 +503,7 @@ namespace mrv
                     }
                 }
             }
+            return ret;
         }
 
         void TimelineViewport::_startVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice)
@@ -585,17 +593,17 @@ namespace mrv
             if (p.player)
                 p.playbackMode = p.player->playback();
 
+            int ret = 0;
             if (p.compareOptions.mode == timeline::CompareMode::Wipe)
             {
-                _handleCompareWipe();
-                return 1;
+                ret = _handleCompareWipe();
             }
             else if (p.compareOptions.mode == timeline::CompareMode::Overlay)
             {
-                _handleCompareOverlay();
-                return 1;
+                ret = _handleCompareOverlay();
             }
-            else
+
+            if (ret == 0)
             {
                 if (Fl::event_shift() || p.actionMode == ActionMode::kSelection)
                 {
@@ -743,7 +751,7 @@ namespace mrv
                     return _handlePushLeftMouseButtonShapes();
                 }
             }
-            return 0;
+            return ret;
         }
 
         int TimelineViewport::_handleDragSelection() noexcept

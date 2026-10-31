@@ -170,10 +170,11 @@ jobs:
       - name: Install pyFLTK dependencies
         run: |
           brew install swig pcre bison
-          brew uninstall turbo-jpeg
+          brew uninstall turbo-jpeg 2>/dev/null || true
 
-          echo "$(brew --prefix bison)/bin" >> "$GITHUB_PATH"
-          echo "$(brew --prefix pcre2)/bin" >> "$GITHUB_PATH"
+          echo "$(brew --prefix swig)/bin" >> "$GITHUB_PATH"
+          # echo "$(brew --prefix bison)/bin" >> "$GITHUB_PATH"
+          # echo "$(brew --prefix pcre2)/bin" >> "$GITHUB_PATH"
         
       - name: Install curl dependencies
         run: brew install libidn2

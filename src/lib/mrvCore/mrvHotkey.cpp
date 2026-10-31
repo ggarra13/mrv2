@@ -86,6 +86,7 @@ namespace mrv
     Hotkey kDisplayWindow(true, false, false, false, 'd');
     Hotkey kDataWindow(false, false, false, false, 'd');
 
+    Hotkey kToggleCompareTimelines(false, false, false, false, 0);
     Hotkey kCompareNone(false, false, false, false, 0);
     Hotkey kCompareWipe(false, false, true, false, 'w');
     Hotkey kCompareOverlay(false, false, false, false, 0);
@@ -469,6 +470,7 @@ namespace mrv
         HotkeyEntry(_("Toggle HDR Peak Detection"), &kToggleHDRPeakDetection),
         HotkeyEntry(_("Display Window"), &kDisplayWindow),
         HotkeyEntry(_("Data Window"), &kDataWindow),
+        HotkeyEntry(_("Toggle Compare Timelines"), &kToggleCompareTimelines),
         HotkeyEntry(_("Compare None"), &kCompareNone),
         HotkeyEntry(_("Compare Wipe"), &kCompareWipe),
         HotkeyEntry(_("Compare Overlay"), &kCompareOverlay),

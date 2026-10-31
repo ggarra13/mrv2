@@ -3,6 +3,11 @@
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
+layout(push_constant) uniform PushConstants {
+    mat4 mvp;
+    vec4 color;
+} pc;
+
 // enum tl::image::PixelType
 const int PixelType_None              = 0;
 const int PixelType_L_U8              = 1;
@@ -204,7 +209,7 @@ vec4 sampleTexture(
     return c;
 }
 
-layout(set = 0, binding = 1, std140) uniform UBO {
+layout(set = 0, binding = 0, std140) uniform UBO {
                                 vec4      yuvCoefficients;
                                 vec4      color;
                                 int       pixelType;
@@ -214,9 +219,9 @@ layout(set = 0, binding = 1, std140) uniform UBO {
                                 int       mirrorY;
 } ubo;
 
-layout(binding = 2) uniform sampler2D textureSampler0;
-layout(binding = 3) uniform sampler2D textureSampler1;
-layout(binding = 4) uniform sampler2D textureSampler2;
+layout(binding = 1) uniform sampler2D textureSampler0;
+layout(binding = 2) uniform sampler2D textureSampler1;
+layout(binding = 3) uniform sampler2D textureSampler2;
 
 void main()
 {

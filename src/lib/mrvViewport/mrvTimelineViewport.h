@@ -517,8 +517,9 @@ namespace mrv
 
             void _setVideoRotation(float value) noexcept;
             void _frameView() noexcept;
-            void _handleCompareWipe() noexcept;
-            void _handleCompareOverlay() noexcept;
+
+            int  _handleCompareWipe() noexcept;
+            int  _handleCompareOverlay() noexcept;
 
             int  _handlePushLeftMouseButton() noexcept;
             int  _handlePushLeftMouseButtonShapes() noexcept;

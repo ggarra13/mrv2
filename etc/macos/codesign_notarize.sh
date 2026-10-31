@@ -262,6 +262,21 @@ sign_bundle() {
         _sign_macho "${so}"
     done < <(find "${bundle}" -name "*.so" -print0)
 
+    # ── 2b. Mach-O binaries nested inside *.framework bundles ────────────────
+    #    codesign on a framework only signs the "main" binary resolved via
+    #    Versions/Current. Any other Mach-O file inside it — e.g. the real
+    #    versioned binary when FOLLOW_SYMLINK_CHAIN flattened the symlinks —
+    #    is only sealed into CodeResources, never individually signed, and
+    #    the notary service rejects it. Sign them explicitly first.
+    info "Signing Mach-O binaries nested inside frameworks…"
+    while IFS= read -r -d '' fwbin; do
+        [[ -L "${fwbin}" ]] && continue
+        if _is_macho "${fwbin}"; then
+            info "  fw-bin: ${fwbin#"${bundle}/"}"
+            _sign_macho "${fwbin}"
+        fi
+    done < <(find "${bundle}" -path "*.framework/*" -type f -print0)
+
     # ── 3. Frameworks (sign the whole framework bundle, not just the binary) ──
     # Process deepest first to avoid signing a framework that contains
     # an already-signed sub-framework.

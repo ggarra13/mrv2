@@ -45,6 +45,12 @@ namespace tl
             void finishedAudioRequests();
 
             void resetAudioTime();
+
+            // Recalculate timeRange from the main and compare timelines.
+            // Call from the main thread after the main timeline or the
+            // compare timelines have changed, then copy the result to
+            // mutex.timeRange.
+            void updateTimeRange();
 #if defined(TLRENDER_AUDIO)
             static int rtAudioCallback(
                 void* outputBuffer, void* inputBuffer, unsigned int nFrames,
@@ -62,9 +68,17 @@ namespace tl
 
             void log(const std::shared_ptr<system::Context>&);
 
+            void setTimeRange(const OTIO_NS::TimeRange&);
+
             PlayerOptions playerOptions;
             std::shared_ptr<Timeline> timeline;
             io::Info ioInfo;
+
+            // The time range of the player: the earliest start time and the
+            // longest duration of the main timeline and the compare
+            // timelines, at the main timeline's rate. Main thread only; the
+            // player's thread uses its own copy in thread.timeRange.
+            std::shared_ptr<observer::Value<OTIO_NS::TimeRange> > timeRange;
 
             // The audio format of the media, found when the timeline was read.
             // This is stable across media reference keys, because the timeline
@@ -103,6 +117,7 @@ namespace tl
                 OTIO_NS::RationalTime playbackStartTime = time::invalidTime;
                 std::chrono::steady_clock::time_point playbackStartTimer;
                 OTIO_NS::RationalTime currentTime = time::invalidTime;
+                OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
                 OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
                 std::vector<std::shared_ptr<Timeline> > compare;
                 CompareTimeMode compareTime = CompareTimeMode::Relative;
@@ -144,6 +159,7 @@ namespace tl
             {
                 Playback playback = Playback::Stop;
                 OTIO_NS::RationalTime currentTime = time::invalidTime;
+                OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
                 OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
                 std::vector<std::shared_ptr<Timeline> > compare;
                 CompareTimeMode compareTime = CompareTimeMode::Relative;

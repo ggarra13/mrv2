@@ -272,6 +272,7 @@ namespace tl
             void _createVertexShader(const std::string&);
             void _createFragmentShader(const std::string&);
             void _createComputeShader(const std::string&);
+            void _setObjectName();
 
             Fl_Vk_Context& ctx;
 

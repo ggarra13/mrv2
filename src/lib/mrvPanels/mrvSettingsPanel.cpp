@@ -201,12 +201,12 @@ namespace mrv
             {
                 m->add(_(i.c_str()));
             }
-            m->value(settings->getValue<int>("FileSequence/Audio"));
+            m->value(settings->getValue<int>("ImageSequence/Audio"));
             mW->callback(
                 [=, this](auto o)
                 {
                     int v = o->value();
-                    settings->setValue("FileSequence/Audio", v);
+                    settings->setValue("ImageSequence/Audio", v);
                 });
 
             Fl_Input* i;
@@ -217,14 +217,14 @@ namespace mrv
             i->textcolor(FL_BLACK);
             i->cursor_color(FL_RED);
             std::string file =
-                settings->getValue<std::string>("FileSequence/AudioFileName");
+                settings->getValue<std::string>("ImageSequence/AudioFileName");
 
             i->value(file.c_str());
             iW->callback(
                 [=, this](auto o)
                 {
                     std::string file = o->value();
-                    settings->setValue("FileSequence/AudioFileName", file);
+                    settings->setValue("ImageSequence/AudioFileName", file);
                 });
 
             auto inW = new Widget<Fl_Int_Input>(

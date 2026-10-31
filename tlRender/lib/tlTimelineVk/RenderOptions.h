@@ -59,5 +59,10 @@
 //
 #define USE_OCIO_VULKAN 0
 
-
-#include <tlTimelineVk/RenderShadersBinary.h>
+#if USE_PRECOMPILED_SHADERS
+#  include <tlTimelineVk/RenderShadersBinary.h>
+#else
+#  warning "Not compiling with binary shaders"
+#  include <tlTimelineVk/RenderShadersBinary.h>
+#  include <tlTimelineVk/RenderPrivate.h>
+#endif

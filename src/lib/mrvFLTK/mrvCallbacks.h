@@ -72,6 +72,8 @@ namespace mrv
     void select_Bfile_cb(Fl_Widget* w, void* idx);
 
     //! Compare callbacks
+    void toggle_compare_timelines_cb(Fl_Menu_* m, ViewerUI* ui);
+
     void compare_a_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_b_cb(Fl_Widget* w, ViewerUI* ui);
     void toggle_compare_a_and_b_cb(Fl_Widget* w, ViewerUI* ui);

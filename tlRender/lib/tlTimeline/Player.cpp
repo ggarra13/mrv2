@@ -118,6 +118,8 @@ namespace tl
             p.playerOptions = playerOptions;
             p.timeline = timeline;
             p.ioInfo = timeline->getIOInfo();
+            p.timeRange =
+                observer::Value<OTIO_NS::TimeRange>::create(timeline->getTimeRange());
             p.sourceAudioInfo = timeline->getIOInfo().audio;
 
             // Create observers.
@@ -128,9 +130,9 @@ namespace tl
             p.currentTime = observer::Value<OTIO_NS::RationalTime>::create(
                 playerOptions.currentTime != time::invalidTime
                     ? playerOptions.currentTime
-                    : p.timeline->getTimeRange().start_time());
-            p.inOutRange = observer::Value<OTIO_NS::TimeRange>::create(
-                p.timeline->getTimeRange());
+                    : p.timeRange->get().start_time());
+            p.inOutRange =
+                observer::Value<OTIO_NS::TimeRange>::create(p.timeRange->get());
             p.compare = observer::List<std::shared_ptr<Timeline> >::create();
             p.compareTime = observer::Value<CompareTimeMode>::create(
                 CompareTimeMode::Relative);
@@ -174,6 +176,7 @@ namespace tl
             if (playerOptions.playback == Playback::Reverse)
                 p.mutex.cacheDirection = CacheDirection::Reverse;
             p.mutex.currentTime = p.currentTime->get();
+            p.mutex.timeRange = p.timeRange->get();
             p.mutex.inOutRange = p.inOutRange->get();
             p.mutex.audioOffset = p.audioOffset->get();
             p.mutex.cacheOptions = p.cacheOptions->get();
@@ -283,6 +286,7 @@ namespace tl
                             std::unique_lock<std::mutex> lock(p.mutex.mutex);
                             p.thread.playback = p.mutex.playback;
                             p.thread.currentTime = p.mutex.currentTime;
+                            p.thread.timeRange = p.mutex.timeRange;
                             p.thread.inOutRange = p.mutex.inOutRange;
                             compare = p.mutex.compare;
                             p.thread.compareTime = p.mutex.compareTime;
@@ -427,7 +431,7 @@ namespace tl
         void Player::updateVideoFrame()
         {
             TLRENDER_P();
-            const auto& timeRange = p.timeline->getTimeRange();
+            const auto& timeRange = p.thread.timeRange;
             if (!p.ioInfo.video.empty())
             {
                 const auto i = p.thread.videoCache.find(p.thread.currentTime);
@@ -499,7 +503,13 @@ namespace tl
 
         const OTIO_NS::TimeRange& Player::getTimeRange() const
         {
-            return _p->timeline->getTimeRange();
+            return _p->timeRange->get();
+        }
+
+        std::shared_ptr<observer::IValue<OTIO_NS::TimeRange> >
+        Player::observeTimeRange() const
+        {
+            return _p->timeRange;
         }
 
         const io::Info& Player::getIOInfo() const
@@ -666,7 +676,7 @@ namespace tl
             TLRENDER_P();
 
             // Loop the time.
-            const auto& timeRange = p.timeline->getTimeRange();
+            const auto& timeRange = p.timeRange->get();
             const auto tmp =
                 loop(time.rescaled_to(timeRange.duration()).floor(), timeRange);
 
@@ -814,8 +824,8 @@ namespace tl
         {
             TLRENDER_P();
             setInOutRange(OTIO_NS::TimeRange::range_from_start_end_time(
-                p.timeline->getTimeRange().start_time(),
-                p.inOutRange->get().end_time_exclusive()));
+                              p.timeRange->get().start_time(),
+                              p.inOutRange->get().end_time_exclusive()));
         }
 
         void Player::setOutPoint()
@@ -830,7 +840,7 @@ namespace tl
             TLRENDER_P();
             setInOutRange(OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                 p.inOutRange->get().start_time(),
-                p.timeline->getTimeRange().end_time_inclusive()));
+                p.timeRange->get().end_time_inclusive()));
         }
 
         const std::vector<std::shared_ptr<Timeline> >&
@@ -851,10 +861,29 @@ namespace tl
             TLRENDER_P();
             if (p.compare->setIfChanged(value))
             {
-                std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                p.mutex.compare = value;
-                p.mutex.clearRequests = true;
-                p.mutex.clearCache = true;
+                // The player's time range depends on the compare timelines.
+                const OTIO_NS::TimeRange oldTimeRange = p.timeRange->get();
+                p.updateTimeRange();
+                {
+                    std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                    p.mutex.compare = value;
+                    p.mutex.timeRange = p.timeRange->get();
+                    p.mutex.clearRequests = true;
+                    p.mutex.clearCache = true;
+                }
+                if (p.timeRange->get() != oldTimeRange)
+                {
+                    // Follow the time range if the in/out points were not
+                    // changed by the user, otherwise keep them within it.
+                    const OTIO_NS::TimeRange inOutRange = p.inOutRange->get();
+                    setInOutRange(
+                        inOutRange == oldTimeRange
+                        ? p.timeRange->get()
+                        : inOutRange.clamped(p.timeRange->get()));
+
+                    // Make sure the current time is still valid.
+                    seek(p.currentTime->get());
+                }
             }
         }
 
@@ -1095,8 +1124,13 @@ namespace tl
             p.timeline->setTimeline(value);
             if (!p.timeline)
                 return;
+            p.updateTimeRange();
+            {
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.mutex.timeRange = p.timeRange->get();
+            }
             p.speed->setIfChanged(p.timeline->getTimeRange().duration().rate());
-            p.inOutRange->setIfChanged(p.timeline->getTimeRange());
+            p.inOutRange->setIfChanged(p.timeRange->get());
         }
 
         void Player::tick()

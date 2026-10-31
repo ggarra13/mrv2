@@ -59,8 +59,10 @@ unset DYLD_LIBRARY_PATH
 
 export branch=$(git rev-parse --abbrev-ref HEAD)
 if [[ "$branch" != "beta" && \
-          "$branch" != "peace" ]]; then
-    echo "You are not on the beta or peace branch.  Will not make a release."
+          "$branch" != "peace" &&
+	  "$branch" != "love" ]]; then
+    echo "You are not on the beta, love or peace branch.  "
+    echo "Will not make a release."
     exit 0
 fi
 

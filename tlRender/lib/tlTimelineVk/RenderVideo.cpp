@@ -42,8 +42,6 @@ namespace tl
             const timeline::CompareOptions& compareOptions,
             const timeline::BackgroundOptions& backgroundOptions)
         {
-            TLRENDER_P();
-
             if (!videoFrame.empty() && !videoFrame.front().layers.empty())
             {
                 _drawBackground(boxes, backgroundOptions);
@@ -137,10 +135,13 @@ namespace tl
                     _create2DMesh("colorMesh", mesh);
                     createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh");
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts["checkers"];
+                    PushConstants pc;
+                    pc.mvp = p.transform;
+                    pc.color = color;
                     vkCmdPushConstants(
                         p.cmd, pipelineLayout,
                         p.shaders["colorMesh"]->getPushStageFlags(), 0,
-                        sizeof(color), &color);
+                        sizeof(pc), &pc);
 
                     p.fbo->transitionToColorAttachment(p.cmd);
                     p.fbo->beginClearRenderPass(p.cmd);
@@ -171,10 +172,13 @@ namespace tl
                     _create2DMesh("colorMesh", mesh);
                     createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts["gradient"];
+                    PushConstants pc;
+                    pc.mvp = p.transform;
+                    pc.color = color;
                     vkCmdPushConstants(
                         p.cmd, pipelineLayout,
                         p.shaders["colorMesh"]->getPushStageFlags(), 0,
-                        sizeof(color), &color);
+                        sizeof(pc), &pc);
                     p.fbo->transitionToColorAttachment(p.cmd);
                     p.fbo->beginClearRenderPass(p.cmd);
                     drawColorMesh("gradient", mesh, math::Vector2i(), image::Color4f(1.F, 1.F, 1.F));
@@ -427,10 +431,14 @@ namespace tl
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
             _createBindingSet(wipeShader);
+            color = image::Color4f(0.F, 0.F, 0.F);
+
+            PushConstants pc;
+            pc.mvp = p.transform;
+            pc.color = color;
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                wipeShader->getPushStageFlags(), 0,
-                               sizeof(color), &color);
-            wipeShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+                               sizeof(pc), &pc);
             _bindDescriptorSets(pipelineLayoutName, wipeShader);
 
             _vkDraw("wipe");
@@ -501,10 +509,11 @@ namespace tl
 
             _createBindingSet(textureShader);
             color = image::Color4f(1.F, 1.F, 1.F);
+            pc.mvp = p.transform;
+            pc.color = color;
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                textureShader->getPushStageFlags(), 0,
-                               sizeof(color), &color);
-            textureShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+                               sizeof(pc), &pc);
             textureShader->setFBO("textureSampler",
                                   p.buffers["wipe_image"]);
             _bindDescriptorSets(pipelineLayoutName, textureShader);
@@ -609,11 +618,12 @@ namespace tl
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
             _createBindingSet(wipeShader);
-            color = image::Color4f(0.F, 1.F, 0.F);
+            color = image::Color4f(0.F, 0.F, 0.F);
+            pc.mvp = p.transform;
+            pc.color = color;
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                wipeShader->getPushStageFlags(), 0,
-                               sizeof(color), &color);
-            wipeShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+                               sizeof(pc), &pc);
             _bindDescriptorSets(pipelineLayoutName, wipeShader);
 
             _vkDraw("wipe");
@@ -686,10 +696,11 @@ namespace tl
 
             _createBindingSet(textureShader);
             color = image::Color4f(1.F, 1.F, 1.F);
+            pc.mvp = p.transform;
+            pc.color = color;
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                textureShader->getPushStageFlags(), 0,
-                               sizeof(color), &color);
-            textureShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+                               sizeof(pc), &pc);
             textureShader->setFBO("textureSampler", p.buffers["wipe_image"]);
             _bindDescriptorSets(pipelineLayoutName, textureShader);
 
@@ -764,8 +775,6 @@ namespace tl
 
                     auto textureShader = p.shaders["texture"];
                     _createBindingSet(textureShader);
-                    textureShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-
                     const image::Color4f color = image::Color4f(1.F, 1.F, 1.F, compareOptions.overlay);
 
                     const std::string pipelineName = "texture";
@@ -782,8 +791,12 @@ namespace tl
                                    VK_BLEND_FACTOR_ONE);
 
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                    PushConstants pc;
+                    pc.mvp = p.transform;
+                    pc.color = color;
                     vkCmdPushConstants(p.cmd, pipelineLayout,
-                                       textureShader->getPushStageFlags(), 0, sizeof(color), &color);
+                                       textureShader->getPushStageFlags(), 0,
+                                       sizeof(pc), &pc);
 
                     p.fbo->transitionToColorAttachment(p.cmd);
                     p.fbo->beginLoadRenderPass(p.cmd);
@@ -1057,8 +1070,12 @@ namespace tl
                                                VK_BLEND_FACTOR_ONE);
 
                                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+                                PushConstants pc;
+                                pc.mvp = transform;
+                                pc.color = color;
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
-                                                   textureShader->getPushStageFlags(), 0, sizeof(color), &color);
+                                                   textureShader->getPushStageFlags(), 0,
+                                                   sizeof(pc), &pc);
 
                                 if (clearRenderPass)
                                     p.buffers["video"]->beginClearRenderPass(p.cmd);
@@ -1067,8 +1084,6 @@ namespace tl
 
                                 auto textureShader = p.shaders["texture"];
                                 _createBindingSet(textureShader);
-
-                                textureShader->setUniform("transform.mvp", transform, vlk::kShaderVertex);
                                 textureShader->setFBO("textureSampler", p.buffers["dissolve"]);
 
                                 _bindDescriptorSets(pipelineLayoutName,
@@ -1115,12 +1130,12 @@ namespace tl
                                         VK_BLEND_FACTOR_ONE,
                                         VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
                                 }
+                                pc.mvp = transform;
+                                pc.color = color;
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
                                                    textureShader->getPushStageFlags(), 0,
-                                                   sizeof(color), &color);
+                                                   sizeof(pc), &pc);
 
-                                textureShader->setUniform("transform.mvp", transform,
-                                                                  vlk::kShaderVertex);
                                 textureShader->setFBO("textureSampler", p.buffers["dissolve2"]);
                                 _bindDescriptorSets(pipelineLayoutName,
                                                     textureShader);
@@ -1498,7 +1513,14 @@ namespace tl
 
             // Prepare shaders
             auto shader = p.shaders[shaderName];
-            shader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            PushConstants pc;
+            pc.mvp = p.transform;
+            pc.color = image::Color4f(1, 1, 1, 1);
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            vkCmdPushConstants(
+                p.cmd, pipelineLayout,
+                shader->getPushStageFlags(), 0,
+                sizeof(pc), &pc);
             shader->setFBO("textureSampler", p.buffers["compare0"]);
             shader->setFBO("textureSamplerB", p.buffers["compare1"]);
             _bindDescriptorSets(pipelineLayoutName, shader);

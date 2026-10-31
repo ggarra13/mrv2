@@ -1,3 +1,32 @@
+v1.8.5
+======
+
+ChangeLog
+---------
+
+- UI: Allow artists using the Demo version of the players to see the timeline in full by dragging the separator without requesting an Edit license.
+- UI: Allow timelines to be compared.
+- UI: Reordered Window->Preferences into a more logical order, without changing names so as to remain backwards compatible.
+- UI: Improved the readability of the HUD by using a transparent rectangle instead of text shadow.  This also improves performance a tad on the Vulkan backend.
+- UI: Updated translations.
+
+- UI/Core: Allow scrubbing (with audio on the first clip) while in Compare Mode.
+- UI/Core: Improved accuracy of FPS and dropped frames counters, supporting seeks and reverse playback properly.
+- UI/Core: Improved reverse playback caching.
+
+- Vulkan/Core: Improved playback performance even more.
+- Core: Improved pre-caching of movies that could make it drop several frames at the start of playback.
+
+Fixes
+-----
+
+- UI: OTIO in Timeline Viewport was using OCIO on .otio files even when **Preferences->OCIO Not on Videos** was set on the Vulkan backend.
+- UI: Vulkan Wipe comparison would render green if there was no video at the current time.
+- UI: Some wrong translations and items in Window->Preferences.
+- Core: Made changing languages release a floating license previous to restarting.
+- Core: Fixed a potential compilation error on DirEntry's size.
+
+
 v1.8.4
 ======
 

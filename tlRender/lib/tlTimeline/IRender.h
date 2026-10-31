@@ -14,6 +14,7 @@
 #include <tlTimeline/ShaderOptions.h>
 #include <tlTimeline/Video.h>
 
+#include <tlCore/Box.h>
 #include <tlCore/Context.h>
 #include <tlCore/FontSystem.h>
 #include <tlCore/Mesh.h>
@@ -27,21 +28,26 @@ namespace tl
         struct TextInfo
         {
             TextInfo(unsigned id) :
-                textureId(id)
+                textureId(id),
+                box(math::Vector2i(10000, 10000),
+                    math::Vector2i(0, 0))
                 {
                 };
-            
+
             TextInfo(const geom::TriangleMesh2& mesh, unsigned id) :
                 mesh(mesh),
-                textureId(id)
+                textureId(id),
+                box(math::Vector2i(10000, 10000),
+                    math::Vector2i(0, 0))
                 {
                 };
-            
+
             geom::TriangleMesh2 mesh;
             uint8_t textureId;
             size_t  meshIndex = 0;
+            math::Box2i box;
         };
-        
+
         //! Base class for renderers.
         class IRender : public std::enable_shared_from_this<IRender>
         {
@@ -117,13 +123,13 @@ namespace tl
             virtual void drawColorMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) = 0;
-           
+
             //! Create text meshes to speed up drawing
             virtual void appendText(
                 std::vector<TextInfo>& textInfos,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position) = 0;
-            
+
             //! Draw a text mesh after having been created with appendText.
             virtual void drawText(
                 const TextInfo& info,
@@ -154,7 +160,7 @@ namespace tl
             virtual void beginLoadRenderPass() = 0;
             virtual void endRenderPass() = 0;
             virtual void setupViewportAndScissor() = 0;
-            
+
         protected:
             std::weak_ptr<system::Context> _context;
         };

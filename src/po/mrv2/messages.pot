@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.8.4\n"
+"Project-Id-Version: mrv2 v1.8.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-30 13:52-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3451,6 +3451,9 @@ msgstr ""
 msgid "Select B File."
 msgstr ""
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr ""
+
 msgid "Toggle A and B comparison."
 msgstr ""
 
@@ -4662,6 +4665,9 @@ msgid "Timeline/Frame View"
 msgstr ""
 
 msgid "Timeline/Scroll To Current Frame"
+msgstr ""
+
+msgid "Timeline/Compare Timelines"
 msgstr ""
 
 msgid "Timeline/Track Info"
@@ -6420,6 +6426,93 @@ msgstr ""
 msgid "OpenEXR's Contents to Save"
 msgstr ""
 
+msgid "On Demand From Help Menu"
+msgstr ""
+
+msgid "At Start Up"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Do Nothing"
+msgstr ""
+
+msgid "Open Logs on Dock"
+msgstr ""
+
+msgid "Open Logs on Window"
+msgstr ""
+
+msgid "base"
+msgstr ""
+
+msgid "plastic"
+msgstr ""
+
+msgid "gtk+"
+msgstr ""
+
+msgid "gleam"
+msgstr ""
+
+msgid "oxy"
+msgstr ""
+
+msgid "Pick View Background Color"
+msgstr ""
+
+msgid "Pick View Text Overlay Color"
+msgstr ""
+
+msgid "Pick View Selection Color"
+msgstr ""
+
+msgid "Pick HUD Color"
+msgstr ""
+
+msgid "OpenGL only"
+msgstr ""
+
+msgid "Vulkan and OpenGL"
+msgstr ""
+
+msgid "Float Values"
+msgstr ""
+
+msgid "Hex Values"
+msgstr ""
+
+msgid "8-bit Values"
+msgstr ""
+
+msgid "Full Lut, Gamma and Gain"
+msgstr ""
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr ""
+
+msgid "CIE XYZ"
+msgstr ""
+
+msgid "CIE xyY"
+msgstr ""
+
+msgid "Small"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Medium"
+msgstr ""
+
+msgid "Large"
+msgstr ""
+
 msgid "0.00 None"
 msgstr ""
 
@@ -6468,61 +6561,46 @@ msgstr ""
 msgid "Slow"
 msgstr ""
 
-msgid "Medium"
-msgstr ""
-
 msgid "Fast"
 msgstr ""
 
-msgid "base"
+msgid "Loop"
 msgstr ""
 
-msgid "plastic"
+msgid "Ping Pong"
 msgstr ""
 
-msgid "gtk+"
+msgid "29.97"
 msgstr ""
 
-msgid "gleam"
+msgid "14.985"
 msgstr ""
 
-msgid "oxy"
+msgid "Button"
 msgstr ""
 
-msgid "Pick View Background Color"
+msgid "Video Only"
 msgstr ""
 
-msgid "Pick View Text Overlay Color"
+msgid "Video and Audio"
 msgstr ""
 
-msgid "Pick View Selection Color"
+msgid "Always"
 msgstr ""
 
-msgid "Pick HUD Color"
+msgid "Presentation Mode"
 msgstr ""
 
-msgid "Float Values"
+msgid "Automatic"
 msgstr ""
 
-msgid "Hex Values"
+msgid "Half Float"
 msgstr ""
 
-msgid "8-bit Values"
+msgid "Full Float (Accurate)"
 msgstr ""
 
-msgid "Full Lut, Gamma and Gain"
-msgstr ""
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr ""
-
-msgid "CIE XYZ"
-msgstr ""
-
-msgid "CIE xyY"
-msgstr ""
-
-msgid "Small"
+msgid "GPU 0"
 msgstr ""
 
 msgid "High"
@@ -6546,12 +6624,6 @@ msgstr ""
 msgid "Nearest"
 msgstr ""
 
-msgid "Normal"
-msgstr ""
-
-msgid "Large"
-msgstr ""
-
 msgid "Use RGBA"
 msgstr ""
 
@@ -6562,12 +6634,6 @@ msgid "Ignore"
 msgstr ""
 
 msgid "Apply"
-msgstr ""
-
-msgid "Inactive"
-msgstr ""
-
-msgid "Active"
 msgstr ""
 
 msgid "ST2094_40"
@@ -6621,33 +6687,6 @@ msgstr ""
 msgid "Highlight"
 msgstr ""
 
-msgid "OpenGL only"
-msgstr ""
-
-msgid "Vulkan and OpenGL"
-msgstr ""
-
-msgid "29.97"
-msgstr ""
-
-msgid "14.985"
-msgstr ""
-
-msgid "Loop"
-msgstr ""
-
-msgid "Ping Pong"
-msgstr ""
-
-msgid "Button"
-msgstr ""
-
-msgid "Video Only"
-msgstr ""
-
-msgid "Video and Audio"
-msgstr ""
-
 msgid "CG"
 msgstr ""
 
@@ -6670,24 +6709,6 @@ msgid "Gap Frame"
 msgstr ""
 
 msgid "Pick Scratch Color"
-msgstr ""
-
-msgid "Always"
-msgstr ""
-
-msgid "Presentation Mode"
-msgstr ""
-
-msgid "Automatic"
-msgstr ""
-
-msgid "Half Float"
-msgstr ""
-
-msgid "Full Float (Accurate)"
-msgstr ""
-
-msgid "GPU 0"
 msgstr ""
 
 msgid "X 2"
@@ -6714,27 +6735,12 @@ msgstr ""
 msgid "Temp Directory"
 msgstr ""
 
-msgid "Do Nothing"
-msgstr ""
-
-msgid "Open Logs on Dock"
-msgstr ""
-
-msgid "Open Logs on Window"
-msgstr ""
-
-msgid "On Demand From Help Menu"
-msgstr ""
-
-msgid "At Start Up"
-msgstr ""
-
 msgid ""
 "This will reset all your preferences to their default values.  Are you sure "
 "you want to continue?"
 msgstr ""
 
-msgid "User Interface"
+msgid "General"
 msgstr ""
 
 msgid "Window Behavior"
@@ -6758,15 +6764,6 @@ msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
 "If you try to open several mrv2s with different images, all these images "
 "will be sent to the already open mrv2."
-msgstr ""
-
-msgid "Auto Refit Image"
-msgstr ""
-
-msgid ""
-"When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectively means the video will be resized automatically based on the "
-"size of the window."
 msgstr ""
 
 msgid "Raise on Enter"
@@ -6801,219 +6798,26 @@ msgstr ""
 msgid "When selected, mrv2 will start in a maximized window."
 msgstr ""
 
-msgid "User Interface Elements"
+msgid "Behavior"
 msgstr ""
 
-msgid "UI Elements"
+msgid "Check for Updates"
 msgstr ""
 
-msgid "Tooltips"
+msgid "Allows you to automatically download updates of mrv2 when it starts up."
 msgstr ""
 
-msgid "Choose whether to show tooltips or not."
-msgstr ""
-
-msgid "Menu Bar"
-msgstr ""
-
-msgid "When selected, mrv2 will start with the menu bar already shown."
-msgstr ""
-
-msgid "Topbar"
+msgid "Allow Screen Saver"
 msgstr ""
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
+"This setting controls whether mrv2 will block the screen saver when running."
 msgstr ""
 
-msgid "Pixel Toolbar"
+msgid "Window Position"
 msgstr ""
 
-msgid "When selected, mrv2 will start with the pixel toolbar shown."
-msgstr ""
-
-msgid "When selected, mrv2 will start with the timeline shown."
-msgstr ""
-
-msgid "macOS Menus"
-msgstr ""
-
-msgid ""
-"This is a macOS setting only.  When selected the menus will appear on the "
-"system toolbar instead of the mrv2 toolbar."
-msgstr ""
-
-msgid "Tool Dock"
-msgstr ""
-
-msgid "When selected, mrv2 will start with the action tool dock already open."
-msgstr ""
-
-msgid "Status Bar"
-msgstr ""
-
-msgid "When selected, mrv2 will start with the status bar visible."
-msgstr ""
-
-msgid "Only One Panel"
-msgstr ""
-
-msgid "When selected, mrv2 will start with the only one panel option selected."
-msgstr ""
-
-msgid "View Window"
-msgstr ""
-
-msgid "Defaults"
-msgstr ""
-
-msgid "Sets the default gain when mrv2 starts."
-msgstr ""
-
-msgid "Sets the default gamma when mrv2 starts."
-msgstr ""
-
-msgid "Crop"
-msgstr ""
-
-msgid "Allows you to select a standard cropping area around image."
-msgstr ""
-
-msgid "Auto Frame"
-msgstr ""
-
-msgid "When this is on, View/Auto Frame will be active."
-msgstr ""
-
-msgid "Safe Areas"
-msgstr ""
-
-msgid "When mrv2 starts, the safe area display will be active by default."
-msgstr ""
-
-msgid "OCIO in Top Bar"
-msgstr ""
-
-msgid ""
-"When mrv2 starts, OCIO should start in the top bar instead of color "
-"adjustments."
-msgstr ""
-
-msgid "Zoom Speed"
-msgstr ""
-
-msgid "HUD"
-msgstr ""
-
-msgid ""
-"This area specifies which elements should be shown as a HUD overlay on the "
-"view screen."
-msgstr ""
-
-msgid "Frame"
-msgstr ""
-
-msgid "Frame Range"
-msgstr ""
-
-msgid "Frame Count"
-msgstr ""
-
-msgid "Attributes"
-msgstr ""
-
-msgid "Font Size"
-msgstr ""
-
-msgid "File Requester"
-msgstr ""
-
-msgid "Single Click to Travel Drawers"
-msgstr ""
-
-msgid ""
-"When using mrv2's file chooser, a single click on a folder will open it."
-msgstr ""
-
-msgid "Thumbnails Active"
-msgstr ""
-
-msgid "Show thumbnails for known files."
-msgstr ""
-
-msgid "USD Thumbnails"
-msgstr ""
-
-msgid "Show Thumbnails for USD files (can be slow if they are big)"
-msgstr ""
-
-msgid "Use Native File Chooser"
-msgstr ""
-
-msgid ""
-"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
-"standard file chooser will be used."
-msgstr ""
-
-msgid "Fonts"
-msgstr ""
-
-msgid "Menus"
-msgstr ""
-
-msgid "Sets the font to use in menus."
-msgstr ""
-
-msgid "Panels"
-msgstr ""
-
-msgid "Sets the font to use in panels. (Not yet working)"
-msgstr ""
-
-msgid "Language and Colors"
-msgstr ""
-
-msgid "Scheme"
-msgstr ""
-
-msgid "Color Theme"
-msgstr ""
-
-msgid "Reload Theme"
-msgstr ""
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr ""
-
-msgid "Selects the background color of areas outside the current image."
-msgstr ""
-
-msgid "Text Overlay"
-msgstr ""
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr ""
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr ""
-
-msgid "Selects the color of HUD overlays."
-msgstr ""
-
-msgid "RGBA Display"
-msgstr ""
-
-msgid "Pixel Values"
-msgstr ""
-
-msgid "Secondary Display"
-msgstr ""
-
-msgid "Luminance"
-msgstr ""
-
-msgid "Positioning"
+msgid "Position and Size"
 msgstr ""
 
 msgid "Always Save on Exit"
@@ -7054,6 +6858,9 @@ msgstr ""
 msgid "H:"
 msgstr ""
 
+msgid "Screen:"
+msgstr ""
+
 msgid "Take Current Window Values"
 msgstr ""
 
@@ -7063,25 +6870,146 @@ msgid ""
 "Fixed Size depending what you want to save."
 msgstr ""
 
-msgid "Screen:"
+msgid "Interface"
 msgstr ""
 
-msgid "Render"
+msgid "UI Elements"
 msgstr ""
 
-msgid "Debanding (Vulkan)"
+msgid "Menu Bar"
 msgstr ""
 
-msgid "Makes gradients smoother on video files."
+msgid "When selected, mrv2 will start with the menu bar already shown."
 msgstr ""
 
-msgid "Alpha Blend"
+msgid "Topbar"
 msgstr ""
 
-msgid "Minify Filter"
+msgid ""
+"When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
 msgstr ""
 
-msgid "Magnify Filter"
+msgid "Pixel Toolbar"
+msgstr ""
+
+msgid "When selected, mrv2 will start with the pixel toolbar shown."
+msgstr ""
+
+msgid "When selected, mrv2 will start with the timeline shown."
+msgstr ""
+
+msgid "Status Bar"
+msgstr ""
+
+msgid "When selected, mrv2 will start with the status bar visible."
+msgstr ""
+
+msgid "Tool Dock"
+msgstr ""
+
+msgid "When selected, mrv2 will start with the action tool dock already open."
+msgstr ""
+
+msgid "Only One Panel"
+msgstr ""
+
+msgid "When selected, mrv2 will start with the only one panel option selected."
+msgstr ""
+
+msgid "Tooltips"
+msgstr ""
+
+msgid "Choose whether to show tooltips or not."
+msgstr ""
+
+msgid "macOS Menus"
+msgstr ""
+
+msgid ""
+"This is a macOS setting only.  When selected the menus will appear on the "
+"system toolbar instead of the mrv2 toolbar."
+msgstr ""
+
+msgid "On FFmpeg Error"
+msgstr ""
+
+msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
+msgstr ""
+
+msgid "On Error"
+msgstr ""
+
+msgid "Adjusts how Log Window behaves in case of error."
+msgstr ""
+
+msgid "Appearance"
+msgstr ""
+
+msgid "Language and Theme"
+msgstr ""
+
+msgid "Scheme"
+msgstr ""
+
+msgid "Color Theme"
+msgstr ""
+
+msgid "Reload Theme"
+msgstr ""
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr ""
+
+msgid "Fonts"
+msgstr ""
+
+msgid "Menus"
+msgstr ""
+
+msgid "Sets the font to use in menus."
+msgstr ""
+
+msgid "Panels"
+msgstr ""
+
+msgid "Sets the font to use in panels. (Not yet working)"
+msgstr ""
+
+msgid "View Colors"
+msgstr ""
+
+msgid "Selects the background color of areas outside the current image."
+msgstr ""
+
+msgid "Text Overlay"
+msgstr ""
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr ""
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr ""
+
+msgid "HUD"
+msgstr ""
+
+msgid "Selects the color of HUD overlays."
+msgstr ""
+
+msgid "Auto Hide Pixel Bar"
+msgstr ""
+
+msgid "RGBA Display"
+msgstr ""
+
+msgid "Pixel Values"
+msgstr ""
+
+msgid "Secondary Display"
+msgstr ""
+
+msgid "Luminance"
 msgstr ""
 
 msgid "Thumbnails"
@@ -7105,18 +7033,6 @@ msgstr ""
 msgid "How to display timeline thumbnails in Stereo Panel."
 msgstr ""
 
-msgid "Edit Viewport"
-msgstr ""
-
-msgid "How to display timeline thumbnails by default."
-msgstr ""
-
-msgid "Preview Thumbnails above Timeline"
-msgstr ""
-
-msgid "Preview Thumbnails in a rectangle above Timeline"
-msgstr ""
-
 msgid "Refresh Thumbnails on Panels Manuallly"
 msgstr ""
 
@@ -7125,16 +7041,156 @@ msgid ""
 "automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
 msgstr ""
 
+msgid "Timeline and Edit Viewport"
+msgstr ""
+
+msgid "Preview Thumbnails above Timeline"
+msgstr ""
+
+msgid "Preview Thumbnails in a rectangle above Timeline"
+msgstr ""
+
+msgid "Edit Viewport"
+msgstr ""
+
+msgid "How to display timeline thumbnails by default."
+msgstr ""
+
+msgid "Edit Viewport Waveforms"
+msgstr ""
+
+msgid "How to display timeline waveforms by default."
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Sets the default gain when mrv2 starts."
+msgstr ""
+
+msgid "Sets the default gamma when mrv2 starts."
+msgstr ""
+
+msgid "Crop"
+msgstr ""
+
+msgid "Allows you to select a standard cropping area around image."
+msgstr ""
+
+msgid "Zoom Speed"
+msgstr ""
+
+msgid "Auto Frame"
+msgstr ""
+
+msgid "When this is on, View/Auto Frame will be active."
+msgstr ""
+
+msgid "Safe Areas"
+msgstr ""
+
+msgid "When mrv2 starts, the safe area display will be active by default."
+msgstr ""
+
+msgid "Auto Refit Image"
+msgstr ""
+
+msgid ""
+"When selected, mrv2 will apply a fit image operation on each video played.  "
+"This effectively means the video will be resized automatically based on the "
+"size of the window."
+msgstr ""
+
+msgid "OCIO in Top Bar"
+msgstr ""
+
+msgid ""
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
+msgstr ""
+
+msgid ""
+"This area specifies which elements should be shown as a HUD overlay on the "
+"view screen."
+msgstr ""
+
+msgid "Frame"
+msgstr ""
+
+msgid "Frame Range"
+msgstr ""
+
+msgid "Frame Count"
+msgstr ""
+
+msgid "Attributes"
+msgstr ""
+
+msgid "Font Size"
+msgstr ""
+
+msgid "Playback"
+msgstr ""
+
+msgid "Auto Playback"
+msgstr ""
+
+msgid "Start Playback when opening files."
+msgstr ""
+
+msgid "Single Click Playback"
+msgstr ""
+
+msgid ""
+"Start Playback when single clicking the left mouse button on the view window"
+msgstr ""
+
+msgid "Looping Mode"
+msgstr ""
+
+msgid "Select default looping mode in timeline."
+msgstr ""
+
+msgid "Sequences"
+msgstr ""
+
+msgid "Speed"
+msgstr ""
+
+msgid "Frames Per Second value for sequences that don't have embedded speed."
+msgstr ""
+
+msgid "Sensitivity"
+msgstr ""
+
+msgid ""
+"This setting controls the sensitivity of scrubbing.  Smaller values make the "
+"mouse move jump more frames while higher values does the opposite."
+msgstr ""
+
+msgid "Alt Sensitivity"
+msgstr ""
+
+msgid ""
+"When using ALT + Left Mouse Button, this setting controls the multiplier "
+"used for slowing the scrubbing."
+msgstr ""
+
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+
 msgid "Display"
 msgstr ""
 
 msgid "How to display timeline by default."
 msgstr ""
 
-msgid "Start in Edit mode"
+msgid "Video Start Frame"
 msgstr ""
 
-msgid "Editing viewport will be visible at start up."
+msgid "Start value in the timeline where video starts."
 msgstr ""
 
 msgid "Remove EDLs in Temporary Folder on Exit"
@@ -7145,10 +7201,118 @@ msgid ""
 "folder."
 msgstr ""
 
-msgid "Video Start Frame"
+msgid "Default View"
 msgstr ""
 
-msgid "Start value in the timeline where video starts."
+msgid "Show Transitions"
+msgstr ""
+
+msgid "Show Transitions in Edit Viewport"
+msgstr ""
+
+msgid "Show Markers"
+msgstr ""
+
+msgid "Show Markers in Edit Viewport"
+msgstr ""
+
+msgid "Show Waveforms"
+msgstr ""
+
+msgid "Show Waveforms in Edit Viewport"
+msgstr ""
+
+msgid "Show Effects"
+msgstr ""
+
+msgid "Show Effects in Edit Viewport"
+msgstr ""
+
+msgid "Show Thunbnails"
+msgstr ""
+
+msgid "Show Thumbnails in Edit Viewport"
+msgstr ""
+
+msgid "Start in Edit mode"
+msgstr ""
+
+msgid "Editing viewport will be visible at start up."
+msgstr ""
+
+msgid "Editable"
+msgstr ""
+
+msgid "Editable Timeline Viewport."
+msgstr ""
+
+msgid "Edit Associated Clips"
+msgstr ""
+
+msgid "Edit Associated Clips."
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Monitor VSync"
+msgstr ""
+
+msgid ""
+"Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
+"the cost of potential tearing in the image."
+msgstr ""
+
+msgid "Color Buffers' Accuracy"
+msgstr ""
+
+msgid ""
+"Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
+"all float information, Half Float preserves most float information and Fast "
+"works in 8-bits.  Automatic selects the accuracy based on image depth."
+msgstr ""
+
+msgid "Blit"
+msgstr ""
+
+msgid ""
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
+msgstr ""
+
+msgid "GPU"
+msgstr ""
+
+msgid "Secondary Viewport"
+msgstr ""
+
+msgid ""
+"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better than the other."
+msgstr ""
+
+msgid "Rendering"
+msgstr ""
+
+msgid "Image Rendering"
+msgstr ""
+
+msgid "Debanding (Vulkan)"
+msgstr ""
+
+msgid "Makes gradients smoother on video files."
+msgstr ""
+
+msgid "Alpha Blend"
+msgstr ""
+
+msgid "Minify Filter"
+msgstr ""
+
+msgid "Magnify Filter"
+msgstr ""
+
+msgid "HDR Processing"
 msgstr ""
 
 msgid "Prefer RGB (Vulkan)"
@@ -7170,6 +7334,9 @@ msgid "Tonemap Algorithm"
 msgstr ""
 
 msgid "Gamut Mapping"
+msgstr ""
+
+msgid "Peak Detection"
 msgstr ""
 
 msgid "HDR Peak Detection"
@@ -7207,110 +7374,13 @@ msgstr ""
 msgid "High Limit to determine scene change."
 msgstr ""
 
-msgid "Playback"
-msgstr ""
-
-msgid "Auto Playback"
-msgstr ""
-
-msgid "Start Playback when opening files."
-msgstr ""
-
-msgid "Single Click Playback"
-msgstr ""
-
-msgid ""
-"Start Playback when single clicking the left mouse button on the view window"
-msgstr ""
-
-msgid "Auto Hide Pixel Bar"
-msgstr ""
-
-msgid "Sequences"
-msgstr ""
-
-msgid "Speed"
-msgstr ""
-
-msgid "Frames Per Second value for sequences that don't have embedded speed."
-msgstr ""
-
-msgid "Looping Mode"
-msgstr ""
-
-msgid "Select default looping mode in timeline."
-msgstr ""
-
-msgid "Sensitivity"
-msgstr ""
-
-msgid ""
-"This setting controls the sensitivity of scrubbing.  Smaller values make the "
-"mouse move jump more frames while higher values does the opposite."
-msgstr ""
-
-msgid ""
-"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
-"less smooth."
-msgstr ""
-
-msgid "Alt Sensitivity"
-msgstr ""
-
-msgid ""
-"When using ALT + Left Mouse Button, this setting controls the multiplier "
-"used for slowing the scrubbing."
-msgstr ""
-
-msgid "Default View"
-msgstr ""
-
-msgid "Show Transitions"
-msgstr ""
-
-msgid "Show Transitions in Edit Viewport"
-msgstr ""
-
-msgid "Show Markers"
-msgstr ""
-
-msgid "Show Markers in Edit Viewport"
-msgstr ""
-
-msgid "Show Effects"
-msgstr ""
-
-msgid "Show Effects in Edit Viewport"
-msgstr ""
-
-msgid "Show Waveforms"
-msgstr ""
-
-msgid "Show Waveforms in Edit Viewport"
-msgstr ""
-
-msgid "Show Thunbnails"
-msgstr ""
-
-msgid "Show Thumbnails in Edit Viewport"
-msgstr ""
-
-msgid "Behavior"
-msgstr ""
-
-msgid "Edit Associated Clips"
-msgstr ""
-
-msgid "Edit Associated Clips."
-msgstr ""
-
-msgid "Editable"
-msgstr ""
-
-msgid "Editable Timeline Viewport."
-msgstr ""
-
 msgid "OCIO"
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Built-in Configs"
 msgstr ""
 
 msgid "OCIO Config File"
@@ -7321,10 +7391,10 @@ msgid ""
 "environment variable OCIO, which takes precedence over any saved setting."
 msgstr ""
 
-msgid "Built-in Configs"
+msgid "Pick a config.ocio file from disk."
 msgstr ""
 
-msgid "Pick a config.ocio file from disk."
+msgid "Options"
 msgstr ""
 
 msgid "Set Auto ICS as default"
@@ -7343,14 +7413,6 @@ msgid ""
 "it will be used to be set as default."
 msgstr ""
 
-msgid "No OCIO on Videos or sRGB/BT709 data"
-msgstr ""
-
-msgid ""
-"If playing a video or showing an SDR image, OCIO will be turned off "
-"automatically."
-msgstr ""
-
 msgid "Use Active Views and Active Displays"
 msgstr ""
 
@@ -7359,7 +7421,12 @@ msgid ""
 "are not taken into account."
 msgstr ""
 
-msgid "OCIO Defaults"
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr ""
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
 msgstr ""
 
 msgid "8-bits"
@@ -7400,6 +7467,9 @@ msgid ""
 "(OpenEXR, hdr, dpx, etc.)"
 msgstr ""
 
+msgid "Look and View"
+msgstr ""
+
 msgid "Default Look"
 msgstr ""
 
@@ -7412,23 +7482,7 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-msgid "Version Regex"
-msgstr ""
-
-msgid ""
-"Regular Expression used to match clip versions.  Must group three things "
-"(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
-msgstr ""
-
-msgid "Maximum Images Apart"
-msgstr ""
-
-msgid ""
-"When searching for a version, this value is the maximum version apart from "
-"each other when searching the first or last version."
+msgid "Missing Frames"
 msgstr ""
 
 msgid "Missing Frame"
@@ -7467,6 +7521,58 @@ msgstr ""
 msgid "Scratch Lines Width."
 msgstr ""
 
+msgid "Versions"
+msgstr ""
+
+msgid "Version Regex"
+msgstr ""
+
+msgid ""
+"Regular Expression used to match clip versions.  Must group three things "
+"(prefix, number and suffix). If left on its default value (_v), it will "
+"automatically be created a regular expression to match versions defined with "
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
+msgstr ""
+
+msgid "Maximum Images Apart"
+msgstr ""
+
+msgid ""
+"When searching for a version, this value is the maximum version apart from "
+"each other when searching the first or last version."
+msgstr ""
+
+msgid "File Requester"
+msgstr ""
+
+msgid "Use Native File Chooser"
+msgstr ""
+
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr ""
+
+msgid "Single Click to Travel Drawers"
+msgstr ""
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr ""
+
+msgid "Thumbnails Active"
+msgstr ""
+
+msgid "Show thumbnails for known files."
+msgstr ""
+
+msgid "USD Thumbnails"
+msgstr ""
+
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr ""
+
 msgid "Path Mappings"
 msgstr ""
 
@@ -7487,6 +7593,53 @@ msgstr ""
 msgid "Remove the currently selected path mapping."
 msgstr ""
 
+msgid "Audio Output"
+msgstr ""
+
+msgid "API"
+msgstr ""
+
+msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
+msgstr ""
+
+msgid "Output Device"
+msgstr ""
+
+msgid "Output Device to use for audio playback."
+msgstr ""
+
+msgid ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+msgstr ""
+
+msgid "Voice Annotations"
+msgstr ""
+
+msgid "Voice Annotation Preferences."
+msgstr ""
+
+msgid "Voice Over"
+msgstr ""
+
+msgid "Save Path"
+msgstr ""
+
+msgid "Pick a directory from disk to save voice overs.."
+msgstr ""
+
+msgid "Playback Speed"
+msgstr ""
+
+msgid "Microphone"
+msgstr ""
+
+msgid "Volume"
+msgstr ""
+
+msgid "Send and Accept"
+msgstr ""
+
 msgid "Send"
 msgstr ""
 
@@ -7505,96 +7658,10 @@ msgstr ""
 msgid "Audio Control"
 msgstr ""
 
-msgid "Monitor VSync"
-msgstr ""
-
-msgid ""
-"Turns on and off Monitor's Vsync.  VSync off can display movies faster, at "
-"the cost of potential tearing in the image."
-msgstr ""
-
-msgid "Color Buffers' Accuracy"
-msgstr ""
-
-msgid ""
-"Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves "
-"all float information, Half Float preserves most float information and Fast "
-"works in 8-bits.  Automatic selects the accuracy based on image depth."
-msgstr ""
-
-msgid "Blit"
-msgstr ""
-
-msgid ""
-"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
-"card and OS one can perform better then the other."
-msgstr ""
-
-msgid "GPU"
-msgstr ""
-
-msgid "Secondary Viewport"
-msgstr ""
-
-msgid ""
-"Timeline can be drawn with blitting or with shaders.  Depending on graphics "
-"card and OS one can perform better than the other."
-msgstr ""
-
-msgid ""
-"For changes to take effect, you will need to re-open any movies already "
-"playing or reload mrv2."
-msgstr ""
-
-msgid "API"
-msgstr ""
-
-msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
-msgstr ""
-
-msgid "Output Device"
-msgstr ""
-
-msgid "Output Device to use for audio playback."
-msgstr ""
-
-msgid "Voice Annotations"
-msgstr ""
-
-msgid "Voice Annotation Preferences."
-msgstr ""
-
-msgid "Save Path"
-msgstr ""
-
-msgid "Pick a directory from disk to save voice overs.."
-msgstr ""
-
-msgid "Playback Speed"
-msgstr ""
-
-msgid "Microphone"
-msgstr ""
-
-msgid "Volume"
-msgstr ""
-
-msgid "ComfyUI"
-msgstr ""
-
-msgid ""
-"Here are the current settings to interact with ComfyUI.  It requires "
-"installation of mrv2's comfyUI nodes."
-msgstr ""
-
-msgid "Use ComfyUI Pipe"
-msgstr ""
-
-msgid ""
-"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
-msgstr ""
-
 msgid "WebRTC settings"
+msgstr ""
+
+msgid "Connection"
 msgstr ""
 
 msgid "WebRTC Presets"
@@ -7639,29 +7706,19 @@ msgstr ""
 msgid "Directory where WebRTC downloads will reside."
 msgstr ""
 
-msgid "On FFmpeg Error"
-msgstr ""
-
-msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
-msgstr ""
-
-msgid "On Error"
-msgstr ""
-
-msgid "Adjusts how Log Window behaves in case of error."
-msgstr ""
-
-msgid "Check for Updates"
-msgstr ""
-
-msgid "Allows you to automatically download updates of mrv2 when it starts up."
-msgstr ""
-
-msgid "Allow Screen Saver"
+msgid "ComfyUI"
 msgstr ""
 
 msgid ""
-"This setting controls whether mrv2 will block the screen saver when running."
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
+msgstr ""
+
+msgid "Use ComfyUI Pipe"
+msgstr ""
+
+msgid ""
+"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
 msgstr ""
 
 msgid "Reset settings to the default."
@@ -7681,34 +7738,43 @@ msgstr ""
 msgid "Module"
 msgstr ""
 
-msgid "User Interface/Elements"
+msgid "General/Window Position"
 msgstr ""
 
-msgid "User Interface/View Window"
+msgid "Interface/Appearance"
 msgstr ""
 
-msgid "User Interface/File Requester"
+msgid "Interface/Pixel Toolbar"
 msgstr ""
 
-msgid "User Interface/Fonts"
+msgid "Interface/Thumbnails"
 msgstr ""
 
-msgid "User Interface/Language and Colors"
+msgid "Timeline/Edit"
 msgstr ""
 
-msgid "User Interface/Pixel Toolbar"
+msgid "Graphics/Rendering"
 msgstr ""
 
-msgid "User Interface/Positioning"
+msgid "Graphics/HDR"
 msgstr ""
 
-msgid "User Interface/Render"
+msgid "OCIO/Defaults"
 msgstr ""
 
-msgid "User Interface/Thumbnails"
+msgid "Loading/File Requester"
 msgstr ""
 
-msgid "User Interface/Timeline"
+msgid "Loading/Path Mappings"
+msgstr ""
+
+msgid "Audio/Voice Annotations"
+msgstr ""
+
+msgid "Network/WebRTC"
+msgstr ""
+
+msgid "Network/ComfyUI"
 msgstr ""
 
 msgid "No Audio was Compiled"
@@ -8163,6 +8229,9 @@ msgid "Toggle HDR tonemap"
 msgstr ""
 
 msgid "Toggle HDR Peak Detection"
+msgstr ""
+
+msgid "Toggle Compare Timelines"
 msgstr ""
 
 msgid "Compare None"

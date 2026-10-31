@@ -6,14 +6,20 @@ namespace tl
 {
     namespace timeline_vlk
     {
-        
+        //! Struct used for PushConstants in most shaders
+        struct PushConstants
+        {
+            alignas(16) math::Matrix4x4f mvp;
+            alignas(16) image::Color4f color;
+        };
+
         struct PBRTransform
         {
             alignas(16) math::Matrix4x4f model;
             alignas(16) math::Matrix4x4f mvp;
             alignas(16) math::Matrix3x3f normalMatrix;
         };
-                
+
         struct PBRMaterial
         {
             alignas(16) math::Vector4f diffuseColor;
@@ -21,7 +27,7 @@ namespace tl
             alignas(4)  float roughtness;
             alignas(4)  float aoStrength;
         };
-        
+
         struct PBRScene
         {
             alignas(16) math::Vector3f camPos;
@@ -40,7 +46,7 @@ namespace tl
             alignas(4)  int32_t mirrorX;
             alignas(4)  int32_t mirrorY;
         };
-        
+
         // Levels
         struct UBOLevels
         {
@@ -60,7 +66,7 @@ namespace tl
             alignas(16) math::Matrix4x4f matrix;
             alignas(4)  uint32_t invert;
         };
-        
+
         // Normalize
         struct UBONormalize
         {
@@ -74,7 +80,7 @@ namespace tl
         {
             alignas(4) uint32_t enabled = 0;
         };
-        
+
         struct UBOOptions
         {
             alignas(4) int   channels;

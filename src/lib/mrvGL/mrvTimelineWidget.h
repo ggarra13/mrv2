@@ -115,8 +115,15 @@ namespace mrv
             //! Get whether the timeline is editable.
             bool isEditable() const;
 
-            //! Toggle timeline editable
+            //! Toggle timeline editable.
             void setEditable(bool);
+
+            //! Toggle between displaying compare timelines.
+            void setCompareTimelines(bool value);
+            bool getCompareTimelines();
+
+            //! Get timeline geometry.
+            const math::Box2i getGeometry() const;
 
             int mousePressEvent(int button, bool, int modifiers);
             int mouseReleaseEvent(int X, int Y, int button, bool, int modifiers);

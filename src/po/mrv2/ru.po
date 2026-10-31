@@ -6,25 +6,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-21 20:00-0300\n"
+"POT-Creation-Date: 2026-10-30 13:31-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid ""
 "\n"
 "USD module.\n"
 "\n"
-"Contains all classes and enums related to USD (Universal Scene Description). \n"
+"Contains all classes and enums related to USD (Universal Scene "
+"Description). \n"
 msgstr ""
 "\n"
 "Модуль долл. США.\n"
 "\n"
-"Содержит все классы и энумы, относящиеся к доллару США (всеобщее описание сцены).\n"
+"Содержит все классы и энумы, относящиеся к доллару США (всеобщее описание "
+"сцены).\n"
 
 msgid "Render Width"
 msgstr "Рендер-широкоугольник"
@@ -303,8 +306,8 @@ msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Дублированный мешок Python {0} в {1} и {2}."
 
 msgid ""
-"Expected a tuple containing a Python function and a string with menu options"
-" in it."
+"Expected a tuple containing a Python function and a string with menu options "
+"in it."
 msgstr "Ожидал тюльку, содержащую функцию Python и строку с опциями меню."
 
 msgid ""
@@ -393,7 +396,8 @@ msgid ""
 "        Dictionary of menu entries as keys with callbacks as values.\n"
 "\n"
 "\n"
-"        :return: A dictionary of menu entries and their corresponding callbacks.\n"
+"        :return: A dictionary of menu entries and their corresponding "
+"callbacks.\n"
 "        :rtype: dict\n"
 "\n"
 "        \"\"\"\n"
@@ -434,10 +438,12 @@ msgstr ""
 "\n"
 "    def menus(self):\n"
 "        \"\"\"\n"
-"        Словарь пунктов меню в качестве ключей и обратных вызовов в качестве значений.\n"
+"        Словарь пунктов меню в качестве ключей и обратных вызовов в качестве "
+"значений.\n"
 "\n"
 "\n"
-"        :return: Словарь пунктов меню и их соответствующих обратных вызовов.\n"
+"        :return: Словарь пунктов меню и их соответствующих обратных "
+"вызовов.\n"
 "        :rtype: dict\n"
 "\n"
 "        \"\"\"\n"
@@ -553,7 +559,8 @@ msgstr ""
 "\n"
 "Модуль изображений.\n"
 "\n"
-"Содержит все классы и перечисления, связанные с элементами управления изображением.\n"
+"Содержит все классы и перечисления, связанные с элементами управления "
+"изображением.\n"
 
 msgid "Red Channel."
 msgstr "Красный канал."
@@ -586,8 +593,8 @@ msgid ""
 "Change a :class:`mrv2.math.Vector3f` of brightness (gain) to image.  Only "
 "the x channel is used."
 msgstr ""
-"Измените яркость (усиление) изображения с помощью "
-":class:`mrv2.math.Vector3f`. Используется только канал x."
+"Измените яркость (усиление) изображения с "
+"помощью :class:`mrv2.math.Vector3f`. Используется только канал x."
 
 msgid ""
 "Change a :class:`mrv2.math.Vector3f` of contrast to image.  Only the x "
@@ -889,8 +896,7 @@ msgid "Speed (FPS) of the File Media."
 msgstr "Скорость (PFS) файловой среды."
 
 msgid "Playback state :class:`mrv2.timeline.Playbacks` of the File Media."
-msgstr ""
-"Состояние воспроизведения :class:`mrv2.timeline.Playbacks` медиафайла."
+msgstr "Состояние воспроизведения :class:`mrv2.timeline.Playbacks` медиафайла."
 
 msgid "Loop state :class:`mrv2.timeline.Loop` of the File Media."
 msgstr "Состояние цикла :class:`mrv2.timeline.Loop` медиафайла."
@@ -977,12 +983,14 @@ msgid ""
 "\n"
 "Command module.\n"
 "\n"
-"Used to run main commands and get arguments and set the display, image, compare, LUT options.\n"
+"Used to run main commands and get arguments and set the display, image, "
+"compare, LUT options.\n"
 msgstr ""
 "\n"
 "Командный модуль.\n"
 "\n"
-"Используется для выполнения основных команд, получения аргументов и установки дисплея, изображения, сравнения, опции LUT.\n"
+"Используется для выполнения основных команд, получения аргументов и "
+"установки дисплея, изображения, сравнения, опции LUT.\n"
 
 msgid "Open file with optional audio."
 msgstr "Открыть файл с факультативным звуком."
@@ -1137,8 +1145,8 @@ msgstr "Получить все голосовые аннотации .wav дл�
 
 msgid "Get all voice and mouse directions for current frame as a JSON file."
 msgstr ""
-"Получить все голосовые и мышиные направления для текущего кадра в виде файла"
-" JSON."
+"Получить все голосовые и мышиные направления для текущего кадра в виде файла "
+"JSON."
 
 msgid "Get all URL/File/AI directions for current frame as a JSON file."
 msgstr ""
@@ -1249,8 +1257,8 @@ msgid "Python Script to run and exit."
 msgstr "Скрипт Python для выполнения и выхода."
 
 msgid ""
-"Python Arguments to pass to the Python script as a single quoted string like"
-" \"arg1 'arg2 asd' arg3\", stored in cmd.argv."
+"Python Arguments to pass to the Python script as a single quoted string like "
+"\"arg1 'arg2 asd' arg3\", stored in cmd.argv."
 msgstr ""
 "Python Arguments для передачи Питонскому сценарию как одна цитируемая "
 "струна, как \"arg1 'arg2 asd' arg3\", хранимая в смд.argv."
@@ -1689,13 +1697,19 @@ msgid ""
 "\n"
 "* None: Ignore the spatial coordinates.\n"
 "* Coordinates: Use the spatial coordinates when clips provide them.\n"
-"* Normalize: Use the spatial coordinates, and display clips without them at the size of the first clip.  Use this to play clips of differing resolutions at the same size."
+"* Normalize: Use the spatial coordinates, and display clips without them at "
+"the size of the first clip.  Use this to play clips of differing resolutions "
+"at the same size."
 msgstr ""
-"Используйте пространственные координаты в файлах OTIO для задания положения и размера клипов.\n"
+"Используйте пространственные координаты в файлах OTIO для задания положения "
+"и размера клипов.\n"
 "\n"
 "* Нет: Игнорировать пространственные координаты.\n"
-"* Координаты: Использовать пространственные координаты, если они указаны для клипа.\n"
-"* Нормализовать: Использовать пространственные координаты и отображать клипы без них в размере первого клипа.  Используйте этот параметр, чтобы воспроизводить клипы с разным разрешением в одном размере."
+"* Координаты: Использовать пространственные координаты, если они указаны для "
+"клипа.\n"
+"* Нормализовать: Использовать пространственные координаты и отображать клипы "
+"без них в размере первого клипа.  Используйте этот параметр, чтобы "
+"воспроизводить клипы с разным разрешением в одном размере."
 
 msgid "Compatibility"
 msgstr "Совместимость"
@@ -1765,8 +1779,8 @@ msgid ""
 msgstr ""
 "Это значение контролирует количество строк, которые использует FFmpeg. Для "
 "большинства фильмов его следует оставить на 0. Некоторые фильмы будут "
-"показывать черные рамки. Для любого подобного, вы должны установить их на 1,"
-" нажмите Enter и перезагрузите файл фильма."
+"показывать черные рамки. Для любого подобного, вы должны установить их на 1, "
+"нажмите Enter и перезагрузите файл фильма."
 
 msgid "Default Settings"
 msgstr "Параметры по умолчанию"
@@ -2445,7 +2459,8 @@ msgid ""
 msgstr ""
 "Прочистить файлы A и B\n"
 "\n"
-"Использовать клавишу опции + левую кнопку мыши для перемещения стирания в X или Y"
+"Использовать клавишу опции + левую кнопку мыши для перемещения стирания в X "
+"или Y"
 
 msgid ""
 "Wipe between the A and B files\n"
@@ -2454,7 +2469,8 @@ msgid ""
 msgstr ""
 "Прочистить файлы A и B\n"
 "\n"
-"Используйте клавишу Alt + левую кнопку мыши, чтобы передвинуть стирку в X или Y."
+"Используйте клавишу Alt + левую кнопку мыши, чтобы передвинуть стирку в X "
+"или Y."
 
 msgid "Overlay the A and B files with optional transparencyy"
 msgstr "Наложить на файлы A и B факультативную прозрачность"
@@ -2692,8 +2708,7 @@ msgstr ""
 "действия лицензии истёк"
 
 msgid "No Signaling server set.  Please update Preferences->WebRTC->Signaling"
-msgstr ""
-"Сервер сигнализации не задан. Обновите Настройки->WebRTC->Сигнализация"
+msgstr "Сервер сигнализации не задан. Обновите Настройки->WebRTC->Сигнализация"
 
 msgid "No Web RTC Studio set.  Please update Preferences->WebRTC->Studio"
 msgstr "Студия WebRTC не задана. Обновите Настройки->WebRTC->Студия"
@@ -2749,10 +2764,12 @@ msgid "Transfers"
 msgstr "Передачи"
 
 msgid ""
-"The timeline downloaded, but the following referenced media could not be found on the server:\n"
+"The timeline downloaded, but the following referenced media could not be "
+"found on the server:\n"
 "\n"
 msgstr ""
-"Таймлайн был загружен, но следующие связанные медиафайлы не удалось найти на сервере:\n"
+"Таймлайн был загружен, но следующие связанные медиафайлы не удалось найти на "
+"сервере:\n"
 "\n"
 
 msgid "Download failed."
@@ -2766,8 +2783,7 @@ msgstr ""
 
 #, c++-format
 msgid "Remote file {0} matches file name {1} but not path."
-msgstr ""
-"Дистанционный файл {0} совпадает с именем файла {1}, но не с дорожкой."
+msgstr "Дистанционный файл {0} совпадает с именем файла {1}, но не с дорожкой."
 
 #, c++-format
 msgid "Remote file {0} does not match local filename."
@@ -2795,8 +2811,8 @@ msgid ""
 "No versioning in this clip.  Please create an image or directory named with "
 "a versioning string."
 msgstr ""
-"В этом клипе нет версий. Создайте изображение или каталог, названный строкой"
-" версий."
+"В этом клипе нет версий. Создайте изображение или каталог, названный строкой "
+"версий."
 
 msgid "Example:  gizmo_v003.0001.exr"
 msgstr "Пример: gizmo_v003 0001.exr"
@@ -2870,8 +2886,7 @@ msgid ""
 "FFmpeg YUV to RGB Conversion is on in Settings Panel.  mrv2 will play back "
 "movies slower."
 msgstr ""
-"FFmpeg YUV в RGB преобразуется в Group. mrv2 будет играть фильмы "
-"помедленнее."
+"FFmpeg YUV в RGB преобразуется в Group. mrv2 будет играть фильмы помедленнее."
 
 msgid "Debanding is not set to None.  This can make images show blurred"
 msgstr ""
@@ -3232,8 +3247,7 @@ msgid "Freehand Drawing Tool"
 msgstr "Инструмент свободного рисования"
 
 msgid "Eraser Tool.   ALT + Left Mouse Button to erase an area."
-msgstr ""
-"Инструмент «Ластик».   ALT + Левая кнопка мыши, чтобы стереть область."
+msgstr "Инструмент «Ластик».   ALT + Левая кнопка мыши, чтобы стереть область."
 
 msgid "Polygon Tool"
 msgstr "Многоугольный режим."
@@ -3413,8 +3427,8 @@ msgstr "Выбранные элементы должны находиться н
 #, c++-format
 msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
 msgstr ""
-"Выбранные элементы должны быть расположены на дорожке непрерывно. Слева {0}."
-" Справа {1}."
+"Выбранные элементы должны быть расположены на дорожке непрерывно. Слева {0}. "
+"Справа {1}."
 
 msgid "Add transition between 2 or 4 selected and contiguous items."
 msgstr "Добавить переход между 2 или 4 выбранными смежными элементами."
@@ -3687,6 +3701,9 @@ msgstr "Перейти к файлу из списка."
 msgid "Select B File."
 msgstr "Выбрать файл B."
 
+msgid "Toggle Timelines Comparison in Edit Viewport when Comparing clips."
+msgstr "Переключить сравнение таймлайнов в окне монтажа при сравнении клипов."
+
 msgid "Toggle A and B comparison."
 msgstr "Переключить сравнение A и B."
 
@@ -3764,8 +3781,8 @@ msgstr "Закрыть текущий файл."
 
 msgid "Exit the program.  Warns if edits or annotations have been made."
 msgstr ""
-"Выйти из программы.  Предупредить, если были внесены изменения или добавлены"
-" аннотации."
+"Выйти из программы.  Предупредить, если были внесены изменения или добавлены "
+"аннотации."
 
 msgid "Previous layer."
 msgstr "Предыдущий слой."
@@ -4093,8 +4110,7 @@ msgid "Toggle Clip Information in Timeline Viewport."
 msgstr "Переключить информацию о клипах в области просмотра таймлайна."
 
 msgid "Toggle Effects in Timeline Viewport."
-msgstr ""
-"Включить/выключить отображение эффектов в области просмотра таймлайна."
+msgstr "Включить/выключить отображение эффектов в области просмотра таймлайна."
 
 msgid "Toggle Markers in Timeline Viewport."
 msgstr "Переключить маркеры в области просмотра таймлайна."
@@ -4362,8 +4378,8 @@ msgid "Unknown action mode in "
 msgstr "Неизвестный режим действия в"
 
 msgid ""
-"Cannot create an annotation here for all frames.  A current frame annotation"
-" already exists."
+"Cannot create an annotation here for all frames.  A current frame annotation "
+"already exists."
 msgstr ""
 "Невозможно создать аннотацию для всех рамок. Аннотация течений уже "
 "существует."
@@ -4372,8 +4388,8 @@ msgid ""
 "Cannot create an annotation here for current frame.  An all frames "
 "annotation already exists."
 msgstr ""
-"Невозможно создать аннотацию для текущей структуры. Аннотация всех рамок уже"
-" существует."
+"Невозможно создать аннотацию для текущей структуры. Аннотация всех рамок уже "
+"существует."
 
 msgid "Cannot save an NDI stream"
 msgstr "Не удалось сохранить поток NDI"
@@ -4391,12 +4407,10 @@ msgid "Saving pictures to {0}."
 msgstr "Сохранение фотографий до {0}."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr ""
-"Профили ProRes требуют расширения видеофайла .mov.  Изменение на .mov."
+msgstr "Профили ProRes требуют расширения видеофайла .mov.  Изменение на .mov."
 
 msgid ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mkv"
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mkv"
 msgstr ""
 "Профиль VP9 требует расширения видеофайла .mp4, .mkv или .webm.  Изменение "
 "на .mkv"
@@ -4408,8 +4422,7 @@ msgstr ""
 msgid ""
 "GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
 msgstr ""
-"Профиль GoPro CineForm требует расширения видеофайла .mkv.  Изменение на "
-".mkv"
+"Профиль GoPro CineForm требует расширения видеофайла .mkv.  Изменение на .mkv"
 
 msgid "HAP profile needs a .mov extension.  Changing it to .mov"
 msgstr "Профиль HAP требует расширения файла .mov.  Изменение на .mov"
@@ -4532,8 +4545,7 @@ msgstr "Переключено на активный HDR-монитор с ин�
 
 #, c++-format
 msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr ""
-"Переключено на монитор с поддержкой HDR, но неактивный, с индексом {0}"
+msgstr "Переключено на монитор с поддержкой HDR, но неактивный, с индексом {0}"
 
 #, c++-format
 msgid "Changed to SDR monitor at index {0}"
@@ -4571,7 +4583,8 @@ msgid ""
 "\n"
 "Do you want to upgrade?"
 msgstr ""
-"Для использования этой функции требуется пожертвование уровня Solo или выше.\n"
+"Для использования этой функции требуется пожертвование уровня Solo или "
+"выше.\n"
 "\n"
 "Хотите выполнить обновление?"
 
@@ -4580,7 +4593,8 @@ msgid ""
 "\n"
 "Do you want to upgrade?"
 msgstr ""
-"Для использования этой функции требуется пожертвование уровня Standard или выше.\n"
+"Для использования этой функции требуется пожертвование уровня Standard или "
+"выше.\n"
 "\n"
 "Хотите выполнить обновление?"
 
@@ -4589,7 +4603,8 @@ msgid ""
 "\n"
 "Do you want to upgrade?"
 msgstr ""
-"Для использования этой функции требуется пожертвование уровня Edit или выше.\n"
+"Для использования этой функции требуется пожертвование уровня Edit или "
+"выше.\n"
 "\n"
 "Хотите выполнить обновление?"
 
@@ -4939,6 +4954,9 @@ msgstr "Таймлайн/Покадровый вид"
 
 msgid "Timeline/Scroll To Current Frame"
 msgstr "Таймлайн/Прокрутить к текущему кадру"
+
+msgid "Timeline/Compare Timelines"
+msgstr "Таймлайн/Сравнить таймлайны"
 
 msgid "Timeline/Track Info"
 msgstr "Таймлайн/Информация о дорожке"
@@ -5302,11 +5320,11 @@ msgstr "Детальный режим"
 
 #, c-format
 msgid ""
-"Could not create directory '%s'. You may not have permission to perform this"
-" operation."
+"Could not create directory '%s'. You may not have permission to perform this "
+"operation."
 msgstr ""
-"Невозможно создать каталог '%s'. Вы можете не иметь разрешения на выполнение"
-" этой операции."
+"Невозможно создать каталог '%s'. Вы можете не иметь разрешения на выполнение "
+"этой операции."
 
 #, c-format
 msgid "An error occurred while trying to delete '%s'. %s"
@@ -5638,7 +5656,8 @@ msgid "Session: "
 msgstr "Сессия:"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus to disable."
 msgstr ""
@@ -5653,7 +5672,8 @@ msgid "Continue"
 msgstr "Продолжить"
 
 msgid ""
-"This will disable events for mrv2, allowing them to pass through to windows below it.\n"
+"This will disable events for mrv2, allowing them to pass through to windows "
+"below it.\n"
 "\n"
 "Give window focus (click on the taskbar icon)\n"
 "to disable."
@@ -5895,16 +5915,19 @@ msgstr "Сохранить напоминания"
 
 msgid ""
 "Save Annotations burned into the movie or sequence.\n"
-"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's pixel type.\n"
+"It also allows saving OpenEXRs from an 8-bit movie and changing OpenEXR's "
+"pixel type.\n"
 "\n"
 "Furthermore, it allows saving A/B or Tiled comparisons and baking OCIO.\n"
 "\n"
 "However, it is limited to the size of your screen."
 msgstr ""
 "Сохранить ссылки, сожженные в фильме или последовательности.\n"
-"Он также позволяет сохранить OpenEXRs из 8-битного фильма и изменить тип пикселя OpenEXR.\n"
+"Он также позволяет сохранить OpenEXRs из 8-битного фильма и изменить тип "
+"пикселя OpenEXR.\n"
 "\n"
-"Кроме того, это позволяет сохранить сопоставления A/B или Triled и выпечку OCIO.\n"
+"Кроме того, это позволяет сохранить сопоставления A/B или Triled и выпечку "
+"OCIO.\n"
 "\n"
 "Однако он ограничен размером с ваш экран."
 
@@ -6128,7 +6151,8 @@ msgstr ""
 "        или H264 при том же качестве, но требует больше вычислительных\n"
 "        ресурсов. Оптимален для видеорецензирования.\n"
 "  HAP - Кодек RGB/A, оптимизированный для быстрого воспроизведения\n"
-"        с декодированием на CPU. Он обеспечивает не очень эффективное сжатие.\n"
+"        с декодированием на CPU. Он обеспечивает не очень эффективное "
+"сжатие.\n"
 "        Для сохранения альфа-канала требуются предустановки hap-alpha*.\n"
 "  HEVC - Поддерживается только аппаратно из-за ограничений,\n"
 "         связанных с лицензиями и патентами.\n"
@@ -6435,13 +6459,15 @@ msgstr "F"
 
 msgid ""
 "Displays:\n"
-"* Linear (Gamma, Gain and LUT in a linear scale where 1.0 is SDR white).    \n"
+"* Linear (Gamma, Gain and LUT in a linear scale where 1.0 is SDR "
+"white).    \n"
 "* Full Pixel Values (Gamma, Gain and LUT)\n"
 "* Original (No Gamma, No Gain, No Lut)\n"
 "* Nits Pixel Values (Monitor units in Vulkan)"
 msgstr ""
 "Отображает:\n"
-"* Линейные значения (гамма, усиление и LUT в линейной шкале, где 1.0 — это белый SDR).\n"
+"* Линейные значения (гамма, усиление и LUT в линейной шкале, где 1.0 — это "
+"белый SDR).\n"
 "* Полные значения пикселей (гамма, усиление и LUT)\n"
 "* Оригинал (без гаммы, без усиления, без LUT)\n"
 "* Значения пикселей в нитах (единицы монитора в Vulkan)"
@@ -6455,20 +6481,24 @@ msgid ""
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
 "Y' (Lumma) is the weighted pixel value according to:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"L (Lightness) is the human perception of luminance of the image which is non linear.\n"
+"L (Lightness) is the human perception of luminance of the image which is non "
+"linear.\n"
 "According to CIE No.15.2:\n"
 "      L = (116 * Y ^ 1/3 - 16) / 100\n"
-"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = 1.0 (white)."
+"A pixel of Y = 0.18 (L = 0.5) will appear about half as bright as Y = L = "
+"1.0 (white)."
 msgstr ""
 "Переключение расчета яркости.\n"
 "Y (Люминанс) — это значение пикселя согласно Rec709:\n"
 "      Y = 0.2126 R + 0.7152 G + 0.0722 B\n"
 "Y' (Люма) — это взвешенное значение пикселя согласно:\n"
 "      Y' = ( R + G + B ) / 3.0\n"
-"L (Светлота) — это восприятие яркости изображения человеком, которое нелинейно.\n"
+"L (Светлота) — это восприятие яркости изображения человеком, которое "
+"нелинейно.\n"
 "Согласно CIE No.15.2:\n"
 "      L = (116 * Y ^ 1/3 - 16) / 100\n"
-"Пиксель с Y = 0.18 (L = 0.5) будет казаться примерно в два раза темнее, чем пиксель с Y = L = 1.0 (белый)."
+"Пиксель с Y = 0.18 (L = 0.5) будет казаться примерно в два раза темнее, чем "
+"пиксель с Y = L = 1.0 (белый)."
 
 msgid "Luminance of image pixel under mouse."
 msgstr "Яркость пикселя изображения под мышью."
@@ -6574,8 +6604,7 @@ msgstr "Позволяет вам отрегулировать рамку."
 
 msgid "Mute audio or switch audio tracks with the right mouse button."
 msgstr ""
-"Выключите аудио- или переключайте звуковые дорожки с правильной кнопкой "
-"мыши."
+"Выключите аудио- или переключайте звуковые дорожки с правильной кнопкой мыши."
 
 msgid "Audio Volume"
 msgstr "Звуковой объем"
@@ -6867,6 +6896,93 @@ msgstr "Содержимое"
 msgid "OpenEXR's Contents to Save"
 msgstr "Содержимое OpenEXR для сохранения"
 
+msgid "On Demand From Help Menu"
+msgstr "По запросу из меню Справка"
+
+msgid "At Start Up"
+msgstr "На старте"
+
+msgid "Inactive"
+msgstr "Неактивно"
+
+msgid "Active"
+msgstr "Активные"
+
+msgid "Do Nothing"
+msgstr "Ничего не делай"
+
+msgid "Open Logs on Dock"
+msgstr "Открыть журнал на доке"
+
+msgid "Open Logs on Window"
+msgstr "Открыть журналы на окне"
+
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "Сияние"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Pick View Background Color"
+msgstr "Выбрать цвет фона вида"
+
+msgid "Pick View Text Overlay Color"
+msgstr "Выбрать цвет наложенного текста вида"
+
+msgid "Pick View Selection Color"
+msgstr "Выбрать цвет выделения вида"
+
+msgid "Pick HUD Color"
+msgstr "Выбрать цвет HUD"
+
+msgid "OpenGL only"
+msgstr "Только OpenGL"
+
+msgid "Vulkan and OpenGL"
+msgstr "Vulkan и OpenGL"
+
+msgid "Float Values"
+msgstr "Значения поплавка"
+
+msgid "Hex Values"
+msgstr "Значения гекса"
+
+msgid "8-bit Values"
+msgstr "8-битные значения"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Полная лута, гамма и прибыль"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Оригинал без гаммы, гонорара или люта"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "Small"
+msgstr "Маленький"
+
+msgid "Normal"
+msgstr "Обычный"
+
+msgid "Medium"
+msgstr "Средняя"
+
+msgid "Large"
+msgstr "Большой"
+
 msgid "0.00 None"
 msgstr "0,00 Нет"
 
@@ -6915,62 +7031,47 @@ msgstr "4,00 Поливидитория"
 msgid "Slow"
 msgstr "Медленно"
 
-msgid "Medium"
-msgstr "Средняя"
-
 msgid "Fast"
 msgstr "Быстрая"
 
-msgid "base"
-msgstr "base"
+msgid "Loop"
+msgstr "Лоп"
 
-msgid "plastic"
-msgstr "plastic"
+msgid "Ping Pong"
+msgstr "Пинг Понг"
 
-msgid "gtk+"
-msgstr "gtk+"
+msgid "29.97"
+msgstr "29,97"
 
-msgid "gleam"
-msgstr "Сияние"
+msgid "14.985"
+msgstr "14,985"
 
-msgid "oxy"
-msgstr "oxy"
+msgid "Button"
+msgstr "Кнопка"
 
-msgid "Pick View Background Color"
-msgstr "Выбрать цвет фона вида"
+msgid "Video Only"
+msgstr "Только видео"
 
-msgid "Pick View Text Overlay Color"
-msgstr "Выбрать цвет наложенного текста вида"
+msgid "Video and Audio"
+msgstr "Видео и аудио"
 
-msgid "Pick View Selection Color"
-msgstr "Выбрать цвет выделения вида"
+msgid "Always"
+msgstr "Всегда"
 
-msgid "Pick HUD Color"
-msgstr "Выбрать цвет HUD"
+msgid "Presentation Mode"
+msgstr "Режим отображения"
 
-msgid "Float Values"
-msgstr "Значения поплавка"
+msgid "Automatic"
+msgstr "Автоматическое"
 
-msgid "Hex Values"
-msgstr "Значения гекса"
+msgid "Half Float"
+msgstr "Половина поплавка"
 
-msgid "8-bit Values"
-msgstr "8-битные значения"
+msgid "Full Float (Accurate)"
+msgstr "Полный поплавок (аккурат)"
 
-msgid "Full Lut, Gamma and Gain"
-msgstr "Полная лута, гамма и прибыль"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Оригинал без гаммы, гонорара или люта"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "Small"
-msgstr "Маленький"
+msgid "GPU 0"
+msgstr "GPU 0"
 
 msgid "High"
 msgstr "Высокий"
@@ -6993,12 +7094,6 @@ msgstr "Предмногочисленные"
 msgid "Nearest"
 msgstr "Ближайший"
 
-msgid "Normal"
-msgstr "Обычный"
-
-msgid "Large"
-msgstr "Большой"
-
 msgid "Use RGBA"
 msgstr "Использовать RGBA"
 
@@ -7010,12 +7105,6 @@ msgstr "Игнорировать"
 
 msgid "Apply"
 msgstr "Применить"
-
-msgid "Inactive"
-msgstr "Неактивно"
-
-msgid "Active"
-msgstr "Активные"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -7068,33 +7157,6 @@ msgstr "Затемнить"
 msgid "Highlight"
 msgstr "Выделить"
 
-msgid "OpenGL only"
-msgstr "Только OpenGL"
-
-msgid "Vulkan and OpenGL"
-msgstr "Vulkan и OpenGL"
-
-msgid "29.97"
-msgstr "29,97"
-
-msgid "14.985"
-msgstr "14,985"
-
-msgid "Loop"
-msgstr "Лоп"
-
-msgid "Ping Pong"
-msgstr "Пинг Понг"
-
-msgid "Button"
-msgstr "Кнопка"
-
-msgid "Video Only"
-msgstr "Только видео"
-
-msgid "Video and Audio"
-msgstr "Видео и аудио"
-
 msgid "CG"
 msgstr "CG"
 
@@ -7118,24 +7180,6 @@ msgstr "Кадр с пропуском"
 
 msgid "Pick Scratch Color"
 msgstr "Выбрать цвет отсутствующих кадров"
-
-msgid "Always"
-msgstr "Всегда"
-
-msgid "Presentation Mode"
-msgstr "Режим отображения"
-
-msgid "Automatic"
-msgstr "Автоматическое"
-
-msgid "Half Float"
-msgstr "Половина поплавка"
-
-msgid "Full Float (Accurate)"
-msgstr "Полный поплавок (аккурат)"
-
-msgid "GPU 0"
-msgstr "GPU 0"
 
 msgid "X 2"
 msgstr "× 2"
@@ -7161,21 +7205,6 @@ msgstr "Домашний каталог"
 msgid "Temp Directory"
 msgstr "Временный каталог"
 
-msgid "Do Nothing"
-msgstr "Ничего не делай"
-
-msgid "Open Logs on Dock"
-msgstr "Открыть журнал на доке"
-
-msgid "Open Logs on Window"
-msgstr "Открыть журналы на окне"
-
-msgid "On Demand From Help Menu"
-msgstr "По запросу из меню Справка"
-
-msgid "At Start Up"
-msgstr "На старте"
-
 msgid ""
 "This will reset all your preferences to their default values.  Are you sure "
 "you want to continue?"
@@ -7183,8 +7212,8 @@ msgstr ""
 "Это перезагрузит все ваши предпочтения к их нормальным значениям. Вы "
 "уверены, что хотите продолжить?"
 
-msgid "User Interface"
-msgstr "Пользовательский интерфейс"
+msgid "General"
+msgstr "Общие"
 
 msgid "Window Behavior"
 msgstr "Поведение окна"
@@ -7207,22 +7236,12 @@ msgstr "Единовременные случаи"
 
 msgid ""
 "When selected, only a single mrv2 instance is allowed.\n"
-"If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2."
+"If you try to open several mrv2s with different images, all these images "
+"will be sent to the already open mrv2."
 msgstr ""
 "При выборе допускается только один случай mrv2.\n"
-"Если вы попытаетесь открыть несколько mrv2 с различными изображениями, все эти изображения будут отправлены на уже открытый mrv2."
-
-msgid "Auto Refit Image"
-msgstr "Автомобильная модификация изображения"
-
-msgid ""
-"When selected, mrv2 will apply a fit image operation on each video played.  "
-"This effectively means the video will be resized automatically based on the "
-"size of the window."
-msgstr ""
-"При выборе, mrv2 будет применять на каждом проигрываемом видео операцию "
-"подходящего изображения. Это фактически означает, что видео будет умножаться"
-" автоматически, исходя из размера окна."
+"Если вы попытаетесь открыть несколько mrv2 с различными изображениями, все "
+"эти изображения будут отправлены на уже открытый mrv2."
 
 msgid "Raise on Enter"
 msgstr "Подняться на входе"
@@ -7231,8 +7250,7 @@ msgid ""
 "When selected, mrv2 will raise the window to the front once you enter the "
 "view window."
 msgstr ""
-"При выборе mrv2 поднимет окно вперед, как только вы войдете в окно "
-"просмотра."
+"При выборе mrv2 поднимет окно вперед, как только вы войдете в окно просмотра."
 
 msgid "Window at Start"
 msgstr "Окно при запуске"
@@ -7258,237 +7276,29 @@ msgstr "Максимизация"
 msgid "When selected, mrv2 will start in a maximized window."
 msgstr "При выборе mrv2 начнётся в максимальном окне."
 
-msgid "User Interface Elements"
-msgstr "Элементы пользовательского интерфейса"
+msgid "Behavior"
+msgstr "Поведение"
 
-msgid "UI Elements"
-msgstr "Элементы UI"
+msgid "Check for Updates"
+msgstr "Проверка обновления"
 
-msgid "Tooltips"
-msgstr "Подсказки"
+msgid "Allows you to automatically download updates of mrv2 when it starts up."
+msgstr "Позволяет вам автоматически загружать обновления mrv2 при запуске."
 
-msgid "Choose whether to show tooltips or not."
-msgstr "Выберите, показывать подсказки или нет."
-
-msgid "Menu Bar"
-msgstr "Панель меню"
-
-msgid "When selected, mrv2 will start with the menu bar already shown."
-msgstr "При выборе mrv2 начнётся с уже показанной панели меню."
-
-msgid "Topbar"
-msgstr "Топбар"
+msgid "Allow Screen Saver"
+msgstr "Разрешить экранную заставку"
 
 msgid ""
-"When selected, mrv2 will start with its channel, gain, gamma toolbar "
-"visible."
+"This setting controls whether mrv2 will block the screen saver when running."
 msgstr ""
-"При выборе mrv2 начнётся с своего канала, выиграет, гамма будет видна."
+"Этот параметр определяет, будет ли mrv2 блокировать экранную заставку во "
+"время работы."
 
-msgid "Pixel Toolbar"
-msgstr "Панель пикселя"
+msgid "Window Position"
+msgstr "Положение окна"
 
-msgid "When selected, mrv2 will start with the pixel toolbar shown."
-msgstr "При выборе mrv2 начнётся с показанной панели инструментов пикселя."
-
-msgid "When selected, mrv2 will start with the timeline shown."
-msgstr "Когда будет выбрана, mrv2 начнётся с показываемой временной линии."
-
-msgid "macOS Menus"
-msgstr "Меню MacOS"
-
-msgid ""
-"This is a macOS setting only.  When selected the menus will appear on the "
-"system toolbar instead of the mrv2 toolbar."
-msgstr ""
-"Это только macOS. При выборе меню появится на панели инструментов системы, а"
-" не на панели инструментов mrv2."
-
-msgid "Tool Dock"
-msgstr "Панель инструментов"
-
-msgid "When selected, mrv2 will start with the action tool dock already open."
-msgstr "Когда будет выбрана, mrv2 начнётся с уже открытой доки."
-
-msgid "Status Bar"
-msgstr "Строка статуса"
-
-msgid "When selected, mrv2 will start with the status bar visible."
-msgstr "При выборе mrv2 начинается с видимого стержня состояния."
-
-msgid "Only One Panel"
-msgstr "Только одна группа"
-
-msgid ""
-"When selected, mrv2 will start with the only one panel option selected."
-msgstr "При выборе mrv2 начнётся с единственного выбранного варианта панели."
-
-msgid "View Window"
-msgstr "Вид Окно"
-
-msgid "Defaults"
-msgstr "Погрешности"
-
-msgid "Sets the default gain when mrv2 starts."
-msgstr "Устанавливает выигрыш по умолчанию, когда начинается mrv2."
-
-msgid "Sets the default gamma when mrv2 starts."
-msgstr "Устанавливает гамма по умолчанию, когда начинается mrv2."
-
-msgid "Crop"
-msgstr "Урожай"
-
-msgid "Allows you to select a standard cropping area around image."
-msgstr ""
-"Позволяет вам выбрать стандартную зону сбора урожая вокруг изображения."
-
-msgid "Auto Frame"
-msgstr "Автоматическая основа"
-
-msgid "When this is on, View/Auto Frame will be active."
-msgstr "Когда это будет включено, будет активно работать View/Auto Frame."
-
-msgid "Safe Areas"
-msgstr "Безопасные районы"
-
-msgid "When mrv2 starts, the safe area display will be active by default."
-msgstr "При запуске mrv2 дисплей безопасности будет активирован по умолчанию."
-
-msgid "OCIO in Top Bar"
-msgstr "OCIO в топ-баре"
-
-msgid ""
-"When mrv2 starts, OCIO should start in the top bar instead of color "
-"adjustments."
-msgstr ""
-"Когда начинается mrv2, OCIO должна начинаться в верхнем стержне вместо "
-"цветовой корректировки."
-
-msgid "Zoom Speed"
-msgstr "Скорость увеличения"
-
-msgid "HUD"
-msgstr "HUD"
-
-msgid ""
-"This area specifies which elements should be shown as a HUD overlay on the "
-"view screen."
-msgstr ""
-"В этой области указывается, какие элементы следует показывать в виде "
-"накладки HUD на экране обзора."
-
-msgid "Frame"
-msgstr "Рамки"
-
-msgid "Frame Range"
-msgstr "Диапазон"
-
-msgid "Frame Count"
-msgstr "Графический подсчет"
-
-msgid "Attributes"
-msgstr "Атрибуты"
-
-msgid "Font Size"
-msgstr "Размер шрифта"
-
-msgid "File Requester"
-msgstr "Запрашиватель файла"
-
-msgid "Single Click to Travel Drawers"
-msgstr "Один щёлкните к рисункам путешествий"
-
-msgid ""
-"When using mrv2's file chooser, a single click on a folder will open it."
-msgstr "При использовании выбора файла mrv2 его откроет один щелчок на папке."
-
-msgid "Thumbnails Active"
-msgstr "Активированные пальцы"
-
-msgid "Show thumbnails for known files."
-msgstr "Показать пальцы для известных файлов."
-
-msgid "USD Thumbnails"
-msgstr "Памфотные пули в долл. США"
-
-msgid "Show Thumbnails for USD files (can be slow if they are big)"
-msgstr ""
-"Показать пальцы для файлов в долларах США (может быть медленно, если они "
-"большие)"
-
-msgid "Use Native File Chooser"
-msgstr "Использовать выбранный файл"
-
-msgid ""
-"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
-"standard file chooser will be used."
-msgstr ""
-"Если выбрано, будет использован выбравший файл natlve. В случае невыбранного"
-" будет использован выбранный стандартный файл mrv2."
-
-msgid "Fonts"
-msgstr "Шрифты"
-
-msgid "Menus"
-msgstr "Меню"
-
-msgid "Sets the font to use in menus."
-msgstr "Устанавливает шрифт для использования в меню."
-
-msgid "Panels"
-msgstr "Таблицы"
-
-msgid "Sets the font to use in panels. (Not yet working)"
-msgstr "Устанавливает шрифт для использования в панелях. (Еще не работает)"
-
-msgid "Language and Colors"
-msgstr "Язык и цвета"
-
-msgid "Scheme"
-msgstr "Схема"
-
-msgid "Color Theme"
-msgstr "Цветовая тема"
-
-msgid "Reload Theme"
-msgstr "Перезагрузить тему"
-
-msgid ""
-"Reload color theme from mrv2.colors file again to refresh change in colors"
-msgstr ""
-"Перезагрузить цветную тему из файла mrv2.colors снова для обновления "
-"изменения цвета"
-
-msgid "Selects the background color of areas outside the current image."
-msgstr "Выберите цвет фона участков вне текущего изображения."
-
-msgid "Text Overlay"
-msgstr "Текстовая накладка"
-
-msgid "Selects the color of text overlays printed over the current image."
-msgstr "Выберите цвет текстовых накладок, напечатанных по текущему снимку."
-
-msgid "Selects the color of the selection rectangle over the current image."
-msgstr ""
-"Выберите цвет выбранного прямоугольника по отношению к текущему снимку."
-
-msgid "Selects the color of HUD overlays."
-msgstr "Выберите цвет накладок HUD."
-
-msgid "RGBA Display"
-msgstr "Показать RGBA"
-
-msgid "Pixel Values"
-msgstr "Значения пикселя"
-
-msgid "Secondary Display"
-msgstr "Вторичное отображение"
-
-msgid "Luminance"
-msgstr "Освещение"
-
-msgid "Positioning"
-msgstr "Расположение"
+msgid "Position and Size"
+msgstr "Положение и размер"
 
 msgid "Always Save on Exit"
 msgstr "Всегда сохранять в выходе"
@@ -7504,8 +7314,8 @@ msgid "Fixed Position"
 msgstr "Стационарное положение"
 
 msgid ""
-"When this option is set, mrv2 will open in the position you set here (except"
-" if the window goes out of the Desktop).  If Always Save on Exit is on, the "
+"When this option is set, mrv2 will open in the position you set here (except "
+"if the window goes out of the Desktop).  If Always Save on Exit is on, the "
 "values are recakculated upon exiting the program."
 msgstr ""
 "Когда эта опция установлена, mrv2 будет открыта в положении, которое вы "
@@ -7537,6 +7347,9 @@ msgstr "W:"
 msgid "H:"
 msgstr "H:"
 
+msgid "Screen:"
+msgstr "Экран:"
+
 msgid "Take Current Window Values"
 msgstr "Воспользуйтесь текущими значениями окна"
 
@@ -7546,29 +7359,155 @@ msgid ""
 "Fixed Size depending what you want to save."
 msgstr ""
 "Fills the Fixed Position and Fixed Size values with the current values of "
-"the viewer. Remember to also check the boxes for Fixed Position and/or Fixed"
-" Size depending what you want to save."
+"the viewer. Remember to also check the boxes for Fixed Position and/or Fixed "
+"Size depending what you want to save."
 
-msgid "Screen:"
-msgstr "Экран:"
+msgid "Interface"
+msgstr "Интерфейс"
 
-msgid "Render"
-msgstr "Редакция"
+msgid "UI Elements"
+msgstr "Элементы UI"
 
-msgid "Debanding (Vulkan)"
-msgstr "Дебандинг (Vulkan)"
+msgid "Menu Bar"
+msgstr "Панель меню"
 
-msgid "Makes gradients smoother on video files."
-msgstr "Делает градиенты более плавными в видеофайлах."
+msgid "When selected, mrv2 will start with the menu bar already shown."
+msgstr "При выборе mrv2 начнётся с уже показанной панели меню."
 
-msgid "Alpha Blend"
-msgstr "Альфа Бленд"
+msgid "Topbar"
+msgstr "Топбар"
 
-msgid "Minify Filter"
-msgstr "Минимизация фильтра"
+msgid ""
+"When selected, mrv2 will start with its channel, gain, gamma toolbar visible."
+msgstr "При выборе mrv2 начнётся с своего канала, выиграет, гамма будет видна."
 
-msgid "Magnify Filter"
-msgstr "Увеличить фильтр"
+msgid "Pixel Toolbar"
+msgstr "Панель пикселя"
+
+msgid "When selected, mrv2 will start with the pixel toolbar shown."
+msgstr "При выборе mrv2 начнётся с показанной панели инструментов пикселя."
+
+msgid "When selected, mrv2 will start with the timeline shown."
+msgstr "Когда будет выбрана, mrv2 начнётся с показываемой временной линии."
+
+msgid "Status Bar"
+msgstr "Строка статуса"
+
+msgid "When selected, mrv2 will start with the status bar visible."
+msgstr "При выборе mrv2 начинается с видимого стержня состояния."
+
+msgid "Tool Dock"
+msgstr "Панель инструментов"
+
+msgid "When selected, mrv2 will start with the action tool dock already open."
+msgstr "Когда будет выбрана, mrv2 начнётся с уже открытой доки."
+
+msgid "Only One Panel"
+msgstr "Только одна группа"
+
+msgid "When selected, mrv2 will start with the only one panel option selected."
+msgstr "При выборе mrv2 начнётся с единственного выбранного варианта панели."
+
+msgid "Tooltips"
+msgstr "Подсказки"
+
+msgid "Choose whether to show tooltips or not."
+msgstr "Выберите, показывать подсказки или нет."
+
+msgid "macOS Menus"
+msgstr "Меню MacOS"
+
+msgid ""
+"This is a macOS setting only.  When selected the menus will appear on the "
+"system toolbar instead of the mrv2 toolbar."
+msgstr ""
+"Это только macOS. При выборе меню появится на панели инструментов системы, а "
+"не на панели инструментов mrv2."
+
+msgid "On FFmpeg Error"
+msgstr "Ошибка FFmpeg"
+
+msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
+msgstr "Регулирует поведение окна журнала в случае ошибки FFmpeg."
+
+msgid "On Error"
+msgstr "Ошибка"
+
+msgid "Adjusts how Log Window behaves in case of error."
+msgstr "Отрегулирует поведение окна журнала в случае ошибки."
+
+msgid "Appearance"
+msgstr "Внешний вид"
+
+msgid "Language and Theme"
+msgstr "Язык и тема оформления"
+
+msgid "Scheme"
+msgstr "Схема"
+
+msgid "Color Theme"
+msgstr "Цветовая тема"
+
+msgid "Reload Theme"
+msgstr "Перезагрузить тему"
+
+msgid ""
+"Reload color theme from mrv2.colors file again to refresh change in colors"
+msgstr ""
+"Перезагрузить цветную тему из файла mrv2.colors снова для обновления "
+"изменения цвета"
+
+msgid "Fonts"
+msgstr "Шрифты"
+
+msgid "Menus"
+msgstr "Меню"
+
+msgid "Sets the font to use in menus."
+msgstr "Устанавливает шрифт для использования в меню."
+
+msgid "Panels"
+msgstr "Таблицы"
+
+msgid "Sets the font to use in panels. (Not yet working)"
+msgstr "Устанавливает шрифт для использования в панелях. (Еще не работает)"
+
+msgid "View Colors"
+msgstr "Цвета области просмотра"
+
+msgid "Selects the background color of areas outside the current image."
+msgstr "Выберите цвет фона участков вне текущего изображения."
+
+msgid "Text Overlay"
+msgstr "Текстовая накладка"
+
+msgid "Selects the color of text overlays printed over the current image."
+msgstr "Выберите цвет текстовых накладок, напечатанных по текущему снимку."
+
+msgid "Selects the color of the selection rectangle over the current image."
+msgstr ""
+"Выберите цвет выбранного прямоугольника по отношению к текущему снимку."
+
+msgid "HUD"
+msgstr "HUD"
+
+msgid "Selects the color of HUD overlays."
+msgstr "Выберите цвет накладок HUD."
+
+msgid "Auto Hide Pixel Bar"
+msgstr "скрытие пикселя"
+
+msgid "RGBA Display"
+msgstr "Показать RGBA"
+
+msgid "Pixel Values"
+msgstr "Значения пикселя"
+
+msgid "Secondary Display"
+msgstr "Вторичное отображение"
+
+msgid "Luminance"
+msgstr "Освещение"
 
 msgid "Thumbnails"
 msgstr "Пальцы"
@@ -7591,18 +7530,6 @@ msgstr "Стереопанель"
 msgid "How to display timeline thumbnails in Stereo Panel."
 msgstr "Как отображать миниатюры таймлайна на стереопанели."
 
-msgid "Edit Viewport"
-msgstr "Правка Просмотра"
-
-msgid "How to display timeline thumbnails by default."
-msgstr "Как отображать хронологию ногтей по умолчанию."
-
-msgid "Preview Thumbnails above Timeline"
-msgstr "Просмотр миниатюрных пальцев над временной линией"
-
-msgid "Preview Thumbnails in a rectangle above Timeline"
-msgstr "Просмотреть пальцы в прямоугольнике над временной линией"
-
 msgid "Refresh Thumbnails on Panels Manuallly"
 msgstr "Обновлять миниатюры на панелях вручную"
 
@@ -7614,95 +7541,101 @@ msgstr ""
 "автоматически. Нужно использовать щелчок правой кнопкой -> Обновить "
 "миниатюру на миниатюре."
 
-msgid "Display"
-msgstr "Показать"
+msgid "Timeline and Edit Viewport"
+msgstr "Таймлайн и область просмотра монтажа"
 
-msgid "How to display timeline by default."
-msgstr "Как отображать временную линию по умолчанию."
+msgid "Preview Thumbnails above Timeline"
+msgstr "Просмотр миниатюрных пальцев над временной линией"
 
-msgid "Start in Edit mode"
-msgstr "Начать в режиме Правки"
+msgid "Preview Thumbnails in a rectangle above Timeline"
+msgstr "Просмотреть пальцы в прямоугольнике над временной линией"
 
-msgid "Editing viewport will be visible at start up."
-msgstr "Редакторский порт будет виден с самого начала."
+msgid "Edit Viewport"
+msgstr "Правка Просмотра"
 
-msgid "Remove EDLs in Temporary Folder on Exit"
-msgstr "Удалить EDL во временной папке при выходе"
+msgid "How to display timeline thumbnails by default."
+msgstr "Как отображать хронологию ногтей по умолчанию."
+
+msgid "Edit Viewport Waveforms"
+msgstr "Волновые формы в окне монтажа"
+
+msgid "How to display timeline waveforms by default."
+msgstr "Как отображать волновые формы таймлайна по умолчанию."
+
+msgid "Defaults"
+msgstr "Погрешности"
+
+msgid "Sets the default gain when mrv2 starts."
+msgstr "Устанавливает выигрыш по умолчанию, когда начинается mrv2."
+
+msgid "Sets the default gamma when mrv2 starts."
+msgstr "Устанавливает гамма по умолчанию, когда начинается mrv2."
+
+msgid "Crop"
+msgstr "Урожай"
+
+msgid "Allows you to select a standard cropping area around image."
+msgstr ""
+"Позволяет вам выбрать стандартную зону сбора урожая вокруг изображения."
+
+msgid "Zoom Speed"
+msgstr "Скорость увеличения"
+
+msgid "Auto Frame"
+msgstr "Автоматическая основа"
+
+msgid "When this is on, View/Auto Frame will be active."
+msgstr "Когда это будет включено, будет активно работать View/Auto Frame."
+
+msgid "Safe Areas"
+msgstr "Безопасные районы"
+
+msgid "When mrv2 starts, the safe area display will be active by default."
+msgstr "При запуске mrv2 дисплей безопасности будет активирован по умолчанию."
+
+msgid "Auto Refit Image"
+msgstr "Автомобильная модификация изображения"
 
 msgid ""
-"When selected, temporary EDLs (Playlists) will be removed from the temporary"
-" folder."
+"When selected, mrv2 will apply a fit image operation on each video played.  "
+"This effectively means the video will be resized automatically based on the "
+"size of the window."
 msgstr ""
-"При выборе из временной папки будут удалены временные EDL (Playlists)."
+"При выборе, mrv2 будет применять на каждом проигрываемом видео операцию "
+"подходящего изображения. Это фактически означает, что видео будет умножаться "
+"автоматически, исходя из размера окна."
 
-msgid "Video Start Frame"
-msgstr "Строка запуска видео"
-
-msgid "Start value in the timeline where video starts."
-msgstr "Начинаем значение в графике, где начинается видео."
-
-msgid "Prefer RGB (Vulkan)"
-msgstr "Предпочитать RGB (Vulkan)"
+msgid "OCIO in Top Bar"
+msgstr "OCIO в топ-баре"
 
 msgid ""
-"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
-"and convert them with a compute shader.  When is off, Vulkan will decode "
-"RGBA_F16 and RGBA_F32 frames."
+"When mrv2 starts, OCIO should start in the top bar instead of color "
+"adjustments."
 msgstr ""
-"Когда этот параметр включён, Vulkan попытается использовать RGB_F16 и "
-"RGB_F32 без изменений и преобразовать их с помощью вычислительного шейдера. "
-"Когда он выключен, Vulkan будет декодировать кадры RGBA_F16 и RGBA_F32."
-
-msgid "Chromaticities"
-msgstr "Хроматичности"
-
-msgid "HDR Data"
-msgstr "Данные HDR"
-
-msgid "Tonemap Algorithm"
-msgstr "Алгоритм тоновой карты"
-
-msgid "Gamut Mapping"
-msgstr "Маппинг цветового охвата"
-
-msgid "HDR Peak Detection"
-msgstr "Обнаружение пиков HDR"
+"Когда начинается mrv2, OCIO должна начинаться в верхнем стержне вместо "
+"цветовой корректировки."
 
 msgid ""
-"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
-" per frame."
+"This area specifies which elements should be shown as a HUD overlay on the "
+"view screen."
 msgstr ""
-"Если видеоклип не является HDR10+ или Dolby Vision, разрешает динамические "
-"пороги для каждого кадра."
+"В этой области указывается, какие элементы следует показывать в виде "
+"накладки HUD на экране обзора."
 
-msgid "HDR Percentile"
-msgstr "HDR-перцентиль"
+msgid "Frame"
+msgstr "Рамки"
 
-msgid ""
-"When less than 100, helps find the peak brightness ignoring the top 1 "
-"percent outliers."
-msgstr ""
-"Когда значение меньше 100, это помогает найти пиковую яркость, игнорируя "
-"верхний 1 процент выбросов."
+msgid "Frame Range"
+msgstr "Диапазон"
 
-msgid "Smoothing Period"
-msgstr "Период сглаживания"
+msgid "Frame Count"
+msgstr "Графический подсчет"
 
-msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
-msgstr ""
-"Время, необходимое системе определения яркости для адаптации к новой сцене."
+msgid "Attributes"
+msgstr "Атрибуты"
 
-msgid "Low Peak Detection"
-msgstr "Низкий порог детекции пиков"
-
-msgid "Low Limit to smooth out frames in the same scene."
-msgstr "Нижний предел для сглаживания кадров в пределах одной сцены."
-
-msgid "High Peak Detection Limit"
-msgstr "Верхний предел детекции пиков"
-
-msgid "High Limit to determine scene change."
-msgstr "Верхний предел для определения смены сцены."
+msgid "Font Size"
+msgstr "Размер шрифта"
 
 msgid "Playback"
 msgstr "Воспроизведение"
@@ -7722,8 +7655,11 @@ msgstr ""
 "Запустить воспроизведение, когда один щелчок левой кнопкой мыши на окне "
 "просмотра"
 
-msgid "Auto Hide Pixel Bar"
-msgstr "Автоматическое скрытие пикселя"
+msgid "Looping Mode"
+msgstr "Режим прокладки"
+
+msgid "Select default looping mode in timeline."
+msgstr "Выберите режим петли по умолчанию во времени."
 
 msgid "Sequences"
 msgstr "Последовательность"
@@ -7736,29 +7672,16 @@ msgstr ""
 "Рамки на второе значение для последовательностей, которые не имеют "
 "встроенной скорости."
 
-msgid "Looping Mode"
-msgstr "Режим прокладки"
-
-msgid "Select default looping mode in timeline."
-msgstr "Выберите режим петли по умолчанию во времени."
-
 msgid "Sensitivity"
 msgstr "Чувствительность"
 
 msgid ""
-"This setting controls the sensitivity of scrubbing.  Smaller values make the"
-" mouse move jump more frames while higher values does the opposite."
+"This setting controls the sensitivity of scrubbing.  Smaller values make the "
+"mouse move jump more frames while higher values does the opposite."
 msgstr ""
 "Эта регулировка контролирует чувствительность скруббирования.  Меньшие "
-"значения заставляют мышь двигать больше кадров, в то время как более высокие"
-" значения делают обратное."
-
-msgid ""
-"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
-"less smooth."
-msgstr ""
-"Начать воспроизведение при чистке, чтобы звук был услышан. Скруббирование "
-"может быть менее гладким."
+"значения заставляют мышь двигать больше кадров, в то время как более высокие "
+"значения делают обратное."
 
 msgid "Alt Sensitivity"
 msgstr "Чувствительность Alt"
@@ -7769,6 +7692,33 @@ msgid ""
 msgstr ""
 "При использовании ALT + левая кнопка мыши, этот параметр контролирует "
 "множитель, используемый для замедления прокрутки."
+
+msgid ""
+"Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
+"less smooth."
+msgstr ""
+"Начать воспроизведение при чистке, чтобы звук был услышан. Скруббирование "
+"может быть менее гладким."
+
+msgid "Display"
+msgstr "Показать"
+
+msgid "How to display timeline by default."
+msgstr "Как отображать временную линию по умолчанию."
+
+msgid "Video Start Frame"
+msgstr "Строка запуска видео"
+
+msgid "Start value in the timeline where video starts."
+msgstr "Начинаем значение в графике, где начинается видео."
+
+msgid "Remove EDLs in Temporary Folder on Exit"
+msgstr "Удалить EDL во временной папке при выходе"
+
+msgid ""
+"When selected, temporary EDLs (Playlists) will be removed from the temporary "
+"folder."
+msgstr "При выборе из временной папки будут удалены временные EDL (Playlists)."
 
 msgid "Default View"
 msgstr "Вид по умолчанию"
@@ -7785,17 +7735,17 @@ msgstr "Показать маркеры"
 msgid "Show Markers in Edit Viewport"
 msgstr "Показать маркеры в портале Правки"
 
-msgid "Show Effects"
-msgstr "Показать эффекты"
-
-msgid "Show Effects in Edit Viewport"
-msgstr "Показать эффекты в окне просмотра монтажа"
-
 msgid "Show Waveforms"
 msgstr "Показать звуковые волны"
 
 msgid "Show Waveforms in Edit Viewport"
 msgstr "Показать звуковые волны в окне просмотра монтажа"
+
+msgid "Show Effects"
+msgstr "Показать эффекты"
+
+msgid "Show Effects in Edit Viewport"
+msgstr "Показать эффекты в окне просмотра монтажа"
 
 msgid "Show Thunbnails"
 msgstr "Показать миниатюры"
@@ -7803,14 +7753,11 @@ msgstr "Показать миниатюры"
 msgid "Show Thumbnails in Edit Viewport"
 msgstr "Показать миниатюры в окне просмотра монтажа"
 
-msgid "Behavior"
-msgstr "Поведение"
+msgid "Start in Edit mode"
+msgstr "Начать в режиме Правки"
 
-msgid "Edit Associated Clips"
-msgstr "Правка Ассоциированные Клипы"
-
-msgid "Edit Associated Clips."
-msgstr "Правка Associated Clips."
+msgid "Editing viewport will be visible at start up."
+msgstr "Редакторский порт будет виден с самого начала."
 
 msgid "Editable"
 msgstr "Редакция"
@@ -7818,238 +7765,14 @@ msgstr "Редакция"
 msgid "Editable Timeline Viewport."
 msgstr "Редактируемый просмотр времени."
 
-msgid "OCIO"
-msgstr "OCIO"
+msgid "Edit Associated Clips"
+msgstr "Правка Ассоциированные Клипы"
 
-msgid "OCIO Config File"
-msgstr "Файл OCIO Conpig"
+msgid "Edit Associated Clips."
+msgstr "Правка Associated Clips."
 
-msgid ""
-"This is the path to your config.ocio file.  It can be set with the "
-"environment variable OCIO, which takes precedence over any saved setting."
-msgstr ""
-"Это путь к вашему файлу config.ocio. Он может быть установлен с переменной "
-"окружающей среды OCIO, которая имеет приоритет над любой сохранённой "
-"настройкой."
-
-msgid "Built-in Configs"
-msgstr "Встроенные конфигуры"
-
-msgid "Pick a config.ocio file from disk."
-msgstr "Выбери файл config.ocio с диска."
-
-msgid "Set Auto ICS as default"
-msgstr "Установить автоматический ICS по умолчанию"
-
-msgid ""
-"Set Auto ICS as a default so that Input Color Space is selected from file "
-"name or OpenEXR metadata.."
-msgstr ""
-"Установить автоматический ICS по умолчанию, чтобы входное цветовое "
-"пространство выбиралось из имени файла или метаданных OpenEXR."
-
-msgid "Use Default Display and View"
-msgstr "Использовать по умолчанию показ и просмотр"
-
-msgid ""
-"When this option is on, and your config.ocio has a default display and view,"
-" it will be used to be set as default."
-msgstr ""
-"Когда эта опция включена, и у вашей конфег.ocio есть по умолчанию дисплей и "
-"обзор, она будет установлена как по умолчанию."
-
-msgid "No OCIO on Videos or sRGB/BT709 data"
-msgstr "Без OCIO для видео или данных sRGB/BT709"
-
-msgid ""
-"If playing a video or showing an SDR image, OCIO will be turned off "
-"automatically."
-msgstr ""
-"При воспроизведении видео или отображении изображения SDR OCIO будет "
-"автоматически отключён."
-
-msgid "Use Active Views and Active Displays"
-msgstr "Использовать активные взгляды и активные дисплеи"
-
-msgid ""
-"When this option is off, OCIO files with active_views: and active_displays: "
-"are not taken into account."
-msgstr ""
-"Когда эта опция выключена, файлы OCIO с активными просмотрами: и "
-"активные_дискуссии: не принимаются во внимание."
-
-msgid "OCIO Defaults"
-msgstr "Погрешности OCIO"
-
-msgid "8-bits"
-msgstr "8 бит"
-
-msgid ""
-"The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
-"etc)."
-msgstr ""
-"Название цветового пространства OCIO для 8 битных изображений (jpg, bmp и "
-"т.д.)."
-
-msgid "16-bits"
-msgstr "16 бит"
-
-msgid ""
-"The name of the OCIO default image color space for 16-bit images (cin, tiff,"
-" etc.)"
-msgstr ""
-"Название цветового пространства OCIO для 16-битных изображений (cin, tiff и "
-"т.д.)"
-
-msgid "32-bits"
-msgstr "32 бита"
-
-msgid ""
-"The name of the OCIO default image color space for 32-bit int images "
-"(openexr integers, etc.)"
-msgstr ""
-"Название цветового пространства OCIO для 32-битных интиллюстраций (открытые "
-"целые числа и т.д.)"
-
-msgid "half"
-msgstr "половина"
-
-msgid ""
-"The name of the OCIO default image color space for OpenEXR half images."
-msgstr "Название цветового пространства OCIO для полуснимков OpenEXR."
-
-msgid "float"
-msgstr "плавучая точка"
-
-msgid ""
-"The name of the OCIO default image color space for half and float images "
-"(OpenEXR, hdr, dpx, etc.)"
-msgstr ""
-"Название цветового пространства OCIO для половинных и поплавковых "
-"изображений (OpenEXR, hdr, dpx и т.д.)"
-
-msgid "Default Look"
-msgstr "По умолчанию"
-
-msgid "Display / View"
-msgstr "Показать/Вид"
-
-msgid "Default Display / View"
-msgstr "Показать по умолчанию/Вид"
-
-msgid "Loading"
-msgstr "Загрузка"
-
-msgid "Version Regex"
-msgstr "Версия Regex"
-
-msgid ""
-"Regular Expression used to match clip versions.  Must group three things "
-"(prefix, number and suffix). If left on its default value (_v), it will "
-"automatically be created a regular expression to match versions defined with"
-" _v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
-msgstr ""
-"Регулярное выражение, используемое для совпадения с версиями клипов. Нужно "
-"группировать три вещи (prefix, число и suffix). Если оставить на своем "
-"значении по умолчанию (_v), то оно автоматически будет создаваться "
-"регулярное выражение для совпадения с версиями, определенными на _v в имени "
-"файла, каталога или обоих. Например: gizmo_v001 0001.exr"
-
-msgid "Maximum Images Apart"
-msgstr "Максимальные изображения"
-
-msgid ""
-"When searching for a version, this value is the maximum version apart from "
-"each other when searching the first or last version."
-msgstr ""
-"При поиске версии это значение представляет собой максимальную версию "
-"отдельно друг от друга при поиске первой или последней версии."
-
-msgid "Missing Frame"
-msgstr "Недостающие рамки"
-
-msgid "Black Frame"
-msgstr "Черная основа"
-
-msgid ""
-"When loading images, this setting controls what to do with missing frames (you may need to reload or clone the sequence):\n"
-"\t* Error Frame\t   - Reports an error.\n"
-"\t* Hold Frame\t   - Holds the last frame read.\n"
-"\t* Scratched Frame  - Holds the last frame read\n"
-"                             but draws a red cross.\n"
-"\t* Black Frame\t   - Replaces current frame with black.\n"
-"\t* Skip Frame\t   - Skips the current frame.\n"
-"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
-msgstr ""
-"При загрузке изображений этот параметр определяет, что делать с отсутствующими кадрами (может потребоваться перезагрузить или клонировать последовательность):\n"
-"\t* Кадр с ошибкой\t   - Сообщает об ошибке.\n"
-"\t* Удерживать кадр\t   - Удерживает последний прочитанный кадр.\n"
-"\t* Поцарапанный кадр  - Удерживает последний прочитанный кадр,\n"
-"                             но рисует поверх него красный крест.\n"
-"\t* Чёрный кадр\t   - Заменяет текущий кадр чёрным.\n"
-"\t* Пропустить кадр\t   - Пропускает текущий кадр.\n"
-"\t* Кадр с пропуском\t   - Добавляет .otio Gap для отсутствующих кадров."
-
-msgid "Scratch Frame"
-msgstr "Отсутствующий кадр"
-
-msgid "When this is on, missing frames will have a cross on them."
-msgstr ""
-"Если эта опция включена, отсутствующие кадры будут отмечены крестиком."
-
-msgid "Scratch Color"
-msgstr "Цвет отсутствующих кадров"
-
-msgid "Scratch Lines Color."
-msgstr "Цвет линий отсутствующих кадров."
-
-msgid "Scratch Width"
-msgstr "Ширина линий отсутствующих кадров"
-
-msgid "Scratch Lines Width."
-msgstr "Ширина линий отсутствующих кадров."
-
-msgid "Path Mappings"
-msgstr "Пути картирования"
-
-msgid ""
-"Use Up and Down arrows to move the selected line up and down.  Double click "
-"to change item.  Click on an empty area to unselect."
-msgstr ""
-"Используйте стрелки вверх и вниз, чтобы переместить выбранную линию вверх и "
-"вниз. Двойной щелчок для изменения пункта. Нажмите на пустую область, чтобы "
-"не выбрать."
-
-msgid "Add Paths"
-msgstr "Добавить пути"
-
-msgid "Add a new remote mapping."
-msgstr "Добавить новое дистанционное картирование."
-
-msgid "Remove Paths"
-msgstr "Удалить пути"
-
-msgid "Remove the currently selected path mapping."
-msgstr "Удалить выбранное в настоящее время картирование путей."
-
-msgid "Send"
-msgstr "Отправить"
-
-msgid "Accept"
-msgstr "Принять"
-
-msgid "UI Control"
-msgstr "Контроль UI"
-
-msgid "Pan and Zoom"
-msgstr "Пановое и крупногабаритное"
-
-msgid "Color Control"
-msgstr "Контроль цвета"
-
-msgid "Audio Control"
-msgstr "Аудиовизуальное управление"
+msgid "Graphics"
+msgstr "Графика"
 
 msgid "Monitor VSync"
 msgstr "Монитор VSync"
@@ -8078,8 +7801,8 @@ msgid "Blit"
 msgstr "Blit"
 
 msgid ""
-"Viewports can be drawn with blitting or with shaders.  Depending on graphics"
-" card and OS one can perform better then the other."
+"Viewports can be drawn with blitting or with shaders.  Depending on graphics "
+"card and OS one can perform better then the other."
 msgstr ""
 "Вьюпорты могут отображаться с помощью блиттинга или шейдеров. В зависимости "
 "от видеокарты и ОС один из методов может работать лучше другого."
@@ -8097,20 +7820,369 @@ msgstr ""
 "Таймлайн может отображаться с помощью блиттинга или шейдеров. В зависимости "
 "от видеокарты и ОС один из методов может работать лучше другого."
 
+msgid "Rendering"
+msgstr "Рендеринг"
+
+msgid "Image Rendering"
+msgstr "Рендеринг изображений"
+
+msgid "Debanding (Vulkan)"
+msgstr "Дебандинг (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "Делает градиенты более плавными в видеофайлах."
+
+msgid "Alpha Blend"
+msgstr "Альфа Бленд"
+
+msgid "Minify Filter"
+msgstr "Минимизация фильтра"
+
+msgid "Magnify Filter"
+msgstr "Увеличить фильтр"
+
+msgid "HDR Processing"
+msgstr "Обработка HDR"
+
+msgid "Prefer RGB (Vulkan)"
+msgstr "Предпочитать RGB (Vulkan)"
+
 msgid ""
-"For changes to take effect, you will need to re-open any movies already "
-"playing or reload mrv2."
+"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
+"and convert them with a compute shader.  When is off, Vulkan will decode "
+"RGBA_F16 and RGBA_F32 frames."
 msgstr ""
-"Для того чтобы изменения вступили в силу, вам нужно будет вновь открыть "
-"любые фильмы, которые уже играют или перезаряжают mrv2."
+"Когда этот параметр включён, Vulkan попытается использовать RGB_F16 и "
+"RGB_F32 без изменений и преобразовать их с помощью вычислительного шейдера. "
+"Когда он выключен, Vulkan будет декодировать кадры RGBA_F16 и RGBA_F32."
+
+msgid "Chromaticities"
+msgstr "Хроматичности"
+
+msgid "HDR Data"
+msgstr "Данные HDR"
+
+msgid "Tonemap Algorithm"
+msgstr "Алгоритм тоновой карты"
+
+msgid "Gamut Mapping"
+msgstr "Маппинг цветового охвата"
+
+msgid "Peak Detection"
+msgstr "Определение пиков"
+
+msgid "HDR Peak Detection"
+msgstr "Обнаружение пиков HDR"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds "
+"per frame."
+msgstr ""
+"Если видеоклип не является HDR10+ или Dolby Vision, разрешает динамические "
+"пороги для каждого кадра."
+
+msgid "HDR Percentile"
+msgstr "HDR-перцентиль"
+
+msgid ""
+"When less than 100, helps find the peak brightness ignoring the top 1 "
+"percent outliers."
+msgstr ""
+"Когда значение меньше 100, это помогает найти пиковую яркость, игнорируя "
+"верхний 1 процент выбросов."
+
+msgid "Smoothing Period"
+msgstr "Период сглаживания"
+
+msgid ""
+"How long it takes for brightness detection to \"catch up\" to a new scene."
+msgstr ""
+"Время, необходимое системе определения яркости для адаптации к новой сцене."
+
+msgid "Low Peak Detection"
+msgstr "Низкий порог детекции пиков"
+
+msgid "Low Limit to smooth out frames in the same scene."
+msgstr "Нижний предел для сглаживания кадров в пределах одной сцены."
+
+msgid "High Peak Detection Limit"
+msgstr "Верхний предел детекции пиков"
+
+msgid "High Limit to determine scene change."
+msgstr "Верхний предел для определения смены сцены."
+
+msgid "OCIO"
+msgstr "OCIO"
+
+msgid "Configuration"
+msgstr "Конфигурация"
+
+msgid "Built-in Configs"
+msgstr "Встроенные конфигуры"
+
+msgid "OCIO Config File"
+msgstr "Файл OCIO Conpig"
+
+msgid ""
+"This is the path to your config.ocio file.  It can be set with the "
+"environment variable OCIO, which takes precedence over any saved setting."
+msgstr ""
+"Это путь к вашему файлу config.ocio. Он может быть установлен с переменной "
+"окружающей среды OCIO, которая имеет приоритет над любой сохранённой "
+"настройкой."
+
+msgid "Pick a config.ocio file from disk."
+msgstr "Выбери файл config.ocio с диска."
+
+msgid "Options"
+msgstr "Параметры"
+
+msgid "Set Auto ICS as default"
+msgstr "Установить автоматический ICS по умолчанию"
+
+msgid ""
+"Set Auto ICS as a default so that Input Color Space is selected from file "
+"name or OpenEXR metadata.."
+msgstr ""
+"Установить автоматический ICS по умолчанию, чтобы входное цветовое "
+"пространство выбиралось из имени файла или метаданных OpenEXR."
+
+msgid "Use Default Display and View"
+msgstr "Использовать по умолчанию показ и просмотр"
+
+msgid ""
+"When this option is on, and your config.ocio has a default display and view, "
+"it will be used to be set as default."
+msgstr ""
+"Когда эта опция включена, и у вашей конфег.ocio есть по умолчанию дисплей и "
+"обзор, она будет установлена как по умолчанию."
+
+msgid "Use Active Views and Active Displays"
+msgstr "Использовать активные взгляды и активные дисплеи"
+
+msgid ""
+"When this option is off, OCIO files with active_views: and active_displays: "
+"are not taken into account."
+msgstr ""
+"Когда эта опция выключена, файлы OCIO с активными просмотрами: и "
+"активные_дискуссии: не принимаются во внимание."
+
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "Без OCIO для видео или данных sRGB/BT709"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr ""
+"При воспроизведении видео или отображении изображения SDR OCIO будет "
+"автоматически отключён."
+
+msgid "8-bits"
+msgstr "8 бит"
+
+msgid ""
+"The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
+"etc)."
+msgstr ""
+"Название цветового пространства OCIO для 8 битных изображений (jpg, bmp и "
+"т.д.)."
+
+msgid "16-bits"
+msgstr "16 бит"
+
+msgid ""
+"The name of the OCIO default image color space for 16-bit images (cin, tiff, "
+"etc.)"
+msgstr ""
+"Название цветового пространства OCIO для 16-битных изображений (cin, tiff и "
+"т.д.)"
+
+msgid "32-bits"
+msgstr "32 бита"
+
+msgid ""
+"The name of the OCIO default image color space for 32-bit int images "
+"(openexr integers, etc.)"
+msgstr ""
+"Название цветового пространства OCIO для 32-битных интиллюстраций (открытые "
+"целые числа и т.д.)"
+
+msgid "half"
+msgstr "половина"
+
+msgid "The name of the OCIO default image color space for OpenEXR half images."
+msgstr "Название цветового пространства OCIO для полуснимков OpenEXR."
+
+msgid "float"
+msgstr "плавучая точка"
+
+msgid ""
+"The name of the OCIO default image color space for half and float images "
+"(OpenEXR, hdr, dpx, etc.)"
+msgstr ""
+"Название цветового пространства OCIO для половинных и поплавковых "
+"изображений (OpenEXR, hdr, dpx и т.д.)"
+
+msgid "Look and View"
+msgstr "Внешний вид и отображение"
+
+msgid "Default Look"
+msgstr "По умолчанию"
+
+msgid "Display / View"
+msgstr "Показать/Вид"
+
+msgid "Default Display / View"
+msgstr "Показать по умолчанию/Вид"
+
+msgid "Loading"
+msgstr "Загрузка"
+
+msgid "Missing Frames"
+msgstr "Отсутствующие кадры"
+
+msgid "Missing Frame"
+msgstr "Недостающие рамки"
+
+msgid "Black Frame"
+msgstr "Черная основа"
+
+msgid ""
+"When loading images, this setting controls what to do with missing frames "
+"(you may need to reload or clone the sequence):\n"
+"\t* Error Frame\t   - Reports an error.\n"
+"\t* Hold Frame\t   - Holds the last frame read.\n"
+"\t* Scratched Frame  - Holds the last frame read\n"
+"                             but draws a red cross.\n"
+"\t* Black Frame\t   - Replaces current frame with black.\n"
+"\t* Skip Frame\t   - Skips the current frame.\n"
+"\t* Gap Frame\t   - Adds an .otio Gap for the missing frames."
+msgstr ""
+"При загрузке изображений этот параметр определяет, что делать с "
+"отсутствующими кадрами (может потребоваться перезагрузить или клонировать "
+"последовательность):\n"
+"\t* Кадр с ошибкой\t   - Сообщает об ошибке.\n"
+"\t* Удерживать кадр\t   - Удерживает последний прочитанный кадр.\n"
+"\t* Поцарапанный кадр  - Удерживает последний прочитанный кадр,\n"
+"                             но рисует поверх него красный крест.\n"
+"\t* Чёрный кадр\t   - Заменяет текущий кадр чёрным.\n"
+"\t* Пропустить кадр\t   - Пропускает текущий кадр.\n"
+"\t* Кадр с пропуском\t   - Добавляет .otio Gap для отсутствующих кадров."
+
+msgid "Scratch Frame"
+msgstr "Отсутствующий кадр"
+
+msgid "When this is on, missing frames will have a cross on them."
+msgstr "Если эта опция включена, отсутствующие кадры будут отмечены крестиком."
+
+msgid "Scratch Color"
+msgstr "Цвет отсутствующих кадров"
+
+msgid "Scratch Lines Color."
+msgstr "Цвет линий отсутствующих кадров."
+
+msgid "Scratch Width"
+msgstr "Ширина линий отсутствующих кадров"
+
+msgid "Scratch Lines Width."
+msgstr "Ширина линий отсутствующих кадров."
+
+msgid "Versions"
+msgstr "Версии"
+
+msgid "Version Regex"
+msgstr "Версия Regex"
+
+msgid ""
+"Regular Expression used to match clip versions.  Must group three things "
+"(prefix, number and suffix). If left on its default value (_v), it will "
+"automatically be created a regular expression to match versions defined with "
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
+msgstr ""
+"Регулярное выражение, используемое для совпадения с версиями клипов. Нужно "
+"группировать три вещи (prefix, число и suffix). Если оставить на своем "
+"значении по умолчанию (_v), то оно автоматически будет создаваться "
+"регулярное выражение для совпадения с версиями, определенными на _v в имени "
+"файла, каталога или обоих. Например: gizmo_v001 0001.exr"
+
+msgid "Maximum Images Apart"
+msgstr "Максимальные изображения"
+
+msgid ""
+"When searching for a version, this value is the maximum version apart from "
+"each other when searching the first or last version."
+msgstr ""
+"При поиске версии это значение представляет собой максимальную версию "
+"отдельно друг от друга при поиске первой или последней версии."
+
+msgid "File Requester"
+msgstr "Запрашиватель файла"
+
+msgid "Use Native File Chooser"
+msgstr "Использовать выбранный файл"
+
+msgid ""
+"If selected, the natlve file chooser will be used.  If unselected, mrv2's "
+"standard file chooser will be used."
+msgstr ""
+"Если выбрано, будет использован выбравший файл natlve. В случае невыбранного "
+"будет использован выбранный стандартный файл mrv2."
+
+msgid "Single Click to Travel Drawers"
+msgstr "Один щёлкните к рисункам путешествий"
+
+msgid ""
+"When using mrv2's file chooser, a single click on a folder will open it."
+msgstr "При использовании выбора файла mrv2 его откроет один щелчок на папке."
+
+msgid "Thumbnails Active"
+msgstr "Активированные пальцы"
+
+msgid "Show thumbnails for known files."
+msgstr "Показать пальцы для известных файлов."
+
+msgid "USD Thumbnails"
+msgstr "Памфотные пули в долл. США"
+
+msgid "Show Thumbnails for USD files (can be slow if they are big)"
+msgstr ""
+"Показать пальцы для файлов в долларах США (может быть медленно, если они "
+"большие)"
+
+msgid "Path Mappings"
+msgstr "Пути картирования"
+
+msgid ""
+"Use Up and Down arrows to move the selected line up and down.  Double click "
+"to change item.  Click on an empty area to unselect."
+msgstr ""
+"Используйте стрелки вверх и вниз, чтобы переместить выбранную линию вверх и "
+"вниз. Двойной щелчок для изменения пункта. Нажмите на пустую область, чтобы "
+"не выбрать."
+
+msgid "Add Paths"
+msgstr "Добавить пути"
+
+msgid "Add a new remote mapping."
+msgstr "Добавить новое дистанционное картирование."
+
+msgid "Remove Paths"
+msgstr "Удалить пути"
+
+msgid "Remove the currently selected path mapping."
+msgstr "Удалить выбранное в настоящее время картирование путей."
+
+msgid "Audio Output"
+msgstr "Вывод звука"
 
 msgid "API"
 msgstr "API"
 
 msgid "Audio API to use for platforms that support multiple APIs (Linux only)"
 msgstr ""
-"Audio API для использования в платформах, которые поддерживают несколько API"
-" (только Linux)"
+"Audio API для использования в платформах, которые поддерживают несколько API "
+"(только Linux)"
 
 msgid "Output Device"
 msgstr "Выходное устройство"
@@ -8118,11 +8190,21 @@ msgstr "Выходное устройство"
 msgid "Output Device to use for audio playback."
 msgstr "Выходное устройство для использования для воспроизведения звука."
 
+msgid ""
+"For changes to take effect, you will need to re-open any movies already "
+"playing or reload mrv2."
+msgstr ""
+"Для того чтобы изменения вступили в силу, вам нужно будет вновь открыть "
+"любые фильмы, которые уже играют или перезаряжают mrv2."
+
 msgid "Voice Annotations"
 msgstr "Голосовые аннотации"
 
 msgid "Voice Annotation Preferences."
 msgstr "Настройки голосовых аннотаций."
+
+msgid "Voice Over"
+msgstr "Закадровый голос"
 
 msgid "Save Path"
 msgstr "Путь для сохранения"
@@ -8139,27 +8221,32 @@ msgstr "Микрофон"
 msgid "Volume"
 msgstr "Громкость"
 
-msgid "ComfyUI"
-msgstr "ComfyUI"
+msgid "Send and Accept"
+msgstr "Отправка и принятие"
 
-msgid ""
-"Here are the current settings to interact with ComfyUI.  It requires "
-"installation of mrv2's comfyUI nodes."
-msgstr ""
-"Вот текущие настройки для взаимодействия с ComfyUI. Это требует установки "
-"узлов mrv2 comfyUI."
+msgid "Send"
+msgstr "Отправить"
 
-msgid "Use ComfyUI Pipe"
-msgstr "Использовать ComfyUI трубу"
+msgid "Accept"
+msgstr "Принять"
 
-msgid ""
-"This setting opens a pipe to communicate with ComfyUI's "
-"mrv2_save_exr_node.py"
-msgstr ""
-"Эта установка открывает трубу для связи с ComfyUI mrv2_save_exr_node.py"
+msgid "UI Control"
+msgstr "Контроль UI"
+
+msgid "Pan and Zoom"
+msgstr "Пановое и крупногабаритное"
+
+msgid "Color Control"
+msgstr "Контроль цвета"
+
+msgid "Audio Control"
+msgstr "Аудиовизуальное управление"
 
 msgid "WebRTC settings"
 msgstr "Настройки WebRTC"
+
+msgid "Connection"
+msgstr "Подключение"
 
 msgid "WebRTC Presets"
 msgstr "Предустановки WebRTC"
@@ -8185,8 +8272,8 @@ msgstr "TURN-сервер"
 
 msgid "Studio name to prefix to all Room connections.  Use some unique name."
 msgstr ""
-"Имя студии, добавляемое в качестве префикса ко всем подключениям к комнатам."
-" Используйте уникальное имя."
+"Имя студии, добавляемое в качестве префикса ко всем подключениям к комнатам. "
+"Используйте уникальное имя."
 
 msgid "Clean directory at Start up"
 msgstr "Очищать каталог при запуске"
@@ -8206,33 +8293,23 @@ msgstr "Каталог кэша"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "Каталог, в котором будут храниться загрузки WebRTC."
 
-msgid "On FFmpeg Error"
-msgstr "Ошибка FFmpeg"
-
-msgid "Adjusts how Log Window behaves in case of an FFmpeg error."
-msgstr "Регулирует поведение окна журнала в случае ошибки FFmpeg."
-
-msgid "On Error"
-msgstr "Ошибка"
-
-msgid "Adjusts how Log Window behaves in case of error."
-msgstr "Отрегулирует поведение окна журнала в случае ошибки."
-
-msgid "Check for Updates"
-msgstr "Проверка обновления"
+msgid "ComfyUI"
+msgstr "ComfyUI"
 
 msgid ""
-"Allows you to automatically download updates of mrv2 when it starts up."
-msgstr "Позволяет вам автоматически загружать обновления mrv2 при запуске."
-
-msgid "Allow Screen Saver"
-msgstr "Разрешить экранную заставку"
-
-msgid ""
-"This setting controls whether mrv2 will block the screen saver when running."
+"Here are the current settings to interact with ComfyUI.  It requires "
+"installation of mrv2's comfyUI nodes."
 msgstr ""
-"Этот параметр определяет, будет ли mrv2 блокировать экранную заставку во "
-"время работы."
+"Вот текущие настройки для взаимодействия с ComfyUI. Это требует установки "
+"узлов mrv2 comfyUI."
+
+msgid "Use ComfyUI Pipe"
+msgstr "Использовать ComfyUI трубу"
+
+msgid ""
+"This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
+msgstr ""
+"Эта установка открывает трубу для связи с ComfyUI mrv2_save_exr_node.py"
 
 msgid "Reset settings to the default."
 msgstr "Перезагрузить настройки по умолчанию."
@@ -8253,35 +8330,44 @@ msgstr ""
 msgid "Module"
 msgstr "Модуль"
 
-msgid "User Interface/Elements"
-msgstr "Пользовательский интерфейс/Элементы"
+msgid "General/Window Position"
+msgstr "Общие/Положение окна"
 
-msgid "User Interface/View Window"
-msgstr "Пользовательский интерфейс/Окно просмотра"
+msgid "Interface/Appearance"
+msgstr "Интерфейс/Внешний вид"
 
-msgid "User Interface/File Requester"
-msgstr "Пользовательский интерфейс/Диалог выбора файла"
+msgid "Interface/Pixel Toolbar"
+msgstr "Пользовательский интерфейс/Панель инструментов пикселей"
 
-msgid "User Interface/Fonts"
-msgstr "Пользовательский интерфейс/Шрифты"
-
-msgid "User Interface/Language and Colors"
-msgstr "Пользовательский интерфейс/Язык и цвета"
-
-msgid "User Interface/Pixel Toolbar"
-msgstr "Пользовательский интерфейс/Панель пикселей"
-
-msgid "User Interface/Positioning"
-msgstr "Пользовательский интерфейс/Позиционирование"
-
-msgid "User Interface/Render"
-msgstr "Пользовательский интерфейс/Рендеринг"
-
-msgid "User Interface/Thumbnails"
+msgid "Interface/Thumbnails"
 msgstr "Пользовательский интерфейс/Миниатюры"
 
-msgid "User Interface/Timeline"
-msgstr "Пользовательский интерфейс/Таймлайн"
+msgid "Timeline/Edit"
+msgstr "Таймлайн/Монтаж"
+
+msgid "Graphics/Rendering"
+msgstr "Графика/Рендеринг"
+
+msgid "Graphics/HDR"
+msgstr "Графика/HDR"
+
+msgid "OCIO/Defaults"
+msgstr "OCIO/Настройки по умолчанию"
+
+msgid "Loading/File Requester"
+msgstr "Загрузка/Выбор файла"
+
+msgid "Loading/Path Mappings"
+msgstr "Загрузка/Сопоставление путей"
+
+msgid "Audio/Voice Annotations"
+msgstr "Аудио/Голосовые аннотации"
+
+msgid "Network/WebRTC"
+msgstr "Сеть/WebRTC"
+
+msgid "Network/ComfyUI"
+msgstr "Сеть/ComfyUI"
 
 msgid "No Audio was Compiled"
 msgstr "Никакого звука не было скомпилировано"
@@ -8332,8 +8418,8 @@ msgstr "Нажмите для удаления выбранного предва
 
 msgid ""
 "Select, Add or Delete an OCIO Preset that stores: config filename, Input "
-"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, "
-"32-bits, half and float images. "
+"Color Space, View, Look, LUT settings and Defaults for 8-bits, 16-bits, 32-"
+"bits, half and float images. "
 msgstr ""
 "Выберите, добавьте или удалите OCIO Preset, который хранит: config Pame, "
 "Introduction Color Space, View, LUT, настройки и по умолчанию для 8-битных, "
@@ -8742,6 +8828,9 @@ msgstr "Скриншот"
 
 msgid "Toggle HDR Peak Detection"
 msgstr "Включить/выключить определение пиков HDR"
+
+msgid "Toggle Compare Timelines"
+msgstr "Переключить сравнение таймлайнов"
 
 msgid "Compare None"
 msgstr "сравнить ни один"
@@ -9215,10 +9304,11 @@ msgstr "Ошибка информации о задаче"
 #~ msgid "Rotated image info: {0}"
 #~ msgstr "Информация о поворачиваемых изображениях: {0}"
 
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgid ""
+#~ "Image too big for Save Annotations.  Will scale to the viewport size."
 #~ msgstr ""
-#~ "Фотография слишком большая, чтобы сохранить аннотации. Расширится до размера"
-#~ " смотрового портала."
+#~ "Фотография слишком большая, чтобы сохранить аннотации. Расширится до "
+#~ "размера смотрового портала."
 
 #, c++-format
 #~ msgid "{0}: Invalid OpenGL format and type"
@@ -9244,6 +9334,45 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Неверный шрифт для текстового рисунка"
+
+#~ msgid "User Interface"
+#~ msgstr "Пользовательский интерфейс"
+
+#~ msgid "User Interface Elements"
+#~ msgstr "Элементы пользовательского интерфейса"
+
+#~ msgid "View Window"
+#~ msgstr "Вид Окно"
+
+#~ msgid "Language and Colors"
+#~ msgstr "Язык и цвета"
+
+#~ msgid "Render"
+#~ msgstr "Рендеринг"
+
+#~ msgid "User Interface/Elements"
+#~ msgstr "Пользовательский интерфейс/Элементы"
+
+#~ msgid "User Interface/View Window"
+#~ msgstr "Пользовательский интерфейс/Окно просмотра"
+
+#~ msgid "User Interface/File Requester"
+#~ msgstr "Пользовательский интерфейс/Диалог выбора файла"
+
+#~ msgid "User Interface/Fonts"
+#~ msgstr "Пользовательский интерфейс/Шрифты"
+
+#~ msgid "User Interface/Language and Colors"
+#~ msgstr "Пользовательский интерфейс/Язык и цвета"
+
+#~ msgid "User Interface/Positioning"
+#~ msgstr "Пользовательский интерфейс/Позиционирование"
+
+#~ msgid "User Interface/Render"
+#~ msgstr "Пользовательский интерфейс/Рендеринг"
+
+#~ msgid "User Interface/Timeline"
+#~ msgstr "Пользовательский интерфейс/Таймлайн"
 
 #, c++-format
 #~ msgid "Show {0} Window."
@@ -9273,9 +9402,6 @@ msgstr "Ошибка информации о задаче"
 #~ msgid "View/Compare/Vertical"
 #~ msgstr "Вид/Сравнение/Вертикальная передача"
 
-#~ msgid "View/Compare/Tile"
-#~ msgstr "Вид/Сравнение/Плитка"
-
 #~ msgid "Remove audio gap(s) at the ones at current time."
 #~ msgstr "Удалить аудиоразрыв(ы) в текущий момент времени."
 
@@ -9298,14 +9424,15 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "Линеаризовать EXR"
 
 #~ msgid ""
-#~ "If saving an EXR, try to linearize the result and save metadata to later use"
-#~ " with OpenImageIO.  Note:  this may not match exactly movies with "
+#~ "If saving an EXR, try to linearize the result and save metadata to later "
+#~ "use with OpenImageIO.  Note:  this may not match exactly movies with "
 #~ "libplacebo, as they use slightly different math."
 #~ msgstr ""
-#~ "При сохранении EXR попробуйте линеаризовать результат и сохранить метаданные"
-#~ " для последующего использования с OpenImageIO.  Примечание: результат может "
-#~ "не в точности соответствовать фильмам, обработанным с помощью libplacebo, "
-#~ "поскольку в них используются несколько отличающиеся вычисления."
+#~ "При сохранении EXR попробуйте линеаризовать результат и сохранить "
+#~ "метаданные для последующего использования с OpenImageIO.  Примечание: "
+#~ "результат может не в точности соответствовать фильмам, обработанным с "
+#~ "помощью libplacebo, поскольку в них используются несколько отличающиеся "
+#~ "вычисления."
 
 #~ msgid "BGR"
 #~ msgstr "BGR"
@@ -9320,21 +9447,22 @@ msgstr "Ошибка информации о задаче"
 #~ ".otioz files cannot be edited.  Please unzip them first and use the "
 #~ "'content.otio' file"
 #~ msgstr ""
-#~ "Файлы .otioz нельзя редактировать. Сначала распакуйте их и используйте файл "
-#~ "«content.otio»."
+#~ "Файлы .otioz нельзя редактировать. Сначала распакуйте их и используйте "
+#~ "файл «content.otio»."
 
 #~ msgid "Start a server.  Use -port to specify a port number."
 #~ msgstr "Запуск сервера. Используйте порт для указания номера порта."
 
 #~ msgid "Connect to a server at <value>.  Use -port to specify a port number."
 #~ msgstr ""
-#~ "Подключиться к серверу на <значение> Использовать -порт для указания номера "
-#~ "порта."
+#~ "Подключиться к серверу на <значение> Использовать -порт для указания "
+#~ "номера порта."
 
 #~ msgid ""
 #~ "Port number for the server to listen to or for the client to connect to."
 #~ msgstr ""
-#~ "Номер порта для сервера, чтобы слушать или чтобы клиент подключался к нему."
+#~ "Номер порта для сервера, чтобы слушать или чтобы клиент подключался к "
+#~ "нему."
 
 #~ msgid "Client"
 #~ msgstr "Клиент"
@@ -9358,8 +9486,8 @@ msgstr "Ошибка информации о задаче"
 #~ "Port to connect to.  Make sure your firewall and router allows read/write "
 #~ "through it."
 #~ msgstr ""
-#~ "Порт для подключения. Убедитесь, что ваш файервол и маршрутизатор позволяют "
-#~ "читать/ писать через него."
+#~ "Порт для подключения. Убедитесь, что ваш файервол и маршрутизатор "
+#~ "позволяют читать/ писать через него."
 
 #~ msgid "Create"
 #~ msgstr "Создать"
@@ -9377,7 +9505,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "Создать хронологию из выбранного клипа."
 
 #~ msgid ""
-#~ "Save current EDL to a permanent location, making paths relative if possible."
+#~ "Save current EDL to a permanent location, making paths relative if "
+#~ "possible."
 #~ msgstr ""
 #~ "Сохранить текущий EDL в постоянное место, делая маршруты относительными, "
 #~ "если возможно."
@@ -9431,10 +9560,12 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 #~ msgid ""
-#~ "Share the room ID with the persons that will review the session with you.\n"
+#~ "Share the room ID with the persons that will review the session with "
+#~ "you.\n"
 #~ "\n"
 #~ msgstr ""
-#~ "Поделитесь идентификатором комнаты с людьми, которые будут просматривать сеанс вместе с вами.\n"
+#~ "Поделитесь идентификатором комнаты с людьми, которые будут просматривать "
+#~ "сеанс вместе с вами.\n"
 #~ "\n"
 
 #~ msgid "WebRTC Server"
@@ -9466,20 +9597,25 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt.rate` seconds.\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
+#~ "rt.rate` seconds.\n"
 #~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Класс RationalTime представляет собой измерение времени в :math:`rt.value/rt.rate` секундах.\n"
-#~ "Он может быть пересчитан в другой :class:`~RationalTime` с другим частотным значением.\n"
+#~ "Класс RationalTime представляет собой измерение времени в :math:`rt.value/"
+#~ "rt.rate` секундах.\n"
+#~ "Он может быть пересчитан в другой :class:`~RationalTime` с другим "
+#~ "частотным значением.\n"
 
 #~ msgid ""
 #~ "\n"
-#~ "Returns true if the time is invalid. The time is considered invalid if the value or the rate are a NaN value\n"
+#~ "Returns true if the time is invalid. The time is considered invalid if "
+#~ "the value or the rate are a NaN value\n"
 #~ "or if the rate is less than or equal to zero.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Возвращение верно, если время является недействительным. Время считается недействительным, если значение или ставка являются значением NN\n"
+#~ "Возвращение верно, если время является недействительным. Время считается "
+#~ "недействительным, если значение или ставка являются значением NN\n"
 #~ "или если ставка меньше или равна нулю.\n"
 
 #~ msgid "Returns the time value for time converted to new_rate."
@@ -9492,36 +9628,45 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "Returns the time value for \"self\" converted to new_rate."
 #~ msgstr ""
-#~ "Возвращает значение времени для себя, преобразованного в новый formula_rate."
+#~ "Возвращает значение времени для себя, преобразованного в новый "
+#~ "formula_rate."
 
 #~ msgid ""
 #~ "\n"
-#~ "Compute the duration of samples from first to last (excluding last). This is not the same as distance.\n"
+#~ "Compute the duration of samples from first to last (excluding last). This "
+#~ "is not the same as distance.\n"
 #~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 frames. Result will be in the rate of start_time.\n"
+#~ "For example, the duration of a clip from frame 10 to frame 15 is 5 "
+#~ "frames. Result will be in the rate of start_time.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Вычислить продолжительность проб от первого до последнего (за исключением последнего). Это не то же самое, что расстояние.\n"
+#~ "Вычислить продолжительность проб от первого до последнего (за исключением "
+#~ "последнего). Это не то же самое, что расстояние.\n"
 #~ "\n"
-#~ "Например, продолжительность клипа от 10 до 15 кадра равна 5 кадрам. Результат будет в скорости начала_время.\n"
+#~ "Например, продолжительность клипа от 10 до 15 кадра равна 5 кадрам. "
+#~ "Результат будет в скорости начала_время.\n"
 
 #~ msgid ""
 #~ "\n"
-#~ "Compute the duration of samples from first to last (including last). This is not the same as distance.\n"
+#~ "Compute the duration of samples from first to last (including last). This "
+#~ "is not the same as distance.\n"
 #~ "\n"
-#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.\n"
+#~ "For example, the duration of a clip from frame 10 to frame 15 is 6 "
+#~ "frames. Result will be in the rate of start_time.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Вычислить продолжительность проб от первого до последнего (в том числе последнего). Это не то же самое, что расстояние.\n"
+#~ "Вычислить продолжительность проб от первого до последнего (в том числе "
+#~ "последнего). Это не то же самое, что расстояние.\n"
 #~ "\n"
-#~ "Например, продолжительность клипа от 10 до 15 кадра равна 6 кадрам. Результат будет в скорости начала_время.\n"
+#~ "Например, продолжительность клипа от 10 до 15 кадра равна 6 кадрам. "
+#~ "Результат будет в скорости начала_время.\n"
 
 #~ msgid ""
-#~ "Returns the first valid timecode rate that has the least difference from the"
-#~ " given value."
+#~ "Returns the first valid timecode rate that has the least difference from "
+#~ "the given value."
 #~ msgstr ""
-#~ "Возвращает первую действительную скорость времени, которая имеет наименьшее "
-#~ "отличие от указанной величины."
+#~ "Возвращает первую действительную скорость времени, которая имеет "
+#~ "наименьшее отличие от указанной величины."
 
 #~ msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
 #~ msgstr "Преобразуйте номер кадра и частоту в объект :class:`~RationalTime`."
@@ -9536,8 +9681,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "Преобразование во временной код (``HH:MM:SS;FRAME``)"
 
 #~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a "
-#~ ":class:`~RationalTime`."
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
+#~ "a :class:`~RationalTime`."
 #~ msgstr ""
 #~ "Преобразовать строку временн*х кодов (``HH:MM:SS;FRAME``) в :class: "
 #~ "`~RationalTime`."
@@ -9551,13 +9696,17 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The TimeRange class represents a range in time. It encodes the start time and the duration,\n"
-#~ "meaning that :meth:`end_time_inclusive` (last portion of a sample in the time range) and\n"
+#~ "The TimeRange class represents a range in time. It encodes the start time "
+#~ "and the duration,\n"
+#~ "meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
+#~ "time range) and\n"
 #~ ":meth:`end_time_exclusive` can be computed.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Класс TimeRange представляет диапазон времени. Он кодирует время начала и продолжительность,\n"
-#~ "что означает возможность вычисления :meth:`end_time_inclusive` (последняя часть выборки в диапазоне времени)\n"
+#~ "Класс TimeRange представляет диапазон времени. Он кодирует время начала и "
+#~ "продолжительность,\n"
+#~ "что означает возможность вычисления :meth:`end_time_inclusive` (последняя "
+#~ "часть выборки в диапазоне времени)\n"
 #~ "и :meth:`end_time_exclusive`.\n"
 
 #~ msgid ""
@@ -9570,18 +9719,23 @@ msgstr "Ошибка информации о задаче"
 #~ "If the time range starts at (0, 24) with duration (10.5, 24):\n"
 #~ "(10, 24)\n"
 #~ "\n"
-#~ "In other words, the last frame with data, even if the last frame is fractional.\n"
+#~ "In other words, the last frame with data, even if the last frame is "
+#~ "fractional.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Время проведения последней выборки, содержащей данные во временном диапазоне.\n"
+#~ "Время проведения последней выборки, содержащей данные во временном "
+#~ "диапазоне.\n"
 #~ "\n"
-#~ "Если временной интервал начинается с (0, 24) с продолжительностью (10, 24), то он составляет:\n"
+#~ "Если временной интервал начинается с (0, 24) с продолжительностью (10, "
+#~ "24), то он составляет:\n"
 #~ "(9, 24)\n"
 #~ "\n"
-#~ "Если временной интервал начинается с (0, 24) с продолжительностью (10.5, 24):\n"
+#~ "Если временной интервал начинается с (0, 24) с продолжительностью (10.5, "
+#~ "24):\n"
 #~ "(10, 24)\n"
 #~ "\n"
-#~ "Иными словами, последняя рамка с данными, даже если последняя рамка является частичной.\n"
+#~ "Иными словами, последняя рамка с данными, даже если последняя рамка "
+#~ "является частичной.\n"
 
 #~ msgid ""
 #~ "\n"
@@ -9596,17 +9750,19 @@ msgstr "Ошибка информации о задаче"
 #~ "\n"
 #~ "Время первого образца вне временных рамок.\n"
 #~ "\n"
-#~ "Если стартовая рамка - 10, а продолжительность - 5, то конец_время_исключительно - 15,\n"
+#~ "Если стартовая рамка - 10, а продолжительность - 5, то "
+#~ "конец_время_исключительно - 15,\n"
 #~ "Потому что последний раз с данными в этом диапазоне - 14.\n"
 #~ "\n"
-#~ "Если стартовая рамка равна 10, а продолжительность - 5,5, то конец_время_исключительно\n"
+#~ "Если стартовая рамка равна 10, а продолжительность - 5,5, то "
+#~ "конец_время_исключительно\n"
 #~ "15.5, потому что последний раз с данными в этом диапазоне - 15.\n"
 
 #~ msgid ""
 #~ "Construct a new :class:`~TimeRange` that is this one extended by other."
 #~ msgstr ""
-#~ "Создать новый :class:`~TimeRange`, который является расширением текущего за "
-#~ "счет другого."
+#~ "Создать новый :class:`~TimeRange`, который является расширением текущего "
+#~ "за счет другого."
 
 #~ msgid ""
 #~ "\n"
@@ -9693,8 +9849,10 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The start of `this` strictly precedes end of `other` by a value >= `epsilon_s`.\n"
-#~ "The end of `this` strictly antecedes start of `other` by a value >= `epsilon_s`.\n"
+#~ "The start of `this` strictly precedes end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` strictly antecedes start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [ this ]\n"
@@ -9703,8 +9861,10 @@ msgstr "Ошибка информации о задаче"
 #~ "The converse would be ``other.overlaps(this)``\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Начало `this` строго предшествует окончанию `other` на значение >= `epsilon_s`.\n"
-#~ "Окончание `this` строго предшествует началу `other` на значение >= `epsilon_s`.\n"
+#~ "Начало `this` строго предшествует окончанию `other` на значение >= "
+#~ "`epsilon_s`.\n"
+#~ "Окончание `this` строго предшествует началу `other` на значение >= "
+#~ "`epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [ this ]\n"
@@ -9774,7 +9934,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgid ""
 #~ "\n"
 #~ "The start of `this` strictly equals the start of `other`.\n"
-#~ "The end of `this` strictly precedes the end of `other` by a value >= `epsilon_s`.\n"
+#~ "The end of `this` strictly precedes the end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [ this ]\n"
@@ -9784,7 +9945,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr ""
 #~ "\n"
 #~ "Начало `this` строго равно началу `other`.\n"
-#~ "Окончание `this` строго предшествует окончанию `other` на значение >= `epsilon_s`.\n"
+#~ "Окончание `this` строго предшествует окончанию `other` на значение >= "
+#~ "`epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [ this ]\n"
@@ -9815,7 +9977,8 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The start of `this` strictly antecedes the start of `other` by a value >= `epsilon_s`.\n"
+#~ "The start of `this` strictly antecedes the start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
 #~ "The end of `this` strictly equals the end of `other`.\n"
 #~ "::\n"
 #~ "\n"
@@ -9825,7 +9988,8 @@ msgstr "Ошибка информации о задаче"
 #~ "The converse would be ``other.finishes(this)``\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Начало `this` строго предшествует началу `other` на значение >= `epsilon_s`.\n"
+#~ "Начало `this` строго предшествует началу `other` на значение >= "
+#~ "`epsilon_s`.\n"
 #~ "Окончание `this` строго равно окончанию `other`.\n"
 #~ "::\n"
 #~ "\n"
@@ -9836,8 +10000,10 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The start of `this` precedes or equals the end of `other` by a value >= `epsilon_s`.\n"
-#~ "The end of `this` antecedes or equals the start of `other` by a value >= `epsilon_s`.\n"
+#~ "The start of `this` precedes or equals the end of `other` by a value >= "
+#~ "`epsilon_s`.\n"
+#~ "The end of `this` antecedes or equals the start of `other` by a value >= "
+#~ "`epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [    this    ]           OR      [    other    ]\n"
@@ -9846,8 +10012,10 @@ msgstr "Ошибка информации о задаче"
 #~ "The converse would be ``other.finishes(this)``\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Начало `this` предшествует или равно окончанию `other` на значение >= `epsilon_s`.\n"
-#~ "Окончание `this` предшествует или равно началу `other` на значение >= `epsilon_s`.\n"
+#~ "Начало `this` предшествует или равно окончанию `other` на значение >= "
+#~ "`epsilon_s`.\n"
+#~ "Окончание `this` предшествует или равно началу `other` на значение >= "
+#~ "`epsilon_s`.\n"
 #~ "::\n"
 #~ "\n"
 #~ "   [    this    ]           ИЛИ      [    other    ]\n"
@@ -9857,25 +10025,33 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (exclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (exclusive).\n"
 #~ "\n"
-#~ "For example, if start_time is 1 and end_time is 10, the returned will have a duration of 9.\n"
+#~ "For example, if start_time is 1 and end_time is 10, the returned will "
+#~ "have a duration of 9.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Создает :class:`~TimeRange` из начального и конечного :class:`~RationalTime`\\s (исключительно).\n"
+#~ "Создает :class:`~TimeRange` из начального и "
+#~ "конечного :class:`~RationalTime`\\s (исключительно).\n"
 #~ "\n"
-#~ "Например, если start_time равно 1, а end_time равно 10, возвращаемый диапазон будет иметь продолжительность 9.\n"
+#~ "Например, если start_time равно 1, а end_time равно 10, возвращаемый "
+#~ "диапазон будет иметь продолжительность 9.\n"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s (inclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (inclusive).\n"
 #~ "\n"
-#~ "For example, if start_time is 1 and end_time is 10, the returned will have a duration of 10.\n"
+#~ "For example, if start_time is 1 and end_time is 10, the returned will "
+#~ "have a duration of 10.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Создает :class:`~TimeRange` из начального и конечного :class:`~RationalTime`\\s (включительно).\n"
+#~ "Создает :class:`~TimeRange` из начального и "
+#~ "конечного :class:`~RationalTime`\\s (включительно).\n"
 #~ "\n"
-#~ "Например, если start_time равно 1, а end_time равно 10, возвращаемый диапазон будет иметь продолжительность 10.\n"
+#~ "Например, если start_time равно 1, а end_time равно 10, возвращаемый "
+#~ "диапазон будет иметь продолжительность 10.\n"
 
 #~ msgid "Preview Thumbnails on Panels"
 #~ msgstr "Просмотр табличек с пальцами на табличках"
@@ -9885,9 +10061,6 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "Renderer Name"
 #~ msgstr "Имя заказчика"
-
-#~ msgid "Renderer"
-#~ msgstr "Редактор"
 
 #~ msgid "Enter a UR."
 #~ msgstr "Введите URL."
@@ -9919,9 +10092,6 @@ msgstr "Ошибка информации о задаче"
 #~ msgid "Render/HDR/Enable ScRGB"
 #~ msgstr "Render/HDR/Включить обнаружение пиков"
 
-#~ msgid "User Interface/HDR"
-#~ msgstr "Интерфейс пользователя/HDR"
-
 #~ msgid "Primaries Name"
 #~ msgstr "Название первичных цветов"
 
@@ -9934,8 +10104,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgid ""
 #~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
 #~ msgstr ""
-#~ "Порог для определения смены кадра или сцены при включённом определении пиков"
-#~ " HDR."
+#~ "Порог для определения смены кадра или сцены при включённом определении "
+#~ "пиков HDR."
 
 #~ msgid "Monitor "
 #~ msgstr "Монитор"
@@ -9969,8 +10139,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "Обнаружен формат Vulkan: {0}"
 
 #~ msgid ""
-#~ "Your Wayland compositor does not support Float on Top.  Go to the title bar "
-#~ "of the Window and click RMB->->More Actions->Keep Above Others"
+#~ "Your Wayland compositor does not support Float on Top.  Go to the title "
+#~ "bar of the Window and click RMB->->More Actions->Keep Above Others"
 #~ msgstr ""
 #~ "Ваш композитор Wayland не поддерживает режим Float on Top. Перейдите к "
 #~ "строке заголовка окна и нажмите ПКМ → «Дополнительные действия» → «Поверх "
@@ -9983,8 +10153,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "Строка статуса"
 
 #~ msgid ""
-#~ "The Pixel Bar can slow down playback at high resolutions.  When this option "
-#~ "is on, the pixel toolbar will be hidden automatically."
+#~ "The Pixel Bar can slow down playback at high resolutions.  When this "
+#~ "option is on, the pixel toolbar will be hidden automatically."
 #~ msgstr ""
-#~ "Pixel Bar может замедлить воспроизведение при высоких разрешениях. Когда эта"
-#~ " опция включена, панель пикселя будет скрыта автоматически."
+#~ "Pixel Bar может замедлить воспроизведение при высоких разрешениях. Когда "
+#~ "эта опция включена, панель пикселя будет скрыта автоматически."

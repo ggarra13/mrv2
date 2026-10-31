@@ -21,7 +21,7 @@ namespace tl
             "Multiply", "Add", "Horizontal", "Vertical", "Tile", "Butterfly");
         TLRENDER_ENUM_SERIALIZE_IMPL(CompareMode);
 
-        TLRENDER_ENUM_IMPL(CompareTimeMode, "Relative", "Absolute");
+        TLRENDER_ENUM_IMPL(CompareTimeMode, "Start of File", "Timecode");
         TLRENDER_ENUM_SERIALIZE_IMPL(CompareTimeMode);
 
         namespace

@@ -129,8 +129,8 @@ namespace mrv
             timeline::Playback::Stop;
         bool TimelineViewport::Private::isScrubbing = false;
         float TimelineViewport::Private::masking = 0.F;
-        int64_t TimelineViewport::Private::lastFrame;
-        uint64_t TimelineViewport::Private::droppedFrames = 0;
+        TimelineViewport::Private::PlaybackStats
+        TimelineViewport::Private::stats;
         bool TimelineViewport::Private::presentation = false;
         float TimelineViewport::Private::rotation = 0.F;
         bool TimelineViewport::Private::resizeWindow = true;
@@ -616,15 +616,15 @@ namespace mrv
             TLRENDER_P();
 
             const auto player = p.player;
-            if (file::isTemporaryNDI(player->path()))
+            if (!player)
                 return;
 
-            const auto& t = player->currentTime();
+            const auto t = player->currentTime();
             auto time = t + OTIO_NS::RationalTime(dx, t.rate());
 
             // Stop at end/beginning if not looping.
             int behavior = p.ui->uiPrefs->ScrubbingLoopMode->value();
-            const auto& range = player->inOutRange();
+            const auto range = player->inOutRange();
             const auto loop = player->loop();
             if ((behavior == kScrubLoopButton &&
                  loop == timeline::Loop::Once) ||
@@ -638,7 +638,7 @@ namespace mrv
                 return;
             }
 
-            const auto& info = player->ioInfo();
+            const auto info = player->ioInfo();
             bool isMuted = player->isMuted();
             if (!info.audio.isValid())
                 isMuted = true;
@@ -783,7 +783,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            p.droppedFrames = 0;
+            p.stats.restart(true);
 
             if (!p.player)
                 return;
@@ -808,7 +808,7 @@ namespace mrv
         void TimelineViewport::framePrev() noexcept
         {
             TLRENDER_P();
-            p.droppedFrames = 0;
+            p.stats.restart(true);
 
             if (!p.player)
                 return;
@@ -822,7 +822,7 @@ namespace mrv
         void TimelineViewport::frameNext() noexcept
         {
             TLRENDER_P();
-            p.droppedFrames = 0;
+            p.stats.restart(true);
 
             if (!p.player)
                 return;
@@ -836,7 +836,7 @@ namespace mrv
         void TimelineViewport::endFrame() noexcept
         {
             TLRENDER_P();
-            p.droppedFrames = 0;
+            p.stats.restart(true);
 
             if (!p.player)
                 return;
@@ -871,7 +871,7 @@ namespace mrv
                 _hidePixelBar();
 
             if (value != timeline::Playback::Stop)
-                p.droppedFrames = 0;
+                p.stats.restart(true);
 
             p.player->setPlayback(value);
 
@@ -906,7 +906,7 @@ namespace mrv
             p.player->togglePlayback();
 
             if (p.player->playback() != timeline::Playback::Stop)
-                p.droppedFrames = 0;
+                p.stats.restart(true);
 
             updatePlaybackButtons();
             p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
@@ -1516,7 +1516,7 @@ namespace mrv
                     frameView();
 
                 p.switchClip = false;
-                p.droppedFrames = 0;
+                p.stats.restart(true);
             }
 
             _getTags();

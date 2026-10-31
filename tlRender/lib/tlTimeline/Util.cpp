@@ -141,7 +141,7 @@ namespace tl
                     out.push_back(a);
                 }
                 else if (
-                    value.end_time_inclusive() > range.end_time_exclusive())
+                    value.end_time_inclusive() > range.end_time_inclusive())
                 {
                     const OTIO_NS::TimeRange clamped(value.start_time(), min);
                     const OTIO_NS::TimeRange a =

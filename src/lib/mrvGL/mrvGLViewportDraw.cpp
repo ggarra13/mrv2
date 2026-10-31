@@ -32,7 +32,6 @@
 namespace
 {
     const char* kModule = "draw";
-    const unsigned kFPSAverageFrames = 10;
     const std::string kFontFamily = "NotoSans-Bold";
 }
 
@@ -1022,10 +1021,7 @@ namespace mrv
             const float alpha) const noexcept
         {
             TLRENDER_P();
-
-            const image::Color4f shadowColor(0.F, 0.F, 0.F, 1.0F);
-            const math::Vector2i shadowPos1{ 1, 1 };
-            const math::Vector2i shadowPos2{ -1, -1 };
+            MRV2_GL();
 
             Fl_Color c = p.ui->uiPrefs->ViewHud->color();
             uint8_t r, g, b;
@@ -1033,8 +1029,12 @@ namespace mrv
             const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
             const math::Vector2i labelPos;
 
-            _drawText(textInfos, shadowPos1, shadowColor);
-            _drawText(textInfos, shadowPos2, shadowColor);
+            image::Color4f boxColor(0.F, 0.F, 0.F, 0.3F);
+            for (auto& textInfo : textInfos)
+            {
+                const math::Box2i shadowBox = math::margin(textInfo.box, 8);
+                gl.render->drawRect(shadowBox, boxColor);
+            }
             _drawText(textInfos, labelPos, labelColor);
         }
 
@@ -1149,7 +1149,8 @@ namespace mrv
                 frame = range.start_time().to_frames();
                 const int64_t last_frame = range.end_time_inclusive().to_frames();
                 snprintf(
-                    buf, 512, " Range: %" PRId64 " -  %" PRId64, frame, last_frame);
+                    buf, 512, " Range: %" PRId64 " -  %" PRId64 " ",
+                    frame, last_frame);
                 tmp += buf;
             }
 
@@ -1168,57 +1169,38 @@ namespace mrv
 
             if (p.hud & HudDisplay::kFPS)
             {
-                if (player->playback() != timeline::Playback::Stop &&
-                    (p.actionMode != ActionMode::kScrub || p.lastEvent != FL_DRAG))
+                const auto playback = player->playback();
+                auto& stats = p.stats;
+
+                if (playback == timeline::Playback::Stop ||
+                    (p.actionMode == ActionMode::kScrub && p.lastEvent == FL_DRAG))
                 {
-                    const OTIO_NS::TimeRange& range = player->timeRange();
-                    const int64_t maxFrames = range.duration().to_frames();
+                    stats.restart();  // not playing, or dragging in the view
+                }
+                else
+                {
+                    const double speed = player->speed();
+                    const bool forward = playback == timeline::Playback::Forward;
+                    const int64_t loopFrames =
+                        player->loop() == timeline::Loop::Loop
+                        ? player->inOutRange().duration().to_frames()
+                        : 0;
 
-                    // Calculate skipped frames
-                    int64_t absdiff = std::abs(time.value() - p.lastFrame);
-                    if (absdiff > 1 && absdiff < 30 && absdiff < maxFrames - 1)
-                        p.droppedFrames += absdiff - 1;
+                    // Don't use 'frame' here: the kFrameRange block above overwrites it.
+                    stats.update(time.to_frames(), speed, forward, loopFrames,
+                                 std::chrono::steady_clock::now());
 
-                    // Calculate elapsed time
-                    auto currentTime = std::chrono::high_resolution_clock::now();
-                    auto frameTime =
-                        std::chrono::duration<double>(currentTime - p.startTime)
-                        .count();
-                    p.frameTimes.push_back(frameTime);
-
-                    // Average FPS over kFPSAverageFrames
-                    if (p.frameTimes.size() >= kFPSAverageFrames)
-                    {
-                        p.frameTimes.pop_front();
-                    }
-
-                    // Calculate average frame time
-                    double averageFrameTime = 0.0;
-                    for (const double time : p.frameTimes)
-                    {
-                        averageFrameTime += time;
-                    }
-                    averageFrameTime /= p.frameTimes.size();
-
-                    double fps = 1.0 / averageFrameTime;
-                    if (fps >= player->speed()) fps = player->speed();
-
-                    snprintf(
-                        buf, 512, "DF: %" PRIu64 " FPS: %.2f/%.2f", p.droppedFrames,
-                        fps, player->speed());
-
-                    tmp += buf;
-
-                    if (swap_interval())
-                        tmp += " FIFO";
+                    if (stats.fps > 0.0)
+                        snprintf(buf, 512, "DF: %" PRIu64 " FPS: %.2f/%.2f",
+                                 stats.droppedFrames, std::min(stats.fps, speed), speed);
                     else
-                        tmp += " MBOX";
-
-                    p.startTime = std::chrono::high_resolution_clock::now();
+                        snprintf(buf, 512, "DF: %" PRIu64 " FPS: --/%.2f",
+                                 stats.droppedFrames, speed);
+                    tmp += buf;
+                    tmp += swap_interval() ? " FIFO" : " MBOX";
                 }
             }
 
-            p.lastFrame = time.value();
 
             if (!tmp.empty())
                 _appendText(textInfos, tmp, fontInfo, pos, lineHeight);

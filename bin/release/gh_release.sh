@@ -36,7 +36,7 @@ count=${#items[@]}
 
 if [[ $count != 22 ]]; then
     echo "Not all files in beta release are there!"
-    echo "COUNT=${count}"
+    echo "COUNT=${count} instead of 22"
     exit 1
 fi
 

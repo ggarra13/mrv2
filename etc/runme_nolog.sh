@@ -483,7 +483,6 @@ else
     exit 1
 fi
 
-build_swig=0
 if command -v swig > /dev/null 2>&1; then
     swig -version
 else

@@ -23,6 +23,8 @@ namespace py = pybind11;
 
 #include "mrvCore/mrvHome.h"
 
+#include "mrvOS/mrvRoot.h"
+
 #include "mrvApp/mrvApp.h"
 
 #ifdef MRV2_PYBIND11

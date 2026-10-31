@@ -26,20 +26,21 @@ namespace tl
 
         //! Timeline item.
         //!
-        //! \todo Add support for dragging clips to different tracks.
         class TimelineItem : public IItem
         {
         protected:
 #ifdef OPENGL_BACKEND
             void _init(
-                const std::shared_ptr<system::Context>& context,
-                const std::shared_ptr<timeline::Player>& player,
+                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<timeline::Timeline>&,
+                const std::shared_ptr<timeline::Player>&,
                 const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
-                double scale, const ItemOptions&, const DisplayOptions&,
+                double scale,
+                const ItemOptions&,
+                const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<gl::GLFWWindow>&,
                 const std::shared_ptr<IWidget>& parent);
-
 
             TimelineItem();
 #endif
@@ -47,7 +48,8 @@ namespace tl
 #ifdef VULKAN_BACKEND
             void _init(
                 const std::shared_ptr<system::Context>& context,
-                const std::shared_ptr<timeline::Player>& player,
+                const std::shared_ptr<timeline::Timeline>&,
+                const std::shared_ptr<timeline::Player>&,
                 const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
@@ -69,6 +71,22 @@ namespace tl
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<gl::GLFWWindow>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
+
+            //! Create a new item for a timeline that is not being played.
+            //!
+            //! For showing a timeline alongside the one being played -- an
+            //! earlier version of it, say. It cannot be scrubbed: there is
+            //! nothing to seek.
+            static std::shared_ptr<TimelineItem> create(
+                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<timeline::Timeline>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
+                double scale,
+                const ItemOptions&,
+                const DisplayOptions&,
+                const std::shared_ptr<ItemData>&,
+                const std::shared_ptr<gl::GLFWWindow>&,
+                const std::shared_ptr<IWidget>& parent = nullptr);
 #endif
 
 #ifdef VULKAN_BACKEND
@@ -78,6 +96,22 @@ namespace tl
                 const std::shared_ptr<timeline::Player>&,
                 const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
+                const std::shared_ptr<ItemData>&,
+                Fl_Vk_Context& ctx,
+                const std::shared_ptr<IWidget>& parent = nullptr);
+
+            //! Create a new item for a timeline that is not being played.
+            //!
+            //! For showing a timeline alongside the one being played -- an
+            //! earlier version of it, say. It cannot be scrubbed: there is
+            //! nothing to seek.
+            static std::shared_ptr<TimelineItem> create(
+                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<timeline::Timeline>&,
+                const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
+                double scale,
+                const ItemOptions&,
+                const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 Fl_Vk_Context& ctx,
                 const std::shared_ptr<IWidget>& parent = nullptr);
@@ -113,6 +147,11 @@ namespace tl
             int getMinimumHeight() const;
 
             void setDisplayOptions(const DisplayOptions&) override;
+
+            //! Set whether the item reserves room at the top for the ruler.
+            //! Only the first item in a TimelineWidget should; the ruler is
+            //! drawn once over the top of the viewport.
+            void setRulerSpace(bool);
 
             void setGeometry(const math::Box2i&) override;
             void sizeHintEvent(const ui::SizeHintEvent&) override;
