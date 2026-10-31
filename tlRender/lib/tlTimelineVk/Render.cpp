@@ -3500,7 +3500,7 @@ namespace tl
                 // Recreate display shader
 #if USE_PRECOMPILED_SHADERS
                 p.shaders["display"] =
-                    vlk::Shader::create(ctx, Vertex3_spv, Vertex3_spv_len,
+                    vlk::Shader::create(ctx, displayVertex_spv, displayVertex_spv_len,
                                         source, "display");
 #else
                 p.shaders["display"] =

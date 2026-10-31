@@ -60,6 +60,8 @@ namespace tl
                 // Assuming you have a VkDevice 'device' already created
                 p.vertex = create_shader_module(ctx.device, spirv);
                 p.vertexSource = source;
+                vk_set_object_name(ctx.device, VK_OBJECT_TYPE_SHADER_MODULE,
+                                   (uint64_t)p.vertex, shaderName.c_str());
             }
             catch (const std::exception& e)
             {
@@ -92,6 +94,8 @@ namespace tl
                 // Assuming you have a VkDevice 'device' already created
                 p.fragment = create_shader_module(ctx.device, spirv);
                 p.fragmentSource = source;
+                vk_set_object_name(ctx.device, VK_OBJECT_TYPE_SHADER_MODULE,
+                                   (uint64_t)p.fragment, shaderName.c_str());
             }
             catch (const std::exception& e)
             {
@@ -124,6 +128,8 @@ namespace tl
                 // Assuming you have a VkDevice 'device' already created
                 p.compute = create_shader_module(ctx.device, spirv);
                 p.computeSource = source;
+                vk_set_object_name(ctx.device, VK_OBJECT_TYPE_SHADER_MODULE,
+                                   (uint64_t)p.compute, shaderName.c_str());
             }
             catch (const std::exception& e)
             {
@@ -148,8 +154,8 @@ namespace tl
         {
             TLRENDER_P();
 
-            p.vertex = create_shader_module(ctx.device, vertexBytes, vertexLength);
             shaderName = name;
+            p.vertex = create_shader_module(ctx.device, vertexBytes, vertexLength);
 
             _createFragmentShader(fragmentSource);
         }
@@ -162,9 +168,9 @@ namespace tl
         {
             TLRENDER_P();
 
+            shaderName = name;
             p.vertex = create_shader_module(ctx.device, vertexBytes, vertexLength);
             p.fragment = create_shader_module(ctx.device, fragmentBytes, fragmentLength);
-            shaderName = name;
 
             ++objectCount;
         }
@@ -201,9 +207,8 @@ namespace tl
         {
             TLRENDER_P();
 
-            p.compute = create_shader_module(ctx.device, computeBytes, computeLength);
-
             shaderName = name;
+            p.compute = create_shader_module(ctx.device, computeBytes, computeLength);
 
             ++objectCount;
         }

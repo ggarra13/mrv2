@@ -63,5 +63,6 @@
 #  include <tlTimelineVk/RenderShadersBinary.h>
 #else
 #  warning "Not compiling with binary shaders"
+#  include <tlTimelineVk/RenderShadersBinary.h>
 #  include <tlTimelineVk/RenderPrivate.h>
 #endif
