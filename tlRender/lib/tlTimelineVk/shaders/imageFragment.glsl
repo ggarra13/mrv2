@@ -209,7 +209,7 @@ vec4 sampleTexture(
     return c;
 }
 
-layout(set = 0, binding = 1, std140) uniform UBO {
+layout(set = 0, binding = 0, std140) uniform UBO {
                                 vec4      yuvCoefficients;
                                 vec4      color;
                                 int       pixelType;
@@ -219,9 +219,9 @@ layout(set = 0, binding = 1, std140) uniform UBO {
                                 int       mirrorY;
 } ubo;
 
-layout(binding = 2) uniform sampler2D textureSampler0;
-layout(binding = 3) uniform sampler2D textureSampler1;
-layout(binding = 4) uniform sampler2D textureSampler2;
+layout(binding = 1) uniform sampler2D textureSampler0;
+layout(binding = 2) uniform sampler2D textureSampler1;
+layout(binding = 3) uniform sampler2D textureSampler2;
 
 void main()
 {

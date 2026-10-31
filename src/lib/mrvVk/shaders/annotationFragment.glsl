@@ -1,7 +1,7 @@
 #version 450
 
-layout(location = 0) out vec4 fColor;
 layout(location = 0) in vec2 fTexture;
+layout(location = 0) out vec4 fColor;
 
 layout(push_constant) uniform PushConstants {
     mat4 mvp;
