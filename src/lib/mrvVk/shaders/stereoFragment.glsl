@@ -1,12 +1,13 @@
 #version 450
-                  
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 fColor;
 
-layout(binding = 1) uniform sampler2D textureSampler;
+layout(binding = 0) uniform sampler2D textureSampler;
 
 layout(push_constant) uniform PushConstants {
-    float opacity;
+    mat4 mvp;
+    vec4 color;
 } pc;
                   // enum mrv::StereoOutput
 const uint Stereo_Anaglyph     = 0;
@@ -15,12 +16,12 @@ const uint Stereo_Scanlines    = 2;
 const uint Stereo_Columns      = 3;
 const uint Stereo_OpenGL       = 4;
 
-layout(set = 0, binding = 3) uniform OpacityUBO {
+layout(set = 0, binding = 1) uniform StereoUBO {
      uniform int stereo;
      uniform int width;
      uniform int height;
-} ubo; 
- 
+} ubo;
+
 vec4 stereoFunc(vec4 c, vec2 st)
 {
     int x = 0;
@@ -52,5 +53,5 @@ void main()
 {
     fColor = texture(textureSampler, fTexture);
     fColor = stereoFunc(fColor, fTexture);
-    fColor.a *= pc.opacity;
+    fColor.a *= pc.color.a;
 }

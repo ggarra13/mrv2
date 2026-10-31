@@ -23,7 +23,7 @@
 //
 // Use 1 for faster startups.
 //
-#define USE_PRECOMPILED_SHADERS 0
+#define USE_PRECOMPILED_SHADERS 1
 
 //
 // Use 1 for using dynamic stencils.
@@ -59,5 +59,9 @@
 //
 #define USE_OCIO_VULKAN 0
 
-
-#include <tlTimelineVk/RenderShadersBinary.h>
+#if USE_PRECOMPILED_SHADERS
+#  include <tlTimelineVk/RenderShadersBinary.h>
+#else
+#  warning "Not compiling with binary shaders"
+#  include <tlTimelineVk/RenderPrivate.h>
+#endif

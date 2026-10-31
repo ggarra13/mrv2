@@ -29,3 +29,4 @@
 #include "shaders/Vertex2NoUVs.spv.h"
 #include "shaders/Vertex3.spv.h"
 #include "shaders/colorMeshVertex.spv.h"
+#include "shaders/displayVertex.spv.h"

@@ -34,7 +34,8 @@
 #include "mrvOS/mrvString.h"
 #include "mrvOS/mrvI8N.h"
 
-#include <tlTimelineVk/RenderShadersBinary.h>
+#include <tlTimelineVk/RenderOptions.h>
+#include <tlTimelineVk/RenderStructs.h>
 
 #include <tlCore/FontSystem.h>
 #include <tlCore/StringFormat.h>
@@ -674,8 +675,9 @@ namespace mrv
                 vk.viewport = std::make_shared<vulkan::Lines>(ctx, renderPass());
 
 
-                const image::Color4f color(1.F, 1.F, 1.F);
-                math::Matrix4x4f mvp;
+                const timeline_vlk::PushConstants pc;
+                const vlk::ShaderFlags flags =
+                    static_cast<vlk::ShaderFlags>(vlk::kShaderVertex | vlk::kShaderFragment);
                 if (!vk.shader)
                 {
                     vk.shader = vlk::Shader::create(
@@ -686,12 +688,9 @@ namespace mrv
                         textureFragment_spv_len,
                         "vk.shader");
 
-                    // Create parameters for shader.
-                    vk.shader->createUniform(
-                        "transform.mvp", mvp, vlk::kShaderVertex);
-                    vk.shader->addTexture("textureSampler"); // default is fragment
-                    float opacity = 1.F;
-                    vk.shader->addPush("opacity", opacity, vlk::kShaderFragment);
+                    vk.shader->addTexture("textureSampler");
+                    vk.shader->addPush("pc", pc, flags);
+
                     vk.shader->createBindingSet();
 
                     if (vk.pipeline_layout != VK_NULL_HANDLE)
@@ -710,11 +709,10 @@ namespace mrv
                         annotationFragment_spv,
                         annotationFragment_spv_len,
                         "vk.annotationShader");
-                    vk.annotationShader->createUniform(
-                        "transform.mvp", mvp, vlk::kShaderVertex);
                     vk.annotationShader->addTexture("textureSampler");
                     int channels = 0; // Color Channel
                     vk.annotationShader->createUniform("channels", channels);
+                    vk.annotationShader->addPush("pc", pc, flags);
                     vk.annotationShader->createBindingSet();
 
                     if (vk.annotation_pipeline_layout != VK_NULL_HANDLE)
@@ -745,6 +743,7 @@ namespace mrv
 
         void Viewport::draw()
         {
+
 
             TLRENDER_P();
             MRV2_VK();
@@ -1277,7 +1276,6 @@ namespace mrv
                 // --- Update Descriptor Set for the SECOND pass (Composition) ---
                 // This updates the descriptor set for the CURRENT frame index on
                 // the CPU.
-                vk.shader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
                 vk.shader->setFBO("textureSampler", vk.buffer);
 
                 // --- Bind Descriptor Set for the SECOND pass ---
@@ -1288,9 +1286,13 @@ namespace mrv
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk.pipeline_layout, 0, 1,
                     &descriptorSet, 0, nullptr);
 
+                timeline_vlk::PushConstants pc;
+                pc.mvp = mvp;
+                pc.color = image::Color4f(opacity, opacity, opacity, opacity);
+
                 vkCmdPushConstants(
                     cmd, vk.pipeline_layout,
-                    vk.shader->getPushStageFlags(), 0, sizeof(float), &opacity);
+                    vk.shader->getPushStageFlags(), 0, sizeof(pc), &pc);
 
                 if (vk.vao && vk.vbo)
                 {

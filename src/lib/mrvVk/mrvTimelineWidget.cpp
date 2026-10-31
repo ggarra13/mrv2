@@ -26,7 +26,8 @@
 #include <tlTimelineUI/TimelineWidget.h>
 
 #include <tlTimelineVk/Render.h>
-#include <tlTimelineVk/RenderShadersBinary.h>
+#include <tlTimelineVk/RenderOptions.h>
+#include <tlTimelineVk/RenderStructs.h>
 
 #include <tlUI/IWindow.h>
 
@@ -754,11 +755,11 @@ namespace mrv
                             textureFragment_spv,
                             textureFragment_spv_len,
                             "timeline p.shader");
-                        math::Matrix4x4f pm;
-                        p.shader->createUniform(
-                            "transform.mvp", pm, vlk::kShaderVertex);
+                        timeline_vlk::PushConstants pc;
+                        const vlk::ShaderFlags flags =
+                            static_cast<vlk::ShaderFlags>(vlk::kShaderVertex | vlk::kShaderFragment);
+                        p.shader->addPush("pc", pc, flags);
                         p.shader->addTexture("textureSampler");
-                        p.shader->addPush("opacity", 1.0, vlk::kShaderFragment);
                         p.shader->createBindingSet();
                     }
                 }
@@ -1028,7 +1029,6 @@ namespace mrv
                 const auto pm = math::ortho(
                     0.F, static_cast<float>(renderSize.w),
                     0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
-                p.shader->setUniform("transform.mvp", pm, vlk::kShaderVertex);
                 p.shader->setFBO("textureSampler", p.buffer);
 
 #ifdef __APPLE__
@@ -1045,11 +1045,13 @@ namespace mrv
                     cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0,
                     1, &descriptorSet, 0, nullptr);
 
-                const float opacity = 1.0;
+                timeline_vlk::PushConstants pc;
+                pc.mvp = pm;
+                pc.color = image::Color4f(1.F, 1.F, 1.F, 1.F);
                 vkCmdPushConstants(
                     cmd, p.pipeline_layout,
                     p.shader->getPushStageFlags(), 0,
-                    sizeof(float), &opacity);
+                    sizeof(pc), &pc);
 
                 VkViewport viewport = {};
                 viewport.x = 0.0f;

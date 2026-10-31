@@ -23,6 +23,7 @@
 
 #include "mrvOS/mrvMemory.h"
 
+#include <tlTimelineVk/RenderStructs.h>
 #include <tlVk/Util.h>
 
 #include <tlDevice/IOutput.h>
@@ -519,8 +520,14 @@ namespace mrv
             MRV2_VK();
 
             shader->bind(frameIndex);
-            shader->setUniform("transform.mvp", orthoMatrix,
-                               vlk::kShaderVertex);
+
+            timeline_vlk::PushConstants pc;
+            pc.mvp = orthoMatrix;
+            pc.color = image::Color4f(1.F, 1.F, 1.F, 1.F);
+            vkCmdPushConstants(
+                cmd, vk.pipeline_layout,
+                vk.shader->getPushStageFlags(), 0, sizeof(pc), &pc);
+
             timeline::Channels channels = timeline::Channels::Color;
             if (!p.displayOptions.empty())
                 channels = p.displayOptions[0].channels;

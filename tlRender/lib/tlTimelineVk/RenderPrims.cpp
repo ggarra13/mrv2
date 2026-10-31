@@ -136,7 +136,7 @@ namespace tl
             auto shader = p.shaders[shaderName];
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             shader->bind(p.frameIndex);
-            PushConstant pc;
+            PushConstants pc;
             pc.mvp = transform;
             pc.color = color;
             vkCmdPushConstants(
@@ -302,7 +302,7 @@ namespace tl
                     math::Vector3f(position.x, position.y, 0.F));
 
             shader->bind(p.frameIndex);
-            PushConstant pc;
+            PushConstants pc;
             pc.mvp = transform;
             pc.color = color;
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
@@ -389,7 +389,7 @@ namespace tl
             _bindDescriptorSets("text", shader);
 
             VkPipelineLayout pipelineLayout = p.pipelineLayouts["text"];
-            PushConstant pc;
+            PushConstants pc;
             pc.mvp = transform;
             pc.color = color;
             vkCmdPushConstants(
@@ -556,10 +556,13 @@ namespace tl
             }
 
             VkPipelineLayout pipelineLayout = p.pipelineLayouts["texture"];
+            PushConstants pc;
+            pc.mvp = p.transform;
+            pc.color = color;
             vkCmdPushConstants(
                 p.cmd, pipelineLayout,
                 shader->getPushStageFlags(), 0,
-                sizeof(color), &color);
+                sizeof(pc), &pc);
 
             _vkDraw("texture");
         }
@@ -739,7 +742,7 @@ namespace tl
 
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
-            PushConstant pc;
+            PushConstants pc;
             pc.mvp = p.transform;
             pc.color = image::Color4f(1.F, 1.F, 1.F, 1.F);
             vkCmdPushConstants(

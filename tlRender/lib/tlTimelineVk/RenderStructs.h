@@ -7,7 +7,7 @@ namespace tl
     namespace timeline_vlk
     {
         //! Struct used for PushConstants in most shaders
-        struct PushConstant
+        struct PushConstants
         {
             alignas(16) math::Matrix4x4f mvp;
             alignas(16) image::Color4f color;

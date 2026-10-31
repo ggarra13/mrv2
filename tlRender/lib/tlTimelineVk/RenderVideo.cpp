@@ -135,7 +135,7 @@ namespace tl
                     _create2DMesh("colorMesh", mesh);
                     createPipeline(p.fbo, "checkers", "checkers", "colorMesh", "colorMesh");
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts["checkers"];
-                    PushConstant pc;
+                    PushConstants pc;
                     pc.mvp = p.transform;
                     pc.color = color;
                     vkCmdPushConstants(
@@ -172,7 +172,7 @@ namespace tl
                     _create2DMesh("colorMesh", mesh);
                     createPipeline(p.fbo, "gradient", "gradient", "colorMesh", "colorMesh");
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts["gradient"];
-                    PushConstant pc;
+                    PushConstants pc;
                     pc.mvp = p.transform;
                     pc.color = color;
                     vkCmdPushConstants(
@@ -433,7 +433,7 @@ namespace tl
             _createBindingSet(wipeShader);
             color = image::Color4f(0.F, 0.F, 0.F);
 
-            PushConstant pc;
+            PushConstants pc;
             pc.mvp = p.transform;
             pc.color = color;
             vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -791,7 +791,7 @@ namespace tl
                                    VK_BLEND_FACTOR_ONE);
 
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                    PushConstant pc;
+                    PushConstants pc;
                     pc.mvp = p.transform;
                     pc.color = color;
                     vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -1070,7 +1070,7 @@ namespace tl
                                                VK_BLEND_FACTOR_ONE);
 
                                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-                                PushConstant pc;
+                                PushConstants pc;
                                 pc.mvp = transform;
                                 pc.color = color;
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -1513,7 +1513,7 @@ namespace tl
 
             // Prepare shaders
             auto shader = p.shaders[shaderName];
-            PushConstant pc;
+            PushConstants pc;
             pc.mvp = p.transform;
             pc.color = image::Color4f(1, 1, 1, 1);
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];

@@ -1180,7 +1180,7 @@ namespace tl
             g.textures.clear();
             g.buffers.clear();
 
-            const PushConstant pc;
+            const PushConstants pc;
             const vlk::ShaderFlags flags =
                 static_cast<vlk::ShaderFlags>(vlk::kShaderVertex | vlk::kShaderFragment);
 
