@@ -10,7 +10,7 @@ endif()
 
 if (NOT OpenSSL_FOUND)
     set(OpenSSL_GIT_REPOSITORY "https://github.com/openssl/openssl.git")
-    set(OpenSSL_GIT_TAG "openssl-3.3.0")
+    set(OpenSSL_GIT_TAG "openssl-3.5.0") # was openssl-3.3.0
 
     set(OpenSSL_DEPENDENCIES )
     if(NOT WIN32)
