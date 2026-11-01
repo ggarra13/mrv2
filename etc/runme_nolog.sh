@@ -57,7 +57,8 @@ elif [[ $KERNEL == *Darwin* ]]; then
     # echo "APP_PASSWORD=$APP_PASSWORD"
 fi
 
-if [[ $INSTALL_CMAKE == 1 ]]; then
+if [[ "$INSTALL_CMAKE" == "1"  ||
+	  "$INSTALL_CMAKE" == "ON" ]]; then
     . etc/install_cmake.sh
 fi
 
