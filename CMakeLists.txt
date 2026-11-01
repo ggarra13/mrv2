@@ -20,6 +20,27 @@ if(APPLE)
     message(STATUS "-------------------------------------------------")
 endif()
 
+set(DEBIAN_DISTRO OFF)
+set(REDHAT_DISTRO OFF)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    cmake_host_system_information(
+        RESULT DISTRO_ID
+        QUERY DISTRIB_ID
+    )
+
+    cmake_host_system_information(
+        RESULT DISTRO_ID_LIKE
+        QUERY DISTRIB_ID_LIKE
+    )
+
+    set(DISTRO_FAMILY "${DISTRO_ID} ${DISTRO_ID_LIKE}")
+
+    if(DISTRO_FAMILY MATCHES "debian")
+	set(DEBIAN_DISTRO ON)
+    elseif(DISTRO_FAMILY MATCHES "rhel|centos|fedora|rocky")
+	set(REDHAT_DISTRO ON)
+    endif()
+endif()
 
 #
 # Sanity checks

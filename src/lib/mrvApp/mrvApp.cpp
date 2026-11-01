@@ -786,13 +786,13 @@ namespace mrv
         ui->uiView->headless(headless);
         ui->uiTimeline->headless(headless);
 
+#endif
+
         if (!headless)
         {
             ui->uiMain->show();
             ui->uiMain->wait_for_expose();
         }
-
-#endif
 
         if (p.options.displaySystemInfo)
         {
