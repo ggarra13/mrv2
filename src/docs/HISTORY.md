@@ -25,6 +25,7 @@ Fixes
 - UI: Some wrong translations and items in Window->Preferences.
 - Core: Made changing languages release a floating license previous to restarting.
 - Core: Fixed a potential compilation error on DirEntry's size.
+- Core: Fixed .github/workflows to work on new Github macOS M1+ runners.
 
 
 v1.8.4
