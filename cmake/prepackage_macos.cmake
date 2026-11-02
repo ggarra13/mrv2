@@ -270,6 +270,8 @@ function(install_vulkan_layers APPNAME)
     endif()
 endfunction()
 
+file(COPY_FILE ${CPACK_PREPACKAGE}/bin/macos_launcher
+    ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/${mrv2_NAME})
 file(COPY ${CPACK_PREPACKAGE}/bin/mrv2.sh
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
 file(COPY ${CPACK_PREPACKAGE}/bin/mrv2
