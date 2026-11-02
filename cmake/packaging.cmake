@@ -418,7 +418,6 @@ endif()
 #
 set(mrv2_COMPONENTS
     applications
-    documentation
 )
 
 if(BUILD_PYTHON)
@@ -431,7 +430,6 @@ endif()
 
 set(CPACK_COMPONENTS_ALL ${mrv2_COMPONENTS})
 set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "${mrv2_NAME} Application")
-set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "${mrv2_NAME} Documentation")
 if(BUILD_PYTHON)
     set(CPACK_COMPONENT_PYTHON_DEMOS_DISPLAY_NAME "${mrv2_NAME} Python Demos")
     set(CPACK_COMPONENT_PYTHON_PLUGINS_DISPLAY_NAME "${mrv2_NAME} Python FLTK Plugins")
