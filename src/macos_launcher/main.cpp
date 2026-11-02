@@ -28,13 +28,15 @@ int main(int argc, char *argv[]) {
         setenv("VK_LAYER_PATH", layer_path, 1);
         setenv("MVK_CONFIG_LOG_LEVEL", "0", 1);
 
-        // Path to your real core engine binary
+        // Path to real core engine binary
         char core_path[PATH_MAX];
-        snprintf(core_path, sizeof(core_path), "%s/bin/mrv2", dir);
+        snprintf(core_path, sizeof(core_path), "%s/../Resources/bin/mrv2", dir);
 
         // Replace launcher process with the core binary, preserving args and env
-        execve(core_path, argv, environ);
-        perror("Failed to launch vmrv2_core");
+        // execv automatically passes the modified environment to the core binary
+        execv(core_path, argv);
+        perror("Failed to launch");
+        fprintf(stderr, "%s not found\n", core_path);
     }
     return 1;
 }
