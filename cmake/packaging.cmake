@@ -134,13 +134,21 @@ if(APPLE)
      	${MRV2_BUNDLE_DIR}/Contents/Info.plist )
 
     # Copy the shell script into the MacOS bundle and make them executable
-    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
+    # configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
+    # 	${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME}
+    # 	FILE_PERMISSIONS
+    # 	OWNER_READ OWNER_EXECUTE
+    # 	GROUP_READ GROUP_EXECUTE
+    # 	WORLD_READ WORLD_EXECUTE
+    # 	COPYONLY)
+
+    COPY(FILE ${CMAKE_INSTALL_PREFIX}/bin/macos_launcher
 	${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME}
 	FILE_PERMISSIONS
 	OWNER_READ OWNER_EXECUTE
 	GROUP_READ GROUP_EXECUTE
-	WORLD_READ WORLD_EXECUTE
-	COPYONLY)
+	WORLD_READ WORLD_EXECUTE)
+    
     
     # Install mrv2.app / vmrv2.app bundle dir
     install(DIRECTORY ${MRV2_BUNDLE_DIR}
