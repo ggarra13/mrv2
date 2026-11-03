@@ -19,7 +19,6 @@ namespace mrv
         EnvironmentMapPanel* environmentMapPanel = nullptr;
         LogsPanel* logsPanel = nullptr;
         NotesPanel* notesPanel = nullptr;
-        DevicesPanel* devicesPanel = nullptr;
         ColorAreaPanel* colorAreaPanel = nullptr;
         AnnotationsPanel* annotationsPanel = nullptr;
         ImageInfoPanel* imageInfoPanel = nullptr;

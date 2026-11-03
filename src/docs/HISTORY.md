@@ -9,7 +9,7 @@ ChangeLog
 - Core: Ported to miniaudio as RtAudio seems like a dead project.  This should allow porting to Emscripten and have better aarch64 support.
 - Core: Improved HDR detection on macOS on both laptops and external HDR monitors.
 - Core: Cleaned up useless BMD code.
-- Core: Cleaned up useless Devices Panel.
+- Core: Cleaned all references to unused Devices Panel.
 
 Fixes
 -----

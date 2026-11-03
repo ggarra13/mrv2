@@ -453,11 +453,6 @@ namespace mrv
                 hotkey = kToggleCompare.hotkey();
                 callback_function = (Fl_Callback*)compare_panel_cb;
             }
-            else if (tmp == "Devices")
-            {
-                hotkey = kToggleDevices.hotkey();
-                // callback_function = (Fl_Callback*)devices_panel_cb;
-            }
             else if (tmp == "Settings")
             {
                 hotkey = kToggleSettings.hotkey();
@@ -607,13 +602,6 @@ namespace mrv
             else if (tmp == _("Compare"))
             {
                 if (comparePanel)
-                    item->set();
-                else
-                    item->clear();
-            }
-            else if (tmp == _("Devices"))
-            {
-                if (devicesPanel)
                     item->set();
                 else
                     item->clear();
