@@ -20,7 +20,7 @@ decl {\#include <FL/Fl_Scheme_Choice.H>} {public global
 decl {\#ifdef TLRENDER_AUDIO} {private local
 }
 
-decl {\#include <rtaudio/RtAudio.h>} {private local
+decl {\#include <miniaudio/miniaudio.h>} {private local
 }
 
 decl {\#endif} {private local
@@ -96,8 +96,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double hide resizable
-      code3 {main = m;} non_modal size_range {847 449 0 0}
+      xywh {0 0 847 449} type Double resizable
+      code3 {main = m;} non_modal size_range {847 449 0 0} visible
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
@@ -111,58 +111,58 @@ class PreferencesUI {open
           } {
             Fl_Group {} {
               label General
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {282 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Window Behavior} open
-                xywh {300 61 531 182} box ROUNDED_BOX
+                xywh {302 61 531 182} box ROUNDED_BOX
               } {
                 Fl_Check_Button AlwaysOnTop {
                   label {Always on Top}
-                  tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {320 91 25 25} box UP_BOX down_box DOWN_BOX align 8
+                  tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {322 91 25 25} box UP_BOX down_box DOWN_BOX align 8
                 }
                 Fl_Check_Button SecondaryOnTop {
                   label {Secondary on Top}
-                  tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {320 123 25 25} box UP_BOX down_box DOWN_BOX align 8
+                  tooltip {When selected, mrv2's window will always show up on top of other windows on the desktop.} xywh {322 123 25 25} box UP_BOX down_box DOWN_BOX align 8
                 }
                 Fl_Check_Button SingleInstance {
                   label {Single Instance}
                   tooltip {When selected, only a single mrv2 instance is allowed.
-If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2.} xywh {320 155 25 25} box UP_BOX down_box DOWN_BOX align 8
+If you try to open several mrv2s with different images, all these images will be sent to the already open mrv2.} xywh {322 155 25 25} box UP_BOX down_box DOWN_BOX align 8
                 }
                 Fl_Check_Button RaiseOnEnter {
                   label {Raise on Enter}
-                  tooltip {When selected, mrv2 will raise the window to the front once you enter the view window.} xywh {320 187 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will raise the window to the front once you enter the view window.} xywh {322 187 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Group OpenMode {
                   label {Window at Start}
-                  xywh {563 91 254 140} box UP_BOX
+                  xywh {565 91 254 140} box UP_BOX
                 } {
                   Fl_Round_Button {} {
                     label Normal
-                    tooltip {When selected, mrv2 will resize its window to the first image.} xywh {575 104 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 align 8
+                    tooltip {When selected, mrv2 will resize its window to the first image.} xywh {577 104 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 align 8
                   }
                   Fl_Round_Button {} {
                     label Fullscreen
-                    tooltip {When selected, mrv2 will start in full screen mode.} xywh {575 134 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                    tooltip {When selected, mrv2 will start in full screen mode.} xywh {577 134 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
                   }
                   Fl_Round_Button {} {
                     label Presentation
-                    tooltip {When selected, mrv2 will start in presentation mode.} xywh {575 164 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                    tooltip {When selected, mrv2 will start in presentation mode.} xywh {577 164 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
                   }
                   Fl_Round_Button {} {
                     label Maximized
-                    tooltip {When selected, mrv2 will start in a maximized window.} xywh {575 194 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                    tooltip {When selected, mrv2 will start in a maximized window.} xywh {577 194 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
                   }
                 }
               }
               Fl_Group {} {
                 label Behavior open
-                xywh {300 269 531 82} box ROUNDED_BOX
+                xywh {302 269 531 82} box ROUNDED_BOX
               } {
                 Fl_Choice CheckForUpdates {
                   label {Check for Updates}
-                  tooltip {Allows you to automatically download updates of mrv2 when it starts up.} xywh {460 283 255 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Allows you to automatically download updates of mrv2 when it starts up.} xywh {515 282 300 26} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -176,7 +176,7 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Choice AllowScreenSaver {
                   label {Allow Screen Saver} open
-                  tooltip {This setting controls whether mrv2 will block the screen saver when running.} xywh {460 317 255 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {This setting controls whether mrv2 will block the screen saver when running.} xywh {515 317 300 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -200,7 +200,7 @@ If you try to open several mrv2s with different images, all these images will be
               } {
                 Fl_Check_Button uiAlwaysSaveOnExit {
                   label {Always Save on Exit}
-                  tooltip {When this option is set, mrv2 will save its position and size upon exiting the program.} xywh {314 75 215 25} box UP_BOX down_box DOWN_BOX align 16
+                  tooltip {When this option is set, mrv2 will save its position and size upon exiting the program.} xywh {323 75 215 26} box UP_BOX down_box DOWN_BOX align 16
                 }
                 Fl_Group {} {
                   xywh {314 111 503 48} box ROUNDED_BOX
@@ -347,13 +347,13 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
               } {
                 Fl_Choice uiLanguage {
                   label Language
-                  xywh {440 75 160 25} down_box BORDER_BOX
+                  xywh {461 75 160 25} down_box BORDER_BOX
                   code3 {auto languages = mrv::getLanguages(); std::string entry;
 for (const auto& language : languages) { entry = _(language.c_str()); entry += " (" + language + ")"; o->add(entry.c_str()); }}
                 } {}
                 Fl_Choice {} {
                   label Scheme
-                  xywh {440 109 160 25} down_box BORDER_BOX
+                  xywh {461 109 160 25} down_box BORDER_BOX
                   class Fl_Scheme_Choice
                 } {
                   MenuItem {} {
@@ -400,7 +400,7 @@ TimelineClass* t = v->uiTimeWindow;
 t->redraw();
 v->uiTimeline->setStyle(style);
 v->refresh();} open
-                  xywh {440 143 160 25} down_box BORDER_BOX
+                  xywh {461 143 160 25} down_box BORDER_BOX
                 } {}
                 Fl_Button {} {
                   label {Reload Theme}
@@ -408,7 +408,7 @@ v->refresh();} open
                   callback {const Fl_Menu_Item* item = v->uiPrefs->uiColorTheme->mvalue();
 mrv::Preferences::schemes.reload_theme( item->text );
 v->refresh();}
-                  tooltip {Reload color theme from mrv2.colors file again to refresh change in colors} xywh {614 143 135 25}
+                  tooltip {Reload color theme from mrv2.colors file again to refresh change in colors} xywh {635 143 180 26}
                 }
               }
               Fl_Group {} {
@@ -417,14 +417,14 @@ v->refresh();}
               } {
                 Fl_Choice uiFontMenus {
                   label Menus open
-                  tooltip {Sets the font to use in menus.} xywh {440 217 160 25} down_box BORDER_BOX
+                  tooltip {Sets the font to use in menus.} xywh {464 217 160 25} down_box BORDER_BOX
                   code3 {const auto& fonts = mrv::fonts::list();
 for (const auto& font : fonts)
 o->add(font.c_str());}
                 } {}
                 Fl_Choice uiFontPanels {
                   label Panels open
-                  tooltip {Sets the font to use in panels. (Not yet working)} xywh {440 251 160 25} down_box BORDER_BOX
+                  tooltip {Sets the font to use in panels. (Not yet working)} xywh {464 251 160 25} down_box BORDER_BOX
                   code3 {const auto& fonts = mrv::fonts::list();
 for (const auto& font : fonts)
 o->add(font.c_str());}
@@ -911,19 +911,15 @@ o->redraw();}
             } {
               Fl_Group {} {
                 label Defaults open
-                xywh {300 61 531 82} box ROUNDED_BOX
+                xywh {300 59 531 84} box ROUNDED_BOX
               } {
                 Fl_Check_Button AutoPlayback {
                   label {Auto Playback}
-                  tooltip {Start Playback when opening files.} xywh {430 75 25 25} box UP_BOX down_box DOWN_BOX align 4
-                }
-                Fl_Check_Button SingleClickPlayback {
-                  label {Single Click Playback}
-                  tooltip {Start Playback when single clicking the left mouse button on the view window} xywh {700 75 25 25} box UP_BOX down_box DOWN_BOX align 4
+                  tooltip {Start Playback when opening files.} xywh {476 76 25 25} box UP_BOX down_box DOWN_BOX align 132
                 }
                 Fl_Choice LoopMode {
                   label {Looping Mode}
-                  tooltip {Select default looping mode in timeline.} xywh {430 109 110 25} box THIN_DOWN_BOX down_box BORDER_BOX
+                  tooltip {Select default looping mode in timeline.} xywh {514 109 110 25} box THIN_DOWN_BOX down_box BORDER_BOX
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -937,6 +933,14 @@ o->redraw();}
                   MenuItem {} {
                     label {Ping Pong}
                     xywh {10 10 100 20}
+                  }
+                }
+                Fl_Group {} {open
+                  xywh {521 59 310 44}
+                } {
+                  Fl_Check_Button SingleClickPlayback {
+                    label {Single Click Playback}
+                    tooltip {Start Playback when single clicking the left mouse button on the view window} xywh {786 75 25 26} box UP_BOX down_box DOWN_BOX align 132
                   }
                 }
               }
@@ -1051,7 +1055,7 @@ v->FPS->value( g );}
               } {
                 Fl_Choice TimelineDisplay {
                   label Display
-                  tooltip {How to display timeline by default.} xywh {440 75 200 25} box THIN_DOWN_BOX down_box BORDER_BOX
+                  tooltip {How to display timeline by default.} xywh {535 75 200 25} box THIN_DOWN_BOX down_box BORDER_BOX
                   code3 {o->value(0);}
                 } {
                   MenuItem {} {
@@ -1069,7 +1073,7 @@ v->FPS->value( g );}
                 }
                 Fl_Value_Input uiStartTimeOffset {
                   label {Video Start Frame}
-                  tooltip {Start value in the timeline where video starts.} xywh {440 109 78 25} color 20 minimum -32400 maximum 324000 step 1 textcolor 56
+                  tooltip {Start value in the timeline where video starts.} xywh {535 109 78 25} color 20 minimum -32400 maximum 324000 step 1 textcolor 56
                 }
                 Fl_Check_Button RemoveEDLs {
                   label {Remove EDLs in Temporary Folder on Exit}
@@ -1087,7 +1091,7 @@ v->FPS->value( g );}
               } {
                 Fl_Choice EditView {
                   label {Default View}
-                  tooltip {How to display timeline by default.} xywh {440 75 210 25} box THIN_DOWN_BOX down_box BORDER_BOX
+                  tooltip {How to display timeline by default.} xywh {503 75 210 25} box THIN_DOWN_BOX down_box BORDER_BOX
                   code3 {o->value(0);}
                 } {
                   MenuItem {} {
@@ -1101,7 +1105,7 @@ v->FPS->value( g );}
                 }
                 Fl_Check_Button ShowTransitions {
                   label {Show Transitions}
-                  tooltip {Show Transitions in Edit Viewport} xywh {440 111 15 20} down_box DOWN_BOX value 1 align 8
+                  tooltip {Show Transitions in Edit Viewport} xywh {363 111 15 20} down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button ShowMarkers {
                   label {Show Markers}
@@ -1109,7 +1113,7 @@ v->FPS->value( g );}
                 }
                 Fl_Check_Button ShowWaveforms {
                   label {Show Waveforms}
-                  tooltip {Show Waveforms in Edit Viewport} xywh {440 143 15 20} down_box DOWN_BOX value 1 align 8
+                  tooltip {Show Waveforms in Edit Viewport} xywh {363 143 15 20} down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button ShowEffects {
                   label {Show Effects}
@@ -1117,7 +1121,7 @@ v->FPS->value( g );}
                 }
                 Fl_Check_Button ShowThumbnails {
                   label {Show Thunbnails}
-                  tooltip {Show Thumbnails in Edit Viewport} xywh {440 175 15 20} down_box DOWN_BOX value 1 align 8
+                  tooltip {Show Thumbnails in Edit Viewport} xywh {363 175 15 20} down_box DOWN_BOX value 1 align 8
                 }
               }
               Fl_Group {} {
@@ -1139,16 +1143,16 @@ v->FPS->value( g );}
               }
             }
             Fl_Group {} {
-              label Graphics
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Graphics open
+              xywh {289 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Display open
-                xywh {300 61 531 82} box ROUNDED_BOX
+                xywh {301 61 531 82} box ROUNDED_BOX
               } {
                 Fl_Choice OpenGLVsync {
                   label {Monitor VSync}
-                  tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {490 75 160 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Turns on and off Monitor's Vsync.  VSync off can display movies faster, at the cost of potential tearing in the image.} xywh {589 75 160 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1166,7 +1170,7 @@ v->FPS->value( g );}
                 }
                 Fl_Choice ColorAccuracy {
                   label {Color Buffers' Accuracy}
-                  tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy based on image depth.} xywh {490 109 160 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Color Buffers can be Float, Half Float, Fast or Automatic.  Float preserves all float information, Half Float preserves most float information and Fast works in 8-bits.  Automatic selects the accuracy based on image depth.} xywh {589 109 160 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1189,11 +1193,11 @@ v->FPS->value( g );}
               }
               Fl_Group {} {
                 label {Main Viewport} open
-                xywh {300 169 171 72} box BORDER_BOX
+                xywh {301 169 171 72} box BORDER_BOX
               } {
                 Fl_Choice BlitMainViewport {
                   label Blit
-                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {350 179 110 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {351 179 110 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1207,7 +1211,7 @@ v->FPS->value( g );}
                 }
                 Fl_Choice MainViewportGPU {
                   label GPU open
-                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {350 209 110 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {351 209 110 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1218,11 +1222,11 @@ v->FPS->value( g );}
               }
               Fl_Group {} {
                 label {Secondary Viewport} open
-                xywh {480 169 171 72} box BORDER_BOX
+                xywh {481 169 171 72} box BORDER_BOX
               } {
                 Fl_Choice BlitSecondaryViewport {
                   label Blit
-                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {530 179 110 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {531 179 110 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1236,7 +1240,7 @@ v->FPS->value( g );}
                 }
                 Fl_Choice SecondaryViewportGPU {
                   label GPU open
-                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {530 209 110 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {531 209 110 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1247,11 +1251,11 @@ v->FPS->value( g );}
               }
               Fl_Group {} {
                 label Timeline open
-                xywh {660 169 171 72} box BORDER_BOX
+                xywh {661 169 171 72} box BORDER_BOX
               } {
                 Fl_Choice BlitTimeline {
                   label Blit
-                  tooltip {Timeline can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better than the other.} xywh {710 179 110 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Timeline can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better than the other.} xywh {711 179 110 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1265,7 +1269,7 @@ v->FPS->value( g );}
                 }
                 Fl_Choice TimelineGPU {
                   label GPU open
-                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {710 209 110 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Viewports can be drawn with blitting or with shaders.  Depending on graphics card and OS one can perform better then the other.} xywh {711 209 110 25} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -1276,16 +1280,16 @@ v->FPS->value( g );}
               }
             }
             Fl_Group {} {
-              label Rendering
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Rendering open
+              xywh {280 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label {Image Rendering} open
-                xywh {300 61 531 184} box ROUNDED_BOX
+                xywh {294 62 531 184} box ROUNDED_BOX
               } {
                 Fl_Choice Debanding {
-                  label {Debanding (Vulkan)} open
-                  tooltip {Makes gradients smoother on video files.} xywh {470 75 160 25} down_box BORDER_BOX
+                  label {Debanding (Vulkan)} open selected
+                  tooltip {Makes gradients smoother on video files.} xywh {556 76 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label None
@@ -1305,8 +1309,8 @@ v->FPS->value( g );}
                   }
                 }
                 Fl_Choice VideoLevels {
-                  label {Video Levels}
-                  xywh {470 109 160 25} down_box BORDER_BOX
+                  label {Video Levels} selected
+                  xywh {556 110 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label {From File}
@@ -1322,8 +1326,8 @@ v->FPS->value( g );}
                   }
                 }
                 Fl_Choice AlphaBlend {
-                  label {Alpha Blend}
-                  xywh {470 143 160 25} down_box BORDER_BOX
+                  label {Alpha Blend} selected
+                  xywh {556 144 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label None
@@ -1339,8 +1343,8 @@ v->FPS->value( g );}
                   }
                 }
                 Fl_Choice MinifyFilter {
-                  label {Minify Filter}
-                  xywh {470 177 160 25} down_box BORDER_BOX
+                  label {Minify Filter} selected
+                  xywh {556 178 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Nearest
@@ -1352,8 +1356,8 @@ v->FPS->value( g );}
                   }
                 }
                 Fl_Choice MagnifyFilter {
-                  label {Magnify Filter}
-                  xywh {470 211 160 25} down_box BORDER_BOX
+                  label {Magnify Filter} selected
+                  xywh {556 212 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Nearest
@@ -1367,7 +1371,7 @@ v->FPS->value( g );}
               }
             }
             Fl_Group {} {
-              label HDR
+              label HDR open
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -1376,7 +1380,7 @@ v->FPS->value( g );}
               } {
                 Fl_Choice VulkanUseRGB {
                   label {Prefer RGB (Vulkan)}
-                  tooltip {When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is and convert them with a compute shader.  When is off, Vulkan will decode RGBA_F16 and RGBA_F32 frames.} xywh {470 75 160 25} down_box BORDER_BOX
+                  tooltip {When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is and convert them with a compute shader.  When is off, Vulkan will decode RGBA_F16 and RGBA_F32 frames.} xywh {560 75 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label {Use RGBA}
@@ -1389,7 +1393,7 @@ v->FPS->value( g );}
                 }
                 Fl_Choice Chromaticities {
                   label Chromaticities
-                  xywh {470 107 160 25} down_box BORDER_BOX
+                  xywh {560 107 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Ignore
@@ -1402,7 +1406,7 @@ v->FPS->value( g );}
                 }
                 Fl_Choice HDRInfo {
                   label {HDR Data}
-                  xywh {470 139 160 25} down_box BORDER_BOX
+                  xywh {560 139 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label {From File}
@@ -1419,7 +1423,7 @@ v->FPS->value( g );}
                 }
                 Fl_Choice TonemapAlgorithm {
                   label {Tonemap Algorithm}
-                  xywh {470 171 160 25} down_box BORDER_BOX
+                  xywh {560 171 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label ST2094_40
@@ -1476,7 +1480,7 @@ v->FPS->value( g );}
                 }
                 Fl_Choice GamutMapping {
                   label {Gamut Mapping}
-                  xywh {470 203 160 25} down_box BORDER_BOX
+                  xywh {560 203 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Auto
@@ -1526,7 +1530,7 @@ v->FPS->value( g );}
               } {
                 Fl_Choice HDRPeakDetection {
                   label {HDR Peak Detection}
-                  tooltip {When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds per frame.} xywh {470 275 160 25} down_box BORDER_BOX
+                  tooltip {When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds per frame.} xywh {470 275 160 25} down_box BORDER_BOX align 132
                 } {
                   MenuItem {} {
                     label Inactive
@@ -1539,19 +1543,19 @@ v->FPS->value( g );}
                 }
                 Fl_Value_Input HDRPeakPercentile {
                   label {HDR Percentile}
-                  tooltip {When less than 100, helps find the peak brightness ignoring the top 1 percent outliers.} xywh {470 307 64 25} minimum 0.1 maximum 100 step 0.1 value 100 textcolor 56
+                  tooltip {When less than 100, helps find the peak brightness ignoring the top 1 percent outliers.} xywh {470 307 64 25} align 132 minimum 0.1 maximum 100 step 0.1 value 100 textcolor 56
                 }
                 Fl_Value_Input HDRPeakSmoothingPeriod {
                   label {Smoothing Period}
-                  tooltip {How long it takes for brightness detection to "catch up" to a new scene.} xywh {740 307 64 25} minimum 0.1 maximum 100 step 0.1 value 20 textcolor 56
+                  tooltip {How long it takes for brightness detection to "catch up" to a new scene.} xywh {740 306 64 25} align 132 minimum 0.1 maximum 100 step 0.1 value 20 textcolor 56
                 }
                 Fl_Value_Input HDRPeakLowLimit {
                   label {Low Peak Detection}
-                  tooltip {Low Limit to smooth out frames in the same scene.} xywh {470 339 64 25} minimum 0.1 maximum 100 step 0.1 value 1 textcolor 56
+                  tooltip {Low Limit to smooth out frames in the same scene.} xywh {470 339 64 25} align 132 minimum 0.1 maximum 100 step 0.1 value 1 textcolor 56
                 }
                 Fl_Value_Input HDRPeakHighLimit {
                   label {High Peak Detection Limit}
-                  tooltip {High Limit to determine scene change.} xywh {740 339 64 25} minimum 0.1 maximum 100 step 0.1 value 3 textcolor 56
+                  tooltip {High Limit to determine scene change.} xywh {740 339 64 25} align 132 minimum 0.1 maximum 100 step 0.1 value 3 textcolor 56
                 }
               }
             }
@@ -1797,8 +1801,8 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label Loading open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label Loading
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Missing Frames} open
@@ -1934,7 +1938,7 @@ o->redraw();}
                 Fl_Choice AudioAPI {
                   label API
                   user_data this user_data_type {PreferencesUI*}
-                  callback {fill_audio_output_devices(v);} open
+                  callback {fill_audio_output_devices(v);}
                   tooltip {Audio API to use for platforms that support multiple APIs (Linux only)} xywh {430 75 356 25} down_box BORDER_BOX align 132 when 5 textcolor 32
                   code3 {fill_audio_apis(o);
 o->value(0);}
@@ -2240,7 +2244,7 @@ if (oldpath.empty()) o->value(path.c_str());}
               }
             }
             Fl_Group {} {
-              label ComfyUI
+              label ComfyUI open
               tooltip {Here are the current settings to interact with ComfyUI.  It requires installation of mrv2's comfyUI nodes.} xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -2249,7 +2253,7 @@ if (oldpath.empty()) o->value(path.c_str());}
               } {
                 Fl_Choice UseComfyUIPipe {
                   label {Use ComfyUI Pipe} open
-                  tooltip {This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py} xywh {450 75 255 25} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py} xywh {603 75 90 24} down_box BORDER_BOX textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -2264,7 +2268,7 @@ if (oldpath.empty()) o->value(path.c_str());}
               }
             }
           }
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {324 408 470 40}
           } {
             Fl_Button {} {
@@ -2294,7 +2298,7 @@ mrv::Preferences::load(false, false);}
               label OK
               user_data m user_data_type {ViewerUI*}
               callback {v->uiPrefs->uiMain->hide();
-mrv::Preferences::run();} selected
+mrv::Preferences::run();}
               tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {652 411 132 31}
             }
           }
@@ -2366,48 +2370,78 @@ o->add( _("Network/WebRTC") );
 o->add( _("Network/ComfyUI") );
 o->select( item );} {}
   }
-  Function {fill_audio_apis(Fl_Choice* o)} {} {
+  Function {fill_audio_apis(Fl_Choice* o)} {open
+  } {
     code {o->clear();
 
 \#ifdef TLRENDER_AUDIO
 
-    std::vector<RtAudio::Api> apis;
-    RtAudio::getCompiledApi(apis);
-    
-    if (apis.empty())
-    {    
-         o->add(_("No Audio was Compiled"));
-         return;
+    // Find the compiled-in miniaudio backends. The "null" backend is a
+    // do-nothing fallback that always reports a device, so skip it.
+    std::array<ma_backend, MA_BACKEND_COUNT> backends;
+    size_t backendCount = 0;
+    if (ma_get_enabled_backends(
+            backends.data(), backends.size(), &backendCount) != MA_SUCCESS)
+    {
+        backendCount = 0;
     }
-   
-   
-    std::vector<RtAudio::Api> validApis;
+
+    std::vector<ma_backend> apis;
+    for (size_t i = 0; i < backendCount; ++i)
+    {
+        if (backends[i] != ma_backend_null)
+            apis.push_back(backends[i]);
+    }
+
+    if (apis.empty())
+    {
+        o->add(_("No Audio was Compiled"));
+        return;
+    }
+
+    // Keep only the backends that can be initialized and have devices.
+    std::vector<ma_backend> validApis;
     for (auto api : apis)
     {
-    	RtAudio audio(api);
-    	if (audio.getDeviceCount() > 0)
-    	    validApis.push_back(api);	
-    }    
-    
-    if (validApis.empty())
-    {    
-         o->add(_("No Audio Devices were Found"));
-         return;
+        // We ignore ma_backend_jack as that would create errors on Linux
+\#ifdef __linux__
+    	if (api == ma_backend_jack)
+    	  continue;
+\#endif
+        ma_context context;
+        if (ma_context_init(&api, 1, nullptr, &context) != MA_SUCCESS)
+            continue;
+
+        ma_device_info* playbackInfos = nullptr;
+        ma_uint32 playbackCount = 0;
+        ma_device_info* captureInfos = nullptr;
+        ma_uint32 captureCount = 0;
+        if (ma_context_get_devices(
+                &context, &playbackInfos, &playbackCount, &captureInfos,
+                &captureCount) == MA_SUCCESS &&
+            (playbackCount + captureCount) > 0)
+        {
+            validApis.push_back(api);
+        }
+        ma_context_uninit(&context);
     }
-   
-    auto name = RtAudio::getApiName(validApis[0]);
-    
+
+    if (validApis.empty())
+    {
+        o->add(_("No Audio Devices were Found"));
+        return;
+    }
+
     std::string apiDefault = _("Default API");
     apiDefault += " (";
-    apiDefault += name;
+    apiDefault += ma_get_backend_name(validApis[0]);
     apiDefault += ")";
-    
+
     o->add(apiDefault.c_str());
 
-    for (auto& api : validApis)
+    for (auto api : validApis)
     {
-        auto name = RtAudio::getApiName(api);
-        o->add(name.c_str());
+        o->add(ma_get_backend_name(api));
     }
 
 \#else
@@ -2443,25 +2477,66 @@ if (item && item->label())
     apiName = item->label();
 }
 
-   
-RtAudio::Api api = RtAudio::getCompiledApiByName(apiName);
-
-RtAudio audio(api);
-
-RtAudio::Api realApi = audio.getCurrentApi();
-
-const auto numDevices = audio.getDeviceCount();
-if (numDevices <= 0)
+// Find the backend by name. The first menu entry is "Default API (...)",
+// which matches nothing and so leaves miniaudio to pick its own default.
+std::array<ma_backend, MA_BACKEND_COUNT> backends;
+size_t backendCount = 0;
+if (ma_get_enabled_backends(
+        backends.data(), backends.size(), &backendCount) != MA_SUCCESS)
 {
-    o->add(_("No Valid Devices found" ));
+    backendCount = 0;
+}
+
+ma_backend backend = ma_backend_null;
+const ma_backend* pBackend = nullptr;
+ma_uint32 pBackendCount = 0;
+for (size_t i = 0; i < backendCount; ++i)
+{
+    if (apiName == ma_get_backend_name(backends[i]))
+    {
+        backend = backends[i];
+        pBackend = &backend;
+        pBackendCount = 1;
+        break;
+    }
+}
+
+ma_context context;
+if (ma_context_init(pBackend, pBackendCount, nullptr, &context) != MA_SUCCESS)
+{
+    o->add(_("No Valid Devices found"));
     o->value(0);
     return;
 }
 
+// Only playback (output) devices are of interest here.
+ma_device_info* playbackInfos = nullptr;
+ma_uint32 numDevices = 0;
+ma_device_info* captureInfos = nullptr;
+ma_uint32 captureCount = 0;
+if (ma_context_get_devices(
+        &context, &playbackInfos, &numDevices, &captureInfos,
+        &captureCount) != MA_SUCCESS ||
+    numDevices == 0)
+{
+    ma_context_uninit(&context);
+    o->add(_("No Valid Devices found"));
+    o->value(0);
+    return;
+}
 
-const auto deviceDefault = audio.getDefaultOutputDevice();
-const auto& info = audio.getDeviceInfo(deviceDefault);
-const auto& deviceName = mrv::string::commentSlash(info.name);
+// Find the default device, falling back to the first one.
+ma_uint32 deviceDefault = 0;
+for (ma_uint32 i = 0; i < numDevices; ++i)
+{
+    if (playbackInfos[i].isDefault)
+    {
+        deviceDefault = i;
+        break;
+    }
+}
+const auto deviceName =
+    mrv::string::commentSlash(playbackInfos[deviceDefault].name);
 
 oldDevice = 0;
 
@@ -2470,31 +2545,26 @@ name += " (";
 name += deviceName;
 name += ")";
 o->add(name.c_str());
-for (size_t i = 0; i < numDevices - 1; ++i)
+
+int menuIndex = 1; // index 0 is the "Default Device" entry.
+for (ma_uint32 i = 0; i < numDevices; ++i)
 {
-   const auto& deviceInfo = audio.getDeviceInfo(i);
-\#ifndef RTAUDIO_VERSION_MAJOR
-   if (!deviceInfo.probed) continue;
-\#endif
-   
-   unsigned numOutput = deviceInfo.outputChannels;
-   unsigned numDuplex = deviceInfo.duplexChannels;
-   if (numOutput == 0 && numDuplex == 0)
-      continue;  // a microphone or similar
-      
-   name = mrv::string::commentSlash(deviceInfo.name);
-   o->add(name.c_str());
-   if (name == oldDeviceName)
-   {
-      oldDevice = i + 1;
-   }
+    name = mrv::string::commentSlash(playbackInfos[i].name);
+    o->add(name.c_str());
+    if (name == oldDeviceName)
+    {
+        oldDevice = menuIndex;
+    }
+    ++menuIndex;
 }
+
+ma_context_uninit(&context);
 
 o->value(oldDevice);
 
 \#else
 
-o->add(_("No Valid Devices found" ));
+o->add(_("No Valid Devices found"));
 o->value(0);
 
 \#endif} {}
@@ -2503,7 +2573,6 @@ o->value(0);
   } {
     code {auto v = self->AudioAPI;
 auto o = self->VoiceOverMicrophone;
-
 int oldDevice = o->value();
 std::string oldDeviceName;
 
@@ -2515,7 +2584,6 @@ if (oldDevice >= 0)
         oldDeviceName = item->label();
     }
 }
-
 
 o->clear();
 
@@ -2530,25 +2598,66 @@ if (item && item->label())
     apiName = item->label();
 }
 
-   
-RtAudio::Api api = RtAudio::getCompiledApiByName(apiName);
-
-RtAudio audio(api);
-
-RtAudio::Api realApi = audio.getCurrentApi();
-
-const auto numDevices = audio.getDeviceCount();
-if (numDevices <= 0)
+// Find the backend by name. The first menu entry is "Default API (...)",
+// which matches nothing and so leaves miniaudio to pick its own default.
+std::array<ma_backend, MA_BACKEND_COUNT> backends;
+size_t backendCount = 0;
+if (ma_get_enabled_backends(
+        backends.data(), backends.size(), &backendCount) != MA_SUCCESS)
 {
-    o->add(_("No Valid Devices found" ));
+    backendCount = 0;
+}
+
+ma_backend backend = ma_backend_null;
+const ma_backend* pBackend = nullptr;
+ma_uint32 pBackendCount = 0;
+for (size_t i = 0; i < backendCount; ++i)
+{
+    if (apiName == ma_get_backend_name(backends[i]))
+    {
+        backend = backends[i];
+        pBackend = &backend;
+        pBackendCount = 1;
+        break;
+    }
+}
+
+ma_context context;
+if (ma_context_init(pBackend, pBackendCount, nullptr, &context) != MA_SUCCESS)
+{
+    o->add(_("No Valid Devices found"));
     o->value(0);
     return;
 }
 
+// Only capture (input) devices are of interest here.
+ma_device_info* playbackInfos = nullptr;
+ma_uint32 playbackCount = 0;
+ma_device_info* captureInfos = nullptr;
+ma_uint32 numDevices = 0;
+if (ma_context_get_devices(
+        &context, &playbackInfos, &playbackCount, &captureInfos,
+        &numDevices) != MA_SUCCESS ||
+    numDevices == 0)
+{
+    ma_context_uninit(&context);
+    o->add(_("No Valid Devices found"));
+    o->value(0);
+    return;
+}
 
-const auto deviceDefault = audio.getDefaultInputDevice();
-const auto& info = audio.getDeviceInfo(deviceDefault);
-const auto& deviceName = mrv::string::commentSlash(info.name);
+// Find the default device, falling back to the first one.
+ma_uint32 deviceDefault = 0;
+for (ma_uint32 i = 0; i < numDevices; ++i)
+{
+    if (captureInfos[i].isDefault)
+    {
+        deviceDefault = i;
+        break;
+    }
+}
+const auto deviceName =
+    mrv::string::commentSlash(captureInfos[deviceDefault].name);
 
 oldDevice = 0;
 
@@ -2557,31 +2666,26 @@ name += " (";
 name += deviceName;
 name += ")";
 o->add(name.c_str());
-for (size_t i = 0; i < numDevices - 1; ++i)
+
+int menuIndex = 1; // index 0 is the "Default Device" entry.
+for (ma_uint32 i = 0; i < numDevices; ++i)
 {
-   const auto& deviceInfo = audio.getDeviceInfo(i);
-\#ifndef RTAUDIO_VERSION_MAJOR
-   if (!deviceInfo.probed) continue;
-\#endif
-   
-   unsigned numInput = deviceInfo.inputChannels;
-   unsigned numDuplex = deviceInfo.duplexChannels;
-   if (numInput == 0 && numDuplex == 0)
-      continue;  // a microphone or similar
-      
-   name = mrv::string::commentSlash(deviceInfo.name);
-   o->add(name.c_str());
-   if (name == oldDeviceName)
-   {
-      oldDevice = i + 1;
-   }
+    name = mrv::string::commentSlash(captureInfos[i].name);
+    o->add(name.c_str());
+    if (name == oldDeviceName)
+    {
+        oldDevice = menuIndex;
+    }
+    ++menuIndex;
 }
+
+ma_context_uninit(&context);
 
 o->value(oldDevice);
 
 \#else
 
-o->add(_("No Valid Devices found" ));
+o->add(_("No Valid Devices found"));
 o->value(0);
 
 \#endif} {}

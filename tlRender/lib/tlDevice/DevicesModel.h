@@ -21,7 +21,7 @@ namespace tl
 
     namespace device
     {
-        //! BMD devices model data.
+        //! Devices model data.
         struct DevicesModelData
         {
             std::vector<std::string> devices;

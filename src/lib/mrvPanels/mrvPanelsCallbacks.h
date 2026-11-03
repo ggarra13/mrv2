@@ -14,7 +14,6 @@
 #include "mrvPanels/mrvColorAreaPanel.h"
 #include "mrvPanels/mrvColorPanel.h"
 #include "mrvPanels/mrvComparePanel.h"
-#include "mrvPanels/mrvDevicesPanel.h"
 #include "mrvPanels/mrvEnvironmentMapPanel.h"
 #include "mrvPanels/mrvFilesPanel.h"
 #include "mrvPanels/mrvHistogramPanel.h"
@@ -56,7 +55,6 @@ namespace mrv
         extern ComparePanel* comparePanel;
         extern SettingsPanel* settingsPanel;
         extern LogsPanel* logsPanel;
-        extern DevicesPanel* devicesPanel;
         extern ColorAreaPanel* colorAreaPanel;
         extern AnnotationsPanel* annotationsPanel;
         extern NotesPanel* notesPanel;
@@ -110,7 +108,6 @@ namespace mrv
         void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void color_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void compare_panel_cb(Fl_Widget* w, ViewerUI* ui);
-        void devices_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void environment_map_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void files_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void histogram_panel_cb(Fl_Widget* w, ViewerUI* ui);

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.1.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-31 04:31-0300\n"
+"POT-Creation-Date: 2026-11-03 19:10-0300\n"
 "PO-Revision-Date: 2024-05-09 12:13-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1799,9 +1799,6 @@ msgstr "Toggle Python Panel"
 msgid "Toggle Logs Panel"
 msgstr "Toggle Logs Panel"
 
-msgid "Toggle Devices Panel"
-msgstr "Toggle Devices Panel"
-
 msgid "Toggle Color Area Panel"
 msgstr "Toggle Color Area Panel"
 
@@ -3572,9 +3569,6 @@ msgstr "Background"
 msgid "Color Area"
 msgstr "Color Area"
 
-msgid "Devices"
-msgstr "Devices"
-
 msgid "Environment Map"
 msgstr "Environment Map"
 
@@ -4128,6 +4122,9 @@ msgstr "Install is broken.  Missing license_helper"
 msgid "Online documentation."
 msgstr "Online documentation."
 
+msgid "Video Tutorials."
+msgstr "Video Tutorials."
+
 msgid "Toggle Annotations."
 msgstr "Toggle Annotations."
 
@@ -4469,17 +4466,6 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "Cache: "
 
-#, c++-format
-msgid "HDR monitor min. nits = {0}"
-msgstr "HDR monitor min. nits = {0}"
-
-#, c++-format
-msgid "HDR monitor max. nits = {0}"
-msgstr "HDR monitor max. nits = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR monitor not found or not configured."
-
 msgid "HDR monitor not detected by Vulkan or Window Manager."
 msgstr "HDR monitor not detected by Vulkan or Window Manager."
 
@@ -4490,6 +4476,17 @@ msgstr "Vulkan color space is {0}"
 #, c++-format
 msgid "Vulkan format is {0}"
 msgstr "Vulkan format is {0}"
+
+#, c++-format
+msgid "HDR monitor min. nits = {0}"
+msgstr "HDR monitor min. nits = {0}"
+
+#, c++-format
+msgid "HDR monitor max. nits = {0}"
+msgstr "HDR monitor max. nits = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR monitor not found or not configured."
 
 #, c++-format
 msgid "Changed to HDR active monitor at index {0}"
@@ -5179,6 +5176,9 @@ msgstr "Help/Unlock Features"
 
 msgid "Help/Documentation"
 msgstr "Help/Documentation"
+
+msgid "Help/Video Tutorials"
+msgstr "Help/Video Tutorials"
 
 msgid "Help/About"
 msgstr "Help/About"
@@ -7586,6 +7586,12 @@ msgstr "Auto Playback"
 msgid "Start Playback when opening files."
 msgstr "Start Playback when opening files."
 
+msgid "Looping Mode"
+msgstr "Looping Mode"
+
+msgid "Select default looping mode in timeline."
+msgstr "Select default looping mode in timeline."
+
 msgid "Single Click Playback"
 msgstr "Single Click Playback"
 
@@ -7593,12 +7599,6 @@ msgid ""
 "Start Playback when single clicking the left mouse button on the view window"
 msgstr ""
 "Start Playback when single clicking the left mouse button on the view window"
-
-msgid "Looping Mode"
-msgstr "Looping Mode"
-
-msgid "Select default looping mode in timeline."
-msgstr "Select default looping mode in timeline."
 
 msgid "Sequences"
 msgstr "Sequences"
@@ -8033,14 +8033,14 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 
 msgid "Maximum Images Apart"
 msgstr "Maximum Images Apart"
@@ -9193,6 +9193,9 @@ msgstr "Toggle Media Info Panel"
 msgid "Toggle Color Area Info Panel"
 msgstr "Toggle Color Area Info Panel"
 
+msgid "Toggle Devices Panel"
+msgstr "Toggle Devices Panel"
+
 msgid "Toggle Annotation Panel"
 msgstr "Toggle Annotation Panel"
 
@@ -9260,8 +9263,11 @@ msgstr "task info failed"
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Invalid font for text drawing"
 
+#~ msgid "Devices"
+#~ msgstr "Devices"
+
 #~ msgid "User Interface"
-#~ msgstr "User Interface/HDR"
+#~ msgstr "User Interface"
 
 #~ msgid "User Interface Elements"
 #~ msgstr "User Interface Elements"
@@ -9270,10 +9276,10 @@ msgstr "task info failed"
 #~ msgstr "View Window"
 
 #~ msgid "Language and Colors"
-#~ msgstr "User Interface/Language and Colors"
+#~ msgstr "Language and Colors"
 
 #~ msgid "Render"
-#~ msgstr "Renderer"
+#~ msgstr "Render"
 
 #~ msgid "User Interface/Elements"
 #~ msgstr "User Interface/Elements"
@@ -9294,7 +9300,7 @@ msgstr "task info failed"
 #~ msgstr "User Interface/Positioning"
 
 #~ msgid "User Interface/Render"
-#~ msgstr "User Interface/HDR"
+#~ msgstr "User Interface/Render"
 
 #~ msgid "User Interface/Timeline"
 #~ msgstr "User Interface/Timeline"
@@ -9501,13 +9507,13 @@ msgstr "task info failed"
 
 #~ msgid ""
 #~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt."
-#~ "rate` seconds.\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
+#~ "rt.rate` seconds.\n"
 #~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt."
-#~ "rate` seconds.\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
+#~ "rt.rate` seconds.\n"
 #~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 
 #~ msgid ""
@@ -9580,11 +9586,11 @@ msgstr "task info failed"
 #~ msgstr "Convert to timecode (``HH:MM:SS;FRAME``)"
 
 #~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:"
-#~ "`~RationalTime`."
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
+#~ "a :class:`~RationalTime`."
 #~ msgstr ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:"
-#~ "`~RationalTime`."
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
+#~ "a :class:`~RationalTime`."
 
 #~ msgid ""
 #~ "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
@@ -9918,30 +9924,30 @@ msgstr "task info failed"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (exclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (exclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 9.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (exclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (exclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 9.\n"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (inclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (inclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 10.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (inclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (inclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 10.\n"

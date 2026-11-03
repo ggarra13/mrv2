@@ -170,7 +170,6 @@ endif()
 
 # Audio dependencies
 if(TLRENDER_AUDIO)
-    find_package(RtAudio REQUIRED)
     add_definitions(-DTLRENDER_AUDIO)
 endif()
 

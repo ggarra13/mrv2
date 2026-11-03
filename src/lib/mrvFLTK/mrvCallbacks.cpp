@@ -187,9 +187,6 @@ namespace mrv
         {_("Color"), (Fl_Callback*)color_panel_cb},
         {_("Color Area"), (Fl_Callback*)color_area_panel_cb},
         {_("Compare"), (Fl_Callback*)compare_panel_cb},
-#ifdef TLRENDER_BMD
-        {_("Devices"), (Fl_Callback*)devices_panel_cb},
-#endif
         {_("Environment Map"), (Fl_Callback*)environment_map_panel_cb},
         {_("Files"), (Fl_Callback*)files_panel_cb},
         {_("Histogram"), (Fl_Callback*)histogram_panel_cb},
@@ -1654,8 +1651,6 @@ namespace mrv
             panel::settingsPanel->save();
         if (panel::logsPanel)
             panel::logsPanel->save();
-        if (panel::devicesPanel)
-            panel::devicesPanel->save();
         if (panel::annotationsPanel)
             panel::annotationsPanel->save();
         if (panel::notesPanel)
@@ -5088,6 +5083,23 @@ namespace mrv
         }
         const std::string& docs = docspath();
         fl_open_uri(docs.c_str());
+    }
+
+    void help_tutorials_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Video Tutorials."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        const std::string& tutorials = "https://www.youtube.com/watch?v=8JViz-pPCrg&list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-";
+        fl_open_uri(tutorials.c_str());
     }
 
     void toggle_annotation_cb(Fl_Menu_* m, ViewerUI* ui)

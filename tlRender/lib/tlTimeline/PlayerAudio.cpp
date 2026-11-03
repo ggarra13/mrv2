@@ -50,26 +50,29 @@ namespace tl
                 audioMutex.reset = true;
             }
 #if defined(TLRENDER_AUDIO)
-            if (thread.rtAudio && thread.rtAudio->isStreamRunning())
-            {
-                try
-                {
-                    thread.rtAudio->setStreamTime(0.0);
-                }
-                catch (const std::exception&)
-                {
-                    //! \todo How should this be handled?
-                }
-            }
+            // miniaudio has no settable stream time, so reset our own counter.
+            thread.streamFrames = 0;
 #endif // TLRENDER_AUDIO
         }
 
 #if defined(TLRENDER_AUDIO)
-        int Player::Private::rtAudioCallback(
-            void* outputBuffer, void* inputBuffer, unsigned int outSamples,
-            double streamTime, RtAudioStreamStatus status, void* userData)
+        void Player::Private::maDataCallback(
+            ma_device* device, void* outputBuffer, const void* inputBuffer,
+            ma_uint32 outSamples)
         {
-            auto p = reinterpret_cast<Player::Private*>(userData);
+            auto p = reinterpret_cast<Player::Private*>(device->pUserData);
+
+            // Advance the stream time when the callback returns, no matter
+            // which path it takes (RtAudio did this after every callback).
+            struct StreamTimeTicker
+            {
+                std::atomic<uint64_t>& frames;
+                ma_uint32 count;
+                ~StreamTimeTicker()
+                {
+                    frames.fetch_add(count, std::memory_order_relaxed);
+                }
+            } streamTimeTicker{p->thread.streamFrames, outSamples};
 
             // Get mutex protected values.
             Playback playback = Playback::Stop;
@@ -118,7 +121,7 @@ namespace tl
             case Playback::Forward:
             case Playback::Reverse:
             {
-                // Flush the audio resampler and buffer when the RtAudio
+                // Flush the audio resampler and buffer when the audio
                 // playback is reset.
                 if (reset)
                 {
@@ -154,7 +157,7 @@ namespace tl
                 // Fill the audio buffer.
                 if (inputInfo.sampleRate <= 0 ||
                     playbackStartTime == time::invalidTime)
-                    return 0;
+                    return;
 
                 const bool backwards = playback == Playback::Reverse;
                 if (!thread.silence)
@@ -413,7 +416,7 @@ namespace tl
                     }
                 }
 
-                // Send audio data to RtAudio.
+                // Send audio data to miniaudio.
                 const auto now = std::chrono::steady_clock::now();
                 if (defaultSpeed ==
                         p->timeline->getTimeRange().duration().rate() &&
@@ -443,22 +446,37 @@ namespace tl
                 break;
             }
 
-            return 0;
+            return;
         }
 
-#if RTAUDIO_VERSION_MAJOR >= 6
-        void Player::Private::rtAudioErrorCallback(
-            RtAudioErrorType type, const std::string& errorText)
+        void Player::Private::maNotificationCallback(
+            const ma_device_notification* notification)
         {
-            std::cout << "RtAudio ERROR: " << errorText << std::endl;
+            auto p = reinterpret_cast<Player::Private*>(
+                notification->pDevice->pUserData);
+            switch (notification->type)
+            {
+            case ma_device_notification_type_started:
+                p->thread.audioStarted = true;
+                break;
+            case ma_device_notification_type_stopped:
+                p->thread.audioStarted = false;
+                break;
+            case ma_device_notification_type_rerouted:
+                std::cout << "miniaudio: audio device rerouted" << std::endl;
+                break;
+            case ma_device_notification_type_interruption_began:
+                std::cout << "miniaudio: audio interruption began"
+                          << std::endl;
+                break;
+            case ma_device_notification_type_interruption_ended:
+                std::cout << "miniaudio: audio interruption ended"
+                          << std::endl;
+                break;
+            default:
+                break;
+            }
         }
-#else
-        void Player::Private::rtAudioErrorCallback(
-            RtAudioError::Type type, const std::string& errorText)
-        {
-            std::cout << "RtAudio ERROR: " << errorText << std::endl;
-        }
-#endif
 
 #endif // TLRENDER_AUDIO
 

@@ -1215,18 +1215,6 @@ namespace mrv
                     if ((!value && comparePanel) || (value && !comparePanel))
                         compare_panel_cb(nullptr, ui);
                 }
-                else if (c == "Devices Panel")
-                {
-                    bool receive = uiPrefs->ReceiveUI->value();
-                    if (!receive)
-                    {
-                        tcp->unlock();
-                        return;
-                    }
-                    bool value = message["value"];
-                    if ((!value && devicesPanel) || (value && !devicesPanel))
-                        devices_panel_cb(nullptr, ui);
-                }
                 else if (c == "Environment Map Panel")
                 {
                     bool receive = uiPrefs->ReceiveUI->value();

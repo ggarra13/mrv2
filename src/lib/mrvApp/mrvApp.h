@@ -83,11 +83,6 @@ namespace mrv
         void endNDIOutputStream();
 #endif
 
-#ifdef TLRENDER_BMD
-        void beginBMDOutputStream();
-        void endBMDOutputStream();
-#endif
-
         //! Create a new application.
         static std::shared_ptr<App>
         create(int argc, char* argv[], const std::shared_ptr<system::Context>&);

@@ -109,12 +109,78 @@ namespace mrv
                 p.hdrRetries = 0;
                 return;
             }
-            p.monitor = p.pendingMonitor;          // restore DXGI's answer
-            m_swapchain_needs_recreation = true;   // may also nudge the driver
-            init_colorspace();                     // success, or re-arms the timer
+            p.monitor = p.pendingMonitor;
+            
+            m_swapchain_needs_recreation = true;
+            init_colorspace();
             redraw();
         }
 
+        // Feed the real monitor state into the driver's scorer.
+        Fl_Vk_Display_Caps Viewport::display_caps()
+        {
+            TLRENDER_P();
+ 
+            if (p.monitor_first_run)
+            {
+                p.screen_index = this->screen_num();
+                p.monitor = getHDRCapabilities(p.screen_index);
+                p.monitor_first_run = false;
+            }
+            
+            Fl_Vk_Display_Caps caps;
+            caps.wide_gamut = true;               // OS color-manages P3/sRGB
+#ifdef __APPLE__
+            caps.hdr = p.monitor.hdr_supported;   // EDR headroom > 1
+#else
+            caps.hdr = p.monitor.hdr_enabled;             // OS HDR switched on
+#endif
+            return caps;
+        }
+        
+        void Viewport::_afterColorspaceSelected()
+        {
+            TLRENDER_P();
+ 
+            if (!headless())
+            {
+                const bool hdrSpace = fl_vk_is_hdr_color_space(colorSpace());
+ 
+                if (p.monitor.hdr_enabled && !hdrSpace)
+                {
+#ifdef _WIN32
+                    // DXGI says HDR but the driver has not caught up yet: stay SDR
+                    // for now and try again shortly.
+                    if (p.hdrRetries < 8)
+                    {
+                        p.pendingMonitor = p.monitor;
+                        ++p.hdrRetries;
+                        Fl::remove_timeout(hdrRetryCB, this);
+                        Fl::add_timeout(0.25, hdrRetryCB, this);
+                    }
+                    else
+#endif
+                    {
+                        LOG_STATUS(_("HDR monitor not detected by Vulkan or Window Manager."));
+                    }
+                    p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
+                    p.monitor.min_nits = 0.001F;
+                    p.monitor.max_nits = 100.F;
+                }
+                else if (p.monitor.hdr_enabled)
+                {
+                    _getMonitorNits();   // just logs now; the forced-SDR fixup is gone
+                }
+            }
+
+            std::string msg = string::Format(_("Vulkan color space is {0}")).
+                              arg(string_VkColorSpaceKHR(colorSpace()));
+            LOG_STATUS(msg);
+            msg = string::Format(_("Vulkan format is {0}")).
+                  arg(string_VkFormat(format()));
+            LOG_STATUS(msg);
+        }
+        
         Viewport::Viewport(int X, int Y, int W, int H, const char* L) :
             TimelineViewport(X, Y, W, H, L),
             _vk(new VKPrivate)
@@ -433,9 +499,6 @@ namespace mrv
                 }
                 else if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
                 {
-                    colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-                    format() = VK_FORMAT_B8G8R8A8_UNORM;
-
                     p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
                     p.monitor.min_nits = 0.001F;
                     p.monitor.max_nits = 100.F;
@@ -802,8 +865,8 @@ namespace mrv
 
                 // If we changed screen we may have gone to a monitor with
                 // different scaling.  Recreate swapchain.
-                m_swapchain_needs_recreation = true;
-                init_colorspace();
+                reselect_surface_format();
+                _afterColorspaceSelected();
                 redraw();
                 return;
             }

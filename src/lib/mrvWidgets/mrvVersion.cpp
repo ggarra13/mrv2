@@ -110,7 +110,7 @@
 #endif
 
 #ifdef TLRENDER_AUDIO
-#    include <rtaudio/RtAudio.h>
+#    include <miniaudio/miniaudio.h>
 #endif
 
 #if defined(OPENGL_BACKEND)
@@ -1013,6 +1013,12 @@ namespace mrv
           << "Copyright Contributors to the MaterialX Project" << endl
           << endl;
 #endif
+#ifdef TLRENDER_AUDIO
+        o << "miniaudio v" << MA_VERSION_STRING << endl
+          << "Copyright (c) 2026-10-31-Present David Reid "
+          << "(makron@gmail.com)" << endl
+          << endl;
+#endif
         o << "minizip-ng v" << MZ_VERSION << endl
           << "Copyright (C) Nathan Moinvaziri" << endl
           << endl;
@@ -1129,11 +1135,6 @@ namespace mrv
         o << endl
           << "Copyright (c) 2001-Present Python Software Foundation." << endl
           << "All Rights Reserved." << endl
-          << endl;
-#endif
-#ifdef TLRENDER_AUDIO
-        o << "RtAudio v" << RTAUDIO_VERSION << endl
-          << "Copyright (c) 2001-Present Gary P. Scavone" << endl
           << endl;
 #endif
 #ifdef TLRENDER_STB
