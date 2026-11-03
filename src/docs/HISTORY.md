@@ -1,3 +1,13 @@
+v1.8.6
+======
+
+ChangeLog
+---------
+
+- Core: Ported to miniaudio so that porting to Emscripten will be possible.
+- Core: Improved HDR detection on macOS
+
+
 v1.8.5
 ======
 

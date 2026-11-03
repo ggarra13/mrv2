@@ -1,168 +1,229 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+//
+// NOTE: not compiled here (no macOS toolchain available when this was
+// written); please build and test on a Mac, with an internal XDR/HDR display,
+// an external SDR display and (ideally) an external HDR display.
+//
+// All AppKit calls must run on the main thread (FLTK's UI thread is).
 
 #include "mrvUI/mrvMonitor.h"
-#include <iostream>
-#include <sstream>
+#include "mrvMonitor_macOS.h"
+
 #include <string>
 #include <vector>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-
-#import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 #import <CoreGraphics/CoreGraphics.h>
-#import <ApplicationServices/ApplicationServices.h> // For ColorSync
-#import <IOKit/IOKitLib.h>
-
+#import <ApplicationServices/ApplicationServices.h> // ColorSync
 #pragma clang diagnostic pop
-
-#import <iostream>
-#import <string>
-#import <sstream>
-#import <cstring>
-#import <vector>
-
-// Helper to decode ICC s15Fixed16Number to standard float
-static float decode_s15Fixed16(const uint8_t* bytes) {
-    // ICC profiles are Big-Endian
-    int32_t val = (bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3];
-    return val / 65536.0f;
-}
 
 using tl::monitor::Capabilities;
 
-
-bool getDisplayNameForDispID(CGDirectDisplayID dispID,
-                             std::string& out)
+namespace
 {
-    bool bRes = false;
-    
-    out.clear();
-    
-    NSArray *screens = [NSScreen screens];
-            
-    for (NSScreen *screen in screens)
+    // ICC s15Fixed16Number, big-endian.
+    double decode_s15Fixed16(const uint8_t* b)
     {
-        NSRect screenFrame = [screen frame];
-        CGRect cgDisplayBounds = CGDisplayBounds(dispID);
+        const int32_t v = (int32_t)((uint32_t(b[0]) << 24) | (uint32_t(b[1]) << 16) |
+                                    (uint32_t(b[2]) << 8) | uint32_t(b[3]));
+        return v / 65536.0;
+    }
 
-        // We match by bound rectangle as matching by display id did not work.
-        if (CGRectEqualToRect(NSRectToCGRect(screenFrame),
-                              cgDisplayBounds))
+    NSScreen* screenForDisplayID(CGDirectDisplayID id)
+    {
+        for (NSScreen* s in [NSScreen screens])
         {
-            //Got it
-            NSString* pName = [screen localizedName];
-                    
-            out.assign([pName UTF8String], [pName lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-                    
-            bRes = true;
-                    
-            break;
+            NSNumber* n = [[s deviceDescription] objectForKey:@"NSScreenNumber"];
+            if (n && [n unsignedIntValue] == id)
+                return s;
         }
-    }    
-            
-    return bRes;
+        return nil;
+    }
+
+    // Reads an 'XYZ ' tag (20 bytes: sig, reserved, X, Y, Z).
+    bool readXYZ(ColorSyncProfileRef profile, CFStringRef tag, double xyz[3])
+    {
+        CFDataRef d = ColorSyncProfileCopyTag(profile, tag);
+        if (!d)
+            return false;
+        bool ok = false;
+        if (CFDataGetLength(d) >= 20)
+        {
+            const uint8_t* b = CFDataGetBytePtr(d);
+            xyz[0] = decode_s15Fixed16(b + 8);
+            xyz[1] = decode_s15Fixed16(b + 12);
+            xyz[2] = decode_s15Fixed16(b + 16);
+            ok = true;
+        }
+        CFRelease(d);        // released on every path (the old code leaked here)
+        return ok;
+    }
+
+    // Reads the 'chad' tag: 3x3 chromatic adaptation matrix (sf32, row-major).
+    bool readChad(ColorSyncProfileRef profile, double m[9])
+    {
+        CFDataRef d = ColorSyncProfileCopyTag(profile, CFSTR("chad"));
+        if (!d)
+            return false;
+        bool ok = false;
+        if (CFDataGetLength(d) >= 8 + 9 * 4)
+        {
+            const uint8_t* b = CFDataGetBytePtr(d) + 8;
+            for (int i = 0; i < 9; ++i)
+                m[i] = decode_s15Fixed16(b + 4 * i);
+            ok = true;
+        }
+        CFRelease(d);
+        return ok;
+    }
+
+    bool invert3x3(const double m[9], double r[9])
+    {
+        const double a = m[0], b = m[1], c = m[2];
+        const double d = m[3], e = m[4], f = m[5];
+        const double g = m[6], h = m[7], i = m[8];
+        const double A = e * i - f * h, B = -(d * i - f * g), C = d * h - e * g;
+        const double det = a * A + b * B + c * C;
+        if (det > -1e-12 && det < 1e-12)
+            return false;
+        const double s = 1.0 / det;
+        r[0] = A * s;                  r[1] = -(b * i - c * h) * s; r[2] = (b * f - c * e) * s;
+        r[3] = B * s;                  r[4] = (a * i - c * g) * s;  r[5] = -(a * f - c * d) * s;
+        r[6] = C * s;                  r[7] = -(a * h - b * g) * s; r[8] = (a * e - b * d) * s;
+        return true;
+    }
+
+    // ICC stores primaries and white point adapted to the D50 PCS, so
+    // x,y computed straight from rXYZ/gXYZ/bXYZ/wtpt report a D50 white for
+    // *every* display.  Undo the adaptation with inverse('chad') to get the
+    // display's native chromaticities (sRGB -> red ~(0.64, 0.33), white D65).
+    void fillChromaticity(ColorSyncProfileRef profile, Capabilities& caps)
+    {
+        double chad[9], inv[9];
+        const bool undo = readChad(profile, chad) && invert3x3(chad, inv);
+
+        auto xy = [&](CFStringRef tag, float* ox, float* oy)
+        {
+            double v[3];
+            if (!readXYZ(profile, tag, v))
+                return;                       // e.g. LUT-based profile: keep defaults
+            if (undo)
+            {
+                const double X = inv[0] * v[0] + inv[1] * v[1] + inv[2] * v[2];
+                const double Y = inv[3] * v[0] + inv[4] * v[1] + inv[5] * v[2];
+                const double Z = inv[6] * v[0] + inv[7] * v[1] + inv[8] * v[2];
+                v[0] = X; v[1] = Y; v[2] = Z;
+            }
+            const double sum = v[0] + v[1] + v[2];
+            if (sum > 0.0)
+            {
+                *ox = float(v[0] / sum);
+                *oy = float(v[1] / sum);
+            }
+        };
+
+        xy(CFSTR("rXYZ"), &caps.red.x,   &caps.red.y);
+        xy(CFSTR("gXYZ"), &caps.green.x, &caps.green.y);
+        xy(CFSTR("bXYZ"), &caps.blue.x,  &caps.blue.y);
+        xy(CFSTR("wtpt"), &caps.white.x, &caps.white.y);
+    }
+
+    Capabilities capsForScreen(NSScreen* screen)
+    {
+        Capabilities caps;
+        if (!screen)
+            return caps;
+
+        // "Potential" EDR headroom is a multiple of SDR white.  Plain SDR
+        // displays report 1.0, but some non-HDR Mac displays (e.g. Intel
+        // MacBook Pros) report a small value above 1, so "> 1.0" wrongly
+        // marks them as HDR.  Require clearly more than 2x; real HDR/XDR
+        // displays report well above that.  Tune kMinEDRHeadroom if needed.
+        // The headroom is relative to SDR white, so max_nits is approximate.
+        // (maximumExtendedDynamicRangeColorComponentValue is the *current*
+        // headroom and stays 1.0 until something requests EDR, so it is not
+        // usable for selection.)
+        static const CGFloat kMinEDRHeadroom = 2.0;
+        const CGFloat headroom =
+            screen.maximumPotentialExtendedDynamicRangeColorComponentValue;
+        if (getenv("MRV2_DEBUG_EDR"))
+            NSLog(@"EDR headroom: potential=%f current=%f",
+                  (double)headroom,
+                  (double)screen.maximumExtendedDynamicRangeColorComponentValue);
+        if (headroom > kMinEDRHeadroom)
+        {
+            caps.hdr_supported = true;
+            caps.hdr_enabled   = true;
+            caps.max_nits      = float(headroom * 100.0);
+        }
+
+        NSColorSpace* ns = screen.colorSpace;
+        CGColorSpaceRef cs = ns ? ns.CGColorSpace : nullptr;
+        if (cs)
+        {
+            CFDataRef icc = CGColorSpaceCopyICCData(cs);
+            if (icc)
+            {
+                CFErrorRef err = nullptr;
+                ColorSyncProfileRef profile = ColorSyncProfileCreate(icc, &err);
+                if (profile)
+                {
+                    fillChromaticity(profile, caps);
+                    CFRelease(profile);
+                }
+                if (err)
+                    CFRelease(err);
+                CFRelease(icc);
+            }
+        }
+        return caps;
+    }
+} // anonymous namespace
+
+
+// Name of the monitor, by CGDirectDisplayID.
+bool getDisplayNameForDispID(CGDirectDisplayID dispID, std::string& out)
+{
+    out.clear();
+    // Match on NSScreenNumber.  Comparing NSScreen.frame with CGDisplayBounds
+    // fails for any display not at the origin: AppKit's y axis points up from
+    // the main display's bottom-left, CoreGraphics' points down from its
+    // top-left.
+    NSScreen* screen = screenForDisplayID(dispID);
+    if (!screen)
+        return false;
+    NSString* name = [screen localizedName];
+    out = [name UTF8String];
+    return true;
 }
 
-namespace mrv {
-    namespace monitor {
-
-        // Helper to get capabilities for a specific ID        
-        Capabilities getCapabilitiesForDisplay(CGDirectDisplayID displayID) {
-            Capabilities caps;
-    
-            // 2. Supplement/Override with NSScreen headroom if available
-            // macOS EDR (Extended Dynamic Range) is a multiplier of SDR (usually 100 nits)
-            for (NSScreen* screen in [NSScreen screens]) {
-                NSDictionary* deviceDescription = [screen deviceDescription];
-                NSNumber* screenNumber = [deviceDescription objectForKey:@"NSScreenNumber"];
-        
-                if (screenNumber && [screenNumber unsignedIntValue] == displayID) {
-                    CGFloat headroom = screen.maximumPotentialExtendedDynamicRangeColorComponentValue;
-            
-                    // If the multiplier is > 2.0, it's an HDR-capable display
-                    if (headroom > 2.0) {
-                        caps.hdr_supported = true;
-                        caps.hdr_enabled = true;
-                        caps.max_nits = headroom * 100.0f; 
-                    }
-                    break;
-                }
-            }
-
-            
-            // 3. Extract Primaries and White Point via ColorSync
-            for (NSScreen* screen in [NSScreen screens]) {
-                NSNumber* screenNumber = [[screen deviceDescription] objectForKey:@"NSScreenNumber"];
-                if (screenNumber && [screenNumber unsignedIntValue] == displayID) {
-            
-                    CGColorSpaceRef colorSpace = screen.colorSpace.CGColorSpace;
-                    if (!colorSpace) break;
-            
-                    // Extract the raw ICC profile data
-                    CFDataRef iccData = CGColorSpaceCopyICCData(colorSpace);
-                    if (iccData) {
-                        CFErrorRef err = NULL;
-                        ColorSyncProfileRef profile = ColorSyncProfileCreate(iccData, &err);
-                
-                        if (profile) {
-                            // Lambda to read an XYZ tag and convert it to x,y chromaticity
-                            auto extractXY = ^(CFStringRef tag, float *outX, float *outY) {
-                                CFDataRef tagData = ColorSyncProfileCopyTag(profile, tag);
-                                // XYZType tags are exactly 20 bytes long
-                                if (tagData && CFDataGetLength(tagData) >= 20) {
-                                    const uint8_t* b = CFDataGetBytePtr(tagData);
-                            
-                                    // Bytes 8-19 contain X, Y, Z
-                                    float X = decode_s15Fixed16(b + 8);
-                                    float Y = decode_s15Fixed16(b + 12);
-                                    float Z = decode_s15Fixed16(b + 16);
-                            
-                                    float sum = X + Y + Z;
-                                    if (sum > 0.0f) {
-                                        *outX = X / sum;
-                                        *outY = Y / sum;
-                                    }
-                                    CFRelease(tagData);
-                                }
-                            };
-
-                            // Extract using standard ICC tag signatures
-                            extractXY(CFSTR("rXYZ"), &caps.red.x, &caps.red.y);
-                            extractXY(CFSTR("gXYZ"), &caps.green.x, &caps.green.y);
-                            extractXY(CFSTR("bXYZ"), &caps.blue.x, &caps.blue.y);
-                            extractXY(CFSTR("wtpt"), &caps.white.x, &caps.white.y);
-
-                            CFRelease(profile);
-                        }
-                        CFRelease(iccData);
-                    }
-                    break; // Found the screen, stop looping
-                }
-            }
-    
-            return caps;
+namespace mrv
+{
+    namespace monitor
+    {
+        // By index in [NSScreen screens] (FLTK's Cocoa screen list is built
+        // from that array; CGGetActiveDisplayList does not guarantee the same
+        // order).  Prefer the window-based call below.
+        Capabilities get_hdr_capabilities(int screen_index)
+        {
+            NSArray<NSScreen*>* screens = [NSScreen screens];
+            if (screen_index >= 0 && screen_index < (int)[screens count])
+                return capsForScreen([screens objectAtIndex:screen_index]);
+            return Capabilities();
         }
 
-        // Optimized version to return the full struct instead of just a bool
-        Capabilities get_hdr_capabilities(int screen_index) {
-            uint32_t displayCount;
-            CGGetActiveDisplayList(0, NULL, &displayCount);
-    
-            std::vector<CGDirectDisplayID> displays(displayCount);
-            CGGetActiveDisplayList(displayCount, displays.data(), &displayCount);
-
-            // If index is valid, return that specific monitor's caps
-            if (screen_index >= 0 && screen_index < (int)displayCount) {
-                return getCapabilitiesForDisplay(displays[screen_index]);
-            }
-
-            // Default return (not found or invalid index)
-            Capabilities empty;
-            return empty;
+        // Most robust: the screen the window is actually on (the one holding
+        // most of it).  Pass fl_xid(window) / glfwGetCocoaWindow().
+        // Declare it in mrvMonitor.h next to get_hdr_capabilities().
+        Capabilities get_hdr_capabilities_for_window(void* nsWindow)
+        {
+            NSWindow* w = (__bridge NSWindow*)nsWindow;
+            NSScreen* s = w ? w.screen : nil;
+            return capsForScreen(s ? s : [NSScreen mainScreen]);
         }
-
     } // namespace monitor
 } // namespace mrv
-
-
