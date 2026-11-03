@@ -110,7 +110,6 @@ namespace mrv
         void color_area_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void color_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void compare_panel_cb(Fl_Widget* w, ViewerUI* ui);
-        void devices_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void environment_map_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void files_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void histogram_panel_cb(Fl_Widget* w, ViewerUI* ui);
