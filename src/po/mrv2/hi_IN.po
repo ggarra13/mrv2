@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-31 04:31-0300\n"
+"POT-Creation-Date: 2026-11-03 19:10-0300\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1771,9 +1771,6 @@ msgstr "पायथन फलक टॉगल करें"
 msgid "Toggle Logs Panel"
 msgstr "लॉग पैनल दिखाएँ/छिपाएँ"
 
-msgid "Toggle Devices Panel"
-msgstr "औज़ार फलक टॉगल करें"
-
 msgid "Toggle Color Area Panel"
 msgstr "रंग क्षेत्र जानकारी पैनल दिखाएँ/छिपाएँ"
 
@@ -3532,9 +3529,6 @@ msgstr "पृष्ठभूमि"
 msgid "Color Area"
 msgstr "रंग क्षेत्र"
 
-msgid "Devices"
-msgstr "डिवाइस"
-
 msgid "Environment Map"
 msgstr "एनवायरनमेंट नक्शा"
 
@@ -4086,6 +4080,9 @@ msgstr "इंस्टॉलेशन खराब है। license_helper ग
 msgid "Online documentation."
 msgstr "ऑनलाइन दस्तावेज़।"
 
+msgid "Video Tutorials."
+msgstr "वीडियो ट्यूटोरियल"
+
 msgid "Toggle Annotations."
 msgstr "एनोटेशन को चालू/बंद करें।"
 
@@ -4429,17 +4426,6 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "कैश: "
 
-#, c++-format
-msgid "HDR monitor min. nits = {0}"
-msgstr "HDR मॉनिटर की न्यूनतम ब्राइटनेस (निट्स) = {0}"
-
-#, c++-format
-msgid "HDR monitor max. nits = {0}"
-msgstr "HDR मॉनिटर की अधिकतम ब्राइटनेस (निट्स) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
-
 msgid "HDR monitor not detected by Vulkan or Window Manager."
 msgstr "Vulkan या विंडो मैनेजर द्वारा कोई HDR मॉनिटर नहीं पाया गया।"
 
@@ -4450,6 +4436,17 @@ msgstr "Vulkan रंग स्थान {0} है"
 #, c++-format
 msgid "Vulkan format is {0}"
 msgstr "Vulkan फ़ॉर्मेट {0} है"
+
+#, c++-format
+msgid "HDR monitor min. nits = {0}"
+msgstr "HDR मॉनिटर की न्यूनतम ब्राइटनेस (निट्स) = {0}"
+
+#, c++-format
+msgid "HDR monitor max. nits = {0}"
+msgstr "HDR मॉनिटर की अधिकतम ब्राइटनेस (निट्स) = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
 
 #, c++-format
 msgid "Changed to HDR active monitor at index {0}"
@@ -5137,6 +5134,9 @@ msgstr "सहायता/सुविधाएँ अनलॉक करें
 
 msgid "Help/Documentation"
 msgstr "सहायता/दस्तावेज़"
+
+msgid "Help/Video Tutorials"
+msgstr "सहायता/वीडियो ट्यूटोरियल"
 
 msgid "Help/About"
 msgstr "सहायता/परिचय"
@@ -7236,7 +7236,7 @@ msgstr ""
 "Size depending what you want to save."
 
 msgid "Interface"
-msgstr "इंटरफ़ेस"
+msgstr "यूज़र इंटरफ़ेस"
 
 msgid "UI Elements"
 msgstr "यूआई तत्व"
@@ -7512,18 +7512,18 @@ msgstr "स्वचालित बजाएँ"
 msgid "Start Playback when opening files."
 msgstr "जब फ़ाइलों को खोला जाए तो प्लेबैक प्रारंभ करें."
 
+msgid "Looping Mode"
+msgstr "लूपिंग मोड"
+
+msgid "Select default looping mode in timeline."
+msgstr "समय रेखा में डिफ़ॉल्ट लूपिंग मोड चुनें."
+
 msgid "Single Click Playback"
 msgstr "एकल क्लिकबैक"
 
 msgid ""
 "Start Playback when single clicking the left mouse button on the view window"
 msgstr "जब एकल माउस बटन को दृश्य विंडो में क्लिक करते हो तो प्लेबैक प्रारंभ करें"
-
-msgid "Looping Mode"
-msgstr "लूपिंग मोड"
-
-msgid "Select default looping mode in timeline."
-msgstr "समय रेखा में डिफ़ॉल्ट लूपिंग मोड चुनें."
 
 msgid "Sequences"
 msgstr "अनुक्रम"
@@ -7945,8 +7945,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "क्लिप संस्करणों से मेल खाने के लिए उपयोग किया जाने वाला नियमित अभिव्यक्ति (रेगुलर "
 "एक्सप्रेशन)। इसमें तीन चीजें (प्रिफिक्स, संख्या, और सफिक्स) का समूह होना चाहिए। यदि इसे "
@@ -8173,7 +8173,7 @@ msgid "General/Window Position"
 msgstr "सामान्य/विंडो की स्थिति"
 
 msgid "Interface/Appearance"
-msgstr "इंटरफ़ेस/रूप-रंग"
+msgstr "यूज़र इंटरफ़ेस/रूप-रंग"
 
 msgid "Interface/Pixel Toolbar"
 msgstr "यूज़र इंटरफ़ेस/पिक्सेल टूलबार"
@@ -8182,7 +8182,7 @@ msgid "Interface/Thumbnails"
 msgstr "यूज़र इंटरफ़ेस/थंबनेल"
 
 msgid "Timeline/Edit"
-msgstr "टाइमलाइन/संपादन"
+msgstr "टाइम-लाइन/संपादन"
 
 msgid "Graphics/Rendering"
 msgstr "ग्राफ़िक्स/रेंडरिंग"
@@ -9103,6 +9103,9 @@ msgstr "मीडिया जानकारी फलक टॉगल कर�
 msgid "Toggle Color Area Info Panel"
 msgstr "रंग क्षेत्र जानकारी फलक टॉगल करें"
 
+msgid "Toggle Devices Panel"
+msgstr "औज़ार फलक टॉगल करें"
+
 msgid "Toggle Annotation Panel"
 msgstr "व्याख्या फलक टॉगल करें"
 
@@ -9168,6 +9171,9 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
+
+#~ msgid "Devices"
+#~ msgstr "डिवाइस"
 
 #~ msgid "User Interface"
 #~ msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
@@ -9423,8 +9429,8 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid ""
 #~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt."
-#~ "rate` seconds.\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
+#~ "rt.rate` seconds.\n"
 #~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 #~ msgstr ""
 #~ "\n"
@@ -9498,8 +9504,8 @@ msgstr "कार्य सूचना असफल"
 #~ msgstr "समयकोड में बदलें (USHH:MS; FSUSUD)"
 
 #~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:"
-#~ "`~RationalTime`."
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
+#~ "a :class:`~RationalTime`."
 #~ msgstr ""
 #~ "समयकोड स्ट्रिंग (``HH:MM:SS;FRAME``) को :class:`~RationalTime` में परिवर्तित करें।"
 
@@ -9580,8 +9586,9 @@ msgstr "कार्य सूचना असफल"
 #~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "'other' (:class:`~RationalTime`) को :attr:`start_time`/:attr:"
-#~ "`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+#~ "'other' (:class:`~RationalTime`) "
+#~ "को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार "
+#~ "क्लैंप करें।\n"
 
 #~ msgid ""
 #~ "\n"
@@ -9589,8 +9596,9 @@ msgstr "कार्य सूचना असफल"
 #~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "'other' (:class:`~TimeRange`) को :attr:`start_time`/:attr:"
-#~ "`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+#~ "'other' (:class:`~TimeRange`) "
+#~ "को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार "
+#~ "क्लैंप करें।\n"
 
 #~ msgid ""
 #~ "\n"
@@ -9835,8 +9843,8 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (exclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (exclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 9.\n"
@@ -9850,8 +9858,8 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (inclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (inclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 10.\n"

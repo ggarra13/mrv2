@@ -5085,6 +5085,23 @@ namespace mrv
         fl_open_uri(docs.c_str());
     }
 
+    void help_tutorials_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        switch(Fl::callback_reason())
+        {
+        case FL_REASON_GOT_FOCUS:
+            ui->uiStatusBar->message(_("Video Tutorials."));
+            return;
+        case FL_REASON_LOST_FOCUS:
+            ui->uiStatusBar->message("");
+            return;
+        default:
+            break;
+        }
+        const std::string& tutorials = "https://www.youtube.com/watch?v=8JViz-pPCrg&list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-";
+        fl_open_uri(tutorials.c_str());
+    }
+
     void toggle_annotation_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         switch(Fl::callback_reason())

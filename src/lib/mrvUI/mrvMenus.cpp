@@ -2302,6 +2302,9 @@ namespace mrv
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,
             ui, mode);
         menu->add(
+            _("Help/Video Tutorials"), 0, (Fl_Callback*)help_tutorials_cb,
+            ui, mode);
+        menu->add(
             _("Help/About"), kToggleAbout.hotkey(), (Fl_Callback*)about_cb,
             ui, mode);
 

@@ -305,6 +305,9 @@ namespace mrv
     //! Call the browser with documentation.
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui);
 
+    //! Call the browser with video tutorials.
+    void help_tutorials_cb(Fl_Menu_*, ViewerUI* ui);
+
     // Network toggles
     void toggle_sync_send_cb(Fl_Menu_* m, ViewerUI* ui);
     void toggle_sync_receive_cb(Fl_Menu_* m, ViewerUI* ui);
