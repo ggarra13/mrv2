@@ -29,54 +29,21 @@ namespace tl
         {
 #if defined(TLRENDER_AUDIO)
 
-#if RTAUDIO_VERSION_MAJOR >= 6
-            void checkRtError(const RtAudioErrorType e)
+            //! Returns ma_format_unknown for types the player does not ask
+            //! the device for; the caller falls back to F32.
+            ma_format toMiniaudio(audio::DataType value) noexcept
             {
-                if (e == RTAUDIO_NO_ERROR || e == RTAUDIO_WARNING) return;
-                switch(e)
-                {
-                case RTAUDIO_UNKNOWN_ERROR:
-                    throw std::runtime_error("Unspecified error type");
-                case RTAUDIO_NO_DEVICES_FOUND:
-                    throw std::runtime_error("No Devices Found");
-                case RTAUDIO_INVALID_DEVICE:
-                    throw std::runtime_error("An invalid device ID was specified.");
-                case RTAUDIO_DEVICE_DISCONNECT:
-                    throw std::runtime_error("A device in use was disconnected.");
-                case RTAUDIO_MEMORY_ERROR:
-                    throw std::runtime_error("An error occurred during memory allocation.");
-                case RTAUDIO_INVALID_PARAMETER:
-                    throw std::runtime_error("An invalid parameter was specified to a function.");
-                case RTAUDIO_INVALID_USE:
-                    throw std::runtime_error("The function was called incorrectly.");
-                case RTAUDIO_DRIVER_ERROR:
-                    throw std::runtime_error("A system driver error occurred.");
-                case RTAUDIO_SYSTEM_ERROR:
-                    throw std::runtime_error("A system error occurred.");
-                case RTAUDIO_THREAD_ERROR:
-                    throw std::runtime_error("A thread error occurred.");
-                default:
-                    throw std::runtime_error("Undefined error.");
-                }
-            }
-#endif
-
-            RtAudioFormat toRtAudio(audio::DataType value) noexcept
-            {
-                RtAudioFormat out = 0;
+                ma_format out = ma_format_unknown;
                 switch (value)
                 {
                 case audio::DataType::S16:
-                    out = RTAUDIO_SINT16;
+                    out = ma_format_s16;
                     break;
                 case audio::DataType::S32:
-                    out = RTAUDIO_SINT32;
+                    out = ma_format_s32;
                     break;
                 case audio::DataType::F32:
-                    out = RTAUDIO_FLOAT32;
-                    break;
-                case audio::DataType::F64:
-                    out = RTAUDIO_FLOAT64;
+                    out = ma_format_f32;
                     break;
                 default:
                     break;
@@ -182,25 +149,6 @@ namespace tl
             p.mutex.cacheOptions = p.cacheOptions->get();
             p.mutex.cacheInfo = p.cacheInfo->get();
             p.audioMutex.speed = p.speed->get();
-#if defined(TLRENDER_AUDIO)
-            try
-            {
-                auto audioSystem = context->getSystem<audio::System>();
-                auto api =
-                    static_cast<RtAudio::Api>(audioSystem->getCurrentAPI());
-                p.thread.rtAudio.reset(new RtAudio(api));
-            }
-            catch (const std::exception& e)
-            {
-                if (auto context = getContext().lock())
-                {
-                    std::stringstream ss;
-                    ss << "Cannot create RtAudio instance: " << e.what();
-                    context->log(
-                        "tl::timeline::Player", ss.str(), log::Type::Error);
-                }
-            }
-#endif
             p.log(context);
             p.thread.running = true;
             p.thread.thread = std::thread(
@@ -213,8 +161,9 @@ namespace tl
                     {
                         // Initialize audio.
                         auto audioSystem = context->getSystem<audio::System>();
-                        if (p.thread.rtAudio &&
-                            !audioSystem->getDevices().empty())
+                        auto maContext =
+                            audioSystem ? audioSystem->getContext() : nullptr;
+                        if (maContext && !audioSystem->getDevices().empty())
                         {
                             p.audioThread.info =
                                 audioSystem->getDefaultOutputInfo();
@@ -223,45 +172,59 @@ namespace tl
                                     audio::DataType::kNone &&
                                 p.audioThread.info.sampleRate > 0)
                             {
-                                try
+                                // miniaudio converts to the device's native
+                                // format for us, so fall back to float when
+                                // we have no direct equivalent (e.g. F64).
+                                ma_format format =
+                                    toMiniaudio(p.audioThread.info.dataType);
+                                if (ma_format_unknown == format)
                                 {
-                                    RtAudio::StreamParameters rtParameters;
-                                    auto audioSystem =
-                                        context->getSystem<audio::System>();
-                                    rtParameters.deviceId =
-                                        audioSystem->getOutputDevice();
-                                    rtParameters.nChannels =
-                                        p.audioThread.info.channelCount;
-                                    unsigned int rtBufferFrames =
-                                        p.playerOptions.audioBufferFrameCount;
-#if RTAUDIO_VERSION_MAJOR >= 6
-                                    RtAudioErrorType rterror =
-                                        p.thread.rtAudio->openStream(
-                                        &rtParameters, nullptr,
-                                        toRtAudio(p.audioThread.info.dataType),
-                                        p.audioThread.info.sampleRate,
-                                        &rtBufferFrames,
-                                        p.rtAudioCallback,
-                                        _p.get());
-                                    checkRtError(rterror);
-                                    rterror = p.thread.rtAudio->startStream();
-                                    checkRtError(rterror);
-#else
-                                    p.thread.rtAudio->openStream(
-                                        &rtParameters, nullptr,
-                                        toRtAudio(p.audioThread.info.dataType),
-                                        p.audioThread.info.sampleRate,
-                                        &rtBufferFrames, p.rtAudioCallback,
-                                        _p.get(), nullptr,
-                                        p.rtAudioErrorCallback);
-                                    p.thread.rtAudio->startStream();
-#endif
+                                    format = ma_format_f32;
+                                    p.audioThread.info.dataType =
+                                        audio::DataType::F32;
                                 }
-                                catch (const std::exception& e)
+
+                                ma_device_config config =
+                                    ma_device_config_init(
+                                        ma_device_type_playback);
+                                config.playback.pDeviceID =
+                                    static_cast<const ma_device_id*>(
+                                        audioSystem->getDeviceId(
+                                            audioSystem->getOutputDevice()));
+                                config.playback.format = format;
+                                config.playback.channels =
+                                    p.audioThread.info.channelCount;
+                                config.sampleRate =
+                                    p.audioThread.info.sampleRate;
+                                config.periodSizeInFrames =
+                                    p.playerOptions.audioBufferFrameCount;
+                                config.dataCallback = p.maDataCallback;
+                                config.notificationCallback =
+                                    p.maNotificationCallback;
+                                config.pUserData = _p.get();
+
+                                std::unique_ptr<ma_device> device(
+                                    new ma_device);
+                                ma_result r = ma_device_init(
+                                    maContext.get(), &config, device.get());
+                                if (MA_SUCCESS == r)
+                                {
+                                    // The device is initialized; from here on
+                                    // the deleter uninitializes it.
+                                    p.thread.maContext = maContext;
+                                    p.thread.maDevice.reset(device.release());
+                                    r = ma_device_start(
+                                        p.thread.maDevice.get());
+                                    if (MA_SUCCESS == r)
+                                    {
+                                        p.thread.audioStarted = true;
+                                    }
+                                }
+                                if (r != MA_SUCCESS)
                                 {
                                     std::stringstream ss;
                                     ss << "Cannot open audio stream: "
-                                       << e.what();
+                                       << ma_result_description(r);
                                     context->log(
                                         "tl::timeline::Player", ss.str(),
                                         log::Type::Error);
@@ -398,23 +361,11 @@ namespace tl
                 p.thread.thread.join();
             }
 #if defined(TLRENDER_AUDIO)
-            if (p.thread.rtAudio && p.thread.rtAudio->isStreamOpen())
-            {
-                try
-                {
-#if RTAUDIO_VERSION_MAJOR >= 6
-                    RtAudioErrorType rterror = p.thread.rtAudio->abortStream();
-                    checkRtError(rterror);
-#else
-                    p.thread.rtAudio->abortStream();
-#endif
-                    p.thread.rtAudio->closeStream();
-                }
-                catch (const std::exception&)
-                {
-                    //! \todo How should this be handled?
-                }
-            }
+            // Uninitializing the device stops it and waits for the data
+            // callback to finish. Do this before releasing the context.
+            p.thread.audioStarted = false;
+            p.thread.maDevice.reset();
+            p.thread.maContext.reset();
 #endif // TLRENDER_AUDIO
         }
 
@@ -1157,11 +1108,12 @@ namespace tl
                 }
                 double seconds = 0.0;
 #if defined(TLRENDER_AUDIO)
-                if (p.thread.rtAudio && p.thread.rtAudio->isStreamRunning() &&
+                if (p.thread.audioStarted &&
                     TimerMode::Audio == p.playerOptions.timerMode &&
                     math::fuzzyCompare(timelineSpeed, speed))
                 {
-                    seconds = p.thread.rtAudio->getStreamTime();
+                    seconds = static_cast<double>(p.thread.streamFrames.load()) /
+                              p.audioThread.info.sampleRate;
                 }
                 else
 #endif // TLRENDER_AUDIO

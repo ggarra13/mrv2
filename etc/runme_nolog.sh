@@ -187,6 +187,10 @@ if [ -z "$TLRENDER_AOM" ]; then
     fi
 fi
 
+if [ -z "$TLRENDER_AUDIO" ]; then
+    export TLRENDER_AUDIO=ON
+fi
+
 if [ -z "$TLRENDER_AV1" ]; then
     export TLRENDER_AV1=ON
 fi
@@ -536,6 +540,7 @@ echo "tlRender Options"
 echo
 
 echo "FFmpeg support ..................... ${TLRENDER_FFMPEG} 	(TLRENDER_FFMPEG)"
+echo "Audio support ...................... ${TLRENDER_AUDIO} 	(TLRENDER_AUDIO)"
 if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo "FFmpeg License ..................... ${FFMPEG_GPL} 	(Use -gpl flag)"
     echo "    FFmpeg minimal.................. ${TLRENDER_FFMPEG_MINIMAL}         (TLRENDER_FFMPEG_MINIMAL)"
@@ -630,6 +635,7 @@ cmd="cmake -G 'Ninja'
            -D TLRENDER_AOM=${TLRENDER_AOM}
            -D TLRENDER_API=${TLRENDER_API}
            -D TLRENDER_ASAN=${TLRENDER_ASAN}
+	   -D TLRENDER_AUDIO=${TLRENDER_AUDIO}
            -D TLRENDER_AV1=${TLRENDER_AV1}
 	   -D TLRENDER_CURL=${TLRENDER_CURL}
            -D TLRENDER_EXR=${TLRENDER_EXR}

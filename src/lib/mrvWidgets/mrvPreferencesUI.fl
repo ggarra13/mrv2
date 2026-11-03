@@ -20,7 +20,7 @@ decl {\#include <FL/Fl_Scheme_Choice.H>} {public global
 decl {\#ifdef TLRENDER_AUDIO} {private local
 }
 
-decl {\#include <rtaudio/RtAudio.h>} {private local
+decl {\#include <miniaudio/miniaudio.h>} {private local
 }
 
 decl {\#endif} {private local
@@ -1870,7 +1870,7 @@ o->redraw();}
                   code3 {o->value( "_v" );}
                 }
                 Fl_Spinner MaxImagesApart {
-                  label {Maximum Images Apart}
+                  label {Maximum Images Apart} selected
                   tooltip {When searching for a version, this value is the maximum version apart from each other when searching the first or last version.} xywh {496 285 60 25} box DOWN_BOX color 20 selection_color 15 minimum 10 maximum 50 value 10 textcolor 56
                 }
               }
@@ -1924,7 +1924,7 @@ o->redraw();}
               }
             }
             Fl_Group {} {
-              label Audio
+              label Audio open
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -1934,7 +1934,7 @@ o->redraw();}
                 Fl_Choice AudioAPI {
                   label API
                   user_data this user_data_type {PreferencesUI*}
-                  callback {fill_audio_output_devices(v);} open
+                  callback {fill_audio_output_devices(v);}
                   tooltip {Audio API to use for platforms that support multiple APIs (Linux only)} xywh {430 75 356 25} down_box BORDER_BOX align 132 when 5 textcolor 32
                   code3 {fill_audio_apis(o);
 o->value(0);}
@@ -2125,7 +2125,7 @@ uiPrefs->VoiceOverPath->value( r.c_str() );}
               }
             }
             Fl_Group {} {
-              label WebRTC
+              label WebRTC open
               tooltip {WebRTC settings} xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -2294,7 +2294,7 @@ mrv::Preferences::load(false, false);}
               label OK
               user_data m user_data_type {ViewerUI*}
               callback {v->uiPrefs->uiMain->hide();
-mrv::Preferences::run();} selected
+mrv::Preferences::run();}
               tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {652 411 132 31}
             }
           }
@@ -2366,48 +2366,78 @@ o->add( _("Network/WebRTC") );
 o->add( _("Network/ComfyUI") );
 o->select( item );} {}
   }
-  Function {fill_audio_apis(Fl_Choice* o)} {} {
+  Function {fill_audio_apis(Fl_Choice* o)} {open
+  } {
     code {o->clear();
 
 \#ifdef TLRENDER_AUDIO
 
-    std::vector<RtAudio::Api> apis;
-    RtAudio::getCompiledApi(apis);
-    
-    if (apis.empty())
-    {    
-         o->add(_("No Audio was Compiled"));
-         return;
+    // Find the compiled-in miniaudio backends. The "null" backend is a
+    // do-nothing fallback that always reports a device, so skip it.
+    std::array<ma_backend, MA_BACKEND_COUNT> backends;
+    size_t backendCount = 0;
+    if (ma_get_enabled_backends(
+            backends.data(), backends.size(), &backendCount) != MA_SUCCESS)
+    {
+        backendCount = 0;
     }
-   
-   
-    std::vector<RtAudio::Api> validApis;
+
+    std::vector<ma_backend> apis;
+    for (size_t i = 0; i < backendCount; ++i)
+    {
+        if (backends[i] != ma_backend_null)
+            apis.push_back(backends[i]);
+    }
+
+    if (apis.empty())
+    {
+        o->add(_("No Audio was Compiled"));
+        return;
+    }
+
+    // Keep only the backends that can be initialized and have devices.
+    std::vector<ma_backend> validApis;
     for (auto api : apis)
     {
-    	RtAudio audio(api);
-    	if (audio.getDeviceCount() > 0)
-    	    validApis.push_back(api);	
-    }    
-    
-    if (validApis.empty())
-    {    
-         o->add(_("No Audio Devices were Found"));
-         return;
+        // We ignore ma_backend_jack as that would create errors on Linux
+\#ifdef __linux__
+    	if (api == ma_backend_jack)
+    	  continue;
+\#endif
+        ma_context context;
+        if (ma_context_init(&api, 1, nullptr, &context) != MA_SUCCESS)
+            continue;
+
+        ma_device_info* playbackInfos = nullptr;
+        ma_uint32 playbackCount = 0;
+        ma_device_info* captureInfos = nullptr;
+        ma_uint32 captureCount = 0;
+        if (ma_context_get_devices(
+                &context, &playbackInfos, &playbackCount, &captureInfos,
+                &captureCount) == MA_SUCCESS &&
+            (playbackCount + captureCount) > 0)
+        {
+            validApis.push_back(api);
+        }
+        ma_context_uninit(&context);
     }
-   
-    auto name = RtAudio::getApiName(validApis[0]);
-    
+
+    if (validApis.empty())
+    {
+        o->add(_("No Audio Devices were Found"));
+        return;
+    }
+
     std::string apiDefault = _("Default API");
     apiDefault += " (";
-    apiDefault += name;
+    apiDefault += ma_get_backend_name(validApis[0]);
     apiDefault += ")";
-    
+
     o->add(apiDefault.c_str());
 
-    for (auto& api : validApis)
+    for (auto api : validApis)
     {
-        auto name = RtAudio::getApiName(api);
-        o->add(name.c_str());
+        o->add(ma_get_backend_name(api));
     }
 
 \#else
@@ -2443,25 +2473,66 @@ if (item && item->label())
     apiName = item->label();
 }
 
-   
-RtAudio::Api api = RtAudio::getCompiledApiByName(apiName);
-
-RtAudio audio(api);
-
-RtAudio::Api realApi = audio.getCurrentApi();
-
-const auto numDevices = audio.getDeviceCount();
-if (numDevices <= 0)
+// Find the backend by name. The first menu entry is "Default API (...)",
+// which matches nothing and so leaves miniaudio to pick its own default.
+std::array<ma_backend, MA_BACKEND_COUNT> backends;
+size_t backendCount = 0;
+if (ma_get_enabled_backends(
+        backends.data(), backends.size(), &backendCount) != MA_SUCCESS)
 {
-    o->add(_("No Valid Devices found" ));
+    backendCount = 0;
+}
+
+ma_backend backend = ma_backend_null;
+const ma_backend* pBackend = nullptr;
+ma_uint32 pBackendCount = 0;
+for (size_t i = 0; i < backendCount; ++i)
+{
+    if (apiName == ma_get_backend_name(backends[i]))
+    {
+        backend = backends[i];
+        pBackend = &backend;
+        pBackendCount = 1;
+        break;
+    }
+}
+
+ma_context context;
+if (ma_context_init(pBackend, pBackendCount, nullptr, &context) != MA_SUCCESS)
+{
+    o->add(_("No Valid Devices found"));
     o->value(0);
     return;
 }
 
+// Only playback (output) devices are of interest here.
+ma_device_info* playbackInfos = nullptr;
+ma_uint32 numDevices = 0;
+ma_device_info* captureInfos = nullptr;
+ma_uint32 captureCount = 0;
+if (ma_context_get_devices(
+        &context, &playbackInfos, &numDevices, &captureInfos,
+        &captureCount) != MA_SUCCESS ||
+    numDevices == 0)
+{
+    ma_context_uninit(&context);
+    o->add(_("No Valid Devices found"));
+    o->value(0);
+    return;
+}
 
-const auto deviceDefault = audio.getDefaultOutputDevice();
-const auto& info = audio.getDeviceInfo(deviceDefault);
-const auto& deviceName = mrv::string::commentSlash(info.name);
+// Find the default device, falling back to the first one.
+ma_uint32 deviceDefault = 0;
+for (ma_uint32 i = 0; i < numDevices; ++i)
+{
+    if (playbackInfos[i].isDefault)
+    {
+        deviceDefault = i;
+        break;
+    }
+}
+const auto deviceName =
+    mrv::string::commentSlash(playbackInfos[deviceDefault].name);
 
 oldDevice = 0;
 
@@ -2470,31 +2541,26 @@ name += " (";
 name += deviceName;
 name += ")";
 o->add(name.c_str());
-for (size_t i = 0; i < numDevices - 1; ++i)
+
+int menuIndex = 1; // index 0 is the "Default Device" entry.
+for (ma_uint32 i = 0; i < numDevices; ++i)
 {
-   const auto& deviceInfo = audio.getDeviceInfo(i);
-\#ifndef RTAUDIO_VERSION_MAJOR
-   if (!deviceInfo.probed) continue;
-\#endif
-   
-   unsigned numOutput = deviceInfo.outputChannels;
-   unsigned numDuplex = deviceInfo.duplexChannels;
-   if (numOutput == 0 && numDuplex == 0)
-      continue;  // a microphone or similar
-      
-   name = mrv::string::commentSlash(deviceInfo.name);
-   o->add(name.c_str());
-   if (name == oldDeviceName)
-   {
-      oldDevice = i + 1;
-   }
+    name = mrv::string::commentSlash(playbackInfos[i].name);
+    o->add(name.c_str());
+    if (name == oldDeviceName)
+    {
+        oldDevice = menuIndex;
+    }
+    ++menuIndex;
 }
+
+ma_context_uninit(&context);
 
 o->value(oldDevice);
 
 \#else
 
-o->add(_("No Valid Devices found" ));
+o->add(_("No Valid Devices found"));
 o->value(0);
 
 \#endif} {}
@@ -2503,7 +2569,6 @@ o->value(0);
   } {
     code {auto v = self->AudioAPI;
 auto o = self->VoiceOverMicrophone;
-
 int oldDevice = o->value();
 std::string oldDeviceName;
 
@@ -2515,7 +2580,6 @@ if (oldDevice >= 0)
         oldDeviceName = item->label();
     }
 }
-
 
 o->clear();
 
@@ -2530,25 +2594,66 @@ if (item && item->label())
     apiName = item->label();
 }
 
-   
-RtAudio::Api api = RtAudio::getCompiledApiByName(apiName);
-
-RtAudio audio(api);
-
-RtAudio::Api realApi = audio.getCurrentApi();
-
-const auto numDevices = audio.getDeviceCount();
-if (numDevices <= 0)
+// Find the backend by name. The first menu entry is "Default API (...)",
+// which matches nothing and so leaves miniaudio to pick its own default.
+std::array<ma_backend, MA_BACKEND_COUNT> backends;
+size_t backendCount = 0;
+if (ma_get_enabled_backends(
+        backends.data(), backends.size(), &backendCount) != MA_SUCCESS)
 {
-    o->add(_("No Valid Devices found" ));
+    backendCount = 0;
+}
+
+ma_backend backend = ma_backend_null;
+const ma_backend* pBackend = nullptr;
+ma_uint32 pBackendCount = 0;
+for (size_t i = 0; i < backendCount; ++i)
+{
+    if (apiName == ma_get_backend_name(backends[i]))
+    {
+        backend = backends[i];
+        pBackend = &backend;
+        pBackendCount = 1;
+        break;
+    }
+}
+
+ma_context context;
+if (ma_context_init(pBackend, pBackendCount, nullptr, &context) != MA_SUCCESS)
+{
+    o->add(_("No Valid Devices found"));
     o->value(0);
     return;
 }
 
+// Only capture (input) devices are of interest here.
+ma_device_info* playbackInfos = nullptr;
+ma_uint32 playbackCount = 0;
+ma_device_info* captureInfos = nullptr;
+ma_uint32 numDevices = 0;
+if (ma_context_get_devices(
+        &context, &playbackInfos, &playbackCount, &captureInfos,
+        &numDevices) != MA_SUCCESS ||
+    numDevices == 0)
+{
+    ma_context_uninit(&context);
+    o->add(_("No Valid Devices found"));
+    o->value(0);
+    return;
+}
 
-const auto deviceDefault = audio.getDefaultInputDevice();
-const auto& info = audio.getDeviceInfo(deviceDefault);
-const auto& deviceName = mrv::string::commentSlash(info.name);
+// Find the default device, falling back to the first one.
+ma_uint32 deviceDefault = 0;
+for (ma_uint32 i = 0; i < numDevices; ++i)
+{
+    if (captureInfos[i].isDefault)
+    {
+        deviceDefault = i;
+        break;
+    }
+}
+const auto deviceName =
+    mrv::string::commentSlash(captureInfos[deviceDefault].name);
 
 oldDevice = 0;
 
@@ -2557,31 +2662,26 @@ name += " (";
 name += deviceName;
 name += ")";
 o->add(name.c_str());
-for (size_t i = 0; i < numDevices - 1; ++i)
+
+int menuIndex = 1; // index 0 is the "Default Device" entry.
+for (ma_uint32 i = 0; i < numDevices; ++i)
 {
-   const auto& deviceInfo = audio.getDeviceInfo(i);
-\#ifndef RTAUDIO_VERSION_MAJOR
-   if (!deviceInfo.probed) continue;
-\#endif
-   
-   unsigned numInput = deviceInfo.inputChannels;
-   unsigned numDuplex = deviceInfo.duplexChannels;
-   if (numInput == 0 && numDuplex == 0)
-      continue;  // a microphone or similar
-      
-   name = mrv::string::commentSlash(deviceInfo.name);
-   o->add(name.c_str());
-   if (name == oldDeviceName)
-   {
-      oldDevice = i + 1;
-   }
+    name = mrv::string::commentSlash(captureInfos[i].name);
+    o->add(name.c_str());
+    if (name == oldDeviceName)
+    {
+        oldDevice = menuIndex;
+    }
+    ++menuIndex;
 }
+
+ma_context_uninit(&context);
 
 o->value(oldDevice);
 
 \#else
 
-o->add(_("No Valid Devices found" ));
+o->add(_("No Valid Devices found"));
 o->value(0);
 
 \#endif} {}
