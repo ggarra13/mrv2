@@ -14,15 +14,6 @@
 #include <mutex>
 #include <thread>
 
-#if defined(__APPLE__)
-typedef int64_t LONGLONG;
-#elif defined(__linux__)
-typedef bool BOOL;
-typedef int64_t LONGLONG;
-#elif defined(_WIN32)
-#    include <objbase.h>
-#endif // __APPLE__
-
 namespace tl
 {
     namespace device
@@ -54,10 +45,6 @@ namespace tl
                 {
                     TLRENDER_P();
 
-#if defined(_WIN32)
-                    CoInitialize(NULL);
-#endif // _WIN32
-
                     bool log = true;
                     while (p.running)
                     {
@@ -65,109 +52,6 @@ namespace tl
 
                         std::vector<DeviceInfo> deviceInfoList;
 
-#if 0
-                        IDeckLinkIterator* dlIterator = nullptr;
-                        if (GetDeckLinkIterator(&dlIterator) == S_OK)
-                        {
-                            IDeckLink* dl = nullptr;
-                            while (dlIterator->Next(&dl) == S_OK)
-                            {
-                                DeviceInfo deviceInfo;
-
-#    if defined(__APPLE__)
-                                CFStringRef dlstring;
-                                dl->GetModelName(&dlstring);
-                                StringToStdString(dlstring, deviceInfo.name);
-                                CFRelease(dlstring);
-#    else  // __APPLE__
-                                dlstring_t dlstring;
-                                dl->GetModelName(&dlstring);
-                                deviceInfo.name = DlToStdString(dlstring);
-                                DeleteString(dlstring);
-#    endif // __APPLE__
-
-                                IDeckLinkOutput* dlOutput = nullptr;
-                                if (dl->QueryInterface(IID_IDeckLinkOutput, (void**)&dlOutput) == S_OK)
-                                {
-                                    IDeckLinkDisplayModeIterator* dlDisplayModeIterator = nullptr;
-                                    if (dlOutput->GetDisplayModeIterator(&dlDisplayModeIterator) == S_OK)
-                                    {
-                                        IDeckLinkDisplayMode* dlDisplayMode = nullptr;
-                                        while (dlDisplayModeIterator->Next(&dlDisplayMode) == S_OK)
-                                        {
-                                            DisplayMode displayMode;
-                                            dlDisplayMode->GetName(&dlstring);
-#    if defined(__APPLE__)
-                                            StringToStdString(dlstring, displayMode.name);
-                                            CFRelease(dlstring);
-#    else  // __APPLE__
-                                            displayMode.name = DlToStdString(dlstring);
-                                            DeleteString(dlstring);
-#    endif // __APPLE__
-                                            displayMode.size.w = dlDisplayMode->GetWidth();
-                                            displayMode.size.h = dlDisplayMode->GetHeight();
-                                            BMDTimeValue frameDuration;
-                                            BMDTimeScale frameTimescale;
-                                            dlDisplayMode->GetFrameRate(&frameDuration, &frameTimescale);
-                                            displayMode.frameRate = OTIO_NS::RationalTime(frameDuration, frameTimescale);
-
-                                            dlDisplayMode->Release();
-
-                                            deviceInfo.displayModes.push_back(displayMode);
-                                        }
-                                    }
-                                    if (dlDisplayModeIterator)
-                                    {
-                                        dlDisplayModeIterator->Release();
-                                    }
-                                }
-                                if (dlOutput)
-                                {
-                                    dlOutput->Release();
-                                }
-
-                                IDeckLinkProfileAttributes* dlProfileAttributes = nullptr;
-                                if (dl->QueryInterface(IID_IDeckLinkProfileAttributes, (void**)&dlProfileAttributes) == S_OK)
-                                {
-                                    LONGLONG minVideoPreroll = 0;
-                                    if (dlProfileAttributes->GetInt(BMDDeckLinkMinimumPrerollFrames, &minVideoPreroll) == S_OK)
-                                    {
-                                        deviceInfo.minVideoPreroll = minVideoPreroll;
-                                    }
-                                    BOOL hdrMetaData = false;
-                                    if (dlProfileAttributes->GetFlag(BMDDeckLinkSupportsHDRMetadata, &hdrMetaData) == S_OK)
-                                    {
-                                        deviceInfo.hdrMetaData = hdrMetaData;
-                                    }
-                                    LONGLONG maxAudioChannels = 0;
-                                    if (dlProfileAttributes->GetInt(BMDDeckLinkMaximumAudioChannels, &maxAudioChannels) == S_OK)
-                                    {
-                                        deviceInfo.maxAudioChannels = maxAudioChannels;
-                                    }
-                                }
-                                dlProfileAttributes->Release();
-
-                                dl->Release();
-
-
-                                deviceInfo.pixelTypes.push_back(PixelType::_8BitBGRA);
-                                deviceInfo.pixelTypes.push_back(PixelType::_8BitYUV);
-                                deviceInfo.pixelTypes.push_back(PixelType::_10BitRGB);
-                                deviceInfo.pixelTypes.push_back(PixelType::_10BitRGBX);
-                                deviceInfo.pixelTypes.push_back(PixelType::_10BitRGBXLE);
-                                //deviceInfo.pixelTypes.push_back(PixelType::_10BitYUV);
-                                deviceInfo.pixelTypes.push_back(PixelType::_12BitRGB);
-                                deviceInfo.pixelTypes.push_back(PixelType::_12BitRGBLE);
-
-                                deviceInfoList.push_back(deviceInfo);
-                            }
-                        }
-                        if (dlIterator)
-                        {
-                            dlIterator->Release();
-                        }
-
-#endif
                         {
                             std::unique_lock<std::mutex> lock(p.mutex.mutex);
                             log = deviceInfoList != p.mutex.deviceInfo;
