@@ -58,44 +58,9 @@ namespace tl
                             p.mutex.deviceInfo = deviceInfoList;
                         }
 
-                        if (log)
-                        {
-                            log = false;
-                            if (auto context = _context.lock())
-                            {
-                                for (const auto& i : deviceInfoList)
-                                {
-                                    std::vector<std::string> displayModes;
-                                    for (const auto& j : i.displayModes)
-                                    {
-                                        displayModes.push_back(j.name);
-                                    }
-                                    context->log(
-                                        "tl::device::System",
-                                        string::Format(
-                                            "\n"
-                                            "    {0}\n"
-                                            "        Display modes: {1}\n"
-                                            "        Min video preroll: {2}\n"
-                                            "        HDR metadata: {3}\n"
-                                            "        Max audio channels: {4}")
-                                            .arg(i.name)
-                                            .arg(string::join(
-                                                displayModes, ", "))
-                                            .arg(i.minVideoPreroll)
-                                            .arg(i.hdrMetaData)
-                                            .arg(i.maxAudioChannels));
-                                }
-                            }
-                        }
-
                         const auto t1 = std::chrono::steady_clock::now();
                         time::sleep(getTickTime(), t0, t1);
                     }
-
-#if defined(_WIN32)
-                    CoUninitialize();
-#endif // _WIN32
                 });
         }
 
