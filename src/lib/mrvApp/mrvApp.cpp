@@ -58,15 +58,8 @@ namespace py = pybind11;
 #  include "mrvOS/mrvSignalHandler.h"
 #endif
 
-#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
-#    include <tlDevice/DevicesModel.h>
-#endif
-
-#ifdef TLRENDER_BMD
-#    include <tlDevice/BMD/BMDOutputDevice.h>
-#endif
-
 #ifdef TLRENDER_NDI
+#    include <tlDevice/DevicesModel.h>
 #    include <tlDevice/NDI/NDIOutputDevice.h>
 #endif
 
@@ -853,25 +846,6 @@ namespace mrv
         }
 #endif // TLRENDER_USD
 
-#if defined(TLRENDER_BMD)
-        device::DevicesModelData bmdDevicesModelData;
-        p.settings->setDefaultValue(
-            "BMD/DeviceIndex", bmdDevicesModelData.deviceIndex);
-        p.settings->setDefaultValue(
-            "BMD/DisplayModeIndex", bmdDevicesModelData.displayModeIndex);
-        p.settings->setDefaultValue(
-            "BMD/PixelTypeIndex", bmdDevicesModelData.pixelTypeIndex);
-        p.settings->setDefaultValue(
-            "BMD/DeviceEnabled", bmdDevicesModelData.deviceEnabled);
-        const auto i = bmdDevicesModelData.boolOptions.find(
-            device::Option::_444SDIVideoOutput);
-        p.settings->setDefaultValue(
-            "BMD/444SDIVideoOutput",
-            i != bmdDevicesModelData.boolOptions.end() ? i->second : false);
-        p.settings->setDefaultValue("BMD/HDRMode", bmdDevicesModelData.hdrMode);
-        p.settings->setDefaultValue("BMD/HDRData", bmdDevicesModelData.hdrData);
-#endif // TLRENDER_BMD
-
 #if defined(TLRENDER_NDI)
 
         device::DevicesModelData devicesModelData;
@@ -933,72 +907,6 @@ namespace mrv
                         player->setCompareTime(value);
                     }
                 });
-
-#if defined(TLRENDER_BMD)
-        p.devicesObserver =
-            observer::ValueObserver<device::DevicesModelData>::create(
-                p.devicesModel->observeData(),
-                [this](const device::DevicesModelData& value)
-                {
-                    TLRENDER_P();
-
-                    device::DeviceConfig config;
-                    config.deviceIndex = value.deviceIndex - 1;
-                    config.displayModeIndex = value.displayModeIndex - 1;
-                    config.pixelType =
-                        value.pixelTypeIndex >= 0 &&
-                                value.pixelTypeIndex < value.pixelTypes.size()
-                            ? value.pixelTypes[value.pixelTypeIndex]
-                            : device::PixelType::kNone;
-                    config.boolOptions = value.boolOptions;
-                    p.outputDevice->setConfig(config);
-                    p.outputDevice->setEnabled(value.deviceEnabled);
-                    p.putputVideoLevels = value.videoLevels;
-                    timeline::DisplayOptions displayOptions =
-                        p.viewportModel->getDisplayOptions();
-                    displayOptions.videoLevels = p.bmdOutputVideoLevels;
-                    p.outputDevice->setDisplayOptions({displayOptions});
-                    p.outputDevice->setHDR(value.hdrMode, value.hdrData);
-
-                    p.settings->setValue("BMD/DeviceIndex", value.deviceIndex);
-                    p.settings->setValue(
-                        "BMD/DisplayModeIndex", value.displayModeIndex);
-                    p.settings->setValue(
-                        "BMD/PixelTypeIndex", value.pixelTypeIndex);
-                    p.settings->setValue(
-                        "BMD/DeviceEnabled", value.deviceEnabled);
-                    const auto i = value.boolOptions.find(
-                        device::Option::_444SDIVideoOutput);
-                    p.settings->setValue(
-                        "BMD/444SDIVideoOutput",
-                        i != value.boolOptions.end() ? i->second : false);
-                    // p.settings->setValue("NDI/HDRMode", value.hdrMode);
-                    // p.settings->setValue("NDI/HDRData", value.hdrData);
-                });
-
-        p.bmdActiveObserver = observer::ValueObserver<bool>::create(
-            p.bmdOutputDevice->observeActive(),
-            [this](bool value)
-            {
-                _p->bmdDeviceActive = value;
-                _audioUpdate();
-            });
-        p.bmdSizeObserver = observer::ValueObserver<math::Size2i>::create(
-            p.bmdOutputDevice->observeSize(),
-            [this](const math::Size2i& value)
-            {
-                // std::cout << "output device size: " << value << std::endl;
-            });
-        p.bmdFrameRateObserver =
-            observer::ValueObserver<OTIO_NS::RationalTime>::create(
-                p.bmdOutputDevice->observeFrameRate(),
-                [this](const OTIO_NS::RationalTime& value)
-                {
-                    // std::cout << "output device frame rate: " << value <<
-                    // std::endl;
-                });
-
-#endif // TLRENDER_BMD
 
         p.logObserver = observer::ListObserver<log::Item>::create(
             ui->app->getContext()->getLogSystem()->observeLog(),
@@ -1289,6 +1197,7 @@ namespace mrv
                 ui->uiView->destroy();
                 ui->uiTimeline->destroy();
 #endif
+                exit_cb(nullptr, ui);
 
                 delete ui;
                 ui = nullptr;
@@ -1321,10 +1230,6 @@ namespace mrv
 
 #ifdef TLRENDER_NDI
         endNDIOutputStream();
-#endif
-
-#ifdef TLRENDER_BMD
-        endBMDOutputStream();
 #endif
 
         delete p.mainControl;
@@ -1760,7 +1665,7 @@ namespace mrv
         return _p->outputDevice;
     }
 
-#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+#ifdef TLRENDER_NDI
     void App::_timer_update_cb(App* self)
     {
         self->timerUpdate();
@@ -1806,9 +1711,7 @@ namespace mrv
 
         Fl::remove_timeout((Fl_Timeout_Handler)_timer_update_cb, this);
     }
-#endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
 
-#if defined(TLRENDER_NDI)
     void App::beginNDIOutputStream()
     {
         TLRENDER_P();
@@ -1861,50 +1764,6 @@ namespace mrv
     }
 #endif
 
-#ifdef TLRENDER_BMD
-    void App::beginBMDOutputStream()
-    {
-        TLRENDER_P();
-        p.outputDevice = bmd::OutputDevice::create(_context);
-        p.devicesModel = device::DevicesModel::create(_context);
-        p.devicesModel->setDeviceIndex(
-            p.settings->getValue<int>("BMD/DeviceIndex"));
-        p.devicesModel->setDisplayModeIndex(
-            p.settings->getValue<int>("BMD/DisplayModeIndex"));
-        p.devicesModel->setPixelTypeIndex(
-            p.settings->getValue<int>("BMD/PixelTypeIndex"));
-        p.devicesModel->setDeviceEnabled(
-            p.settings->getValue<bool>("BMD/DeviceEnabled"));
-        device::BoolOptions deviceBoolOptions;
-        deviceBoolOptions[bmd::Option::_444SDIVideoOutput] =
-            p.settings->getValue<bool>("BMD/444SDIVideoOutput");
-        p.devicesModel->setBoolOptions(deviceBoolOptions);
-        p.devicesModel->setHDRMode(static_cast<device::HDRMode>(
-            p.settings->getValue<int>("BMD/HDRMode")));
-        std::string s = p.settings->getValue<std::string>("BMD/HDRData");
-        if (!s.empty())
-        {
-            auto json = nlohmann::json::parse(s);
-            image::HDRData hdrData;
-            try
-            {
-                from_json(json, hdrData);
-            }
-            catch (const std::exception&)
-            {
-            }
-            p.devicesModel->setHDRData(hdrData);
-        }
-        _startOutputDeviceTimer();
-    }
-
-    void App::endBMDOutputStream()
-    {
-        _stopOutputDeviceTimer();
-        _p->outputDevice.reset();
-        _p->devicesModel.reset();
-    }
-#endif
 
     void
     App::open(const std::vector<std::string >& fileNames,
@@ -2474,10 +2333,10 @@ namespace mrv
 
         p.activeFiles = activeFiles;
         p.player = player;
-#if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
+#if defined(TLRENDER_NDI)
         if (p.outputDevice)
             p.outputDevice->setPlayer(p.player ? p.player->player() : nullptr);
-#endif // TLRENDER_BMD
+#endif // TLRENDER_NDI
 
 
 
@@ -2711,7 +2570,7 @@ namespace mrv
             p.player->setMute(p.mute);
         }
 
-#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+#if defined(TLRENDER_NDI)
         if (p.outputDevice)
         {
             p.outputDevice->setVolume(p.volume);

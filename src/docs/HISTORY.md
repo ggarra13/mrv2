@@ -4,8 +4,21 @@ v1.8.6
 ChangeLog
 ---------
 
-- Core: Ported to miniaudio so that porting to Emscripten will be possible.
-- Core: Improved HDR detection on macOS
+- Core: Ported to miniaudio as RtAudio seems like a dead project.  This shoudl allow porting to Emscripten and have better aarch64 support.
+- Core: Improved HDR detection on macOS on both laptops and external HDR monitors.
+- Core: Cleaned up useless BMD code.
+
+Fixes
+-----
+
+- Fixed hang on exit when running a python script on the Vulkan backend.
+
+Libraries
+---------
+
+- miniaudio 0.11.26
+- OpenSSL 3.5.0
+- FLTK Vulkan v2.4.8
 
 
 v1.8.5
