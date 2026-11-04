@@ -110,7 +110,7 @@ namespace mrv
                 return;
             }
             p.monitor = p.pendingMonitor;
-            
+
             m_swapchain_needs_recreation = true;
             init_colorspace();
             redraw();
@@ -120,32 +120,32 @@ namespace mrv
         Fl_Vk_Display_Caps Viewport::display_caps()
         {
             TLRENDER_P();
- 
+
             if (p.monitor_first_run)
             {
                 p.screen_index = this->screen_num();
                 p.monitor = getHDRCapabilities(p.screen_index);
                 p.monitor_first_run = false;
             }
-            
+
             Fl_Vk_Display_Caps caps;
             caps.wide_gamut = true;               // OS color-manages P3/sRGB
 #ifdef __APPLE__
             caps.hdr = p.monitor.hdr_supported;   // EDR headroom > 1
 #else
-            caps.hdr = p.monitor.hdr_enabled;             // OS HDR switched on
+            caps.hdr = p.monitor.hdr_enabled;     // OS HDR switched on
 #endif
             return caps;
         }
-        
+
         void Viewport::_afterColorspaceSelected()
         {
             TLRENDER_P();
- 
+
             if (!headless())
             {
                 const bool hdrSpace = fl_vk_is_hdr_color_space(colorSpace());
- 
+
                 if (p.monitor.hdr_enabled && !hdrSpace)
                 {
 #ifdef _WIN32
@@ -180,7 +180,7 @@ namespace mrv
                   arg(string_VkFormat(format()));
             LOG_STATUS(msg);
         }
-        
+
         Viewport::Viewport(int X, int Y, int W, int H, const char* L) :
             TimelineViewport(X, Y, W, H, L),
             _vk(new VKPrivate)
