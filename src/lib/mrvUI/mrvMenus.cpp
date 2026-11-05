@@ -1909,8 +1909,7 @@ namespace mrv
             {
                 for (int m = 0; m < num_screens; ++m)
                 {
-                    const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
-                    std::string monitorName = mrv::desktop::monitorName(m);
+                    const timeline::OCIOOptions o = uiView->getOCIOOptions(m);
                     /* xgettext:c-format */
                     snprintf(
                         buf, 1024, _("OCIO/  Monitor #%d Display: %s"), m,

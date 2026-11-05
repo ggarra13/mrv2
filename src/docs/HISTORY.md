@@ -6,7 +6,7 @@ ChangeLog
 
 - UI: Added **Help->Video Tutorials** which opens your browser with a YouTube video playlist.
 
-- Core/MacOS; HDR support on the Vulkan backend with an external monitor has been added and tested.  With a USB-C connection the HDR max. nits is limited to 616 compared to 1100 on my HDMI-1 connection.
+- Core/MacOS: HDR support on the Vulkan backend with an external monitor has been added and tested.  With a USB-C connection the HDR max. nits is limited to 616 compared to 1100 on my HDMI-1 connection.
 - Core/MacOS: Added a tiny launcher program for mrv2 and vmrv2 so that it complies to MacOS Mach-O standards in Applications .app bundles.
 - Core: Improved headless mode in Vulkan backend using a float surface for good baking of HDR (ie. when running a python script for baking OCIO or images to a movie file). 
 - Core: Ported to miniaudio as RtAudio seems like a dead project.  This should allow porting to Emscripten and have better aarch64 support.
@@ -17,6 +17,7 @@ ChangeLog
 Fixes
 -----
 
+- Fixed a menus not displaying properly the OpenColorIO settings on multiple monitors, when the Top Bar OCIO selector was used.
 - Fixed hang on exit when running a python script on the Vulkan backend.
 - Fixed crash when Log Panel was not visible and it was opened by an error in
   a callback, like an error on Open->URL Movie.
@@ -26,7 +27,7 @@ Libraries
 
 - miniaudio 0.11.26
 - OpenSSL 3.5.0
-- FLTK Vulkan v2.4.8
+- FLTK Vulkan v2.5.1
 
 
 v1.8.5
