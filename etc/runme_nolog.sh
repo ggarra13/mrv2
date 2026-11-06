@@ -228,7 +228,7 @@ if [ -z "$TLRENDER_JPEG" ]; then
 fi
 
 if [ -z "$TLRENDER_LIBDISPLAYINFO" ]; then
-    export TLRENDER_LIBDISPLAYINFO=OFF
+    export TLRENDER_LIBDISPLAYINFO=ON
 fi
 
 if [ -z "$TLRENDER_LIBDOVI" ]; then
