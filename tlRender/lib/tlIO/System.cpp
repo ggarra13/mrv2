@@ -8,25 +8,27 @@
 #include <tlIO/DPX.h>
 #include <tlIO/PPM.h>
 #include <tlIO/SGI.h>
-#include <tlIO/SVG.h>
-#if defined(TLRENDER_STB)
-#    include <tlIO/STB.h>
-#endif
+#if defined(TLRENDER_EXR)
+#    include <tlIO/OpenEXR.h>
+#endif // TLRENDER_EXR
 #if defined(TLRENDER_FFMPEG)
 #    include <tlIO/FFmpeg.h>
 #endif // TLRENDER_FFMPEG
 #if defined(TLRENDER_JPEG)
 #    include <tlIO/JPEG.h>
 #endif // TLRENDER_JPEG
-#if defined(TLRENDER_EXR)
-#    include <tlIO/OpenEXR.h>
-#endif // TLRENDER_EXR
 #if defined(TLRENDER_NDI)
 #    include <tlIO/NDI.h>
 #endif // TLRENDER_NDI
 #if defined(TLRENDER_PNG)
 #    include <tlIO/PNG.h>
 #endif // TLRENDER_PNG
+#if defined(TLRENDER_SVG)
+#    include <tlIO/SVG.h>
+#endif
+#if defined(TLRENDER_STB)
+#    include <tlIO/STB.h>
+#endif
 #if defined(TLRENDER_TIFF)
 #    include <tlIO/TIFF.h>
 #endif // TLRENDER_TIFF
@@ -69,7 +71,9 @@ namespace tl
                 _plugins.push_back(dpx::ReadPlugin::create(logSystem));
                 _plugins.push_back(ppm::ReadPlugin::create(logSystem));
                 _plugins.push_back(sgi::ReadPlugin::create(logSystem));
+#if defined(TLRENDER_SVG)
                 _plugins.push_back(svg::ReadPlugin::create(logSystem));
+#endif
 #if defined(TLRENDER_EXR)
                 _plugins.push_back(exr::ReadPlugin::create(logSystem));
 #endif // TLRENDER_EXR
