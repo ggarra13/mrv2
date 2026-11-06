@@ -1,0 +1,14 @@
+$ErrorActionPreference = 'Stop'
+
+$packageArgs = @{
+  packageName    = '@MRV2_NAME@'
+  fileType       = 'exe'
+  silentArgs     = '@MRV2_SILENT_ARGS@'
+  validExitCodes = @(0)
+  softwareName   = '@MRV2_DISPLAY_NAME@*'
+  @MRV2_URL_KEY@          = '@MRV2_URL@'
+  @MRV2_CHECKSUM_KEY@     = '@MRV2_SHA256@'
+  @MRV2_CHECKSUMTYPE_KEY@ = 'sha256'
+}
+
+Install-ChocolateyPackage @packageArgs
