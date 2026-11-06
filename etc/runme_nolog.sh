@@ -281,6 +281,10 @@ if [ -z "$TLRENDER_OAPV" ]; then
     export TLRENDER_OAPV=ON
 fi
 
+if [ -z "$TLRENDER_OCIO" ]; then
+    export TLRENDER_OCIO=ON
+fi
+
 if [ -z "$TLRENDER_OPENJPH" ]; then
     export TLRENDER_OPENJPH=ON
 fi
