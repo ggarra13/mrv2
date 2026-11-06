@@ -4,7 +4,9 @@ v1.8.6
 ChangeLog
 ---------
 
-- UI: Added **Help->Video Tutorials** which opens your browser with a YouTube video playlist.
+- Install/Windows: Added chocolatey packages as another method of distribution.
+
+- UI: Added **Help->Video Tutorials** which opens your browser with a YouTube video playlist.  Close to 20 videos showing the UI and evolution of the features of mrv2 and vmrv2.
 
 - Core/MacOS: HDR support on the Vulkan backend with an external monitor has been added and tested.  With a USB-C connection the HDR max. nits is limited to 616 compared to 1100 on my HDMI-1 connection.
 - Core/MacOS: Added a tiny launcher program for mrv2 and vmrv2 so that it complies to MacOS Mach-O standards in Applications .app bundles.
