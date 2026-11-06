@@ -45,6 +45,7 @@ set(HEADERS
     Mesh.h
     MeshInline.h
     Monitor.h
+    MonitorInline.h
     NDIOptions.h
     OS.h
     Observer.h
@@ -131,16 +132,10 @@ else()
         TimeUnix.cpp)
 endif()
 
-find_package(FLTK CONFIG REQUIRED)
-find_package(harfbuzz REQUIRED)
-
 set(LIBRARIES OTIO::opentimelineio fltk::fltk-shared harfbuzz::harfbuzz Imath::Imath nlohmann_json::nlohmann_json)
 set(LIBRARIES_PRIVATE Freetype::Freetype MINIZIP::minizip-ng ZLIB::ZLIB)
 if(TLRENDER_OCIO)
     list(APPEND LIBRARIES OpenColorIO::OpenColorIO)
-endif()
-if(TLRENDER_AUDIO)
-    list(APPEND LIBRARIES_PRIVATE RtAudio)
 endif()
 if(TLRENDER_FFMPEG)
     list(APPEND LIBRARIES_PRIVATE FFmpeg::swresample)
