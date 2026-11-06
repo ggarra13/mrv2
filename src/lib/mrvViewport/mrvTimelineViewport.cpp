@@ -917,14 +917,13 @@ namespace mrv
             return _p->colorAreaInfo;
         }
 
-        const timeline::OCIOOptions&
+        const timeline::OCIOOptions
         TimelineViewport::getOCIOOptions(unsigned monitorId) const noexcept
         {
             TLRENDER_P();
-
             if (monitorId >= p.monitorOCIOOptions.size())
             {
-                return p.ocioOptions;
+                return timeline::OCIOOptions();
             }
             else
             {
@@ -932,13 +931,13 @@ namespace mrv
             }
         }
 
-        const timeline::OCIOOptions&
+        const timeline::OCIOOptions
         TimelineViewport::getOCIOOptions() const noexcept
         {
             return _p->ocioOptions;
         }
 
-        const timeline::BackgroundOptions&
+        const timeline::BackgroundOptions
         TimelineViewport::getBackgroundOptions() const noexcept
         {
             return _p->backgroundOptions->get();
@@ -976,6 +975,8 @@ namespace mrv
             p.monitorOCIOOptions[monitorId] = value;
             p.previous_screen = -1;
             redrawWindows();
+
+            p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
         }
 
         void TimelineViewport::setOCIOOptions(

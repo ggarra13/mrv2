@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.4.9)  # was v2.4.7
+set(FLTK_GIT_TAG v2.5.1)  # was v2.4.7 with old monitor indices
 
 if(MRV2_VK)
     message(STATUS "Using ggarra13's private FLTK branch")

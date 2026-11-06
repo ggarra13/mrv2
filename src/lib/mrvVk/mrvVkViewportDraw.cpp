@@ -1101,7 +1101,7 @@ namespace mrv
             // On Linux at least, we must send the real metadata over,
             // so we translate OCIO to proper HDRData.
             // If no OCIO is active, assume it is a movie and send the
-            // stored HDRData (which can be sRGB, BT. 709 or HDR.
+            // stored HDRData (which can be sRGB, BT. 709 or HDR).
             const int screen_idx = this->screen_num();
             const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
 
