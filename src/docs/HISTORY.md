@@ -5,10 +5,11 @@ ChangeLog
 ---------
 
 - Install/Windows: Added chocolatey packages as another method of distribution.
+- Install/Linux:  Removed libpcre2 to use the system one.
 
 - UI: Added **Help->Video Tutorials** which opens your browser with a YouTube video playlist.  Close to 20 videos showing the UI and evolution of the features of mrv2 and vmrv2.
 
-- Core/MacOS: HDR support on the Vulkan backend with an external monitor has been added and tested.  With a USB-C connection the HDR max. nits is limited to 616 compared to 1100 on my HDMI-1 connection.
+- Core/MacOS: HDR support on the Vulkan backend with an external monitor has been added and tested on macOS.  With a USB-C connection the HDR max. nits is limited to 616 compared to 1100 on my HDMI-1 connection.
 - Core/MacOS: Added a tiny launcher program for mrv2 and vmrv2 so that it complies to MacOS Mach-O standards in Applications .app bundles.
 - Core: Improved headless mode in Vulkan backend using a float surface for good baking of HDR (ie. when running a python script for baking OCIO or images to a movie file). 
 - Core: Ported to miniaudio as RtAudio seems like a dead project.  This should allow porting to Emscripten and have better aarch64 support.

@@ -292,6 +292,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libgpg-error
 	libm
 	libmount        # was accepted before - broke in Fedora 42, Wayland lib
+	libpcre2
 	libpng
 	libpthread
 	libresolv
