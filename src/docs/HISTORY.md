@@ -20,7 +20,7 @@ ChangeLog
 Fixes
 -----
 
-- Fixed a menus not displaying properly the OpenColorIO settings on multiple monitors, when the Top Bar OCIO selector was used.
+- Fixed menus not displaying properly the OpenColorIO settings on multiple monitors, when the Top Bar OCIO selector was used.
 - Fixed hang on exit when running a python script on the Vulkan backend.
 - Fixed crash when Log Panel was not visible and it was opened by an error in
   a callback, like an error on Open->URL Movie.
