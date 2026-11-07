@@ -12,8 +12,9 @@
 #include "mrvMonitor_macOS.h"
 
 
-// --- Set this to 0 if M1 compiles don't work on Apple Siilicon ---
-#define USE_MACOS_PRIVATE_API 1
+#ifndef USE_MACOS_PRIVATE_API
+#  define USE_MACOS_PRIVATE_API 1
+#endif
 
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < 120000
@@ -30,46 +31,61 @@
 #import <ApplicationServices/ApplicationServices.h> // ColorSync
 #pragma clang diagnostic pop
 
-// --- Apple Silicon (ARM64) IOAVService Private API declarations ---
-#if defined(__aarch64__)
-typedef CFTypeRef IOAVServiceRef;
-extern "C" {
-    IOAVServiceRef IOAVServiceCreateWithService(CFAllocatorRef allocator, io_service_t service);
-    IOReturn IOAVServiceCopyEDID(IOAVServiceRef service, CFDataRef *edidData);
-}
-#endif
-
 #include <string>
 #include <vector>
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
+#include <dlfcn.h>
 
 using tl::monitor::Capabilities;
 
 namespace
 {
-        // ---- EDID -> declared HDR peak luminance ---------------------------
+    //! Auxiliary struct to hold the monitor information.
+    struct EDIDMatch
+    {
+        uint32_t vendor;
+        uint32_t model;
+        uint32_t serial;
+    };
 
+    // ---- EDID -> declared HDR peak luminance ---------------------------
     // Parses the CTA-861 "HDR Static Metadata" data block (extended tag 6).
     // Desired Content Max Luminance: nits = 50 * 2^(code/32); 0 = undefined.
     bool parseEDIDMaxNits(const uint8_t* e, size_t len, float& maxNits)
     {
         if (!e || len < 128)
             return false;
+
+        float bestNits = 0.0f;
         const size_t numExt = e[126];
+
         for (size_t i = 1; i <= numExt; ++i)
         {
             if (len < (i + 1) * 128)
                 break;
+
             const uint8_t* blk = e + 128 * i;
+
             if (blk[0] != 0x02)               // CTA-861 extension
                 continue;
-            const size_t dtd = blk[2];         // offset of first DTD
-            if (dtd < 4)
+
+            if (blk[1] < 3)           // CTA revision 3+
                 continue;
-            const size_t end = dtd < 128 ? dtd : 128;
+
+
+            // Data block collection ends at the DTD offset.
+            // Offset zero means the collection extends to byte 126.
+            size_t end = blk[2];
+            if (end == 0)
+                end = 127;
+
+            if (end < 4 || end > 127)
+                continue;
+
             size_t pos = 4;
+
             while (pos < end)
             {
                 const uint8_t hdr = blk[pos];
@@ -81,100 +97,125 @@ namespace
                 if (tag == 7 && n >= 4 && blk[pos + 1] == 6)
                 {
                     const uint8_t code = blk[pos + 4];
-                    if (code == 0)
-                        return false;
-                    maxNits = float(50.0 * std::pow(2.0, code / 32.0));
-                    return true;
+                    if (code != 0)
+                    {
+                        const float nits = float(50.0 *
+                                                 std::pow(2.0, code / 32.0));
+                        if (nits > bestNits)
+                            bestNits = nits;
+                    }
                 }
                 pos += 1 + n;
             }
         }
-        return false;
-    }
 
-    struct EDIDMatch
-    {
-        uint32_t vendor;
-        uint32_t model;
-        uint32_t serial;
-    };
-
-    // Walks the IORegistry looking for an EDID blob that matches the display.
-    // A recursive scan is used on purpose: CGDisplayIOServicePort() does not
-    // exist on Apple Silicon, and the node that carries the EDID differs
-    // between Intel (IODisplayConnect / AppleDisplay) and Apple Silicon
-    // (AppleCLCD2 / DCP proxies).
-    bool edidMaxNitsForDisplay(CGDirectDisplayID id, float& maxNits)
-    {
-        if (CGDisplayIsBuiltin(id))
-            return false;                       // internal panels: no useful EDID
-
-        const EDIDMatch want = {CGDisplayVendorNumber(id),
-                                CGDisplayModelNumber(id),
-                                CGDisplaySerialNumber(id)};
-#if defined(__aarch64__)
-
-#    if USE_MACOS_PRIVATE_API
-        // -----------------------------------------------------------------
-        // APPLE SILICON PATH: Use IOAVService iterator to locate EDID blobs
-        // -----------------------------------------------------------------
-        io_iterator_t iterator = 0;
-        CFMutableDictionaryRef matching = IOServiceMatching("IOAVService");
-        if (IOServiceGetMatchingServices(kIOMainPortDefault, matching, &iterator) != KERN_SUCCESS)
+        if (bestNits <= 0.0f)
             return false;
 
-        bool found = false;
-        float best = 0.f;
-        io_service_t service;
+        maxNits = bestNits;
+        return true;
+    }
 
-        while ((service = IOIteratorNext(iterator)) != IO_OBJECT_NULL)
+    // Vendor+model must match; a serial match is preferred.
+    bool matchEDID(CFDataRef d, const EDIDMatch& want, float& best,
+                   bool& found, bool& serialMatched)
+    {
+        if (!d || CFDataGetLength(d) < 128)
+            return false;
+        const uint8_t* e = CFDataGetBytePtr(d);
+        const size_t len = (size_t)CFDataGetLength(d);
+        const uint32_t vendor = (uint32_t(e[8]) << 8) | e[9];
+        const uint32_t model  = e[10] | (uint32_t(e[11]) << 8);
+        const uint32_t serial = e[12] | (uint32_t(e[13]) << 8) |
+                                (uint32_t(e[14]) << 16) | (uint32_t(e[15]) << 24);
+        float nits;
+        if (vendor != want.vendor || model != want.model ||
+            !parseEDIDMaxNits(e, len, nits))
+            return false;
+        const bool serialOk = want.serial && serial == want.serial;
+        if (!found || (serialOk && !serialMatched))
         {
-            IOAVServiceRef avService = IOAVServiceCreateWithService(kCFAllocatorDefault, service);
-            IOObjectRelease(service);
-            if (!avService)
-                continue;
+            best = nits;
+            found = true;
+            serialMatched = serialOk;
+        }
+        return serialOk;
+    }
 
-            CFDataRef edidData = nullptr;
-            if (IOAVServiceCopyEDID(avService, &edidData) == kIOReturnSuccess && edidData)
+    // Apple Silicon (also harmless on Intel: no proxy nodes -> empty iterator).
+    bool edidMaxNitsFromDCP(const EDIDMatch& want, float& maxNits)
+    {
+        io_iterator_t it = IO_OBJECT_NULL;
+        if (IOServiceGetMatchingServices(
+                kIOMainPortDefault, IOServiceMatching("DCPAVServiceProxy"),
+                &it) != KERN_SUCCESS)
+            return false;
+
+#if USE_MACOS_PRIVATE_API
+        using CreateFn = CFTypeRef (*)(CFAllocatorRef, io_service_t);
+        using CopyFn   = IOReturn (*)(CFTypeRef, CFDataRef*);
+        static CreateFn createAV = (CreateFn)dlsym(
+            RTLD_DEFAULT, "IOAVServiceCreateWithService");
+        static CopyFn copyEDID = (CopyFn)dlsym(
+            RTLD_DEFAULT, "IOAVServiceCopyEDID");
+#endif
+
+        bool found = false, serialMatched = false;
+        float best = 0.f;
+
+        while (io_service_t svc = IOIteratorNext(it))
+        {
+            CFTypeRef loc = IORegistryEntrySearchCFProperty(
+                svc, kIOServicePlane, CFSTR("Location"), kCFAllocatorDefault,
+                kIORegistryIterateRecursively);
+            const bool external =
+                loc && CFGetTypeID(loc) == CFStringGetTypeID() &&
+                CFStringCompare((CFStringRef)loc, CFSTR("External"), 0) ==
+                    kCFCompareEqualTo;
+            if (loc)
+                CFRelease(loc);
+
+            if (external)
             {
-                const uint8_t* e = CFDataGetBytePtr(edidData);
-                const size_t len = (size_t)CFDataGetLength(edidData);
-                if (len >= 128)
+                // Public path: the proxy may carry the blob directly.
+                CFTypeRef p = IORegistryEntryCreateCFProperty(
+                    svc, CFSTR("EDID"), kCFAllocatorDefault, 0);
+                if (p)
                 {
-                    const uint32_t vendor = (uint32_t(e[8]) << 8) | e[9];
-                    const uint32_t model  = e[10] | (uint32_t(e[11]) << 8);
-                    const uint32_t serial = e[12] | (uint32_t(e[13]) << 8) |
-                                            (uint32_t(e[14]) << 16) |
-                                            (uint32_t(e[15]) << 24);
-                    float nits;
-                    if (vendor == want.vendor && model == want.model &&
-                        parseEDIDMaxNits(e, len, nits))
+                    if (CFGetTypeID(p) == CFDataGetTypeID())
+                        matchEDID((CFDataRef)p, want, best, found, serialMatched);
+                    CFRelease(p);
+                }
+#if USE_MACOS_PRIVATE_API
+                if (!found && createAV && copyEDID)
+                {
+                    if (CFTypeRef av = createAV(kCFAllocatorDefault, svc))
                     {
-                        best = nits;
-                        found = true;
-                        CFRelease(edidData);
-                        CFRelease(avService);
-                        break; // Stop at the first matching external display
+                        CFDataRef d = nullptr;
+                        if (copyEDID(av, &d) == kIOReturnSuccess && d)
+                        {
+                            matchEDID(d, want, best, found, serialMatched);
+                            CFRelease(d);
+                        }
+                        CFRelease(av);
                     }
                 }
-                CFRelease(edidData);
+#endif
             }
-            CFRelease(avService);
+            IOObjectRelease(svc);      // released on every path
+            if (serialMatched)
+                break;
         }
-        IOObjectRelease(iterator);
-
+        IOObjectRelease(it);
         if (found)
             maxNits = best;
         return found;
-#else
-        return false;
-#endif
+    }
 
-#else
-        // -----------------------------------------------------------------
-        // INTEL PATH: Recursive IORegistry traversal for IODisplayEDID
-        // -----------------------------------------------------------------
-        io_iterator_t it = 0;
+    // Intel / generic: scan the whole registry for an EDID property.
+    bool edidMaxNitsFromRegistryScan(const EDIDMatch& want, float& maxNits)
+    {
+        io_iterator_t it = IO_OBJECT_NULL;
         if (IORegistryCreateIterator(kIOMainPortDefault, kIOServicePlane,
                                      kIORegistryIterateRecursively,
                                      &it) != KERN_SUCCESS)
@@ -183,7 +224,7 @@ namespace
         static CFStringRef const keys[] = {CFSTR("IODisplayEDID"),
                                            CFSTR("IODisplayEDIDOriginal"),
                                            CFSTR("EDID")};
-        bool found = false, haveSerialMatch = false;
+        bool found = false, serialMatched = false;
         float best = 0.f;
 
         while (io_registry_entry_t entry = IOIteratorNext(it))
@@ -195,46 +236,30 @@ namespace
                 if (!p)
                     continue;
                 if (CFGetTypeID(p) == CFDataGetTypeID())
-                {
-                    CFDataRef d = (CFDataRef)p;
-                    const uint8_t* e = CFDataGetBytePtr(d);
-                    const size_t len = (size_t)CFDataGetLength(d);
-                    if (len >= 128)
-                    {
-                        const uint32_t vendor = (uint32_t(e[8]) << 8) | e[9];
-                        const uint32_t model  = e[10] | (uint32_t(e[11]) << 8);
-                        const uint32_t serial = e[12] | (uint32_t(e[13]) << 8) |
-                                                (uint32_t(e[14]) << 16) |
-                                                (uint32_t(e[15]) << 24);
-                        float nits;
-                        if (vendor == want.vendor && model == want.model &&
-                            parseEDIDMaxNits(e, len, nits))
-                        {
-                            const bool serialOk =
-                                want.serial && serial == want.serial;
-                            if (!found || (serialOk && !haveSerialMatch))
-                            {
-                                best = nits;
-                                found = true;
-                                haveSerialMatch = serialOk;
-                            }
-                        }
-                    }
-                }
+                    matchEDID((CFDataRef)p, want, best, found, serialMatched);
                 CFRelease(p);
             }
             IOObjectRelease(entry);
-            if (haveSerialMatch)
+            if (serialMatched)
                 break;
         }
         IOObjectRelease(it);
-
         if (found)
             maxNits = best;
         return found;
-#endif
     }
-    
+
+    bool edidMaxNitsForDisplay(CGDirectDisplayID id, float& maxNits)
+    {
+        if (CGDisplayIsBuiltin(id))
+            return false;
+        const EDIDMatch want = {CGDisplayVendorNumber(id),
+                                CGDisplayModelNumber(id),
+                                CGDisplaySerialNumber(id)};
+        return edidMaxNitsFromDCP(want, maxNits) ||
+               edidMaxNitsFromRegistryScan(want, maxNits);
+    }
+
     // ICC s15Fixed16Number, big-endian.
     double decode_s15Fixed16(const uint8_t* b)
     {
