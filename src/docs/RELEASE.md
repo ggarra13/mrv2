@@ -28,7 +28,7 @@ Without a donation license, the following features are unavailable:
 
 ```
 Full Annotations and Color Area Selection (Solo+)
-Python (Standard+)
+Python Plugins and Baking scripts (Standard+)
 Editing (Edit+)
 Voice and Link Annotations (Pro)
 Unlimited WebRTC Remote Reviews (Pro)
@@ -39,6 +39,7 @@ The free version still includes:
 ```
 Tone-mapping (OpenGL) and HDR (Vulkan)
 OpenEXR layer switching
+Python Editor for interactive editing of pyrhon scripts.
 Saving Images and Movies with Audio
 Limited WebRTC Remote Reviews (2 artists for 30 minutes)
 ```
