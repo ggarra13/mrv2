@@ -765,10 +765,18 @@ namespace mrv
 #endif
 
 #ifdef MRV2_PYBIND11
-        if (app::soporta_python && !p.options.pythonScript.empty())
+        if (!p.options.pythonScript.empty())
         {
-            showUI = false;
-            headless = true;
+            if (app::soporta_python)
+            {
+                showUI = false;
+                headless = true;
+            }
+            else
+            {
+                LOG_ERROR("Running python scripts needs a Standard donation");
+                exit(0);
+            }
         }
         if (p.options.displaySystemInfo)
         {
@@ -1114,7 +1122,7 @@ namespace mrv
         }
 
 #ifdef MRV2_PYBIND11
-        if (!p.options.noPython && app::soporta_python)
+        if (!p.options.noPython)
         {
             // Import the mrv2 python module so we read all python
             // plug-ins.
@@ -1189,8 +1197,6 @@ namespace mrv
                 {
                     std::cerr << _("Python Error: ") << std::endl
                               << e.what() << std::endl;
-                    _exit = 1;
-                    return;
                 }
 
 #ifdef VULKAN_BACKEND
