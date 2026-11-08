@@ -162,7 +162,7 @@ extern "C"
 #    include <pxr/pxr.h>
 #endif
 
-#ifdef TLRENDER_NET
+#ifdef TLRENDER_CURL
 #    ifndef CURL_STATICLIB
 #        define CURL_STATICLIB
 #    endif
@@ -931,7 +931,7 @@ namespace mrv
           << "Copyright (c) 2020-2021 Paul-Louis Ageneau. All rights reserved."
           << endl << endl;
 #endif
-#ifdef TLRENDER_NET
+#ifdef TLRENDER_CURL
         o << curl_version() << endl
           << "(C) Daniel Stenberg, <daniel@haxx.se>, et al." << endl
           << endl;

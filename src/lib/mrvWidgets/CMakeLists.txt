@@ -226,7 +226,7 @@ if(TLRENDER_LIBPLACEBO)
     list(APPEND LIBRARIES libplacebo::libplacebo)
 endif()
 
-if(TLRENDER_NET)
+if(TLRENDER_CURL)
     # First, try the one we built ourselves, which has CONFIG for cmake
     find_package(CURL CONFIG)
     if (CURL_FOUND)
@@ -236,6 +236,7 @@ if(TLRENDER_NET)
 	find_package(curl REQUIRED)
 	list(APPEND LIBRARIES curl::libcurl)
     endif()
+    add_definitions(-DTLRENDER_CURL)
 endif()
 
 if(TLRENDER_OAPV)

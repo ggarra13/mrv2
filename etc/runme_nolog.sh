@@ -191,6 +191,10 @@ if [ -z "$TLRENDER_AV1" ]; then
     export TLRENDER_AV1=ON
 fi
 
+if [ -z "TLRENDER_CURL" ]; then
+    export TLRENDER_CURL=OFF
+fi
+
 if [ -z "$TLRENDER_EXR" ]; then
     export TLRENDER_EXR=ON
 fi
@@ -627,6 +631,7 @@ cmd="cmake -G 'Ninja'
            -D TLRENDER_API=${TLRENDER_API}
            -D TLRENDER_ASAN=${TLRENDER_ASAN}
            -D TLRENDER_AV1=${TLRENDER_AV1}
+	   -D TLRENDER_CURL=${TLRENDER_CURL}
            -D TLRENDER_EXR=${TLRENDER_EXR}
            -D TLRENDER_FFMPEG=${TLRENDER_FFMPEG}
            -D TLRENDER_FFMPEG_MINIMAL=${TLRENDER_FFMPEG_MINIMAL}
