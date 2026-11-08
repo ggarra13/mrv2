@@ -220,7 +220,7 @@
 
     // Update the description text based on backend
     if (backend === "mrv2") {
-	descBox.innerHTML = "<strong>mrv2 (OpenGL):</strong> Robust, reliable and widely compatible.  OpenUSD support.";
+	descBox.innerHTML = "<strong>mrv2 (OpenGL):</strong> Reliable and widely compatible, but not developed anymore.  OpenUSD support.";
 	if (/Windows/.test(platform)) {
 	    bestFor.innerHTML = "Best for Windows 10 and Windows 11.";
 	}
@@ -239,7 +239,7 @@
 	    bestFor.innerHTML = "Windows 10 compatible.  Best for Windows 11.";
 	}
 	else if (/Linux/.test(platform)) {
-	    bestFor.innerHTML = "HDR needs GNOME 49+ / Kwin 6.5+ with latest card drivers.";
+	    bestFor.innerHTML = "HDR needs GNOME 50+ / Kwin 6.5+ with latest card drivers.";
 	}
 	else if (/Darwin-amd64/.test(platform)) {
 	    bestFor.innerHTML = "Best for macBook Pro Intel 2019.";

@@ -10,6 +10,8 @@ ChangeLog
 - UI: Added **Help->Video Tutorials** which opens your browser with a YouTube video playlist.  Close to 20 videos showing the UI and evolution of the features of mrv2 and vmrv2.
 
 - Python: Python support within the UI was always available, including the Python Editor.  Only Python plugins and running python scripts was not possible without a Standard license.  Now running a python script without the unlocking of the python licensing, will print out a clarifying message.
+- Python: the included bakeOCIO.py python demo script now has documentation on how to bake OpenEXR sequencese to HDR .mov files.
+- Python: exposed cmd.presetsPath() to list the FFmpeg presets path.
 
 - Core/MacOS: HDR support on the Vulkan backend with an external monitor has been added and tested on macOS. 
 - Core/MacOS: Added a tiny launcher program for mrv2 and vmrv2 so that it complies to MacOS Mach-O standards in Applications .app bundles.
@@ -24,8 +26,7 @@ Fixes
 
 - Fixed menus not displaying properly the OpenColorIO settings on multiple monitors, when the Top Bar OCIO selector was used.
 - Fixed hang on exit when running a python script on the Vulkan backend.
-- Fixed crash when Log Panel was not visible and it was opened by an error in
-  a callback, like an error on Open->URL Movie.
+- Fixed crash when Log Panel was not visible and it was opened by an error in a callback, like an error on Open->URL Movie.
 - Fixed interrupting a running python script from the command-line resulting in a stack trace.
 - Added **Help->Update mrv2** python plugin to the demo version of mrv2.
 
