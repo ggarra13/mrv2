@@ -2528,6 +2528,36 @@ namespace tl
                         p.ocioData.reset();
                         throw std::runtime_error("Cannot get OCIO processor");
                     }
+#ifdef BAKE_OCIO_DISPLAY
+                    constexpr int N = 65;
+                    constexpr float kMin = -10.F, kMax = 6.5F; // stops: 2^-10 .. ~90
+                    auto cpu = p.ocioData->processor->getDefaultCPUProcessor();
+                    std::vector<float> lut(N * N * N * 4);
+                    auto unshape = [&](int i) {
+                        return i == 0 ? 0.F : std::exp2(kMin +
+                                                        (kMax - kMin) * i /
+                                                        float(N - 1));
+                    };
+                    float* o = lut.data();
+                    for (int b = 0; b < N; ++b)
+                        for (int g = 0; g < N; ++g)
+                            for (int r = 0; r < N; ++r)
+                            {
+                                float px[3] = { unshape(r), unshape(g), unshape(b) };
+                                cpu->applyRGB(px);
+                                *o++ = px[0]; *o++ = px[1]; *o++ = px[2]; *o++ = 1.F;
+                            }
+                    auto tex = vlk::Texture::create(ctx,
+                                                    VK_IMAGE_TYPE_3D, N, N, N,
+                                                    VK_FORMAT_R32G32B32A32_SFLOAT,
+                                                    "ocioBakedSampler");
+                    tex->copy(reinterpret_cast<const uint8_t*>(lut.data()),
+                              lut.size() * sizeof(float));
+                    tex->transitionToShaderRead(p.cmd);
+
+                    p.ocioData->textures.push_back(tex);
+                    p.ocioData->shaderDesc = OCIO::GpuShaderDesc::CreateShaderDesc();
+#else
                     p.ocioData->gpuProcessor =
                         p.ocioData->processor->getOptimizedGPUProcessor(
                             OCIO::OPTIMIZATION_DEFAULT);
@@ -2564,6 +2594,7 @@ namespace tl
                         p.ocioData.reset();
                         throw e;
                     }
+#endif
                 }
             }
 #endif // TLRENDER_OCIO
@@ -3392,8 +3423,20 @@ namespace tl
             }
             if (p.ocioData && p.ocioData->shaderDesc)
             {
+#ifdef BAKE_OCIO_DISPLAY
+                ocioDef += R"(
+uniform sampler3D ocioBakedSampler;
+vec4 ocioDisplayFunc(vec4 c)
+{
+    vec3 t = clamp((log2(max(c.rgb, vec3(1e-10))) + 10.0) / 16.5, 0.0, 1.0);
+    t = t * (64.0 / 65.0) + 0.5 / 65.0;
+    return vec4(texture(ocioBakedSampler, t).rgb, c.a);
+}
+)";
+#else
                 ocioDef = _getOCIOUniforms(p.ocioData->shaderDesc);
-                ocioDef = p.ocioData->shaderDesc->getShaderText();
+                ocioDef += p.ocioData->shaderDesc->getShaderText();
+#endif
                 ocioDef = replaceUniformSampler(ocioDef, p.bindingIndex);
                 ocio = "outColor = ocioDisplayFunc(outColor);";
             }

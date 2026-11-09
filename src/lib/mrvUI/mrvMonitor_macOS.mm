@@ -16,6 +16,7 @@
 #  define USE_MACOS_PRIVATE_API 1
 #endif
 
+#include <AvailabilityMacros.h>
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < 120000
 #  define kIOMainPortDefault kIOMasterPortDefault
@@ -128,9 +129,12 @@ namespace
         const uint32_t model  = e[10] | (uint32_t(e[11]) << 8);
         const uint32_t serial = e[12] | (uint32_t(e[13]) << 8) |
                                 (uint32_t(e[14]) << 16) | (uint32_t(e[15]) << 24);
-        float nits;
-        if (vendor != want.vendor || model != want.model ||
-            !parseEDIDMaxNits(e, len, nits))
+        float nits = 0.f;
+        const bool hdr = parseEDIDMaxNits(e, len, nits);
+        if (getenv("MRV2_DEBUG_EDR"))
+            NSLog(@"EDID: %04x/%04x/%08x len=%zu hdr=%d nits=%.0f",
+                  vendor, model, serial, len, hdr, nits);
+        if (vendor != want.vendor || model != want.model || !hdr)
             return false;
         const bool serialOk = want.serial && serial == want.serial;
         if (!found || (serialOk && !serialMatched))
@@ -154,10 +158,12 @@ namespace
 #if USE_MACOS_PRIVATE_API
         using CreateFn = CFTypeRef (*)(CFAllocatorRef, io_service_t);
         using CopyFn   = IOReturn (*)(CFTypeRef, CFDataRef*);
-        static CreateFn createAV = (CreateFn)dlsym(
-            RTLD_DEFAULT, "IOAVServiceCreateWithService");
-        static CopyFn copyEDID = (CopyFn)dlsym(
-            RTLD_DEFAULT, "IOAVServiceCopyEDID");
+
+        // Explicitly dlopen IOKit so private symbols can be resolved on Apple Silicon
+        static void* ioKitHandle = dlopen("/System/Library/Frameworks/IOKit.framework/IOKit", RTLD_LAZY | RTLD_GLOBAL);
+
+        static CreateFn createAV = ioKitHandle ? (CreateFn)dlsym(ioKitHandle, "IOAVServiceCreateWithService") : nullptr;
+        static CopyFn   copyEDID = ioKitHandle ? (CopyFn)dlsym(ioKitHandle, "IOAVServiceCopyEDID") : nullptr;
 #endif
 
         bool found = false, serialMatched = false;
@@ -174,6 +180,11 @@ namespace
                     kCFCompareEqualTo;
             if (loc)
                 CFRelease(loc);
+
+            if (getenv("MRV2_DEBUG_EDR"))
+                NSLog(@"DCP proxy: external=%d createAV=%p copyEDID=%p want=%04x/%04x/%08x",
+                      external, (void*)createAV, (void*)copyEDID,
+                      want.vendor, want.model, want.serial);
 
             if (external)
             {
@@ -396,7 +407,7 @@ namespace
                   haveEDID ? [NSString stringWithFormat:@"%.0f", edidNits]
                            : @"n/a");
 
-        if (headroom > kMinEDRHeadroom)
+        if (headroom > kMinEDRHeadroom || (haveEDID && edidNits > 200.F))
         {
             caps.hdr_supported = true;
             caps.hdr_enabled   = true;

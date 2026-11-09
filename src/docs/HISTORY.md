@@ -13,21 +13,34 @@ ChangeLog
 - Python: the included bakeOCIO.py python demo script now has documentation on how to bake OpenEXR sequencese to HDR .mov files.
 - Python: exposed cmd.presetsPath() to list the FFmpeg presets path.
 
+- Core/MacOS: Vulkan OCIO support has been dramatically improved on MacOS.
+
 - Core/MacOS: HDR support on the Vulkan backend with an external monitor has been added and tested on macOS. 
+
 - Core/MacOS: Added a tiny launcher program for mrv2 and vmrv2 so that it complies to MacOS Mach-O standards in Applications .app bundles.
+
 - Core: Improved headless mode in Vulkan backend using a float surface for good baking of HDR (ie. when running a python script for baking OCIO or images to a movie file). 
+
 - Core: Ported to miniaudio as RtAudio seems like a dead project.  This should allow porting to Emscripten and have better aarch64 support.
+
 - Core: Improved HDR detection on macOS on both laptops and external HDR monitors.
+
 - Core: Cleaned up useless BMD code.
+
 - Core: Cleaned all references to unused Devices Panel.
 
 Fixes
 -----
 
 - Fixed menus not displaying properly the OpenColorIO settings on multiple monitors, when the Top Bar OCIO selector was used.
+
 - Fixed hang on exit when running a python script on the Vulkan backend.
+
 - Fixed crash when Log Panel was not visible and it was opened by an error in a callback, like an error on Open->URL Movie.
+
+>>>>>>> love
 - Fixed interrupting a running python script from the command-line resulting in a stack trace.
+
 - Added **Help->Update mrv2** python plugin to the demo version of mrv2.
 
 Libraries

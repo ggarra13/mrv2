@@ -40,8 +40,19 @@
 //
 #ifdef __APPLE__
 #  define USE_DYNAMIC_RGBA_WRITE_MASKS 0
+#  define BAKE_OCIO_DISPLAY 1
 #else
 #  define USE_DYNAMIC_RGBA_WRITE_MASKS 1
+#  define BAkE_OCIO_DISPLAY 0
+#endif
+
+//
+// Use 1 for to bake OCIO Display for faster performance.
+//
+#ifdef __APPLE__
+#  define BAKE_OCIO_DISPLAY 1
+#else
+#  define BAkE_OCIO_DISPLAY 0
 #endif
 
 //
