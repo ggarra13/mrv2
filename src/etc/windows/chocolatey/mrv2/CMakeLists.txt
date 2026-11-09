@@ -23,6 +23,11 @@ if(NOT MRV2_VERSION)
     message(FATAL_ERROR "Pass -DMRV2_VERSION=x.y.z")
 endif()
 
+set(mrv2_DESCRIPTION "OpenGL backend")
+if (MRV2_NAME STEQUAL "vmrv2")
+    set(mrv2_DESCRIPTION "Vulkan backend")
+endif()
+
 set(mrv2_NAME    ${MRV2_NAME})
 set(mrv2_VERSION ${MRV2_VERSION})
 

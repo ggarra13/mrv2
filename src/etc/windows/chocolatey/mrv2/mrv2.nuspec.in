@@ -34,7 +34,7 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
 
     <!-- == SOFTWARE SPECIFIC SECTION == -->
     <!-- This section is about the software itself -->
-    <title>@mrv2_NAME@ (Install)</title>
+    <title>@mrv2_NAME@ @mrv2_DESCRIPTION@ (Install)</title>
     <authors>Contributors to the mrv2 project</authors>
     <!-- projectUrl is required for the community feed -->
     <projectUrl>https://mrv2.sourceforge.io</projectUrl>
@@ -50,8 +50,8 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
     <!--<mailingListUrl></mailingListUrl>-->
     <bugTrackerUrl>https://github.com/ggarra13/mrv2/issues/</bugTrackerUrl>
     <tags>@mrv2_NAME@ admin mrviewer flipbook viewer image video audio player review exr</tags>
-    <summary>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics.</summary>
-    <description>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics.</description>
+    <summary>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics using a @mrv2_DESCRIPTION@.</summary>
+    <description>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics using a @mrv2_DESCRIPTION@.</description>
     <releaseNotes>https://github.com/ggarra13/mrv2/releases/tag/@mrv2_VERSION@</releaseNotes>
     <!-- =============================== -->
 
