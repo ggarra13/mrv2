@@ -1,14 +1,26 @@
 $ErrorActionPreference = 'Stop'
 
+# Real OS architecture. When choco runs as an emulated x64 process on Windows
+# ARM64, PROCESSOR_ARCHITECTURE reports AMD64 but PROCESSOR_ARCHITEW6432 reports ARM64.
+$realArch = if ($env:PROCESSOR_ARCHITEW6432) { $env:PROCESSOR_ARCHITEW6432 } else { $env:PROCESSOR_ARCHITECTURE }
+
+if ($realArch -eq 'ARM64') {
+  $url      = '@MRV2_URL_AARCH64@'
+  $checksum = '@MRV2_SHA256_AARCH64@'
+} else {
+  $url      = '@MRV2_URL_AMD64@'
+  $checksum = '@MRV2_SHA256_AMD64@'
+}
+
 $packageArgs = @{
   packageName    = '@MRV2_NAME@'
   fileType       = 'exe'
   silentArgs     = '@MRV2_SILENT_ARGS@'
   validExitCodes = @(0)
   softwareName   = '@MRV2_DISPLAY_NAME@*'
-  @MRV2_URL_KEY@          = '@MRV2_URL@'
-  @MRV2_CHECKSUM_KEY@     = '@MRV2_SHA256@'
-  @MRV2_CHECKSUMTYPE_KEY@ = 'sha256'
+  url            = $url
+  checksum       = $checksum
+  checksumType   = 'sha256'
 }
 
 Install-ChocolateyPackage @packageArgs

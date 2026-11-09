@@ -11,28 +11,26 @@ else
 fi
 
 echo
-echo "RELEASING ${mrv2_VERSION}"
+echo "RELEASING chocolatey for ${mrv2_VERSION}"
 echo
 
 START_DIR=$PWD
 
 cd src/etc/windows/chocolatey/mrv2
 
-cmake -S . -B build-mrv2  -DMRV2_NAME=mrv2  -DMRV2_VERSION=${mrv2_VERSION} -DMRV2_ARCH=amd64
-cmake --build build-mrv2  --target choco_pack
+for mrv2_NAME in mrv2 vmrv2; do
+    build_dir=build-${mrv2_NAME}
+    echo "choco cmake dir=`pwd`"
+    cmake -S . -B ${build_dir} -D MRV2_NAME=${mrv2_NAME} -D MRV2_VERSION=${mrv2_VERSION}
+    cmake --build ${build_dir}  --target choco_pack
 
-cd build-mrv2/package
-choco push mrv2.${mrv2_VERSION}.nupkg --source https://push.chocolatey.org/
-cd -
-rm -rf build-mrv2
-
-cmake -S . -B build-vmrv2 -DMRV2_NAME=vmrv2 -DMRV2_VERSION=${mrv2_VERSION} -DMRV2_ARCH=amd64
-cmake --build build-vmrv2 --target choco_pack
-
-cd build-vmrv2/package
-choco push vmrv2.${mrv2_VERSION}.nupkg --source https://push.chocolatey.org/
-cd -
-
-rm -rf build-vmrv2
+    cd ${build_dir}/package
+    echo "choco push dir=`pwd`"
+    #choco push ${mrv2_NAME}.${mrv2_VERSION}.nupkg --source https://push.chocolatey.org/
+    cd -
+    echo "LAST dir=`pwd`"
+    
+    rm -rf ${build_dir}
+done
 
 cd $START_DIR
