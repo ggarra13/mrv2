@@ -2528,7 +2528,7 @@ namespace tl
                         p.ocioData.reset();
                         throw std::runtime_error("Cannot get OCIO processor");
                     }
-#ifdef __APPLE__
+#ifdef BAKE_OCIO_DISPLAY
                     constexpr int N = 65;
                     constexpr float kMin = -10.F, kMax = 6.5F; // stops: 2^-10 .. ~90
                     auto cpu = p.ocioData->processor->getDefaultCPUProcessor();
@@ -3423,7 +3423,7 @@ namespace tl
             }
             if (p.ocioData && p.ocioData->shaderDesc)
             {
-#ifdef __APPLE__
+#ifdef BAKE_OCIO_DISPLAY
                 ocioDef += R"(
 uniform sampler3D ocioBakedSampler;
 vec4 ocioDisplayFunc(vec4 c)

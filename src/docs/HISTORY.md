@@ -11,6 +11,7 @@ ChangeLog
 
 - Python: Python support within the UI was always available, including the Python Editor.  Only Python plugins and running python scripts was not possible without a Standard license.  Now running a python script without the unlocking of the python licensing, will print out a clarifying message.
 
+- Core/MacOS: Vulkan OCIO support has been dramatically improved on MacOS.
 - Core/MacOS: HDR support on the Vulkan backend with an external monitor has been added and tested on macOS. 
 - Core/MacOS: Added a tiny launcher program for mrv2 and vmrv2 so that it complies to MacOS Mach-O standards in Applications .app bundles.
 - Core: Improved headless mode in Vulkan backend using a float surface for good baking of HDR (ie. when running a python script for baking OCIO or images to a movie file). 
