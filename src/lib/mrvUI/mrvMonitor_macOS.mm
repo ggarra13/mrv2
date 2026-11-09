@@ -161,7 +161,7 @@ namespace
 
         // Explicitly dlopen IOKit so private symbols can be resolved on Apple Silicon
         static void* ioKitHandle = dlopen("/System/Library/Frameworks/IOKit.framework/IOKit", RTLD_LAZY | RTLD_GLOBAL);
-        
+
         static CreateFn createAV = ioKitHandle ? (CreateFn)dlsym(ioKitHandle, "IOAVServiceCreateWithService") : nullptr;
         static CopyFn   copyEDID = ioKitHandle ? (CopyFn)dlsym(ioKitHandle, "IOAVServiceCopyEDID") : nullptr;
 #endif
@@ -407,7 +407,7 @@ namespace
                   haveEDID ? [NSString stringWithFormat:@"%.0f", edidNits]
                            : @"n/a");
 
-        if (headroom > kMinEDRHeadroom)
+        if (headroom > kMinEDRHeadroom || (haveEDID && edidNits > 200.F))
         {
             caps.hdr_supported = true;
             caps.hdr_enabled   = true;
