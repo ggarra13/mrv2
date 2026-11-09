@@ -96,7 +96,7 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {474 182 847 449} type Double resizable
+      xywh {0 0 847 449} type Double resizable
       code3 {main = m;} non_modal size_range {847 449 0 0} visible
     } {
       Fl_Group {} {open
@@ -1143,7 +1143,7 @@ v->FPS->value( g );}
               }
             }
             Fl_Group {} {
-              label Graphics
+              label Graphics open
               xywh {289 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -1280,15 +1280,15 @@ v->FPS->value( g );}
               }
             }
             Fl_Group {} {
-              label Rendering
-              xywh {280 37 555 360} box EMBOSSED_BOX align 5 hide
+              label Rendering open
+              xywh {280 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label {Image Rendering} open
-                xywh {295 62 530 216} box ROUNDED_BOX
+                xywh {294 62 531 184} box ROUNDED_BOX
               } {
                 Fl_Choice Debanding {
-                  label {Debanding (Vulkan)} open
+                  label {Debanding (Vulkan)} open selected
                   tooltip {Makes gradients smoother on video files.} xywh {556 76 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -1309,7 +1309,7 @@ v->FPS->value( g );}
                   }
                 }
                 Fl_Choice VideoLevels {
-                  label {Video Levels}
+                  label {Video Levels} selected
                   xywh {556 110 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -1326,7 +1326,7 @@ v->FPS->value( g );}
                   }
                 }
                 Fl_Choice AlphaBlend {
-                  label {Alpha Blend}
+                  label {Alpha Blend} selected
                   xywh {556 144 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -1343,7 +1343,7 @@ v->FPS->value( g );}
                   }
                 }
                 Fl_Choice MinifyFilter {
-                  label {Minify Filter}
+                  label {Minify Filter} selected
                   xywh {556 178 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -1356,7 +1356,7 @@ v->FPS->value( g );}
                   }
                 }
                 Fl_Choice MagnifyFilter {
-                  label {Magnify Filter}
+                  label {Magnify Filter} selected
                   xywh {556 212 160 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -1371,7 +1371,7 @@ v->FPS->value( g );}
               }
             }
             Fl_Group {} {
-              label HDR
+              label HDR open
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -1561,7 +1561,7 @@ v->FPS->value( g );}
             }
             Fl_Group {} {
               label OCIO
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Configuration open
@@ -1624,23 +1624,23 @@ uiPrefs->OCIOConfig->value( r.c_str() );}
               }
               Fl_Group {} {
                 label Options open
-                xywh {298 195 533 192} box ROUNDED_BOX
+                xywh {300 195 531 158} box ROUNDED_BOX
               } {
                 Fl_Light_Button uiOCIOUseAutoICS {
                   label {Set Auto ICS as default}
-                  tooltip {Set Auto ICS as a default so that Input Color Space is selected from file name or OpenEXR metadata..} xywh {365 222 400 30} value 1
+                  tooltip {Set Auto ICS as a default so that Input Color Space is selected from file name or OpenEXR metadata..} xywh {365 209 400 30} value 1
                 }
                 Fl_Light_Button uiOCIOUseDefaultDisplayView {
                   label {Use Default Display and View}
-                  tooltip {When this option is on, and your config.ocio has a default display and view, it will be used to be set as default.} xywh {365 258 400 30}
+                  tooltip {When this option is on, and your config.ocio has a default display and view, it will be used to be set as default.} xywh {365 245 400 30}
                 }
                 Fl_Light_Button uiOCIOUseActiveViews {
                   label {Use Active Views and Active Displays}
-                  tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {365 294 400 30}
+                  tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {365 281 400 30}
                 }
                 Fl_Light_Button uiOCIONotOnVideos {
                   label {No OCIO on Videos or sRGB/BT709 data}
-                  tooltip {If playing a video or showing an SDR image, OCIO will be turned off automatically.} xywh {365 330 400 30}
+                  tooltip {If playing a video or showing an SDR image, OCIO will be turned off automatically.} xywh {365 317 400 30}
                 }
               }
             }
@@ -2244,7 +2244,7 @@ if (oldpath.empty()) o->value(path.c_str());}
               }
             }
             Fl_Group {} {
-              label ComfyUI
+              label ComfyUI open
               tooltip {Here are the current settings to interact with ComfyUI.  It requires installation of mrv2's comfyUI nodes.} xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -2298,7 +2298,7 @@ mrv::Preferences::load(false, false);}
               label OK
               user_data m user_data_type {ViewerUI*}
               callback {v->uiPrefs->uiMain->hide();
-mrv::Preferences::run();} selected
+mrv::Preferences::run();}
               tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {652 411 132 31}
             }
           }
