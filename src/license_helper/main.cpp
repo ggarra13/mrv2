@@ -230,7 +230,7 @@ Pro+
                 plan_features->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                 plan_features->label(_(R"TEXT(
 Annotations for one year
-Solo + Python for one year
+Solo + Full Python access for one year
 Standard + Editing for one year
 Editing + Voice and Link Annotations for one year
 All of Pro but without expiration date (you own it).
