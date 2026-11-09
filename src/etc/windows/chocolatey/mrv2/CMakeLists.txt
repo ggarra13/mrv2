@@ -82,3 +82,52 @@ endfunction()
 
 mrv2_resolve_installer(amd64)
 mrv2_resolve_installer(aarch64)
+
+
+# ---------------------------------------------------------------------------
+# Stage the package
+# ---------------------------------------------------------------------------
+set(STAGE "${CMAKE_BINARY_DIR}/stage")
+set(OUT   "${CMAKE_BINARY_DIR}/package")
+
+configure_file(mrv2.nuspec.in                    "${STAGE}/${MRV2_NAME}.nuspec"           @ONLY)
+configure_file(tools/chocolateyinstall.ps1.in    "${STAGE}/tools/chocolateyinstall.ps1"   @ONLY)
+configure_file(tools/chocolateyuninstall.ps1.in  "${STAGE}/tools/chocolateyuninstall.ps1" @ONLY)
+
+# Our chocolateyuninstall.ps1 already runs the real uninstaller. Without this marker
+# Chocolatey's auto-uninstaller runs a second time from its install-time registry
+# snapshot and fails because Uninstall.exe is already gone.
+file(WRITE "${STAGE}/.skipAutoUninstall"       "")
+file(WRITE "${STAGE}/tools/.skipAutoUninstall" "")
+
+# ---------------------------------------------------------------------------
+# Targets
+# ---------------------------------------------------------------------------
+find_program(CHOCO_EXECUTABLE choco)
+
+if(CHOCO_EXECUTABLE)
+    add_custom_target(choco_pack ALL
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${OUT}"
+        COMMAND "${CHOCO_EXECUTABLE}" pack "${STAGE}/${MRV2_NAME}.nuspec" --outputdirectory "${OUT}"
+        WORKING_DIRECTORY "${STAGE}"
+        COMMENT "Packing ${MRV2_NAME} ${MRV2_VERSION} Chocolatey package"
+        VERBATIM)
+
+    # Elevated shell:  cmake --build build --target choco_test_install
+    add_custom_target(choco_test_install
+        COMMAND "${CHOCO_EXECUTABLE}" install ${MRV2_NAME} --version ${MRV2_VERSION} --source "${OUT}" -y --force
+        DEPENDS choco_pack
+        VERBATIM)
+
+    add_custom_target(choco_test_uninstall
+        COMMAND "${CHOCO_EXECUTABLE}" uninstall ${MRV2_NAME} -y
+        VERBATIM)
+
+    # Needs `choco apikey` set first
+    add_custom_target(choco_push
+        COMMAND "${CHOCO_EXECUTABLE}" push "${OUT}/${MRV2_NAME}.${MRV2_VERSION}.nupkg" --source https://push.chocolatey.org/
+        DEPENDS choco_pack
+        VERBATIM)
+else()
+    message(WARNING "choco.exe not found: files were staged in ${STAGE} but 'choco_pack' is unavailable.")
+endif()

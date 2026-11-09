@@ -34,7 +34,7 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
 
     <!-- == SOFTWARE SPECIFIC SECTION == -->
     <!-- This section is about the software itself -->
-    <title>mrv2 (Install)</title>
+    <title>@mrv2_NAME@ (Install)</title>
     <authors>Contributors to the mrv2 project</authors>
     <!-- projectUrl is required for the community feed -->
     <projectUrl>https://mrv2.sourceforge.io</projectUrl>

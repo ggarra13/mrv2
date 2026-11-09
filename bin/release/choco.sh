@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+#set -e
 
 . etc/functions.sh
 
@@ -20,15 +20,12 @@ cd src/etc/windows/chocolatey/mrv2
 
 for mrv2_NAME in mrv2 vmrv2; do
     build_dir=build-${mrv2_NAME}
-    echo "choco cmake dir=`pwd`"
     cmake -S . -B ${build_dir} -D MRV2_NAME=${mrv2_NAME} -D MRV2_VERSION=${mrv2_VERSION}
     cmake --build ${build_dir}  --target choco_pack
 
     cd ${build_dir}/package
-    echo "choco push dir=`pwd`"
-    #choco push ${mrv2_NAME}.${mrv2_VERSION}.nupkg --source https://push.chocolatey.org/
+    choco push ${mrv2_NAME}.${mrv2_VERSION}.nupkg --source https://push.chocolatey.org/
     cd -
-    echo "LAST dir=`pwd`"
     
     rm -rf ${build_dir}
 done
