@@ -38,7 +38,6 @@ Fixes
 
 - Fixed crash when Log Panel was not visible and it was opened by an error in a callback, like an error on Open->URL Movie.
 
->>>>>>> love
 - Fixed interrupting a running python script from the command-line resulting in a stack trace.
 
 - Added **Help->Update mrv2** python plugin to the demo version of mrv2.

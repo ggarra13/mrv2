@@ -34,14 +34,15 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
 
     <!-- == SOFTWARE SPECIFIC SECTION == -->
     <!-- This section is about the software itself -->
-    <title>mrv2 (Install)</title>
+    <title>@mrv2_NAME@ @mrv2_DESCRIPTION@ (Install)</title>
     <authors>Contributors to the mrv2 project</authors>
     <!-- projectUrl is required for the community feed -->
     <projectUrl>https://mrv2.sourceforge.io</projectUrl>
     <!-- There are a number of CDN Services that can be used for hosting the Icon for a package. More information can be found here: https://docs.chocolatey.org/en-us/create/create-packages#package-icon-guidelines -->
     <!-- Here is an example using Githack -->
     <!--<iconUrl>http://rawcdn.githack.com/__REPLACE_YOUR_REPO__/master/icons/mrv2.png</iconUrl>-->
-    <!-- <copyright>Year Software Vendor</copyright> -->
+    <iconUrl>https://github.com/ggarra13/mrv2/blob/main/assets/icons/original/Icon_Windows.png</iconUrl>
+    <copyright>Copyright 2026-Present -- Contributors to the mrv2 project</copyright>
     <!-- If there is a license Url available, it is required for the community feed -->
     <licenseUrl>https://github.com/ggarra13/mrv2/blob/main/LICENSE</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
@@ -50,8 +51,8 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
     <!--<mailingListUrl></mailingListUrl>-->
     <bugTrackerUrl>https://github.com/ggarra13/mrv2/issues/</bugTrackerUrl>
     <tags>@mrv2_NAME@ admin mrviewer flipbook viewer image video audio player review exr</tags>
-    <summary>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics.</summary>
-    <description>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics.</description>
+    <summary>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics using a @mrv2_DESCRIPTION@.</summary>
+    <description>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics using a @mrv2_DESCRIPTION@.</description>
     <releaseNotes>https://github.com/ggarra13/mrv2/releases/tag/@mrv2_VERSION@</releaseNotes>
     <!-- =============================== -->
 

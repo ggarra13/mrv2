@@ -4,7 +4,7 @@ project(mrv2-chocolatey NONE)
 # ---------------------------------------------------------------------------
 # Inputs
 # ---------------------------------------------------------------------------
-set(MRV2_NAME    "" CACHE STRING "Project/package name: mrv2 or wmrv2")
+set(MRV2_NAME    "" CACHE STRING "Project/package name: mrv2 or vmrv2")
 set(MRV2_VERSION "" CACHE STRING "Version to package, e.g. 1.4.0 (no leading 'v')")
 set(MRV2_ARCH    "amd64" CACHE STRING "Architecture used in the installer name (amd64, arm64, ...)")
 set(MRV2_GITHUB_REPO "" CACHE STRING "GitHub 'owner/repo' (default: ggarra13/<MRV2_NAME>)")
@@ -14,10 +14,15 @@ set(MRV2_SILENT_ARGS "/S" CACHE STRING "Silent switches of the installer (/S for
 set(MRV2_DISPLAY_NAME "" CACHE STRING "DisplayName in Add/Remove Programs (default: MRV2_NAME)")
 
 if(NOT MRV2_NAME)
-    message(FATAL_ERROR "Pass -DMRV2_NAME=mrv2 (or wmrv2)")
+    message(FATAL_ERROR "Pass -DMRV2_NAME=mrv2 (or vmrv2)")
 endif()
 if(NOT MRV2_VERSION)
     message(FATAL_ERROR "Pass -DMRV2_VERSION=x.y.z")
+endif()
+
+set(mrv2_DESCRIPTION "OpenGL backend")
+if (MRV2_NAME STEQUAL "vmrv2")
+    set(mrv2_DESCRIPTION "Vulkan backend")
 endif()
 
 set(mrv2_NAME    ${MRV2_NAME})
