@@ -244,6 +244,26 @@ namespace tl
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
 
+            //! Per-shader pool of binding sets, reused across frames.
+            //!
+            //! Creating a ShaderBindingSet is expensive (MAX_FRAMES_IN_FLIGHT
+            //! descriptor pools + sets, a set layout and VMA UBO buffers),
+            //! so instead of building a new one for every draw we hand out
+            //! sets from this pool.  Set N of a shader is used for the Nth
+            //! draw with that shader in a frame; the cursor is rewound in
+            //! begin().  Every set owns one VkDescriptorSet per frame in
+            //! flight, and a frame only ever touches its own slot, which is
+            //! safe to rewrite once that frame's fence has been waited on
+            //! (the same guarantee the garbage lists rely on).
+            struct BindingSetPool
+            {
+                //! Keeps the shader alive so the key cannot be recycled.
+                std::shared_ptr<vlk::Shader> shader;
+                std::vector<std::shared_ptr<vlk::ShaderBindingSet> > sets;
+                size_t cursor = 0;
+            };
+            std::unordered_map<const vlk::Shader*, BindingSetPool> bindingSetPools;
+
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex / Fragment
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute
             std::unordered_map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >

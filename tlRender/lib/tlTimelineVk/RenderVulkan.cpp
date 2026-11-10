@@ -41,8 +41,54 @@ namespace tl
         {
             TLRENDER_P();
 
-            auto bindingSet = shader->createBindingSet();
-            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+            auto& pool = p.bindingSetPools[shader.get()];
+            if (!pool.shader)
+                pool.shader = shader;
+
+            std::shared_ptr<vlk::ShaderBindingSet> bindingSet;
+            if (pool.cursor < pool.sets.size())
+            {
+                // Reuse a set from a previous frame.  Its descriptor set for
+                // p.frameIndex is no longer in flight.
+                bindingSet = pool.sets[pool.cursor];
+            }
+            else
+            {
+                // Pool exhausted for this frame: grow it.  This only happens
+                // until the peak number of draws per frame is reached.
+                bindingSet = shader->createBindingSet();
+                pool.sets.push_back(bindingSet);
+            }
+            ++pool.cursor;
+
+            // createBindingSet() makes the new set active implicitly; reused
+            // sets must be activated explicitly.
+            shader->useBindingSet(bindingSet);
+        }
+
+        void Render::_resetBindingSetPools()
+        {
+            TLRENDER_P();
+
+            for (auto it = p.bindingSetPools.begin();
+                 it != p.bindingSetPools.end();)
+            {
+                auto& pool = it->second;
+                if (pool.shader.use_count() == 1)
+                {
+                    // Only the pool references the shader: it was replaced
+                    // (e.g. the display shader was recreated).  Its sets may
+                    // still be referenced by in-flight frames, so defer their
+                    // destruction like every other retired resource.
+                    auto& bindingSets = p.garbage[p.frameIndex].bindingSets;
+                    for (auto& set : pool.sets)
+                        bindingSets.push_back(std::move(set));
+                    it = p.bindingSetPools.erase(it);
+                    continue;
+                }
+                pool.cursor = 0;
+                ++it;
+            }
         }
 
 

@@ -1180,6 +1180,11 @@ namespace tl
             g.textures.clear();
             g.buffers.clear();
 
+            // Rewind the binding set pools for this frame (and retire the
+            // sets of shaders that no longer exist).  Must come after the
+            // garbage above is cleared.
+            _resetBindingSetPools();
+
             const PushConstants pc;
             const vlk::ShaderFlags flags =
                 static_cast<vlk::ShaderFlags>(vlk::kShaderVertex | vlk::kShaderFragment);
