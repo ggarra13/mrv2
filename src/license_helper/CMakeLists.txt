@@ -33,7 +33,7 @@ endif()
 # Use static FLTK
 #
 set(LIBRARIES )
-list(APPEND LIBRARIES ${FLTK_LIBRARIES} mrvOS ${Intl_LIBRARIES})
+list(APPEND LIBRARIES fltk::fltk mrvOS ${Intl_LIBRARIES})
 
 add_executable(license_helper WIN32 ${SOURCES} ${HEADERS})
 
