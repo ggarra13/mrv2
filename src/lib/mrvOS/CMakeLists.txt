@@ -24,8 +24,8 @@ set(SOURCES
     mrvString.cpp
 )
 
-set(LIBRARIES tlRender::tlCore Imath::Imath ${FLTK_LIBRARIES})
-
+set(LIBRARIES tlRender::tlCore )
+set(LIBRARIES_PRIVATE ${FLTK_LIBRARIES})
 if( WIN32 )
     list( APPEND HEADERS
 	mrvEnv.h

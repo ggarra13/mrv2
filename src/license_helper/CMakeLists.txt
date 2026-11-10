@@ -33,8 +33,13 @@ endif()
 # Use static FLTK
 #
 set(LIBRARIES )
-list(APPEND LIBRARIES fltk::fltk mrvOS ${Intl_LIBRARIES})
-
+if (MSVC)
+    set(LIBRARIES fltk::fltk-shared)
+else()
+    set(LIBRARIES fltk::fltk)
+endif()
+list(APPEND LIBRARIES mrvOS ${Intl_LIBRARIES})
+    
 add_executable(license_helper WIN32 ${SOURCES} ${HEADERS})
 
 target_include_directories(license_helper BEFORE PRIVATE . )
