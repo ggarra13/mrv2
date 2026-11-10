@@ -22,6 +22,8 @@ export MRV2_PDF=OFF
 #
 # These are some of the expensive TLRENDER options
 #
+export TLRENDER_OAPV=OFF
+export TLRENDER_AV1=OFF
 export TLRENDER_AOM=OFF
 export TLRENDER_AV1=OFF
 export TLRENDER_EXR=OFF
