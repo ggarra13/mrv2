@@ -240,7 +240,8 @@ def download_url(base_url, dest_dir, mrv2_prefix):
 
     # Parse the page for file links
     links = parse_sourceforge_page(response.text, base_url)
-
+    links = sorted(links)
+    
     print(f"Found {len(links)} files to download.")
 
     # Download each file using curl
