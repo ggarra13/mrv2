@@ -56,4 +56,4 @@ endif()
 install(TARGETS license_helper
     RUNTIME DESTINATION bin COMPONENT applications
     LIBRARY DESTINATION lib COMPONENT libraries
-    ARCHIVE DESTINATION lib COMPONENT libraries
+    ARCHIVE DESTINATION lib COMPONENT libraries)
