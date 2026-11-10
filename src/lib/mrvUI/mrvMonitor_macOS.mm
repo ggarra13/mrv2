@@ -439,22 +439,102 @@ namespace
     }
 } // anonymous namespace
 
+namespace
+{
+    // Returns the CGDirectDisplayID of an NSScreen (0 if unknown).
+    CGDirectDisplayID displayIDForScreen(NSScreen* s)
+    {
+        NSNumber* n = [[s deviceDescription] objectForKey:@"NSScreenNumber"];
+        return n ? (CGDirectDisplayID)[n unsignedIntValue] : 0;
+    }
+
+    bool assignScreenName(NSScreen* screen, std::string& out)
+    {
+        if (!screen)
+            return false;
+
+        NSString* name = nil;
+        if (@available(macOS 10.15, *))
+            name = [screen localizedName];
+
+        if (!name || ![name length])
+            return false;
+
+        const char* utf8 = [name UTF8String];
+        if (!utf8)
+            return false;
+
+        out = utf8;
+        return true;
+    }
+}  // anonymous namespace
 
 // Name of the monitor, by CGDirectDisplayID.
+//
+// dispID is interpreted, in order, as:
+//   1. a real CGDirectDisplayID (Vulkan, arm64 OpenGL),
+//   2. a display in the same mirror set / with the same CG bounds,
+//   3. an OpenGL display mask (Intel OpenGL),
+//   4. 0 -> the main screen.
 bool getDisplayNameForDispID(CGDirectDisplayID dispID, std::string& out)
 {
     out.clear();
-    // Match on NSScreenNumber.  Comparing NSScreen.frame with CGDisplayBounds
-    // fails for any display not at the origin: AppKit's y axis points up from
-    // the main display's bottom-left, CoreGraphics' points down from its
-    // top-left.
-    NSScreen* screen = screenForDisplayID(dispID);
-    if (!screen)
-        return false;
-    NSString* name = [screen localizedName];
-    out = [name UTF8String];
-    return true;
+
+    NSArray<NSScreen*>* screens = [NSScreen screens];
+    const bool debug = getenv("MRV2_DEBUG_EDR") != nullptr;
+
+    if (debug)
+    {
+        NSLog(@"getDisplayNameForDispID: dispID=%u (0x%x)", dispID, dispID);
+        for (NSScreen* s in screens)
+            NSLog(@"   screen id=%u mask=0x%x name=%@",
+                  displayIDForScreen(s),
+                  CGDisplayIDToOpenGLDisplayMask(displayIDForScreen(s)),
+                  [s localizedName]);
+    }
+
+    // 1. Exact CGDirectDisplayID match (what the Vulkan path passes).
+    for (NSScreen* s in screens)
+        if (dispID && displayIDForScreen(s) == dispID)
+            if (assignScreenName(s, out))
+                return true;
+
+    // 2. Same CoreGraphics bounds / mirror set.  Compare CG with CG: never
+    //    mix with NSScreen.frame, whose y axis is flipped.
+    if (dispID && CGDisplayIsActive(dispID))
+    {
+        const CGRect want = CGDisplayBounds(dispID);
+        for (NSScreen* s in screens)
+        {
+            const CGDirectDisplayID id = displayIDForScreen(s);
+            if (!id)
+                continue;
+            if (CGDisplayPrimaryDisplay(id) == CGDisplayPrimaryDisplay(dispID) ||
+                CGRectEqualToRect(CGDisplayBounds(id), want))
+                if (assignScreenName(s, out))
+                    return true;
+        }
+    }
+
+    // 3. Intel OpenGL: the value may be an OpenGL display mask.
+    if (dispID)
+    {
+        for (NSScreen* s in screens)
+        {
+            const CGDirectDisplayID id = displayIDForScreen(s);
+            if (id && CGDisplayIDToOpenGLDisplayMask(id) == dispID)
+                if (assignScreenName(s, out))
+                    return true;
+        }
+    }
+
+    // 4. Nothing usable was passed: fall back to the main screen.
+    if (!dispID)
+        return assignScreenName([NSScreen mainScreen], out);
+
+    return false;
 }
+
 
 namespace mrv
 {
