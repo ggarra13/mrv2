@@ -28,6 +28,7 @@ extern "C"
 
 #include <array>
 #include <list>
+#include <set>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -971,10 +972,16 @@ namespace tl
         {
             TLRENDER_P();
             p.transform = value;
-            for (auto i : p.shaders)
+            // Several names share one program (rect/wipe, texture/overlay/
+            // dissolve), so only update each unique shader once.
+            std::set<gl::Shader*> done;
+            for (const auto& i : p.shaders)
             {
-                i.second->bind();
-                i.second->setUniform("transform.mvp", value);
+                if (i.second && done.insert(i.second.get()).second)
+                {
+                    i.second->bind();
+                    i.second->setUniform("transform.mvp", value);
+                }
             }
         }
 

@@ -88,6 +88,9 @@ namespace tl
             static size_t getObjectCount();
             
         private:
+            //! Get a uniform location, cached per program.
+            int _location(const std::string&);
+
             TLRENDER_PRIVATE();
         };
     } // namespace gl
