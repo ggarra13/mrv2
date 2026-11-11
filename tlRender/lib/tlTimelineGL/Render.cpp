@@ -843,24 +843,43 @@ namespace tl
             }
             _displayShader();
 
-            p.vbos["rect"] = gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32);
-            p.vaos["rect"] = gl::VAO::create(
-                p.vbos["rect"]->getType(), p.vbos["rect"]->getID());
-            p.vbos["texture"] =
-                gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
-            p.vaos["texture"] = gl::VAO::create(
-                p.vbos["texture"]->getType(), p.vbos["texture"]->getID());
-            p.vbos["image"] =
-                gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
-            p.vaos["image"] = gl::VAO::create(
+            if (!p.vbos["rect"])
+            {
+                p.vbos["rect"] = gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32);
+                p.vaos["rect"] = gl::VAO::create(
+                    p.vbos["rect"]->getType(), p.vbos["rect"]->getID());
+            }
+
+            if (!p.vbos["texture"])
+            {
+                p.vbos["texture"] =
+                    gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
+                p.vaos["texture"] = gl::VAO::create(
+                    p.vbos["texture"]->getType(), p.vbos["texture"]->getID());
+            }
+
+            if (!p.vbos["image"])
+            {
+                p.vbos["image"] =
+                    gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
+                p.vaos["image"] = gl::VAO::create(
                 p.vbos["image"]->getType(), p.vbos["image"]->getID());
-            p.vbos["wipe"] = gl::VBO::create(1 * 3, gl::VBOType::Pos2_F32);
-            p.vaos["wipe"] = gl::VAO::create(
-                p.vbos["wipe"]->getType(), p.vbos["wipe"]->getID());
-            p.vbos["video"] =
-                gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
-            p.vaos["video"] = gl::VAO::create(
-                p.vbos["video"]->getType(), p.vbos["video"]->getID());
+            }
+
+            if (!p.vbos["wipe"])
+            {
+                p.vbos["wipe"] = gl::VBO::create(1 * 3, gl::VBOType::Pos2_F32);
+                p.vaos["wipe"] = gl::VAO::create(
+                    p.vbos["wipe"]->getType(), p.vbos["wipe"]->getID());
+            }
+
+            if (!p.vbos["video"])
+            {
+                p.vbos["video"] =
+                    gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
+                p.vaos["video"] = gl::VAO::create(
+                    p.vbos["video"]->getType(), p.vbos["video"]->getID());
+            }
 
             setViewport(math::Box2i(0, 0, renderSize.w, renderSize.h));
             if (renderOptions.clear)

@@ -21,6 +21,8 @@ ChangeLog
 
 - Core/MacOS: Added a tiny launcher program for mrv2 and vmrv2 so that it complies to MacOS Mach-O standards in Applications .app bundles.
 
+- Core: Improved performance of the OpenGL backend.
+
 - Core: Improved performance of the Vulkan backend. 
 
 - Core: Ported to miniaudio as RtAudio seems like a dead project.  This should allow porting to Emscripten and have better aarch64 support.

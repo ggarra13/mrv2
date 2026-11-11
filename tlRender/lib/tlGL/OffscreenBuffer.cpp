@@ -297,8 +297,6 @@ namespace tl
                 throw std::runtime_error(getErrorLabel(Error::Init));
             }
 
-            ++objectCount;
-
             image::Info info(p.size.w, p.size.h, p.options.colorType);
             totalByteCount += image::getDataByteCount(info);
         }
