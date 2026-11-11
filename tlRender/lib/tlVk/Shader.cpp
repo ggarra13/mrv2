@@ -12,6 +12,8 @@
 #include <FL/Fl_Vk_Utils.H>
 
 #include <atomic>
+#include <filesystem>
+#include <fstream>
 #include <cassert>
 #include <iostream>
 #include <sstream>
@@ -24,6 +26,49 @@ namespace tl
         namespace
         {
             std::atomic<size_t> objectCount = 0;
+
+            //! Compile GLSL to SPIR-V, caching the result on disk keyed by a
+            //! hash of the stage and source.  shaderc is slow (especially for
+            //! the OCIO-generated display shader), so compile once per
+            //! distinct source instead of at every start.
+            std::vector<uint32_t> compileCached(
+                const std::string& source, const shaderc_shader_kind kind,
+                const char* name)
+            {
+                uint64_t h = 1469598103934665603ULL; // FNV-1a
+                auto mix = [&h](unsigned char c) { h ^= c; h *= 1099511628211ULL; };
+                mix(static_cast<unsigned char>(kind));
+                for (unsigned char c : source) mix(c);
+
+                std::error_code ec;
+                const auto dir = std::filesystem::temp_directory_path(ec) /
+                                 "tlrender_vk_spirv"; // TODO: app cache dir
+                std::filesystem::create_directories(dir, ec);
+                const auto file = dir / (std::to_string(h) + "_" +
+                                         std::to_string(source.size()) + ".spv");
+                {
+                    std::ifstream f(file, std::ios::binary | std::ios::ate);
+                    if (f)
+                    {
+                        const std::streamsize bytes = f.tellg();
+                        if (bytes > 0 && bytes % 4 == 0)
+                        {
+                            std::vector<uint32_t> spirv(bytes / 4);
+                            f.seekg(0);
+                            f.read(reinterpret_cast<char*>(spirv.data()), bytes);
+                            if (f && spirv[0] == 0x07230203u) // SPIR-V magic
+                                return spirv;
+                        }
+                    }
+                }
+                std::vector<uint32_t> spirv =
+                    compile_glsl_to_spirv(source, kind, name);
+                std::ofstream f(file, std::ios::binary | std::ios::trunc);
+                if (f)
+                    f.write(reinterpret_cast<const char*>(spirv.data()),
+                            spirv.size() * sizeof(uint32_t));
+                return spirv;
+            }
         }
 
         size_t Shader::getObjectCount()
@@ -51,7 +96,7 @@ namespace tl
 
             try
             {
-                std::vector<uint32_t> spirv = compile_glsl_to_spirv(
+                std::vector<uint32_t> spirv = compileCached(
                     source,
                     shaderc_vertex_shader, // Shader type
                     "vertex_shader.glsl"       // Filename for error reporting
@@ -85,7 +130,7 @@ namespace tl
 
             try
             {
-                std::vector<uint32_t> spirv = compile_glsl_to_spirv(
+                std::vector<uint32_t> spirv = compileCached(
                     source,
                     shaderc_fragment_shader, // Shader type
                     "frag_shader.glsl"       // Filename for error reporting
@@ -119,7 +164,7 @@ namespace tl
 
             try
             {
-                std::vector<uint32_t> spirv = compile_glsl_to_spirv(
+                std::vector<uint32_t> spirv = compileCached(
                     source,
                     shaderc_compute_shader, // Shader type
                     "compute_shader.glsl"       // Filename for error reporting

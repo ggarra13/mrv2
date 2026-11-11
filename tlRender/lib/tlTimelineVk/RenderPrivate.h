@@ -278,6 +278,13 @@ namespace tl
             std::unordered_map<std::string, std::shared_ptr<vlk::VBO> > vbos;
             std::shared_ptr<vlk::VAOPool> vaoPool;
 
+            //! Long-lived pipeline cache (loaded from / saved to disk).
+            VkPipelineCache pipelineCache = VK_NULL_HANDLE;
+
+            //! Set by the option setters; the display shader is rebuilt once,
+            //! at the start of the next frame, instead of once per setter.
+            bool displayShaderDirty = false;
+
             //! Flag for using display shader on SDR.
             bool sdrOutput = false;
 

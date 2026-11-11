@@ -1038,6 +1038,10 @@ namespace tl
                 vkDestroyPipeline(device, pipeline.second, nullptr);
             }
 
+            _savePipelineCache();
+            if (p.pipelineCache != VK_NULL_HANDLE)
+                vkDestroyPipelineCache(device, p.pipelineCache, nullptr);
+
             for (auto& [_, pipelineLayout] : p.pipelineLayouts)
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
@@ -1184,6 +1188,11 @@ namespace tl
             // sets of shaders that no longer exist).  Must come after the
             // garbage above is cleared.
             _resetBindingSetPools();
+
+            // Rebuild the display shader once for all option changes made
+            // since the last frame.
+            if (p.displayShaderDirty)
+                _displayShader();
 
             const PushConstants pc;
             const vlk::ShaderFlags flags =
@@ -1743,8 +1752,7 @@ namespace tl
 
             p.monitor = value;
 
-            p.shaders["display"].reset();
-            _displayShader();
+            _invalidateDisplayShader();
         }
 
         void Render::setSDROutput(bool value)
@@ -1756,10 +1764,7 @@ namespace tl
 
             p.sdrOutput = value;
 
-            p.shaders["display"].reset();
-
-            if (p.fbo)
-                _displayShader();
+            _invalidateDisplayShader();
         }
 
         Fl_Vk_Context& Render::getContext() const
@@ -2604,8 +2609,7 @@ namespace tl
             }
 #endif // TLRENDER_OCIO
 
-            p.shaders["display"].reset();
-            _displayShader();
+            _invalidateDisplayShader();
         }
 
         void Render::setLUTOptions(const timeline::LUTOptions& value)
@@ -2694,8 +2698,7 @@ namespace tl
             }
 #endif // TLRENDER_OCIO
 
-            p.shaders["display"].reset();
-            _displayShader();
+            _invalidateDisplayShader();
         }
 
         void Render::setShaderOptions(const timeline::ShaderOptions& value)
@@ -2706,8 +2709,7 @@ namespace tl
 
             p.shaderOptions = value;
 
-            p.shaders["display"].reset();
-            _displayShader();
+            _invalidateDisplayShader();
         }
 
         void Render::setHDROptions(const timeline::HDROptions& value)
@@ -2898,9 +2900,28 @@ namespace tl
             }
         }
 
+        void Render::_invalidateDisplayShader()
+        {
+            TLRENDER_P();
+            p.shaders["display"].reset();
+            p.displayShaderDirty = true;
+        }
+
+        //! Rebuild the display shader if an option setter invalidated it (or
+        //! it was never created).  Must be called before anything uses
+        //! p.shaders["display"], because the setters can run at any time
+        //! between begin() and drawing.
+        void Render::_ensureDisplayShader()
+        {
+            TLRENDER_P();
+            if (p.displayShaderDirty || !p.shaders["display"])
+                _displayShader();
+        }
+
         void Render::_displayShader()
         {
             TLRENDER_P();
+            p.displayShaderDirty = false;
 
             std::string toneMapDef;
             std::string ocioICSDef;

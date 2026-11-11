@@ -309,6 +309,10 @@ namespace tl
 
         private:
             void _displayShader();
+            void _invalidateDisplayShader();
+            void _ensureDisplayShader();
+            void _createPipelineCache();
+            void _savePipelineCache();
 
             void _drawImageCommon(
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
