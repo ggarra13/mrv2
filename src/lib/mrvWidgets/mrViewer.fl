@@ -890,17 +890,17 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 934 674} type Double color 1 align 80 hide resizable
-      class {mrv::MainWindow} size_range {934 674 0 0}
+      xywh {0 0 934 674} type Double color 1 align 80 resizable
+      class {mrv::MainWindow} size_range {934 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 934 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar open
+          label MenuBar
           xywh {0 0 934 30} box FLAT_BOX labeltype NO_LABEL
         } {
-          Fl_Group {} {open
+          Fl_Group {} {
             xywh {0 0 892 30}
           } {
             Fl_Menu_Bar uiMenuBar {open
@@ -946,7 +946,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar open
+          label TopBar
           xywh {0 30 934 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -1149,7 +1149,7 @@ else
   o->labelcolor(FL_FOREGROUND_COLOR);
   o->color(FL_BACKGROUND_COLOR);
 }
-o->redraw();} selected
+o->redraw();}
                 tooltip {Automatically select Input Color Space from file and OpenEXR metadata.} xywh {247 30 38 29} type Toggle down_box DOWN_BOX selection_color 14 labelsize 10 align 144
               }
               Fl_Menu_Button uiICS {
@@ -1202,75 +1202,7 @@ uiMain->workspace = uiViewGroup;}
             Fl_Group uiToolsGroup {open
               xywh {0 59 42 501}
             } {
-              Fl_Group uiEditGroup {open
-                xywh {0 59 42 501} box FLAT_BOX hide
-              } {
-                Fl_Button uiSelect {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Select );}
-                  tooltip {Clip Selection Tool.} image {../../icons/EditSelect.svg} compress_image 1 xywh {2 60 40 50} down_box DOWN_BOX selection_color 14
-                  class {mrv::Button}
-                }
-                Fl_Button uiMove {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Move );}
-                  image {../../icons/EditMove.svg} compress_image 1 xywh {1 110 40 50} down_box DOWN_BOX value 1 selection_color 14
-                  class {mrv::Button}
-                }
-                Fl_Button uiTrim {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Trim );}
-                  image {../../icons/EditTrim.svg} compress_image 1 xywh {1 160 40 50} down_box DOWN_BOX selection_color 14
-                  class {mrv::Button}
-                }
-                Fl_Button uiSlip {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Slip );}
-                  image {../../icons/EditSlip.svg} compress_image 1 xywh {1 210 40 50} down_box DOWN_BOX selection_color 14
-                  class {mrv::Button}
-                }
-                Fl_Button uiRoll {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );}
-                  image {../../icons/EditRoll.svg} compress_image 1 xywh {1 260 40 50} down_box DOWN_BOX selection_color 14
-                  class {mrv::Button}
-                }
-                Fl_Button uiRipple {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Ripple );}
-                  image {../../icons/EditRipple.svg} compress_image 1 xywh {1 310 40 50} down_box DOWN_BOX selection_color 14 hide
-                  class {mrv::Button}
-                }
-                Fl_Button uiSlide {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Slide );}
-                  image {../../icons/EditSlide.svg} compress_image 1 xywh {1 360 40 50} down_box DOWN_BOX selection_color 14 hide
-                  class {mrv::Button}
-                }
-                Fl_Button uiSlice {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Slice );}
-                  image {../../icons/EditSlice.svg} compress_image 1 xywh {1 410 40 50} down_box DOWN_BOX selection_color 14 hide
-                  class {mrv::Button}
-                }
-                Fl_Group {} {
-                  xywh {0 460 42 100}
-                } {
-                  Fl_Button uiUndoEdit {
-                    user_data this user_data_type {ViewerUI*}
-                    callback {mrv::edit_undo_cb(nullptr, v);}
-                    tooltip {Undo Last Edit.} image {../../icons/Undo.svg} compress_image 1 xywh {0 460 40 50} deactivate
-                    class {mrv::Button}
-                  }
-                  Fl_Button uiRedoEdit {
-                    user_data this user_data_type {ViewerUI*}
-                    callback {mrv::edit_redo_cb(nullptr, v);}
-                    tooltip {Redo Previous Edit.} image {../../icons/Redo.svg} compress_image 1 xywh {0 510 40 50} deactivate
-                    class {mrv::Button}
-                  }
-                }
-              }
-              Fl_Group uiActionGroup {open
+              Fl_Group uiActionGroup {
                 xywh {0 59 42 501} box FLAT_BOX
               } {
                 Fl_Button uiScrub {
@@ -1507,6 +1439,76 @@ settings->setValue( mrv::kPenColorA, a);}
                   }
                 }
               }
+              Fl_Group uiEditGroup {
+                xywh {0 59 42 501} box FLAT_BOX hide
+              } {
+                Fl_Button uiSelect {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Select );}
+                  tooltip {Clip Selection Tool.} image {../../icons/EditSelect.svg} compress_image 1 xywh {2 60 40 50} down_box DOWN_BOX selection_color 14
+                  class {mrv::Button}
+                }
+                Fl_Button uiMove {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {std::cerr << "called uiMove" << std::endl;
+
+uiView->setEditMode( tl::timeline::EditMode::Move );}
+                  image {../../icons/EditMove.svg} compress_image 1 xywh {1 110 40 50} down_box DOWN_BOX value 1 selection_color 14
+                  class {mrv::Button}
+                }
+                Fl_Button uiTrim {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Trim );}
+                  image {../../icons/EditTrim.svg} compress_image 1 xywh {1 160 40 50} down_box DOWN_BOX selection_color 14
+                  class {mrv::Button}
+                }
+                Fl_Button uiSlip {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Slip );}
+                  image {../../icons/EditSlip.svg} compress_image 1 xywh {1 210 40 50} down_box DOWN_BOX selection_color 14
+                  class {mrv::Button}
+                }
+                Fl_Button uiRoll {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );}
+                  image {../../icons/EditRoll.svg} compress_image 1 xywh {1 260 40 50} down_box DOWN_BOX selection_color 14
+                  class {mrv::Button}
+                }
+                Fl_Button uiRipple {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Ripple );}
+                  image {../../icons/EditRipple.svg} compress_image 1 xywh {1 310 40 50} down_box DOWN_BOX selection_color 14 hide
+                  class {mrv::Button}
+                }
+                Fl_Button uiSlide {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Slide );}
+                  image {../../icons/EditSlide.svg} compress_image 1 xywh {1 360 40 50} down_box DOWN_BOX selection_color 14 hide
+                  class {mrv::Button}
+                }
+                Fl_Button uiSlice {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Slice );}
+                  image {../../icons/EditSlice.svg} compress_image 1 xywh {1 410 40 50} down_box DOWN_BOX selection_color 14 hide
+                  class {mrv::Button}
+                }
+                Fl_Group {} {
+                  xywh {0 460 42 100}
+                } {
+                  Fl_Button uiUndoEdit {
+                    user_data this user_data_type {ViewerUI*}
+                    callback {mrv::edit_undo_cb(nullptr, v);}
+                    tooltip {Undo Last Edit.} image {../../icons/Undo.svg} compress_image 1 xywh {0 460 40 50} deactivate
+                    class {mrv::Button}
+                  }
+                  Fl_Button uiRedoEdit {
+                    user_data this user_data_type {ViewerUI*}
+                    callback {mrv::edit_redo_cb(nullptr, v);}
+                    tooltip {Redo Previous Edit.} image {../../icons/Redo.svg} compress_image 1 xywh {0 510 40 50} deactivate
+                    class {mrv::Button}
+                  }
+                }
+              }
             }
             Fl_Group uiView {
               label {Main Viewport} open
@@ -1532,12 +1534,12 @@ uiMain->set_dock(o);}
             }
           }
           Fl_Group uiTimelineGroup {
-            label uiTimelineGroup
+            label uiTimelineGroup open
             xywh {0 560 934 30} box FLAT_BOX color 51 labeltype NO_LABEL
             class {mrv::TimelineGroup}
           } {
             Fl_Group uiTimeline {
-              label uiTimeline
+              label uiTimeline selected
               xywh {0 568 934 22} color 6 labeltype NO_LABEL resizable
               class MyTimelineWidget
             } {}

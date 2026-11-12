@@ -4007,7 +4007,7 @@ namespace mrv
         {
             int savedH = calculate_edit_viewport_size(ui);
             int H = ui->uiTimelineGroup->h();
-            if (H == kMinEditModeH || !ui->uiTimelineGroup->visible())
+            if (H <= kMinEditModeH || !ui->uiTimelineGroup->visible())
                 active = false;
         }
 

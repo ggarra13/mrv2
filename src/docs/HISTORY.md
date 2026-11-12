@@ -9,6 +9,8 @@ ChangeLog
 
 - UI: Added **Help->Video Tutorials** which opens your browser with a YouTube video playlist.  Close to 20 videos showing the UI and evolution of the features of mrv2 and vmrv2.
 
+- UI/Wayland:  Now clicking twice on the title bar with a tablet will resize the window.
+
 - Python: Python support within the UI was always available, including the Python Editor.  Only Python plugins and running python scripts was not possible without a Standard license.  Now running a python script without the unlocking of the python licensing, will print out a clarifying message.
 
 - Python: the included bakeOCIO.py python demo script now has documentation on how to bake OpenEXR sequencese to HDR .mov files.

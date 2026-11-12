@@ -13,6 +13,10 @@ namespace mrv
         Fl_Button(X, Y, W, H, L)
     {
         default_color = color();
+
+#if FLTK_HAVE_PEN_SUPPORT
+        Fl::Pen::subscribe(this);
+#endif
     }
 
     void Button::set_cursor(Fl_Cursor e)
@@ -20,12 +24,13 @@ namespace mrv
         if (window())
             window()->cursor(e);
     }
-    
+
     int Button::handle(int e)
     {
         int ret = Fl_Button::handle(e);
         switch (e)
         {
+        case Fl::Pen::ENTER:
         case FL_ENTER:
             if (color() != FL_YELLOW)
             {
@@ -38,6 +43,7 @@ namespace mrv
                 }
             }
             return 1;
+        case Fl::Pen::LEAVE:
         case FL_LEAVE:
             if (color() != FL_YELLOW)
                 color(default_color);
