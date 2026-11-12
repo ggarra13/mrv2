@@ -531,36 +531,36 @@ namespace mrv
                 return;
 
 #ifdef OPENGL_BACKEND
-            if (window())
-                window()->cursor(n);
+            if (top_window())
+                top_window()->cursor(n);
 #endif
 
 #ifdef VULKAN_BACKEND
 #   ifdef _WIN32
-            if (window())
+            if (top_window())
             {
                 if (n == FL_CURSOR_CROSS)
                 {
                     static std::unique_ptr<Fl_PNG_Image> rgba_cross {
                         load_png("crosshair.png")
                     };
-                    window()->cursor(rgba_cross.get(), 16, 16);
+                    top_window()->cursor(rgba_cross.get(), 16, 16);
                 }
                 else if (n == FL_CURSOR_INSERT)
                 {
                     static std::unique_ptr<Fl_PNG_Image> rgba_insert {
                         load_png("textcursor.png")
                     };
-                    window()->cursor(rgba_insert.get(), 16, 16);
+                    top_window()->cursor(rgba_insert.get(), 16, 16);
                 }
                 else
                 {
-                    window()->cursor(n);
+                    top_window()->cursor(n);
                 }
             }
 #   else
-                if (window())
-                    window()->cursor(n);
+                if (top_window())
+                    top_window()->cursor(n);
 #   endif
 #endif
             p.lastCursor = n;
