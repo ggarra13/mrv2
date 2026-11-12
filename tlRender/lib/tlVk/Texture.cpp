@@ -220,6 +220,8 @@ namespace tl
                     VK_FORMAT_UNDEFINED, // YUV_444SP_U16
 
                     VK_FORMAT_R8G8B8A8_UNORM, // ARGB_4444_Premult
+
+                    VK_FORMAT_UNDEFINED,  //
             };
             return data[static_cast<std::size_t>(type)];
         }

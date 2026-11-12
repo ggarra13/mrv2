@@ -111,6 +111,21 @@ namespace tl
             YUV_444SP_U16,  //!< Semi-planar 4:4:4 16-bit (e.g. hardware-decoded P216)
             ARGB_4444_Premult,
 
+            //! Planar three channel half float: red, then green, then blue,
+            //! each its own plane.
+            //!
+            //! The same bytes as RGB_F16 in a different order, uploaded as
+            //! three single channel textures rather than one three channel
+            //! one. There is no three channel half format on Metal, so a
+            //! RGB_F16 texture is backed by a four channel one and every
+            //! upload of it is widened by the driver; three single channel
+            //! textures are each a format that does exist, so nothing is
+            //! widened.
+            //!
+            //! Added at the end deliberately: the shaders carry these values as
+            //! literals, so inserting one anywhere else renumbers them.
+            RGB_F16_P,
+
             Count,
             First = kNone
         };
