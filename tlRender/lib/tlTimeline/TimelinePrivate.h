@@ -88,8 +88,8 @@ namespace tl
             // contained and quietly reading a file from somewhere else would be
             // misleading; reading one of these fails instead. Filled in while
             // the timeline is read and only read afterwards.
-            std::set<const OTIO_NS::MediaReference*> unavailableMediaReferences
-            ;
+            std::set<const OTIO_NS::MediaReference*> unavailableMediaReferences;
+
             // Guarded by memFilesMutex once the timeline is running, since a
             // reference can also turn out to be unavailable when its byte
             // ranges are worked out on first read.
@@ -294,6 +294,11 @@ namespace tl
                 std::string mediaReferenceKey;
                 std::map<const OTIO_NS::Clip*, std::string> clipMediaReferenceKeys;
                 bool mediaReferenceKeysChanged = false;
+
+                // Used by sequence's request list reading.
+                std::optional<OTIO_NS::RationalTime> priorityTime;
+                bool priorityReverse = false;
+
                 std::mutex mutex;
             };
             Mutex mutex;
@@ -332,12 +337,16 @@ namespace tl
                 {
                     std::function<io::VideoData()> f;
                     std::promise<io::VideoData> promise;
+                    std::optional<OTIO_NS::RationalTime> time;
                 };
                 std::vector<std::thread> threads;
                 std::list<Task> tasks;
                 std::condition_variable cv;
                 std::mutex mutex;
                 bool stopped = false;
+                // Guarded by mutex.
+                std::optional<OTIO_NS::RationalTime> priorityTime;
+                bool priorityReverse = false;
             };
             ReadPool readPool;
 
@@ -347,7 +356,9 @@ namespace tl
             // Decode on the pool. The future carries an empty VideoData if the
             // decode throws, which is what a reader did with a failed frame.
             std::future<io::VideoData>
-            submitRead(std::function<io::VideoData()>);
+            submitRead(std::function<io::VideoData()>,
+                       const std::optional<OTIO_NS::RationalTime>& time =
+                       std::nullopt);
 
             // Give up on a request that has not resolved, so that a caller
             // waiting on its future is not left waiting forever. The frame

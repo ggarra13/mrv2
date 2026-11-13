@@ -594,7 +594,7 @@ namespace tl
                 copyTextures(image, textures);
                 p.textureCache->add(image, textures, image->getDataByteCount());
             }
-            fprintf(stderr, "misses=%d\n", misses);
+            fprintf(stderr, "misses=%d %p\n", misses, image.get());
 
             auto shader = p.shaders["image"];
             _createBindingSet(shader);

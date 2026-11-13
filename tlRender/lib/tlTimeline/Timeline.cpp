@@ -30,7 +30,27 @@ namespace tl
     {
 
         namespace
-        {
+        {    struct Rank { int group; double key; };
+
+            // Lower is served first: at/ahead of the playhead in the play
+            // direction, nearest first; then behind it, in the order a
+            // loop reaches them; then frames not tied to playback.
+            Rank rank(const std::optional<OTIO_NS::RationalTime>& t,
+                      const OTIO_NS::RationalTime& playhead, bool reverse)
+            {
+                if (!t.has_value()) return { 2, 0.0 };
+                const double s = t->to_seconds();
+                const double p = playhead.to_seconds();
+                const double ahead = reverse ? p - s : s - p;
+                if (ahead >= 0.0) return { 0, ahead };
+                return { 1, reverse ? -s : s };
+            }
+
+            bool before(const Rank& a, const Rank& b)
+            {
+                return a.group != b.group ? a.group < b.group : a.key < b.key;
+            }
+
             std::string getKey(const file::Path& path)
             {
                 std::vector<std::string> out;
@@ -1677,8 +1697,23 @@ namespace tl
                         (p.thread.videoRequestsInProgress.size() +
                          newVideoRequests.size()) < getVideoRequestMax())
                 {
-                    newVideoRequests.push_back(p.mutex.videoRequests.front());
-                    p.mutex.videoRequests.pop_front();
+                    auto pick = p.mutex.videoRequests.begin();
+                    if (p.mutex.priorityTime.has_value())
+                    {
+                        auto best = rank(std::optional(( *pick)->time),
+                                         *p.mutex.priorityTime,
+                                         p.mutex.priorityReverse);
+                        for (auto j = std::next(pick);
+                             j != p.mutex.videoRequests.end(); ++j)
+                        {
+                            const auto r = rank(std::optional((*j)->time),
+                                                *p.mutex.priorityTime,
+                                                p.mutex.priorityReverse);
+                            if (before(r, best)) { best = r; pick = j; }
+                        }
+                    }
+                    newVideoRequests.push_back(*pick);
+                    p.mutex.videoRequests.erase(pick);
                 }
                 while (!p.mutex.audioRequests.empty() &&
                        (p.thread.audioRequestsInProgress.size() +
@@ -2120,11 +2155,12 @@ namespace tl
                     timeRangeOpt.value(),
                     trimmedRange,
                     ioInfo.videoTime->duration().rate());
+                const auto tag = time + p.timeRange.start_time();
                 out = seq ?
                       p.submitRead(
-                          [seq, mediaTime, optionsMerged]
+                          [&p, seq, mediaTime, optionsMerged]
                               {
-                                  return seq->readVideo(mediaTime, optionsMerged);
+                                  return p.readSeqFrame(seq, mediaTime, optionsMerged);
                               }) :
                       read->readVideo(mediaTime, optionsMerged);
             }
@@ -2304,8 +2340,19 @@ namespace tl
                                             // Stopped and drained.
                                             return;
                                         }
-                                        task = std::move(readPool.tasks.front());
-                                        readPool.tasks.pop_front();
+                                        auto it = readPool.tasks.begin();
+                                        if (readPool.priorityTime.has_value())
+                                        {
+                                            const auto playhead = readPool.priorityTime.value();
+                                            auto best = rank(it->time, playhead, readPool.priorityReverse);
+                                            for (auto j = std::next(it); j != readPool.tasks.end(); ++j)
+                                            {
+                                                const auto r = rank(j->time, playhead, readPool.priorityReverse);
+                                                if (before(r, best)) { best = r; it = j; }
+                                            }
+                                        }
+                                        task = std::move(*it);
+                                        readPool.tasks.erase(it);
                                     }
                                     try
                                     {
@@ -2352,10 +2399,12 @@ namespace tl
         }
 
         std::future<io::VideoData> Timeline::Private::submitRead(
-            std::function<io::VideoData()> f)
+            std::function<io::VideoData()> f,
+            const std::optional<OTIO_NS::RationalTime>& time)
         {
             ReadPool::Task task;
             task.f = std::move(f);
+            task.time = time;
             auto out = task.promise.get_future();
             if (readPool.threads.empty())
             {
@@ -3436,6 +3485,23 @@ namespace tl
                 p.thread.thread.join();
             }
             p.stopReadPool();
+        }
+
+        void Timeline::setRequestPriority(const OTIO_NS::RationalTime& time, bool reverse)
+        {
+            TLRENDER_P();
+            const std::optional<OTIO_NS::RationalTime> t =
+                time.is_invalid_time() ? std::nullopt : std::optional(time);
+            {
+                std::unique_lock<std::mutex> lock(p.readPool.mutex);
+                p.readPool.priorityTime = t;
+                p.readPool.priorityReverse = reverse;
+            }
+            {
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.mutex.priorityTime = t;
+                p.mutex.priorityReverse = reverse;
+            }
         }
 
     } // namespace timeline
