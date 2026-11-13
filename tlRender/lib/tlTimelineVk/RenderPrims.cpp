@@ -568,8 +568,8 @@ namespace tl
         }
 
         void Render::_drawImageCommon(
-            const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
-            const std::shared_ptr<image::Image>& image, const math::Box2i& box,
+            const std::shared_ptr<vlk::OffscreenBuffer> fbo,
+            const std::shared_ptr<image::Image> image, const math::Box2i& box,
             const image::Color4f& color,
             const timeline::ImageOptions& imageOptions,
             const bool clearRenderPass,
@@ -580,6 +580,8 @@ namespace tl
             ++(p.currentStats.images);
 
             const auto& info = image->getInfo();
+            fprintf(stderr, "draw image %p  w=%d\n",
+                    (void*)image.get(), info.size.w);
             std::vector<std::shared_ptr<vlk::Texture> > textures;
             if (!imageOptions.cache)
             {
@@ -588,9 +590,17 @@ namespace tl
             }
             else if (!p.textureCache->get(image, textures))
             {
+                static int misses = 0;
+                fprintf(stderr, "texture cache miss #%d\n", ++misses);
                 textures = getTextures(ctx, info, imageOptions.imageFilters);
                 copyTextures(image, textures);
                 p.textureCache->add(image, textures, image->getDataByteCount());
+                fprintf(stderr, "add image %p  w=%d\n",
+                        (void*)image.get(), info.size.w);
+                if (!p.textureCache->get(image, textures))
+                {
+                    fprintf(stderr, "after add we got a miss!!!\n");
+                }
             }
 
             auto shader = p.shaders["image"];

@@ -76,14 +76,15 @@ namespace tl
 
             void copy(const std::shared_ptr<image::Image>&);
             void copy(const std::shared_ptr<image::Image>&, int x, int y);
+            void copy(const uint8_t*, const image::Info&);
             void copy(const uint8_t*, const image::Info&,
-                      const int rowStride = 0);
+                      const int rowStride);
 
             ///@}
 
             //! Bind the texture.
             void bind();
-            
+
             //! Get the number of objects currenty instantiated.
             static size_t getObjectCount();
 
@@ -91,6 +92,9 @@ namespace tl
             static size_t getTotalByteCount();
 
         private:
+            void _copy(const uint8_t* data,
+                       const image::Info& info, int x, int y);
+
             TLRENDER_PRIVATE();
         };
     } // namespace gl

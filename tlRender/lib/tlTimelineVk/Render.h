@@ -315,8 +315,8 @@ namespace tl
             void _savePipelineCache();
 
             void _drawImageCommon(
-                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
-                const std::shared_ptr<image::Image>& image,
+                const std::shared_ptr<vlk::OffscreenBuffer> fbo,
+                const std::shared_ptr<image::Image> image,
                 const math::Box2i& box,
                 const image::Color4f& color,
                 const timeline::ImageOptions& imageOptions,
