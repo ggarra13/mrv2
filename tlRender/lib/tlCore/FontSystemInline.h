@@ -2,9 +2,6 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <functional>
-#include <string>
-
 namespace tl
 {
     namespace image
@@ -40,6 +37,16 @@ namespace tl
         {
         }
 
+        inline bool GlyphInfo::operator==(const GlyphInfo& other) const
+        {
+            return code == other.code && fontInfo == other.fontInfo;
+        }
+
+        inline bool GlyphInfo::operator!=(const GlyphInfo& other) const
+        {
+            return !(*this == other);
+        }
+
         inline bool GlyphInfo::operator<(const GlyphInfo& other) const
         {
             return std::tie(code, fontInfo) <
@@ -47,30 +54,3 @@ namespace tl
         }
     } // namespace image
 } // namespace tl
-
-namespace std
-{
-    template <>
-    struct hash<tl::image::FontInfo>
-    {
-        std::size_t operator()(const tl::image::FontInfo& value) const noexcept
-        {
-            std::size_t out = std::hash<std::string>{}(value.family);
-            out ^= std::hash<int>{}(value.size) + 0x9e3779b97f4a7c15ULL +
-                   (out << 6) + (out >> 2);
-            return out;
-        }
-    };
-
-    template <>
-    struct hash<tl::image::GlyphInfo>
-    {
-        std::size_t operator()(const tl::image::GlyphInfo& value) const noexcept
-        {
-            std::size_t out = std::hash<uint32_t>{}(value.code);
-            out ^= std::hash<tl::image::FontInfo>{}(value.fontInfo) +
-                   0x9e3779b97f4a7c15ULL + (out << 6) + (out >> 2);
-            return out;
-        }
-    };
-}

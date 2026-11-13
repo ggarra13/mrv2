@@ -4,9 +4,8 @@
 
 #pragma once
 
-#include <cstddef>
-#include <list>
-#include <unordered_map>
+#include <cstdint>
+#include <map>
 #include <vector>
 
 namespace tl
@@ -14,8 +13,7 @@ namespace tl
     namespace memory
     {
         //! Least recently used (LRU) cache.
-        template <typename T, typename U>
-        class LRUCache
+        template <typename T, typename U> class LRUCache
         {
         public:
             //! \name Size
@@ -34,8 +32,7 @@ namespace tl
             ///@{
 
             bool contains(const T& key) const;
-            bool get(const T& key, U& value);
-            bool touch(const T& key);
+            bool get(const T& key, U& value) const;
 
             void add(const T& key, const U& value, size_t size = 1);
             void remove(const T& key);
@@ -47,29 +44,12 @@ namespace tl
             ///@}
 
         private:
-            void _evict();
+            void _maxUpdate();
 
             size_t _max = 10000;
-            size_t _size = 0; // running total of item sizes
-
-            // LRU order: front = most-recently-used, back = least-recently-used.
-            struct ListNode
-            {
-                ListNode(const T& key, const U& value, size_t size) :
-                    key(key),
-                    value(value),
-                    size(size)
-                    {}
-
-                T      key;
-                U      value;
-                size_t size = 1;
-            };
-            std::list<ListNode> _list;
-
-            // Maps key -> iterator into _list for O(1) lookup and splice.
-            using Map = std::unordered_map<T, typename std::list<ListNode>::iterator>;
-            Map _map;
+            std::map<T, std::pair<U, size_t> > _map;
+            mutable std::map<T, int64_t> _counts;
+            mutable int64_t _counter = 0;
         };
     } // namespace memory
 } // namespace tl
