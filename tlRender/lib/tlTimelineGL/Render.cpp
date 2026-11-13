@@ -49,8 +49,7 @@ namespace tl
             std::vector<std::shared_ptr<gl::Texture> > out;
             gl::TextureOptions options;
             options.filters = imageFilters;
-            options.pbo =
-                info.size.w >= pboSizeMin || info.size.h >= pboSizeMin;
+            options.pbo = false;
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:
@@ -192,7 +191,8 @@ namespace tl
         void copyTextures(
             const std::shared_ptr<image::Image>& image,
             const std::vector<std::shared_ptr<gl::Texture> >& textures,
-            size_t offset)
+            size_t offset,
+            gl::UploadBuffer* upload)
         {
             const auto& info = image->getInfo();
             switch (info.pixelType)
@@ -464,7 +464,8 @@ namespace tl
             default:
                 if (1 == textures.size())
                 {
-                    textures[0]->copy(image);
+                    upload ? textures[0]->copy(image, *upload) :
+                             textures[0]->copy(image);
                 }
                 break;
             }
@@ -777,6 +778,10 @@ namespace tl
             {
                 p.glyphTextureAtlas = gl::TextureAtlas::create(
                     1, 4096, image::PixelType::L_U8, timeline::ImageFilter::Linear);
+            }
+            if (!p.uploadBuffer)
+            {
+                p.uploadBuffer = std::make_unique<gl::UploadBuffer>();
             }
 
             glEnable(GL_BLEND);

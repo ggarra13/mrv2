@@ -361,7 +361,11 @@ namespace tl
             {
                 textures = getTextures(info, imageOptions.imageFilters);
                 copyTextures(image, textures);
-                p.textureCache->add(image, textures, image->getDataByteCount());
+                size_t glBytes = image->getDataByteCount();
+                if (image::getChannelCount(info.pixelType) == 3 &&
+                    info.pixelType != image::PixelType::RGB_U10)
+                    glBytes = glBytes / 3 * 4; // GPUs store RGB as RGBA.
+                p.textureCache->add(image, textures, glBytes);
             }
             setActiveTextures(info, textures);
 
