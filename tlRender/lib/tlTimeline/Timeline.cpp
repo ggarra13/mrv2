@@ -30,7 +30,8 @@ namespace tl
     {
 
         namespace
-        {    struct Rank { int group; double key; };
+        {
+            struct Rank { int group; double key; };
 
             // Lower is served first: at/ahead of the playhead in the play
             // direction, nearest first; then behind it, in the order a
@@ -1554,37 +1555,24 @@ namespace tl
         void Timeline::cancelRequests(const std::vector<uint64_t>& ids)
         {
             TLRENDER_P();
+            auto cancel = [&ids](auto& requests)
+                {
+                    auto i = requests.begin();
+                    while (i != requests.end())
+                    {
+                        if (std::find(ids.begin(), ids.end(), (*i)->id) != ids.end())
+                        {
+                            i = requests.erase(i);
+                        }
+                        else
+                        {
+                            ++i;
+                        }
+                    }
+                };
             std::unique_lock<std::mutex> lock(p.mutex.mutex);
-            {
-                auto i = p.mutex.videoRequests.begin();
-                while (i != p.mutex.videoRequests.end())
-                {
-                    const auto j = std::find(ids.begin(), ids.end(), (*i)->id);
-                    if (j != ids.end())
-                    {
-                        i = p.mutex.videoRequests.erase(i);
-                    }
-                    else
-                    {
-                        ++i;
-                    }
-                }
-            }
-            {
-                auto i = p.mutex.audioRequests.begin();
-                while (i != p.mutex.audioRequests.end())
-                {
-                    const auto j = std::find(ids.begin(), ids.end(), (*i)->id);
-                    if (j != ids.end())
-                    {
-                        i = p.mutex.audioRequests.erase(i);
-                    }
-                    else
-                    {
-                        ++i;
-                    }
-                }
-            }
+            cancel(p.mutex.videoRequests);
+            cancel(p.mutex.audioRequests);
         }
 
         void Timeline::tick()
@@ -1666,6 +1654,25 @@ namespace tl
              }
          }
 
+
+        void Timeline::closeReaders()
+        {
+            TLRENDER_P();
+            std::vector<std::shared_ptr<io::IVideoRead> > video;
+            std::vector<std::shared_ptr<io::IAudioRead> > audio;
+            {
+                std::unique_lock<std::mutex> lock(p.readCacheMutex);
+                video = p.videoReadCache.getValues();
+                audio = p.audioReadCache.getValues();
+                p.videoReadCache.clear();
+                p.audioReadCache.clear();
+            }
+            {
+                std::unique_lock<std::mutex> lock(p.seqFrameMutex);
+                p.seqFrameCache.clear();
+            }
+        }
+
          void Timeline::_requests()
          {
              TLRENDER_P();
@@ -1709,7 +1716,11 @@ namespace tl
                             const auto r = rank(std::optional((*j)->time),
                                                 *p.mutex.priorityTime,
                                                 p.mutex.priorityReverse);
-                            if (before(r, best)) { best = r; pick = j; }
+                            if (before(r, best))
+                            {
+                                best = r;
+                                pick = j;
+                            }
                         }
                     }
                     newVideoRequests.push_back(*pick);
@@ -3201,6 +3212,7 @@ namespace tl
 
             double sum = (options.videoGB + options.audioGB);
             p.frameCache->setMax(sum * memory::gigabyte);
+            p.seqFrameCache.setMax(options.videoGB * memory::gigabyte);
         }
 
         file::Path Timeline::getMediaPath(OTIO_NS::RationalTime& mediaTime)
@@ -3487,7 +3499,8 @@ namespace tl
             p.stopReadPool();
         }
 
-        void Timeline::setRequestPriority(const OTIO_NS::RationalTime& time, bool reverse)
+        void Timeline::setRequestPriority(const OTIO_NS::RationalTime& time,
+                                          bool reverse)
         {
             TLRENDER_P();
             const std::optional<OTIO_NS::RationalTime> t =
@@ -3504,5 +3517,30 @@ namespace tl
             }
         }
 
+        io::VideoData Timeline::Private::readSeqFrame(
+            const std::shared_ptr<io::SeqDecode>& seq,
+            const OTIO_NS::RationalTime& t, const io::Options& options)
+        {
+            std::string key =
+                std::to_string(reinterpret_cast<uintptr_t>(seq.get()));
+            key += '/' + std::to_string(t.value()) + '@' +
+                   std::to_string(t.rate());
+            // layer selection etc. changes the pixels
+            for (const auto& i : options)
+                key += '|' + i.first + '=' + i.second;
+            {
+                std::unique_lock<std::mutex> lock(seqFrameMutex);
+                io::VideoData cached;
+                if (seqFrameCache.get(key, cached))
+                    return cached;
+            }
+            io::VideoData out = seq->readVideo(t, options);
+            if (out.image)
+            {
+                std::unique_lock<std::mutex> lock(seqFrameMutex);
+                seqFrameCache.add(key, out, out.image->getDataByteCount());
+            }
+            return out;
+        }
     } // namespace timeline
 } // namespace tl

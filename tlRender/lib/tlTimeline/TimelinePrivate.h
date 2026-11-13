@@ -448,6 +448,13 @@ namespace tl
             //! The observable side of the above; see
             //! Timeline::observeFramesFound().
             std::shared_ptr<observer::List<OTIO_NS::TimeRange> > framesFound;
+
+            //! Sequence
+            std::mutex seqFrameMutex;
+            memory::LRUCache<std::string, io::VideoData> seqFrameCache;
+            io::VideoData readSeqFrame(const std::shared_ptr<io::SeqDecode>&,
+                                       const OTIO_NS::RationalTime&,
+                                       const io::Options&);
         };
     } // namespace timeline
 } // namespace tl

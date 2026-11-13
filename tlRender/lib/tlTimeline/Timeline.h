@@ -297,9 +297,6 @@ namespace tl
             //! Set the cache options.
             void setCacheOptions(const PlayerCacheOptions&);
 
-            //! Set the request priority.
-            void setRequestPriority(const OTIO_NS::RationalTime& time, bool reverse);
-
         private:
             void _tick();
             void _requests();
