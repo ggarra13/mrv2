@@ -581,6 +581,7 @@ namespace tl
 
             const auto& info = image->getInfo();
             std::vector<std::shared_ptr<vlk::Texture> > textures;
+            static int misses = 0;
             if (!imageOptions.cache)
             {
                 textures = getTextures(ctx, info, imageOptions.imageFilters);
@@ -588,10 +589,12 @@ namespace tl
             }
             else if (!p.textureCache->get(image, textures))
             {
+                ++misses;
                 textures = getTextures(ctx, info, imageOptions.imageFilters);
                 copyTextures(image, textures);
                 p.textureCache->add(image, textures, image->getDataByteCount());
             }
+            fprintf(stderr, "misses=%d\n", misses);
 
             auto shader = p.shaders["image"];
             _createBindingSet(shader);

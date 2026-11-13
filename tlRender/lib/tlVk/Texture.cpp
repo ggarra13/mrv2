@@ -841,6 +841,7 @@ namespace tl
         {
             TLRENDER_P();
 
+            std::size_t bufferSize = VK_WHOLE_SIZE;
             uint8_t* data = const_cast<uint8_t*>(upload);
 
             // Assuming 'data' is a pointer to your tightly packed
@@ -852,6 +853,12 @@ namespace tl
             {
                 pixel_size = sizeof(uint32_t);
             }
+
+            const size_t tightRow = static_cast<size_t>(p.info.size.w) * pixel_size;
+            const size_t rows     = static_cast<size_t>(p.info.size.h) * p.depth;
+            const bool   strided  = (rowPitch > 0 && static_cast<size_t>(rowPitch) != tightRow);
+            if (strided)
+                bufferSize = tightRow * rows;
 
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
@@ -1050,11 +1057,23 @@ namespace tl
                         d[i * 4 + 3] = 1.0f;         // A
                     }
                 }
+                else if (strided)
+                {
+                    // Re-pack the strided source into a tightly packed
+                    // staging buffer so bufferRowLength = 0 below is correct.
+                    const uint8_t* s = data;
+                    uint8_t* d = static_cast<uint8_t*>(mapped);
+                    for (size_t row = 0; row < rows; ++row)
+                    {
+                        std::memcpy(d, s, tightRow);
+                        d += tightRow;
+                        s += rowPitch;
+                    }
+                }
                 else
                 {
                     std::memcpy(mapped, data, size);
                 }
-
                 vmaUnmapMemory(ctx.allocator, stagingAllocation);
                 vmaFlushAllocation(ctx.allocator, stagingAllocation, 0,
                                    VK_WHOLE_SIZE);

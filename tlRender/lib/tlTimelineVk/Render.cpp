@@ -295,6 +295,7 @@ namespace tl
             std::vector<std::shared_ptr<vlk::Texture> > out;
             vlk::TextureOptions options;
             options.filters = imageFilters;
+            options.tiling = VK_IMAGE_TILING_OPTIMAL;
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:
