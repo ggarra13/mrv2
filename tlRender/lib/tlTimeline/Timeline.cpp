@@ -1534,37 +1534,25 @@ namespace tl
         void Timeline::cancelRequests(const std::vector<uint64_t>& ids)
         {
             TLRENDER_P();
+            auto cancel = [&ids](auto& requests)
+                {
+                    auto i = requests.begin();
+                    while (i != requests.end())
+                    {
+                        if (std::find(ids.begin(), ids.end(), (*i)->id) !=
+                            ids.end())
+                        {
+                            i = requests.erase(i);
+                        }
+                        else
+                        {
+                            ++i;
+                        }
+                    }
+                };
             std::unique_lock<std::mutex> lock(p.mutex.mutex);
-            {
-                auto i = p.mutex.videoRequests.begin();
-                while (i != p.mutex.videoRequests.end())
-                {
-                    const auto j = std::find(ids.begin(), ids.end(), (*i)->id);
-                    if (j != ids.end())
-                    {
-                        i = p.mutex.videoRequests.erase(i);
-                    }
-                    else
-                    {
-                        ++i;
-                    }
-                }
-            }
-            {
-                auto i = p.mutex.audioRequests.begin();
-                while (i != p.mutex.audioRequests.end())
-                {
-                    const auto j = std::find(ids.begin(), ids.end(), (*i)->id);
-                    if (j != ids.end())
-                    {
-                        i = p.mutex.audioRequests.erase(i);
-                    }
-                    else
-                    {
-                        ++i;
-                    }
-                }
-            }
+            cancel(p.mutex.videoRequests);
+            cancel(p.mutex.audioRequests);
         }
 
         void Timeline::tick()
