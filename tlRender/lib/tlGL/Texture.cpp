@@ -95,7 +95,7 @@ namespace tl
                 // LA_*
                 GL_RG8, GL_RG16, GL_RG32I, GL_RG16F, GL_RG32F,
                 // RGB_*
-                GL_RGB8, GL_RGB10_A2, GL_RGB16, GL_RGB32I, GL_RGB16F, GL_RGB32F,
+                GL_RGB8, GL_RGB10_A2, GL_RGB16, GL_RGB32I, GL_RGBA16F, GL_RGBA32F,
                 // RGBA_*
                 GL_RGBA8, GL_RGBA16, GL_RGBA32I, GL_RGBA16F, GL_RGBA32F,
                 // YUV planar
@@ -207,6 +207,32 @@ namespace tl
             return data[static_cast<std::size_t>(value)];
         }
 
+        
+        UploadBuffer::~UploadBuffer()
+        {
+            for (auto& id : _ids)
+                if (id) glDeleteBuffers(1, &id);
+        }
+
+        void* UploadBuffer::map(size_t byteCount)
+        {
+            const int i = _index;
+            _index = (_index + 1) % count;
+            if (!_ids[i]) glGenBuffers(1, &_ids[i]);
+            glBindBuffer(GL_PIXEL_UNPACK_BUFFER, _ids[i]);
+            if (_sizes[i] < byteCount) // Grow only; never reallocate per frame.
+            {
+                glBufferData(GL_PIXEL_UNPACK_BUFFER, byteCount, nullptr, GL_STREAM_DRAW);
+                _sizes[i] = byteCount;
+            }
+            // Invalidate so we never wait on the previous upload still reading this buffer.
+            return glMapBufferRange(
+                GL_PIXEL_UNPACK_BUFFER, 0, byteCount,
+                GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+        }
+
+        void UploadBuffer::unmap() { glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER); }
+        
         namespace
         {
             std::atomic<size_t> objectCount = 0;
@@ -453,6 +479,32 @@ namespace tl
             glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
         }
 
+        void Texture::copy(const std::shared_ptr<image::Image>& data,
+                           UploadBuffer& upload)
+        {
+            const auto& info = data->getInfo();
+            if (1 == info.layout.alignment && info.layout.endian == memory::getEndian())
+            {
+                const size_t byteCount = data->getDataByteCount();
+                if (void* dst = upload.map(byteCount))
+                {
+                    memcpy(dst, data->getData(), byteCount);
+                    upload.unmap();
+                    glBindTexture(GL_TEXTURE_2D, _p->id);
+                    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+                    glPixelStorei(GL_UNPACK_SWAP_BYTES, 0);
+                    glTexSubImage2D(
+                        GL_TEXTURE_2D, 0, 0, 0, info.size.w, info.size.h,
+                        getTextureFormat(info.pixelType),
+                        getTextureType(info.pixelType), nullptr);
+                    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+                    return;
+                }
+                glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+            }
+            copy(data, 0, 0); // Fallback: client-memory upload.
+        }
+        
         void Texture::bind()
         {
             glBindTexture(GL_TEXTURE_2D, _p->id);

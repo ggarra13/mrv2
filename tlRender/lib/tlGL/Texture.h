@@ -20,7 +20,25 @@ namespace tl
 
         //! Get the OpenGL texture type.
         unsigned int getTextureType(image::PixelType);
+        
+        //! Small ring of pixel-unpack buffers shared by all uploads on a GL
+        //! context.
+        class UploadBuffer
+        {
+            TLRENDER_NON_COPYABLE(UploadBuffer);
+        public:
+            UploadBuffer() = default;
+            ~UploadBuffer();
+            void* map(size_t byteCount); // Leaves the buffer bound to GL_PIXEL_UNPACK_BUFFER.
+            void unmap();
+        private:
+            static constexpr int count = 3;
+            unsigned int _ids[count] = {};
+            size_t _sizes[count] = {};
+            int _index = 0;
+        };
 
+        
         //! OpenGL texture options.
         struct TextureOptions
         {
@@ -78,6 +96,7 @@ namespace tl
             void copy(const std::shared_ptr<image::Image>&, int x, int y);
             void copy(const uint8_t*, const image::Info&,
                       const int rowStride = 0);
+            void copy(const std::shared_ptr<image::Image>&, UploadBuffer&);
 
             ///@}
 
