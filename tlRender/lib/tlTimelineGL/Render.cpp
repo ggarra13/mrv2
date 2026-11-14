@@ -143,6 +143,14 @@ namespace tl
                 out.push_back(gl::Texture::create(infoTmp, options));
                 break;
             }
+            case image::PixelType::RGB_F16_P:
+            {
+                const auto infoTmp = image::Info(info.size, image::PixelType::L_F16);
+                out.push_back(gl::Texture::create(infoTmp, options));
+                out.push_back(gl::Texture::create(infoTmp, options));
+                out.push_back(gl::Texture::create(infoTmp, options));
+                break;
+            }
             case image::PixelType::YUV_422SP_U8:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
@@ -462,6 +470,21 @@ namespace tl
                         textures[1]->copy(image->getPlaneData(1),
                                           textures[1]->getInfo(),
                                           image->getLineSize(1));
+                    }
+                }
+                break;
+            }
+            case image::PixelType::RGB_F16_P:
+            {
+                if (3 == textures.size())
+                {
+                    const std::size_t plane =
+                        static_cast<std::size_t>(info.size.w) * info.size.h * 2;
+                    for (std::size_t i = 0; i < 3; ++i)
+                    {
+                        textures[i]->copy(
+                            image->getData() + i * plane,
+                            textures[i]->getInfo());
                     }
                 }
                 break;

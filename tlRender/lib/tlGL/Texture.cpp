@@ -11,7 +11,8 @@
 
 #include <array>
 #include <atomic>
-#include <iostream>
+#include <cstring>
+#include <stdexcept>
 #include <tuple>
 
 namespace tl
@@ -222,7 +223,8 @@ namespace tl
             glBindBuffer(GL_PIXEL_UNPACK_BUFFER, _ids[i]);
             if (_sizes[i] < byteCount) // Grow only; never reallocate per frame.
             {
-                glBufferData(GL_PIXEL_UNPACK_BUFFER, byteCount, nullptr, GL_STREAM_DRAW);
+                glBufferData(GL_PIXEL_UNPACK_BUFFER, byteCount, nullptr,
+                             GL_STREAM_DRAW);
                 _sizes[i] = byteCount;
             }
             // Invalidate so we never wait on the previous upload still reading this buffer.
@@ -237,7 +239,159 @@ namespace tl
         {
             std::atomic<size_t> objectCount = 0;
             std::atomic<size_t> totalByteCount = 0;
-        }
+
+            //! Creating or uploading to a texture is not a drawing operation,
+            //! so it should neither depend on which texture unit the last draw
+            //! left selected, nor change it. bind() is the opposite: callers
+            //! choose the unit and it binds there.
+            class UploadUnit
+            {
+            public:
+                UploadUnit()
+                {
+                    glGetIntegerv(GL_ACTIVE_TEXTURE, &_previous);
+                    glActiveTexture(GL_TEXTURE0);
+                }
+
+                ~UploadUnit()
+                {
+                    glActiveTexture(static_cast<GLenum>(_previous));
+                }
+
+            private:
+                GLint _previous = GL_TEXTURE0;
+            };
+
+            //! Issue glTexSubImage2D, sourcing from the currently bound
+            //! GL_PIXEL_UNPACK_BUFFER (pass nullptr) or from client memory.
+            //! Every piece of unpack state the upload depends on is set here
+            //! rather than assumed, and the ones that are easy to forget
+            //! (row length, byte swapping) are put back afterwards so they
+            //! can't corrupt an unrelated upload elsewhere.
+            void texSubImage(
+                GLuint id, int x, int y, const image::Info& info,
+                int alignment, int rowLength, const void* data)
+            {
+                glBindTexture(GL_TEXTURE_2D, id);
+                glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+                glPixelStorei(GL_UNPACK_ROW_LENGTH, rowLength);
+#if defined(TLRENDER_API_GL_4_1)
+                // Not available in GLES.
+                glPixelStorei(
+                    GL_UNPACK_SWAP_BYTES,
+                    info.layout.endian != memory::getEndian());
+#endif // TLRENDER_API_GL_4_1
+                glTexSubImage2D(
+                    GL_TEXTURE_2D, 0, x, y, info.size.w, info.size.h,
+                    getTextureFormat(info.pixelType),
+                    getTextureType(info.pixelType), data);
+#if defined(TLRENDER_API_GL_4_1)
+                glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
+#endif // TLRENDER_API_GL_4_1
+                glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+            }
+
+#if defined(TLRENDER_API_GL_4_1)
+            //! Bind the PBO and map it for writing.
+            //!
+            //! The buffer handed to the previous upload may still be read by
+            //! the driver (uploads are asynchronous), and mapping that same
+            //! storage would block until the GPU is done with it. Re-specifying
+            //! the data store ("orphaning") gives us fresh storage with no
+            //! reader to wait for; the driver frees the old storage once the
+            //! pending upload finishes. INVALIDATE_BUFFER_BIT repeats the
+            //! request for drivers that honor the map flag but not the
+            //! orphan, and costs nothing where both are honored.
+            //!
+            //! The PBO is left bound, even on failure; the caller unbinds it.
+            void* mapUnpackBuffer(GLuint pbo, size_t capacity, size_t byteCount)
+            {
+                glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+                glBufferData(
+                    GL_PIXEL_UNPACK_BUFFER, capacity, nullptr, GL_STREAM_DRAW);
+                return glMapBufferRange(
+                    GL_PIXEL_UNPACK_BUFFER, 0, byteCount,
+                    GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+            }
+#endif // TLRENDER_API_GL_4_1
+
+            //! Upload pixels to a texture, through the PBO when there is one
+            //! and the data fits in it, otherwise from client memory.
+            //! rowStride is in bytes; zero means the rows follow the image's
+            //! own layout (including its alignment padding).
+            void uploadPixels(
+                GLuint id, GLuint pbo, size_t pboCapacity,
+                int x, int y, const image::Info& info,
+                const uint8_t* data, int rowStride)
+            {
+                const UploadUnit uploadUnit;
+
+                // A caller supplied stride is exact, so alignment must not
+                // round it. With no stride the image's own layout rules.
+                const bool strided = rowStride != 0;
+                const int alignment = strided ? 1 : info.layout.alignment;
+
+                size_t rowBytes = 0;
+                size_t tightByteCount = 0;
+                int rowLength = 0;
+                if (strided)
+                {
+                    // Derive bytes per pixel from the library rather than
+                    // channels * bitDepth / 8, which is wrong for packed
+                    // types such as RGB_U10 (4 bytes per pixel, not 3).
+                    image::Info tight = info;
+                    tight.layout.alignment = 1;
+                    tightByteCount = image::getDataByteCount(tight);
+                    const size_t pixelCount =
+                        static_cast<size_t>(info.size.w) * info.size.h;
+                    const size_t bytesPerPixel =
+                        pixelCount > 0 ? tightByteCount / pixelCount : 0;
+                    if (0 == bytesPerPixel)
+                        return;
+                    rowBytes = bytesPerPixel * info.size.w;
+                    rowLength = static_cast<int>(rowStride / bytesPerPixel);
+                }
+                const size_t byteCount =
+                    strided ? tightByteCount : image::getDataByteCount(info);
+
+#if defined(TLRENDER_API_GL_4_1)
+                if (pbo && byteCount <= pboCapacity)
+                {
+                    bool done = false;
+                    if (void* dst = mapUnpackBuffer(pbo, pboCapacity, byteCount))
+                    {
+                        if (strided)
+                        {
+                            // Repack into tightly packed rows.
+                            auto out = static_cast<uint8_t*>(dst);
+                            for (int row = 0; row < info.size.h; ++row)
+                            {
+                                memcpy(
+                                    out + row * rowBytes,
+                                    data + static_cast<size_t>(row) * rowStride,
+                                    rowBytes);
+                            }
+                        }
+                        else
+                        {
+                            memcpy(dst, data, byteCount);
+                        }
+                        // The data store can be lost while mapped (rare,
+                        // e.g. a display mode change); then fall back.
+                        if (glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER))
+                        {
+                            texSubImage(id, x, y, info, alignment, 0, nullptr);
+                            done = true;
+                        }
+                    }
+                    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+                    if (done)
+                        return;
+                }
+#endif // TLRENDER_API_GL_4_1
+                texSubImage(id, x, y, info, alignment, rowLength, data);
+            }
+        } // namespace
 
         size_t Texture::getTotalByteCount()
         {
@@ -252,7 +406,9 @@ namespace tl
         struct Texture::Private
         {
             image::Info info;
+            size_t byteCount = 0;
             GLuint pbo = 0;
+            size_t pboSize = 0;
             GLuint id = 0;
         };
 
@@ -265,15 +421,18 @@ namespace tl
             {
                 throw std::runtime_error("Invalid texture");
             }
+            p.byteCount = image::getDataByteCount(p.info);
+
+            const UploadUnit uploadUnit;
 #if defined(TLRENDER_API_GL_4_1)
             if (options.pbo && 1 == p.info.layout.alignment &&
                 memory::getEndian() == p.info.layout.endian)
             {
+                p.pboSize = p.byteCount;
                 glGenBuffers(1, &p.pbo);
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, p.pbo);
                 glBufferData(
-                    GL_PIXEL_UNPACK_BUFFER, image::getDataByteCount(p.info),
-                    NULL, GL_STREAM_DRAW);
+                    GL_PIXEL_UNPACK_BUFFER, p.pboSize, NULL, GL_STREAM_DRAW);
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
             }
 #endif // TLRENDER_API_GL_4_1
@@ -293,13 +452,15 @@ namespace tl
                 getTextureFormat(p.info.pixelType),
                 getTextureType(p.info.pixelType), NULL);
 
-            ++objectCount;
-            totalByteCount += image::getDataByteCount(p.info);
+            totalByteCount += p.byteCount;
         }
 
         Texture::Texture() :
             _p(new Private)
         {
+            // Counted here, and uncounted in the destructor, so the two
+            // always match even when _init() throws on an invalid texture.
+            ++objectCount;
         }
 
         Texture::~Texture()
@@ -317,7 +478,7 @@ namespace tl
             }
 
             --objectCount;
-            totalByteCount -= image::getDataByteCount(p.info);
+            totalByteCount -= p.byteCount;
         }
 
         std::shared_ptr<Texture>
@@ -362,54 +523,13 @@ namespace tl
         Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
         {
             TLRENDER_P();
-
-            const auto& info = data->getInfo();
-
-#if defined(TLRENDER_API_GL_4_1)
-            if (p.pbo)
-            {
-                glBindBuffer(GL_PIXEL_UNPACK_BUFFER, p.pbo);
-
-                // Orphan the buffer to prevent GPU stalls
-                glBufferData(GL_PIXEL_UNPACK_BUFFER, data->getDataByteCount(),
-                             NULL, GL_STREAM_DRAW);
-                if (void* buffer =
-                        glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY))
-                {
-                    memcpy(buffer, data->getData(), data->getDataByteCount());
-                    glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-                    glBindTexture(GL_TEXTURE_2D, p.id);
-                    glPixelStorei(GL_UNPACK_ALIGNMENT, info.layout.alignment);
-                    glPixelStorei(
-                        GL_UNPACK_SWAP_BYTES,
-                        info.layout.endian != memory::getEndian());
-                    glTexSubImage2D(
-                        GL_TEXTURE_2D, 0, x, y, info.size.w, info.size.h,
-                        getTextureFormat(info.pixelType),
-                        getTextureType(info.pixelType), NULL);
-                }
-                glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-            }
-            else
-#endif // TLRENDER_API_GL_4_1
-            {
-                glBindTexture(GL_TEXTURE_2D, p.id);
-                glPixelStorei(GL_UNPACK_ALIGNMENT, info.layout.alignment);
-#if defined(TLRENDER_API_GL_4_1)
-                glPixelStorei(
-                    GL_UNPACK_SWAP_BYTES,
-                    info.layout.endian != memory::getEndian());
-#endif // TLRENDER_API_GL_4_1
-                glTexSubImage2D(
-                    GL_TEXTURE_2D, 0, x, y, info.size.w, info.size.h,
-                    getTextureFormat(info.pixelType),
-                    getTextureType(info.pixelType), data->getData());
-            }
+            uploadPixels(
+                p.id, p.pbo, p.pboSize, x, y, data->getInfo(), data->getData(),
+                0);
         }
 
         void Texture::copy(const std::shared_ptr<image::Image>& data)
         {
-            TLRENDER_P();
             copy(data, 0, 0);
         }
 
@@ -417,94 +537,31 @@ namespace tl
                            const int rowStride)
         {
             TLRENDER_P();
-            const int channelCount = image::getChannelCount(info.pixelType);
-            const int bytesPerPixel =
-                channelCount * (image::getBitDepth(info.pixelType) / 8);
-            const int unpackRowLength =
-                bytesPerPixel > 0 ? (rowStride / bytesPerPixel) : 0;
-
-#if defined(TLRENDER_API_GL_4_1)
-            if (p.pbo)
-            {
-                glBindBuffer(GL_PIXEL_UNPACK_BUFFER, p.pbo);
-                if (void* buffer =
-                        glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY))
-                {
-                    if (rowStride == 0)
-                    {
-                        memcpy(buffer, data, image::getDataByteCount(info));
-                    }
-                    else
-                    {
-                        for (int y = 0; y < info.size.h; ++y)
-                        {
-                            memcpy(
-                                static_cast<uint8_t*>(buffer) + y * info.size.w * bytesPerPixel,
-                                data + y * rowStride,
-                                info.size.w * bytesPerPixel);
-                        }
-                    }
-                    glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-                    glBindTexture(GL_TEXTURE_2D, p.id);
-                    glPixelStorei(GL_UNPACK_ALIGNMENT, info.layout.alignment);
-                    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0); // Or info.size.w
-                    glPixelStorei(
-                        GL_UNPACK_SWAP_BYTES,
-                        info.layout.endian != memory::getEndian());
-                    glTexSubImage2D(
-                        GL_TEXTURE_2D, 0, 0, 0, info.size.w, info.size.h,
-                        getTextureFormat(info.pixelType),
-                        getTextureType(info.pixelType), NULL);
-                }
-                glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-            }
-            else
-#endif // TLRENDER_API_GL_4_1
-            {
-                glBindTexture(GL_TEXTURE_2D, p.id);
-                glPixelStorei(GL_UNPACK_ALIGNMENT, info.layout.alignment);
-                glPixelStorei(GL_UNPACK_ROW_LENGTH, unpackRowLength);
-#if defined(TLRENDER_API_GL_4_1)
-                glPixelStorei(
-                    GL_UNPACK_SWAP_BYTES,
-                    info.layout.endian != memory::getEndian());
-#endif // TLRENDER_API_GL_4_1
-                glTexSubImage2D(
-                    GL_TEXTURE_2D, 0, 0, 0, info.size.w, info.size.h,
-                    getTextureFormat(info.pixelType),
-                    getTextureType(info.pixelType), data);
-            }
-
-            // Always reset GL state to avoid side effects
-            glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+            uploadPixels(p.id, p.pbo, p.pboSize, 0, 0, info, data, rowStride);
         }
 
         void Texture::copy(const std::shared_ptr<image::Image>& data,
                            UploadBuffer& upload)
         {
+            TLRENDER_P();
             const auto& info = data->getInfo();
             if (1 == info.layout.alignment && info.layout.endian == memory::getEndian())
             {
+                const UploadUnit uploadUnit;
                 const size_t byteCount = data->getDataByteCount();
                 if (void* dst = upload.map(byteCount))
                 {
                     memcpy(dst, data->getData(), byteCount);
                     upload.unmap();
-                    glBindTexture(GL_TEXTURE_2D, _p->id);
-                    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-                    glPixelStorei(GL_UNPACK_SWAP_BYTES, 0);
-                    glTexSubImage2D(
-                        GL_TEXTURE_2D, 0, 0, 0, info.size.w, info.size.h,
-                        getTextureFormat(info.pixelType),
-                        getTextureType(info.pixelType), nullptr);
+                    texSubImage(p.id, 0, 0, info, 1, 0, nullptr);
                     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
                     return;
                 }
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
             }
-            copy(data, 0, 0); // Fallback: client-memory upload.
+            copy(data, 0, 0); // Fallback: the texture's own PBO or client memory.
         }
-        
+
         void Texture::bind()
         {
             glBindTexture(GL_TEXTURE_2D, _p->id);

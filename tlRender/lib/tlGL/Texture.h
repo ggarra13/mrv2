@@ -29,7 +29,10 @@ namespace tl
         public:
             UploadBuffer() = default;
             ~UploadBuffer();
-            void* map(size_t byteCount); // Leaves the buffer bound to GL_PIXEL_UNPACK_BUFFER.
+
+            //! Leaves the buffer bound to GL_PIXEL_UNPACK_BUFFER.
+            void* map(size_t byteCount);
+            
             void unmap();
         private:
             static constexpr int count = 3;
