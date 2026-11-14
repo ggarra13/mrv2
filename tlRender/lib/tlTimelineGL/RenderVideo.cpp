@@ -1205,15 +1205,21 @@ namespace tl
                     default:
                         if (layer.image)
                         {
+                            const auto& opts = imageOptions.get() ?
+                                               *imageOptions :
+                                               layer.imageOptions;
+                            const bool skipBlend = clearRenderPass &&
+                                                   opts.alphaBlend !=
+                                                   timeline::AlphaBlend::Straight;
+                            if (skipBlend) glDisable(GL_BLEND);
                             drawImage(
                                 layer.image,
                                 getBox(
                                     layerBox(layer.bounds),
                                     layer.image->getInfo(),
                                     displayOptions.aspect),
-                                image::Color4f(1.F, 1.F, 1.F),
-                                imageOptions.get() ? *imageOptions
-                                                   : layer.imageOptions);
+                                image::Color4f(1.F, 1.F, 1.F), opts);
+                            if (skipBlend) glEnable(GL_BLEND);
                         }
                         break;
                     }
