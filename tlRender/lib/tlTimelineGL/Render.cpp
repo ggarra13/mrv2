@@ -49,8 +49,12 @@ namespace tl
             std::vector<std::shared_ptr<gl::Texture> > out;
             gl::TextureOptions options;
             options.filters = imageFilters;
+#ifdef __APPLE__
+            options.pbo = false;
+#else
             options.pbo =
                 info.size.w >= pboSizeMin || info.size.h >= pboSizeMin;
+#endif
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:
