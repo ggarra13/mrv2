@@ -289,6 +289,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libfreetype
 	libgbm
 	libgcc_s
+	libgnutls       # was accepted before - broke in Fedora 45
 	libgpg-error
 	libm
 	libmount        # was accepted before - broke in Fedora 42, Wayland lib
