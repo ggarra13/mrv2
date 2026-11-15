@@ -553,6 +553,7 @@ namespace mrv
                     format() = VK_FORMAT_B8G8R8A8_UNORM;
                 }
 
+#ifdef _WIN32
                 if (p.monitor.hdr_enabled && p.hdrRetries < 8)
                 {
                     // DXGI says HDR, driver hasn't caught up yet. Stay SDR
@@ -563,7 +564,9 @@ namespace mrv
                     Fl::remove_timeout(hdrRetryCB, this);
                     Fl::add_timeout(0.25, hdrRetryCB, this);
                 }
-                else if (p.monitor.hdr_enabled)
+                else
+#endif
+                    if (p.monitor.hdr_enabled)
                 {
                     LOG_STATUS(_("HDR monitor not detected by Vulkan or Window Manager."));
                 }
