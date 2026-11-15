@@ -932,7 +932,8 @@ namespace tl
             for (const auto& item : p.mouse.items)
             {
                 if (!dynamic_cast<VideoClipItem*>(item->p.get()) &&
-                    !dynamic_cast<AudioClipItem*>(item->p.get()))
+                    !dynamic_cast<AudioClipItem*>(item->p.get()) &&
+                    !dynamic_cast<GapItem*>(item->p.get()))
                     continue;
                 timeline::MoveData move;
                 move.fromTrack = move.toTrack = item->track;
