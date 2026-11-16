@@ -13,7 +13,7 @@ ChangeLog
 
 - Python: Python support within the UI was always available, including the Python Editor.  Only Python plugins and running python scripts was not possible without a Standard license.  Now running a python script without the unlocking of the python licensing, will print out a clarifying message.
 
-- Python: the included bakeOCIO.py python demo script now has documentation on how to bake OpenEXR sequencese to HDR .mov files.
+- Python: the included bakeOCIO.py python demo script now has documentation on how to bake OpenEXR sequences to HDR .mov files.
 
 - Edit: Numerous fixes and improvements.  You can now edit timelines with a start time code different than 0.
 
