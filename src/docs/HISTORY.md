@@ -58,7 +58,7 @@ Libraries
 ---------
 
 - miniaudio 0.11.26
-- FLTK Vulkan v2.5.1
+- FLTK Vulkan v2.5.5
 
 
 v1.8.5
