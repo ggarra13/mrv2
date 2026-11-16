@@ -563,6 +563,7 @@ namespace tl
         {
             IWidget::mousePressEvent(event);
             TLRENDER_P();
+
             bool saveUndo = false;
             bool doSelection = false;
             bool selectionMode = false;
@@ -954,8 +955,9 @@ namespace tl
                 if (!dynamic_cast<TransitionItem*>(item->p.get()))
                     continue;
                 timeline::MoveData move;
+                int otioIndex = p.tracks[item->track].otioTransitionIndexes[item->index];
                 move.fromTrack = move.toTrack = item->track;
-                move.fromIndex = move.toIndex = item->index;
+                move.fromIndex = move.toIndex = otioIndex;
                 out.push_back(move);
             }
             return out;

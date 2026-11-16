@@ -112,6 +112,12 @@ namespace tl
             //! costs no reading.
             bool                        missing = false;
 
+            //! Whether the reader declined the request rather than decoding
+            //! it, the playhead having passed the frame while playing (see
+            //! IVideoRead::setPlayhead()). The image is empty; the frame is not
+            //! what the file holds there, and is not to be kept as such.
+            bool                        declined = false;
+
             //! The frame repeated in place of it, when there was one to repeat.
             std::optional<int64_t>      heldFrom;
 

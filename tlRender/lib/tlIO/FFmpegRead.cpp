@@ -8,6 +8,9 @@
 #include <tlCore/Assert.h>
 #include <tlCore/StringFormat.h>
 
+#include <cmath>
+#include <optional>
+
 extern "C"
 {
 #include <libavutil/opt.h>
@@ -218,8 +221,9 @@ namespace tl
                             p.info.video.push_back(videoInfo);
                             p.info.videoTime = p.readVideo ->getTimeRange();
                             p.info.tags = p.readVideo->getTags();
+
+                            p.infoValid = true;
                         }
-                        p.infoReady.store(true, std::memory_order_release);
 
                         _run();
                     }
@@ -317,7 +321,7 @@ namespace tl
             // for the decoder to finish whatever frame it was on (or a whole
             // seek) before it could queue the next request or hand back a
             // finished one.
-            if (p.infoReady.load(std::memory_order_acquire))
+            if (p.infoValid)
             {
                 std::promise<io::Info> promise;
                 promise.set_value(p.info);
@@ -382,6 +386,13 @@ namespace tl
             p.cache->addVideo(cacheKey, data);
         }
 
+        void VideoRead::setPlayhead(const std::optional<io::Playhead>& value)
+        {
+            TLRENDER_P();
+            std::unique_lock<std::mutex> lock(p.playheadMutex);
+            p.playhead = value;
+        }
+
         void VideoRead::cancelRequests()
         {
             TLRENDER_P();
@@ -418,6 +429,7 @@ namespace tl
                 // Check requests.
                 std::list<std::shared_ptr<Private::InfoRequest> > infoRequests;
                 std::shared_ptr<Private::VideoRequest> videoRequest;
+                std::list<std::shared_ptr<Private::VideoRequest> > passed;
                 {
                     std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
                     p.videoThread.cv.wait(
@@ -433,10 +445,99 @@ namespace tl
                         return;
 
                     infoRequests = std::move(p.videoMutex.infoRequests);
-                    if (!p.videoMutex.videoRequests.empty())
+                    auto& requests = p.videoMutex.videoRequests;
+                    if (!requests.empty())
                     {
-                        videoRequest = p.videoMutex.videoRequests.front();
-                        p.videoMutex.videoRequests.pop_front();
+                        // Lock order: videoMutex, then playheadMutex.
+                        // setPlayhead() only takes the latter.
+                        std::optional<io::Playhead> playhead;
+                        {
+                            std::unique_lock<std::mutex> playheadLock(
+                                p.playheadMutex);
+                            playhead = p.playhead;
+                        }
+                        if (playhead.has_value() && playhead->playing &&
+                            p.info.videoTime.has_value())
+                        {
+                            // The playhead is moving. Frames it has already
+                            // passed are not decoded (see below), and the
+                            // next frame decoded is the first in line that
+                            // can still be decoded in time to reach the
+                            // screen, by the measured time of a request;
+                            // failing that, the furthest ahead.
+                            const double rate =
+                                p.info.videoTime->duration().rate();
+                            const double playheadFrame =
+                                playhead->time.rescaled_to(rate).value();
+                            const bool reverse = playhead->reverse;
+                            const auto ahead =
+                                [playheadFrame, rate, reverse](
+                                    const OTIO_NS::RationalTime& time)
+                                {
+                                    const double d =
+                                        time.rescaled_to(rate).value() -
+                                        playheadFrame;
+                                    return reverse ? -d : d;
+                                };
+
+                            for (auto i = requests.begin();
+                                 i != requests.end();)
+                            {
+                                if (ahead((*i)->time) < 0.0)
+                                {
+                                    passed.push_back(*i);
+                                    i = requests.erase(i);
+                                }
+                                else
+                                {
+                                    ++i;
+                                }
+                            }
+
+                            // With the per-frame timing above this should
+                            // stay small, but nothing bounds the very first
+                            // sample before any smoothing has happened, and
+                            // an unbounded margin can again make every
+                            // request "unreachable" and starve the one
+                            // actually needed, as above. videoBufferSize is
+                            // this reader's own decode buffer, not the
+                            // Player/Timeline's prefetch window, so it isn't
+                            // exactly the right bound -- it's used here only
+                            // as a small, already-available, conservative
+                            // stand-in; replace it with the real prefetch
+                            // depth if that is reachable from here.
+                            const double margin = std::min(
+                                std::ceil(
+                                    p.videoThread.requestSeconds * rate + .5),
+                                static_cast<double>(p.options.videoBufferSize));
+                            auto out = requests.end();
+                            double furthest = -1.0;
+                            for (auto i = requests.begin();
+                                 i != requests.end(); ++i)
+                            {
+                                const double a = ahead((*i)->time);
+                                if (a >= margin)
+                                {
+                                    out = i;
+                                    break;
+                                }
+                                if (a > furthest)
+                                {
+                                    furthest = a;
+                                    out = i;
+                                }
+                            }
+                            if (out != requests.end())
+                            {
+                                videoRequest = *out;
+                                requests.erase(out);
+                            }
+                        }
+                        else
+                        {
+                            videoRequest = requests.front();
+                            requests.pop_front();
+                        }
                     }
                 }
 
@@ -445,6 +546,32 @@ namespace tl
                 {
                     request->promise.set_value(p.info);
                 }
+
+                // Requests the playhead has passed: served if the frame is
+                // already cached, which costs nothing, otherwise declined
+                // (io::VideoData::declined). The player drops a declined
+                // frame and asks again when it wants it.
+                for (auto& request : passed)
+                {
+                    io::VideoData data;
+                    bool cached = false;
+                    if (p.cache)
+                    {
+                        cached = p.cache->getVideo(
+                            io::getVideoCacheKey(
+                                _path, request->time, _options,
+                                request->options),
+                            data);
+                    }
+                    if (!cached)
+                    {
+                        data = io::VideoData();
+                        data.time = request->time;
+                        data.declined = true;
+                    }
+                    request->promise.set_value(data);
+                }
+                const auto requestStart = std::chrono::steady_clock::now();
 
                 // Check the cache. The key is built once and reused when the
                 // decoded frame is added below.
@@ -500,13 +627,19 @@ namespace tl
                    }
                }
 
-                // Process.
+                // Process. One iteration of this loop is one decoded frame,
+                // whether it ends up handed to the request below or, while
+                // seeking backwards, only cached in passing: framesDecoded
+                // counts them so the timing below reflects the cost of one
+                // frame rather than of the whole backward refill.
+                size_t framesDecoded = 0;
                 while (videoRequest && p.readVideo->isBufferEmpty() &&
                        p.readVideo->isValid() &&
                        p.readVideo->process(
                            backwards, videoRequest->time,
                            p.videoThread.currentTime))
                 {
+                    ++framesDecoded;
                     if (backwards)
                     {
                         if (videoRequest->time.value() ==
@@ -533,6 +666,31 @@ namespace tl
                         data.image = p.readVideo->popBuffer();
                     }
                     videoRequest->promise.set_value(data);
+
+                    // Smoothed time to decode one frame (cache hits
+                    // `continue` above and never reach here), used to choose
+                    // the next request while the playhead is moving. Seeking
+                    // backwards can decode many frames to serve this one
+                    // request, so the measured time is divided by the number
+                    // of frames actually decoded: otherwise a single backward
+                    // refill would be charged as if it cost one frame,
+                    // inflating the margin below until nothing ever looks
+                    // reachable and every request falls back to the one
+                    // furthest from the playhead, starving the frame actually
+                    // needed for display.
+                    if (framesDecoded > 0)
+                    {
+                        const double seconds =
+                            std::chrono::duration<double>(
+                                std::chrono::steady_clock::now() -
+                                requestStart).count() /
+                            static_cast<double>(framesDecoded);
+                        p.videoThread.requestSeconds =
+                            p.videoThread.requestSeconds > 0.0 ?
+                            p.videoThread.requestSeconds * .8 + seconds * .2 :
+                            seconds;
+                    }
+
                     if (p.cache)
                     {
                         if (cacheKey.empty())
@@ -602,7 +760,8 @@ namespace tl
                         p.info.audio = p.readAudio->getInfo();
                         p.info.audioTime = p.readAudio->getTimeRange();
                         p.info.tags = p.readAudio->getTags();
-                        p.infoReady.store(true, std::memory_order_release);
+
+                        p.infoValid = true;
 
                         _run();
                     }
@@ -764,7 +923,7 @@ namespace tl
             // for the decoder to finish whatever frame it was on (or a whole
             // seek) before it could queue the next request or hand back a
             // finished one.
-            if (p.infoReady.load(std::memory_order_acquire))
+            if (p.infoValid)
             {
                 std::promise<io::Info> promise;
                 promise.set_value(p.info);

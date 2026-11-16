@@ -954,7 +954,7 @@ namespace mrv
 
                         timeline::RenderOptions renderOptions;
                         renderOptions.clear = true;
-                        renderOptions.vaoSize = 32 * memory::megabyte;
+                        renderOptions.vaoSize = 64 * memory::megabyte;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
 
@@ -2092,8 +2092,6 @@ namespace mrv
             const std::vector<tl::timeline::MoveData>& moves)
         {
             TLRENDER_P();
-            edit_store_undo(p.player, p.ui);
-            edit_clear_redo(p.ui);
             edit_move_clip_annotations(moves, p.ui);
         }
 

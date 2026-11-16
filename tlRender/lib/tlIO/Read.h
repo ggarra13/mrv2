@@ -51,6 +51,20 @@ namespace tl
             std::vector<file::MemoryRead> _mem;
         };
 
+        //! Where the playhead is, for a video reader to serve its requests
+        //! by; see IVideoRead::setPlayhead().
+        struct Playhead
+        {
+            //! In the reader's own time.
+            OTIO_NS::RationalTime time;
+            bool reverse = false;
+            //! Whether the playhead is moving, as opposed to stopped or held
+            //! while the cache fills.
+            bool playing = false;
+
+            bool operator == (const Playhead&) const = default;
+        };
+
         //! Base class for video readers.
         class IVideoRead : public IRead
         {
@@ -61,6 +75,15 @@ namespace tl
             virtual std::future<VideoData> readVideo(
                 const OTIO_NS::RationalTime&,
                 const Options& = Options()) = 0;
+
+            //! Set where the playhead is. A reader that decodes in order, as
+            //! the movie readers do, uses it while the playhead is moving: a
+            //! request for a frame the playhead has passed is declined rather
+            //! than decoded (VideoData::declined), and the next frame decoded
+            //! is the first in line that can still reach the screen, by the
+            //! reader's own frame time. Stopped, requests are served in the
+            //! order they were made. The default implementation ignores it.
+            virtual void setPlayhead(const std::optional<Playhead>&);
 
             //! Give the reader a cache to use for decoded frames, in place of
             //! any private one it would otherwise keep. Called at most once,

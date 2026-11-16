@@ -62,7 +62,12 @@ set(SOURCE
     ShaderOptions.cpp
     TimeUnits.cpp
     Timeline.cpp
+    TimelineCanvas.cpp
+    TimelineInit.cpp
+    TimelineMedia.cpp
     TimelineOptions.cpp
+    TimelineRead.cpp
+    TimelineRequests.cpp
     Transition.cpp
     Util.cpp
     Zip.cpp

@@ -199,31 +199,8 @@ namespace tl
                 int64_t seconds = inSampleRate > 0 ? (frame / inSampleRate) : 0;
                 int64_t inOffsetSamples = frame - seconds * inSampleRate;
 
-#if CHECK_AUDIO
-                std::cerr << "TIM seconds:     " << seconds << std::endl;
-                std::cerr << "TIM rtAudioCurrentFrame: "
-                          << thread.rtAudioCurrentFrame << std::endl;
-                std::cerr << "TIM playbackStartTime: " << playbackStartTime
-                          << std::endl;
-                std::cerr << "TIM playbackStartFrame: " << playbackStartFrame
-                          << std::endl;
-                std::cerr << "TIM bufferSampleCount: " <<  bufferSampleCount
-                          << std::endl;
-                std::cerr << "TIM inSampleRate: " << inSampleRate
-                          << std::endl;
-                std::cerr << "TIM outSampleRate: " << outSampleRate
-                          << std::endl;
-                std::cerr << "TIM timeOffset: " <<  timeOffset.rescaled_to(1.0) << std::endl;
-                std::cerr << "TIM frameOffset: " << frameOffset << std::endl;
-                std::cerr << "TIM frame:       " << frame   << std::endl;
-#endif
-
                 while (audio::getSampleCount(thread.buffer) < outSamples)
                 {
-#if CHECK_AUDIO
-                    std::cout << "\tseconds: " << seconds << std::endl;
-                    std::cerr << "\tinOffsetSamples: " << inOffsetSamples  << std::endl;
-#endif
                     AudioFrame audioFrame;
                     {
                         std::unique_lock<std::mutex> lock(p->audioMutex.mutex);
@@ -259,9 +236,11 @@ namespace tl
                                     clipTimeRange.duration().rescaled_to(
                                         inSampleRate));
                                 const auto inOffset =
-                                    layer.inTransition->in_offset().value();
+                                    layer.inTransition->in_offset().
+                                    rescaled_to(inSampleRate).value();
                                 const auto outOffset =
-                                    layer.inTransition->out_offset().value();
+                                    layer.inTransition->out_offset().
+                                    rescaled_to(inSampleRate).value();
                                 const auto fadeInBegin =
                                     range.start_time().value() - inOffset;
                                 const auto fadeInEnd =
@@ -286,6 +265,7 @@ namespace tl
                                 }
                             }
 
+
                             if (layer.outTransition)
                             {
                                 const auto& clipTimeRange = layer.clipTimeRange;
@@ -296,9 +276,11 @@ namespace tl
                                         inSampleRate));
 
                                 const auto inOffset =
-                                    layer.outTransition->in_offset().value();
+                                    layer.outTransition->in_offset().
+                                    rescaled_to(inSampleRate).value();
                                 const auto outOffset =
-                                    layer.outTransition->out_offset().value();
+                                    layer.outTransition->out_offset().
+                                    rescaled_to(inSampleRate).value();
                                 const auto fadeOutBegin =
                                     range.end_time_inclusive().value() -
                                     inOffset;
@@ -423,9 +405,6 @@ namespace tl
                     !mute && now >= muteTimeout &&
                     outSamples <= getSampleCount(thread.buffer))
                 {
-#    if CHECK_AUDIO
-                    std::cerr << "\t\t\tMOVE audio" << std::endl;
-#    endif
                     audio::move(
                         thread.buffer, reinterpret_cast<uint8_t*>(outputBuffer),
                         outSamples);
@@ -433,12 +412,6 @@ namespace tl
 
                 // Update the audio frame.
                 thread.rtAudioCurrentFrame += outSamples;
-
-#    if CHECK_AUDIO
-                std::cerr << "\t\t\tSEND seconds=" << seconds << std::endl
-                          << "\t\t\tSEND inOffsetSamples " << inOffsetSamples
-                          << " outSamples=" << outSamples << std::endl;
-#    endif
 
                 break;
             }

@@ -163,9 +163,5 @@ namespace tl
             return _error;
         }
 
-        Format::operator std::string() const
-        {
-            return _text;
-        }
     } // namespace string
 } // namespace tl

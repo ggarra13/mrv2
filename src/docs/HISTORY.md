@@ -15,8 +15,6 @@ ChangeLog
 
 - Python: the included bakeOCIO.py python demo script now has documentation on how to bake OpenEXR sequencese to HDR .mov files.
 
-- Python: exposed cmd.presetsPath() to list the FFmpeg presets path.
-
 - Core/MacOS: Vulkan OCIO support has been dramatically improved on MacOS.
 
 - Core/MacOS: HDR support on the Vulkan backend with an external monitor has been added and tested on macOS, both Intel and M1.
@@ -35,8 +33,14 @@ ChangeLog
 
 - Core: Cleaned all references to unused Devices Panel.
 
+- Core: Improved reverse playback on complex movies.
+
 Fixes
 -----
+
+- Fixed removing selected transitions. 
+
+- Fixed dragging clips to the timeline viewport to create an EDL.
 
 - Fixed menus not displaying properly the OpenColorIO settings on multiple monitors, when the Top Bar OCIO selector was used.
 
@@ -47,6 +51,8 @@ Fixes
 - Fixed interrupting a running python script from the command-line resulting in a stack trace.
 
 - Added **Help->Update mrv2** python plugin to the demo version of mrv2.
+
+- Fixed -edl command-line flag on sequences and on videos not loading the audio.
 
 Libraries
 ---------

@@ -1181,6 +1181,11 @@ namespace mrv
                 p.videoData.clear();
             }
 
+            if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
+            {
+                p.ui->uiSecondary->viewport()->setTimelinePlayer(player);
+            }
+
             refreshWindows(); // needed We need to refresh, as the new
             // video data may have different sizes.
         }

@@ -560,10 +560,16 @@ namespace mrv
             file::Path path;
             auto model = p.ui->app->filesModel();
             auto Aitem = model->observeA()->get();
+            std::string mediaReferenceKey;
             if (Aitem)
+            {
                 path = Aitem->path;
+                mediaReferenceKey = Aitem->mediaReferenceKey;
+            }
             else
+            {
                 path = player->getPath();
+            }
 
             const image::Size size(kTHUMB_WIDTH, kTHUMB_HEIGHT);
             const OTIO_NS::RationalTime& timelineTime = _posToTime(_toUI(Fl::event_x()));
@@ -572,9 +578,9 @@ namespace mrv
             if (auto thumbnailSystem = p.thumbnailSystem.lock())
             {
                 const auto timeline = timeline::Timeline::create(p.context.lock(), path);
-                auto mediaPath = timeline->getMediaPath(time);
                 p.thumbnail.request =
-                    thumbnailSystem->getThumbnail(path, mediaPath, size.h, time);
+                    thumbnailSystem->getThumbnail(path, size.h, time,
+                                                  mediaReferenceKey);
             }
 
             timeToText(buffer, timelineTime, _p->units);

@@ -1450,9 +1450,7 @@ settings->setValue( mrv::kPenColorA, a);}
                 }
                 Fl_Button uiMove {
                   user_data this user_data_type {ViewerUI*}
-                  callback {std::cerr << "called uiMove" << std::endl;
-
-uiView->setEditMode( tl::timeline::EditMode::Move );}
+                  callback {uiView->setEditMode(tl::timeline::EditMode::Move );}
                   image {../../icons/EditMove.svg} compress_image 1 xywh {1 110 40 50} down_box DOWN_BOX value 1 selection_color 14
                   class {mrv::Button}
                 }

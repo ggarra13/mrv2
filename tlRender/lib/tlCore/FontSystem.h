@@ -54,8 +54,7 @@ namespace tl
             uint32_t code = 0;
             FontInfo fontInfo;
 
-            bool operator==(const GlyphInfo&) const;
-            bool operator!=(const GlyphInfo&) const;
+            bool operator == (const GlyphInfo&) const = default;
             bool operator<(const GlyphInfo&) const;
         };
 

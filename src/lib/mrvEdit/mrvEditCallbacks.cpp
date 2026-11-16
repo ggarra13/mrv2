@@ -147,7 +147,7 @@ namespace mrv
                 if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
                         timeline->tracks()->children()[move.fromTrack]))
                 {
-                    out = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Transition>(track->children()[move.fromIndex]);
+                    out = dynamic_cast<OTIO_NS::Transition*>(track->children()[move.fromIndex].value);
                 }
             }
             return out;
@@ -285,7 +285,7 @@ namespace mrv
         // Routine to verify a clip is available and it is not an .otio file.
         bool verifySourceItem(int index, ViewerUI* ui)
         {
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             const auto& sourceItems = model->observeFiles()->get();
             if (index < 0 || index >= sourceItems.size())
             {
@@ -418,7 +418,7 @@ namespace mrv
         void makePathsAbsolute(OTIO_NS::Timeline* timeline, ViewerUI* ui)
         {
             auto stack = timeline->tracks();
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto tracks = stack->children();
             auto item = model->observeA()->get();
             if (!item)
@@ -602,7 +602,7 @@ namespace mrv
         void makePathsToTemp(OTIO_NS::Timeline* timeline, ViewerUI* ui)
         {
             auto stack = timeline->tracks();
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto tracks = stack->children();
             auto item = model->observeA()->get();
             if (!item)
@@ -683,7 +683,7 @@ namespace mrv
 
         void toOtioFile(OTIO_NS::Timeline* otioTimeline, ViewerUI* ui)
         {
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             int index = model->observeAIndex()->get();
             if (index < 0)
                 return;
@@ -708,47 +708,16 @@ namespace mrv
             else
             {
                 otioFile = otioFilename(ui);
-                if (file::isOTIOZ(path))
-                {
-                    ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
-                                                                  _("Unzipping"));
-                    progress->show();
-                    Fl::check();
 
-                    std::string dir = mrv::tmppath() + "/media";
-                    item->timeline->expandOTIOZ(dir, [&](
-                                                        bool& aborted,
-                                                        const std::string& title,
-                                                        size_t done,
-                                                        size_t total)
-                        {
-                            // Safely update the UI
-                            progress->set_end(total);
-                            progress->set_value(done);
+                // Reset the item's timeline::Timeline
+                item->timeline.reset();
 
-                            if (!progress->window() ||
-                                (progress->window() &&
-                                 !progress->window()->shown()))
-                                aborted = true;
+                // Needed to reload the movie and change it from .otioz to
+                // EDL0x****.otio
+                reloadMedia = true;
 
-                            Fl::check();
-                        });
-
-                    delete progress;
-
-                    // Change paths in OTIO timeline to point to /tmp/media
-                    makePathsToTemp(timeline, ui);
-
-                    // Reset the item's timeline::Timeline
-                    item->timeline.reset();
-
-                    // Needed to reload the movie and change it from .otioz to
-                    // EDL0x****.otio
-                    reloadMedia = true;
-
-                    // Needed to refresh the file caches.
-                    refreshCache = true;
-                }
+                // Needed to refresh the file caches.
+                refreshCache = true;
             }
 
             timeline->to_json_file(otioFile);
@@ -757,11 +726,6 @@ namespace mrv
             if (reloadMedia)
             {
                 refresh_media_cb(nullptr, ui);
-            }
-
-            if (refreshCache)
-            {
-                refresh_file_cache_cb(nullptr, ui);
             }
         }
 
@@ -941,7 +905,7 @@ namespace mrv
         //! Switches to EDL clip for timeline processing during an Undo/Redo.
         bool switchToEDL(const std::string& fileName, ViewerUI* ui)
         {
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             auto Aitem = model->observeA()->get();
             if (!Aitem)
@@ -982,7 +946,7 @@ namespace mrv
         //! Return the EDL name for the Undo/Redo queue.
         std::string getEDLName(ViewerUI* ui)
         {
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto Aitem = model->observeA()->get();
 
             const file::Path path = Aitem->path;
@@ -1031,13 +995,10 @@ namespace mrv
     // \@note: Player is a reference, as it can mutate after toOtioFile.
     void edit_store_undo(TimelinePlayer*& player, ViewerUI* ui)
     {
-        auto oldPlayer = player;
+        player->stop();
 
         UndoRedo buffer;
         buffer.annotations = player->getAllAnnotations();
-
-        player->stop();
-        const OTIO_NS::RationalTime time = player->currentTime();
 
         auto timeline = player->getTimeline();
         if (!timeline)
@@ -1046,13 +1007,45 @@ namespace mrv
         timeline = duplicateTimeline(timeline);
         if (isOTIOZ())
         {
+            auto model = App::app->filesModel();
+            auto item = model->observeA()->get();
+            if (!item)
+                return;
+
             makePathsToTemp(timeline, ui);
+
+            ProgressReport* progress = new ProgressReport(App::ui->uiMain,
+                                                          0, 100,
+                                                          _("Unzipping"));
+            progress->show();
+            Fl::check();
+
+            std::string dir = mrv::tmppath() + "/media";
+            item->timeline->expandOTIOZ(dir, [&](
+                                            bool& aborted,
+                                            const std::string& title,
+                                            size_t done,
+                                            size_t total)
+                {
+                    // Safely update the UI
+                    progress->set_end(total);
+                    progress->set_value(done);
+
+                    if (!progress->window() ||
+                        (progress->window() &&
+                         !progress->window()->shown()))
+                        aborted = true;
+
+                    Fl::check();
+                });
+
+            delete progress;
+            item->timeline.reset();
         }
         else
         {
             makePathsAbsolute(timeline, ui);
         }
-        toOtioFile(timeline, ui);
 
         const std::string state = timeline->to_json_string();
         if (!undoBuffer.empty())
@@ -1071,10 +1064,10 @@ namespace mrv
         undoBuffer.push_back(buffer);
         ui->uiUndoEdit->activate();
 
-        // Return new player if any.
+        // Update view's with the undoBuffer contents.
+        // We update the timeline viewport at the end of the operations.
         player = ui->uiView->getTimelinePlayer();
-        // Update player's timeline and timeline viewport (uiTimeline).
-        updateTimeline(timeline, time, ui);
+        player->setTimeline(timeline);
     }
 
     void edit_clear_redo(ViewerUI* ui)
@@ -2040,6 +2033,8 @@ namespace mrv
 
         for (auto& item : selected)
         {
+            if (!item)
+                continue;
             for (auto composition : compositions)
             {
                 auto track = dynamic_cast<OTIO_NS::Track*>(composition);
@@ -2073,6 +2068,8 @@ namespace mrv
 
         for (auto& item : transitions)
         {
+            if (!item)
+                continue;
             for (auto composition : compositions)
             {
                 auto track = dynamic_cast<Track*>(composition);
@@ -2083,7 +2080,7 @@ namespace mrv
                 for (auto& child : track->children())
                 {
 
-                    if (item == OTIO_NS::dynamic_retainer_cast<Transition>(child))
+                    if (item == dynamic_cast<Transition*>(child.value))
                     {
                         int childIndex = track->index_of_child(child);
                         indices.push_back(childIndex);
@@ -2375,6 +2372,9 @@ namespace mrv
     void _addTransition(const OTIO_NS::Item* left,
                         const OTIO_NS::Item* right)
     {
+        if (!left || !right)
+            return;
+
         auto track = left->parent();
         if (track != right->parent())
         {
@@ -2768,7 +2768,7 @@ namespace mrv
             tcp->unlock();
             throw std::runtime_error(error);
         }
-        ui->app->open(file);
+        App::app->open(file);
         tcp->unlock();
     }
 
@@ -2810,7 +2810,7 @@ namespace mrv
         if (!player)
             return;
 
-        auto model = ui->app->filesModel();
+        auto model = App::app->filesModel();
         auto Aitem = model->observeA()->get();
         if (!Aitem)
             return;
@@ -2960,28 +2960,6 @@ namespace mrv
                         itemTrackRange.start_time().rescaled_to(videoRate) +
                             globalStartTime.rescaled_to(videoRate),
                         itemTrackRange.duration().rescaled_to(videoRate));
-
-                    // file::PathOptions options;
-                    // auto clip = OTIO_NS::dynamic_retainer_cast<Clip>(child);
-                    // file::Path path;
-                    // if (clip)
-                    //     path = timeline::getPath(clip->media_reference(),
-                    //                              "",
-                    //                              options);
-
-                    // std::cerr << "---------------- " << path.get(-1,
-                    // file::PathType::FileName)
-                    //           << std::endl;
-                    // std::cerr << "      itemRange=" << itemRange
-                    //           << std::endl;
-                    // std::cerr << " itemTrackRange=" << itemTrackRange
-                    //           << std::endl;
-                    // std::cerr << "     inOutRange=" << inOutRange <<
-                    // std::endl; std::cerr << "    globalRange=" <<
-                    // videoGlobalRange
-                    //           << std::endl;
-                    // std::cerr << "videoInOutRange=" << videoInOutRange <<
-                    // std::endl;
 
                     if (videoInOutRange.intersects(videoGlobalRange))
                     {
@@ -3205,7 +3183,7 @@ namespace mrv
         const int sourceIndex, const int destIndex,
         OTIO_NS::Timeline* destTimeline, ViewerUI* ui)
     {
-        auto model = ui->app->filesModel();
+        auto model = App::app->filesModel();
         auto numFiles = model->observeFiles()->getSize();
 
         if (sourceIndex < 0 || sourceIndex >= numFiles)
@@ -3274,7 +3252,7 @@ namespace mrv
         if (!verifySourceItem(index, ui))
             return;
 
-        auto model = ui->app->filesModel();
+        auto model = App::app->filesModel();
 
         const auto sourceItems = model->observeFiles()->get();
 
@@ -3293,7 +3271,7 @@ namespace mrv
         if (!file::isTemporaryEDL(destItem->path))
         {
             // 1. Get the index of the currently displayed clip (the 'A' item)
-            auto aIndex = ui->app->filesModel()->observeAIndex()->get();
+            auto aIndex = App::app->filesModel()->observeAIndex()->get();
 
             // 2. Create a new timeline containing the currently displayed clip
             add_clip_to_new_timeline_cb(aIndex, ui);
@@ -3353,8 +3331,6 @@ namespace mrv
                 player->getAllAnnotations(), sourceItem->inOutRange,
                 sourceItem->annotations);
 
-            bool emptyTracks = hasEmptyTracks(destTimeline->tracks());
-
             addClipToTimeline(index, destIndex, destTimeline, ui);
 
             //
@@ -3372,11 +3348,8 @@ namespace mrv
             destItem->inOutRange = timeRange;
             destItem->speed = videoRate;
 
-            if (emptyTracks)
-            {
-                model->setA(index);
-                model->setA(destIndex);
-            }
+            model->setA(index);
+            model->setA(destIndex);
 
             ui->uiView->valid(0); // needed
             ui->uiView->redraw(); // needed
@@ -3441,9 +3414,15 @@ namespace mrv
         if (!timeline)
             return;
 
+        ui->uiView->setTimelinePlayer(player);
+        ui->uiTimeline->setTimelinePlayer(player);
+
         // If an undo only operation, return immediately.
-        if (moves.size() == 1 && moves[0].type == tl::timeline::MoveType::UndoOnly)
+        if (moves.size() == 1 &&
+            moves[0].type == tl::timeline::MoveType::UndoOnly)
+        {
             return;
+        }
 
         if (moves.empty())
             return;
@@ -3458,8 +3437,8 @@ namespace mrv
             innerPlayer->getTimeline()->setTimeline(otioTimeline);
         }
 
-        const auto& stack = timeline->tracks();
-        const auto& tracks = stack->children();
+        const auto stack = timeline->tracks();
+        const auto tracks = stack->children();
 
         // Annotations are only shifted once per distinct move, no matter how
         // many (associated) video items travel together.

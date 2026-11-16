@@ -288,6 +288,45 @@ namespace tl
                             p.invalidateVideoCache(framesFound);
                         }
 
+                        // Tell the timeline(s) where the playhead is. Video
+                        // requests are served nearest the playhead first, and
+                        // while it is playing the readers decode only what can
+                        // still reach the screen; see
+                        // Timeline::setRequestPriority() and
+                        // io::IVideoRead::setPlayhead().
+                        {
+                            const bool playing =
+                                Playback::Stop != p.thread.playback;
+                            const bool reverse =
+                                Playback::Reverse == p.thread.playback;
+                            p.timeline->setRequestPriority(
+                                p.thread.currentTime, reverse, playing);
+                            for (const auto& t : compare)
+                            {
+                                if (!t)
+                                    continue;
+                                // Each compare timeline is requested at its
+                                // own time: the same offset from its start
+                                // when relative, the same time when absolute.
+                                OTIO_NS::RationalTime compareTime =
+                                    p.thread.currentTime;
+                                if (CompareTimeMode::Relative ==
+                                    p.thread.compareTime)
+                                {
+                                    compareTime =
+                                        p.thread.currentTime -
+                                        p.thread.timeRange.start_time()
+                                            .rescaled_to(
+                                                p.thread.currentTime.rate()) +
+                                        t->getTimeRange().start_time()
+                                            .rescaled_to(
+                                                p.thread.currentTime.rate());
+                                }
+                                t->setRequestPriority(
+                                    compareTime, reverse, playing);
+                            }
+                        }
+
                         // Update the cache.
                         p.cacheUpdate();
 
