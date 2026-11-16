@@ -2202,11 +2202,6 @@ namespace mrv
                         bool isEDL = file::isTemporaryEDL(item->path);
                         size_t idx = i - p.files.begin();
 
-                        if (isEDL)
-                        {
-                            p.timelines[idx] = _createTimeline(item);
-                        }
-
                         auto timeline = p.timelines[idx];
                         if (!timeline)
                             return;
@@ -2240,8 +2235,7 @@ namespace mrv
                                 item->playback = timeline::Playback::Forward;
                             }
 
-                            if (!file::isTemporaryEDL(item->path) &&
-                                autoPlayback && isRunning())
+                            if (!isEDL && autoPlayback && isRunning())
                             {
 
                                 // If we have autoplayback on and auto hide
@@ -2295,6 +2289,7 @@ namespace mrv
                                 player->setMediaReferenceKey(item->mediaReferenceKey);
                                 player->setSpeed(item->speed);
                                 player->setLoop(item->loop);
+
                                 player->setInOutRange(item->inOutRange);
                                 player->setVolume(p.volume);
                                 player->setMute(p.mute);

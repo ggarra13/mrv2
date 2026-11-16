@@ -15,6 +15,8 @@ ChangeLog
 
 - Python: the included bakeOCIO.py python demo script now has documentation on how to bake OpenEXR sequencese to HDR .mov files.
 
+- Edit: Numerous fixes and improvements.  You can now edit timelines with a start time code different than 0.
+
 - Core/MacOS: Vulkan OCIO support has been dramatically improved on MacOS.
 
 - Core/MacOS: HDR support on the Vulkan backend with an external monitor has been added and tested on macOS, both Intel and M1.
@@ -23,7 +25,7 @@ ChangeLog
 
 - Core: Improved performance of the OpenGL backend.
 
-- Core: Improved performance of the Vulkan backend. 
+- Core: Improved performance of the Vulkan backend.
 
 - Core: Ported to miniaudio as RtAudio seems like a dead project.  This should allow porting to Emscripten and have better aarch64 support.
 

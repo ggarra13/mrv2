@@ -244,6 +244,7 @@ namespace mrv
                 _createThumbnailWindow();
             }
 
+            auto settings = ui->app->settings();
 
             p.style = ui::Style::create(context);
             p.fontSystem = image::FontSystem::create(context);
@@ -265,8 +266,6 @@ namespace mrv
             p.timelineWidget->setTimelines(std::vector<std::shared_ptr<timeline::Timeline> >());
 
             p.timelineWidget->setParent(p.timelineWindow);
-
-            auto settings = ui->app->settings();
 
             timelineui_vk::DisplayOptions displayOptions;
             displayOptions.trackInfo =
@@ -398,10 +397,8 @@ namespace mrv
                         const auto& cache =
                             p.player->player()->observeCacheOptions()->get();
                         const auto& rate = time.rate();
-                        const auto& readAhead =
-                            cache.readAhead.rescaled_to(rate);
-                        const auto& readBehind =
-                            cache.readBehind.rescaled_to(rate);
+                        const auto& readAhead = cache.readAhead.rescaled_to(rate);
+                        const auto& readBehind = cache.readBehind.rescaled_to(rate);
                         const auto& timeRange = p.player->inOutRange();
 
                         auto startTime = time + readBehind;
@@ -494,8 +491,7 @@ namespace mrv
             const int wX = X - kWINDOW_BORDERS;
             const int wY = Y - kWINDOW_BORDERS;
             const int wW = W + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2;
-            const int wH =
-                H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 + kLABEL_SIZE;
+            const int wH = H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 + kLABEL_SIZE;
 
             const int bX = kBOX_BORDERS;
             const int bY = kBOX_BORDERS;

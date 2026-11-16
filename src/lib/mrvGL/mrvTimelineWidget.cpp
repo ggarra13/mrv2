@@ -245,11 +245,14 @@ namespace mrv
             p.style = ui::Style::create(context);
             p.fontSystem = image::FontSystem::create(context);
 
+            p.timelineWindow = TimelineWindow::create(context);
+
+
             p.timelineWidget =
                 timelineui::TimelineWidget::create(timeUnitsModel, context);
             p.timelineWidget->setEditable(false);
-            p.timelineWidget->setEditMode(timeline::EditMode::Move);
             p.timelineWidget->setFrameView(true);
+            p.timelineWidget->setEditMode(timeline::EditMode::Move);
             p.timelineWidget->setScrollBarsVisible(false);
             p.timelineWidget->setMoveCallback(std::bind(
                                                   &mrv::opengl::TimelineWidget::moveCallback, this, std::placeholders::_1));
@@ -261,7 +264,6 @@ namespace mrv
             displayOptions.clipInfo = settings->getValue<bool>("Timeline/ClipInfo");
             p.timelineWidget->setDisplayOptions(displayOptions);
 
-            p.timelineWindow = TimelineWindow::create(context);
             p.timelineWidget->setParent(p.timelineWindow);
 
             p.thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
@@ -313,6 +315,11 @@ namespace mrv
         void TimelineWidget::setEditable(bool value)
         {
             _p->timelineWidget->setEditable(value);
+        }
+
+        const math::Box2i TimelineWidget::getGeometry() const
+        {
+            return _p->timelineWidget->getAllGeometry();
         }
 
         void TimelineWidget::setEditMode(const timeline::EditMode value)
@@ -406,7 +413,7 @@ namespace mrv
             const int Y = _toUI(Fl::event_y());
             const int X = _toUI(Fl::event_x());
             if ((Y < maxY && !p.timelineWidget->isDraggingClip()) ||
-                !p.timelineWidget->isEditable())
+                !p.timelineWidget->isEditable() && p.player)
             {
                 p.timeRange = p.player->player()->getTimeRange();
                 const auto& info = p.player->ioInfo();
@@ -1746,11 +1753,6 @@ namespace mrv
             p.vao.reset();
         }
 
-        const math::Box2i TimelineWidget::getGeometry() const
-        {
-            return _p->timelineWidget->getAllGeometry();
-        }
-
         bool TimelineWidget::getCompareTimelines()
         {
             return _p->compareTimelines;
@@ -1792,8 +1794,6 @@ namespace mrv
             const std::vector<tl::timeline::MoveData>& moves)
         {
             TLRENDER_P();
-            edit_store_undo(p.player, p.ui);
-            edit_clear_redo(p.ui);
             edit_move_clip_annotations(moves, p.ui);
         }
 

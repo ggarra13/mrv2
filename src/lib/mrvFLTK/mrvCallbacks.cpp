@@ -5542,11 +5542,12 @@ namespace mrv
         item->videoLayers = media->videoLayers;
 
         // Playback
-        item->timeRange = media->timeRange;
-        item->inOutRange = media->inOutRange;
+        item->timeRange = player->timeRange();
+        item->inOutRange = player->inOutRange();
         item->ioInfo = media->ioInfo;
-        item->speed = media->speed;
-        item->loop = media->loop;
+        item->speed = player->speed();
+        item->loop = player->loop();
+        item->audioOffset = player->audioOffset();
         item->playback = player->playback();
         item->currentTime = time;
         item->mute = media->mute;
@@ -5554,8 +5555,8 @@ namespace mrv
         item->timeline.reset();
 
         // Annotations
-        item->annotations = media->annotations;
-        item->voiceAnnotations = media->voiceAnnotations;
+        item->annotations = player->getAllAnnotations();
+        item->voiceAnnotations = player->getAllVoiceAnnotations();
 
         // OCIO
         item->ocioIcs = media->ocioIcs;
