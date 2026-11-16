@@ -937,8 +937,9 @@ namespace tl
                     !dynamic_cast<GapItem*>(item->p.get()))
                     continue;
                 timeline::MoveData move;
+                int otioIndex = p.tracks[item->track].otioIndexes[item->index];
                 move.fromTrack = move.toTrack = item->track;
-                move.fromIndex = move.toIndex = item->index;
+                move.fromIndex = move.toIndex = otioIndex;
                 out.push_back(move);
             }
             return out;

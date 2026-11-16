@@ -2411,12 +2411,8 @@ namespace mrv
         double left_rate = left_range.duration().rate();
         double right_rate = right_range.duration().rate();
 
-        auto in_offset = RationalTime(std::min(
-                                          std::max(1.0, left_range.duration().value() /
-                                                   2.0), left_rate / 2.0), left_rate);
-        auto out_offset = RationalTime(std::min(
-                                           std::max(1.0, right_range.duration().value() /
-                                                    2.0), right_rate / 2.0), right_rate);
+        auto in_offset = RationalTime(std::max(1.0, left_range.duration().value() / 2.0), left_rate);
+        auto out_offset = RationalTime(std::max(1.0, right_range.duration().value() / 2.0), right_rate);
 
         OTIO_NS::Transition* transition =
             new OTIO_NS::Transition("", "SMPTE_Dissolve", in_offset, out_offset);
@@ -2469,6 +2465,11 @@ namespace mrv
         {
             left_video = selection[0];
             right_video = selection[1];
+            if (left_video == nullptr || right_video == nullptr)
+            {
+                LOG_ERROR("left video=" << left_video << " right_video="
+                          << right_video);
+            }
             _addTransition(left_video, right_video);
         }
         else
