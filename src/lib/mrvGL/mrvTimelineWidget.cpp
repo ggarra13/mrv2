@@ -1072,7 +1072,6 @@ namespace mrv
             mousePressEvent(button, on, modifiers);
             if (p.draggingClip)
             {
-                toOtioFile(p.player, p.ui);
                 p.ui->uiView->redrawWindows();
                 panel::redrawThumbnails();
                 p.draggingClip = false;
