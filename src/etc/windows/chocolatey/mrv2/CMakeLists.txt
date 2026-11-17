@@ -24,7 +24,7 @@ if(NOT MRV2_VERSION)
 endif()
 
 set(mrv2_DESCRIPTION "OpenGL backend")
-if (MRV2_NAME STEQUAL "vmrv2")
+if (MRV2_NAME STREQUAL "vmrv2")
     set(mrv2_DESCRIPTION "Vulkan backend")
 endif()
 

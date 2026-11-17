@@ -56,6 +56,7 @@ Fixes
 
 - Fixed -edl command-line flag on sequences and on videos not loading the audio.
 
+
 Libraries
 ---------
 
