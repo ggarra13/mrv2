@@ -715,9 +715,9 @@ namespace tl
             // the end.
             const double value = out.rescaled_to(rate).value();
             const double nearest = std::round(value);
-            return OTIO_NS::RationalTime(
-                std::abs(value - nearest) < 1.0e-6 ? nearest : std::floor(value),
-                rate);
+            const double selected = std::abs(value - nearest) < 1.0e-6 ?
+                                    nearest : std::floor(value);
+            return OTIO_NS::RationalTime(selected, rate);
         }
 
         OTIO_NS::TimeRange toAudioMediaTime(

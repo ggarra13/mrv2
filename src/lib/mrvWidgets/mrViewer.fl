@@ -470,7 +470,7 @@ widget_class TimelineClass {open
     Fl_Group {} {open
       xywh {5 0 928 29}
     } {
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {5 3 127 26}
       } {
         Fl_Menu_Button uiTimecodeSwitch {
@@ -517,10 +517,10 @@ ui->uiView->take_focus();}
           class {mrv::Timecode}
         }
       }
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {133 1 544 28}
       } {
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {133 3 324 26}
         } {
           Fl_Button uiPlayStart {
@@ -721,7 +721,7 @@ o->maximum(60.0);}
             class {mrv::FPSInput}
           }
         }
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {576 3 101 24}
         } {
           Fl_Button uiAudioTracks {
@@ -768,14 +768,15 @@ if (value < 0.01F)
           }
         }
       }
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {677 3 256 26}
       } {
         Fl_Button uiStartButton {
           label I
           user_data this user_data_type {ViewerUI*}
           callback {auto player = ui->uiView->getTimelinePlayer();
-		    if ( !player ) return;
+if ( !player ) return;
+
 if ( !o->value() )
 	player->resetInPoint();
 else
@@ -787,7 +788,7 @@ const auto& startTime = range.start_time();
 uiStartFrame->setTime( startTime );
 
 ui->uiTimeline->setTimelinePlayer(player);
-ui->uiTimeline->redraw();}
+ui->uiTimeline->redraw();} selected
           xywh {682 3 27 24} type Toggle down_box DOWN_BOX selection_color 14 labelcolor 20 align 16
         }
         Fl_Input uiStartFrame {
@@ -1537,7 +1538,7 @@ uiMain->set_dock(o);}
             class {mrv::TimelineGroup}
           } {
             Fl_Group uiTimeline {
-              label uiTimeline selected
+              label uiTimeline
               xywh {0 568 934 22} color 6 labeltype NO_LABEL resizable
               class MyTimelineWidget
             } {}

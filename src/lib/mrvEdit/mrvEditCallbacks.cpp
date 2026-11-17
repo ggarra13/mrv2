@@ -200,10 +200,12 @@ namespace mrv
             return timeline;
         }
 
-        OTIO_NS::Timeline* duplicateTimeline(const OTIO_NS::Timeline* orig)
+        OTIO_NS::Timeline* duplicateTimeline(const OTIO_NS::Timeline* timeline)
         {
-            const std::string json = orig->to_json_string();
+            const auto startTimeOpt = timeline->global_start_time();
+            const std::string json = timeline->to_json_string();
             auto out = createTimelineFromString(json);
+            out->set_global_start_time(startTimeOpt);
             return out;
         }
 
@@ -226,23 +228,21 @@ namespace mrv
             auto time = player->currentTime();
 
             const auto startTimeOpt = timeline->global_start_time();
-            if (startTimeOpt.has_value() && startTimeOpt.value().value() != 0.0)
-            {
-                const OTIO_NS::RationalTime startTime = startTimeOpt.value();
 
-                // Work on a deep copy, as the undo buffer shares the
-                // original annotations (edit_store_undo does not copy them).
-                auto annotations = player->getAllAnnotations();
-                annotations = deepCopyAnnotations(annotations);
-                player->setAllAnnotations(annotations);
-            }
+            // Work on a deep copy, as the undo buffer shares the
+            // original annotations (edit_store_undo does not copy them).
+            auto annotations = player->getAllAnnotations();
+            annotations = deepCopyAnnotations(annotations);
 
             // Update the view player's timeline
             timeline->set_global_start_time(startTimeOpt);
             player->setTimeline(timeline);
-            const double rate = player->defaultSpeed();
+            const double rate = timeline->duration().rate();
             player->setSpeed(rate);
             player->setInOutRange(player->timeRange());
+            player->resetInPoint();
+            player->resetOutPoint();
+            player->setAllAnnotations(annotations);
 
             // Update the timeline player
             ui->uiTimeline->setTimelinePlayer(player);
@@ -250,7 +250,7 @@ namespace mrv
 
             // Set the start and end frame in the UI
             const auto one_frame = RationalTime(1.0, rate);
-            const auto startTime = RationalTime(0.0, rate);
+            const auto startTime = player->timeRange().start_time();
             auto endTime = startTime + timeline->duration() - one_frame;
             endTime = endTime.rescaled_to(rate);
             TimelineClass* c = ui->uiTimeWindow;
@@ -1295,9 +1295,6 @@ namespace mrv
             }
         }
 
-        TimeRange timeRange;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
-
         const RationalTime scaledTime = time.rescaled_to(videoRate);
         const TimeRange range(scaledTime, RationalTime(1.0, videoRate));
 
@@ -1393,9 +1390,6 @@ namespace mrv
                     sampleRate = frame.rate;
             }
         }
-
-        TimeRange timeRange;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
 
         const RationalTime scaledTime = time.rescaled_to(videoRate);
 
@@ -1733,7 +1727,6 @@ namespace mrv
         }
 
         updateTimeline(timeline, ui);
-
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -1916,7 +1909,6 @@ namespace mrv
         }
 
         updateTimeline(timeline, ui);
-
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -1981,7 +1973,6 @@ namespace mrv
         }
 
         updateTimeline(timeline, ui);
-
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -2099,7 +2090,6 @@ namespace mrv
             return;
 
         updateTimeline(timeline, ui);
-
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -2565,9 +2555,6 @@ namespace mrv
         OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> timeline(
             otioTimeline);
 
-        TimeRange timeRange;
-        double videoRate = 0.F, sampleRate = 0.F;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
 
         player->setAllAnnotations(buffer.annotations);
         updateTimeline(timeline, ui);
@@ -2620,10 +2607,6 @@ namespace mrv
 
         OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> timeline(
             otioTimeline);
-
-        TimeRange timeRange;
-        double videoRate = 0.F, sampleRate = 0.F;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
 
         player->setAllAnnotations(buffer.annotations);
         updateTimeline(timeline, ui);
@@ -2772,8 +2755,7 @@ namespace mrv
         OTIO_NS::Timeline* timeline, const std::string& otioFile,
         bool makeRelativePaths)
     {
-        const std::string& s = timeline->to_json_string();
-        const auto otioTimeline = createTimelineFromString(s);
+        const auto otioTimeline = duplicateTimeline(timeline);
         if (!otioTimeline)
             return;
 
@@ -3218,8 +3200,7 @@ namespace mrv
 
         // Make a copy of the timeline, so we don't modify the original in
         // place.
-        const std::string& s = timeline->to_json_string();
-        const auto otioTimeline = createTimelineFromString(s);
+        const auto otioTimeline = duplicateTimeline(timeline);
         if (!otioTimeline)
             return;
 
@@ -3338,10 +3319,11 @@ namespace mrv
             sanitizeVideoAndAudioRates(
                 destTimeline, timeRange, videoRate, sampleRate);
 
+            updateTimeline(destTimeline, ui);
             toOtioFile(destTimeline, ui);
 
             destItem->timeRange = timeRange;
-            destItem->inOutRange = timeRange;
+            destItem->inOutRange = time::invalidTimeRange;
             destItem->speed = videoRate;
 
             model->setA(index);
@@ -3372,6 +3354,10 @@ namespace mrv
         tcp->unlock();
 
         refresh_media_cb(nullptr, ui);
+
+        player = ui->uiView->getTimelinePlayer();
+        auto timeline = player->getTimeline();
+        updateTimeline(timeline, ui);
     }
 
     //! Associated items (like the audio of a video clip) are sent along with
