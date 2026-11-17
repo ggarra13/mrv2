@@ -46,13 +46,14 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
     <licenseUrl>https://github.com/ggarra13/mrv2/blob/main/LICENSE</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <projectSourceUrl>https://github.com/ggarra13/mrv2</projectSourceUrl>
+    <packageSourceUrl>https://github.com/ggarra13/mrv2</packageSourceUrl>
     <docsUrl>https://mrv2.sourceforge.io/docs/en/index.html</docsUrl>
     <!--<mailingListUrl></mailingListUrl>-->
     <bugTrackerUrl>https://github.com/ggarra13/mrv2/issues/</bugTrackerUrl>
     <tags>@mrv2_NAME@ admin mrviewer flipbook viewer image video audio player review exr</tags>
     <summary>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics using a @mrv2_DESCRIPTION@.</summary>
     <description>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics using a @mrv2_DESCRIPTION@.</description>
-    <releaseNotes>https://github.com/ggarra13/mrv2/releases/tag/@mrv2_VERSION@</releaseNotes>
+    <releaseNotes>https://github.com/ggarra13/mrv2/releases/tag/v@mrv2_VERSION@</releaseNotes>
     <!-- =============================== -->
 
     <!-- Specifying dependencies and version ranges? https://docs.nuget.org/create/versioning#specifying-version-ranges-in-.nuspec-files -->
