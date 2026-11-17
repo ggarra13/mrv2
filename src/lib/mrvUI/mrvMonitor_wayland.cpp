@@ -10,12 +10,14 @@
 #include <sstream>
 #include <string>
 #include <tuple>
+#include <utility>
 #include <vector>
 #include <stdexcept>
 
 namespace fs = std::filesystem;
 
 #include <wayland-client.h>
+#include <FL/Fl.H>       // For Fl::screen_count() / Fl::screen_xywh()
 #include <FL/platform.H> // Make sure to include for fl_wl_display()
 
 namespace
@@ -41,7 +43,8 @@ namespace
             int32_t y = 0;
         };
 
-        // Get the sorted list of monitors. It initializes on first call.
+        // Get the list of monitors, in the order the registry announced them.
+        // It initializes on first call.
         const std::vector<MonitorData>& getMonitors()
         {
             if (!initialized)
@@ -49,6 +52,54 @@ namespace
                 initialize();
             }
             return monitors;
+        }
+
+        // Map an FLTK screen index (Fl_Window::screen_num()) to the index of
+        // the matching entry in getMonitors().
+        //
+        // FLTK's screen order is NOT the registry order: since the change to
+        // compute_full_and_maximized_areas(), FLTK moves the compositor's
+        // primary screen to the front of its list.  Instead of guessing that
+        // order, we rely on the one thing both sides share: the wl_output
+        // geometry position.  FLTK divides that position by a per-screen
+        // scale, which keeps the ordering of screens, so we match screens by
+        // their rank when sorted by position (x, then y).
+        int fltkIndexToMonitorIndex(int fltkIndex)
+        {
+            const auto& mons = getMonitors();
+            const int numMons = static_cast<int>(mons.size());
+            const int numFltk = Fl::screen_count();
+
+            if (fltkIndex < 0 || fltkIndex >= numFltk || numFltk != numMons)
+                return fltkIndex; // can't match reliably; fall back.
+
+            // Position of every FLTK screen.
+            std::vector<std::pair<int, int>> fltkPos(numFltk);
+            for (int i = 0; i < numFltk; ++i)
+            {
+                int x, y, w, h;
+                Fl::screen_xywh(x, y, w, h, i);
+                fltkPos[i] = {x, y};
+            }
+
+            // Rank of the requested FLTK screen by position.
+            int rank = 0;
+            for (int i = 0; i < numFltk; ++i)
+            {
+                if (i != fltkIndex && fltkPos[i] < fltkPos[fltkIndex])
+                    ++rank;
+            }
+
+            // Monitor indices sorted by position.
+            std::vector<int> order(numMons);
+            for (int i = 0; i < numMons; ++i)
+                order[i] = i;
+            std::stable_sort(
+                order.begin(), order.end(), [&](int a, int b)
+                { return std::tie(mons[a].x, mons[a].y) <
+                         std::tie(mons[b].x, mons[b].y); });
+
+            return order[rank];
         }
 
     private:
@@ -202,12 +253,21 @@ namespace mrv
 #endif
             const auto& monitors = WaylandMonitorManager::instance().getMonitors();
 
-            if (monitorIndex < 0 || monitorIndex >= monitors.size())
+            if (monitorIndex < 0 || monitorIndex >= (int)monitors.size())
             {
                 throw std::runtime_error("Invalid Monitor index");
             }
-            
-            const auto& monitorInfo = monitors[monitorIndex];
+
+            // monitorIndex is an FLTK screen index; translate it to our own.
+            const int index =
+                WaylandMonitorManager::instance().fltkIndexToMonitorIndex(
+                    monitorIndex);
+            if (index < 0 || index >= (int)monitors.size())
+            {
+                throw std::runtime_error("Invalid Monitor index");
+            }
+
+            const auto& monitorInfo = monitors[index];
             if (!monitorInfo.name.empty())
             {
                 out = monitorInfo.name + ": " + monitorInfo.description;

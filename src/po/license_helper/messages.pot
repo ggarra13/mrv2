@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
+# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the license_helper package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: license_helper v1.8.5\n"
+"Project-Id-Version: license_helper v1.8.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-31 04:31-0300\n"
+"POT-Creation-Date: 2026-11-09 20:40-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,7 @@ msgstr ""
 msgid ""
 "\n"
 "Annotations for one year\n"
-"Solo + Python for one year\n"
+"Solo + Full Python access for one year\n"
 "Standard + Editing for one year\n"
 "Editing + Voice and Link Annotations for one year\n"
 "All of Pro but without expiration date (you own it).\n"

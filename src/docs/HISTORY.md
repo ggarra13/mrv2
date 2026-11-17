@@ -1,3 +1,68 @@
+v1.8.6
+======
+
+ChangeLog
+---------
+
+- Install/Windows: Added chocolatey packages as another method of distribution.
+- Install/Linux:  Removed libpcre2 to use the system one.
+
+- UI: Added **Help->Video Tutorials** which opens your browser with a YouTube video playlist.  Close to 20 videos showing the UI and evolution of the features of mrv2 and vmrv2.
+
+- UI/Wayland:  Now clicking twice on the title bar with a tablet will resize the window.
+
+- Python: Python support within the UI was always available, including the Python Editor.  Only Python plugins and running python scripts was not possible without a Standard license.  Now running a python script without the unlocking of the python licensing, will print out a clarifying message.
+
+- Python: the included bakeOCIO.py python demo script now has documentation on how to bake OpenEXR sequences to HDR .mov files.
+
+- Edit: Numerous fixes and improvements.  You can now edit timelines with a start time code different than 0.
+
+- Core/MacOS: Vulkan OCIO support has been dramatically improved on MacOS.
+
+- Core/MacOS: HDR support on the Vulkan backend with an external monitor has been added and tested on macOS, both Intel and M1.
+
+- Core/MacOS: Added a tiny launcher program for mrv2 and vmrv2 so that it complies to MacOS Mach-O standards in Applications .app bundles.
+
+- Core: Improved performance of the OpenGL backend.
+
+- Core: Improved performance of the Vulkan backend.
+
+- Core: Ported to miniaudio as RtAudio seems like a dead project.  This should allow porting to Emscripten and have better aarch64 support.
+
+- Core: Improved HDR detection on macOS on both laptops and external HDR monitors.
+
+- Core: Cleaned up useless BMD code.
+
+- Core: Cleaned all references to unused Devices Panel.
+
+- Core: Improved reverse playback on complex movies.
+
+Fixes
+-----
+
+- Fixed removing selected transitions. 
+
+- Fixed dragging clips to the timeline viewport to create an EDL.
+
+- Fixed menus not displaying properly the OpenColorIO settings on multiple monitors, when the Top Bar OCIO selector was used.
+
+- Fixed hang on exit when running a python script on the Vulkan backend.
+
+- Fixed crash when Log Panel was not visible and it was opened by an error in a callback, like an error on Open->URL Movie.
+
+- Fixed interrupting a running python script from the command-line resulting in a stack trace.
+
+- Added **Help->Update mrv2** python plugin to the demo version of mrv2.
+
+- Fixed -edl command-line flag on sequences and on videos not loading the audio.
+
+Libraries
+---------
+
+- miniaudio 0.11.26
+- FLTK Vulkan v2.5.5
+
+
 v1.8.5
 ======
 

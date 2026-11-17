@@ -59,6 +59,7 @@ namespace mrv
 
             void prepare() FL_OVERRIDE;
             void destroy() FL_OVERRIDE;
+            Fl_Vk_Display_Caps display_caps() FL_OVERRIDE;
 
             std::shared_ptr<vlk::OffscreenBuffer> getVideoFBO();
 
@@ -71,6 +72,8 @@ namespace mrv
             void _retryHDR();
 
         protected:
+            
+            void _afterColorspaceSelected();
             void _updateHDRMetadata();
 
             void _createCubicEnvironmentMap();

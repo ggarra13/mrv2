@@ -286,6 +286,7 @@ endif()
 
 
 set(POCO_DEP )
+set(libdatachannel_DEP )
 if(MRV2_NETWORK)
     include(cmake/Modules/BuildPoco.cmake)
     include(cmake/Modules/Buildlibdatachannel.cmake)

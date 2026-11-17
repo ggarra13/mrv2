@@ -112,14 +112,14 @@ namespace mrv
             const image::Color4f* image() const;
 
             //! Get the shader options.
-            const timeline::ShaderOptions&
+            const timeline::ShaderOptions
             getShaderOptions() const noexcept;
 
             //! Set the shader options.
             void setShaderOptions(const timeline::ShaderOptions& value) noexcept;
 
             //! Get the background options.
-            const timeline::BackgroundOptions&
+            const timeline::BackgroundOptions
             getBackgroundOptions() const noexcept;
 
             //! Observe the background options.
@@ -140,10 +140,10 @@ namespace mrv
             void setAutoICS();
 
             //! Get the OCIO options.
-            const timeline::OCIOOptions&
+            const timeline::OCIOOptions
             getOCIOOptions(unsigned monitorId) const noexcept;
 
-            const timeline::OCIOOptions& getOCIOOptions() const noexcept;
+            const timeline::OCIOOptions getOCIOOptions() const noexcept;
 
             //! Set the LUT options.
             void setLUTOptions(const timeline::LUTOptions&) noexcept;

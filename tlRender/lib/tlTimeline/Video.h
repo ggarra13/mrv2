@@ -44,6 +44,20 @@ namespace tl
             Transition transition = Transition::kNone;
             float transitionValue = 0.F;
 
+            //! The path of the media the image came from, so a consumer can
+            //! resolve things about the source; e.g., an input color space.
+            std::string                 path;
+
+            //! The path of the media "imageB" came from.
+            std::string                 pathB;
+
+            //! Per layer overrides of the OCIO input color space; empty uses
+            //! the item's. Filled by a consumer that resolves them from the
+            //! paths and the image tags; the timeline itself says nothing
+            //! about color.
+            std::string                 ocioInput;
+            std::string                 ocioInputB;
+
             //! Whether the image stands in for a frame the media does not have,
             //! rather than being the frame that was asked for. Carried per
             //! layer so that a comparison can say which of its sources it is
@@ -53,8 +67,14 @@ namespace tl
             //! The frame repeated in place of it, when there was one to repeat.
             std::optional<int64_t>      heldFrom;
 
-            bool operator==(const VideoLayer&) const;
-            bool operator!=(const VideoLayer&) const;
+            //! Whether the reader skipped this layer to keep up with a
+            //! moving playhead, rather than decoding it (see
+            //! io::IVideoRead::setPlayhead()). A declined layer carries no
+            //! image and should not be cached or displayed as the answer
+            //! for its time; the time should be asked for again later.
+            bool                        declined        = false;
+
+            bool operator == (const VideoLayer&) const = default;
         };
 
         //! Video data.

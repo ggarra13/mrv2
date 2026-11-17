@@ -16,11 +16,10 @@ add_library(mrvBaseApp ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
 find_package(Imath REQUIRED)
-find_package(RtAudio REQUIRED)
 find_package(Freetype REQUIRED)
 
 set(LIBRARIES )
-set(LIBRARIES_PRIVATE tlRender::tlCore RtAudio Freetype::Freetype Imath::Imath)
+set(LIBRARIES_PRIVATE tlRender::tlCore Freetype::Freetype Imath::Imath)
 
 target_link_libraries(mrvBaseApp PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_include_directories(mrvBaseApp PUBLIC ${INCLUDES} )

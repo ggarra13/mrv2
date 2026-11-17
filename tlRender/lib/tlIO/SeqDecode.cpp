@@ -57,7 +57,17 @@ namespace tl
             }
 
             _info = _probeInfo();
-            const double speed = _decode->getSpeed(_info, defaultSpeed);
+            double speed = _decode->getSpeed(_info, defaultSpeed);
+            if (const auto i = options.find("SeqIO/Speed"); i != options.end())
+            {
+                std::stringstream ss(i->second);
+                double value = 0.0;
+                ss >> value;
+                if (value > 0.0)
+                {
+                    speed = value;
+                }
+            }
 
             // The range the sequence covers, whether or not every frame in it
             // is there. A policy that leaves frames out is settled by the

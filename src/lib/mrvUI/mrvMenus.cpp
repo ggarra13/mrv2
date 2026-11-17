@@ -453,11 +453,6 @@ namespace mrv
                 hotkey = kToggleCompare.hotkey();
                 callback_function = (Fl_Callback*)compare_panel_cb;
             }
-            else if (tmp == "Devices")
-            {
-                hotkey = kToggleDevices.hotkey();
-                // callback_function = (Fl_Callback*)devices_panel_cb;
-            }
             else if (tmp == "Settings")
             {
                 hotkey = kToggleSettings.hotkey();
@@ -607,13 +602,6 @@ namespace mrv
             else if (tmp == _("Compare"))
             {
                 if (comparePanel)
-                    item->set();
-                else
-                    item->clear();
-            }
-            else if (tmp == _("Devices"))
-            {
-                if (devicesPanel)
                     item->set();
                 else
                     item->clear();
@@ -1921,8 +1909,7 @@ namespace mrv
             {
                 for (int m = 0; m < num_screens; ++m)
                 {
-                    const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
-                    std::string monitorName = mrv::desktop::monitorName(m);
+                    const timeline::OCIOOptions o = uiView->getOCIOOptions(m);
                     /* xgettext:c-format */
                     snprintf(
                         buf, 1024, _("OCIO/  Monitor #%d Display: %s"), m,
@@ -2312,6 +2299,9 @@ namespace mrv
             (Fl_Callback*) unlock_features_cb, ui, mode | FL_MENU_DIVIDER);
         menu->add(
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,
+            ui, mode);
+        menu->add(
+            _("Help/Video Tutorials"), 0, (Fl_Callback*)help_tutorials_cb,
             ui, mode);
         menu->add(
             _("Help/About"), kToggleAbout.hotkey(), (Fl_Callback*)about_cb,

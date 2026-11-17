@@ -28,6 +28,7 @@ extern "C"
 
 #include <array>
 #include <list>
+#include <set>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -48,8 +49,12 @@ namespace tl
             std::vector<std::shared_ptr<gl::Texture> > out;
             gl::TextureOptions options;
             options.filters = imageFilters;
+#ifdef __APPLE__
+            options.pbo = false;
+#else
             options.pbo =
                 info.size.w >= pboSizeMin || info.size.h >= pboSizeMin;
+#endif
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:
@@ -138,6 +143,14 @@ namespace tl
                 out.push_back(gl::Texture::create(infoTmp, options));
                 break;
             }
+            case image::PixelType::RGB_F16_P:
+            {
+                const auto infoTmp = image::Info(info.size, image::PixelType::L_F16);
+                out.push_back(gl::Texture::create(infoTmp, options));
+                out.push_back(gl::Texture::create(infoTmp, options));
+                out.push_back(gl::Texture::create(infoTmp, options));
+                break;
+            }
             case image::PixelType::YUV_422SP_U8:
             {
                 auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
@@ -191,7 +204,8 @@ namespace tl
         void copyTextures(
             const std::shared_ptr<image::Image>& image,
             const std::vector<std::shared_ptr<gl::Texture> >& textures,
-            size_t offset)
+            size_t offset,
+            gl::UploadBuffer* upload)
         {
             const auto& info = image->getInfo();
             switch (info.pixelType)
@@ -460,10 +474,26 @@ namespace tl
                 }
                 break;
             }
+            case image::PixelType::RGB_F16_P:
+            {
+                if (3 == textures.size())
+                {
+                    const std::size_t plane =
+                        static_cast<std::size_t>(info.size.w) * info.size.h * 2;
+                    for (std::size_t i = 0; i < 3; ++i)
+                    {
+                        textures[i]->copy(
+                            image->getData() + i * plane,
+                            textures[i]->getInfo());
+                    }
+                }
+                break;
+            }
             default:
                 if (1 == textures.size())
                 {
-                    textures[0]->copy(image);
+                    upload ? textures[0]->copy(image, *upload) :
+                             textures[0]->copy(image);
                 }
                 break;
             }
@@ -777,6 +807,10 @@ namespace tl
                 p.glyphTextureAtlas = gl::TextureAtlas::create(
                     1, 4096, image::PixelType::L_U8, timeline::ImageFilter::Linear);
             }
+            if (!p.uploadBuffer)
+            {
+                p.uploadBuffer = std::make_unique<gl::UploadBuffer>();
+            }
 
             glEnable(GL_BLEND);
             glBlendEquation(GL_FUNC_ADD);
@@ -843,24 +877,43 @@ namespace tl
             }
             _displayShader();
 
-            p.vbos["rect"] = gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32);
-            p.vaos["rect"] = gl::VAO::create(
-                p.vbos["rect"]->getType(), p.vbos["rect"]->getID());
-            p.vbos["texture"] =
-                gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
-            p.vaos["texture"] = gl::VAO::create(
-                p.vbos["texture"]->getType(), p.vbos["texture"]->getID());
-            p.vbos["image"] =
-                gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
-            p.vaos["image"] = gl::VAO::create(
+            if (!p.vbos["rect"])
+            {
+                p.vbos["rect"] = gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32);
+                p.vaos["rect"] = gl::VAO::create(
+                    p.vbos["rect"]->getType(), p.vbos["rect"]->getID());
+            }
+
+            if (!p.vbos["texture"])
+            {
+                p.vbos["texture"] =
+                    gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
+                p.vaos["texture"] = gl::VAO::create(
+                    p.vbos["texture"]->getType(), p.vbos["texture"]->getID());
+            }
+
+            if (!p.vbos["image"])
+            {
+                p.vbos["image"] =
+                    gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
+                p.vaos["image"] = gl::VAO::create(
                 p.vbos["image"]->getType(), p.vbos["image"]->getID());
-            p.vbos["wipe"] = gl::VBO::create(1 * 3, gl::VBOType::Pos2_F32);
-            p.vaos["wipe"] = gl::VAO::create(
-                p.vbos["wipe"]->getType(), p.vbos["wipe"]->getID());
-            p.vbos["video"] =
-                gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
-            p.vaos["video"] = gl::VAO::create(
-                p.vbos["video"]->getType(), p.vbos["video"]->getID());
+            }
+
+            if (!p.vbos["wipe"])
+            {
+                p.vbos["wipe"] = gl::VBO::create(1 * 3, gl::VBOType::Pos2_F32);
+                p.vaos["wipe"] = gl::VAO::create(
+                    p.vbos["wipe"]->getType(), p.vbos["wipe"]->getID());
+            }
+
+            if (!p.vbos["video"])
+            {
+                p.vbos["video"] =
+                    gl::VBO::create(2 * 3, gl::VBOType::Pos2_F32_UV_U16);
+                p.vaos["video"] = gl::VAO::create(
+                    p.vbos["video"]->getType(), p.vbos["video"]->getID());
+            }
 
             setViewport(math::Box2i(0, 0, renderSize.w, renderSize.h));
             if (renderOptions.clear)
@@ -952,10 +1005,16 @@ namespace tl
         {
             TLRENDER_P();
             p.transform = value;
-            for (auto i : p.shaders)
+            // Several names share one program (rect/wipe, texture/overlay/
+            // dissolve), so only update each unique shader once.
+            std::set<gl::Shader*> done;
+            for (const auto& i : p.shaders)
             {
-                i.second->bind();
-                i.second->setUniform("transform.mvp", value);
+                if (i.second && done.insert(i.second.get()).second)
+                {
+                    i.second->bind();
+                    i.second->setUniform("transform.mvp", value);
+                }
             }
         }
 

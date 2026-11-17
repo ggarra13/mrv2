@@ -62,7 +62,8 @@ namespace tl
         void copyTextures(
             const std::shared_ptr<image::Image>&,
             const std::vector<std::shared_ptr<gl::Texture> >&,
-            size_t offset = 0);
+            size_t offset = 0,
+            gl::UploadBuffer* upload = nullptr);
 
         void setActiveTextures(
             const image::Info& info,
@@ -156,6 +157,7 @@ namespace tl
             std::map<std::string, std::shared_ptr<gl::OffscreenBuffer> >
                 buffers;
             std::shared_ptr<TextureCache> textureCache;
+            std::unique_ptr<gl::UploadBuffer> uploadBuffer;
             std::shared_ptr<gl::TextureAtlas> glyphTextureAtlas;
             std::map<image::GlyphInfo, gl::TextureAtlasID> glyphIDs;
             std::map<std::string, std::shared_ptr<gl::VBO> > vbos;

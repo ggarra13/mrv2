@@ -14,5 +14,15 @@ namespace tl
             ss << value;
             return arg(ss.str());
         }
+
+        inline const std::string& Format::str() const
+        {
+            return _text;
+        }
+
+        inline Format::operator std::string() const
+        {
+            return _text;
+        }
     } // namespace string
 } // namespace tl

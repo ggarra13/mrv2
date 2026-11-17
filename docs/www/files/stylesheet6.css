@@ -48,23 +48,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 15px;
+  margin-bottom: 10px;
 }
 
 .header .logo-title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     text-align: center;
     color: #ffffff;
     font-size: 1.4vw;
 }
-
-.header .header-right {
-    margin-left: auto;
-}
-
 
 #subtitle {
     margin: 0;

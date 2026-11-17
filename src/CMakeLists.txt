@@ -479,6 +479,13 @@ add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 add_subdirectory(license_helper)
 
 #
+# If on macOS, create tiny macos launcher for vmrv2.
+#
+if (APPLE)
+    add_subdirectory(macos_launcher)
+endif()
+
+#
 # Add hdr source
 #
 if (TLRENDER_NDI AND TLRENDER_VK AND MRV2_HDR)

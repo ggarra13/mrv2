@@ -147,7 +147,7 @@ namespace mrv
                 if (auto track = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Track>(
                         timeline->tracks()->children()[move.fromTrack]))
                 {
-                    out = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Transition>(track->children()[move.fromIndex]);
+                    out = dynamic_cast<OTIO_NS::Transition*>(track->children()[move.fromIndex].value);
                 }
             }
             return out;
@@ -200,10 +200,12 @@ namespace mrv
             return timeline;
         }
 
-        OTIO_NS::Timeline* duplicateTimeline(const OTIO_NS::Timeline* orig)
+        OTIO_NS::Timeline* duplicateTimeline(const OTIO_NS::Timeline* timeline)
         {
-            const std::string json = orig->to_json_string();
+            const auto startTimeOpt = timeline->global_start_time();
+            const std::string json = timeline->to_json_string();
             auto out = createTimelineFromString(json);
+            out->set_global_start_time(startTimeOpt);
             return out;
         }
 
@@ -217,48 +219,41 @@ namespace mrv
             const std::vector<std::shared_ptr<draw::Annotation> >&
                 originalAnnotations);
 
-        void updateTimeline(
-            OTIO_NS::Timeline* timeline, const RationalTime& time, ViewerUI* ui)
+        void updateTimeline(OTIO_NS::Timeline* timeline, ViewerUI* ui)
         {
             auto player = ui->uiView->getTimelinePlayer();
+            if (!player || !timeline)
+                return;
 
-            // The global start time (an .otio timecode start time) is reset
-            // below, so the timeline will start at 0.  The annotations are
-            // stored in the player's time (start time included), so make them
-            // relative to the start of the timeline at the same time.
-            // Otherwise, they would not follow the clips when editing.
+            auto time = player->currentTime();
+
             const auto startTimeOpt = timeline->global_start_time();
-            if (startTimeOpt.has_value() && startTimeOpt.value().value() != 0.0)
-            {
-                const OTIO_NS::RationalTime startTime = startTimeOpt.value();
 
-                // Work on a deep copy, as the undo buffer shares the
-                // original annotations (edit_store_undo does not copy them).
-                auto annotations =
-                    deepCopyAnnotations(player->getAllAnnotations());
-                for (auto& annotation : annotations)
-                {
-                    if (annotation->allFrames)
-                        continue;
-                    const auto offset =
-                        startTime.rescaled_to(annotation->time.rate());
-                    if (annotation->time >= offset)
-                        annotation->time -= offset;
-                }
-                player->setAllAnnotations(annotations);
-            }
+            // Work on a deep copy, as the undo buffer shares the
+            // original annotations (edit_store_undo does not copy them).
+            auto annotations = player->getAllAnnotations();
+            annotations = deepCopyAnnotations(annotations);
+            auto voannotations = player->getAllVoiceAnnotations();
 
-            timeline->set_global_start_time(std::nullopt);
+            // Update the view player's timeline
+            timeline->set_global_start_time(startTimeOpt);
             player->setTimeline(timeline);
-            const double rate = player->defaultSpeed();
-            player->setSpeed(rate); // needed
-            player->setInOutRange(player->timeRange()); // needed
+            const double rate = timeline->duration().rate();
+            player->setSpeed(rate);
+            player->setInOutRange(player->timeRange());
+            player->resetInPoint();
+            player->resetOutPoint();
+            player->setAllAnnotations(annotations);
+            player->setAllAnnotations(voannotations);
+
+            // Update the timeline player in the timeline viewport.
             ui->uiTimeline->setTimelinePlayer(player);
+            ui->uiTimeline->frameView();
             ui->uiTimeline->redraw();
 
-            // Set the start and end frame
+            // Set the start and end frame in the UI.
             const auto one_frame = RationalTime(1.0, rate);
-            const auto startTime = RationalTime(0.0, rate);
+            const auto startTime = player->timeRange().start_time();
             auto endTime = startTime + timeline->duration() - one_frame;
             endTime = endTime.rescaled_to(rate);
             TimelineClass* c = ui->uiTimeWindow;
@@ -285,7 +280,7 @@ namespace mrv
         // Routine to verify a clip is available and it is not an .otio file.
         bool verifySourceItem(int index, ViewerUI* ui)
         {
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             const auto& sourceItems = model->observeFiles()->get();
             if (index < 0 || index >= sourceItems.size())
             {
@@ -418,7 +413,7 @@ namespace mrv
         void makePathsAbsolute(OTIO_NS::Timeline* timeline, ViewerUI* ui)
         {
             auto stack = timeline->tracks();
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto tracks = stack->children();
             auto item = model->observeA()->get();
             if (!item)
@@ -602,7 +597,7 @@ namespace mrv
         void makePathsToTemp(OTIO_NS::Timeline* timeline, ViewerUI* ui)
         {
             auto stack = timeline->tracks();
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto tracks = stack->children();
             auto item = model->observeA()->get();
             if (!item)
@@ -683,7 +678,7 @@ namespace mrv
 
         void toOtioFile(OTIO_NS::Timeline* otioTimeline, ViewerUI* ui)
         {
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             int index = model->observeAIndex()->get();
             if (index < 0)
                 return;
@@ -708,47 +703,13 @@ namespace mrv
             else
             {
                 otioFile = otioFilename(ui);
-                if (file::isOTIOZ(path))
-                {
-                    ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
-                                                                  _("Unzipping"));
-                    progress->show();
-                    Fl::check();
 
-                    std::string dir = mrv::tmppath() + "/media";
-                    item->timeline->expandOTIOZ(dir, [&](
-                                                        bool& aborted,
-                                                        const std::string& title,
-                                                        size_t done,
-                                                        size_t total)
-                        {
-                            // Safely update the UI
-                            progress->set_end(total);
-                            progress->set_value(done);
+                // Needed to reload the movie and change it from .otioz to
+                // EDL0x****.otio
+                reloadMedia = true;
 
-                            if (!progress->window() ||
-                                (progress->window() &&
-                                 !progress->window()->shown()))
-                                aborted = true;
-
-                            Fl::check();
-                        });
-
-                    delete progress;
-
-                    // Change paths in OTIO timeline to point to /tmp/media
-                    makePathsToTemp(timeline, ui);
-
-                    // Reset the item's timeline::Timeline
-                    item->timeline.reset();
-
-                    // Needed to reload the movie and change it from .otioz to
-                    // EDL0x****.otio
-                    reloadMedia = true;
-
-                    // Needed to refresh the file caches.
-                    refreshCache = true;
-                }
+                // Needed to refresh the file caches.
+                refreshCache = true;
             }
 
             timeline->to_json_file(otioFile);
@@ -756,6 +717,8 @@ namespace mrv
 
             if (reloadMedia)
             {
+                // Reset the item's timeline::Timeline
+                item->timeline.reset();
                 refresh_media_cb(nullptr, ui);
             }
 
@@ -941,7 +904,7 @@ namespace mrv
         //! Switches to EDL clip for timeline processing during an Undo/Redo.
         bool switchToEDL(const std::string& fileName, ViewerUI* ui)
         {
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             auto Aitem = model->observeA()->get();
             if (!Aitem)
@@ -982,7 +945,7 @@ namespace mrv
         //! Return the EDL name for the Undo/Redo queue.
         std::string getEDLName(ViewerUI* ui)
         {
-            auto model = ui->app->filesModel();
+            auto model = App::app->filesModel();
             auto Aitem = model->observeA()->get();
 
             const file::Path path = Aitem->path;
@@ -1016,7 +979,7 @@ namespace mrv
     void toOtioFile(TimelinePlayer* player, ViewerUI* ui)
     {
         auto timeline = player->getTimeline();
-        updateTimeline(timeline, player->currentTime(), ui);
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
     }
 
@@ -1031,13 +994,10 @@ namespace mrv
     // \@note: Player is a reference, as it can mutate after toOtioFile.
     void edit_store_undo(TimelinePlayer*& player, ViewerUI* ui)
     {
-        auto oldPlayer = player;
+        player->stop();
 
         UndoRedo buffer;
         buffer.annotations = player->getAllAnnotations();
-
-        player->stop();
-        const OTIO_NS::RationalTime time = player->currentTime();
 
         auto timeline = player->getTimeline();
         if (!timeline)
@@ -1046,13 +1006,45 @@ namespace mrv
         timeline = duplicateTimeline(timeline);
         if (isOTIOZ())
         {
+            auto model = App::app->filesModel();
+            auto item = model->observeA()->get();
+            if (!item)
+                return;
+
             makePathsToTemp(timeline, ui);
+
+            ProgressReport* progress = new ProgressReport(App::ui->uiMain,
+                                                          0, 100,
+                                                          _("Unzipping"));
+            progress->show();
+            Fl::check();
+
+            std::string dir = mrv::tmppath() + "/media";
+            item->timeline->expandOTIOZ(dir, [&](
+                                            bool& aborted,
+                                            const std::string& title,
+                                            size_t done,
+                                            size_t total)
+                {
+                    // Safely update the UI
+                    progress->set_end(total);
+                    progress->set_value(done);
+
+                    if (!progress->window() ||
+                        (progress->window() &&
+                         !progress->window()->shown()))
+                        aborted = true;
+
+                    Fl::check();
+                });
+
+            delete progress;
+            item->timeline.reset();
         }
         else
         {
             makePathsAbsolute(timeline, ui);
         }
-        toOtioFile(timeline, ui);
 
         const std::string state = timeline->to_json_string();
         if (!undoBuffer.empty())
@@ -1064,17 +1056,17 @@ namespace mrv
             }
         }
 
+        // Update view's with the undoBuffer contents.
+        // We update the timeline viewport at the end of the operations.
+        player = ui->uiView->getTimelinePlayer();
+        player->setTimeline(timeline);
+
         // Store timeline string and EDL name.
         buffer.json = state;
         buffer.fileName = getEDLName(ui);
 
         undoBuffer.push_back(buffer);
         ui->uiUndoEdit->activate();
-
-        // Return new player if any.
-        player = ui->uiView->getTimelinePlayer();
-        // Update player's timeline and timeline viewport (uiTimeline).
-        updateTimeline(timeline, time, ui);
     }
 
     void edit_clear_redo(ViewerUI* ui)
@@ -1252,7 +1244,7 @@ namespace mrv
         player->setAllAnnotations(annotations);
         edit_clear_redo(ui);
 
-        updateTimeline(timeline, time, ui);
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         tcp->pushMessage("Edit/Frame/Cut", time);
@@ -1306,9 +1298,6 @@ namespace mrv
             }
         }
 
-        TimeRange timeRange;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
-
         const RationalTime scaledTime = time.rescaled_to(videoRate);
         const TimeRange range(scaledTime, RationalTime(1.0, videoRate));
 
@@ -1356,7 +1345,7 @@ namespace mrv
 
         edit_clear_redo(ui);
 
-        updateTimeline(timeline, scaledTime, ui);
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         panel::redrawThumbnails();
@@ -1405,9 +1394,6 @@ namespace mrv
             }
         }
 
-        TimeRange timeRange;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
-
         const RationalTime scaledTime = time.rescaled_to(videoRate);
 
         for (auto& frame : copiedFrames)
@@ -1435,7 +1421,7 @@ namespace mrv
 
         edit_clear_redo(ui);
 
-        updateTimeline(timeline, scaledTime, ui);
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         panel::redrawThumbnails();
@@ -1517,10 +1503,10 @@ namespace mrv
 
         edit_clear_redo(ui);
 
-        updateTimeline(timeline, time, ui);
-        toOtioFile(timeline, ui);
-
         tcp->pushMessage("Edit/Time/Slice", time);
+
+        updateTimeline(timeline, ui);
+        toOtioFile(timeline, ui);
     }
 
     void edit_time_remove_clip_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1563,7 +1549,7 @@ namespace mrv
             OTIO_NS::algo::remove(track, trackTime, false);
         }
 
-        updateTimeline(timeline, time, ui);
+        updateTimeline(timeline, ui);
 
         player = ui->uiView->getTimelinePlayer();
 
@@ -1665,7 +1651,7 @@ namespace mrv
             modified = true;
             refreshMedia = true;
 
-            updateTimeline(timeline, time, ui);
+            updateTimeline(timeline, ui);
             compositions = getTracks(player);
         }
 
@@ -1743,8 +1729,7 @@ namespace mrv
             }
         }
 
-        updateTimeline(timeline, time, ui);
-
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -1866,7 +1851,7 @@ namespace mrv
             }
 
             modified = true;
-            updateTimeline(timeline, time, ui);
+            updateTimeline(timeline, ui);
             compositions = getTracks(player);
         }
 
@@ -1926,8 +1911,7 @@ namespace mrv
             }
         }
 
-        updateTimeline(timeline, time, ui);
-
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -1991,8 +1975,7 @@ namespace mrv
             track->remove_child(clipIndex);
         }
 
-        updateTimeline(timeline, time, ui);
-
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -2040,6 +2023,8 @@ namespace mrv
 
         for (auto& item : selected)
         {
+            if (!item)
+                continue;
             for (auto composition : compositions)
             {
                 auto track = dynamic_cast<OTIO_NS::Track*>(composition);
@@ -2073,6 +2058,8 @@ namespace mrv
 
         for (auto& item : transitions)
         {
+            if (!item)
+                continue;
             for (auto composition : compositions)
             {
                 auto track = dynamic_cast<Track*>(composition);
@@ -2083,7 +2070,7 @@ namespace mrv
                 for (auto& child : track->children())
                 {
 
-                    if (item == OTIO_NS::dynamic_retainer_cast<Transition>(child))
+                    if (item == dynamic_cast<Transition*>(child.value))
                     {
                         int childIndex = track->index_of_child(child);
                         indices.push_back(childIndex);
@@ -2105,8 +2092,7 @@ namespace mrv
         if (!modified)
             return;
 
-        updateTimeline(timeline, time, ui);
-
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -2171,7 +2157,7 @@ namespace mrv
             track->remove_child(gapIndex);
         }
 
-        updateTimeline(timeline, time, ui);
+        updateTimeline(timeline, ui);
 
         toOtioFile(timeline, ui);
 
@@ -2296,7 +2282,7 @@ namespace mrv
             }
         }
 
-        updateTimeline(timeline, time, ui);
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -2360,8 +2346,7 @@ namespace mrv
             track->remove_child(gapIndex);
         }
 
-        updateTimeline(timeline, time, ui);
-
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         if (modified)
@@ -2375,6 +2360,9 @@ namespace mrv
     void _addTransition(const OTIO_NS::Item* left,
                         const OTIO_NS::Item* right)
     {
+        if (!left || !right)
+            return;
+
         auto track = left->parent();
         if (track != right->parent())
         {
@@ -2421,12 +2409,8 @@ namespace mrv
         double left_rate = left_range.duration().rate();
         double right_rate = right_range.duration().rate();
 
-        auto in_offset = RationalTime(std::min(
-                                          std::max(1.0, left_range.duration().value() /
-                                                   2.0), left_rate / 2.0), left_rate);
-        auto out_offset = RationalTime(std::min(
-                                           std::max(1.0, right_range.duration().value() /
-                                                    2.0), right_rate / 2.0), right_rate);
+        auto in_offset = RationalTime(std::max(1.0, left_range.duration().value() / 2.0), left_rate);
+        auto out_offset = RationalTime(std::max(1.0, right_range.duration().value() / 2.0), right_rate);
 
         OTIO_NS::Transition* transition =
             new OTIO_NS::Transition("", "SMPTE_Dissolve", in_offset, out_offset);
@@ -2479,6 +2463,11 @@ namespace mrv
         {
             left_video = selection[0];
             right_video = selection[1];
+            if (left_video == nullptr || right_video == nullptr)
+            {
+                LOG_ERROR("left video=" << left_video << " right_video="
+                          << right_video);
+            }
             _addTransition(left_video, right_video);
         }
         else
@@ -2520,7 +2509,7 @@ namespace mrv
         }
 
         const auto& time = getTime(player);
-        updateTimeline(timeline, time, ui);
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         tcp->pushMessage("Edit/Selected/Add Transition", time);
@@ -2569,12 +2558,9 @@ namespace mrv
         OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> timeline(
             otioTimeline);
 
-        TimeRange timeRange;
-        double videoRate = 0.F, sampleRate = 0.F;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
 
         player->setAllAnnotations(buffer.annotations);
-        updateTimeline(timeline, player->currentTime(), ui);
+        updateTimeline(timeline, ui);
 
         toOtioFile(timeline, ui);
 
@@ -2625,12 +2611,8 @@ namespace mrv
         OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> timeline(
             otioTimeline);
 
-        TimeRange timeRange;
-        double videoRate = 0.F, sampleRate = 0.F;
-        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
-
         player->setAllAnnotations(buffer.annotations);
-        updateTimeline(timeline, player->currentTime(), ui);
+        updateTimeline(timeline, ui);
 
         toOtioFile(timeline, ui);
 
@@ -2752,12 +2734,15 @@ namespace mrv
         return otioTimeline;
     }
 
-    void create_new_timeline_cb(ViewerUI* ui)
+    void create_new_timeline_cb(
+        ViewerUI* ui,
+        const std::optional<OTIO_NS::RationalTime> startTimeOpt)
     {
         const std::string file = otioFilename(ui);
 
         OTIO_NS::ErrorStatus errorStatus;
         auto timeline = createEmptyTimeline(ui);
+        timeline->set_global_start_time(startTimeOpt);
         timeline->to_json_file(file, &errorStatus);
         if (OTIO_NS::is_error(errorStatus))
         {
@@ -2768,7 +2753,7 @@ namespace mrv
             tcp->unlock();
             throw std::runtime_error(error);
         }
-        ui->app->open(file);
+        App::app->open(file);
         tcp->unlock();
     }
 
@@ -2776,8 +2761,7 @@ namespace mrv
         OTIO_NS::Timeline* timeline, const std::string& otioFile,
         bool makeRelativePaths)
     {
-        const std::string& s = timeline->to_json_string();
-        const auto otioTimeline = createTimelineFromString(s);
+        const auto otioTimeline = duplicateTimeline(timeline);
         if (!otioTimeline)
             return;
 
@@ -2810,7 +2794,7 @@ namespace mrv
         if (!player)
             return;
 
-        auto model = ui->app->filesModel();
+        auto model = App::app->filesModel();
         auto Aitem = model->observeA()->get();
         if (!Aitem)
             return;
@@ -2854,9 +2838,11 @@ namespace mrv
         save_timeline_to_disk(otioFile);
     }
 
-    void add_clip_to_new_timeline_cb(const int index, ViewerUI* ui)
+    void add_clip_to_new_timeline_cb(
+        const int index,
+        const std::optional<OTIO_NS::RationalTime> startTime, ViewerUI* ui)
     {
-        create_new_timeline_cb(ui);
+        create_new_timeline_cb(ui, startTime);
         add_clip_to_timeline_cb(index, ui);
         panel::redrawThumbnails();
     }
@@ -2960,28 +2946,6 @@ namespace mrv
                         itemTrackRange.start_time().rescaled_to(videoRate) +
                             globalStartTime.rescaled_to(videoRate),
                         itemTrackRange.duration().rescaled_to(videoRate));
-
-                    // file::PathOptions options;
-                    // auto clip = OTIO_NS::dynamic_retainer_cast<Clip>(child);
-                    // file::Path path;
-                    // if (clip)
-                    //     path = timeline::getPath(clip->media_reference(),
-                    //                              "",
-                    //                              options);
-
-                    // std::cerr << "---------------- " << path.get(-1,
-                    // file::PathType::FileName)
-                    //           << std::endl;
-                    // std::cerr << "      itemRange=" << itemRange
-                    //           << std::endl;
-                    // std::cerr << " itemTrackRange=" << itemTrackRange
-                    //           << std::endl;
-                    // std::cerr << "     inOutRange=" << inOutRange <<
-                    // std::endl; std::cerr << "    globalRange=" <<
-                    // videoGlobalRange
-                    //           << std::endl;
-                    // std::cerr << "videoInOutRange=" << videoInOutRange <<
-                    // std::endl;
 
                     if (videoInOutRange.intersects(videoGlobalRange))
                     {
@@ -3205,7 +3169,7 @@ namespace mrv
         const int sourceIndex, const int destIndex,
         OTIO_NS::Timeline* destTimeline, ViewerUI* ui)
     {
-        auto model = ui->app->filesModel();
+        auto model = App::app->filesModel();
         auto numFiles = model->observeFiles()->getSize();
 
         if (sourceIndex < 0 || sourceIndex >= numFiles)
@@ -3244,8 +3208,7 @@ namespace mrv
 
         // Make a copy of the timeline, so we don't modify the original in
         // place.
-        const std::string& s = timeline->to_json_string();
-        const auto otioTimeline = createTimelineFromString(s);
+        const auto otioTimeline = duplicateTimeline(timeline);
         if (!otioTimeline)
             return;
 
@@ -3274,7 +3237,7 @@ namespace mrv
         if (!verifySourceItem(index, ui))
             return;
 
-        auto model = ui->app->filesModel();
+        auto model = App::app->filesModel();
 
         const auto sourceItems = model->observeFiles()->get();
 
@@ -3293,10 +3256,13 @@ namespace mrv
         if (!file::isTemporaryEDL(destItem->path))
         {
             // 1. Get the index of the currently displayed clip (the 'A' item)
-            auto aIndex = ui->app->filesModel()->observeAIndex()->get();
+            auto aIndex = App::app->filesModel()->observeAIndex()->get();
+
+            auto timeline = player->getTimeline();
+            auto startTimeOpt = timeline->global_start_time();
 
             // 2. Create a new timeline containing the currently displayed clip
-            add_clip_to_new_timeline_cb(aIndex, ui);
+            add_clip_to_new_timeline_cb(aIndex, startTimeOpt, ui);
 
             // 3. Append the dragged clip to this newly created timeline
             add_clip_to_timeline_cb(index, ui);
@@ -3353,8 +3319,6 @@ namespace mrv
                 player->getAllAnnotations(), sourceItem->inOutRange,
                 sourceItem->annotations);
 
-            bool emptyTracks = hasEmptyTracks(destTimeline->tracks());
-
             addClipToTimeline(index, destIndex, destTimeline, ui);
 
             //
@@ -3366,34 +3330,8 @@ namespace mrv
             sanitizeVideoAndAudioRates(
                 destTimeline, timeRange, videoRate, sampleRate);
 
+            updateTimeline(destTimeline, ui);
             toOtioFile(destTimeline, ui);
-
-            destItem->timeRange = timeRange;
-            destItem->inOutRange = timeRange;
-            destItem->speed = videoRate;
-
-            if (emptyTracks)
-            {
-                model->setA(index);
-                model->setA(destIndex);
-            }
-
-            ui->uiView->valid(0); // needed
-            ui->uiView->redraw(); // needed
-
-            player = ui->uiView->getTimelinePlayer();
-            if (!player)
-            {
-                LOG_ERROR("No destination player");
-                return;
-            }
-
-            auto time = timelineDuration.rescaled_to(videoRate) +
-                        sourceItem->currentTime.rescaled_to(videoRate);
-            updateTimeline(destTimeline, time, ui);
-
-            player->setAllAnnotations(annotations);
-            ui->uiTimeline->frameView();
         }
         catch (const std::exception& e)
         {
@@ -3401,6 +3339,12 @@ namespace mrv
         }
 
         tcp->unlock();
+
+        refresh_media_cb(nullptr, ui);
+
+        player = ui->uiView->getTimelinePlayer();
+        auto timeline = player->getTimeline();
+        updateTimeline(timeline, ui);
     }
 
     //! Associated items (like the audio of a video clip) are sent along with
@@ -3441,9 +3385,15 @@ namespace mrv
         if (!timeline)
             return;
 
+        ui->uiView->setTimelinePlayer(player);
+        ui->uiTimeline->setTimelinePlayer(player);
+
         // If an undo only operation, return immediately.
-        if (moves.size() == 1 && moves[0].type == tl::timeline::MoveType::UndoOnly)
+        if (moves.size() == 1 &&
+            moves[0].type == tl::timeline::MoveType::UndoOnly)
+        {
             return;
+        }
 
         if (moves.empty())
             return;
@@ -3458,8 +3408,8 @@ namespace mrv
             innerPlayer->getTimeline()->setTimeline(otioTimeline);
         }
 
-        const auto& stack = timeline->tracks();
-        const auto& tracks = stack->children();
+        const auto stack = timeline->tracks();
+        const auto tracks = stack->children();
 
         // Annotations are only shifted once per distinct move, no matter how
         // many (associated) video items travel together.
@@ -3821,7 +3771,7 @@ namespace mrv
 
         makePathsAbsolute(timeline, ui);
 
-        updateTimeline(timeline, time, ui);
+        updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
         player->player()->setChannelMute(audioTracks);
@@ -4007,7 +3957,7 @@ namespace mrv
         {
             int savedH = calculate_edit_viewport_size(ui);
             int H = ui->uiTimelineGroup->h();
-            if (H == kMinEditModeH || !ui->uiTimelineGroup->visible())
+            if (H <= kMinEditModeH || !ui->uiTimelineGroup->visible())
                 active = false;
         }
 

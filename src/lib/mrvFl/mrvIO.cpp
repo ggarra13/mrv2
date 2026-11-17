@@ -34,7 +34,7 @@ namespace mrv
         {
             if (!panel::logsPanel)
                 panel::logs_panel_cb(NULL, ui);
-            if (!panel::logsPanel->is_panel())
+            if (panel::logsPanel && !panel::logsPanel->is_panel())
                 panel::logsPanel->dock();
         }
 
@@ -42,7 +42,7 @@ namespace mrv
         {
             if (!panel::logsPanel)
                 panel::logs_panel_cb(NULL, ui);
-            if (panel::logsPanel->is_panel())
+            if (panel::logsPanel && panel::logsPanel->is_panel())
                 panel::logsPanel->undock();
         }
     } // namespace
@@ -151,7 +151,7 @@ namespace mrv
         {
             if (Flu_File_Chooser::window)
                 return;
-            
+
             if (oldMsg == c)
                 return;
 
@@ -184,7 +184,7 @@ namespace mrv
                 return;
 
             oldMsg = c;
-            
+
             if (out.is_open())
             {
                 out << c << std::flush;

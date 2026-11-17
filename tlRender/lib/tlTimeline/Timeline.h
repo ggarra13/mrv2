@@ -166,14 +166,59 @@ namespace tl
             //! keeps the reading on the side that knows where the bytes are.
             std::vector<file::Path> getMediaPaths() const;
 
-            //! Get the media path (if any) at the current mediaTime.
-            file::Path getMediaPath(OTIO_NS::RationalTime& mediaTime);
-
             //! Get the information for one of the media in the timeline.
             bool getMediaInfo(
                 const file::Path&,
                 io::Info&,
                 const io::Options& = io::Options());
+
+            //! \name Media Frame Numbers
+            //!
+            //! A timeline time is not a frame number. A clip can be trimmed, so
+            //! that its first frame is not the media's first frame, and a sequence
+            //! read with frames skipped is only as long as the frames it has.
+            //! These convert between the two using the clip at the given time,
+            //! which is the clip the caller is looking at.
+            ///@{
+
+            //! The media time that names the frame shown at a timeline time.
+            //!
+            //! This is the time to show someone watching, whatever units they
+            //! read it in: it matches the file on disk, where the timeline's own
+            //! time only counts off the frames that are being played.
+            std::optional<OTIO_NS::RationalTime> getMediaTime(
+                const OTIO_NS::RationalTime&);
+
+            //! The timeline time that shows the given media time, taking the clip
+            //! from the given time.
+            std::optional<OTIO_NS::RationalTime> getTimelineTime(
+                const OTIO_NS::RationalTime&,
+                const OTIO_NS::RationalTime& mediaTime);
+
+            //! The frame number the media gives to a timeline time.
+            std::optional<int64_t> getMediaFrame(
+                const OTIO_NS::RationalTime&);
+
+            //! The timeline time that reads the given media frame number, taking
+            //! the clip from the given time.
+            //!
+            //! A frame the media does not have snaps as the media requires, so
+            //! there is always an answer for a clip that was found.
+            std::optional<OTIO_NS::RationalTime> getMediaFrameTime(
+                const OTIO_NS::RationalTime&,
+                int64_t frame);
+
+            //! Whether media times increase over the whole timeline, which is
+            //! what makes them worth showing in place of it.
+            //!
+            //! They do when every video clip reads the same media and takes a
+            //! later part of it than the one before: one file played through, in
+            //! one piece or in the runs a sparse sequence is cut into. Cutting
+            //! between media, or playing the same media twice, restarts the
+            //! numbering.
+            bool isMediaTimeContinuous() const;
+
+            ///@}
 
             //! Read one frame of one of the media in the timeline.
             //!
@@ -186,6 +231,14 @@ namespace tl
             //! Read audio from one of the media in the timeline.
             std::future<io::AudioData> readMediaAudio(
                 const file::Path&,
+                const OTIO_NS::TimeRange&,
+                const io::Options& = io::Options());
+
+            //! Read audio of a clip in the timeline, its active media, over a
+            //! range of the timeline in seconds from its start: the clip's
+            //! sound alone, as an audio track's waveform draws it.
+            std::future<io::AudioData> readClipAudio(
+                const OTIO_NS::Clip*,
                 const OTIO_NS::TimeRange&,
                 const io::Options& = io::Options());
 
@@ -251,14 +304,6 @@ namespace tl
 
             ///@}
 
-            //! Exampand an .otioz file into a directory, with all its elements.
-            //! the progressCb function allows using a progress indicator and aborting the
-            //! operation by setting aborted to true.
-            void expandOTIOZ(const std::string& mediaPath,
-                             std::function<void(bool& aborted,
-                                                const std::string& title,
-                                                size_t done, size_t total) > progressCb);
-
             //! \name Video and Audio Data
             ///@{
 
@@ -274,12 +319,15 @@ namespace tl
             void cancelRequests(const std::vector<uint64_t>&);
 
             //! Set the time requests are served nearest to. Video requests at
-            //! and ahead of it, in the direction given, are served first,
-            //! nearest first; those behind it after, in order of time. Without
-            //! it they are served in the order they were made.
+            //! and ahead of it, in the direction given, are served first, nearest
+            //! first; those behind it after, in order of time. Without it they
+            //! are served in the order they were made. The readers hear it too,
+            //! and while the playhead is moving decode what can still reach the
+            //! screen; see IVideoRead::setPlayhead().
             void setRequestPriority(
                 const OTIO_NS::RationalTime&,
-                bool reverse = false);
+                bool reverse = false,
+                bool playing = false);
 
             //! Close the readers, which hold the decoders and what they have
             //! decoded. The next read opens them again, while the timeline
@@ -297,7 +345,33 @@ namespace tl
             //! Set the cache options.
             void setCacheOptions(const PlayerCacheOptions&);
 
+            //! Exampand an .otioz file into a directory, with all its elements.
+            //! the progressCb function allows using a progress indicator and aborting the
+            //! operation by setting aborted to true.
+            void expandOTIOZ(const std::string& mediaPath,
+                             std::function<void(bool& aborted,
+                                                const std::string& title,
+                                                size_t done, size_t total) > progressCb);
         private:
+            //! What is needed to convert between timeline time and media time for
+            //! the clip at a time.
+            struct MediaAt
+            {
+                std::shared_ptr<io::SeqDecode> seq;
+                OTIO_NS::TimeRange rangeInParent;
+                OTIO_NS::TimeRange trimmedRange;
+                double rate = 0.0;
+            };
+            std::optional<MediaAt> _mediaAt(const OTIO_NS::RationalTime&);
+            std::optional<MediaAt> _mediaFrom(
+                const OTIO_NS::Clip*,
+                const OTIO_NS::TimeRange& rangeInParent);
+            std::vector<MediaAt> _mediaAll();
+            OTIO_NS::RationalTime _toMediaTime(
+                const MediaAt&,
+                const OTIO_NS::RationalTime&) const;
+            OTIO_NS::RationalTime _fromMediaTime(const MediaAt&, int64_t frame) const;
+
             void _tick();
             void _requests();
             void _finishRequests();
@@ -342,8 +416,12 @@ namespace tl
                 const OTIO_NS::MediaReference*,
                 const io::Options&);
             std::future<io::VideoData> _readVideo(
-                const OTIO_NS::Clip*, const OTIO_NS::RationalTime&,
-                const io::Options&);
+                const OTIO_NS::Clip*,
+                const OTIO_NS::RationalTime&,
+                const io::Options&,
+                std::string* path = nullptr,
+                std::shared_ptr<io::IVideoRead>* read = nullptr,
+                OTIO_NS::RationalTime* mediaTime = nullptr);
             std::future<io::AudioData> _readAudio(
                 const OTIO_NS::Clip*, const OTIO_NS::TimeRange&,
                 const io::Options&);

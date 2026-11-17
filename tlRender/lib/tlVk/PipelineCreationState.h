@@ -421,7 +421,8 @@ namespace tl
             // --- Function to convert to VkGraphicsPipelineCreateInfo ---
             // This function will assemble the Vulkan struct using the stored
             // data
-            VkPipeline create(VkDevice device) const
+            VkPipeline create(VkDevice device,
+                              VkPipelineCache cache = VK_NULL_HANDLE) const
             {
                 VkGraphicsPipelineCreateInfo createInfo = {};
                 createInfo.sType =
@@ -691,17 +692,23 @@ namespace tl
                 createInfo.subpass = subpass;
                 createInfo.flags = flags;
 
-                // Create a temporary pipeline cache
+                // Use the caller's long-lived VkPipelineCache when given.
+                // Only fall back to a throw-away cache (which caches
+                // nothing across calls) when none is provided.
                 VkResult result;
 
-                VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
-                pipelineCacheCreateInfo.sType =
-                    VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-
-                VkPipelineCache pipelineCache = VK_NULL_HANDLE;
-                result = vkCreatePipelineCache(
-                    device, &pipelineCacheCreateInfo, nullptr, &pipelineCache);
-                VK_CHECK(result);
+                VkPipelineCache pipelineCache = cache;
+                const bool ownsCache = (cache == VK_NULL_HANDLE);
+                if (ownsCache)
+                {
+                    VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
+                    pipelineCacheCreateInfo.sType =
+                        VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+                    result = vkCreatePipelineCache(
+                        device, &pipelineCacheCreateInfo, nullptr,
+                        &pipelineCache);
+                    VK_CHECK(result);
+                }
 
                 VkPipeline graphicsPipeline = VK_NULL_HANDLE;
                 result = vkCreateGraphicsPipelines(
@@ -709,7 +716,8 @@ namespace tl
                     &graphicsPipeline);
                 VK_CHECK(result);
 
-                vkDestroyPipelineCache(device, pipelineCache, nullptr);
+                if (ownsCache)
+                    vkDestroyPipelineCache(device, pipelineCache, nullptr);
 
                 return graphicsPipeline;
             }

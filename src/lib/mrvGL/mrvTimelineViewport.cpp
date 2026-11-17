@@ -28,7 +28,7 @@ namespace
             ((x << 8)  & 0x00FF0000) |
             ((x << 24) & 0xFF000000);
     }
-    
+
     inline int normalizeAngle0to360(float angle)
     {
         int out = static_cast<int>(std::fmod(angle, 360.0f));
@@ -49,7 +49,7 @@ namespace
 namespace mrv
 {
     namespace opengl
-    {        
+    {
         using namespace tl;
 
         TimelineViewport::TimelineViewport(
@@ -72,7 +72,7 @@ namespace mrv
             p.ui = App::ui;
             _init();
         }
-        
+
         void TimelineViewport::resize(int X, int Y, int W, int H)
         {
             GLWindow::resize(X, Y, W, H);
@@ -82,7 +82,7 @@ namespace mrv
             }
         }
 
-        const timeline::ShaderOptions& TimelineViewport::getShaderOptions() const noexcept
+        const timeline::ShaderOptions TimelineViewport::getShaderOptions() const noexcept
         {
             return _p->shaderOptions;
         }
@@ -90,10 +90,10 @@ namespace mrv
         void TimelineViewport::setShaderOptions(const timeline::ShaderOptions& value) noexcept
         {
             TLRENDER_P();
-            
+
             if (value == p.shaderOptions)
                 return;
-            
+
             p.shaderOptions = value;
             redrawWindows();
         }
@@ -184,5 +184,5 @@ namespace mrv
         }
 
     } // namespace opengl
-    
+
 } // namespace mrv

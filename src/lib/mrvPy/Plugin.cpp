@@ -31,6 +31,7 @@ namespace py = pybind11;
 
 #include "mrvPy/PyStdErrOutRedirect.h"
 
+#include "mrvApp/mrvGlobals.h"
 #include "mrvApp/mrvApp.h"
 
 namespace
@@ -191,7 +192,8 @@ namespace mrv
 
         for (const auto& plugin : plugins)
         {
-            process_python_plugin(plugin.first, m);
+            if (app::soporta_python || plugin.first == "update-mrv2.py")
+                process_python_plugin(plugin.first, m);
         }
     }
 

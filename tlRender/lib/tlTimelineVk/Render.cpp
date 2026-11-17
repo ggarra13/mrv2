@@ -1038,6 +1038,10 @@ namespace tl
                 vkDestroyPipeline(device, pipeline.second, nullptr);
             }
 
+            _savePipelineCache();
+            if (p.pipelineCache != VK_NULL_HANDLE)
+                vkDestroyPipelineCache(device, p.pipelineCache, nullptr);
+
             for (auto& [_, pipelineLayout] : p.pipelineLayouts)
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
@@ -1179,6 +1183,16 @@ namespace tl
             g.bindingSets.clear();
             g.textures.clear();
             g.buffers.clear();
+
+            // Rewind the binding set pools for this frame (and retire the
+            // sets of shaders that no longer exist).  Must come after the
+            // garbage above is cleared.
+            _resetBindingSetPools();
+
+            // Rebuild the display shader once for all option changes made
+            // since the last frame.
+            if (p.displayShaderDirty)
+                _displayShader();
 
             const PushConstants pc;
             const vlk::ShaderFlags flags =
@@ -1738,8 +1752,7 @@ namespace tl
 
             p.monitor = value;
 
-            p.shaders["display"].reset();
-            _displayShader();
+            _invalidateDisplayShader();
         }
 
         void Render::setSDROutput(bool value)
@@ -1751,10 +1764,7 @@ namespace tl
 
             p.sdrOutput = value;
 
-            p.shaders["display"].reset();
-
-            if (p.fbo)
-                _displayShader();
+            _invalidateDisplayShader();
         }
 
         Fl_Vk_Context& Render::getContext() const
@@ -2528,6 +2538,36 @@ namespace tl
                         p.ocioData.reset();
                         throw std::runtime_error("Cannot get OCIO processor");
                     }
+#ifdef BAKE_OCIO_DISPLAY
+                    constexpr int N = 65;
+                    constexpr float kMin = -10.F, kMax = 6.5F; // stops: 2^-10 .. ~90
+                    auto cpu = p.ocioData->processor->getDefaultCPUProcessor();
+                    std::vector<float> lut(N * N * N * 4);
+                    auto unshape = [&](int i) {
+                        return i == 0 ? 0.F : std::exp2(kMin +
+                                                        (kMax - kMin) * i /
+                                                        float(N - 1));
+                    };
+                    float* o = lut.data();
+                    for (int b = 0; b < N; ++b)
+                        for (int g = 0; g < N; ++g)
+                            for (int r = 0; r < N; ++r)
+                            {
+                                float px[3] = { unshape(r), unshape(g), unshape(b) };
+                                cpu->applyRGB(px);
+                                *o++ = px[0]; *o++ = px[1]; *o++ = px[2]; *o++ = 1.F;
+                            }
+                    auto tex = vlk::Texture::create(ctx,
+                                                    VK_IMAGE_TYPE_3D, N, N, N,
+                                                    VK_FORMAT_R32G32B32A32_SFLOAT,
+                                                    "ocioBakedSampler");
+                    tex->copy(reinterpret_cast<const uint8_t*>(lut.data()),
+                              lut.size() * sizeof(float));
+                    tex->transitionToShaderRead(p.cmd);
+
+                    p.ocioData->textures.push_back(tex);
+                    p.ocioData->shaderDesc = OCIO::GpuShaderDesc::CreateShaderDesc();
+#else
                     p.ocioData->gpuProcessor =
                         p.ocioData->processor->getOptimizedGPUProcessor(
                             OCIO::OPTIMIZATION_DEFAULT);
@@ -2564,12 +2604,12 @@ namespace tl
                         p.ocioData.reset();
                         throw e;
                     }
+#endif
                 }
             }
 #endif // TLRENDER_OCIO
 
-            p.shaders["display"].reset();
-            _displayShader();
+            _invalidateDisplayShader();
         }
 
         void Render::setLUTOptions(const timeline::LUTOptions& value)
@@ -2658,8 +2698,7 @@ namespace tl
             }
 #endif // TLRENDER_OCIO
 
-            p.shaders["display"].reset();
-            _displayShader();
+            _invalidateDisplayShader();
         }
 
         void Render::setShaderOptions(const timeline::ShaderOptions& value)
@@ -2670,8 +2709,7 @@ namespace tl
 
             p.shaderOptions = value;
 
-            p.shaders["display"].reset();
-            _displayShader();
+            _invalidateDisplayShader();
         }
 
         void Render::setHDROptions(const timeline::HDROptions& value)
@@ -2862,9 +2900,28 @@ namespace tl
             }
         }
 
+        void Render::_invalidateDisplayShader()
+        {
+            TLRENDER_P();
+            p.shaders["display"].reset();
+            p.displayShaderDirty = true;
+        }
+
+        //! Rebuild the display shader if an option setter invalidated it (or
+        //! it was never created).  Must be called before anything uses
+        //! p.shaders["display"], because the setters can run at any time
+        //! between begin() and drawing.
+        void Render::_ensureDisplayShader()
+        {
+            TLRENDER_P();
+            if (p.displayShaderDirty || !p.shaders["display"])
+                _displayShader();
+        }
+
         void Render::_displayShader()
         {
             TLRENDER_P();
+            p.displayShaderDirty = false;
 
             std::string toneMapDef;
             std::string ocioICSDef;
@@ -3392,8 +3449,20 @@ namespace tl
             }
             if (p.ocioData && p.ocioData->shaderDesc)
             {
+#ifdef BAKE_OCIO_DISPLAY
+                ocioDef += R"(
+uniform sampler3D ocioBakedSampler;
+vec4 ocioDisplayFunc(vec4 c)
+{
+    vec3 t = clamp((log2(max(c.rgb, vec3(1e-10))) + 10.0) / 16.5, 0.0, 1.0);
+    t = t * (64.0 / 65.0) + 0.5 / 65.0;
+    return vec4(texture(ocioBakedSampler, t).rgb, c.a);
+}
+)";
+#else
                 ocioDef = _getOCIOUniforms(p.ocioData->shaderDesc);
-                ocioDef = p.ocioData->shaderDesc->getShaderText();
+                ocioDef += p.ocioData->shaderDesc->getShaderText();
+#endif
                 ocioDef = replaceUniformSampler(ocioDef, p.bindingIndex);
                 ocio = "outColor = ocioDisplayFunc(outColor);";
             }

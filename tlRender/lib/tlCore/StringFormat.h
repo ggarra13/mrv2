@@ -43,6 +43,9 @@ namespace tl
 
             ///@}
 
+            //! Get the string.
+            const std::string& str() const;
+
             //! \name Errors
             ///@{
 

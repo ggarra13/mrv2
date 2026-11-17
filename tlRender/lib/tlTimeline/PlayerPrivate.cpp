@@ -383,8 +383,8 @@ namespace tl
                 if (ready)
                 {
                     const OTIO_NS::RationalTime time = videoRequestsIt->first;
-                    auto& videoCache = thread.videoCache[time];
-                    videoCache.clear();
+                    std::vector<VideoFrame> videoFrames;
+                    bool declined = false;
                     for (auto videoRequestIt =
                              videoRequestsIt->second.begin();
                          videoRequestIt !=
@@ -393,10 +393,33 @@ namespace tl
                     {
                         auto videoFrame = videoRequestIt->future.get();
                         videoFrame.time = time;
-                        videoCache.push_back(videoFrame);
+                        for (const auto& layer : videoFrame.layers)
+                        {
+                            if (layer.declined)
+                            {
+                                declined = true;
+                                break;
+                            }
+                        }
+                        videoFrames.push_back(std::move(videoFrame));
                     }
                     videoRequestsIt =
                         thread.videoRequests.erase(videoRequestsIt);
+                    // A declined layer means the reader skipped this time
+                    // to keep up with a moving playhead instead of falling
+                    // behind (see FFmpeg::VideoRead::setPlayhead()).
+                    // Caching it would freeze the display on an empty
+                    // frame, so leave the cache alone; having erased it
+                    // from thread.videoRequests above, this time is now in
+                    // neither the cache nor the requests, so the next
+                    // cacheUpdate() asks for it again on its own, by which
+                    // point the playhead may have moved on to something
+                    // else entirely -- the same way a time that simply
+                    // isn't ready yet is already handled below.
+                    if (!declined)
+                    {
+                        thread.videoCache[time] = std::move(videoFrames);
+                    }
                 }
                 else
                 {

@@ -50,26 +50,29 @@ namespace tl
                 audioMutex.reset = true;
             }
 #if defined(TLRENDER_AUDIO)
-            if (thread.rtAudio && thread.rtAudio->isStreamRunning())
-            {
-                try
-                {
-                    thread.rtAudio->setStreamTime(0.0);
-                }
-                catch (const std::exception&)
-                {
-                    //! \todo How should this be handled?
-                }
-            }
+            // miniaudio has no settable stream time, so reset our own counter.
+            thread.streamFrames = 0;
 #endif // TLRENDER_AUDIO
         }
 
 #if defined(TLRENDER_AUDIO)
-        int Player::Private::rtAudioCallback(
-            void* outputBuffer, void* inputBuffer, unsigned int outSamples,
-            double streamTime, RtAudioStreamStatus status, void* userData)
+        void Player::Private::maDataCallback(
+            ma_device* device, void* outputBuffer, const void* inputBuffer,
+            ma_uint32 outSamples)
         {
-            auto p = reinterpret_cast<Player::Private*>(userData);
+            auto p = reinterpret_cast<Player::Private*>(device->pUserData);
+
+            // Advance the stream time when the callback returns, no matter
+            // which path it takes (RtAudio did this after every callback).
+            struct StreamTimeTicker
+            {
+                std::atomic<uint64_t>& frames;
+                ma_uint32 count;
+                ~StreamTimeTicker()
+                {
+                    frames.fetch_add(count, std::memory_order_relaxed);
+                }
+            } streamTimeTicker{p->thread.streamFrames, outSamples};
 
             // Get mutex protected values.
             Playback playback = Playback::Stop;
@@ -118,7 +121,7 @@ namespace tl
             case Playback::Forward:
             case Playback::Reverse:
             {
-                // Flush the audio resampler and buffer when the RtAudio
+                // Flush the audio resampler and buffer when the audio
                 // playback is reset.
                 if (reset)
                 {
@@ -154,7 +157,7 @@ namespace tl
                 // Fill the audio buffer.
                 if (inputInfo.sampleRate <= 0 ||
                     playbackStartTime == time::invalidTime)
-                    return 0;
+                    return;
 
                 const bool backwards = playback == Playback::Reverse;
                 if (!thread.silence)
@@ -196,31 +199,8 @@ namespace tl
                 int64_t seconds = inSampleRate > 0 ? (frame / inSampleRate) : 0;
                 int64_t inOffsetSamples = frame - seconds * inSampleRate;
 
-#if CHECK_AUDIO
-                std::cerr << "TIM seconds:     " << seconds << std::endl;
-                std::cerr << "TIM rtAudioCurrentFrame: "
-                          << thread.rtAudioCurrentFrame << std::endl;
-                std::cerr << "TIM playbackStartTime: " << playbackStartTime
-                          << std::endl;
-                std::cerr << "TIM playbackStartFrame: " << playbackStartFrame
-                          << std::endl;
-                std::cerr << "TIM bufferSampleCount: " <<  bufferSampleCount
-                          << std::endl;
-                std::cerr << "TIM inSampleRate: " << inSampleRate
-                          << std::endl;
-                std::cerr << "TIM outSampleRate: " << outSampleRate
-                          << std::endl;
-                std::cerr << "TIM timeOffset: " <<  timeOffset.rescaled_to(1.0) << std::endl;
-                std::cerr << "TIM frameOffset: " << frameOffset << std::endl;
-                std::cerr << "TIM frame:       " << frame   << std::endl;
-#endif
-
                 while (audio::getSampleCount(thread.buffer) < outSamples)
                 {
-#if CHECK_AUDIO
-                    std::cout << "\tseconds: " << seconds << std::endl;
-                    std::cerr << "\tinOffsetSamples: " << inOffsetSamples  << std::endl;
-#endif
                     AudioFrame audioFrame;
                     {
                         std::unique_lock<std::mutex> lock(p->audioMutex.mutex);
@@ -256,9 +236,11 @@ namespace tl
                                     clipTimeRange.duration().rescaled_to(
                                         inSampleRate));
                                 const auto inOffset =
-                                    layer.inTransition->in_offset().value();
+                                    layer.inTransition->in_offset().
+                                    rescaled_to(inSampleRate).value();
                                 const auto outOffset =
-                                    layer.inTransition->out_offset().value();
+                                    layer.inTransition->out_offset().
+                                    rescaled_to(inSampleRate).value();
                                 const auto fadeInBegin =
                                     range.start_time().value() - inOffset;
                                 const auto fadeInEnd =
@@ -283,6 +265,7 @@ namespace tl
                                 }
                             }
 
+
                             if (layer.outTransition)
                             {
                                 const auto& clipTimeRange = layer.clipTimeRange;
@@ -293,9 +276,11 @@ namespace tl
                                         inSampleRate));
 
                                 const auto inOffset =
-                                    layer.outTransition->in_offset().value();
+                                    layer.outTransition->in_offset().
+                                    rescaled_to(inSampleRate).value();
                                 const auto outOffset =
-                                    layer.outTransition->out_offset().value();
+                                    layer.outTransition->out_offset().
+                                    rescaled_to(inSampleRate).value();
                                 const auto fadeOutBegin =
                                     range.end_time_inclusive().value() -
                                     inOffset;
@@ -413,16 +398,13 @@ namespace tl
                     }
                 }
 
-                // Send audio data to RtAudio.
+                // Send audio data to miniaudio.
                 const auto now = std::chrono::steady_clock::now();
                 if (defaultSpeed ==
                         p->timeline->getTimeRange().duration().rate() &&
                     !mute && now >= muteTimeout &&
                     outSamples <= getSampleCount(thread.buffer))
                 {
-#    if CHECK_AUDIO
-                    std::cerr << "\t\t\tMOVE audio" << std::endl;
-#    endif
                     audio::move(
                         thread.buffer, reinterpret_cast<uint8_t*>(outputBuffer),
                         outSamples);
@@ -431,34 +413,43 @@ namespace tl
                 // Update the audio frame.
                 thread.rtAudioCurrentFrame += outSamples;
 
-#    if CHECK_AUDIO
-                std::cerr << "\t\t\tSEND seconds=" << seconds << std::endl
-                          << "\t\t\tSEND inOffsetSamples " << inOffsetSamples
-                          << " outSamples=" << outSamples << std::endl;
-#    endif
-
                 break;
             }
             default:
                 break;
             }
 
-            return 0;
+            return;
         }
 
-#if RTAUDIO_VERSION_MAJOR >= 6
-        void Player::Private::rtAudioErrorCallback(
-            RtAudioErrorType type, const std::string& errorText)
+        void Player::Private::maNotificationCallback(
+            const ma_device_notification* notification)
         {
-            std::cout << "RtAudio ERROR: " << errorText << std::endl;
+            auto p = reinterpret_cast<Player::Private*>(
+                notification->pDevice->pUserData);
+            switch (notification->type)
+            {
+            case ma_device_notification_type_started:
+                p->thread.audioStarted = true;
+                break;
+            case ma_device_notification_type_stopped:
+                p->thread.audioStarted = false;
+                break;
+            case ma_device_notification_type_rerouted:
+                std::cout << "miniaudio: audio device rerouted" << std::endl;
+                break;
+            case ma_device_notification_type_interruption_began:
+                std::cout << "miniaudio: audio interruption began"
+                          << std::endl;
+                break;
+            case ma_device_notification_type_interruption_ended:
+                std::cout << "miniaudio: audio interruption ended"
+                          << std::endl;
+                break;
+            default:
+                break;
+            }
         }
-#else
-        void Player::Private::rtAudioErrorCallback(
-            RtAudioError::Type type, const std::string& errorText)
-        {
-            std::cout << "RtAudio ERROR: " << errorText << std::endl;
-        }
-#endif
 
 #endif // TLRENDER_AUDIO
 

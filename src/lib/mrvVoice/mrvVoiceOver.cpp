@@ -26,23 +26,24 @@ extern "C"
 }
 
 #if defined(TLRENDER_AUDIO)
-#    include <rtaudio/RtAudio.h>
+#    include <miniaudio/miniaudio.h>
 #endif // TLRENDER_AUDIO
 
 #include <thread>
+#include <atomic>
+#include <algorithm>
 
 namespace
 {
     const int      kNumChannels = 2; // we store and play stereo
     const unsigned kSampleRate = 44100;
-    unsigned int   rtBufferFrames = 256;
     const char*    kModule = "voice";
 }
 
 namespace
 {
     size_t voiceOverIndex = 1;
-    
+
     std::string voiceOverFileName()
     {
         char buf[256];
@@ -57,10 +58,10 @@ namespace
         auto out = tmpdir + '/' + buf;
 
         ++voiceOverIndex;
-        
+
         return out;
     }
-    
+
     // A helper function to print error messages from FFmpeg functions
     void print_ffmpeg_error(int error_code, const std::string& message)
     {
@@ -70,155 +71,92 @@ namespace
     }
 }
 
-        
+
 struct AudioData
 {
     size_t rtCurrentFrame = 0;
     std::vector<float> buffer;
+    std::atomic<bool> playbackFinished{false};
 };
 
 
 #if defined(TLRENDER_AUDIO)
-namespace
-{
-#if RTAUDIO_VERSION_MAJOR >= 6
-    void checkRtError(const RtAudioErrorType e)
-    {
-        if (e == RTAUDIO_NO_ERROR || e == RTAUDIO_WARNING) return;
-        switch(e)
-        {
-        case RTAUDIO_UNKNOWN_ERROR:
-            throw std::runtime_error("Unspecified error type");
-        case RTAUDIO_NO_DEVICES_FOUND:
-            throw std::runtime_error("No Devices Found");
-        case RTAUDIO_INVALID_DEVICE:
-            throw std::runtime_error("An invalid device ID was specified.");
-        case RTAUDIO_DEVICE_DISCONNECT:
-            throw std::runtime_error("A device in use was disconnected.");
-        case RTAUDIO_MEMORY_ERROR:
-            throw std::runtime_error("An error occurred during memory allocation.");
-        case RTAUDIO_INVALID_PARAMETER:
-            throw std::runtime_error("An invalid parameter was specified to a function.");
-        case RTAUDIO_INVALID_USE:
-            throw std::runtime_error("The function was called incorrectly.");
-        case RTAUDIO_DRIVER_ERROR:
-            throw std::runtime_error("A system driver error occurred.");
-        case RTAUDIO_SYSTEM_ERROR:
-            throw std::runtime_error("A system error occurred.");
-        case RTAUDIO_THREAD_ERROR:
-            throw std::runtime_error("A thread error occurred.");
-        default:
-            throw std::runtime_error("Undefined error.");
-        }
-    }
-#endif
 
-}
-
-static int rtAudioPlaybackCallback(
-    void* outputBuffer, void* inputBuffer, unsigned int nFrames,
-    double streamTime, RtAudioStreamStatus status, void* userData)
+// miniaudio callbacks must not perform blocking operations. The recording
+// callback appends samples to the buffer, matching the original RtAudio
+// implementation. The playback callback signals completion through an atomic
+// flag; the device is stopped later from the normal application thread.
+static void maAudioPlaybackCallback(
+    ma_device* device, void* outputBuffer, const void* inputBuffer,
+    ma_uint32 frameCount)
 {
-    // Unused output buffer
     (void)inputBuffer;
-        
-    // Cast the user data back to our struct
-    AudioData* audio = static_cast<AudioData*>(userData);
-    
-    // Cast the input buffer to our sample type (float)
-    float *out = static_cast<float*>(outputBuffer);
 
-    const size_t samplesRequested = static_cast<size_t>(nFrames) * kNumChannels;
+    AudioData* audio = static_cast<AudioData*>(device->pUserData);
+    float* out = static_cast<float*>(outputBuffer);
+    const size_t requested = static_cast<size_t>(frameCount) * kNumChannels;
+
+    std::memset(out, 0, requested * sizeof(float));
+
     const size_t pos = audio->rtCurrentFrame * kNumChannels;
-    const size_t available = (pos < audio->buffer.size()) ? (audio->buffer.size() - pos) : 0;
-
-    if (available == 0)
+    if (pos >= audio->buffer.size())
     {
-        // No data left: fill output with silence and return non-zero to stop streaming.
-        std::memset(out, 0, samplesRequested * sizeof(float));
-        return 1;
+        audio->playbackFinished.store(true, std::memory_order_release);
+        return;
     }
 
-    
-    const size_t toCopySamples = std::min(available, samplesRequested);
-    std::memcpy(out, &audio->buffer[pos], toCopySamples * sizeof(float));
-    
-    if (toCopySamples < samplesRequested)
+    const size_t availableFrames =
+        (audio->buffer.size() - pos) / kNumChannels;
+    const size_t framesToCopy =
+        std::min<size_t>(availableFrames, frameCount);
+    const size_t samplesToCopy = framesToCopy * kNumChannels;
+
+    if (samplesToCopy > 0)
     {
-        // Partial copy: zero the rest
-        std::memset(out + toCopySamples, 0, (samplesRequested - toCopySamples) * sizeof(float));
-        audio->rtCurrentFrame += toCopySamples / kNumChannels;
-        return 1; // Stop streaming
+        std::memcpy(out, audio->buffer.data() + pos,
+                    samplesToCopy * sizeof(float));
     }
 
-    // Copy the audio data
-    size_t dataByteCount = nFrames * kNumChannels * sizeof(float);
-    float* stored = &audio->buffer[pos];
-    memcpy(out, stored, dataByteCount);
+    // Preserve the original voice-over speed behavior: advance through the
+    // source by the preference multiplier after each output callback.
+    int speed = 1;
+    if (mrv::App::ui && mrv::App::ui->uiPrefs)
+        speed = mrv::App::ui->uiPrefs->VoiceOverSpeed->value() + 1;
+    audio->rtCurrentFrame += static_cast<size_t>(frameCount) *
+                             static_cast<size_t>(std::max(speed, 1));
 
-    // Increment the counter based on playback speed set in preferences.
-    PreferencesUI* uiPrefs = mrv::App::ui->uiPrefs;
-    audio->rtCurrentFrame += nFrames *
-                             (uiPrefs->VoiceOverSpeed->value() + 1);
-    
-    return 0; // Return 0 to continue streaming
+    if (framesToCopy < frameCount ||
+        audio->rtCurrentFrame * kNumChannels >= audio->buffer.size())
+    {
+        audio->playbackFinished.store(true, std::memory_order_release);
+    }
 }
 
-static int rtAudioRecordCallback(
-    void* outputBuffer, void* inputBuffer, unsigned int nFrames,
-    double streamTime, RtAudioStreamStatus status, void* userData)
+static void maAudioRecordCallback(
+    ma_device* device, void* outputBuffer, const void* inputBuffer,
+    ma_uint32 frameCount)
 {
-    // Unused output buffer
     (void)outputBuffer;
 
-    // Calculate the number of samples to record
-    size_t numSamples = nFrames * kNumChannels;
-    
-    // Cast the user data back to our struct
-    AudioData* audio = static_cast<AudioData*>(userData);
-    
-    // Cast the input buffer to our sample type (float)
+    AudioData* audio = static_cast<AudioData*>(device->pUserData);
+    const size_t numSamples = static_cast<size_t>(frameCount) * kNumChannels;
+
     if (!inputBuffer)
     {
-        // Input unavailable — append silence (or skip)
         audio->buffer.insert(audio->buffer.end(), numSamples, 0.0f);
-        return 0;
+        return;
     }
 
-    float* input = static_cast<float*>(inputBuffer);
-    
-    // Resize the buffer to accommodate the new interleaved stereo data
+    const float* input = static_cast<const float*>(inputBuffer);
     audio->buffer.reserve(audio->buffer.size() + numSamples);
 
-    //
-    // Store out interleaved audio data.
-    //
-    for (unsigned int i = 0; i < nFrames; ++i)
+    // Capture is mono; store it as interleaved stereo.
+    for (ma_uint32 i = 0; i < frameCount; ++i)
     {
-        // Get the single mono sample
-        float monoSample = input[i];
-
-        // Append the mono sample to the buffer twice for interleaved stereo
-        audio->buffer.push_back(monoSample); // Left channel
-        audio->buffer.push_back(monoSample); // Right channel
+        audio->buffer.push_back(input[i]);
+        audio->buffer.push_back(input[i]);
     }
-
-    return 0; // Return 0 to continue streaming
 }
-
-#if RTAUDIO_VERSION_MAJOR >= 6
-static void rtAudioErrorCallback(
-    RtAudioErrorType type, const std::string& errorText)
-{
-    LOG_ERROR("rtAudio ERROR: " << type << " " << errorText);
-}
-#else
-static void rtAudioErrorCallback(
-    RtAudioError::Type type, const std::string& errorText)
-{
-    LOG_ERROR("rtAudio ERROR: " << type << " " << errorText);
-}
-#endif
 
 #endif // TLRENDER_AUDIO
 
@@ -227,18 +165,19 @@ namespace mrv
     namespace voice
     {
         using namespace tl;
-        
+
         struct VoiceOver::Private
         {
             std::weak_ptr<system::Context> context;
-                
+
 #if defined(TLRENDER_AUDIO)
-            std::unique_ptr<RtAudio> rtAudio;
+            ma_device audioDevice{};
+            bool audioDeviceInitialized = false;
 #endif // TLRENDER_AUDIO
-            
+
             bool running = false;
             std::thread thread;
-            
+
             AudioData audio;
         };
 
@@ -246,15 +185,15 @@ namespace mrv
 
         TLRENDER_ENUM_IMPL(RecordStatus, "Stopped", "Recording", "Saved", "Playing");
         TLRENDER_ENUM_SERIALIZE_IMPL(RecordStatus);
-        
-        
+
+
         void VoiceOver::_init(const std::shared_ptr<system::Context>& context,
                               const math::Vector2f& inCenter)
         {
             TLRENDER_P();
             p.context = context;
             center  = inCenter;
-            
+
             MouseData data;
             data.pos = inCenter;
             data.pressed = false;
@@ -295,7 +234,7 @@ namespace mrv
         void VoiceOver::clear()
         {
             TLRENDER_P();
-            
+
             p.audio.buffer.clear();
             mouse.data.clear();
 
@@ -313,7 +252,7 @@ namespace mrv
         {
             return _p->audio.buffer;
         }
-        
+
         void VoiceOver::startRecording()
         {
             TLRENDER_P();
@@ -322,91 +261,63 @@ namespace mrv
             p.audio.buffer.clear();
             p.audio.rtCurrentFrame = 0;
 
-            _startRecording();            
+            _startRecording();
         }
-        
+
         void VoiceOver::appendRecording()
         {
             TLRENDER_P();
-            
-            _startRecording();   
+
+            _startRecording();
         }
-            
+
         void VoiceOver::_startRecording()
         {
             TLRENDER_P();
-            
-#if defined(TLRENDER_AUDIO)
-            if (auto context = getContext().lock())
-            {
-                try
-                {
-                    auto audioSystem = context->getSystem<audio::System>();
-                    auto api = static_cast<RtAudio::Api>(audioSystem->getCurrentAPI());
-                    p.rtAudio.reset(new RtAudio(api));
-                }
-                catch (const std::exception& e)
-                {
-                    LOG_ERROR("Cannot create RtAudio instance: " << e.what());
-                }
-            }
-            if (auto context = getContext().lock())
-            {
-                // Initialize audio.
-                auto audioSystem = context->getSystem<audio::System>();
-                if (p.rtAudio &&
-                    !audioSystem->getDevices().empty())
-                {
-                    try
-                    {
-                        RtAudio::StreamParameters rtParameters;
-                        auto audioSystem =
-                            context->getSystem<audio::System>();
-                        rtParameters.deviceId =
-                            audioSystem->getInputDevice();
 
-                        // We record one channel as macOS has a single mic,
-                        // but we store stereo audio.
-                        rtParameters.nChannels = 1;
-#if RTAUDIO_VERSION_MAJOR >= 6
-                        RtAudioErrorType rterror = p.rtAudio->openStream(
-                            nullptr, &rtParameters,
-                            RTAUDIO_FLOAT32,
-                            kSampleRate,
-                            &rtBufferFrames,
-                            rtAudioRecordCallback,
-                            &p.audio);
-                        rterror = p.rtAudio->startStream();
-#else
-                        p.rtAudio->openStream(
-                            nullptr, &rtParameters,
-                            RTAUDIO_FLOAT32,
-                            kSampleRate,
-                            &rtBufferFrames, rtAudioRecordCallback,
-                            &p.audio, nullptr,
-                            rtAudioErrorCallback);
-                        p.rtAudio->startStream();
-#endif
-                        status = RecordStatus::Recording;
-                    }
-                    catch (const std::exception& e)
-                    {
-                        LOG_ERROR("Cannot open audio stream for recording: " << e.what());
-                    }
-                }
+#if defined(TLRENDER_AUDIO)
+            _cleanupAudio();
+
+            ma_device_config config =
+                ma_device_config_init(ma_device_type_capture);
+            config.capture.format = ma_format_f32;
+            config.capture.channels = 1;
+            config.sampleRate = kSampleRate;
+            config.dataCallback = maAudioRecordCallback;
+            config.pUserData = &p.audio;
+
+            // Use miniaudio's default capture device. RtAudio device IDs
+            // are backend-specific and cannot be reused as miniaudio IDs.
+            ma_result result = ma_device_init(nullptr, &config,
+                                              &p.audioDevice);
+            if (result == MA_SUCCESS)
+            {
+                p.audioDeviceInitialized = true;
+                result = ma_device_start(&p.audioDevice);
             }
-#endif // TLRENDER_AUDIO   
+
+            if (result == MA_SUCCESS)
+            {
+                status = RecordStatus::Recording;
+            }
+            else
+            {
+                LOG_ERROR("Cannot initialize or start miniaudio capture device: "
+                          << ma_result_description(result));
+                _cleanupAudio();
+            }
+#endif // TLRENDER_AUDIO
         }
 
         std::string VoiceOver::getFileName() const
         {
             return fileName;
         }
-        
+
         void VoiceOver::loadAudio()
         {
             TLRENDER_P();
-            
+
             AVFormatContext* fmt_ctx = NULL;
             AVCodecContext* dec_ctx = NULL;
             int audio_stream_index = -1;
@@ -478,7 +389,7 @@ namespace mrv
 
                 // Step 6: Read frames from the file
                 p.audio.buffer.clear(); // Clear any existing buffer data
-                
+
                 int ret = 0;
                 while (av_read_frame(fmt_ctx, pkt) >= 0) {
                     // Check if the packet belongs to our audio stream
@@ -506,19 +417,19 @@ namespace mrv
                                 print_ffmpeg_error(ret, "Error receiving frame from the decoder");
                                 break;
                             }
-                            
+
                             // Append decoded data to the buffer
                             const size_t num_samples = frame->nb_samples * kNumChannels;
                             size_t current_size = p.audio.buffer.size();
                             p.audio.buffer.resize(current_size + num_samples);
                             memcpy(p.audio.buffer.data() + current_size, frame->data[0], num_samples * sizeof(float));
-                            
+
                             av_frame_unref(frame);
                         }
                     }
                     av_packet_unref(pkt);
                 }
-                
+
                 // Flush the decoder
                 ret = avcodec_send_packet(dec_ctx, NULL); // Flush decoder
                 while (ret >= 0) {
@@ -543,68 +454,35 @@ namespace mrv
             {
                 LOG_ERROR(e.what());
             }
-            
+
             // Step 7: Cleanup
             av_packet_free(&pkt);
             av_frame_free(&frame);
             avcodec_free_context(&dec_ctx);
             avformat_close_input(&fmt_ctx);
-            
+
             if (!p.audio.buffer.empty())
             {
                 status = RecordStatus::Saved;
             }
-        }        
-        
+        }
+
         void VoiceOver::stopRecording()
         {
             TLRENDER_P();
-            
+
             if (status != RecordStatus::Recording || p.audio.buffer.empty())
             {
                 return;
             }
-            
+
 #if defined(TLRENDER_AUDIO)
-#  if RTAUDIO_VERSION_MAJOR >= 6
-            try
-            {
-               RtAudioErrorType rterror;
-               if (p.rtAudio && p.rtAudio->isStreamRunning())
-               {
-                   rterror = p.rtAudio->stopStream();
-                   checkRtError(rterror);
-               }   
-               if (p.rtAudio && p.rtAudio->isStreamOpen())
-               {
-                p.rtAudio->closeStream();
-               }
-            }
-            catch (const std::exception& e)
-            {
-               LOG_ERROR(e.what());
-            }
-#  else
-           try
-           {
-                if (p.rtAudio && p.rtAudio->isStreamRunning())
-                    p.rtAudio->stopStream();
-                
-                if (p.rtAudio && p.rtAudio->isStreamOpen())
-                {
-                    p.rtAudio->closeStream();
-                }
-            }
-            catch (const RtAudioError& e)
-            {
-                e.printMessage();
-            }
-#  endif
+            _cleanupAudio();
 #endif
 
             status = RecordStatus::Saved;
             mouse.idx = 0;
-                        
+
             fileName = voiceOverFileName();
 
             AVFormatContext *fmt_ctx = NULL;
@@ -666,7 +544,7 @@ namespace mrv
             const size_t totalSamples = p.audio.buffer.size(); // number of floats = frames * channels
             const size_t frames = totalSamples / channels;
             const size_t bytes = totalSamples * sizeof(float);
-                
+
             pkt->data = (uint8_t*)p.audio.buffer.data();
             pkt->size = bytes;
             pkt->flags |= AV_PKT_FLAG_KEY;
@@ -699,13 +577,13 @@ namespace mrv
         void VoiceOver::startPlaying()
         {
             TLRENDER_P();
-            
+
             if (mouse.data.empty())
             {
                 LOG_ERROR(_("Cannot play - no mouse recording"));
                 return;
             }
-            
+
             if (p.audio.buffer.empty())
             {
                 LOG_ERROR(_("Cannot play - audio annotation is empty"));
@@ -720,86 +598,53 @@ namespace mrv
 
             mouse.idx = 0;
             p.audio.rtCurrentFrame = 0;
-            
+
 #if defined(TLRENDER_AUDIO)
-            if (auto context = getContext().lock())
+            _cleanupAudio();
+            p.audio.playbackFinished.store(false, std::memory_order_release);
+
+            ma_device_config config =
+                ma_device_config_init(ma_device_type_playback);
+            config.playback.format = ma_format_f32;
+            config.playback.channels = kNumChannels;
+            config.sampleRate = kSampleRate;
+            config.dataCallback = maAudioPlaybackCallback;
+            config.pUserData = &p.audio;
+
+            ma_result result = ma_device_init(nullptr, &config,
+                                              &p.audioDevice);
+            if (result == MA_SUCCESS)
             {
-                try
-                {
-                    auto audioSystem = context->getSystem<audio::System>();
-                    auto api = static_cast<RtAudio::Api>(audioSystem->getCurrentAPI());
-                    p.rtAudio.reset(new RtAudio(api));
-                }
-                catch (const std::exception& e)
-                {
-                    std::stringstream ss;
-                    ss << "Cannot create RtAudio instance: " << e.what();
-                    context->log(
-                        "mrv::voice::VoiceOver", ss.str(), log::Type::Error);
-                }
+                p.audioDeviceInitialized = true;
+                result = ma_device_start(&p.audioDevice);
             }
-            if (auto context = getContext().lock())
+
+            if (result == MA_SUCCESS)
             {
-                // Initialize audio.
-                auto audioSystem = context->getSystem<audio::System>();
-                if (p.rtAudio &&
-                    !audioSystem->getDevices().empty())
-                {
-                    try
-                    {
-                        RtAudio::StreamParameters rtParameters;
-                        auto audioSystem = context->getSystem<audio::System>();
-                        rtParameters.deviceId = audioSystem->getOutputDevice();
-                        rtParameters.nChannels = kNumChannels;
-#  if RTAUDIO_VERSION_MAJOR >= 6
-                        RtAudioErrorType rterror;
-                        rterror = p.rtAudio->openStream(
-                            &rtParameters, nullptr,
-                            RTAUDIO_FLOAT32,
-                            kSampleRate,
-                            &rtBufferFrames, rtAudioPlaybackCallback,
-                            &p.audio);
-                        checkRtError(rterror);
-                        rterror = p.rtAudio->startStream();
-                        checkRtError(rterror);
-#  else
-                        p.rtAudio->openStream(
-                            &rtParameters, nullptr,
-                            RTAUDIO_FLOAT32,
-                            kSampleRate,
-                            &rtBufferFrames, rtAudioPlaybackCallback,
-                            &p.audio, nullptr,
-                            rtAudioErrorCallback);
-                        p.rtAudio->startStream();
-#  endif
-                        status = RecordStatus::Playing;
-                    }
-                    catch (const std::exception& e)
-                    {
-                        LOG_ERROR("Cannot open audio stream for playback: " << e.what());
-                    }
-                }
-                else
-                {
-                    LOG_ERROR("No rtAudio or devices");
-                }
+                status = RecordStatus::Playing;
+            }
+            else
+            {
+                LOG_ERROR("Cannot initialize or start miniaudio playback "
+                          "device: " << ma_result_description(result));
+                _cleanupAudio();
             }
 #endif
         }
-        
+
         void VoiceOver::stopPlaying()
         {
             TLRENDER_P();
-            
+
             if (status != RecordStatus::Playing || p.audio.buffer.empty())
             {
                 p.audio.rtCurrentFrame = 0;
                 mouse.idx = 0;
                 return;
             }
-            
+
             _cleanupAudio();
-            
+
             status = RecordStatus::Saved;
             p.audio.rtCurrentFrame = 0;
             mouse.idx = 0;
@@ -809,7 +654,7 @@ namespace mrv
         {
             return status;
         }
-        
+
         MouseData VoiceOver::getMouseData() const
         {
             TLRENDER_P();
@@ -833,7 +678,7 @@ namespace mrv
         {
             return center;
         }
-        
+
         const math::Box2f VoiceOver::getBBox(const float mult) const
         {
             TLRENDER_P();
@@ -846,7 +691,15 @@ namespace mrv
         void VoiceOver::tick()
         {
             TLRENDER_P();
-            
+
+#if defined(TLRENDER_AUDIO)
+            if (status == RecordStatus::Playing &&
+                p.audio.playbackFinished.load(std::memory_order_acquire))
+            {
+                _cleanupAudio();
+            }
+#endif
+
             mouse.idx++;
 
             if (mouse.idx >= mouse.data.size())
@@ -862,46 +715,17 @@ namespace mrv
         void VoiceOver::_cleanupAudio()
         {
             TLRENDER_P();
-                
+
 #if defined(TLRENDER_AUDIO)
-            if (!p.rtAudio) return; // Nothing to do
-
-#  if RTAUDIO_VERSION_MAJOR >= 6
-            try
+            if (p.audioDeviceInitialized)
             {
-                RtAudioErrorType rterror;
-                if (p.rtAudio->isStreamRunning())
-                {
-                    rterror = p.rtAudio->abortStream();
-                    checkRtError(rterror);
-                }
-                
-                if (p.rtAudio->isStreamOpen())
-                    p.rtAudio->closeStream();
+                ma_device_uninit(&p.audioDevice);
+                p.audioDeviceInitialized = false;
             }
-            catch (const std::exception& e)
-            {
-                LOG_ERROR(e.what());
-            }
-#  else
-            try
-            {
-                if (p.rtAudio->isStreamRunning())
-                    p.rtAudio->abortStream();
-
-                if (p.rtAudio->isStreamOpen())
-                    p.rtAudio->closeStream();
-            }
-            catch (const RtAudioError& e)
-            {
-                e.printMessage();
-            }
-#  endif
-
-            p.rtAudio.reset(); // Destroy the object and release resources
+            p.audio.playbackFinished.store(false, std::memory_order_release);
 #endif
         }
-        
+
         void to_json(nlohmann::json& j, const MouseData& value)
         {
             j["pos"] = value.pos;
@@ -913,7 +737,7 @@ namespace mrv
             j.at("pos").get_to(value.pos);
             j.at("pressed").get_to(value.pressed);
         }
-        
+
         void to_json(nlohmann::json& j, const MouseRecording& value)
         {
             j["data"] = value.data;
@@ -924,7 +748,7 @@ namespace mrv
             j.at("data").get_to(value.data);
             value.idx = 0;
         }
-        
+
         void to_json(nlohmann::json& j, const VoiceOver& value)
         {
             j["center"] = value.center;

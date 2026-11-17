@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Contributors to the mrv2 Project
+# Copyright (C) YEAR Contributors\ to\ the\ mrv2\ Project
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.8.5\n"
+"Project-Id-Version: mrv2 v1.8.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-31 04:31-0300\n"
+"POT-Creation-Date: 2026-11-03 19:24-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1650,9 +1650,6 @@ msgid "Toggle Python Panel"
 msgstr ""
 
 msgid "Toggle Logs Panel"
-msgstr ""
-
-msgid "Toggle Devices Panel"
 msgstr ""
 
 msgid "Toggle Color Area Panel"
@@ -3360,9 +3357,6 @@ msgstr ""
 msgid "Color Area"
 msgstr ""
 
-msgid "Devices"
-msgstr ""
-
 msgid "Environment Map"
 msgstr ""
 
@@ -3911,6 +3905,9 @@ msgstr ""
 msgid "Online documentation."
 msgstr ""
 
+msgid "Video Tutorials."
+msgstr ""
+
 msgid "Toggle Annotations."
 msgstr ""
 
@@ -4244,17 +4241,6 @@ msgstr ""
 msgid "Cache: "
 msgstr ""
 
-#, c++-format
-msgid "HDR monitor min. nits = {0}"
-msgstr ""
-
-#, c++-format
-msgid "HDR monitor max. nits = {0}"
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "HDR monitor not detected by Vulkan or Window Manager."
 msgstr ""
 
@@ -4264,6 +4250,17 @@ msgstr ""
 
 #, c++-format
 msgid "Vulkan format is {0}"
+msgstr ""
+
+#, c++-format
+msgid "HDR monitor min. nits = {0}"
+msgstr ""
+
+#, c++-format
+msgid "HDR monitor max. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor not found or not configured."
 msgstr ""
 
 #, c++-format
@@ -4937,6 +4934,9 @@ msgid "Help/Unlock Features"
 msgstr ""
 
 msgid "Help/Documentation"
+msgstr ""
+
+msgid "Help/Video Tutorials"
 msgstr ""
 
 msgid "Help/About"
@@ -7138,17 +7138,17 @@ msgstr ""
 msgid "Start Playback when opening files."
 msgstr ""
 
+msgid "Looping Mode"
+msgstr ""
+
+msgid "Select default looping mode in timeline."
+msgstr ""
+
 msgid "Single Click Playback"
 msgstr ""
 
 msgid ""
 "Start Playback when single clicking the left mouse button on the view window"
-msgstr ""
-
-msgid "Looping Mode"
-msgstr ""
-
-msgid "Select default looping mode in timeline."
 msgstr ""
 
 msgid "Sequences"
@@ -7531,8 +7531,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -8667,6 +8667,9 @@ msgid "Toggle Media Info Panel"
 msgstr ""
 
 msgid "Toggle Color Area Info Panel"
+msgstr ""
+
+msgid "Toggle Devices Panel"
 msgstr ""
 
 msgid "Toggle Annotation Panel"

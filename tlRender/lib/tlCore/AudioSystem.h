@@ -7,6 +7,12 @@
 #include <tlCore/Audio.h>
 #include <tlCore/ISystem.h>
 
+#include <memory>
+
+// Forward declarations of miniaudio types, so this header does not need
+// miniaudio.h.
+struct ma_context;
+
 namespace tl
 {
     namespace audio
@@ -96,8 +102,24 @@ namespace tl
             //! Get the default audio output device information.
             Info getDefaultOutputInfo() const;
 
+            //! Get the miniaudio context. Hold on to the returned pointer for
+            //! as long as you use devices created from it; it keeps the
+            //! context alive even if the audio API is changed. Returns null
+            //! if audio is not available.
+            std::shared_ptr<ma_context> getContext() const;
+
+            //! Get the miniaudio device ID (a const ma_device_id*) for a
+            //! device index (an index into getDevices()). It is returned as
+            //! void* because ma_device_id is an anonymous union and cannot be
+            //! forward declared; cast it with
+            //! static_cast<const ma_device_id*>(). Returns null for an
+            //! invalid index, which miniaudio treats as "use the default
+            //! device". The pointer is only valid until the next call to
+            //! setAPI(); use it right away (ma_device_init() copies the ID).
+            const void* getDeviceId(size_t index) const;
+
         private:
-            size_t _deviceNameToIndex(const std::string&) const;
+            size_t _deviceNameToIndex(const std::string&, bool input) const;
             void _getDevices();
 
             TLRENDER_PRIVATE();

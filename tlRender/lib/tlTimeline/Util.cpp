@@ -32,6 +32,50 @@ namespace tl
 {
     namespace timeline
     {
+
+        namespace
+        {
+            //! The path a file URL names, or the value as it is when it is not
+            //! one. Editors write them (Hiero writes "file:///X:/..."), and
+            //! kept as a URL the drive letter came after a slash, so
+            //! "/X:/..." was what the readers were asked to open
+            //! (tlRender #143).
+            std::string fromFileURL(const std::string& value)
+            {
+                if (string::toLower(value.substr(0, 5)) != "file:")
+                {
+                    return value;
+                }
+
+                std::string out = value.substr(5);
+                if (0 == out.compare(0, 2, "//"))
+                {
+                    // A host, or none: "file:///path" and
+                    // "file://localhost/path" are on this machine, and any
+                    // other is a share on that one.
+                    out = out.substr(2);
+                    const size_t i = out.find('/');
+                    const std::string host = out.substr(0, i);
+                    out = i != std::string::npos ?
+                          out.substr(i) :
+                          std::string();
+                    if (!host.empty() && string::toLower(host) != "localhost")
+                    {
+                        out = "//" + host + out;
+                    }
+                }
+                if (out.size() >= 3 &&
+                    '/' == out[0] &&
+                    std::isalpha(static_cast<unsigned char>(out[1])) &&
+                    ':' == out[2] &&
+                    (3 == out.size() || '/' == out[3] || '\\' == out[3]))
+                {
+                    out = out.substr(1);
+                }
+                return out;
+            }
+        }
+
         std::vector<std::string> getExtensions(
             const std::shared_ptr<system::Context>& context, int types)
         {
@@ -247,23 +291,20 @@ namespace tl
             return out;
         }
 
-        OTIO_NS::TimeRange getTimeRange(const OTIO_NS::Timeline* otioTimeline)
+        std::optional<OTIO_NS::TimeRange> getTimeRange(const OTIO_NS::Timeline* otioTimeline)
         {
-            OTIO_NS::TimeRange out = time::invalidTimeRange;
-            auto duration =
-                timeline::getDuration(otioTimeline, OTIO_NS::Track::Kind::video);
+            std::optional<OTIO_NS::TimeRange> out;
+            auto duration = getDuration(otioTimeline, OTIO_NS::Track::Kind::video);
             if (!duration.has_value())
             {
-                duration = timeline::getDuration(
-                    otioTimeline, OTIO_NS::Track::Kind::audio);
+                duration = getDuration(otioTimeline, OTIO_NS::Track::Kind::audio);
             }
             if (duration.has_value())
             {
                 const OTIO_NS::RationalTime startTime =
-                    otioTimeline->global_start_time().has_value()
-                        ? otioTimeline->global_start_time().value().rescaled_to(
-                              duration->rate())
-                        : OTIO_NS::RationalTime(0, duration->rate());
+                    otioTimeline->global_start_time().has_value() ?
+                    otioTimeline->global_start_time().value().rescaled_to(duration->rate()) :
+                    OTIO_NS::RationalTime(0, duration->rate());
                 out = OTIO_NS::TimeRange(startTime, duration.value());
             }
             return out;
@@ -318,7 +359,7 @@ namespace tl
             const std::string& url, const std::string& directory,
             const file::PathOptions& pathOptions)
         {
-            file::Path out(url::decode(url), pathOptions);
+            file::Path out(fromFileURL(url::decode(url)), pathOptions);
             if (!out.hasProtocol() && !out.isAbsolute())
             {
                 out.setDirectory(
@@ -616,15 +657,67 @@ namespace tl
             return out;
         }
 
+        std::optional<OTIO_NS::RationalTime> getSequenceOffset(
+            const OTIO_NS::MediaReference* mediaReference)
+        {
+            std::optional<OTIO_NS::RationalTime> out;
+            if (auto imageSeqRef =
+                dynamic_cast<const OTIO_NS::ImageSequenceReference*>(mediaReference))
+            {
+                // The reference's own available range rather than a clip's,
+                // which is the clip's active reference, and a timeline can be
+                // showing another one.
+                if (const auto availableRange = imageSeqRef->available_range())
+                {
+                    const double rate = imageSeqRef->rate();
+                    out = OTIO_NS::RationalTime(imageSeqRef->start_frame(), rate) -
+                          availableRange->start_time().rescaled_to(rate);
+                }
+            }
+            return out;
+        }
+
+        OTIO_NS::TimeRange getMediaTrimmedRange(
+            const OTIO_NS::TimeRange& trimmedRange,
+            const OTIO_NS::TimeRange& availableRange,
+            const std::optional<OTIO_NS::RationalTime>& sequenceOffset,
+            const std::optional<OTIO_NS::TimeRange>& mediaTime,
+            bool compat)
+        {
+            OTIO_NS::TimeRange out = trimmedRange;
+            if (sequenceOffset.has_value())
+            {
+                out = OTIO_NS::TimeRange(
+                    out.start_time() + sequenceOffset.value(),
+                    out.duration());
+            }
+            else if (compat &&
+                     mediaTime.has_value() &&
+                     availableRange.start_time() > mediaTime->start_time())
+            {
+                out = OTIO_NS::TimeRange(
+                    out.start_time() - availableRange.start_time(),
+                    out.duration());
+            }
+            return out;
+        }
+
         OTIO_NS::RationalTime toVideoMediaTime(
             const OTIO_NS::RationalTime& time,
             const OTIO_NS::TimeRange& trimmedRangeInParent,
             const OTIO_NS::TimeRange& trimmedRange, double rate)
         {
-            OTIO_NS::RationalTime out = time - trimmedRangeInParent.start_time() +
-                                      trimmedRange.start_time();
-            out = out.rescaled_to(rate).round();
-            return out;
+            OTIO_NS::RationalTime out =
+                time - trimmedRangeInParent.start_time() + trimmedRange.start_time();
+            // Not the nearest frame: a 12 fps sequence in a 24 fps timeline
+            // went 1, 2, 2, 3 rather than 1, 1, 2, 2, every frame showing a
+            // timeline frame early and the last one asking for a frame after
+            // the end.
+            const double value = out.rescaled_to(rate).value();
+            const double nearest = std::round(value);
+            const double selected = std::abs(value - nearest) < 1.0e-6 ?
+                                    nearest : std::floor(value);
+            return OTIO_NS::RationalTime(selected, rate);
         }
 
         OTIO_NS::TimeRange toAudioMediaTime(

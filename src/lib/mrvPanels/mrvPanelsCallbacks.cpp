@@ -19,7 +19,6 @@ namespace mrv
         EnvironmentMapPanel* environmentMapPanel = nullptr;
         LogsPanel* logsPanel = nullptr;
         NotesPanel* notesPanel = nullptr;
-        DevicesPanel* devicesPanel = nullptr;
         ColorAreaPanel* colorAreaPanel = nullptr;
         AnnotationsPanel* annotationsPanel = nullptr;
         ImageInfoPanel* imageInfoPanel = nullptr;
@@ -117,8 +116,6 @@ namespace mrv
             if (pythonPanel && pythonPanel->is_panel())
                 python_panel_cb(nullptr, ui);
 #endif
-            if (devicesPanel && devicesPanel->is_panel())
-                devices_panel_cb(nullptr, ui);
             if (colorAreaPanel && colorAreaPanel->is_panel())
                 color_area_panel_cb(nullptr, ui);
             if (annotationsPanel && annotationsPanel->is_panel())
@@ -167,8 +164,6 @@ namespace mrv
             if (pythonPanel && !pythonPanel->is_panel())
                 python_panel_cb(nullptr, ui);
 #endif
-            if (devicesPanel && !devicesPanel->is_panel())
-                devices_panel_cb(nullptr, ui);
             if (colorAreaPanel && !colorAreaPanel->is_panel())
                 color_area_panel_cb(nullptr, ui);
             if (annotationsPanel && !annotationsPanel->is_panel())
@@ -364,16 +359,19 @@ namespace mrv
 
         void logs_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
-            switch(Fl::callback_reason())
+            if (w)
             {
-            case FL_REASON_GOT_FOCUS:
-                App::ui->uiStatusBar->message(_("Toggle Logs Panel"));
-                return;
-            case FL_REASON_LOST_FOCUS:
-                App::ui->uiStatusBar->message("");
-                return;
-            default:
-                break;
+                switch(Fl::callback_reason())
+                {
+                case FL_REASON_GOT_FOCUS:
+                    App::ui->uiStatusBar->message(_("Toggle Logs Panel"));
+                    return;
+                case FL_REASON_LOST_FOCUS:
+                    App::ui->uiStatusBar->message("");
+                    return;
+                default:
+                    break;
+                }
             }
             // Logs panel is not sent nor received.
             if (logsPanel)
@@ -384,38 +382,6 @@ namespace mrv
                 return;
             }
             logsPanel = new LogsPanel(ui);
-            ui->uiMain->fill_menu(ui->uiMenuBar);
-        }
-
-        void devices_panel_cb(Fl_Widget* w, ViewerUI* ui)
-        {
-            switch(Fl::callback_reason())
-            {
-            case FL_REASON_GOT_FOCUS:
-                App::ui->uiStatusBar->message(_("Toggle Devices Panel"));
-                return;
-            case FL_REASON_LOST_FOCUS:
-                App::ui->uiStatusBar->message("");
-                return;
-            default:
-                break;
-            }
-
-            bool send = ui->uiPrefs->SendUI->value();
-            if (send)
-            {
-                tcp->pushMessage(
-                    "Devices Panel", static_cast<bool>(!devicesPanel));
-            }
-
-            if (devicesPanel)
-            {
-                delete devicesPanel;
-                devicesPanel = nullptr;
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-                return;
-            }
-            devicesPanel = new DevicesPanel(ui);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 

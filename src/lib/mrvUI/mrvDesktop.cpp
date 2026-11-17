@@ -105,12 +105,12 @@ namespace mrv
 #endif
             return out;
         }
-        
+
 
         std::string WaylandCompositor()
         {
             std::string out;
-            
+
 #ifdef FLTK_USE_WAYLAND
             const char* env = fl_getenv("XDG_SESSION_DESKTOP");
             if (env && strlen(env) > 0)
@@ -147,7 +147,7 @@ namespace mrv
             }
             catch (const std::exception& e)
             {
-                LOG_INFO(e.what());
+                LOG_ERROR(e.what());
             }
 
             if (out.empty())
@@ -159,6 +159,6 @@ namespace mrv
 
             return out;
         }
-        
+
     } // namespace desktop
 } // namespace mrv

@@ -12,7 +12,7 @@
 #include <tlCore/LRUCache.h>
 
 #if defined(TLRENDER_AUDIO)
-#    include <rtaudio/RtAudio.h>
+#    include <miniaudio/miniaudio.h>
 #endif // TLRENDER_AUDIO
 
 #include <atomic>
@@ -23,6 +23,18 @@ namespace tl
 {
     namespace timeline
     {
+#if defined(TLRENDER_AUDIO)
+        //! Uninitializes (which also stops) and frees a miniaudio device.
+        struct MaDeviceDeleter
+        {
+            void operator()(ma_device* p) const
+            {
+                ma_device_uninit(p);
+                delete p;
+            }
+        };
+#endif // TLRENDER_AUDIO
+
         struct Player::Private
         {
             OTIO_NS::RationalTime loopPlayback(const OTIO_NS::RationalTime&);
@@ -52,18 +64,14 @@ namespace tl
             // mutex.timeRange.
             void updateTimeRange();
 #if defined(TLRENDER_AUDIO)
-            static int rtAudioCallback(
-                void* outputBuffer, void* inputBuffer, unsigned int nFrames,
-                double streamTime, RtAudioStreamStatus status, void* userData);
+            //! miniaudio data callback (runs on the audio thread).
+            static void maDataCallback(
+                ma_device* device, void* outputBuffer,
+                const void* inputBuffer, ma_uint32 frameCount);
 
-#if RTAUDIO_VERSION_MAJOR >= 6
-            static void rtAudioErrorCallback(
-                RtAudioErrorType type, const std::string& errorText);
-#else
-            static void rtAudioErrorCallback(
-                RtAudioError::Type type, const std::string& errorText);
-#endif
-
+            //! miniaudio notification callback (started, stopped, rerouted...).
+            static void
+            maNotificationCallback(const ma_device_notification* notification);
 #endif // TLRENDER_AUDIO
 
             void log(const std::shared_ptr<system::Context>&);
@@ -175,8 +183,19 @@ namespace tl
                 std::map<OTIO_NS::RationalTime, std::vector<VideoFrame> >
                     videoCache;
 #if defined(TLRENDER_AUDIO)
-                std::unique_ptr<RtAudio> rtAudio;
+                // The context is shared with audio::System. Holding a
+                // reference keeps it alive for as long as the device exists
+                // (declared first so it is destroyed last).
+                std::shared_ptr<ma_context> maContext;
+                std::unique_ptr<ma_device, MaDeviceDeleter> maDevice;
 #endif // TLRENDER_AUDIO
+                // True while the audio device is started. Written by the
+                // player thread and the miniaudio notification callback, read
+                // by the main thread.
+                std::atomic<bool> audioStarted{false};
+                // Number of frames sent to the audio device. miniaudio has no
+                // stream time, so this replaces RtAudio's getStreamTime().
+                std::atomic<uint64_t> streamFrames{0};
                 std::map<int64_t, AudioRequest> audioRequests;
                 std::chrono::steady_clock::time_point cacheTimer;
                 std::chrono::steady_clock::time_point logTimer;

@@ -44,7 +44,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 20;
+    const int kSessionVersion = 21;
 } // namespace
 
 namespace
@@ -176,7 +176,6 @@ namespace mrv
                 {"Media Information", (imageInfoPanel != nullptr)},
                 {"Annotations", (annotationsPanel != nullptr)},
                 {"Notes", (notesPanel != nullptr)},
-                {"Devices", (devicesPanel != nullptr)},
                 {"Environment Map", (environmentMapPanel != nullptr)},
                 {"Settings", (settingsPanel != nullptr)},
 #ifdef MRV2_PYBIND11

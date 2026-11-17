@@ -22,7 +22,7 @@ namespace
             ((x << 8)  & 0x00FF0000) |
             ((x << 24) & 0xFF000000);
     }
-    
+
     inline int normalizeAngle0to360(float angle)
     {
         int out = static_cast<int>(std::fmod(angle, 360.0f));
@@ -46,7 +46,7 @@ namespace mrv
 
     namespace vulkan
     {
-        
+
         TimelineViewport::TimelineViewport(
             int X, int Y, int W, int H, const char* L) :
             VkWindow(X, Y, W, H, L),
@@ -67,7 +67,7 @@ namespace mrv
             p.ui = App::ui;
             _init();
         }
-        
+
         void TimelineViewport::resize(int X, int Y, int W, int H)
         {
             VkWindow::resize(X, Y, W, H);
@@ -77,7 +77,7 @@ namespace mrv
             }
         }
 
-        const timeline::ShaderOptions& TimelineViewport::getShaderOptions() const noexcept
+        const timeline::ShaderOptions TimelineViewport::getShaderOptions() const noexcept
         {
             return _p->shaderOptions;
         }
@@ -85,14 +85,14 @@ namespace mrv
         void TimelineViewport::setShaderOptions(const timeline::ShaderOptions& value) noexcept
         {
             TLRENDER_P();
-            
+
             if (value == p.shaderOptions)
                 return;
-            
+
             p.shaderOptions = value;
             redrawWindows();
         }
-        
+
         void TimelineViewport::_showPixelBar() const noexcept
         {
             TLRENDER_P();
@@ -182,7 +182,7 @@ namespace mrv
             TLRENDER_P();
 
             const math::Size2i& viewportSize = getViewportSize();
-            
+
             const math::Matrix4x4f vm =
                 math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F)) *
                 math::scale(math::Vector3f(p.viewZoom, p.viewZoom, 1.F));
@@ -193,8 +193,8 @@ namespace mrv
         }
 
 
-        
+
     }  // namespace vulkan
 
-    
+
 } // namespace mrv

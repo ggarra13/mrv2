@@ -26,6 +26,8 @@ set(HEADERS
     RenderOptions.h
     RenderOptionsInline.h
     RenderUtil.h
+    ShaderOptions.h
+    ShaderOptionsInline.h
     TimeUnits.h
     Timeline.h
     TimelineOptions.h
@@ -57,9 +59,15 @@ set(SOURCE
     PlayerOptions.cpp
     PlayerPrivate.cpp
     RenderUtil.cpp
+    ShaderOptions.cpp
     TimeUnits.cpp
     Timeline.cpp
+    TimelineCanvas.cpp
+    TimelineInit.cpp
+    TimelineMedia.cpp
     TimelineOptions.cpp
+    TimelineRead.cpp
+    TimelineRequests.cpp
     Transition.cpp
     Util.cpp
     Zip.cpp

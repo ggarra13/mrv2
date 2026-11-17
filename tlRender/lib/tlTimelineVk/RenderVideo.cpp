@@ -930,6 +930,10 @@ namespace tl
         {
             TLRENDER_P();
 
+            // The option setters only invalidate the display shader; make
+            // sure it exists before anything below touches it.
+            _ensureDisplayShader();
+
             auto textureShader = p.shaders["texture"];
 
             // Saving and restoring the old matrix is needed for tiling.

@@ -73,7 +73,9 @@ namespace tl
             "YUV_444SP_U8",
             "YUV_444SP_U16",
 
-            "ARGB_4444_Premult");
+            "ARGB_4444_Premult",
+
+            "RGB_F16P");
         TLRENDER_ENUM_SERIALIZE_IMPL(PixelType);
 
         TLRENDER_ENUM_IMPL(YUVCoefficients, "REC709", "BT2020", "BT601");

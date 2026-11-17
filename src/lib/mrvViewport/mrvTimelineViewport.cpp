@@ -531,36 +531,36 @@ namespace mrv
                 return;
 
 #ifdef OPENGL_BACKEND
-            if (window())
-                window()->cursor(n);
+            if (top_window())
+                top_window()->cursor(n);
 #endif
 
 #ifdef VULKAN_BACKEND
 #   ifdef _WIN32
-            if (window())
+            if (top_window())
             {
                 if (n == FL_CURSOR_CROSS)
                 {
                     static std::unique_ptr<Fl_PNG_Image> rgba_cross {
                         load_png("crosshair.png")
                     };
-                    window()->cursor(rgba_cross.get(), 16, 16);
+                    top_window()->cursor(rgba_cross.get(), 16, 16);
                 }
                 else if (n == FL_CURSOR_INSERT)
                 {
                     static std::unique_ptr<Fl_PNG_Image> rgba_insert {
                         load_png("textcursor.png")
                     };
-                    window()->cursor(rgba_insert.get(), 16, 16);
+                    top_window()->cursor(rgba_insert.get(), 16, 16);
                 }
                 else
                 {
-                    window()->cursor(n);
+                    top_window()->cursor(n);
                 }
             }
 #   else
-                if (window())
-                    window()->cursor(n);
+                if (top_window())
+                    top_window()->cursor(n);
 #   endif
 #endif
             p.lastCursor = n;
@@ -917,14 +917,13 @@ namespace mrv
             return _p->colorAreaInfo;
         }
 
-        const timeline::OCIOOptions&
+        const timeline::OCIOOptions
         TimelineViewport::getOCIOOptions(unsigned monitorId) const noexcept
         {
             TLRENDER_P();
-
             if (monitorId >= p.monitorOCIOOptions.size())
             {
-                return p.ocioOptions;
+                return timeline::OCIOOptions();
             }
             else
             {
@@ -932,13 +931,13 @@ namespace mrv
             }
         }
 
-        const timeline::OCIOOptions&
+        const timeline::OCIOOptions
         TimelineViewport::getOCIOOptions() const noexcept
         {
             return _p->ocioOptions;
         }
 
-        const timeline::BackgroundOptions&
+        const timeline::BackgroundOptions
         TimelineViewport::getBackgroundOptions() const noexcept
         {
             return _p->backgroundOptions->get();
@@ -976,6 +975,8 @@ namespace mrv
             p.monitorOCIOOptions[monitorId] = value;
             p.previous_screen = -1;
             redrawWindows();
+
+            p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
         }
 
         void TimelineViewport::setOCIOOptions(
@@ -1178,6 +1179,11 @@ namespace mrv
             else
             {
                 p.videoData.clear();
+            }
+
+            if (p.ui->uiSecondary && p.ui->uiSecondary->viewport())
+            {
+                p.ui->uiSecondary->viewport()->setTimelinePlayer(player);
             }
 
             refreshWindows(); // needed We need to refresh, as the new

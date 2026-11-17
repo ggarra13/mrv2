@@ -679,10 +679,13 @@ namespace tl
                 value)
         {
             TLRENDER_P();
+
             p.moveCallback = value;
 
-            if (!p.timelineItems.empty())
-                p.timelineItems.front()->setMoveCallback(value);
+            for (auto item : p.timelineItems)
+            {
+                item->setMoveCallback(value);
+            }
         }
 
         void TimelineWidget::mousePressEvent(ui::MouseClickEvent& event)

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.7nReport-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-31 04:31-0300\n"
+"POT-Creation-Date: 2026-11-03 19:10-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: it\n"
@@ -586,8 +586,8 @@ msgid ""
 "Change a :class:`mrv2.math.Vector3f` of brightness (gain) to image.  Only "
 "the x channel is used."
 msgstr ""
-"Modificare la luminosità (guadagno) dell'immagine con un :class:`mrv2.math."
-"Vector3f`. Viene utilizzato solo il canale x."
+"Modificare la luminosità (guadagno) dell'immagine con "
+"un :class:`mrv2.math.Vector3f`. Viene utilizzato solo il canale x."
 
 msgid ""
 "Change a :class:`mrv2.math.Vector3f` of contrast to image.  Only the x "
@@ -1799,9 +1799,6 @@ msgstr "Commuta il pannello Python"
 
 msgid "Toggle Logs Panel"
 msgstr "Mostra/nascondi pannello dei log"
-
-msgid "Toggle Devices Panel"
-msgstr "Commuta il pannello Dispositivi"
 
 msgid "Toggle Color Area Panel"
 msgstr "Mostra/nascondi pannello delle informazioni sull'area colore"
@@ -3608,9 +3605,6 @@ msgstr "Contesto"
 msgid "Color Area"
 msgstr "Area colore"
 
-msgid "Devices"
-msgstr "Dispositivi"
-
 msgid "Environment Map"
 msgstr "Mappa dell'ambiente"
 
@@ -4183,6 +4177,9 @@ msgstr "L’installazione è danneggiata. license_helper mancante"
 msgid "Online documentation."
 msgstr "Documentazione online."
 
+msgid "Video Tutorials."
+msgstr "Tutorial video"
+
 msgid "Toggle Annotations."
 msgstr "Attiva/disattiva le annotazioni."
 
@@ -4211,8 +4208,8 @@ msgstr ""
 
 msgid "Save state of UI and files to a .mrv2s session file."
 msgstr ""
-"Salva lo stato dell'interfaccia utente e dei file in un file di sessione ."
-"mrv2s."
+"Salva lo stato dell'interfaccia utente e dei file in un file di "
+"sessione .mrv2s."
 
 msgid "Load a session file which stores the state of the UI and files."
 msgstr ""
@@ -4423,8 +4420,8 @@ msgstr "Salvataggio delle immagini in {0}."
 
 msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
 msgstr ""
-"I profili ProRes richiedono un'estensione di file video .mov.  Modifica in ."
-"mov."
+"I profili ProRes richiedono un'estensione di file video .mov.  Modifica "
+"in .mov."
 
 msgid ""
 "VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to .mkv"
@@ -4538,17 +4535,6 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "Cache: "
 
-#, c++-format
-msgid "HDR monitor min. nits = {0}"
-msgstr "Luminosità minima del monitor HDR (nit) = {0}"
-
-#, c++-format
-msgid "HDR monitor max. nits = {0}"
-msgstr "Luminosità massima del monitor HDR (nit) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR non trovato o non configurato."
-
 msgid "HDR monitor not detected by Vulkan or Window Manager."
 msgstr "Nessun monitor HDR rilevato da Vulkan o dal gestore delle finestre."
 
@@ -4559,6 +4545,17 @@ msgstr "Lo spazio colore Vulkan è {0}"
 #, c++-format
 msgid "Vulkan format is {0}"
 msgstr "Il formato Vulkan è {0}"
+
+#, c++-format
+msgid "HDR monitor min. nits = {0}"
+msgstr "Luminosità minima del monitor HDR (nit) = {0}"
+
+#, c++-format
+msgid "HDR monitor max. nits = {0}"
+msgstr "Luminosità massima del monitor HDR (nit) = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR non trovato o non configurato."
 
 #, c++-format
 msgid "Changed to HDR active monitor at index {0}"
@@ -5248,6 +5245,9 @@ msgstr "Aiuto/Sblocca funzionalità"
 
 msgid "Help/Documentation"
 msgstr "Aiuto/Documentazione"
+
+msgid "Help/Video Tutorials"
+msgstr "Aiuto/Tutorial video"
 
 msgid "Help/About"
 msgstr "Aiuto/Circa"
@@ -7682,6 +7682,12 @@ msgstr "Riproduzione automatica"
 msgid "Start Playback when opening files."
 msgstr "Avvia la riproduzione al momento dell'apertura dei file."
 
+msgid "Looping Mode"
+msgstr "Modalità di attacco"
+
+msgid "Select default looping mode in timeline."
+msgstr "Selezionare la modalità di loop predefinita nella timeline."
+
 msgid "Single Click Playback"
 msgstr "Riproduzione singola clic"
 
@@ -7690,12 +7696,6 @@ msgid ""
 msgstr ""
 "Inizia la riproduzione quando fai clic sul pulsante sinistro del mouse sulla "
 "finestra di visualizzazione"
-
-msgid "Looping Mode"
-msgstr "Modalità di attacco"
-
-msgid "Select default looping mode in timeline."
-msgstr "Selezionare la modalità di loop predefinita nella timeline."
 
 msgid "Sequences"
 msgstr "Sequenze"
@@ -8142,8 +8142,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "Espressione regolare utilizzata per corrispondere alle versioni delle clip. "
 "Deve raggruppare tre elementi (prefisso, numero e suffisso). Se lasciato al "
@@ -9310,6 +9310,9 @@ msgstr "Commuta il pannello di informazioni multimediali"
 msgid "Toggle Color Area Info Panel"
 msgstr "Commuta il pannello d'informazione dell'area di colore"
 
+msgid "Toggle Devices Panel"
+msgstr "Commuta il pannello Dispositivi"
+
 msgid "Toggle Annotation Panel"
 msgstr "Commuta il pannello di annotazione"
 
@@ -9377,6 +9380,9 @@ msgstr "Informazione dell'attività non riuscita"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Tipo di carattere non valido per il disegno di testo"
+
+#~ msgid "Devices"
+#~ msgstr "Dispositivi"
 
 #~ msgid "User Interface"
 #~ msgstr "Interfaccia utente"
@@ -9639,14 +9645,14 @@ msgstr "Informazione dell'attività non riuscita"
 
 #~ msgid ""
 #~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt."
-#~ "rate` seconds.\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
+#~ "rt.rate` seconds.\n"
 #~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "La classe RationalTime rappresenta una misura del tempo di :math:`rt."
-#~ "value/rt.rate` secondi. Può essere ridimensionata in un altro :class:"
-#~ "`~RationalTime`.\n"
+#~ "La classe RationalTime rappresenta una misura del tempo "
+#~ "di :math:`rt.value/rt.rate` secondi. Può essere ridimensionata in un "
+#~ "altro :class:`~RationalTime`.\n"
 
 #~ msgid ""
 #~ "\n"
@@ -9707,8 +9713,8 @@ msgstr "Informazione dell'attività non riuscita"
 
 #~ msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
 #~ msgstr ""
-#~ "Trasformare un numero di fotogrammi e la velocità in un oggetto :class:"
-#~ "`~RationalTime`."
+#~ "Trasformare un numero di fotogrammi e la velocità in un "
+#~ "oggetto :class:`~RationalTime`."
 
 #~ msgid "Returns the frame number based on the current rate."
 #~ msgstr "Restituisce il numero di fotogramma in base al tasso corrente."
@@ -9720,8 +9726,8 @@ msgstr "Informazione dell'attività non riuscita"
 #~ msgstr "Convertire in timecode (``HH:MM:SS;FRAME``)"
 
 #~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:"
-#~ "`~RationalTime`."
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
+#~ "a :class:`~RationalTime`."
 #~ msgstr ""
 #~ "Converti una stringa di codice temporale (``HH:MM:SS;FRAME``) in una "
 #~ "stringa :class:`~RationalTime`."
@@ -10061,30 +10067,30 @@ msgstr "Informazione dell'attività non riuscita"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (exclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (exclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 9.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:"
-#~ "`~RationalTime`\\s (esclusivo).\n"
+#~ "Crea un :class:`~TimeRange` dall'inizio e dalla "
+#~ "fine :class:`~RationalTime`\\s (esclusivo).\n"
 #~ "\n"
 #~ "Per esempio, se start_time è 1 e end_time è 10, il ritorno avrà una "
 #~ "durata di 9.\n"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (inclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (inclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 10.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Crea un :class:`~TimeRange` dall'inizio e dalla fine :class:"
-#~ "`~RationalTime`\\s (incluso).\n"
+#~ "Crea un :class:`~TimeRange` dall'inizio e dalla "
+#~ "fine :class:`~RationalTime`\\s (incluso).\n"
 #~ "\n"
 #~ "Per esempio, se start_time è 1 e end_time è 10, il ritorno avrà una "
 #~ "durata di 10.\n"

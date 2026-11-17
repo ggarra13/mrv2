@@ -46,7 +46,11 @@ namespace mrv
 
         Capabilities
         get_hdr_capabilities_by_name(const std::string& target_connector);
-        
+
+#ifdef __APPLE__
+        Capabilities
+        get_hdr_capabilities_for_window(void*);
+#endif
         
     } // namespace monitor
 } // namespace mrv

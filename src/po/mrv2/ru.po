@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"POT-Creation-Date: 2026-10-31 04:31-0300\n"
+"POT-Creation-Date: 2026-11-03 19:10-0300\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
 "Language: ru\n"
@@ -593,8 +593,8 @@ msgid ""
 "Change a :class:`mrv2.math.Vector3f` of brightness (gain) to image.  Only "
 "the x channel is used."
 msgstr ""
-"Измените яркость (усиление) изображения с помощью :class:`mrv2.math."
-"Vector3f`. Используется только канал x."
+"Измените яркость (усиление) изображения с "
+"помощью :class:`mrv2.math.Vector3f`. Используется только канал x."
 
 msgid ""
 "Change a :class:`mrv2.math.Vector3f` of contrast to image.  Only the x "
@@ -1809,9 +1809,6 @@ msgstr "Переключить панель Python"
 
 msgid "Toggle Logs Panel"
 msgstr "Показать/скрыть панель журналов"
-
-msgid "Toggle Devices Panel"
-msgstr "Переключить панель устройств"
 
 msgid "Toggle Color Area Panel"
 msgstr "Показать/скрыть панель информации о цветовом пространстве"
@@ -3606,9 +3603,6 @@ msgstr "Фон"
 msgid "Color Area"
 msgstr "Цветовая область"
 
-msgid "Devices"
-msgstr "Устройства"
-
 msgid "Environment Map"
 msgstr "Экологическая карта"
 
@@ -4173,6 +4167,9 @@ msgstr "Установка повреждена. Отсутствует license_
 msgid "Online documentation."
 msgstr "Онлайн-документация."
 
+msgid "Video Tutorials."
+msgstr "Видеоуроки"
+
 msgid "Toggle Annotations."
 msgstr "Переключить аннотации."
 
@@ -4189,7 +4186,7 @@ msgid "Pan And Zoom"
 msgstr "Пэн и Зум"
 
 msgid "Timeline"
-msgstr "Сроки"
+msgstr "Таймлайн"
 
 msgid "Toggle Receive Elements."
 msgstr "Переключить элементы приёма."
@@ -4517,17 +4514,6 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "Кэш: "
 
-#, c++-format
-msgid "HDR monitor min. nits = {0}"
-msgstr "Минимальная яркость HDR-монитора (нит) = {0}"
-
-#, c++-format
-msgid "HDR monitor max. nits = {0}"
-msgstr "Максимальная яркость HDR-монитора (нит) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR-монитор не найден или не настроен."
-
 msgid "HDR monitor not detected by Vulkan or Window Manager."
 msgstr "Vulkan или оконный менеджер не обнаружил HDR-монитор."
 
@@ -4538,6 +4524,17 @@ msgstr "Цветовое пространство Vulkan: {0}"
 #, c++-format
 msgid "Vulkan format is {0}"
 msgstr "Формат Vulkan: {0}"
+
+#, c++-format
+msgid "HDR monitor min. nits = {0}"
+msgstr "Минимальная яркость HDR-монитора (нит) = {0}"
+
+#, c++-format
+msgid "HDR monitor max. nits = {0}"
+msgstr "Максимальная яркость HDR-монитора (нит) = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR-монитор не найден или не настроен."
 
 #, c++-format
 msgid "Changed to HDR active monitor at index {0}"
@@ -5230,6 +5227,9 @@ msgstr "Справка/Разблокировать функции"
 
 msgid "Help/Documentation"
 msgstr "Справка/Документация"
+
+msgid "Help/Video Tutorials"
+msgstr "Справка/Видеоуроки"
 
 msgid "Help/About"
 msgstr "Справка/О том, что"
@@ -7646,6 +7646,12 @@ msgstr "Автозакрытие воспроизведения"
 msgid "Start Playback when opening files."
 msgstr "Начать воспроизведение при открытии файлов."
 
+msgid "Looping Mode"
+msgstr "Режим прокладки"
+
+msgid "Select default looping mode in timeline."
+msgstr "Выберите режим петли по умолчанию во времени."
+
 msgid "Single Click Playback"
 msgstr "Воспроизведение по одиночному клику"
 
@@ -7654,12 +7660,6 @@ msgid ""
 msgstr ""
 "Запустить воспроизведение, когда один щелчок левой кнопкой мыши на окне "
 "просмотра"
-
-msgid "Looping Mode"
-msgstr "Режим прокладки"
-
-msgid "Select default looping mode in timeline."
-msgstr "Выберите режим петли по умолчанию во времени."
 
 msgid "Sequences"
 msgstr "Последовательность"
@@ -7808,7 +7808,7 @@ msgstr ""
 "от видеокарты и ОС один из методов может работать лучше другого."
 
 msgid "GPU"
-msgstr "Графический процессор"
+msgstr "GPU"
 
 msgid "Secondary Viewport"
 msgstr "Вторичное окно просмотра"
@@ -7984,8 +7984,8 @@ msgid ""
 "The name of the OCIO default image color space for 8 bit images (jpg, bmp, "
 "etc)."
 msgstr ""
-"Название цветового пространства OCIO для 8 битных изображений (jpg, bmp и т."
-"д.)."
+"Название цветового пространства OCIO для 8 битных изображений (jpg, bmp и "
+"т.д.)."
 
 msgid "16-bits"
 msgstr "16 бит"
@@ -8097,8 +8097,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "Регулярное выражение, используемое для совпадения с версиями клипов. Нужно "
 "группировать три вещи (prefix, число и suffix). Если оставить на своем "
@@ -8337,10 +8337,10 @@ msgid "Interface/Appearance"
 msgstr "Интерфейс/Внешний вид"
 
 msgid "Interface/Pixel Toolbar"
-msgstr "Пользовательский интерфейс/Панель инструментов пикселей"
+msgstr "Интерфейс/Панель инструментов пикселей"
 
 msgid "Interface/Thumbnails"
-msgstr "Пользовательский интерфейс/Миниатюры"
+msgstr "Интерфейс/Миниатюры"
 
 msgid "Timeline/Edit"
 msgstr "Таймлайн/Монтаж"
@@ -9267,6 +9267,9 @@ msgstr "Переключить панель информации о медиа"
 msgid "Toggle Color Area Info Panel"
 msgstr "Переключить панель информации о цветовой области"
 
+msgid "Toggle Devices Panel"
+msgstr "Переключить панель устройств"
+
 msgid "Toggle Annotation Panel"
 msgstr "Переключить панель аннотаций"
 
@@ -9334,6 +9337,9 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Неверный шрифт для текстового рисунка"
+
+#~ msgid "Devices"
+#~ msgstr "Устройства"
 
 #~ msgid "User Interface"
 #~ msgstr "Пользовательский интерфейс"
@@ -9597,8 +9603,8 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt."
-#~ "rate` seconds.\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
+#~ "rt.rate` seconds.\n"
 #~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 #~ msgstr ""
 #~ "\n"
@@ -9681,8 +9687,8 @@ msgstr "Ошибка информации о задаче"
 #~ msgstr "Преобразование во временной код (``HH:MM:SS;FRAME``)"
 
 #~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:"
-#~ "`~RationalTime`."
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
+#~ "a :class:`~RationalTime`."
 #~ msgstr ""
 #~ "Преобразовать строку временн*х кодов (``HH:MM:SS;FRAME``) в :class: "
 #~ "`~RationalTime`."
@@ -10025,30 +10031,30 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (exclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (exclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 9.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Создает :class:`~TimeRange` из начального и конечного :class:"
-#~ "`~RationalTime`\\s (исключительно).\n"
+#~ "Создает :class:`~TimeRange` из начального и "
+#~ "конечного :class:`~RationalTime`\\s (исключительно).\n"
 #~ "\n"
 #~ "Например, если start_time равно 1, а end_time равно 10, возвращаемый "
 #~ "диапазон будет иметь продолжительность 9.\n"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (inclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (inclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 10.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Создает :class:`~TimeRange` из начального и конечного :class:"
-#~ "`~RationalTime`\\s (включительно).\n"
+#~ "Создает :class:`~TimeRange` из начального и "
+#~ "конечного :class:`~RationalTime`\\s (включительно).\n"
 #~ "\n"
 #~ "Например, если start_time равно 1, а end_time равно 10, возвращаемый "
 #~ "диапазон будет иметь продолжительность 10.\n"

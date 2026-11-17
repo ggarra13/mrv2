@@ -26,10 +26,48 @@ namespace tl
     {
         class ZipReader;
 
+        //! An absolute form of a file name, for comparing paths.
+        std::string absoluteFileName(const std::string&);
+
+        //! An absolute, normalized form of a media path, used only to compare
+        //! paths that name the same file in different ways.
+        std::string normalMediaPath(const file::Path&);
+
+        //! Get the OTIO spatial coordinates of a media reference. These are
+        //! optional; media without them is laid out from the image size.
+        //! The coordinates are returned as authored, in the OTIO coordinate
+        //! system: unit-less and Y-up.
+        std::optional<math::Box2f> getMediaReferenceBounds(
+            const OTIO_NS::MediaReference* otioMediaReference);
+
+        //! Get a clip's box within the timeline canvas.
+        std::optional<math::Box2f> getCanvasBox(
+            const std::optional<math::Box2f>& clipBounds,
+            Spatial spatial,
+            const math::Size2i& normalizeSize,
+            double scale,
+            const math::Vector2f& offset);
+
+        //! Resolve which media reference a clip should be read from.
+        //!
+        //! A key set for the clip alone takes precedence over the timeline
+        //! wide key. Clips that do not have the requested key fall back to the
+        //! default media key, and then to the media reference OTIO has active.
+        OTIO_NS::MediaReference* resolveMediaReference(
+            const OTIO_NS::Clip* otioClip,
+            const std::string& key,
+            const std::map<const OTIO_NS::Clip*, std::string>& clipKeys);
+
         struct Timeline::Private
         {
             std::weak_ptr<system::Context> context;
             std::weak_ptr<log::System> logSystem;
+            //! What the log calls this timeline.
+            //!
+            //! Counted rather than the address, which the allocator hands out
+            //! again: two timelines in one session can print the same pointer,
+            //! and the log then says one of them was destroyed twice.
+            size_t logId = 0;
             std::shared_ptr<file::FileIO> fileIO;
             OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
 
@@ -213,6 +251,16 @@ namespace tl
 
                 std::future<io::VideoData> image;
                 std::future<io::VideoData> imageB;
+                // The readers the futures came from, for cancelling what they
+                // have queued; none for a sequence, which the pool decodes.
+                std::shared_ptr<io::IVideoRead> read;
+                std::shared_ptr<io::IVideoRead> readB;
+                // The readers' own times of the frames, for telling them where
+                // the playhead is in those times.
+                OTIO_NS::RationalTime mediaTime;
+                OTIO_NS::RationalTime mediaTimeB;
+                std::string path;
+                std::string pathB;
                 std::optional<math::Box2f> bounds;
                 std::optional<math::Box2f> boundsB;
                 Transition transition = Transition::kNone;
@@ -227,6 +275,10 @@ namespace tl
                 OTIO_NS::RationalTime time = time::invalidTime;
                 io::Options options;
                 std::promise<VideoFrame> promise;
+
+                // Cancelled while in progress: finished like any other, with
+                // whatever the reads return, since nobody is waiting.
+                bool cancelled = false;
 
                 std::vector<VideoLayerData> layerData;
             };
@@ -256,6 +308,21 @@ namespace tl
                 std::vector<AudioLayerData> layerData;
             };
 
+            // Shared between the main thread and the request thread; every field
+            // is guarded by mutex. The request queues are filled by the main
+            // thread (getVideo/getAudio, cancelRequests) and drained by the
+            // request thread (_requests). stopped is set by the request thread at
+            // shutdown and read by the main thread to reject late requests.
+            // Where requests are served from; see setRequestPriority().
+            struct RequestPriority
+            {
+                OTIO_NS::RationalTime time;
+                bool reverse = false;
+                bool playing = false;
+
+                bool operator == (const RequestPriority&) const = default;
+            };
+
             // Held for the whole of setTimeline(), which stops the request
             // thread and read pool, swaps in the new timeline, rebuilds the
             // state derived from it, and starts them back up. That sequence
@@ -272,6 +339,14 @@ namespace tl
             // requests.
             struct Mutex
             {
+                //! Where the pending video requests are served from.
+                std::optional<RequestPriority> requestPriority;
+                std::list<std::shared_ptr<PendingVideoRequest> > videoRequests;
+                std::list<std::shared_ptr<PendingAudioRequest> > audioRequests;
+                // Cancelled ids for the request thread to match against what
+                // is in progress; see cancelRequests().
+                std::vector<uint64_t> cancelledIds;
+
                 OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
                 bool otioTimelineChanged = false;
                 // Written under this mutex by pollSeqWatches(), called from
@@ -279,9 +354,6 @@ namespace tl
                 // framesFound->setAlways() by tick(), called on the main
                 // thread the same way otioTimelineChanged already is.
                 std::vector<OTIO_NS::TimeRange> foundFrames;
-
-                std::list<std::shared_ptr<PendingVideoRequest> > videoRequests;
-                std::list<std::shared_ptr<PendingAudioRequest> > audioRequests;
                 bool stopped = false;
                 std::string readError;
                 size_t readErrorCount = 0;
@@ -309,11 +381,13 @@ namespace tl
                 OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
                 std::list<std::shared_ptr<PendingVideoRequest> >
                     videoRequestsInProgress;
+                //! The priority last passed on to the readers.
+                std::optional<RequestPriority> readersPriority;
                 std::list<std::shared_ptr<PendingAudioRequest> >
                     audioRequestsInProgress;
                 std::condition_variable cv;
                 std::thread thread;
-                std::atomic<bool> running;
+                std::atomic<bool> running { false };
                 std::chrono::steady_clock::time_point logTimer;
                 // Copies of the media reference keys, refreshed under the mutex
                 // when the main thread changes them.
@@ -332,12 +406,16 @@ namespace tl
                 {
                     std::function<io::VideoData()> f;
                     std::promise<io::VideoData> promise;
+                    //! The timeline time of the frame, for the priority.
+                    std::optional<OTIO_NS::RationalTime> time;
                 };
                 std::vector<std::thread> threads;
                 std::list<Task> tasks;
                 std::condition_variable cv;
                 std::mutex mutex;
                 bool stopped = false;
+                //! A copy of the request priority, guarded by the pool's mutex.
+                std::optional<RequestPriority> priority;
             };
             ReadPool readPool;
 
@@ -347,7 +425,9 @@ namespace tl
             // Decode on the pool. The future carries an empty VideoData if the
             // decode throws, which is what a reader did with a failed frame.
             std::future<io::VideoData>
-            submitRead(std::function<io::VideoData()>);
+            submitRead(
+                std::function<io::VideoData()>,
+                const std::optional<OTIO_NS::RationalTime>& time = std::nullopt);
 
             // Give up on a request that has not resolved, so that a caller
             // waiting on its future is not left waiting forever. The frame

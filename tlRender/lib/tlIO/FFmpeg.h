@@ -195,6 +195,7 @@ namespace tl
             std::future<io::VideoData> readVideo(
                 const OTIO_NS::RationalTime&,
                 const io::Options& = io::Options()) override;
+            void setPlayhead(const std::optional<io::Playhead>&) override;
             void setCache(const std::shared_ptr<io::Cache>&) override;
             void cancelRequests() override;
 

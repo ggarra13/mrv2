@@ -7,4 +7,6 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
+#include <string>
+
 bool getDisplayNameForDispID(CGDirectDisplayID dispID, std::string& strOutName);

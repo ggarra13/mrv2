@@ -229,11 +229,11 @@ namespace tl
 
             io::Info info;
 
-            // Set by the video thread once info is filled in, just before it
-            // starts serving requests. info is never written after that, so
-            // getInfo() can answer from any thread without waiting for the
-            // decoder to come back to its request loop.
-            std::atomic<bool> infoReady{ false };
+            //! Set once the open has filled the information, which
+            //! never changes afterwards, so getInfo() can answer
+            //! immediately instead of queueing behind the request
+            //! being served.
+            std::atomic<bool> infoValid{ false };
 
             struct InfoRequest
             {
@@ -263,10 +263,18 @@ namespace tl
                 std::condition_variable cv;
                 std::thread thread;
                 std::atomic<bool> running;
+
+                //! How long a request takes, smoothed, for the frames skipped
+                //! ahead to while the playhead is moving; see _run().
+                double requestSeconds = 0.0;
             };
             VideoThread videoThread;
 
             std::shared_ptr<io::Cache> cache;
+
+            //! See setPlayhead().
+            std::mutex playheadMutex;
+            std::optional<io::Playhead> playhead;
 
             ErrorMutex errorMutex;
         };
@@ -279,11 +287,11 @@ namespace tl
 
             io::Info info;
 
-            // Set by the audio thread once info is filled in, just before it
-            // starts serving requests. info is never written after that, so
-            // getInfo() can answer from any thread without waiting for the
-            // decoder to come back to its request loop.
-            std::atomic<bool> infoReady{ false };
+            //! Set once the open has filled the information, which
+            //! never changes afterwards, so getInfo() can answer
+            //! immediately instead of queueing behind the request
+            //! being served.
+            std::atomic<bool> infoValid{ false };
 
             struct InfoRequest
             {

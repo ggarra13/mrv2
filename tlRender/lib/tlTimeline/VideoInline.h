@@ -6,23 +6,6 @@ namespace tl
 {
     namespace timeline
     {
-        inline bool VideoLayer::operator==(const VideoLayer& other) const
-        {
-            return image == other.image &&
-                   imageOptions == other.imageOptions &&
-                   imageB == other.imageB &&
-                   imageOptionsB == other.imageOptionsB &&
-                   bounds == other.bounds &&
-                   boundsB == other.boundsB &&
-                   transition == other.transition &&
-                   transitionValue == other.transitionValue;
-        }
-
-        inline bool VideoLayer::operator!=(const VideoLayer& other) const
-        {
-            return !(*this == other);
-        }
-
         inline bool VideoFrame::operator==(const VideoFrame& other) const
         {
             return size == other.size &&

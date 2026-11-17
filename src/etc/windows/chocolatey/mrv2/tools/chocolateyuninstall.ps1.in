@@ -1,0 +1,25 @@
+$ErrorActionPreference = 'Stop'
+
+$packageArgs = @{
+  packageName    = '@MRV2_NAME@'
+  fileType       = 'exe'
+  silentArgs     = '@MRV2_SILENT_ARGS@'
+  validExitCodes = @(0)
+}
+
+# Find the uninstaller registered by the installer (Add/Remove Programs).
+[array]$keys = Get-UninstallRegistryKey -SoftwareName '@MRV2_DISPLAY_NAME@*'
+
+if ($keys.Count -eq 1) {
+  $key = $keys[0]
+  $packageArgs['file'] = ($key.UninstallString -replace '"', '').Trim()
+  Uninstall-ChocolateyPackage @packageArgs
+}
+elseif ($keys.Count -eq 0) {
+  Write-Warning "@MRV2_NAME@ was not found in the installed programs; it may already have been removed."
+}
+else {
+  Write-Warning "$($keys.Count) matches found for '@MRV2_DISPLAY_NAME@*'; refusing to guess. Matches:"
+  $keys | ForEach-Object { Write-Warning "- $($_.DisplayName)" }
+  throw "Ambiguous uninstall target."
+}

@@ -7,7 +7,6 @@ set(HEADERS
     Init.h
     Namespace.h
     MarkerItem.h
-    OCIOSDR.h
     # StackItem.h
     ThumbnailSystem.h
     TimelineItem.h
@@ -27,7 +26,6 @@ set(SOURCE
     Init.cpp
     MarkerItem.cpp
     # StackItem.cpp
-    OCIOSDR.cpp
     ThumbnailSystem.cpp
     TimelineItem.cpp
     TimelineItemFill.cpp
@@ -51,6 +49,11 @@ endif()
 if(MRV2_BACKEND STREQUAL "GL")
     list(APPEND SOURCE ThumbnailSystem_GL.cpp)
     set(LIBRARY_NAME tlTimelineUI)
+endif()
+
+if (TLRENDER_OCIO)
+    list(APPEND SOURCE  OCIOSDR.cpp)
+    list(APPEND HEADERS OCIOSDR.h)
 endif()
 
 add_library(${LIBRARY_NAME} ${HEADERS} ${HEADERS_PRIVATE} ${SOURCE})

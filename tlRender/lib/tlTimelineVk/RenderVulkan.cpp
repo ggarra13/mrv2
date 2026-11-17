@@ -4,7 +4,10 @@
 
 #include <tlTimelineVk/RenderPrivate.h>
 
+#include <filesystem>
+#include <fstream>
 #include <iostream>
+#include <iterator>
 #include <mutex>
 #include <string>
 
@@ -37,12 +40,118 @@ namespace tl
             }
         }
 
+        namespace
+        {
+            std::filesystem::path pipelineCachePath()
+            {
+                std::error_code ec;
+                auto dir = std::filesystem::temp_directory_path(ec);
+                // TODO: use your application's cache/config directory.
+                return dir / "tlrender_vk_pipeline_cache.bin";
+            }
+        }
+
+        void Render::_createPipelineCache()
+        {
+            TLRENDER_P();
+            if (p.pipelineCache != VK_NULL_HANDLE)
+                return;
+
+            std::vector<char> data;
+            {
+                std::ifstream f(pipelineCachePath(), std::ios::binary);
+                if (f)
+                    data.assign(std::istreambuf_iterator<char>(f),
+                                std::istreambuf_iterator<char>());
+            }
+
+            VkPipelineCacheCreateInfo info = {};
+            info.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+            info.initialDataSize = data.size();
+            info.pInitialData = data.empty() ? nullptr : data.data();
+            // The driver validates the header (vendor/device/UUID) and
+            // silently ignores data from another GPU or driver version.
+            if (vkCreatePipelineCache(ctx.device, &info, nullptr,
+                                      &p.pipelineCache) != VK_SUCCESS)
+            {
+                info.initialDataSize = 0;
+                info.pInitialData = nullptr;
+                p.pipelineCache = VK_NULL_HANDLE;
+                vkCreatePipelineCache(ctx.device, &info, nullptr,
+                                      &p.pipelineCache);
+            }
+        }
+
+        void Render::_savePipelineCache()
+        {
+            TLRENDER_P();
+            if (p.pipelineCache == VK_NULL_HANDLE)
+                return;
+            size_t size = 0;
+            if (vkGetPipelineCacheData(ctx.device, p.pipelineCache, &size,
+                                       nullptr) != VK_SUCCESS || size == 0)
+                return;
+            std::vector<char> data(size);
+            if (vkGetPipelineCacheData(ctx.device, p.pipelineCache, &size,
+                                       data.data()) != VK_SUCCESS)
+                return;
+            std::ofstream f(pipelineCachePath(), std::ios::binary | std::ios::trunc);
+            if (f)
+                f.write(data.data(), size);
+        }
+
         void Render::_createBindingSet(const std::shared_ptr<vlk::Shader> shader)
         {
             TLRENDER_P();
 
-            auto bindingSet = shader->createBindingSet();
-            p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
+            auto& pool = p.bindingSetPools[shader.get()];
+            if (!pool.shader)
+                pool.shader = shader;
+
+            std::shared_ptr<vlk::ShaderBindingSet> bindingSet;
+            if (pool.cursor < pool.sets.size())
+            {
+                // Reuse a set from a previous frame.  Its descriptor set for
+                // p.frameIndex is no longer in flight.
+                bindingSet = pool.sets[pool.cursor];
+            }
+            else
+            {
+                // Pool exhausted for this frame: grow it.  This only happens
+                // until the peak number of draws per frame is reached.
+                bindingSet = shader->createBindingSet();
+                pool.sets.push_back(bindingSet);
+            }
+            ++pool.cursor;
+
+            // createBindingSet() makes the new set active implicitly; reused
+            // sets must be activated explicitly.
+            shader->useBindingSet(bindingSet);
+        }
+
+        void Render::_resetBindingSetPools()
+        {
+            TLRENDER_P();
+
+            for (auto it = p.bindingSetPools.begin();
+                 it != p.bindingSetPools.end();)
+            {
+                auto& pool = it->second;
+                if (pool.shader.use_count() == 1)
+                {
+                    // Only the pool references the shader: it was replaced
+                    // (e.g. the display shader was recreated).  Its sets may
+                    // still be referenced by in-flight frames, so defer their
+                    // destruction like every other retired resource.
+                    auto& bindingSets = p.garbage[p.frameIndex].bindingSets;
+                    for (auto& set : pool.sets)
+                        bindingSets.push_back(std::move(set));
+                    it = p.bindingSetPools.erase(it);
+                    continue;
+                }
+                pool.cursor = 0;
+                ++it;
+            }
         }
 
 
@@ -101,6 +210,8 @@ namespace tl
                 pipelineLayout = _createPipelineLayout(pipelineLayoutName,
                                                        shader);
             }
+
+            _createPipelineCache();
 
             VkDevice device = ctx.device;
 
@@ -174,7 +285,7 @@ namespace tl
             if (p.pipelines.count(key) == 0)
             {
                 DEBUG_PIPELINE("CREATING   pipeline " << pipelineName);
-                pipeline = pipelineState.create(device);
+                pipeline = pipelineState.create(device, p.pipelineCache);
                 p.pipelines[key] = std::make_pair(pipelineState,
                                                            pipeline);
             }
@@ -188,7 +299,7 @@ namespace tl
                     DEBUG_PIPELINE("RECREATING pipeline " << pipelineName);
                     p.garbage[p.frameIndex].pipelines.push_back(
                         oldPipeline);
-                    pipeline = pipelineState.create(device);
+                    pipeline = pipelineState.create(device, p.pipelineCache);
                     auto pair = std::make_pair(pipelineState, pipeline);
                     p.pipelines[key] = pair;
                 }

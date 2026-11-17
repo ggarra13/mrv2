@@ -309,6 +309,10 @@ namespace tl
 
         private:
             void _displayShader();
+            void _invalidateDisplayShader();
+            void _ensureDisplayShader();
+            void _createPipelineCache();
+            void _savePipelineCache();
 
             void _drawImageCommon(
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
@@ -414,6 +418,7 @@ namespace tl
             void _create3DMesh(
                 const std::string& meshName, const geom::TriangleMesh3& mesh);
             void _createBindingSet(const std::shared_ptr<vlk::Shader> shaderName);
+            void _resetBindingSetPools();
             VkPipelineLayout _createPipelineLayout(
                 const std::string& pipelineLayoutName,
                 const std::shared_ptr<vlk::Shader> shader);

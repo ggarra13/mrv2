@@ -244,6 +244,7 @@ namespace mrv
                 _createThumbnailWindow();
             }
 
+            auto settings = ui->app->settings();
 
             p.style = ui::Style::create(context);
             p.fontSystem = image::FontSystem::create(context);
@@ -265,8 +266,6 @@ namespace mrv
             p.timelineWidget->setTimelines(std::vector<std::shared_ptr<timeline::Timeline> >());
 
             p.timelineWidget->setParent(p.timelineWindow);
-
-            auto settings = ui->app->settings();
 
             timelineui_vk::DisplayOptions displayOptions;
             displayOptions.trackInfo =
@@ -398,10 +397,8 @@ namespace mrv
                         const auto& cache =
                             p.player->player()->observeCacheOptions()->get();
                         const auto& rate = time.rate();
-                        const auto& readAhead =
-                            cache.readAhead.rescaled_to(rate);
-                        const auto& readBehind =
-                            cache.readBehind.rescaled_to(rate);
+                        const auto& readAhead = cache.readAhead.rescaled_to(rate);
+                        const auto& readBehind = cache.readBehind.rescaled_to(rate);
                         const auto& timeRange = p.player->inOutRange();
 
                         auto startTime = time + readBehind;
@@ -494,8 +491,7 @@ namespace mrv
             const int wX = X - kWINDOW_BORDERS;
             const int wY = Y - kWINDOW_BORDERS;
             const int wW = W + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2;
-            const int wH =
-                H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 + kLABEL_SIZE;
+            const int wH = H + kWINDOW_BORDERS * 2 + kBOX_BORDERS * 2 + kLABEL_SIZE;
 
             const int bX = kBOX_BORDERS;
             const int bY = kBOX_BORDERS;
@@ -954,7 +950,7 @@ namespace mrv
 
                         timeline::RenderOptions renderOptions;
                         renderOptions.clear = true;
-                        renderOptions.vaoSize = 32 * memory::megabyte;
+                        renderOptions.vaoSize = 64 * memory::megabyte;
                         renderOptions.clearColor =
                             p.style->getColorRole(ui::ColorRole::Window);
 
@@ -2092,8 +2088,6 @@ namespace mrv
             const std::vector<tl::timeline::MoveData>& moves)
         {
             TLRENDER_P();
-            edit_store_undo(p.player, p.ui);
-            edit_clear_redo(p.ui);
             edit_move_clip_annotations(moves, p.ui);
         }
 

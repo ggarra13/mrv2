@@ -8,7 +8,6 @@ set(HEADERS
     mrvColorAreaPanel.h
     mrvColorPanel.h
     mrvComparePanel.h
-    mrvDevicesPanel.h
     mrvEnvironmentMapPanel.h
     mrvFilesPanel.h
     mrvHistogramPanel.h
@@ -32,7 +31,6 @@ set(SOURCES
     mrvColorAreaPanel.cpp
     mrvColorPanel.cpp
     mrvComparePanel.cpp
-    mrvDevicesPanel.cpp
     mrvFilesPanel.cpp
     mrvHistogramPanel.cpp
     mrvImageInfoPanel.cpp
