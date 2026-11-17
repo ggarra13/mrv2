@@ -233,6 +233,7 @@ namespace mrv
             // original annotations (edit_store_undo does not copy them).
             auto annotations = player->getAllAnnotations();
             annotations = deepCopyAnnotations(annotations);
+            auto voannotations = player->getAllVoiceAnnotations();
 
             // Update the view player's timeline
             timeline->set_global_start_time(startTimeOpt);
@@ -243,12 +244,14 @@ namespace mrv
             player->resetInPoint();
             player->resetOutPoint();
             player->setAllAnnotations(annotations);
+            player->setAllAnnotations(voannotations);
 
-            // Update the timeline player
+            // Update the timeline player in the timeline viewport.
             ui->uiTimeline->setTimelinePlayer(player);
+            ui->uiTimeline->frameView();
             ui->uiTimeline->redraw();
 
-            // Set the start and end frame in the UI
+            // Set the start and end frame in the UI.
             const auto one_frame = RationalTime(1.0, rate);
             const auto startTime = player->timeRange().start_time();
             auto endTime = startTime + timeline->duration() - one_frame;
@@ -2731,12 +2734,15 @@ namespace mrv
         return otioTimeline;
     }
 
-    void create_new_timeline_cb(ViewerUI* ui)
+    void create_new_timeline_cb(
+        ViewerUI* ui,
+        const std::optional<OTIO_NS::RationalTime> startTimeOpt)
     {
         const std::string file = otioFilename(ui);
 
         OTIO_NS::ErrorStatus errorStatus;
         auto timeline = createEmptyTimeline(ui);
+        timeline->set_global_start_time(startTimeOpt);
         timeline->to_json_file(file, &errorStatus);
         if (OTIO_NS::is_error(errorStatus))
         {
@@ -2832,9 +2838,11 @@ namespace mrv
         save_timeline_to_disk(otioFile);
     }
 
-    void add_clip_to_new_timeline_cb(const int index, ViewerUI* ui)
+    void add_clip_to_new_timeline_cb(
+        const int index,
+        const std::optional<OTIO_NS::RationalTime> startTime, ViewerUI* ui)
     {
-        create_new_timeline_cb(ui);
+        create_new_timeline_cb(ui, startTime);
         add_clip_to_timeline_cb(index, ui);
         panel::redrawThumbnails();
     }
@@ -3250,8 +3258,11 @@ namespace mrv
             // 1. Get the index of the currently displayed clip (the 'A' item)
             auto aIndex = App::app->filesModel()->observeAIndex()->get();
 
+            auto timeline = player->getTimeline();
+            auto startTimeOpt = timeline->global_start_time();
+
             // 2. Create a new timeline containing the currently displayed clip
-            add_clip_to_new_timeline_cb(aIndex, ui);
+            add_clip_to_new_timeline_cb(aIndex, startTimeOpt, ui);
 
             // 3. Append the dragged clip to this newly created timeline
             add_clip_to_timeline_cb(index, ui);
@@ -3321,30 +3332,6 @@ namespace mrv
 
             updateTimeline(destTimeline, ui);
             toOtioFile(destTimeline, ui);
-
-            destItem->timeRange = timeRange;
-            destItem->inOutRange = time::invalidTimeRange;
-            destItem->speed = videoRate;
-
-            model->setA(index);
-            model->setA(destIndex);
-
-            ui->uiView->valid(0); // needed
-            ui->uiView->redraw(); // needed
-
-            player = ui->uiView->getTimelinePlayer();
-            if (!player)
-            {
-                LOG_ERROR("No destination player");
-                return;
-            }
-
-            auto time = timelineDuration.rescaled_to(videoRate) +
-                        sourceItem->currentTime.rescaled_to(videoRate);
-            updateTimeline(destTimeline, ui);
-
-            player->setAllAnnotations(annotations);
-            ui->uiTimeline->frameView();
         }
         catch (const std::exception& e)
         {

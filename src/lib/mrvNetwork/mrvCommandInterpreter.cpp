@@ -1459,10 +1459,6 @@ namespace mrv
                 {
                     annotation_clear_all_cb(nullptr, ui);
                 }
-                else if (c == "Create New Timeline")
-                {
-                    create_new_timeline_cb(ui);
-                }
                 else if (c == "Add Clip to Timeline")
                 {
                     int Aindex = message["value"];
