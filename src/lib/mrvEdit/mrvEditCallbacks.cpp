@@ -718,6 +718,11 @@ namespace mrv
                 item->timeline.reset();
                 refresh_media_cb(nullptr, ui);
             }
+
+            if (refreshCache)
+            {
+                refresh_file_cache_cb(nullptr, ui);
+            }
         }
 
         //! Change clips' source range to use the highest video and audio
@@ -3365,6 +3370,8 @@ namespace mrv
         }
 
         tcp->unlock();
+
+        refresh_media_cb(nullptr, ui);
     }
 
     //! Associated items (like the audio of a video clip) are sent along with

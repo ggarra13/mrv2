@@ -5572,14 +5572,14 @@ namespace mrv
 
         ui->uiPrefs->AutoPlayback->value(autoPlayback);
 
+        player = ui->uiView->getTimelinePlayer();
+        player->resetInPoint();
+        player->resetOutPoint();
+        player->seek(time);
+
         if (item->playback != timeline::Playback::Stop)
         {
             App::app->startPlayback();
-        }
-        else
-        {
-            player = ui->uiView->getTimelinePlayer();
-            player->seek(time);
         }
     }
 
