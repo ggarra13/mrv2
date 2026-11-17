@@ -27,7 +27,7 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
     <!-- Is the version a prerelease of a version? https://docs.nuget.org/create/versioning#creating-prerelease-packages -->
     <!-- Note that unstable versions like 0.0.1 can be considered a released version, but it's possible that one can release a 0.0.1-beta before you release a 0.0.1 version. If the version number is final, that is considered a released version and not a prerelease. -->
     <version>@mrv2_VERSION@</version>
-    <!-- <packageSourceUrl>Where is this Chocolatey package located (think GitHub)? packageSourceUrl is highly recommended for the community feed</packageSourceUrl>-->
+    <packageSourceUrl>https://github.com/ggarra13/mrv2</packageSourceUrl>
     <!-- owners is a poor name for maintainers of the package. It sticks around by this name for compatibility reasons. It basically means you. -->
     <!--<owners>__REPLACE_YOUR_NAME__</owners>-->
     <!-- ============================== -->
@@ -52,7 +52,7 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
     <tags>@mrv2_NAME@ admin mrviewer flipbook viewer image video audio player review exr</tags>
     <summary>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics using a @mrv2_DESCRIPTION@.</summary>
     <description>@mrv2_NAME@ is an open source professional player and review tool for VFX, animation and computer graphics using a @mrv2_DESCRIPTION@.</description>
-    <releaseNotes>https://github.com/ggarra13/mrv2/releases/tag/@mrv2_VERSION@</releaseNotes>
+    <releaseNotes>https://github.com/ggarra13/mrv2/releases/tag/v@mrv2_VERSION@</releaseNotes>
     <!-- =============================== -->
 
     <!-- Specifying dependencies and version ranges? https://docs.nuget.org/create/versioning#specifying-version-ranges-in-.nuspec-files -->
