@@ -127,6 +127,7 @@ Currently supported:
 - Movie files (H264, MP4, VPX, WEBM, AV1, etc.) without needing to install FFmpeg binaries.
 - Forward and Reverse Playback of both movies and image sequences.
 - Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP, PSD)
+- Embedded Python and Python Editor to interactively for customizing tools.
 - RAW Camera Formats (CR2, CR3, X3F, etc).
 - Multi-channel audio
 - Color management

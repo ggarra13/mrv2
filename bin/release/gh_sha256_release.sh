@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+if [[ "$1" == "" ]]; then
+    echo "gh_release.sh <version>"
+    exit 1
+fi
+
+OUTPUT_FILE=SHA256SUMS
+
+cd releases/beta
+rm -rf $OUTPUT_FILE
+
+#
+# Add opengl first
+#
+files=""
+for i in opengl/*$1*; do
+    files="$i $files"
+done
+
+#
+# Add Vulkan last
+#
+for i in vulkan/*$1*; do
+    files="$files $i"
+done
+
+#
+# Read and count files
+#
+read -ra items <<< "$files"
+count=${#items[@]}
+
+if [[ $count != 22 ]]; then
+    echo "Not all files in beta release are there!"
+    echo "COUNT=${count} instead of 22"
+    exit 1
+fi
+
+for file in $files; do
+    echo "Adding checksum for $file..."
+    sha256sum "$file" >> "$OUTPUT_FILE"
+done
+
+files="${OUTPUT_FILE}"
+
+echo $files
+
+
+
+gh release upload $1 $files --clobber 
+

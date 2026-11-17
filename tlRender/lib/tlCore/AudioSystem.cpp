@@ -12,6 +12,10 @@
 #include <tlCore/String.h>
 
 #if defined(TLRENDER_AUDIO)
+
+// COINIT_APARTMENTTHREADED, so OleInitialize/RegisterDragDrop work
+#define MA_COINIT_VALUE 2
+
 // miniaudio is a single-header library. The implementation must be compiled
 // in exactly one translation unit. If another file in your project already
 // defines MINIAUDIO_IMPLEMENTATION (e.g. the audio output code), remove it
