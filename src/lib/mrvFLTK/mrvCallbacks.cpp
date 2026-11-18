@@ -2,15 +2,28 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvHUDUI.h"
-#include "mrvOCIOPresetsUI.h"
-#include "mrvHotkeyUI.h"
-#include "mrViewer.h"
-#include "make_ocio_chooser.h"
-#include "mrvSaveImageOptionsUI.h"
-#ifdef TLRENDER_FFMPEG
-#    include "mrvSaveMovieOptionsUI.h"
-#    include "mrvURLMovieUI.h"
+#ifdef __EMSCRIPTEN__
+#include "mrvWidgets/mrvHUDUI.h"
+#include "mrvWidgets/mrvOCIOPresetsUI.h"
+#include "mrvWidgets/mrvHotkeyUI.h"
+#include "mrvWidgets/mrViewer.h"
+#include "mrvWidgets/make_ocio_chooser.h"
+#include "mrvWidgets/mrvSaveImageOptionsUI.h"
+#  ifdef TLRENDER_FFMPEG
+#    include "mrvWidgets/mrvSaveMovieOptionsUI.h"
+#    include "mrvWidgets/mrvURLMovieUI.h"
+#  endif
+#else
+#  include "mrvHUDUI.h"
+#  include "mrvOCIOPresetsUI.h"
+#  include "mrvHotkeyUI.h"
+#  include "mrViewer.h"
+#  include "make_ocio_chooser.h"
+#  include "mrvSaveImageOptionsUI.h"
+#    ifdef TLRENDER_FFMPEG
+#      include "mrvSaveMovieOptionsUI.h"
+#      include "mrvURLMovieUI.h"
+#    endif
 #endif
 
 #include "mrvApp/mrvSettingsObject.h"
@@ -3283,7 +3296,11 @@ namespace mrv
         default:
             break;
         }
+#ifdef __EMSCRIPTEN__
+        auto c = ui;
+#else
         TimelineClass* c = ui->uiTimeWindow;
+#endif
         c->uiStartButton->value(!c->uiStartButton->value());
         c->uiStartButton->do_callback();
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -3302,7 +3319,11 @@ namespace mrv
         default:
             break;
         }
+#ifdef __EMSCRIPTEN__
+        auto c = ui;
+#else
         TimelineClass* c = ui->uiTimeWindow;
+#endif
         c->uiEndButton->value(!c->uiEndButton->value());
         c->uiEndButton->do_callback();
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -3326,7 +3347,11 @@ namespace mrv
         auto player = ui->uiView->getTimelinePlayer();
         if (!player) return;
 
+#ifdef __EMSCRIPTEN__
+        auto c = ui;
+#else
         TimelineClass* c = ui->uiTimeWindow;
+#endif
         const OTIO_NS::TimeRange& inOutRange = player->inOutRange();
         const OTIO_NS::TimeRange& timeRange = player->timeRange();
         if (timeRange != inOutRange)
@@ -3363,7 +3388,11 @@ namespace mrv
 
     static void playback_loop_mode(ViewerUI* ui, timeline::Loop mode)
     {
+#ifdef __EMSCRIPTEN__
+        auto c = ui;
+#else
         TimelineClass* c = ui->uiTimeWindow;
+#endif
         c->uiLoopMode->value((int)mode);
         c->uiLoopMode->do_callback();
     }
@@ -3986,7 +4015,11 @@ namespace mrv
             range.end_time_exclusive().round());
         player->setInOutRange(range);
 
+#ifdef __EMSCRIPTEN__
+        auto c = ui;
+#else
         TimelineClass* c = ui->uiTimeWindow;
+#endif
         c->uiStartButton->value(!c->uiStartButton->value());
         c->uiEndButton->value(!c->uiEndButton->value());
         c->uiStartFrame->setTime(range.start_time());
