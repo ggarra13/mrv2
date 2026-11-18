@@ -1728,8 +1728,10 @@ namespace mrv
         // Delete Color Chooser
         delete colorChooser;
 
+#ifndef __EMSCRIPTEN__
         // Release the floating license if any.
         release_license();
+#endif
 
         // Remove any temporary EDLs in tmppath
         if (ui->uiPrefs->RemoveEDLs->value())
