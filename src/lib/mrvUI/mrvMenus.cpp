@@ -6,10 +6,6 @@
 #include <locale>
 #include <string> // Add this include for string-related functionality
 
-#ifdef _WIN32
-#include <winsock2.h>
-#endif
-
 #include "mrvApp/mrvGlobals.h"
 
 #include "mrvApp/mrvSettingsObject.h"
@@ -23,11 +19,15 @@
 #include "mrvUI/mrvDesktop.h"
 #include "mrvUI/mrvMenus.h"
 
+#include "mrvFl/mrvTimelinePlayer.h"
+
 #include "mrvWidgets/mrvMainWindow.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvNetwork/mrvDummyClient.h"
+#ifdef MRV2_NETWORK
+#   include "mrvNetwork/mrvDummyClient.h"
+#endif
 
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
@@ -35,11 +35,13 @@
 #include "mrvOS/mrvI8N.h"
 #include "mrvOS/mrvString.h"
 
+#include <tlTimelineUI/IItem.h>
+
 #include <tlCore/StringFormat.h>
 
 
 
-#include "mrvPreferencesUI.h"
+// #include "mrvPreferencesUI.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -69,14 +71,19 @@ namespace mrv
 
     void MainWindow::fill_menu(Fl_Menu_* menu)
     {
-        using namespace panel;
+        // using namespace panel;
 
         Fl_Menu_Item* item = nullptr;
         int mode = FL_MENU_CHATTY;
         char buf[1024];
-
         ViewerUI* ui = App::ui;
-        const auto model = ui->app->filesModel();
+
+        int idx;
+        mode = FL_MENU_CHATTY;
+
+        auto player = ui->uiView->getTimelinePlayer();
+
+        const auto model = App::app->filesModel();
         const size_t numFiles = model->observeFiles()->getSize();
 
         bool isOtio = false;
@@ -97,9 +104,6 @@ namespace mrv
         }
 
         menu->clear();
-
-        int idx;
-        mode = FL_MENU_CHATTY;
 
         menu->add(
             _("File/Open/Movie or Sequence"), kOpenImage.hotkey(),
@@ -133,8 +137,6 @@ namespace mrv
         if (numFiles == 0)
             mode = FL_MENU_INACTIVE;
 
-        auto player = ui->uiView->getTimelinePlayer();
-
         menu->add(
             _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
             (Fl_Callback*)save_movie_cb, ui, mode);
@@ -161,13 +163,9 @@ namespace mrv
 
 
         mode = FL_MENU_CHATTY;
+
         if (!player || !player->hasAnnotations())
             mode = FL_MENU_INACTIVE;
-
-        if (!app::soporta_annotations)
-        {
-            mode |= FL_MENU_INACTIVE;
-        }
 
         menu->add(
             _("File/Save/Annotations Only"), kSaveAnnotationsOnly.hotkey(),
@@ -203,7 +201,7 @@ namespace mrv
                   (Fl_Callback*)reload_session_cb, ui, mode);
 
         // std_any value;
-        SettingsObject* settings = ui->app->settings();
+        SettingsObject* settings = App::app->settings();
         const std::vector< std::string >& recentFiles = settings->recentFiles();
 
         mode = FL_MENU_CHATTY;
@@ -260,6 +258,7 @@ namespace mrv
         else
             item->clear();
 
+#ifndef __EMSCRIPTEN__
         idx = menu->add(
             _("Window/Secondary"), kToggleSecondary.hotkey(),
             (Fl_Callback*)toggle_secondary_cb, ui, mode | FL_MENU_TOGGLE);
@@ -290,6 +289,8 @@ namespace mrv
         idx = menu->add(
             _("Window/Less UI Transparency"), kUITransparencyMore.hotkey(),
             (Fl_Callback*)less_ui_transparency, ui, mode);
+#endif
+
 
         snprintf(buf, 256, "%s", _("View/Tool Bars/Toggle Menu Bar"));
         idx = menu->add(
@@ -427,12 +428,12 @@ namespace mrv
             if (tmp == "Files")
             {
                 hotkey = kToggleReel.hotkey();
-                callback_function = (Fl_Callback*)files_panel_cb;
+                callback_function = (Fl_Callback*)panel::files_panel_cb;
             }
             else if (tmp == "Media Information")
             {
                 hotkey = kToggleMediaInfo.hotkey();
-                callback_function = (Fl_Callback*)image_info_panel_cb;
+                callback_function = (Fl_Callback*)panel::image_info_panel_cb;
             }
             else if (tmp == "Color Info")
             {
@@ -441,105 +442,105 @@ namespace mrv
             else if (tmp == "Color")
             {
                 hotkey = kToggleColorControls.hotkey();
-                callback_function = (Fl_Callback*)color_panel_cb;
+                callback_function = (Fl_Callback*)panel::color_panel_cb;
             }
             else if (tmp == "Color Area")
             {
                 hotkey = kToggleColorInfo.hotkey();
-                callback_function = (Fl_Callback*)color_area_panel_cb;
+                callback_function = (Fl_Callback*)panel::color_area_panel_cb;
             }
             else if (tmp == "Compare")
             {
                 hotkey = kToggleCompare.hotkey();
-                callback_function = (Fl_Callback*)compare_panel_cb;
+                callback_function = (Fl_Callback*)panel::compare_panel_cb;
             }
             else if (tmp == "Settings")
             {
                 hotkey = kToggleSettings.hotkey();
-                callback_function = (Fl_Callback*)settings_panel_cb;
+                callback_function = (Fl_Callback*)panel::settings_panel_cb;
             }
             else if (tmp == "Annotations")
             {
                 hotkey = kToggleAnnotation.hotkey();
-                callback_function = (Fl_Callback*)annotations_panel_cb;
+                callback_function = (Fl_Callback*)panel::annotations_panel_cb;
             }
             else if (tmp == "Histogram")
             {
                 hotkey = kToggleHistogram.hotkey();
-                callback_function = (Fl_Callback*)histogram_panel_cb;
+                callback_function = (Fl_Callback*)panel::histogram_panel_cb;
             }
             else if (tmp == "Vectorscope")
             {
                 hotkey = kToggleVectorscope.hotkey();
-                callback_function = (Fl_Callback*)vectorscope_panel_cb;
+                callback_function = (Fl_Callback*)panel::vectorscope_panel_cb;
             }
             else if (tmp == "Environment Map")
             {
                 hotkey = kToggleEnvironmentMap.hotkey();
-                callback_function = (Fl_Callback*)environment_map_panel_cb;
+                callback_function = (Fl_Callback*)panel::environment_map_panel_cb;
             }
             else if (tmp == "Waveform")
             {
                 hotkey = kToggleWaveform.hotkey();
-                callback_function = (Fl_Callback*)waveform_panel_cb;
+                callback_function = (Fl_Callback*)panel::waveform_panel_cb;
             }
             else if (tmp == "NDI")
             {
                 hotkey = kToggleNDI.hotkey();
-                callback_function = (Fl_Callback*)ndi_panel_cb;
+                callback_function = (Fl_Callback*)panel::ndi_panel_cb;
             }
             else if (tmp == "Notes")
             {
                 hotkey = kToggleNotes.hotkey();
-                callback_function = (Fl_Callback*)notes_panel_cb;
+                callback_function = (Fl_Callback*)panel::notes_panel_cb;
             }
             else if (tmp == "WebRTC")
             {
                 hotkey = kToggleWebRTC.hotkey();
-                callback_function = (Fl_Callback*)webrtc_panel_cb;
+                callback_function = (Fl_Callback*)panel::webrtc_panel_cb;
             }
             else if (tmp == "USD")
             {
                 hotkey = kToggleUSD.hotkey();
-                callback_function = (Fl_Callback*)usd_panel_cb;
+                callback_function = (Fl_Callback*)panel::usd_panel_cb;
             }
             else if (tmp == "Statistics")
             {
                 hotkey = 0; //kToggleStats.hotkey();
-                callback_function = (Fl_Callback*)stats_panel_cb;
+                callback_function = (Fl_Callback*)panel::stats_panel_cb;
             }
             else if (tmp == "Stereo 3D")
             {
                 hotkey = kToggleStereo3D.hotkey();
-                callback_function = (Fl_Callback*)stereo3D_panel_cb;
+                callback_function = (Fl_Callback*)panel::stereo3D_panel_cb;
             }
             else if (tmp == "Background")
             {
                 hotkey = kToggleBackground.hotkey();
-                callback_function = (Fl_Callback*)background_panel_cb;
+                callback_function = (Fl_Callback*)panel::background_panel_cb;
             }
             else if (tmp == "Python")
             {
                 hotkey = kTogglePythonConsole.hotkey();
-                callback_function = (Fl_Callback*)python_panel_cb;
+                callback_function = (Fl_Callback*)panel::python_panel_cb;
             }
             else if (tmp == "Logs")
             {
                 hotkey = kToggleLogs.hotkey();
-                callback_function = (Fl_Callback*)logs_panel_cb;
+                callback_function = (Fl_Callback*)panel::logs_panel_cb;
             }
             else if (tmp == "Hotkeys")
             {
                 menu_root = menu_window_root;
                 hotkey = kToggleHotkeys.hotkey();
-                callback_function = (Fl_Callback*)hotkeys_window_cb;
+                callback_function = 0; //(Fl_Callback*)hotkeys_window_cb;
                 mode = FL_MENU_CHATTY;
             }
             else if (tmp == "Preferences")
             {
                 menu_root = menu_window_root;
                 hotkey = kTogglePreferences.hotkey();
-                callback_function = (Fl_Callback*)preferences_window_cb;
+                callback_function = 0; //(Fl_Callback*)preferences_window_cb;
                 mode = FL_MENU_CHATTY;
             }
             else if (tmp == "About")
@@ -559,94 +560,94 @@ namespace mrv
             item = const_cast<Fl_Menu_Item*>(&menu->menu()[idx]);
             if (tmp == _("Files"))
             {
-                if (filesPanel)
+                if (panel::filesPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Color"))
             {
-                if (colorPanel)
+                if (panel::colorPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Color Area"))
             {
-                if (colorAreaPanel)
+                if (panel::colorAreaPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Histogram"))
             {
-                if (histogramPanel)
+                if (panel::histogramPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Vectorscope"))
             {
-                if (vectorscopePanel)
+                if (panel::vectorscopePanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Waveform"))
             {
-                if (waveformPanel)
+                if (panel::waveformPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Compare"))
             {
-                if (comparePanel)
+                if (panel::comparePanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Annotations"))
             {
-                if (annotationsPanel)
+                if (panel::annotationsPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Settings"))
             {
-                if (settingsPanel)
+                if (panel::settingsPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Logs"))
             {
-                if (logsPanel)
+                if (panel::logsPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Notes"))
             {
-                if (notesPanel)
+                if (panel::notesPanel)
                     item->set();
                 else
                     item->clear();
             }
-#ifdef MRV2_PYBIND11
             else if (tmp == _("Python"))
             {
-                if (pythonPanel)
+#ifdef MRV2_PYBIND11
+                if (panel::pythonPanel)
                     item->set();
                 else
                     item->clear();
-            }
 #endif
+            }
             else if (tmp == _("NDI"))
             {
 #ifdef TLRENDER_NDI
-                if (ndiPanel)
+                if (panel::ndiPanel)
                     item->set();
                 else
                     item->clear();
@@ -655,7 +656,7 @@ namespace mrv
             else if (tmp == _("USD"))
             {
 #ifdef TLRENDER_USD
-                if (usdPanel)
+                if (panel::usdPanel)
                     item->set();
                 else
                     item->clear();
@@ -663,55 +664,55 @@ namespace mrv
             }
             else if (tmp == _("Stereo 3D"))
             {
-                if (stereo3DPanel)
+                if (panel::stereo3DPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Stats"))
             {
-                if (statsPanel)
+                if (panel::statsPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Media Information"))
             {
-                if (imageInfoPanel)
+                if (panel::imageInfoPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Environment Map"))
             {
-                if (environmentMapPanel)
+                if (panel::environmentMapPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Background"))
             {
-                if (backgroundPanel)
+                if (panel::backgroundPanel)
                     item->set();
                 else
                     item->clear();
             }
             else if (tmp == _("Statistics"))
             {
-                if (statsPanel)
+                if (panel::statsPanel)
                     item->set();
                 else
                     item->clear();
             }
+#ifdef MRV2_NETWORK
             else if (tmp == _("WebRTC"))
             {
-#ifdef MRV2_NETWORK
-                if (webrtcPanel)
+                if (panel::webrtcPanel)
                     item->set();
                 else
                     item->clear();
-#endif
             }
+#endif
             else if (
                 tmp == _("Hotkeys") || tmp == _("Preferences") ||
                 tmp == _("About"))
@@ -724,14 +725,16 @@ namespace mrv
             }
         }
 
+#ifdef MRV2_NETWORK
         // Make sure to sync panels remotely.
         syncPanels("");
+#endif
 
         {
             const timeline::DisplayOptions& displayOptions =
-                ui->app->displayOptions();
+                App::app->displayOptions();
             const timeline::ImageOptions& imageOptions =
-                ui->app->imageOptions();
+                App::app->imageOptions();
             const timeline::BackgroundOptions& backgroundOptions =
                 uiView->getBackgroundOptions();
 
@@ -1138,8 +1141,6 @@ namespace mrv
             (Fl_Callback*)toggle_playback_cb, ui, FL_MENU_DIVIDER | mode);
 
         // Set In/Out
-        TimelineClass* c = ui->uiTimeWindow;
-
         mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
@@ -1148,14 +1149,14 @@ namespace mrv
             _("Playback/Toggle In Point"), kSetInPoint.hotkey(),
             (Fl_Callback*)playback_set_in_point_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (c->uiStartButton->value())
+        if (ui->uiStartButton->value())
             item->set();
         idx = menu->add(
             _("Playback/Toggle Out Point"), kSetOutPoint.hotkey(),
             (Fl_Callback*)playback_set_out_point_cb, ui,
             FL_MENU_DIVIDER | mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (c->uiEndButton->value())
+        if (ui->uiEndButton->value())
             item->set();
         idx = menu->add(
             _("Playback/Toggle In and Out Points"), kToggleInOutPoint.hotkey(),
@@ -1284,11 +1285,10 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
-        const char* tmp;
         size_t num = ui->uiPrefs->CropArea->children();
         for (size_t i = 0; i < num; ++i)
         {
-            tmp = ui->uiPrefs->CropArea->child(i)->label();
+            const char* tmp = ui->uiPrefs->CropArea->child(i)->label();
             if (!tmp)
                 continue;
             /* xgettext:c-format */
@@ -1331,11 +1331,8 @@ namespace mrv
         const auto& itemOptions = ui->uiTimeline->getItemOptions();
         const auto& displayOptions = ui->uiTimeline->getDisplayOptions();
 
-        if (!app::soporta_editing)
-        {
-            ui->uiTimeline->setEditable(false);
-            mode |= FL_MENU_INACTIVE;
-        }
+        ui->uiTimeline->setEditable(false);
+        mode |= FL_MENU_INACTIVE;
 
         idx = menu->add(
             _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
@@ -1436,13 +1433,13 @@ namespace mrv
             mode |= FL_MENU_INACTIVE;
 
         const float kPixels_per_unit = ui->uiView->pixels_per_unit();
-        const int kTSmall = TIMELINEUI::kThumbnailSmall * kPixels_per_unit;
-        const int kTMedium = TIMELINEUI::kThumbnailMedium * kPixels_per_unit;
-        const int kTLarge = TIMELINEUI::kThumbnailLarge * kPixels_per_unit;
+        const int kTSmall = timelineui::kThumbnailSmall * kPixels_per_unit;
+        const int kTMedium = timelineui::kThumbnailMedium * kPixels_per_unit;
+        const int kTLarge = timelineui::kThumbnailLarge * kPixels_per_unit;
 
-        const int kWSmall = TIMELINEUI::kWaveformSmall * kPixels_per_unit;
-        const int kWMedium = TIMELINEUI::kWaveformMedium * kPixels_per_unit;
-        const int kWLarge = TIMELINEUI::kWaveformLarge * kPixels_per_unit;
+        const int kWSmall = timelineui::kWaveformSmall * kPixels_per_unit;
+        const int kWMedium = timelineui::kWaveformMedium * kPixels_per_unit;
+        const int kWLarge = timelineui::kWaveformLarge * kPixels_per_unit;
 
 
         idx = menu->add(
@@ -1559,42 +1556,43 @@ namespace mrv
 
             fileName = mrv::string::normalizePath(fileName);
 
-            const std::regex& regex = version_regex(ui, false);
-            bool has_version = regex_match(fileName, regex);
+            // \@wmrv2: file loading / regex
+            // const std::regex& regex = version_regex(ui, false);
+            // bool has_version = regex_match(fileName, regex);
 
-            if (numFiles > 1)
-            {
-                menu->add(
-                    _("Image/Next"), kNextImage.hotkey(),
-                    (Fl_Callback*)next_file_cb, ui, mode);
-                menu->add(
-                    _("Image/Next Limited"), kNextImageLimited.hotkey(),
-                    (Fl_Callback*)next_file_limited_cb, ui, mode);
-                menu->add(
-                    _("Image/Previous"), kPreviousImage.hotkey(),
-                    (Fl_Callback*)previous_file_cb, ui, mode);
-                menu->add(
-                    _("Image/Previous Limited"), kPreviousImageLimited.hotkey(),
-                    (Fl_Callback*)previous_file_limited_cb, ui, mode |
-                    FL_MENU_DIVIDER);
-            }
+            // if (numFiles > 1)
+            // {
+            //     menu->add(
+            //         _("Image/Next"), kNextImage.hotkey(),
+            //         (Fl_Callback*)next_file_cb, ui, mode);
+            //     menu->add(
+            //         _("Image/Next Limited"), kNextImageLimited.hotkey(),
+            //         (Fl_Callback*)next_file_limited_cb, ui, mode);
+            //     menu->add(
+            //         _("Image/Previous"), kPreviousImage.hotkey(),
+            //         (Fl_Callback*)previous_file_cb, ui, mode);
+            //     menu->add(
+            //         _("Image/Previous Limited"), kPreviousImageLimited.hotkey(),
+            //         (Fl_Callback*)previous_file_limited_cb, ui, mode |
+            //         FL_MENU_DIVIDER);
+            // }
 
-            if (has_version)
-            {
-                menu->add(
-                    _("Image/Version/First"), kFirstVersionImage.hotkey(),
-                    (Fl_Callback*)first_image_version_cb, ui, mode);
-                menu->add(
-                    _("Image/Version/Last"), kLastVersionImage.hotkey(),
-                    (Fl_Callback*)last_image_version_cb, ui, mode |
-                    FL_MENU_DIVIDER);
-                menu->add(
-                    _("Image/Version/Previous"), kPreviousVersionImage.hotkey(),
-                    (Fl_Callback*)previous_image_version_cb, ui, mode);
-                menu->add(
-                    _("Image/Version/Next"), kNextVersionImage.hotkey(),
-                    (Fl_Callback*)next_image_version_cb, ui, mode);
-            }
+            // if (has_version)
+            // {
+            //     menu->add(
+            //         _("Image/Version/First"), kFirstVersionImage.hotkey(),
+            //         (Fl_Callback*)first_image_version_cb, ui, mode);
+            //     menu->add(
+            //         _("Image/Version/Last"), kLastVersionImage.hotkey(),
+            //         (Fl_Callback*)last_image_version_cb, ui, mode |
+            //         FL_MENU_DIVIDER);
+            //     menu->add(
+            //         _("Image/Version/Previous"), kPreviousVersionImage.hotkey(),
+            //         (Fl_Callback*)previous_image_version_cb, ui, mode);
+            //     menu->add(
+            //         _("Image/Version/Next"), kNextVersionImage.hotkey(),
+            //         (Fl_Callback*)next_image_version_cb, ui, mode);
+            // }
 
             mode = FL_MENU_CHATTY | FL_MENU_RADIO;
 
@@ -1712,10 +1710,6 @@ namespace mrv
             }
 
             mode = FL_MENU_CHATTY | FL_MENU_TOGGLE;
-            if (!app::soporta_editing)
-            {
-                mode |= FL_MENU_INACTIVE;
-            }
 
             idx = menu->add(
                 _("Edit/Associated Clips"),
@@ -1935,7 +1929,7 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         item->labelcolor(FL_YELLOW);
 
-        const timeline::LUTOptions& lut = ui->app->lutOptions();
+        const timeline::LUTOptions& lut = App::app->lutOptions();
         if (lut.enabled && !lut.fileName.empty())
         {
             file::Path path(lut.fileName);
@@ -2111,6 +2105,7 @@ namespace mrv
         }
 #endif
 
+#ifdef MRV2_NETWORK
         if (dynamic_cast< DummyClient* >(tcp) == nullptr ||
             panel::webrtcPanel)
         {
@@ -2237,6 +2232,7 @@ namespace mrv
             else
                 item->clear();
         }
+#endif
 
 #ifdef MRV2_PYBIND11
         {
@@ -2293,6 +2289,7 @@ namespace mrv
         }
 #endif
 
+#ifndef __EMSCRIPTEN__
         mode = FL_MENU_CHATTY;
         menu->add(
             _("Help/Unlock Features"), 0,
@@ -2306,6 +2303,7 @@ namespace mrv
         menu->add(
             _("Help/About"), kToggleAbout.hotkey(), (Fl_Callback*)about_cb,
             ui, mode);
+#endif
 
         menu->menu_end();
 
@@ -2330,7 +2328,9 @@ namespace mrv
         }
 
 #else
+#    ifndef __EMSCRIPTEN__
         menu->textfont(ui->uiPrefs->uiFontMenus->value());
+#    endif
 #endif
 
         menu->redraw();
