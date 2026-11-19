@@ -341,6 +341,13 @@ else()
     set(CPACK_GENERATOR NSIS ZIP)
 
     #
+    # Directory with mrv2_translations.nsh, used by our NSIS.template.in.
+    # Also tell CPack to use our NSIS.template.in instead of its own.
+    #
+    set(CPACK_NSIS_MRV2_DIR "${MRV2_ROOT}/cmake/nsis")
+    set(CPACK_MODULE_PATH "${MRV2_ROOT}/cmake/nsis")
+
+    #
     # This sets the title at the top of the installer.
     #
     set(CPACK_NSIS_PACKAGE_NAME "${mrv2_NAME} v${mrv2_VERSION} ${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
@@ -429,11 +436,11 @@ if(BUILD_PYTHON)
 endif()
 
 set(CPACK_COMPONENTS_ALL ${mrv2_COMPONENTS})
-set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "${mrv2_NAME} Application")
+set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "$(kCompApplication)")
 if(BUILD_PYTHON)
-    set(CPACK_COMPONENT_PYTHON_DEMOS_DISPLAY_NAME "${mrv2_NAME} Python Demos")
-    set(CPACK_COMPONENT_PYTHON_PLUGINS_DISPLAY_NAME "${mrv2_NAME} Python FLTK Plugins")
-    set(CPACK_COMPONENT_PYTHON_TK_DISPLAY_NAME "Python TK Libraries")
+    set(CPACK_COMPONENT_PYTHON_DEMOS_DISPLAY_NAME "$(kCompPythonDemos)")
+    set(CPACK_COMPONENT_PYTHON_PLUGINS_DISPLAY_NAME "$(kCompPythonPlugins)")
+    set(CPACK_COMPONENT_PYTHON_TK_DISPLAY_NAME "$(kCompPythonTk)")
     set(CPACK_COMPONENT_PYTHON_TK_DISABLED TRUE)
 endif()
 
