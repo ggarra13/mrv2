@@ -7,7 +7,7 @@
 
 #include "mrvWidgets/mrvBackend.h"
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
 #  include "mrvVoice/mrvAnnotation.h"
 #endif
 
@@ -342,9 +342,6 @@ namespace mrv
         //! Returns whether there's annotations in the player.
         bool hasAnnotations() const;
 
-        //! Returns whether there's voice annotations in the player.
-        bool hasVoiceAnnotations() const;
-
         //! Return a list of annotation times
         const std::vector< OTIO_NS::RationalTime > getAnnotationTimes() const;
 
@@ -391,7 +388,10 @@ namespace mrv
 
         //! @{
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
+        //! Returns whether there's voice annotations in the player.
+        bool hasVoiceAnnotations() const;
+
         //! Get annotation for current time
         std::shared_ptr< voice::Annotation > getVoiceAnnotation() const;
 

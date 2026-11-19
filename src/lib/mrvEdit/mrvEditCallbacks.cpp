@@ -232,11 +232,14 @@ namespace mrv
 
             const auto startTimeOpt = timeline->global_start_time();
 
-            // Work on a deep copy, as the undo buffer shares the
-            // original annotations (edit_store_undo does not copy them).
+            // The global start time (an .otio timecode start time) is reset
+            // below, so the timeline will start at 0.  The annotations are
             auto annotations = player->getAllAnnotations();
             annotations = deepCopyAnnotations(annotations);
+
+#ifndef __EMSCRIPTEN__
             auto voannotations = player->getAllVoiceAnnotations();
+#endif
 
             // Update the view player's timeline
             timeline->set_global_start_time(startTimeOpt);
@@ -247,14 +250,16 @@ namespace mrv
             player->resetInPoint();
             player->resetOutPoint();
             player->setAllAnnotations(annotations);
+#ifndef __EMSCRIPTEN__
             player->setAllAnnotations(voannotations);
+#endif
 
-            // Update the timeline player in the timeline viewport.
+            // \@wmrv2
             ui->uiTimeline->setTimelinePlayer(player);
             ui->uiTimeline->frameView();
             ui->uiTimeline->redraw();
 
-            // Set the start and end frame in the UI.
+            // Set the start and end frame
             const auto one_frame = RationalTime(1.0, rate);
             const auto startTime = player->timeRange().start_time();
             auto endTime = startTime + timeline->duration() - one_frame;
@@ -1516,8 +1521,8 @@ namespace mrv
             OTIO_NS::algo::slice(track, time);
         }
 
-        // If we sliced on the start or end of all clips, we don't need to
-        // store the undo.
+        // // If we sliced on the start or end of all clips, we don't need to
+        // // store the undo.
         if (remove_undo)
             undoBuffer.pop_back();
 
@@ -2498,7 +2503,7 @@ namespace mrv
         const OTIO_NS::Item* right_video = nullptr;
         const OTIO_NS::Item* left_audio = nullptr;
         const OTIO_NS::Item* right_audio = nullptr;
-
+//         edit_store_undo(player, ui);
         if (selection.size() == 2)
         {
             left_video = selection[0];
@@ -3977,7 +3982,7 @@ namespace mrv
         const int maxTileHeight = tileH - kMinEditModeH;
 
         // Force a resize of the timeline to refresh its sizes calling
-        // TIMELINEUI::TimelineWidget's _sizeHintEvent recursively.
+        // timelineui::TimelineWidget's _sizeHintEvent recursively.
         H  = ui->uiTimeline->getGeometry().h();
         H /= pixels_unit;
         if (H >= maxTileHeight)

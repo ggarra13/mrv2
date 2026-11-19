@@ -259,7 +259,9 @@ namespace mrv
         void ThumbnailPanel::_cancelRequests()
         {
             const auto context = App::app->getContext();
+#ifndef __EMSCRIPTEN__
             auto thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
+#endif
             std::vector<uint64_t> ids;
             for (const auto& i : thumbnailRequests)
             {

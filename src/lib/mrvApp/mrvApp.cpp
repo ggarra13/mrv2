@@ -883,7 +883,7 @@ namespace mrv
 
         if (p.options.loop != timeline::Loop::Count)
         {
-#ifdef __EMSCRIPTEN___
+#ifdef __EMSCRIPTEN__
             auto c = ui;
 #else
             TimelineClass* c = ui->uiTimeWindow;

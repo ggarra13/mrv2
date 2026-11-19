@@ -112,13 +112,16 @@ namespace mrv
                 VKLinkShape* s;
                 if (!(s = dynamic_cast<VKLinkShape*>(shape)))
                     return;
+                s->open();
 #endif
 #ifdef OPENGL_BACKEND
                 GLLinkShape* s;
                 if (!(s = dynamic_cast<GLLinkShape*>(shape)))
                     return;
-#endif
                 s->open();
+#endif
+#ifdef WEBGPU_BACKEND
+#endif
             }
 
             void link_edit_cb(Fl_Menu_*, tl::draw::Shape* shape)
@@ -127,13 +130,16 @@ namespace mrv
                 VKLinkShape* s;
                 if (!(s = dynamic_cast<VKLinkShape*>(shape)))
                     return;
+                s->edit();
 #endif
 #ifdef OPENGL_BACKEND
                 GLLinkShape* s;
                 if (!(s = dynamic_cast<GLLinkShape*>(shape)))
                     return;
-#endif
                 s->edit();
+#endif
+#ifdef WEBGPU_BACKEND
+#endif
             }
 
             void link_delete_cb(Fl_Menu_*, TimelineViewport* view)
@@ -207,7 +213,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             if (!currentVoiceOver)
                 return;
 
@@ -549,6 +555,7 @@ namespace mrv
         {
             TLRENDER_P();
 
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             if (!p.player)
                 return;
 
@@ -563,12 +570,14 @@ namespace mrv
                     }
                 }
             }
+#endif
         }
 
         void TimelineViewport::_stopVoicePlaying()
         {
             TLRENDER_P();
 
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             if (!p.player)
                 return;
 
@@ -583,6 +592,7 @@ namespace mrv
                     }
                 }
             }
+#endif
 
         }
 
@@ -645,6 +655,7 @@ namespace mrv
                     }
                     else if (p.actionMode == ActionMode::kVoice)
                     {
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
                         if (!p.player)
                             return 0;
 
@@ -685,7 +696,6 @@ namespace mrv
                                         // pop it out of the program.
                                         App::unsaved_annotations = true;
 
-#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
                                         switch(status)
                                         {
                                         case voice::RecordStatus::Stopped:
@@ -714,7 +724,6 @@ namespace mrv
                                         default:
                                             return 0;
                                         }
-#endif
                                         redrawWindows();
                                         return 1;
                                     }
@@ -722,7 +731,6 @@ namespace mrv
                             }
                         }
 
-#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
                         if (currentVoiceOver)
                         {
                             switch(currentVoiceOver->getStatus())
@@ -747,8 +755,8 @@ namespace mrv
                             _startVoiceRecording(voice);
                         }
                         return 1;
-                    }
 #endif
+                    }
 
                     return _handlePushLeftMouseButtonShapes();
                 }
