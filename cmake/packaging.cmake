@@ -350,7 +350,8 @@ else()
     #
     # This sets the title at the top of the installer.
     #
-    set(CPACK_NSIS_PACKAGE_NAME "${mrv2_NAME} v${mrv2_VERSION} ${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS}" )
+    set(CPACK_NSIS_PACKAGE_NAME "${mrv2_NAME} v${mrv2_VERSION}" )
+    set(CPACK_NSIS_INSTALLER_TITLE "${mrv2_NAME} v${mrv2_VERSION} ${CMAKE_SYSTEM_NAME}-${MRV2_OS_BITS} bits" )
     
     #
     # Set the executable
