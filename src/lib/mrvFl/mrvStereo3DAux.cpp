@@ -4,7 +4,7 @@
 
 #include <string>
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 namespace mrv
 {

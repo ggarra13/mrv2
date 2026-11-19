@@ -24,7 +24,7 @@ namespace py = pybind11;
 #include "mrvOptions/mrvStereo3DOptions.h"
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvFl/mrvOCIO.h"
 

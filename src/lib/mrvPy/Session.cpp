@@ -13,7 +13,7 @@
 #include <pybind11/stl.h>
 namespace py = pybind11;
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 namespace mrv
 {

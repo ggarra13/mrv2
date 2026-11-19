@@ -3,14 +3,14 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvIO.h"
 
-#ifdef TLRENDER_FFMPEG
-#include "mrvVoice/mrvAnnotation.h"
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
+#    include "mrvVoice/mrvAnnotation.h"
 #endif
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
@@ -92,7 +92,7 @@ namespace mrv
         //! Last annotation undone.
         std::vector<std::shared_ptr<draw::Annotation> > undoAnnotations;
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__) 
         //! List of voice annotations.
         std::vector<std::shared_ptr<voice::Annotation> > voiceAnnotations;
 
@@ -314,12 +314,14 @@ namespace mrv
     template < typename T >
     void TimelinePlayer::pushMessage(const std::string& command, const T& value)
     {
+#ifdef MRV2_NETWORK
         bool send = App::ui->uiPrefs->SendTimeline->value();
         if (send)
         {
             Message message = {{"command", command}, {"value", value}};
             tcp->pushMessage(message);
         }
+#endif
     }
 
     void TimelinePlayer::setSpeed(double value)
@@ -608,7 +610,11 @@ namespace mrv
     //! This signal is emitted when the playback speed is changed.
     void TimelinePlayer::speedChanged(double fps)
     {
+#ifdef __EMSCRIPTEN__
+        auto c = App::ui;
+#else
         TimelineClass* c = App::ui->uiTimeWindow;
+#endif
         c->uiFPS->value(fps);
     }
 
@@ -622,7 +628,11 @@ namespace mrv
     //! This signal is emitted when the playback loop mode is changed.
     void TimelinePlayer::loopChanged(tl::timeline::Loop value)
     {
+#ifdef __EMSCRIPTEN__
+        auto c = App::ui;
+#else
         TimelineClass* c = App::ui->uiTimeWindow;
+#endif
         c->uiLoopMode->value(static_cast<int>(value));
         c->uiLoopMode->do_callback();
     }
@@ -632,7 +642,11 @@ namespace mrv
     {
         auto timeline = App::ui->uiTimeline;
         timeline->redraw();
+#ifdef __EMSCRIPTEN__
+        auto c = App::ui;
+#else
         TimelineClass* c = App::ui->uiTimeWindow;
+#endif
         c->uiFrame->setTime(value);
     }
 
@@ -660,7 +674,7 @@ namespace mrv
 
     bool TimelinePlayer::hasAnnotations() const
     {
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
         return !_p->annotations.empty() || !_p->voiceAnnotations.empty();
 #else
         return !_p->annotations.empty();
@@ -677,7 +691,7 @@ namespace mrv
         {
             times.push_back(annotation->time);
         }
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
         for (auto annotation : p.voiceAnnotations)
         {
             times.push_back(annotation->time);
@@ -795,9 +809,11 @@ namespace mrv
             auto annotation =
                 std::make_shared< draw::Annotation >(time, all_frames);
             p.annotations.push_back(annotation);
+#ifdef MRV2_NETWORK
             bool send = App::ui->uiPrefs->SendAnnotations->value();
             if (send)
                 tcp->pushMessage("Create Annotation", all_frames);
+#endif
             return annotation;
         }
         else
@@ -995,7 +1011,7 @@ namespace mrv
         return !annotation->undo_shapes.empty();
     }
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
     //! Get annotation for current time
     std::shared_ptr< voice::Annotation > TimelinePlayer::getVoiceAnnotation() const
     {

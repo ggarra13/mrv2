@@ -11,7 +11,7 @@
 
 #include "mrvCore/mrvBackend.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #ifdef VULKAN_BACKEND
 #  include "mrvVk/mrvVkUtil.h"
@@ -31,8 +31,10 @@
 
 #include "mrvViewport/mrvTimelineViewport.h"
 
-#include "mrvNetwork/mrvTCP.h"
-#include "mrvNetwork/mrvDummyClient.h"
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvTCP.h"
+#    include "mrvNetwork/mrvDummyClient.h"
+#endif
 
 #include "mrvFLTK/mrvCallbacks.h"
 #include "mrvFl/mrvLaserFadeData.h"
@@ -58,7 +60,9 @@
 
 #include "mrvFl/mrvIO.h"
 
-#include <tlDevice/IOutput.h>
+#ifndef __EMSCRIPTEN__
+#    include <tlDevice/IOutput.h>
+#endif
 
 #include <tlTimeline/Edit.h>
 
@@ -197,7 +201,9 @@ namespace mrv
 
             p.player->undoAnnotation();
 
+#ifdef MRV2_NETWORK
             tcp->pushMessage("undo", 0);
+#endif
 
             p.ui->uiTimeline->redraw();
             redrawWindows();
@@ -213,7 +219,10 @@ namespace mrv
                 return;
 
             p.player->redoAnnotation();
+
+#ifdef MRV2_NETWORK
             tcp->pushMessage("redo", 0);
+#endif
 
             p.ui->uiTimeline->redraw();
             redrawWindows();
@@ -306,10 +315,12 @@ namespace mrv
 
             p.ui->uiTimeline->setEditMode(mode);
 
+#ifdef MRV2_NETWORK
             nlohmann::json msg;
             msg["command"] = "setEditMode";
             msg["value"] = mode;
             tcp->pushMessage(msg);
+#endif
         }
 
         ActionMode TimelineViewport::getActionMode() noexcept
@@ -323,7 +334,7 @@ namespace mrv
 
             // If switching tool or clicking twice on voice over annotation,
             // turn off voice over annotation recording or playing
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             if (currentVoiceOver)
             {
                 switch(currentVoiceOver->getStatus())
@@ -642,6 +653,7 @@ namespace mrv
             bool isMuted = player->isMuted();
             if (!info.audio.isValid())
                 isMuted = true;
+
             if (!isMuted && p.ui->uiPrefs->ScrubAutoPlay->value())
             {
                 if (player->playback() == timeline::Playback::Stop)
@@ -695,8 +707,11 @@ namespace mrv
             // Clear frame times for drop frame stats.
             p.frameTimes.clear();
 
+#ifdef __EMSCRIPTEN__
+            auto c = p.ui;
+#else
             TimelineClass* c = p.ui->uiTimeWindow;
-
+#endif
             if (!p.player)
             {
                 c->uiPlayForwards->color(FL_BACKGROUND_COLOR);
@@ -1002,6 +1017,7 @@ namespace mrv
             p.ui->uiTimeline->setDisplayOptions(display);
             p.ui->uiTimeline->redraw(); // to refresh thumbnail
 
+#ifdef MRV2_NETWORK
             const auto outputDevice = App::app->outputDevice();
             if (outputDevice)
                 outputDevice->setOCIOOptions(value);
@@ -1010,6 +1026,7 @@ namespace mrv
             msg["command"] = "setOCIOOptions";
             msg["value"] = value;
             tcp->pushMessage(msg);
+#endif
 
             p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
 
@@ -1029,15 +1046,19 @@ namespace mrv
                 return;
             p.lutOptions = value;
 
+#ifdef TLRENDER_OCIO
             auto display = p.ui->uiTimeline->getDisplayOptions();
             display.lut = value;
             display.ocioNotOnVideos = p.ui->uiPrefs->uiOCIONotOnVideos->value();
             p.ui->uiTimeline->setDisplayOptions(display);
             p.ui->uiTimeline->redraw(); // to refresh thumbnail
+#endif
 
+#ifdef MRV2_NETWORK
             const auto outputDevice = App::app->outputDevice();
             if (outputDevice)
                 outputDevice->setLUTOptions(value);
+#endif
 
             redraw();
         }
@@ -1374,6 +1395,7 @@ namespace mrv
 
         void TimelineViewport::_updateDevices() const noexcept
         {
+#ifdef MRV2_NETWORK
             TLRENDER_P();
             const auto outputDevice = App::app->outputDevice();
             if (!outputDevice)
@@ -1389,6 +1411,7 @@ namespace mrv
             outputDevice->setView(
                 viewportSize, p.viewPos * scale, p.viewZoom * scale, _getRotation(),
                 p.frameView);
+#endif
         }
 
         void TimelineViewport::setViewPosAndZoom(
@@ -1402,6 +1425,7 @@ namespace mrv
             _updateZoom();
             redraw();
 
+#ifdef MRV2_NETWORK
             bool send = p.ui->uiPrefs->SendPanAndZoom->value();
             if (send)
             {
@@ -1413,6 +1437,7 @@ namespace mrv
                 msg["viewport"] = viewport;
                 tcp->pushMessage(msg);
             }
+#endif
         }
 
         void TimelineViewport::setViewZoom(
@@ -1826,12 +1851,14 @@ namespace mrv
             p.frameView = alwaysFrameView;
             bool frameView = alwaysFrameView;
 
+#ifndef __EMSCRIPTEN__
             if (uiPrefs->uiWindowFixedSize->value())
             {
                 W = (int)uiPrefs->uiWindowXSize->value();
                 H = (int)uiPrefs->uiWindowYSize->value();
             }
             else
+#endif
             {
                 if (p.ui->uiToolsGroup->visible())
                     WBars += p.ui->uiToolsGroup->w();
@@ -1956,7 +1983,7 @@ namespace mrv
                 mw->resize(posX, posY, W, H);
             }
 
-
+#ifndef __EMSCRIPTEN__
             if (desktop::Wayland())
             {
                 // On Wayland, we wait 500 milliseconds to account for
@@ -1985,6 +2012,7 @@ namespace mrv
             viewGroup->fixed(dockGroup, dockGroup->w());
             const int X = viewGroup->x() + viewGroup->w() - dockGroup->w();
             dockGroup->position(X, dockGroup->y());
+#endif
         }
 
         math::Vector2i TimelineViewport::_getFocus() const noexcept
@@ -2024,7 +2052,11 @@ namespace mrv
                 snprintf(label, 12, "x%.2g", p.viewZoom);
             else
                 snprintf(label, 12, "1/%.3g", 1.0f / p.viewZoom);
+#ifdef __EMSCRIPTEN__
+            auto c = _p->ui;
+#else
             PixelToolBarClass* c = _p->ui->uiPixelWindow;
+#endif
             c->uiZoom->copy_label(label);
         }
 
@@ -2040,7 +2072,7 @@ namespace mrv
                 pos = _getRaster();
 
                 // If we have Mirror X or Mirror Y on, flip the coordinates
-                const auto o = p.ui->app->displayOptions();
+                const auto o = App::app->displayOptions();
                 TimelineViewport* self = const_cast< TimelineViewport* >(this);
                 const float devicePixelRatio = self->pixels_per_unit();
                 const auto& renderSize = getRenderSize();
@@ -2067,7 +2099,11 @@ namespace mrv
             }
 
             snprintf(buf, 40, "%5d, %5d", pos.x, pos.y);
+#ifdef __EMSCRIPTEN__
+            auto c = _p->ui;
+#else
             PixelToolBarClass* c = _p->ui->uiPixelWindow;
+#endif
             c->uiCoord->value(buf);
         }
 
@@ -2096,7 +2132,12 @@ namespace mrv
             image::Color4f rgba = in;
             image::Color4f rgba_display = rgba;
 
-            switch(p.ui->uiPixelWindow->uiPixelValue->value())
+#ifdef __EMSCRIPTEN__
+            auto c = _p->ui;
+#else
+            PixelToolBarClass* c = _p->ui->uiPixelWindow;
+#endif
+            switch(c->uiPixelValue->value())
             {
             case PixelValue::kLinear:
                 rgba_display = _pq_to_linear(rgba);
@@ -2108,7 +2149,6 @@ namespace mrv
                 break;
             }
 
-            PixelToolBarClass* c = p.ui->uiPixelWindow;
             char buf[24];
             switch (c->uiAColorType->value())
             {
@@ -2259,6 +2299,7 @@ namespace mrv
             bool refresh = p.environmentMapOptions.type != value.type;
             p.environmentMapOptions = value;
 
+#ifdef MRV2_NETWORK
             bool send = p.ui->uiPrefs->SendPanAndZoom->value();
             if (send)
             {
@@ -2268,6 +2309,7 @@ namespace mrv
                 msg["value"] = opts;
                 tcp->pushMessage(msg);
             }
+#endif
 
             if (panel::environmentMapPanel)
             {
@@ -2283,6 +2325,7 @@ namespace mrv
 
         void TimelineViewport::refreshWindows()
         {
+#ifndef __EMSCRIPTEN__
             _p->ui->uiView->valid(0);
             _p->ui->uiView->redraw();
             if (_hasSecondaryViewport())
@@ -2291,12 +2334,14 @@ namespace mrv
                 view->valid(0);
                 view->redraw();
             }
+#endif
         }
 
         void TimelineViewport::updateOCIOOptions() noexcept
         {
             TLRENDER_P();
 
+#ifdef TLRENDER_OCIO
             int screen = this->screen_num();
             timeline::OCIOOptions o = getOCIOOptions(screen);
             o.fileName = p.ui->uiPrefs->OCIOConfig->value();
@@ -2333,6 +2378,7 @@ namespace mrv
 
             redrawWindows();
             panel::redrawThumbnails();
+#endif
         }
 
         inline float calculate_fstop(float exposure) noexcept
@@ -2363,11 +2409,13 @@ namespace mrv
         void
         TimelineViewport::_pushColorMessage(const std::string& command, float value)
         {
+#ifdef MRV2_NETWORK
             bool send = _p->ui->uiPrefs->SendColor->value();
             if (send)
             {
                 tcp->pushMessage(command, value);
             }
+#endif
         }
 
         void TimelineViewport::updateDisplayOptions() noexcept
@@ -2749,9 +2797,11 @@ namespace mrv
 
             _updateLayers();
 
+#ifdef MRV2_NETWORK
             const auto outputDevice = App::app->outputDevice();
             if (outputDevice)
                 outputDevice->setDisplayOptions({d});
+#endif
 
             redraw();
         }
@@ -2869,7 +2919,7 @@ namespace mrv
 #ifdef VULKAN_BACKEND
             int Y = pos.y;
 #endif
-#ifdef OPENGL_BACKEND
+#if defined(OPENGL_BACKEND) || defined(WEBGPU_BACKEND)
             int Y = size.h - pos.y - 1;
 #endif
             if (p.displayOptions[0].mirror.x)
@@ -3524,7 +3574,11 @@ namespace mrv
         {
             TLRENDER_P();
 
+#ifdef __EMSCRIPTEN__
+            auto c = p.ui;
+#else
             PixelToolBarClass* c = p.ui->uiPixelWindow;
+#endif
             BrightnessType brightness_type = (BrightnessType)c->uiLType->value();
             int hsv_colorspace = c->uiBColorType->value() + 1;
 
@@ -3726,6 +3780,7 @@ namespace mrv
 
         void TimelineViewport::_addAnnotationShapePoint() const
         {
+#ifdef MRV2_NETWORK
             // We should not update tcp client when not needed
             if (dynamic_cast< DummyClient* >(tcp))
                 return;
@@ -3747,7 +3802,7 @@ namespace mrv
 
             draw::Point pnt = path->pts.back();
 
-#ifdef OPENGL_BACKEND
+#if defined(OPENGL_BACKEND) || defined(WEBGPU_BACKEND)
             math::Size2i size = getRenderSize();
             pnt.y = size.h - pnt.y;
 #endif
@@ -3759,6 +3814,7 @@ namespace mrv
             msg["value"] = json;
 
             tcp->pushMessage(msg);
+#endif
         }
 
         void TimelineViewport::_updateAnnotationShape() const
@@ -3803,6 +3859,7 @@ namespace mrv
 
             redrawWindows();
 
+#ifdef MRV2_NETWORK
             bool send = p.ui->uiPrefs->SendColor->value();
             if (send)
             {
@@ -3812,6 +3869,7 @@ namespace mrv
                 msg["value"] = selection;
                 tcp->pushMessage(msg);
             }
+#endif
         }
 
         bool TimelineViewport::getShowAnnotations() const noexcept
@@ -3830,6 +3888,7 @@ namespace mrv
             p.showAnnotations = value;
             redrawWindows();
 
+#ifdef MRV2_NETWORK
             bool send = p.ui->uiPrefs->SendAnnotations->value();
             if (send)
             {
@@ -3838,6 +3897,7 @@ namespace mrv
                 msg["value"] = value;
                 tcp->pushMessage(msg);
             }
+#endif
         }
 
         void TimelineViewport::setShowVideo(bool value) noexcept
@@ -3915,7 +3975,7 @@ namespace mrv
         float TimelineViewport::_getPenSize() const noexcept
         {
             const float kPenSizeMultiplier = 800.F;
-            const auto settings = _p->ui->app->settings();
+            const auto settings = App::app->settings();
             std_any value;
             float pen_size = static_cast<float>(settings->getValue<int>(kPenSize));
             auto renderSize = getRenderSize();
@@ -3964,10 +4024,12 @@ namespace mrv
                 p.hdrOptions.tonemap = p.tonemap;
                 p.hdrOptions.hdrData = *hdrData;
 
+#ifdef TLRENDER_OCIO
                 if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
                     p.ocio_disabled = true;
                 else
                     p.ocio_disabled = false;
+#endif
             }
             else
             {
@@ -3990,20 +4052,24 @@ namespace mrv
                     p.hdrOptions.tonemap = p.tonemap;
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
 
+#ifdef TLRENDER_OCIO
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
                         p.ocio_disabled = true;
                     else
                         p.ocio_disabled = false;
+#endif
                 }
                 else if (file::isSRGB(extension))
                 {
                     p.hdrOptions.tonemap = p.tonemap;
                     p.hdrOptions.hdrData = image::nameToPrimaries("SRGB");
 
+#ifdef TLRENDER_OCIO
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
                         p.ocio_disabled = true;
                     else
                         p.ocio_disabled = false;
+#endif
                 }
                 else
                 {
@@ -4018,6 +4084,7 @@ namespace mrv
                         _("Automatically select Input Color Space\n"
                           "from file and OpenEXR metadata.  ");
 
+#ifdef TLRENDER_OCIO
                     // Handle OCIO Auto ICS
                     if (p.ui->uiAutoICS->value())
                     {
@@ -4043,6 +4110,7 @@ namespace mrv
                     {
                         p.ui->uiAutoICS->copy_tooltip(help.c_str());
                     }
+#endif
 
                     // We pass BT709 metadata unless OCIO changes it in
                     // Viewport::_updateHDRMetadata().
@@ -4104,6 +4172,7 @@ namespace mrv
             }
             _setVideoRotation(videoRotation);
 
+#ifndef __EMSCRIPTEN__  // \@wmrv2
             // \@bug: Apple (macOS Intel at least) is too slow and goes black.
 #ifndef __APPLE__
             auto display = p.ui->uiTimeline->getDisplayOptions();
@@ -4132,6 +4201,7 @@ namespace mrv
                     s >> p.displayOptions[0].normalize.maximum;
                 }
             }
+#endif // ! __EMSCRIPTEN__
         }
 
         void TimelineViewport::_setVideoRotation(float value) noexcept
@@ -4176,6 +4246,11 @@ namespace mrv
                 transformOffset.y = renderSize.h / 2.F;
             }
 
+#ifdef __EMSCRIPTEN__
+            return math::ortho(
+                0.F, static_cast<float>(renderSize.w), 0.F,
+                static_cast<float>(renderSize.h), -1.F, 1.F);
+#else
             const auto outputDevice = App::app->outputDevice();
             if (!outputDevice)
                 return math::ortho(
@@ -4220,6 +4295,7 @@ namespace mrv
                         rotateMatrix * centerMatrix;
 
             return renderMVP; // correct
+#endif
         }
 
 

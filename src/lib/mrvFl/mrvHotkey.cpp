@@ -27,9 +27,9 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFLTK/mrvFileRequester.h"
 
-#include "keyboard_ui.h"
-#include "mrvHotkeyUI.h"
-#include "mrViewer.h"
+#include "mrvWidgets/keyboard_ui.h"
+#include "mrvWidgets/mrvHotkeyUI.h"
+#include "mrvWidgets/mrViewer.h"
 
 namespace
 {
@@ -555,7 +555,11 @@ namespace mrv
 
 
         // Timebar Window Toolbar
+#ifdef __EMSCRIPTEN__
+        auto c = ui;
+#else
         TimelineClass* c = ui->uiTimeWindow;
+#endif
 
         tooltip = _("Go to the beginning of the sequence.");
         tooltip += addHotkey(kFirstFrame);
@@ -601,7 +605,11 @@ namespace mrv
         //
         // Pixel Tool Bar.
         //
+#ifdef __EMSCRIPTEN__
+        auto p = ui;
+#else
         PixelToolBarClass* p = ui->uiPixelWindow;
+#endif
         tooltip = _("Image zoom setting.");
         tooltip += addHotkeys(kZoomOut, kZoomIn, kFitScreen);
         tooltip += _("\n\nMousewheel to zoom in and out.");

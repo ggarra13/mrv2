@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"

@@ -9,7 +9,7 @@
 
 namespace fs = std::filesystem;
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvFl/mrvPathMapping.h"
 #include "mrvFl/mrvVersioning.h"

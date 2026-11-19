@@ -6,7 +6,7 @@
 #include <FL/Fl_Radio_Round_Button.H>
 #include <FL/Fl_Round_Button.H>
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 
 #include "mrvCore/mrvFonts.h"
@@ -137,6 +137,14 @@ namespace mrv
             }
 #endif
 
+#ifdef WEBGPU_BACKEND
+            const std::vector<std::string>& fontList = fonts::list();
+            for (const auto& font : fontList)
+            {
+                c->add(font.c_str());
+            }
+#endif
+
             int numFonts = fontList.size();
             int font = settings->getValue<int>(kTextFont);
             if (font > numFonts)
@@ -215,10 +223,10 @@ namespace mrv
                     const auto& renderSize = p.ui->uiView->getRenderSize();
                     float pct = renderSize.h / 1024.F;
                     double pixels_per_unit = p.ui->uiView->pixels_per_unit();
+#ifdef OPENGL_BACKEND
                     auto w = p.ui->uiView->getMultilineInput();
                     if (!w)
                         return;
-#ifdef OPENGL_BACKEND
                     int fontSize = o->value() * pct * p.ui->uiView->viewZoom()
                                    * pixels_per_unit;
 
@@ -227,6 +235,9 @@ namespace mrv
 #endif
 
 #ifdef VULKAN_BACKEND
+                    auto w = p.ui->uiView->getMultilineInput();
+                    if (!w)
+                        return;
                     if (pct < 1.F) pct = 1.F;
                     int fontSize = o->value() * pct * p.ui->uiView->viewZoom()
                                    * pixels_per_unit;

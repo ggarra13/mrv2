@@ -9,7 +9,7 @@
 
 #include "mrvPDF/mrvPDFCreator.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvImage/mrvOperations.h"
 

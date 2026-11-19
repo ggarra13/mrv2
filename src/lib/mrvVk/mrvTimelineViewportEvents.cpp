@@ -9,7 +9,7 @@
 #include <FL/filename.H>
 #include <FL/Fl_Menu_Button.H>
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvFLTK/mrvCallbacks.h"
 #include "mrvFl/mrvLaserFadeData.h"

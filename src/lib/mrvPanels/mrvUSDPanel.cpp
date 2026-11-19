@@ -5,7 +5,7 @@
 #if defined(TLRENDER_USD)
 
 
-#    include "mrViewer.h"
+#    include "mrvWidgets/mrViewer.h"
 
 #    include "mrvApp/mrvSettingsObject.h"
 

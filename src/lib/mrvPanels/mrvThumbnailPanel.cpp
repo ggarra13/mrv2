@@ -2,7 +2,7 @@
 // Copyright (c) 2021-2023 Darby Johnston
 // All rights reserved.
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvPanels/mrvThumbnailPanel.h"
 
@@ -12,7 +12,9 @@
 #include "mrvFLTK/mrvWait.h"
 
 #include <tlTimeline/Timeline.h>
-#include <tlTimelineUI/OCIOSDR.h>
+#ifdef TLRENDER_OCIO
+#    include <tlTimelineUI/OCIOSDR.h>
+#endif
 
 #include <tlCore/StringFormat.h>
 
@@ -99,6 +101,7 @@ namespace mrv
                                 std::memset(d, 255, w * h * depth);
                             }
 
+#ifdef TLRENDER_OCIO
                             // Apply OCIO (always SDR, FLTK is an sRGB
                             // surface) on the CPU.
                             auto j = _ocioProcessors.find(i->first);
@@ -106,6 +109,7 @@ namespace mrv
                             {
                                 j->second.apply(pixelData, w, h);
                             }
+#endif
 
                             i->first->bind_image(rgbImage);
                             i->first->redraw();
@@ -167,6 +171,7 @@ namespace mrv
             try
             {
 
+#ifdef TLRENDER_OCIO
                 // Same OCIO as the viewport; HDR display / views are
                 // converted to SDR inside the processor.
                 if (!file::isMovie(path) && !file::isOTIO(path) &&
@@ -175,10 +180,14 @@ namespace mrv
                     _ocioProcessors[widget] = TIMELINEUI::OCIOCPUProcessor();
                     _ocioProcessors[widget].setOptions(p.ui->uiView->getOCIOOptions());
                 }
+#endif
 
                 const auto context = App::app->getContext();
+#ifndef __EMSCRIPTEN__
+                // \@wgpu: \@wmrv2:
                 auto thumbnailSystem =
                     context->getSystem<TIMELINEUI::ThumbnailSystem>();
+#endif
 
 #ifdef MRV2_PYBIND11
                 // Only release the GIL if this thread currently holds it
@@ -213,7 +222,10 @@ namespace mrv
                 if (it != thumbnailRequests.end())
                 {
                     const auto& request = it->second;
+#ifndef __EMSCRIPTEN__
+                    // \@wgpu: \@wmrv2
                     thumbnailSystem->cancelRequests({request.id});
+#endif
                     thumbnailRequests.erase(it);
                 }
 
@@ -226,9 +238,12 @@ namespace mrv
 
                 options["Layer"] = string::Format("{0}").arg(layerId);
 
+#ifndef __EMSCRIPTEN__
+                // \@wgpu: \@wmrv2
                 thumbnailRequests[widget] =
                     thumbnailSystem->getThumbnail(path, size.h, time,
                                                   mediaReferenceKey, options);
+#endif
             }
             catch (const std::exception& e)
             {
@@ -251,7 +266,10 @@ namespace mrv
                 const auto& request = i.second;
                 ids.push_back(request.id);
             }
+#ifndef __EMSCRIPTEN__
+            // \@wgpu: \@wmrv2:
             thumbnailSystem->cancelRequests(ids);
+#endif
             thumbnailRequests.clear();
         }
 

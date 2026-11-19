@@ -1,5 +1,5 @@
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 #include "mrvPDFOptionsUI.h"
 
 #include "mrvFl/mrvIO.h"

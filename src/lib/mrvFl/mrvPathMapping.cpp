@@ -20,8 +20,8 @@
 
 #include "mrvWidgets/mrvBrowser.h"
 
-#include "mrvPathMappingUI.h"
-#include "mrViewer.h"
+#include "mrvWidgets/mrvPathMappingUI.h"
+#include "mrvWidgets/mrViewer.h"
 
 namespace
 {

@@ -20,7 +20,7 @@
 
 #include <tlCore/StringFormat.h>
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include <iostream>
 #include <unordered_set>

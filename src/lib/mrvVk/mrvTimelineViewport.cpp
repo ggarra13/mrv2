@@ -5,7 +5,7 @@
 // Debug scaling of the window to image size.
 // #define DEBUG_SCALING 1
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include <tlDevice/IOutput.h>
 

@@ -10,7 +10,7 @@
 #include <FL/Fl_Int_Input.H>
 #include "FL/fl_ask.H"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvCore/mrvHome.h"
 #include "mrvOS/mrvMemory.h"
@@ -316,7 +316,7 @@ namespace mrv
                 _("Compatibility"));
             c = cV;
             c->labelsize(12);
-            c->value(settings->getValue<bool>("OTIO/Compatibility"));
+            c->value(settings->getValue<int>("OTIO/Compatibility"));
             cV->callback(
                 [=, this](auto w)
                 {
@@ -462,7 +462,7 @@ namespace mrv
                 _("FFmpeg YUV to RGB conversion"));
             c = cV;
             c->labelsize(12);
-            c->value(settings->getValue<bool>(
+            c->value(settings->getValue<int>(
                 "Performance/FFmpegYUVToRGBConversion"));
             cV->callback(
                 [=, this](auto w)
@@ -478,7 +478,7 @@ namespace mrv
             c = cV;
             c->labelsize(12);
             c->value(
-                settings->getValue<bool>("Performance/FFmpegColorAccuracy"));
+                settings->getValue<int>("Performance/FFmpegColorAccuracy"));
             c->tooltip(_("When this setting is on, color accuracy is "
                          "chosen when decoding YUV420_P8 movies that have "
                          "Color Space as 'unknown', at the cost of some "
@@ -496,7 +496,7 @@ namespace mrv
             c = cV;
             c->labelsize(12);
             c->value(
-                settings->getValue<bool>("Performance/FFmpegHWAccel"));
+                settings->getValue<int>("Performance/FFmpegHWAccel"));
             c->tooltip(_("When this setting is on, the player will try to decode the movie in the GPU if possible."));
             cV->callback(
                 [=, this](auto w)

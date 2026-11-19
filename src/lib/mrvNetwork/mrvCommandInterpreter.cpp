@@ -18,7 +18,7 @@
 
 #include "mrvOptions/mrvCompareOptions.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #if defined(OPENGL_BACKEND)
 #    include "mrvGL/mrvGLJson.h"

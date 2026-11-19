@@ -4,7 +4,7 @@
 
 #include "mrvFl/mrvPreferences.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvProtocolVersion.h"

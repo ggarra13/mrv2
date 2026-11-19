@@ -6,7 +6,7 @@
 
 
 #include "mrvPreferencesUI.h"
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvSession.h"

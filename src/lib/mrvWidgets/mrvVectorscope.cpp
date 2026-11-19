@@ -20,7 +20,7 @@
 
 #include "mrvWidgets/mrvVectorscope.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvColorSpaces.h"

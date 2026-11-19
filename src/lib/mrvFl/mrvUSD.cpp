@@ -7,7 +7,7 @@
 
 #    include "mrvOptions/mrvUSD.h"
 
-#    include "mrViewer.h"
+#    include "mrvWidgets/mrViewer.h"
 
 #    include <tlCore/StringFormat.h>
 

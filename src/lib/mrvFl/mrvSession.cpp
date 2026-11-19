@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 
 #include "mrvApp/mrvFilesModel.h"
@@ -16,7 +16,11 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvOCIO.h"
+
+#ifdef TLRENDER_OCIO
+#    include "mrvFl/mrvOCIO.h"
+#endif
+
 #include "mrvFl/mrvSession.h"
 
 #include "mrvFLTK/mrvCallbacks.h"
@@ -127,21 +131,26 @@ namespace mrv
             if (player)
             {
                 auto annotations = player->getAllAnnotations();
-                auto voannotations = player->getAllVoiceAnnotations();
                 std::vector< draw::Annotation > jAnnotations;
-                std::vector< voice::Annotation > voAnnotations;
                 for (const auto& ann : annotations)
                 {
                     if (ann->shapes.empty())
                         continue;
                     jAnnotations.push_back(*(ann.get()));
                 }
+                annotation = jAnnotations;
+                timeline["annotations"] = annotation;
+
+#ifndef __EMSCRIPTEN__
+                auto voannotations = player->getAllVoiceAnnotations();
+                std::vector< voice::Annotation > voAnnotations;
                 for (const auto& ann : voannotations)
                 {
                     voAnnotations.push_back(*(ann.get()));
                 }
-                annotation = jAnnotations;
                 voiceAnnotation = voAnnotations;
+                timeline["voiceAnnotations"] = voiceAnnotation;
+#endif
                 time = player->currentTime();
                 playback = player->playback();
                 inOutRange = player->inOutRange();
@@ -151,8 +160,6 @@ namespace mrv
                     mediaReferenceKey = timeline->getMediaReferenceKey();
             }
 
-            timeline["annotations"] = annotation;
-            timeline["voiceAnnotations"] = voiceAnnotation;
             timeline["time"] = time;
             timeline["playback"] = playback;
             timeline["inOutRange"] = inOutRange;
@@ -192,7 +199,9 @@ namespace mrv
                 {"USD", (usdPanel != nullptr)},
 #endif
                 {"Logs", (logsPanel != nullptr)},
+#ifdef MRV2_NETWORK
                 {"WebRTC", (webrtcPanel != nullptr)},
+#endif
             };
 
             if (filesPanel)
@@ -233,9 +242,13 @@ namespace mrv
                 waveformPanel->save();
             if (logsPanel)
                 logsPanel->save();
+
+#ifdef MRV2_NETWORK
             if (webrtcPanel)
                 webrtcPanel->save();
+#endif
 
+#ifdef TLRENDER_OCIO
             std::string config = ui->uiPrefs->OCIOConfig->value();
 
             if (config.substr(0, 7) != "ocio://")
@@ -243,8 +256,6 @@ namespace mrv
                 file::Path path(config);
                 config = getRelativePath(path, fileName).get();
             }
-
-            int layer = ui->uiColorChannel->value();
             const std::string& ocioIcs = ocio::ics();
             const std::string& ocioView = ocio::view();
             const std::string& ocioLook = ocio::look();
@@ -255,6 +266,8 @@ namespace mrv
                 {"view", ocioView},
                 {"look", ocioLook},
             };
+            session["ocio"] = ocio;
+#endif
 
             Message json_settings;
 
@@ -339,15 +352,19 @@ namespace mrv
             Message environmentMap = view->getEnvironmentMapOptions();
             Message background = view->getBackgroundOptions();
             int stereoIndex = model->observeStereoIndex()->get();
+            int layer = ui->uiColorChannel->value();
 
+#ifndef __EMSCRIPTEN__
+            // \@wgpu: \@wmrv2
             auto options = ui->uiTimeline->getItemOptions();
             Message timelineViewport = options;
             timelineViewport["editable"] = ui->uiTimeline->isEditable();
+            session["timelineViewport"] = timelineViewport;
+#endif
 
             session["ui"] = bars;
             session["panels"] = panels;
             session["timeline"] = timeline;
-            session["ocio"] = ocio;
             session["layer"] = layer;
             session["settings"] = json_settings;
             session["compareOptions"] = compare;
@@ -359,7 +376,6 @@ namespace mrv
             session["displayOptions"] = display;
             session["editMode"] = editMode;
             session["metadata"] = sessionMetadata;
-            session["timelineViewport"] = timelineViewport;
             session["frameView"] = view->hasFrameView();
             session["viewZoom"] = view->viewZoom();
             session["viewPos"] = view->viewPos();
@@ -554,11 +570,16 @@ namespace mrv
                     if (!Aitem)
                         continue;
 
+#ifdef TLRENDER_OCIO
                     Aitem->ocioIcs = item.ocioIcs;
                     if (!Aitem->ocioIcs.empty())
                         ocio::setIcs(Aitem->ocioIcs);
+#endif
+
                     Aitem->annotations = item.annotations;
+#ifndef __EMSCRIPTEN__
                     Aitem->voiceAnnotations = item.voiceAnnotations;
+#endif
                     Aitem->videoLayer = item.videoLayer;
                     Aitem->mediaReferenceKey = item.mediaReferenceKey;
                     Aitem->currentTime = item.currentTime;
@@ -613,6 +634,7 @@ namespace mrv
                     //
                     // Handle OCIO
                     //
+#ifdef TLRENDER_OCIO
                     j = session["ocio"];
                     std::string config = j["config"];
 
@@ -630,6 +652,7 @@ namespace mrv
                     }
 
                     ocio::setup();
+#endif
 
                     int Aindex = session["Aindex"];
                     if (Aindex < numFiles)
@@ -637,6 +660,7 @@ namespace mrv
 
                     int value;
                     auto Aitem = model->observeA()->get();
+#ifdef TLRENDER_OCIO
                     if (!Aitem || Aitem->ocioIcs.empty())
                     {
                         if (j["ics"].type() == nlohmann::json::value_t::string)
@@ -672,6 +696,7 @@ namespace mrv
                     }
 
                     view->updateOCIOOptions();
+#endif
 
                     // Hide Panels and Windows
                     removePanels(ui);
@@ -798,11 +823,14 @@ namespace mrv
 
                 if (version >= 9)
                 {
+#ifndef __EMSCRIPTEN__
+                    // \@wgpu: \@wmrv2
                     Message timelineViewport = session["timelineViewport"];
                     auto options = timelineViewport;
                     bool isEditable = timelineViewport["editable"];
                     ui->uiTimeline->setEditable(isEditable);
                     ui->uiTimeline->setItemOptions(options);
+#endif
                 }
 
                 if (version >= 10)
@@ -842,6 +870,7 @@ namespace mrv
 
                         if (version >= 16)
                         {
+#ifndef __EMSCRIPTEN__
                             std::vector< std::shared_ptr<voice::Annotation> >
                                 voiceAnnotations;
                             auto tmp = j["voiceAnnotations"];
@@ -852,6 +881,7 @@ namespace mrv
                             }
 
                             player->setAllAnnotations(voiceAnnotations);
+#endif
                         }
 
                         if (version >= 11)
@@ -863,7 +893,11 @@ namespace mrv
                             auto timeRange = player->timeRange();
                             if (inOutRange != timeRange)
                             {
+#ifdef __EMSCRIPTEN__
+                                auto c = ui;
+#else
                                 TimelineClass* c = ui->uiTimeWindow;
+#endif
                                 if (inOutRange.start_time() !=
                                     timeRange.start_time())
                                 {

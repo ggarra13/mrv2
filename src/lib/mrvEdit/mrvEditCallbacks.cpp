@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvEdit/mrvEditAlgorithm.h"
 #include "mrvEdit/mrvEditCallbacks.h"
@@ -15,7 +15,10 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+#ifdef MRV2_NETWORK
 #include "mrvNetwork/mrvTCP.h"
+#endif
+#include "mrvNetwork/mrvMessage.h"
 
 #include "mrvWidgets/mrvProgressReport.h"
 
@@ -256,7 +259,11 @@ namespace mrv
             const auto startTime = player->timeRange().start_time();
             auto endTime = startTime + timeline->duration() - one_frame;
             endTime = endTime.rescaled_to(rate);
+#ifdef __EMSCRIPTEN__
+            auto c = ui;
+#else
             TimelineClass* c = ui->uiTimeWindow;
+#endif
             c->uiStartFrame->setTime(startTime);
             c->uiEndFrame->setTime(endTime);
             player->seek(time);
@@ -596,6 +603,7 @@ namespace mrv
         //! It uses the information from the current media item.
         void makePathsToTemp(OTIO_NS::Timeline* timeline, ViewerUI* ui)
         {
+#ifndef __EMSCRIPTEN__
             auto stack = timeline->tracks();
             auto model = App::app->filesModel();
             auto tracks = stack->children();
@@ -662,6 +670,7 @@ namespace mrv
                     }
                 }
             }
+#endif
         }
 
         std::string _otioFilename(ViewerUI* ui)
@@ -1162,7 +1171,9 @@ namespace mrv
             copy_frame_from_track(composition, item, time);
         }
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Frame/Copy", time);
+#endif
     }
 
     void edit_frame_cut_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1247,7 +1258,9 @@ namespace mrv
         updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Frame/Cut", time);
+#endif
     }
 
     // Works with .otioz
@@ -1297,6 +1310,9 @@ namespace mrv
                     sampleRate = frame.rate;
             }
         }
+
+        TimeRange timeRange;
+        sanitizeVideoAndAudioRates(timeline, timeRange, videoRate, sampleRate);
 
         const RationalTime scaledTime = time.rescaled_to(videoRate);
         const TimeRange range(scaledTime, RationalTime(1.0, videoRate));
@@ -1350,7 +1366,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Frame/Paste", time);
+#endif
     }
 
     void edit_frame_insert_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1426,7 +1444,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Frame/Insert", time);
+#endif
     }
 
 
@@ -1503,7 +1523,9 @@ namespace mrv
 
         edit_clear_redo(ui);
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Time/Slice", time);
+#endif
 
         updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
@@ -1566,7 +1588,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Time/Remove", time);
+#endif
     }
 
     void edit_time_insert_audio_clip(ViewerUI* ui,
@@ -1740,7 +1764,9 @@ namespace mrv
                 refresh_media_cb(nullptr, ui);
         }
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Time/Audio Clip/Insert", audioFile);
+#endif
     }
 
     void edit_time_insert_audio_clip_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -1757,10 +1783,12 @@ namespace mrv
         default:
             break;
         }
+#ifndef __EMSCRIPTEN__
         std::string audioFile = open_audio_file(nullptr);
         if (audioFile.empty())
             return;
         edit_time_insert_audio_clip(ui, audioFile);
+#endif
     }
 
     void edit_time_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1919,7 +1947,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Time/Audio Gap/Insert", time);
+#endif
     }
 
     void edit_time_remove_audio_clip_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1983,7 +2013,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Time/Audio Clip/Remove", time);
+#endif
     }
 
 
@@ -2100,7 +2132,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Selected/Remove", time);
+#endif
     }
 
 
@@ -2166,7 +2200,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Time/Audio Gap/Remove", time);
+#endif
     }
 
     void edit_time_insert_video_gap_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -2290,7 +2326,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Time/Video Gap/Insert", time);
+#endif
     }
 
 
@@ -2354,7 +2392,9 @@ namespace mrv
 
         panel::redrawThumbnails();
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Video Gap/Remove", time);
+#endif
     }
 
     void _addTransition(const OTIO_NS::Item* left,
@@ -2512,7 +2552,9 @@ namespace mrv
         updateTimeline(timeline, ui);
         toOtioFile(timeline, ui);
 
-        tcp->pushMessage("Edit/Selected/Add Transition", time);
+#ifdef MRV2_NETWORK
+         tcp->pushMessage("Edit/Selected/Add Transition", time);
+#endif
 
         set_edit_mode_cb(EditMode::kFull, ui);
     }
@@ -2537,7 +2579,9 @@ namespace mrv
         if (undoBuffer.empty())
             return;
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Undo", 0);
+#endif
 
         auto buffer = undoBuffer.back();
         undoBuffer.pop_back();
@@ -2587,7 +2631,9 @@ namespace mrv
         if (redoBuffer.empty())
             return;
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Edit/Redo", 0);
+#endif
 
         auto buffer = redoBuffer.back();
         redoBuffer.pop_back();
@@ -2750,11 +2796,16 @@ namespace mrv
             std::string error =
                 string::Format(_("Could not save .otio file: {0}"))
                     .arg(errorStatus.full_description);
+#ifdef MRV2_NETWORK
             tcp->unlock();
+#endif
             throw std::runtime_error(error);
         }
         App::app->open(file);
+
+#ifdef MRV2_NETWORK
         tcp->unlock();
+#endif
     }
 
     void save_timeline_to_disk(
@@ -2831,11 +2882,13 @@ namespace mrv
             break;
         }
 
+#ifndef __EMSCRIPTEN__
         auto otioFile = save_otio(nullptr);
         if (otioFile.empty())
             return;
 
         save_timeline_to_disk(otioFile);
+#endif
     }
 
     void add_clip_to_new_timeline_cb(
@@ -3287,8 +3340,10 @@ namespace mrv
             path = file::Path(fullpath);
         }
 
+#ifdef MRV2_NETWORK
         tcp->pushMessage("Add Clip to Timeline", index);
         tcp->lock();
+#endif
 
         try
         {
@@ -3338,8 +3393,9 @@ namespace mrv
             LOG_ERROR(e.what());
         }
 
+#ifdef MRV2_NETWORK
         tcp->unlock();
-
+#endif
         refresh_media_cb(nullptr, ui);
 
         player = ui->uiView->getTimelinePlayer();
@@ -3881,10 +3937,10 @@ namespace mrv
             view->refresh();
         }
 
-        // This is needed as XWayland and Wayland would leave traces of the
-        // toolbar icons.
+#ifndef __EMSCRIPTEN__
         if (desktop::XWayland() || desktop::Wayland())
             TimelineGroup->redraw();
+#endif
     }
 
     int calculate_edit_viewport_size(ViewerUI* ui)
@@ -4116,9 +4172,11 @@ namespace mrv
 
         // This is needed as XWayland and Wayland would leave traces of the
         // toolbar icons.
+
+#ifndef __EMSCRIPTEN__
         if (desktop::XWayland() || desktop::Wayland())
             TimelineGroup->redraw();
-
+#endif
 
         // Change the edit button status
         set_edit_button(editMode, ui);
@@ -4126,11 +4184,13 @@ namespace mrv
         // EditMode::kNone is used when we go to presentation mode.
         if (mode != EditMode::kNone)
         {
+#ifdef MRV2_NETWORK
             Message msg;
             msg["command"] = "Editing";
             msg["value"] = mode;
             msg["height"] = H / ui->uiView->pixels_per_unit();
             tcp->pushMessage(msg);
+#endif
         }
 
         bool active = (editMode == EditMode::kFull ||

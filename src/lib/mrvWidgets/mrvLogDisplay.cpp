@@ -15,7 +15,7 @@
 
 #include "mrvCore/mrvHome.h"
 #include "mrvWidgets/mrvLogDisplay.h"
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 namespace mrv
 {

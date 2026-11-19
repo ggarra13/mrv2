@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvPy/Cmds.h"
 #include "mrvPy/CmdsAux.h"

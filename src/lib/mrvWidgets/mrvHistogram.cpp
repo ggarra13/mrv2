@@ -7,7 +7,7 @@
 
 #include "mrvWidgets/mrvHistogram.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvCore/mrvColor.h"
 #include "mrvOS/mrvI8N.h"
