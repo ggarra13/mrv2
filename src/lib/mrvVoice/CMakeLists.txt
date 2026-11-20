@@ -15,7 +15,9 @@ set(SOURCES
 set(LIBRARIES mrvWidgets tlRender::tlCore ${FLTK_LIBRARIES} )
 add_library(mrvVoice ${SOURCES} ${HEADERS})
 
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 target_link_libraries(mrvVoice PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvVoice PROPERTIES FOLDER lib)

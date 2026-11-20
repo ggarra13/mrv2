@@ -2,7 +2,7 @@
 // Copyright (c) 2021-2023 Darby Johnston
 // All rights reserved.
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvApp/mrvApp.h"
 #include "mrvApp/mrvFilesModel.h"
@@ -11,14 +11,18 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvSession.h"
 
-#include "mrvNetwork/mrvTCP.h"
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvTCP.h"
+#endif
 
 #include "mrvOptions/mrvCompareOptions.h"
 
 #include "mrvIcons/Mute.h"
 #include "mrvIcons/Audio.h"
 
-#include <tlDevice/IOutput.h>
+#ifndef __EMSCRIPTEN__
+#    include <tlDevice/IOutput.h>
+#endif
 
 #include <tlCore/File.h>
 #include <tlCore/String.h>
@@ -76,7 +80,7 @@ namespace mrv
 
         p.ui = ui;
 
-        App* app = ui->app;
+        App* app = App::app;
 
         p.lutOptions = app->lutOptions();
         p.imageOptions = app->imageOptions();
@@ -93,20 +97,24 @@ namespace mrv
             app->filesModel()->observeAIndex(),
             [this](int value)
             {
+#ifdef MRV2_NETWORK
                 Message msg;
                 msg["command"] = "Set A Index";
                 msg["value"] = value;
                 tcp->pushMessage(msg);
+#endif
                 _widgetUpdate();
             });
         p.bIndexesObserver = observer::ListObserver<int>::create(
             app->filesModel()->observeBIndexes(),
             [this](const std::vector<int>& value)
             {
+#ifdef MRV2_NETWORK
                 Message msg;
                 msg["command"] = "Set B Indexes";
                 msg["value"] = value;
                 tcp->pushMessage(msg);
+#endif
 
                 _widgetUpdate();
             });
@@ -114,10 +122,12 @@ namespace mrv
             app->filesModel()->observeStereoIndex(),
             [this](int value)
             {
+#ifdef MRV2_NETWORK
                 Message msg;
                 msg["command"] = "Set Stereo Index";
                 msg["value"] = value;
                 tcp->pushMessage(msg);
+#endif
                 _widgetUpdate();
             });
         p.backgroundOptionsObserver =
@@ -127,11 +137,13 @@ namespace mrv
                 {
                     _p->backgroundOptions = value;
 
+#ifdef MRV2_NETWORK
                     Message msg;
                     Message opts(value);
                     msg["command"] = "setBackgroundOptions";
                     msg["value"] = opts;
                     tcp->pushMessage(msg);
+#endif
 
                     _widgetUpdate();
                 });
@@ -142,11 +154,13 @@ namespace mrv
                 {
                     _p->compareOptions = value;
 
+#ifdef MRV2_NETWORK
                     Message msg;
                     Message opts(value);
                     msg["command"] = "setCompareOptions";
                     msg["value"] = opts;
                     tcp->pushMessage(msg);
+#endif
 
                     _compareUpdate();
                 });
@@ -158,11 +172,13 @@ namespace mrv
                 {
                     _p->stereo3DOptions = value;
 
+#ifdef MRV2_NETWORK
                     Message msg;
                     Message opts(value);
                     msg["command"] = "setStereo3DOptions";
                     msg["value"] = opts;
                     tcp->pushMessage(msg);
+#endif
 
                     _widgetUpdate();
                 });
@@ -173,11 +189,13 @@ namespace mrv
                 {
                     _p->filesPanelOptions = value;
 
+#ifdef MRV2_NETWORK
                     Message msg;
                     Message opts(value);
                     msg["command"] = "setFilesPanelOptions";
                     msg["value"] = opts;
                     tcp->pushMessage(msg);
+#endif
                 });
     }
 
@@ -229,12 +247,6 @@ namespace mrv
         p.ui->uiTimeline->setTimelinePlayer(p.player);
         if (p.player)
             p.player->setTimelineViewport(p.ui->uiView);
-
-        if (p.ui->uiSecondary)
-        {
-            auto view = p.ui->uiSecondary->viewport();
-            view->setTimelinePlayer(p.player);
-        }
     }
 
     //
@@ -257,6 +269,8 @@ namespace mrv
             view->updateDisplayOptions();
         }
 
+#ifndef __EMSCRIPTEN__
+        // \@wgpu \@wmrv2:
         auto display = p.ui->uiTimeline->getDisplayOptions();
         display.lut = p.lutOptions;
         p.ui->uiTimeline->setDisplayOptions(display);
@@ -268,6 +282,7 @@ namespace mrv
             outputDevice->setLUTOptions(p.lutOptions);
             outputDevice->setDisplayOptions({p.displayOptions});
         }
+#endif
 
         // if (panel::colorPanel)
         // {
@@ -281,17 +296,20 @@ namespace mrv
 
         MyViewport* view = p.ui->uiView;
         view->setCompareOptions(p.compareOptions);
+
         if (p.ui->uiSecondary)
         {
             view = p.ui->uiSecondary->viewport();
             view->setCompareOptions(p.compareOptions);
         }
 
+#ifndef __EMSCRIPTEN__
         auto outputDevice = App::app->outputDevice();
         if (outputDevice)
         {
             outputDevice->setCompareOptions(p.compareOptions);
         }
+#endif
 
         if (panel::comparePanel)
         {
@@ -303,7 +321,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        App* app = p.ui->app;
+        App* app = App::app;
         p.volume = app->volume();
         p.mute = app->isMuted();
         MyViewport* view = p.ui->uiView;
@@ -311,7 +329,11 @@ namespace mrv
         const auto model = app->filesModel();
         const auto files = model->observeFiles()->get();
         const size_t numFiles = files.size();
+#ifdef __EMSCRIPTEN__
+        auto c = p.ui;
+#else
         TimelineClass* c = p.ui->uiTimeWindow;
+#endif
         if (numFiles > 0)
         {
             p.ui->uiTimeline->activate();
@@ -449,10 +471,12 @@ namespace mrv
         view->updateDisplayOptions();
         view->redraw();
 
+#ifdef TLRENDER_OCIO
         auto display = p.ui->uiTimeline->getDisplayOptions();
         display.ocio = p.ocioOptions;
         p.ui->uiTimeline->setDisplayOptions(display);
         p.ui->uiTimeline->redraw();
+#endif
 
         if (panel::comparePanel)
         {
@@ -471,11 +495,6 @@ namespace mrv
         {
             panel::imageInfoPanel->setTimelinePlayer(player);
         }
-        // @todo: do we need it?
-        // if ( audioPanel )
-        // {
-        //     audioPanel->setTimelinelinePlayer( player );
-        // }
 
         p.ui->uiMain->update_title_bar();
 
@@ -497,6 +516,7 @@ namespace mrv
             view->redraw();
         }
 
+#ifndef __EMSCRIPTEN__
         const auto& outputDevice = app->outputDevice();
         if (outputDevice)
         {
@@ -507,6 +527,7 @@ namespace mrv
             outputDevice->setDisplayOptions({p.displayOptions});
             outputDevice->setCompareOptions(p.compareOptions);
         }
+#endif
 
         p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
     }

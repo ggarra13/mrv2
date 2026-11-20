@@ -2,28 +2,15 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#ifdef __EMSCRIPTEN__
 #include "mrvWidgets/mrvHUDUI.h"
 #include "mrvWidgets/mrvOCIOPresetsUI.h"
 #include "mrvWidgets/mrvHotkeyUI.h"
 #include "mrvWidgets/mrViewer.h"
 #include "mrvWidgets/make_ocio_chooser.h"
 #include "mrvWidgets/mrvSaveImageOptionsUI.h"
-#  ifdef TLRENDER_FFMPEG
+#ifdef TLRENDER_FFMPEG
 #    include "mrvWidgets/mrvSaveMovieOptionsUI.h"
 #    include "mrvWidgets/mrvURLMovieUI.h"
-#  endif
-#else
-#  include "mrvHUDUI.h"
-#  include "mrvOCIOPresetsUI.h"
-#  include "mrvHotkeyUI.h"
-#  include "mrViewer.h"
-#  include "make_ocio_chooser.h"
-#  include "mrvSaveImageOptionsUI.h"
-#    ifdef TLRENDER_FFMPEG
-#      include "mrvSaveMovieOptionsUI.h"
-#      include "mrvURLMovieUI.h"
-#    endif
 #endif
 
 #include "mrvApp/mrvSettingsObject.h"
@@ -78,7 +65,9 @@
 
 
 #include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvLicensing.h"
+#ifndef __EMSCRIPTEN__
+#    include "mrvCore/mrvLicensing.h"
+#endif
 #include "mrvCore/mrvUtil.h"
 
 #include "mrvOS/mrvOS.h"
@@ -238,7 +227,12 @@ namespace mrv
             ui->uiTimeline->redraw();
             OTIO_NS::RationalTime start = OTIO_NS::RationalTime(1, 24);
             OTIO_NS::RationalTime end = OTIO_NS::RationalTime(50, 24);
+
+#ifdef __EMSCRIPTEN__
+            auto c = ui;
+#else
             TimelineClass* c = ui->uiTimeWindow;
+#endif
             c->uiFrame->setTime(start);
             c->uiStartFrame->setTime(start);
             c->uiEndFrame->setTime(end);
@@ -455,6 +449,7 @@ namespace mrv
         default:
             break;
         }
+#ifndef __EMSCRIPTEN__
 #ifdef _WIN32
         std::string program = rootpath() + "/bin/mrv2.exe";
 #else
@@ -465,6 +460,7 @@ namespace mrv
         {
             LOG_ERROR(_("Could not open a new mrv2 instance"));
         }
+#endif
     }
 
     void previous_file_cb(Fl_Widget* w, ViewerUI* ui)
@@ -871,6 +867,7 @@ namespace mrv
 
     void save_single_frame_renaming(Fl_Menu_* w, ViewerUI* ui, bool rename)
     {
+#ifndef __EMSCRIPTEN__
         auto model = ui->app->filesModel();
         auto Afile = model->observeA()->get();
         if (!Afile)
@@ -938,6 +935,7 @@ namespace mrv
             lastSavedOptions = options;
             lastSavedOptions.noRename = true;
         }
+#endif
     }
 
     void save_single_frame_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -954,7 +952,9 @@ namespace mrv
         default:
             break;
         }
+#ifndef __EMSCRIPTEN__
         save_single_frame_renaming(w, ui, true);
+#endif
     }
 
     void save_single_frame_to_folder_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -982,7 +982,9 @@ namespace mrv
         auto currentTime = player->currentTime();
         std::string file = path.getFrame(currentTime.value());
 
+#ifndef __EMSCRIPTEN__
         save_single_frame(file, ui, lastSavedOptions);
+#endif
     }
 
     void save_audio_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -999,6 +1001,8 @@ namespace mrv
         default:
             break;
         }
+#ifndef __EMSCRIPTEN__
+
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -1042,6 +1046,7 @@ namespace mrv
         {
             LOG_ERROR(e.what());
         }
+#endif
     }
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -1058,6 +1063,7 @@ namespace mrv
             break;
         }
 
+#ifndef __EMSCRIPTEN__
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -1256,6 +1262,7 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
         }
+#endif
     }
 
     void save_pdf_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -1302,6 +1309,7 @@ namespace mrv
         default:
             break;
         }
+#ifndef __EMSCRIPTEN__
         auto view = ui->uiView;
         auto player = view->getTimelinePlayer();
         if (!player)
@@ -1499,6 +1507,7 @@ namespace mrv
                 LOG_ERROR(e.what());
             }
         }
+#endif
     }
 
     void save_annotations_as_json_cb(Fl_Menu_* w, ViewerUI* ui)
@@ -1514,6 +1523,7 @@ namespace mrv
         default:
             break;
         }
+#ifndef __EMSCRIPTEN__
         auto view = ui->uiView;
         auto player = view->getTimelinePlayer();
         if (!player)
@@ -1539,6 +1549,7 @@ namespace mrv
 
         std::ofstream f(file);
         f << j;
+#endif
     }
 
     void close_current_cb(Fl_Widget* w, ViewerUI* ui)
@@ -1561,9 +1572,11 @@ namespace mrv
         App::unsaved_edits = false;
         App::unsaved_annotations = false;
 
+#ifdef MRV2_NETWORK
         // Must come before model->close().
         if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeCurrent", 0);
+#endif
 
         auto model = ui->app->filesModel();
         model->close();
@@ -1612,8 +1625,10 @@ namespace mrv
         ui->uiView->updateDisplayOptions();
 
 
+#ifdef MRV2_NETWORK
         if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeAll", 0);
+#endif
 
         auto model = ui->app->filesModel();
         model->closeAll();
@@ -1646,7 +1661,9 @@ namespace mrv
         App::unsaved_edits = false;
         App::unsaved_annotations = false;
 
+#ifdef MRV2_NETWORK
         tcp->lock();
+#endif
 
         // Close all files
         close_all_cb(w, ui);
@@ -1747,7 +1764,9 @@ namespace mrv
 
         Fl::hide_all_windows();
 
+#ifdef MRV2_NETWORK
         tcp->unlock();
+#endif
 
     }
 
@@ -2440,9 +2459,11 @@ namespace mrv
         ui->uiTimeline->refresh();
         ui->uiTimeline->valid(0);
 
+#ifdef MRV2_NETWORK
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Fullscreen", active);
+#endif
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -2473,9 +2494,11 @@ namespace mrv
         ui->uiTimeline->refresh();
         ui->uiTimeline->valid(0);
 
+#ifdef MRV2_NETWORK
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Presentation", presentation);
+#endif
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -2860,9 +2883,11 @@ namespace mrv
 
         save_ui_state(ui, bar);
 
+#ifdef MRV2_NETWORK
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Action Bar", (bool)bar->visible());
+#endif
 
         ui->uiViewGroup->layout();
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -2899,9 +2924,12 @@ namespace mrv
         }
         toggle_ui_bar(ui, ui->uiMenuGroup);
         save_ui_state(ui, ui->uiMenuGroup);
+
+#ifdef MRV2_NETWORK
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Menu Bar", (bool)ui->uiMenuGroup->visible());
+#endif
     }
 
     void toggle_top_bar(Fl_Menu_*, ViewerUI* ui)
@@ -2919,9 +2947,12 @@ namespace mrv
         }
         toggle_ui_bar(ui, ui->uiTopBar);
         save_ui_state(ui, ui->uiTopBar);
+
+#ifdef MRV2_NETWORK
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Top Bar", (bool)ui->uiTopBar->visible());
+#endif
     }
 
     void toggle_pixel_bar(Fl_Menu_*, ViewerUI* ui)
@@ -2939,9 +2970,12 @@ namespace mrv
         }
         toggle_ui_bar(ui, ui->uiPixelBar);
         save_ui_state(ui, ui->uiPixelBar);
+
+#ifdef MRV2_NETWORK
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Pixel Bar", (bool)ui->uiPixelBar->visible());
+#endif
     }
 
     void toggle_timeline_bar(Fl_Menu_*, ViewerUI* ui)
@@ -2968,9 +3002,11 @@ namespace mrv
             set_edit_mode_cb(EditMode::kNone, ui);
         }
 
+#ifdef MRV2_NETWORK
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Bottom Bar", (bool)ui->uiBottomBar->visible());
+#endif
     }
 
     void toggle_status_bar(Fl_Menu_*, ViewerUI* ui)
@@ -2988,9 +3024,12 @@ namespace mrv
         }
         toggle_ui_bar(ui, ui->uiStatusGroup);
         save_ui_state(ui, ui->uiStatusGroup);
+
+#ifdef MRV2_NETWORK
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Status Bar", (bool)ui->uiStatusGroup->visible());
+#endif
     }
 
     void restore_ui_state(ViewerUI* ui)
@@ -4221,8 +4260,12 @@ namespace mrv
         const auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
+
+#ifdef MRV2_NETWORK
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Clear Frame Annotations", 0);
+#endif
+
         player->clearFrameAnnotation();
         ui->uiView->updateUndoRedoButtons();
         ui->uiTimeline->redraw();
@@ -4255,8 +4298,11 @@ namespace mrv
         if (!ok)
             return;
 
+#ifdef MRV2_NETWORK
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Clear All Annotations", 0);
+#endif
+
         player->clearAllAnnotations();
         ui->uiView->updateUndoRedoButtons();
         ui->uiTimeline->redraw();
@@ -4280,11 +4326,15 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.waveforms = false;
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4307,11 +4357,15 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.waveforms ^= true;
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4334,11 +4388,15 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails ^= true;
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4363,11 +4421,15 @@ namespace mrv
         bool editable = (bool)item->value();
         ui->uiTimeline->setEditable(editable);
         set_edit_button(mrv::editMode, ui);
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineEditable";
         msg["value"] = editable;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -4387,11 +4449,15 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getItemOptions();
         options.editAssociatedClips = item->value();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineItemOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setItemOptions(options);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -4409,10 +4475,14 @@ namespace mrv
         default:
             break;
         }
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "Timeline/FrameView";
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->frameView();
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -4434,11 +4504,15 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         bool value = item->value();
         auto settings = ui->app->settings();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "Timeline/ScrollToCurrentFrame";
         msg["value"] = value;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         settings->setValue("Timeline/ScrollToCurrentFrame", value);
         ui->uiTimeline->setScrollToCurrentFrame(value);
         ui->uiMain->fill_menu(ui->uiMenuBar);
@@ -4462,11 +4536,15 @@ namespace mrv
         options.trackInfo = item->value();
         auto settings = ui->app->settings();
         settings->setValue("Timeline/TrackInfo", options.trackInfo);
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4491,11 +4569,15 @@ namespace mrv
         options.clipInfo = item->value();
         auto settings = ui->app->settings();
         settings->setValue("Timeline/ClipInfo", options.clipInfo);
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4518,11 +4600,15 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
         options.effects = item->value();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4545,11 +4631,15 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
         options.markers = item->value();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4599,11 +4689,15 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         auto options = ui->uiTimeline->getDisplayOptions();
         options.transitions = item->value();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4643,11 +4737,14 @@ namespace mrv
         Aitem->mediaReferenceKey = key;
         panel::refreshThumbnails();
 
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setMediaReferenceKey";
         msg["value"] = key;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
     }
 
     void timeline_thumbnails_small_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -4667,11 +4764,15 @@ namespace mrv
         options.thumbnails = true;
         options.thumbnailHeight = TIMELINEUI::kThumbnailSmall *
                                   ui->uiView->pixels_per_unit();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4695,11 +4796,15 @@ namespace mrv
         options.thumbnails = true;
         options.thumbnailHeight = TIMELINEUI::kThumbnailMedium *
                                   ui->uiView->pixels_per_unit();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4723,11 +4828,15 @@ namespace mrv
         options.thumbnails = true;
         options.thumbnailHeight = TIMELINEUI::kThumbnailLarge *
                                   ui->uiView->pixels_per_unit();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4752,11 +4861,15 @@ namespace mrv
         options.waveforms = true;
         options.waveformHeight = TIMELINEUI::kWaveformSmall *
                                  ui->uiView->pixels_per_unit();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4780,11 +4893,15 @@ namespace mrv
         options.waveforms = true;
         options.waveformHeight = TIMELINEUI::kWaveformMedium *
                                  ui->uiView->pixels_per_unit();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4809,11 +4926,15 @@ namespace mrv
         options.waveforms = true;
         options.waveformHeight = TIMELINEUI::kWaveformLarge *
                                  ui->uiView->pixels_per_unit();
+
+#ifdef MRV2_NETWORK
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
         msg["value"] = options;
         if (ui->uiPrefs->SendUI->value())
             tcp->pushMessage(msg);
+#endif
+
         ui->uiTimeline->setDisplayOptions(options);
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
@@ -4847,6 +4968,8 @@ namespace mrv
         if (annotationsPanel)
             annotationsPanel->redraw();
 
+#ifndef __EMSCRIPTEN__
+        // \@wmrv2: \@wgpu:
         auto w = ui->uiView->getMultilineInput();
         if (!w)
             return;
@@ -4857,6 +4980,7 @@ namespace mrv
 #ifdef VULKAN_BACKEND
         w->color = from_fltk_color(c);
         ui->uiView->redrawWindows();
+#endif
 #endif
     }
 
@@ -5081,6 +5205,7 @@ namespace mrv
         default:
             break;
         }
+#ifndef __EMSCRIPTEN__
 #ifdef _WIN32
         std::string helper = rootpath() + "/bin/license_helper.exe";
 #else
@@ -5101,6 +5226,7 @@ namespace mrv
 
         int ret = os::exec_command(helper);
         if (ret != 0) return;
+#endif
     }
 
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui)
@@ -5343,6 +5469,7 @@ namespace mrv
         default:
             break;
         }
+#ifndef __EMSCRIPTEN__
         std::string fileName = session::current();
         if (fileName.empty())
             fileName = tmppath() + "/temp.mrv2s";
@@ -5354,6 +5481,7 @@ namespace mrv
         {
             LOG_ERROR(_("Could not restart mrv2 instance with a session file."));
         }
+#endif
     }
 
     void clear_note_annotation_cb(ViewerUI* ui)
@@ -5374,8 +5502,10 @@ namespace mrv
             if (dynamic_cast< draw::NoteShape* >((*it).get()))
             {
                 it = shapes.erase(it);
+#ifdef MRV2_NETWORK
                 if (ui->uiPrefs->SendAnnotations->value())
                     tcp->pushMessage("Clear Note Annotation", "");
+#endif
                 break;
             }
         }
@@ -5427,12 +5557,16 @@ namespace mrv
         if (panel::notesPanel)
             panel::notesPanel->refresh();
 
+#ifdef MRV2_NETWORK
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Create Note Annotation", text);
+#endif
     }
 
     void edit_text_shape_cb(ViewerUI* ui)
     {
+        // \@wgpu: \@wmrv2:
+#ifndef __EMSCRIPTEN__
         TextEdit window(400, 190, _("Edit Text Annotation"));
 
         auto player = ui->uiView->getTimelinePlayer();
@@ -5480,6 +5614,7 @@ namespace mrv
         {
             Fl::check();
         }
+#endif
     }
 
     void clone_file_cb(Fl_Menu_* m, void* d)
@@ -5591,8 +5726,9 @@ namespace mrv
 
         // Annotations
         item->annotations = player->getAllAnnotations();
+#ifndef __EMSCRIPTEN__
         item->voiceAnnotations = player->getAllVoiceAnnotations();
-
+#endif
         // OCIO
         item->ocioIcs = media->ocioIcs;
         item->ocioLook = media->ocioLook;
@@ -5717,8 +5853,11 @@ namespace mrv
         auto context = App::app->getContext();
 
         // Update the Thumbnail and Playback cache.
+#ifndef __EMSCRIPTEN__
+        // \@wgpu: \@wmrv2:
         auto thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
         thumbnailSystem->clearCache();
+#endif
 
         player->clearCache();
     }
@@ -5790,6 +5929,7 @@ namespace mrv
         default:
             break;
         }
+#ifndef __EMSCRIPTEN__
         auto app = ui->app;
         auto model = app->filesModel();
 
@@ -5801,6 +5941,7 @@ namespace mrv
         auto path = item->path.get();
 
         file_manager::show_uri(path);
+#endif
     }
 
 } // namespace mrv

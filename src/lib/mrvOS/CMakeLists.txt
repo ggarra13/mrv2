@@ -58,7 +58,9 @@ endif()
 
 add_library(mrvOS ${SOURCES} ${HEADERS})
 
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 target_link_libraries(mrvOS PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvOS PROPERTIES FOLDER lib)

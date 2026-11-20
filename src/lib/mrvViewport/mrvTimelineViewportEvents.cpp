@@ -4,7 +4,7 @@
 
 //#define DEBUG_EVENTS 1
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvViewport/mrvTimelineViewport.h"
 
@@ -26,7 +26,9 @@
 #include "mrvWidgets/mrvMultilineInput.h"
 #include "mrvWidgets/mrvTooltip.h"
 
-#include "mrvNetwork/mrvTCP.h"
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvTCP.h"
+#endif
 
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHotkey.h"
@@ -110,13 +112,16 @@ namespace mrv
                 VKLinkShape* s;
                 if (!(s = dynamic_cast<VKLinkShape*>(shape)))
                     return;
+                s->open();
 #endif
 #ifdef OPENGL_BACKEND
                 GLLinkShape* s;
                 if (!(s = dynamic_cast<GLLinkShape*>(shape)))
                     return;
-#endif
                 s->open();
+#endif
+#ifdef WEBGPU_BACKEND
+#endif
             }
 
             void link_edit_cb(Fl_Menu_*, tl::draw::Shape* shape)
@@ -125,13 +130,16 @@ namespace mrv
                 VKLinkShape* s;
                 if (!(s = dynamic_cast<VKLinkShape*>(shape)))
                     return;
+                s->edit();
 #endif
 #ifdef OPENGL_BACKEND
                 GLLinkShape* s;
                 if (!(s = dynamic_cast<GLLinkShape*>(shape)))
                     return;
-#endif
                 s->edit();
+#endif
+#ifdef WEBGPU_BACKEND
+#endif
             }
 
             void link_delete_cb(Fl_Menu_*, TimelineViewport* view)
@@ -205,7 +213,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             if (!currentVoiceOver)
                 return;
 
@@ -355,7 +363,7 @@ namespace mrv
             {
                 float dx = p.event_x / (float)w();
                 p.compareOptions.overlay = dx;
-                p.ui->app->filesModel()->setCompareOptions(p.compareOptions);
+                App::app->filesModel()->setCompareOptions(p.compareOptions);
                 return 1;
             }
             return ret;
@@ -376,7 +384,7 @@ namespace mrv
 
                 p.compareOptions.wipeCenter.x = dx;
                 p.compareOptions.wipeCenter.y = 1.0F - dy;
-                p.ui->app->filesModel()->setCompareOptions(p.compareOptions);
+                App::app->filesModel()->setCompareOptions(p.compareOptions);
                 redrawWindows();
                 ret = 1;
             }
@@ -384,7 +392,7 @@ namespace mrv
             {
                 float dx = p.event_x / (float)w() * 360.F;
                 p.compareOptions.wipeRotation = dx;
-                p.ui->app->filesModel()->setCompareOptions(p.compareOptions);
+                App::app->filesModel()->setCompareOptions(p.compareOptions);
                 redrawWindows();
                 ret = 1;
             }
@@ -510,7 +518,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             p.mousePos = _getFocus();
             auto pos = _getRasterf();
 
@@ -527,7 +535,7 @@ namespace mrv
 
         void TimelineViewport::_stopVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice)
         {
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             voice->stopRecording();
             currentVoiceOver.reset();
             redrawWindows();
@@ -536,7 +544,7 @@ namespace mrv
 
         void TimelineViewport::_stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice)
         {
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             voice->stopPlaying();
             currentVoiceOver.reset();
             redrawWindows();
@@ -547,6 +555,7 @@ namespace mrv
         {
             TLRENDER_P();
 
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             if (!p.player)
                 return;
 
@@ -561,12 +570,14 @@ namespace mrv
                     }
                 }
             }
+#endif
         }
 
         void TimelineViewport::_stopVoicePlaying()
         {
             TLRENDER_P();
 
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             if (!p.player)
                 return;
 
@@ -581,6 +592,7 @@ namespace mrv
                     }
                 }
             }
+#endif
 
         }
 
@@ -643,6 +655,7 @@ namespace mrv
                     }
                     else if (p.actionMode == ActionMode::kVoice)
                     {
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
                         if (!p.player)
                             return 0;
 
@@ -683,7 +696,6 @@ namespace mrv
                                         // pop it out of the program.
                                         App::unsaved_annotations = true;
 
-#ifdef TLRENDER_FFMPEG
                                         switch(status)
                                         {
                                         case voice::RecordStatus::Stopped:
@@ -712,7 +724,6 @@ namespace mrv
                                         default:
                                             return 0;
                                         }
-#endif
                                         redrawWindows();
                                         return 1;
                                     }
@@ -720,7 +731,6 @@ namespace mrv
                             }
                         }
 
-#ifdef TLRENDER_FFMPEG
                         if (currentVoiceOver)
                         {
                             switch(currentVoiceOver->getStatus())
@@ -745,8 +755,8 @@ namespace mrv
                             _startVoiceRecording(voice);
                         }
                         return 1;
-                    }
 #endif
+                    }
 
                     return _handlePushLeftMouseButtonShapes();
                 }
@@ -973,7 +983,7 @@ namespace mrv
             float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
             mult = std::clamp(mult, 1.F, 10.F);
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
             if (p.player)
             {
                 auto annotations = p.player->getVoiceAnnotations();
@@ -1036,27 +1046,40 @@ namespace mrv
                 {
                     for (auto& shape : annotation->shapes)
                     {
+                        math::Box2f box;
 #ifdef VULKAN_BACKEND
                         VKLinkShape* s;
                         if (!(s = dynamic_cast<VKLinkShape*>(shape.get())))
                             continue;
+                        box = s->getBBox(mult);
 #endif
 #ifdef OPENGL_BACKEND
                         GLLinkShape* s;
                         if (!(s = dynamic_cast<GLLinkShape*>(shape.get())))
                             continue;
+                        box = s->getBBox(mult);
 #endif
-                        auto box = s->getBBox(mult);
+#ifdef WEBGPU_BACKEND
+                        // WGPULinkShape* s;
+                        // if (!(s = dynamic_cast<WGPULinkShape*>(shape.get())))
+                        //     continue;
+                        // box = s->getBBox(mult);
+#endif
                         if (math::contains(box, pos))
                         {
                             if (Fl::event_button1())
                             {
+#ifdef WEBGPU_BACKEND           // \@wmrv2
+                                return 0;
+#else
                                 return s->handle(event);
+#endif
                             }
                             else
                             {
                                 currentLink = shape;
 
+#ifndef WEBGPU_BACKEND           // \@wmrv2
                                 Fl_Group::current(0);
                                 p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
                                 p.popupMenu->textsize(14);
@@ -1076,6 +1099,7 @@ namespace mrv
                                     (Fl_Callback*)link_delete_cb,
                                     this);
                                 p.popupMenu->popup();
+#endif
                                 return 1;
                             }
                         }
@@ -1178,7 +1202,7 @@ namespace mrv
                 const math::Vector2i pos = _getRaster();
                 if (!math::contains(p.multilineText->box, pos))
                 {
-                    auto settings = p.ui->app->settings();
+                    auto settings = App::app->settings();
                     const auto& renderSize = getRenderSize();
                     float pct = renderSize.h / 1024.F;
                     if (pct < 1.F) pct = 1.F;
@@ -1419,17 +1443,21 @@ namespace mrv
 
                         for (auto& shape : annotation->shapes)
                         {
+                            math::Box2f box;
 #ifdef VULKAN_BACKEND
                             VKLinkShape* s;
                             if (!(s = dynamic_cast<VKLinkShape*>(shape.get())))
                                 continue;
+                            box = s->getBBox(mult);
 #endif
 #ifdef OPENGL_BACKEND
                             GLLinkShape* s;
                             if (!(s = dynamic_cast<GLLinkShape*>(shape.get())))
                                 continue;
+                            box = s->getBBox(mult);
 #endif
-                            auto box = s->getBBox(mult);
+#ifdef WEBGPU_BACKEND        // \@wmrv2
+#endif
                             if (math::contains(box, pos))
                             {
                                 found = true;
@@ -1439,26 +1467,34 @@ namespace mrv
                                 X = Fl::event_x_root();
                                 Y = Fl::event_y_root();
 
+#ifndef __EMSCRIPTEN__
                                 if (desktop::Wayland())
                                 {
                                     X -= p.ui->uiMain->x_root();
                                     Y -= p.ui->uiMain->y_root();
                                 }
+#endif
 
                                 if (!p.tooltip)
                                 {
+#ifndef __EMSCRIPTEN__
                                     if (desktop::Wayland())
                                         Fl_Group::current(p.ui->uiMain);
                                     else
                                         Fl_Group::current(0);
+#else
+                                    Fl_Group::current(p.ui->uiMain);
+#endif
                                     p.tooltip = new Tooltip(X, Y, 160, 40);
                                 }
 
                                 p.tooltip->position(X, Y);
+#ifndef __EMSCRIPTEN__
                                 if (!s->title.empty())
                                     p.tooltip->copy_label(s->title);
                                 else
                                     p.tooltip->copy_label(s->url);
+#endif
                                 if (!p.tooltip->shown() ||
                                     !p.tooltip->visible())
                                     p.tooltip->show();
@@ -1560,8 +1596,9 @@ namespace mrv
                     if (!s->laser)
                         return 1;
 
+#ifdef MRV2_NETWORK
                     tcp->pushMessage("Laser Fade", 0);
-
+#endif
                     LaserFadeData* laserData = new LaserFadeData;
                     laserData->view = reinterpret_cast<MyViewport*>(this);
                     laserData->annotation = annotation;
@@ -1703,7 +1740,7 @@ namespace mrv
                     rawkey = tolower(rawkey);
                 }
 #endif
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(__EMSCRIPTEN__)
                 if (currentVoiceOver)
                 {
                     switch(rawkey)
@@ -1733,9 +1770,7 @@ namespace mrv
                             break;
                         }
                         case voice::RecordStatus::Playing:
-#ifdef TLRENDER_FFMPEG
                             _stopVoicePlaying(currentVoiceOver);
-#endif
                             return 1;
                             break;
                         default:
@@ -1743,7 +1778,6 @@ namespace mrv
                         }
                         break;
                     case FL_Enter:
-#ifdef TLRENDER_FFMPEG
                         switch(currentVoiceOver->getStatus())
                         {
                         case voice::RecordStatus::Recording:
@@ -1757,7 +1791,6 @@ namespace mrv
                         default:
                             break;
                         }
-#endif
                         break;
                     default:
                         break;
@@ -1916,7 +1949,7 @@ namespace mrv
                      p.actionMode != ActionMode::kText) &&
                     kPenSizeMore.match(rawkey))
                 {
-                    auto settings = p.ui->app->settings();
+                    auto settings = App::app->settings();
                     std_any value;
                     value = settings->getValue<std::any>(kPenSize);
                     int v = std_any_empty(value) ? 12 : std_any_cast<int>(value);
@@ -1931,7 +1964,7 @@ namespace mrv
                      p.actionMode != ActionMode::kText) &&
                     kPenSizeLess.match(rawkey))
                 {
-                    auto settings = p.ui->app->settings();
+                    auto settings = App::app->settings();
                     std_any value;
                     value = settings->getValue<std::any>(kPenSize);
                     int v = std_any_empty(value) ? 12 : std_any_cast<int>(value);
@@ -1982,7 +2015,11 @@ namespace mrv
                 }
                 else if (kToggleMuteAudio.match(rawkey))
                 {
+#ifdef __EMSCRIPTEN__
+                    auto c = p.ui;
+#else
                     TimelineClass* c = p.ui->uiTimeWindow;
+#endif
                     c->uiAudioTracks->value(!c->uiAudioTracks->value());
                     c->uiAudioTracks->do_callback();
                     return 1;

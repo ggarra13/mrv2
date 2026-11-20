@@ -14,7 +14,7 @@
 
 #include "mrvOptions/mrvEnums.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 namespace mrv
 {

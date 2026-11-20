@@ -37,7 +37,9 @@ endif()
 
 add_library(mrvFLTK ${SOURCES} ${HEADERS})
 
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 if (WIN32)
    target_compile_definitions(mrvFLTK PUBLIC -DFL_DLL)

@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
@@ -89,23 +89,23 @@ namespace mrv
 
             _r->filesObserver = observer::
                 ListObserver<std::shared_ptr<FilesModelItem> >::create(
-                    ui->app->filesModel()->observeFiles(),
+                    App::app->filesModel()->observeFiles(),
                     [this](const std::vector< std::shared_ptr<FilesModelItem> >&
                                value) { refresh(); },
                     observer::CallbackAction::Suppress);
 
             _r->filesPanelOptionsObserver =
                 observer::ValueObserver<FilesPanelOptions>::create(
-                    ui->app->filesModel()->observeFilesPanelOptions(),
+                    App::app->filesModel()->observeFilesPanelOptions(),
                     [this](const FilesPanelOptions& value) { refresh(); },
                     observer::CallbackAction::Suppress);
 
             _r->aIndexObserver = observer::ValueObserver<int>::create(
-                ui->app->filesModel()->observeAIndex(), [this](int value)
+                App::app->filesModel()->observeAIndex(), [this](int value)
                 { redraw(); }, observer::CallbackAction::Suppress);
 
             _r->layerObserver = observer::ListObserver<int>::create(
-                ui->app->filesModel()->observeLayers(),
+                App::app->filesModel()->observeLayers(),
                 [this](const std::vector<int>& value) { redraw(); },
                 observer::CallbackAction::Suppress);
         }
@@ -140,7 +140,10 @@ namespace mrv
                 time = player->currentTime();
 
             file::Path lastPath;
+
+#ifdef TLRENDER_OCIO
             _ocioProcessors.clear();
+#endif
 
             std::vector<int> ordered;
             if (r.sort == Sort::Loaded)
@@ -157,8 +160,8 @@ namespace mrv
                 std::map<std::string, size_t> fileNames;
                 for (size_t i = 0; i < numFiles; ++i)
                 {
-                    const auto& media = files->getItem(i);
-                    const auto& path = media->path;
+                    const auto media = files->getItem(i);
+                    const auto path = media->path;
 
                     const bool listdir = false;
                     std::string key;
@@ -186,7 +189,7 @@ namespace mrv
                     fileNames[key] = i;
                 }
 
-                for (auto& [_, i] : fileNames)
+                for (auto [_, i] : fileNames)
                 {
                     ordered.push_back(i);
                 }
@@ -198,8 +201,8 @@ namespace mrv
 
             for (const auto i : ordered)
             {
-                const auto& media = files->getItem(i);
-                const auto& path = media->path;
+                const auto media = files->getItem(i);
+                const auto path = media->path;
 
                 const bool isEDL = file::isTemporaryEDL(path);
 
@@ -227,7 +230,7 @@ namespace mrv
                         if (it == r.indices.end())
                             return;
                         int index = (*it).second;
-                        auto model = _p->ui->app->filesModel();
+                        auto model = App::app->filesModel();
                         model->setA(index);
                     });
 
@@ -331,18 +334,18 @@ namespace mrv
             if (!player)
                 return;
 
-            const auto& model = App::app->filesModel();
+            const auto model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
 
             int thumbnailType = p.ui->uiPrefs->FilesPanelThumbnails->value();
             image::Size size = panel::calculateImageSize(thumbnailType);
 
-            for (auto& m : r.map)
+            for (auto m : r.map)
             {
                 size_t i = m.first;
-                const auto& media = files->getItem(i);
-                const auto& path = media->path;
+                const auto media = files->getItem(i);
+                const auto path = media->path;
 
                 const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();

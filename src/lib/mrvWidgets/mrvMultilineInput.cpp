@@ -5,7 +5,7 @@
 
 #include "mrvMultilineInput.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>

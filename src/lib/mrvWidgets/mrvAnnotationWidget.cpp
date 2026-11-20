@@ -1,6 +1,6 @@
 // mrvAnnotationWidget.cpp
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 

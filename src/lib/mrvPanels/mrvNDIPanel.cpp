@@ -4,7 +4,7 @@
 
 #if defined(TLRENDER_NDI)
 
-#    include "mrViewer.h"
+#    include "mrvWidgets/mrViewer.h"
 
 #    include "mrvApp/mrvSettingsObject.h"
 

@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
@@ -93,27 +93,27 @@ namespace mrv
 
             _r->filesObserver = observer::
                 ListObserver<std::shared_ptr<FilesModelItem> >::create(
-                    ui->app->filesModel()->observeFiles(),
+                    App::app->filesModel()->observeFiles(),
                     [this](const std::vector< std::shared_ptr<FilesModelItem> >&
                                value) { refresh(); });
 
             _r->bIndexesObserver = observer::ListObserver<int>::create(
-                ui->app->filesModel()->observeBIndexes(),
+                App::app->filesModel()->observeBIndexes(),
                 [this](const std::vector<int>& value) { redraw(); });
 
             _r->layerObserver = observer::ListObserver<int>::create(
-                ui->app->filesModel()->observeLayers(),
+                App::app->filesModel()->observeLayers(),
                 [this](const std::vector<int>& value) { redraw(); });
 
             _r->compareOptionsObserver =
                 observer::ValueObserver<timeline::CompareOptions>::create(
-                    ui->app->filesModel()->observeCompareOptions(),
+                    App::app->filesModel()->observeCompareOptions(),
                     [this](const timeline::CompareOptions& value)
                     { setCompareOptions(value); });
 
             _r->compareTimeObserver =
                 observer::ValueObserver<timeline::CompareTimeMode>::create(
-                    ui->app->filesModel()->observeCompareTime(),
+                    App::app->filesModel()->observeCompareTime(),
                     [this](const timeline::CompareTimeMode& value)
                         { setCompareTime(value); });
         }
@@ -127,13 +127,14 @@ namespace mrv
             _r->map.clear();
             _r->indices.clear();
 
-            auto settings = p.ui->app->settings();
+            auto settings = App::app->settings();
             const std::string& prefix = tab_prefix();
 
             g->clear();
             g->begin();
-            const auto& model = p.ui->app->filesModel();
-            const auto& files = model->observeFiles();
+
+            const auto model = App::app->filesModel();
+            const auto files = model->observeFiles();
             size_t numFiles = files->getSize();
             auto Bindices = model->observeBIndexes()->get();
             auto Aindex = model->observeAIndex()->get();
@@ -148,15 +149,18 @@ namespace mrv
             size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
+
+#ifdef TLRENDER_OCIO
             _ocioProcessors.clear();
+#endif
 
             int Y = g->y();
             Fl_Check_Button* cB;
 
             for (size_t i = 0; i < numFiles; ++i)
             {
-                const auto& media = files->getItem(i);
-                const auto& path = media->path;
+                const auto media = files->getItem(i);
+                const auto path = media->path;
 
                 const bool isEDL = file::isTemporaryEDL(path);
 
@@ -202,7 +206,7 @@ namespace mrv
                         if (it == _r->indices.end())
                             return;
                         int index = (*it).second;
-                        const auto& model = p.ui->app->filesModel();
+                        const auto model = p.ui->app->filesModel();
                         const auto bIndexes = model->observeBIndexes()->get();
                         const auto i =
                             std::find(bIndexes.begin(), bIndexes.end(), index);
@@ -240,7 +244,7 @@ namespace mrv
             auto cMode = new Widget< PopupMenu >(X, Y, g->w(), 30);
             PopupMenu* pm = compareTimeW = cMode;
             const auto timeLabels = timeline::getCompareTimeModeLabels();
-            for (const auto& label : timeLabels)
+            for (const auto label : timeLabels)
             {
                 pm->add(label.c_str());
             }
@@ -602,8 +606,8 @@ namespace mrv
                 return;
             OTIO_NS::RationalTime time;
 
-            const auto& model = p.ui->app->filesModel();
-            const auto& files = model->observeFiles();
+            const auto model = p.ui->app->filesModel();
+            const auto files = model->observeFiles();
             size_t numFiles = files->getSize();
 
             auto Aindex = model->observeAIndex()->get();
@@ -614,8 +618,8 @@ namespace mrv
 
             for (int i = 0; i < numFiles; ++i)
             {
-                const auto& media = files->getItem(i);
-                const auto& path = media->path;
+                const auto media = files->getItem(i);
+                const auto path = media->path;
 
                 const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();

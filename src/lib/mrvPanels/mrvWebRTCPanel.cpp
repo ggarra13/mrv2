@@ -25,7 +25,7 @@
 
 #include "mrvPanelsCallbacks.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 namespace
 {

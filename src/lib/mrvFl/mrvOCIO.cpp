@@ -14,7 +14,7 @@
 #include "mrvOS/mrvI8N.h"
 #include "mrvOS/mrvString.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include <algorithm>
 #include <cctype>

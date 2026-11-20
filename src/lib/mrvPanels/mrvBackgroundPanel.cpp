@@ -7,7 +7,7 @@
 
 #include <tlTimeline/BackgroundOptions.h>
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"

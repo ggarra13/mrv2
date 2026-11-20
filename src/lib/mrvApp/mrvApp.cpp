@@ -9,9 +9,8 @@
 #include <winsock2.h>
 #endif
 
-
-#include "mrvNetwork/mrvDummyClient.h"
 #ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvDummyClient.h"
 #    include "mrvNetwork/mrvCommandInterpreter.h"
 #    include "mrvNetwork/mrvComfyUIListener.h"
 #    include "mrvNetwork/mrvImageListener.h"
@@ -47,7 +46,9 @@ namespace py = pybind11;
 
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvLicensing.h"
+#ifndef __EMSCRIPTEN__
+#    include "mrvCore/mrvLicensing.h"
+#endif
 #include "mrvCore/mrvUtil.h"
 
 #include "mrvOS/mrvMemory.h"
@@ -70,8 +71,6 @@ namespace py = pybind11;
 #include <tlCore/StringFormat.h>
 #include <tlCore/AudioSystem.h>
 
-
-
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvUI/mrvDesktop.h"
@@ -89,9 +88,8 @@ namespace py = pybind11;
 #    include "mrvPy/mrvPythonArgs.h"
 #endif
 
-
-#include "mrvPreferencesUI.h"
-#include "mrViewer.h"
+#include "mrvWidgets/mrvPreferencesUI.h"
+#include "mrvWidgets/mrViewer.h"
 
 // we include it here to avoid tl::image and mrv::image clashes
 #include "mrvFl/mrvOCIO.h"
@@ -273,12 +271,14 @@ namespace mrv
 
     static void beat_cb(void* data)
     {
+#ifndef __EMSCRIPTEN__
         License ok = license_beat();
         if (ok != License::kValid ||
             app::license_type == LicenseType::kFloating)
         {
             Fl::repeat_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, data);
         }
+#endif
     }
 
     namespace
@@ -551,6 +551,7 @@ namespace mrv
             p.options.fileNames.push_back(unused);
         }
 
+#ifndef __EMSCRIPTEN__
         if (p.options.displayVersion)
         {
             std::cout << std::endl
@@ -572,6 +573,7 @@ namespace mrv
         {
             mrv::trace::logLevel = -1;
         }
+#endif
 
 
         // Initialize FLTK.
@@ -622,9 +624,8 @@ namespace mrv
         // Classes used to handle network connections
 #ifdef MRV2_NETWORK
         p.commandInterpreter = new CommandInterpreter(ui);
-
-#endif
         tcp = new DummyClient();
+#endif
 
         p.lutOptions = p.options.lutOptions;
 
@@ -649,10 +650,9 @@ namespace mrv
         ui->uiTimeline->setScrollBarsVisible(false);
 
 
-
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
 
-
+#ifndef __EMSCRIPTEN__
         License ok = license_beat();
 
         // Floating licenses will do a beat every
@@ -707,6 +707,7 @@ namespace mrv
 
         LOG_STATUS(_("Temp Location: "));
         LOG_STATUS("\t" << mrv::tmppath());
+#endif
 
         // Create the main control.
         p.mainControl = new MainControl(ui);
@@ -795,6 +796,7 @@ namespace mrv
             ui->uiMain->wait_for_expose();
         }
 
+#ifndef __EMSCRIPTEN__
         if (p.options.displaySystemInfo)
         {
 #ifdef VULKAN_BACKEND
@@ -828,6 +830,7 @@ namespace mrv
             ui = nullptr;
             return;
         }
+#endif
 
         Preferences::run();
 
@@ -880,7 +883,11 @@ namespace mrv
 
         if (p.options.loop != timeline::Loop::Count)
         {
+#ifdef __EMSCRIPTEN__
+            auto c = ui;
+#else
             TimelineClass* c = ui->uiTimeWindow;
+#endif
             c->uiLoopMode->value(static_cast<int>(p.options.loop));
             c->uiLoopMode->do_callback();
             timeline::Loop loop =
@@ -917,7 +924,7 @@ namespace mrv
                 });
 
         p.logObserver = observer::ListObserver<log::Item>::create(
-            ui->app->getContext()->getLogSystem()->observeLog(),
+            App::app->getContext()->getLogSystem()->observeLog(),
             [this](const std::vector<log::Item>& value)
             {
                 static std::string lastStatusMessage;
@@ -1090,6 +1097,7 @@ namespace mrv
         }
 #endif
 
+#ifdef TLRENDER_OCIO
         //
         // Handle command-line OCIO
         //
@@ -1120,6 +1128,7 @@ namespace mrv
         {
             LOG_ERROR(e.what());
         }
+#endif
 
 #ifdef MRV2_PYBIND11
         if (!p.options.noPython)
@@ -1253,6 +1262,7 @@ namespace mrv
         delete p.contextObject;
         p.contextObject = nullptr;
 
+#ifdef MRV2_NETWORK
         if (tcp)
         {
             tcp->stop();
@@ -1261,7 +1271,6 @@ namespace mrv
             tcp = nullptr;
         }
 
-#ifdef MRV2_NETWORK
         Poco::Net::uninitializeNetwork();
 #endif
     }
@@ -1422,9 +1431,14 @@ namespace mrv
         if (!p.player)
             return;
 
+#ifdef MRV2_NETWORK
         bool isLocked = tcp->isLocked();
 
         tcp->lock();
+#else
+        bool isLocked = false;
+#endif
+
         p.player->setPlayback(timeline::Playback::Stop);
 
         //
@@ -1480,7 +1494,9 @@ namespace mrv
             (playback == timeline::Playback::Forward ||
              playback == timeline::Playback::Stop))
         {
+#ifdef MRV2_NETWORK
             tcp->lock();
+#endif
 
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
@@ -1539,8 +1555,9 @@ namespace mrv
         }
         else if (use_progress && playback == timeline::Playback::Reverse)
         {
+#ifdef MRV2_NETWORK
             tcp->lock();
-
+#endif
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
@@ -1618,8 +1635,11 @@ namespace mrv
             Fl::check();
         }
 
+#ifdef MRV2_NETWORK
         if (!isLocked)
             tcp->unlock();
+#endif
+
         p.cacheInfoObserver.reset();
         ui->uiView->setPlayback(playback);
     }
@@ -1889,11 +1909,13 @@ namespace mrv
     {
         TLRENDER_P();
         p.mainControl->setDisplayOptions(value);
+#ifdef MRV2_NETWORK
         Message msg;
         Message opts(value);
         msg["command"] = "Display Options";
         msg["value"] = opts;
         tcp->pushMessage(msg);
+#endif
     }
 
     void App::setVolume(float value)
@@ -1909,9 +1931,11 @@ namespace mrv
     void App::volumeChanged(float value)
     {
         TLRENDER_P();
+#ifdef MRV2_NETWORK
         bool send = ui->uiPrefs->SendAudio->value();
         if (send)
             tcp->pushMessage("setVolume", value);
+#endif
         p.settings->setValue("Audio/Volume", value);
     }
 
@@ -1928,9 +1952,11 @@ namespace mrv
     void App::muteChanged(bool value)
     {
         TLRENDER_P();
+#ifdef MRV2_NETWORK
         bool send = ui->uiPrefs->SendAudio->value();
         if (send)
             tcp->pushMessage("setMute", value);
+#endif
         p.settings->setValue("Audio/Mute", value);
     }
 
@@ -1987,7 +2013,11 @@ namespace mrv
         out["FFmpeg/HWDriver"] = string::Format("{0}").arg(
             p.settings->getValue<std::string>("Performance/FFmpegHWDriver"));
 
+#ifdef __EMSCRIPTEN__
+        auto c = ui;
+#else
         TimelineClass* c = ui->uiTimeWindow;
+#endif
         int idx = c->uiAudioTracks->current_track();
         out["FFmpeg/AudioTrack"] = string::Format("{0}").arg(idx);
 #endif // TLRENDER_FFMPEG
@@ -2108,6 +2138,7 @@ namespace mrv
                    : timeline::Timeline::create(
                        _context, item->path, item->audioPath, options);
 
+#ifdef MRV2_NETWORK
         if (ui->uiPrefs->SendMedia->value())
         {
             Message msg;
@@ -2116,6 +2147,7 @@ namespace mrv
             msg["audioFilePath"] = item->audioPath;
             tcp->pushMessage(msg);
         }
+#endif
 
 #ifdef MRV2_PYBIND11
         const std::string& path = item->path.get();
@@ -2175,10 +2207,14 @@ namespace mrv
             p.activeFiles[0]->audioOffset = p.player->audioOffset();
             p.activeFiles[0]->mediaReferenceKey = p.player->getMediaReferenceKey();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
-            p.activeFiles[0]->voiceAnnotations = p.player->getAllVoiceAnnotations();
+
+            // \@wmrv2
+            // p.activeFiles[0]->voiceAnnotations = p.player->getAllVoiceAnnotations();
+#ifdef TLRENDER_OCIO
             p.activeFiles[0]->ocioIcs = ocio::ics();
             p.activeFiles[0]->ocioLook = ocio::look();
             p.activeFiles[0]->lutOptions = p.lutOptions;
+#endif
         }
 
         if (!activeFiles.empty())
@@ -2295,7 +2331,9 @@ namespace mrv
                                 player->setMute(p.mute);
                                 player->setAudioOffset(item->audioOffset);
                                 player->setAllAnnotations(item->annotations);
+#ifndef __EMSCRIPTEN__
                                 player->setAllAnnotations(item->voiceAnnotations);
+#endif
                                 player->seek(item->currentTime);
                                 player->setPlayback(item->playback);
                             }
@@ -2370,6 +2408,7 @@ namespace mrv
 
                 if (!activeFiles.empty())
                 {
+#ifdef TLRENDER_OCIO
                     try
                     {
                         if (activeFiles[0]->ocioIcs.empty())
@@ -2398,6 +2437,7 @@ namespace mrv
 
                     if (activeFiles[0]->lutOptions != p.lutOptions)
                         setLUTOptions(activeFiles[0]->lutOptions);
+#endif
                 }
 
                 if (isRunning())

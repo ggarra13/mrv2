@@ -39,7 +39,7 @@
 
 
 
-#include "mrvPreferencesUI.h"
+#include "mrvWidgets/mrvPreferencesUI.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -2293,6 +2293,7 @@ namespace mrv
         }
 #endif
 
+#ifndef __EMSCRIPTEN__
         mode = FL_MENU_CHATTY;
         menu->add(
             _("Help/Unlock Features"), 0,
@@ -2306,6 +2307,7 @@ namespace mrv
         menu->add(
             _("Help/About"), kToggleAbout.hotkey(), (Fl_Callback*)about_cb,
             ui, mode);
+#endif
 
         menu->menu_end();
 
@@ -2330,7 +2332,9 @@ namespace mrv
         }
 
 #else
+#    ifndef __EMSCRIPTEN__
         menu->textfont(ui->uiPrefs->uiFontMenus->value());
+#    endif
 #endif
 
         menu->redraw();

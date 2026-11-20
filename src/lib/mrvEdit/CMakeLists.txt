@@ -20,7 +20,9 @@ set(SOURCES
 
 
 add_library(mrvEdit ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 set(LIBRARIES mrvViewport mrvWidgets mrvNetwork)
 list(APPEND LIBRARIES OTIO::opentimelineio)

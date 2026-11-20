@@ -1,5 +1,5 @@
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include "mrvApp/mrvApp.h"
 
@@ -47,15 +47,18 @@ namespace
     std::string voiceOverFileName()
     {
         char buf[256];
+        std::string out;
         ViewerUI* ui = mrv::App::ui;
 #ifdef _WIN32
         snprintf(buf, 256, "MRV2_VOICEOVER0x%p.%zu.wav", ui, voiceOverIndex);
 #else
         snprintf(buf, 256, "MRV2_VOICEOVER%p.%zu.wav", ui, voiceOverIndex);
 #endif
+#ifndef __EMSCRIPTEN__
         PreferencesUI* uiPrefs = ui->uiPrefs;
         const std::string tmpdir = uiPrefs->VoiceOverPath->value();
-        auto out = tmpdir + '/' + buf;
+        out = tmpdir + '/' + buf;
+#endif
 
         ++voiceOverIndex;
 

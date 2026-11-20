@@ -9,7 +9,7 @@
 #include <winsock2.h>
 #endif
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include <tlDevice/IOutput.h>
 

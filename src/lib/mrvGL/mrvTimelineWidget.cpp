@@ -35,7 +35,7 @@
 
 #include "mrvApp/mrvSettingsObject.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include <optional>
 

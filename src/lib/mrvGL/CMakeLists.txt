@@ -49,7 +49,9 @@ list(APPEND LIBRARIES tlRender::tlTimelineGL tlRender::tlTimelineUI tlRender::tl
 set(LIBRARIES_PRIVATE )
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 target_link_libraries(mrvGL PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(mrvGL PROPERTIES FOLDER lib)

@@ -209,7 +209,7 @@ extern "C"
 #    pragma warning(disable : 4275)
 #endif
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 #undef snprintf
 
 #include "mrvFl/mrvIO.h"

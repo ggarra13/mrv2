@@ -4,7 +4,7 @@
 
 #include "mrvWidgets/mrvPythonEditor.h"
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 #include <string>
 #include <cstring>

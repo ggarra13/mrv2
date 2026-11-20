@@ -19,7 +19,7 @@
 #include <tlGL/Util.h>
 
 // mrViewer .fl includes
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 #include "mrvHotkeyUI.h"
 
 #include "mrvCore/mrvColor.h"

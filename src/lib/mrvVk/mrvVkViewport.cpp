@@ -5,7 +5,7 @@
 #include <cinttypes>
 
 // mrViewer .fl includes
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 #include "mrvHotkeyUI.h"
 
 #include "mrvNetwork/mrvDummyClient.h"

@@ -18,7 +18,7 @@
 #include <string>
 #include <thread>
 
-#include "mrViewer.h"
+#include "mrvWidgets/mrViewer.h"
 
 namespace
 {
