@@ -13,15 +13,20 @@
 #include "mrvApp/mrvApp.h"
 
 #include "mrvFLTK/mrvCallbacks.h"
-#include "mrvFl/mrvOCIO.h"
+#include "mrvFl/mrvTimelinePlayer.h"
+
+#ifdef TLRENDER_OCIO
+#   include "mrvFl/mrvOCIO.h"
+#endif
+
 #include "mrvFl/mrvVersioning.h"
 
 #include "mrvUI/mrvDesktop.h"
 #include "mrvUI/mrvMenus.h"
 
-#include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvWidgets/mrvMainWindow.h"
+#include "mrvWidgets/mrvPreferencesUI.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -41,7 +46,6 @@
 
 
 
-// #include "mrvPreferencesUI.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -727,7 +731,7 @@ namespace mrv
 
 #ifdef MRV2_NETWORK
         // Make sure to sync panels remotely.
-        syncPanels("");
+        panel::syncPanels("");
 #endif
 
         {
@@ -1145,18 +1149,25 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
+#ifdef __EMSCRIPTEN__
+        auto c = ui;
+#else
+        TimelineClass* c = ui->uiTimeWindow;
+#endif
+
+
         idx = menu->add(
             _("Playback/Toggle In Point"), kSetInPoint.hotkey(),
             (Fl_Callback*)playback_set_in_point_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiStartButton->value())
+        if (c->uiStartButton->value())
             item->set();
         idx = menu->add(
             _("Playback/Toggle Out Point"), kSetOutPoint.hotkey(),
             (Fl_Callback*)playback_set_out_point_cb, ui,
             FL_MENU_DIVIDER | mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (ui->uiEndButton->value())
+        if (c->uiEndButton->value())
             item->set();
         idx = menu->add(
             _("Playback/Toggle In and Out Points"), kToggleInOutPoint.hotkey(),

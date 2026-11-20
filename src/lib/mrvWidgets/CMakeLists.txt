@@ -22,7 +22,9 @@ if(TLRENDER_FFMPEG)
     list(APPEND FL_SOURCES mrvSaveMovieOptionsUI.fl)
 endif()
 
-FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
+if (NOT EMSCRIPTEN)
+    FLTK_WRAP_UI( mrvWidgets ${FL_SOURCES} )
+endif()
 
 set(HEADERS
     mrvAnnotationGroup.h
@@ -137,6 +139,43 @@ set(SOURCES
     mrvVolumeSlider.cpp
     mrvWaveform.cpp
 )
+
+if (EMSCRIPTEN)
+    list(PREPEND HEADERS
+	make_ocio_chooser.h
+	keyboard_ui.h
+	mrvAboutUI.h
+	mrvHotkeyUI.h
+	mrvHUDUI.h
+	mrvOCIOPresetsUI.h
+	mrvPathMappingUI.h
+	mrvPDFOptionsUI.h
+	mrvPreferencesUI.h
+	mrvSaveImageOptionsUI.h
+	mrvURLLinkUI.h
+	mrvURLMovieUI.h
+	mrViewer.h
+    )
+    list(PREPEND SOURCES
+	make_ocio_chooser.cxx
+	keyboard_ui.cxx
+	mrvAboutUI.cxx
+	mrvHotkeyUI.cxx
+	mrvHUDUI.cxx
+	mrvOCIOPresetsUI.cxx
+	mrvPathMappingUI.cxx
+	mrvPDFOptionsUI.cxx
+	mrvPreferencesUI.cxx
+	mrvSaveImageOptionsUI.cxx
+	mrvURLLinkUI.cxx
+	mrvURLMovieUI.cxx
+	mrViewer.cxx
+    )
+else()
+    list(PREPEND SOURCES
+	${mrvWidgets_FLTK_UI_SRCS}
+    )
+endif()
 
 
 list(APPEND LIBRARIES mrvFlmm mrvIcons mrvCore ${FLTK_LIBRARIES})
