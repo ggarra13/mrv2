@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: BSD-3-Clause
+7# SPDX-License-Identifier: BSD-3-Clause
 # mrv2 
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
@@ -35,7 +35,9 @@ set(SOURCES
 )
 
 add_library(mrvFl ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 set(LIBRARIES mrvUI mrvImage mrvOptions tlRender::tlDevice tlRender::tlDraw)
 

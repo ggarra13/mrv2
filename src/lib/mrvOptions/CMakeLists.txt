@@ -28,7 +28,9 @@ if(TLRENDER_USD)
 endif()
 
 add_library(mrvOptions ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 set(LIBRARIES mrvCore )
 set(LIBRARIES_PRIVATE )

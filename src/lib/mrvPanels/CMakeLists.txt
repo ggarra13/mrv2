@@ -85,7 +85,9 @@ set(LIBRARIES mrvFl mrvEdit)
 # endif()
 
 add_library(mrvPanels ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 
 

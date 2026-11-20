@@ -29,7 +29,10 @@ if(APPLE)
 endif()
 
 add_library(mrvUI ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 set(LIBRARIES mrvFl mrvWidgets mrvFLTK)
 set(LIBRARIES_PRIVATE )

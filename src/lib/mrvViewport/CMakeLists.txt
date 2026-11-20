@@ -12,7 +12,9 @@ set(SOURCES
 )
     
 add_library(mrvViewport ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 set(LIBRARIES mrvWidgets mrvFLTK)
 

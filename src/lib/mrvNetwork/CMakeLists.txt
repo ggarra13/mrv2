@@ -66,7 +66,9 @@ endif()
 
 
 add_library(mrvNetwork ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 target_compile_definitions(mrvNetwork
     PRIVATE

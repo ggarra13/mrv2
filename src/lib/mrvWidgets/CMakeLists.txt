@@ -246,7 +246,9 @@ if (TLRENDER_LIBWEBP)
     list(APPEND LIBRARIES WebP::webp)
 endif()
 
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 if (APPLE)
     list(PREPEND SOURCES mrvMainWindow.mm)

@@ -46,7 +46,9 @@ list(APPEND LIBRARIES tlRender::tlTimelineUIVk tlRender::tlDraw tlRender::tlTime
 set(LIBRARIES_PRIVATE )
 
 add_library(mrvVk ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 target_link_libraries(mrvVk PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(mrvVk PROPERTIES FOLDER lib)

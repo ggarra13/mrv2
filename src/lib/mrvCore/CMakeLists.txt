@@ -63,7 +63,10 @@ endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})
 
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
+
 
 if (WIN32)
    target_compile_definitions(mrvCore PUBLIC -DFL_DLL)

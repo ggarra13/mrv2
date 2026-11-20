@@ -13,7 +13,9 @@ set(SOURCES
 )
 
 add_library(mrvBaseApp ${SOURCES} ${HEADERS})
-files_to_absolute_paths()
+if (NOT EMSCRIPTEN)
+    files_to_absolute_paths()
+endif()
 
 find_package(Imath REQUIRED)
 find_package(Freetype REQUIRED)
