@@ -34,4 +34,18 @@ namespace mrv
         }
     }
 
+    void TimelineGroup::resize(int X, int Y, int W, int H)
+    {
+        // Don't let Fl_Group do proportional layout from stale saved sizes.
+        Fl_Widget::resize(X, Y, W, H);
+
+        if (children() > 0)
+        {
+            const int kTop = 4;   // gap between the drag bar and the timeline
+            child(0)->resize(X, Y + kTop, W, H - kTop);
+        }
+        // Make sure the exposed region (and the native sub-window) repaints.
+        redraw();
+    }
+
 } // namespace mrv
