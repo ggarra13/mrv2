@@ -40,13 +40,12 @@ This is a nuspec. It mostly adheres to https://docs.nuget.org/create/Nuspec-Refe
     <projectUrl>https://mrv2.sourceforge.io</projectUrl>
     <!-- There are a number of CDN Services that can be used for hosting the Icon for a package. More information can be found here: https://docs.chocolatey.org/en-us/create/create-packages#package-icon-guidelines -->
     <!-- Here is an example using Githack -->
-    <iconUrl>https://github.com/ggarra13/mrv2/blob/main/assets/icons/original/Icon_Windows.png</iconUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/ggarra13/mrv2@v1.8.6/assets/icons/original/Icon_Windows.png</iconUrl>
     <copyright>2026-Present Contributors to the mrv2 project</copyright>
     <!-- If there is a license Url available, it is required for the community feed -->
     <licenseUrl>https://github.com/ggarra13/mrv2/blob/main/LICENSE</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <projectSourceUrl>https://github.com/ggarra13/mrv2</projectSourceUrl>
-    <packageSourceUrl>https://github.com/ggarra13/mrv2</packageSourceUrl>
     <docsUrl>https://mrv2.sourceforge.io/docs/en/index.html</docsUrl>
     <!--<mailingListUrl></mailingListUrl>-->
     <bugTrackerUrl>https://github.com/ggarra13/mrv2/issues/</bugTrackerUrl>
