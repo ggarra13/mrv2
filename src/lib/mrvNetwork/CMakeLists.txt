@@ -6,7 +6,6 @@ set(HEADERS
     mrvCypher.h
     mrvDummyClient.h
     mrvFilesModelItem.h
-    mrvFilePath.h
     mrvTCP.h
     mrvMessage.h
 )
@@ -14,7 +13,6 @@ set(HEADERS
 set(SOURCES
     mrvCypher.cpp
     mrvFilesModelItem.cpp
-    mrvFilePath.cpp
     mrvTCP.cpp
 )
 

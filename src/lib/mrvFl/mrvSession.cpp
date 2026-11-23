@@ -354,13 +354,10 @@ namespace mrv
             int stereoIndex = model->observeStereoIndex()->get();
             int layer = ui->uiColorChannel->value();
 
-#ifndef __EMSCRIPTEN__
-            // \@wgpu: \@wmrv2
             auto options = ui->uiTimeline->getItemOptions();
             Message timelineViewport = options;
             timelineViewport["editable"] = ui->uiTimeline->isEditable();
             session["timelineViewport"] = timelineViewport;
-#endif
 
             session["ui"] = bars;
             session["panels"] = panels;
@@ -823,14 +820,11 @@ namespace mrv
 
                 if (version >= 9)
                 {
-#ifndef __EMSCRIPTEN__
-                    // \@wgpu: \@wmrv2
                     Message timelineViewport = session["timelineViewport"];
                     auto options = timelineViewport;
                     bool isEditable = timelineViewport["editable"];
                     ui->uiTimeline->setEditable(isEditable);
                     ui->uiTimeline->setItemOptions(options);
-#endif
                 }
 
                 if (version >= 10)

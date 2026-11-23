@@ -34,12 +34,19 @@ set(SOURCES
     mrvVersioning.cpp
 )
 
+set(LIBRARIES mrvUI mrvOptions tlRender::tlDraw)
+if (NOT EMSCRIPTEN)
+    list(PREPEND LIBRARIES mrvImage)
+endif()
+
 add_library(mrvFl ${SOURCES} ${HEADERS})
 if (NOT EMSCRIPTEN)
     files_to_absolute_paths()
+    list(PREPEND LIBRARIES mrvImage)
+    list(APPEND LIBRARIES tlRender::tlDevice)
 endif()
 
-set(LIBRARIES mrvUI mrvImage mrvOptions tlRender::tlDevice tlRender::tlDraw)
+
 
 if(MRV2_PDF)
     list(APPEND LIBRARIES mrvPDF )

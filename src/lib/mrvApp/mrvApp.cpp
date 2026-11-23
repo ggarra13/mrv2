@@ -1013,8 +1013,13 @@ namespace mrv
                 }
 
                 // Replace filenames with newly created otio file
+                auto loadedFiles = p.options.fileNames;
                 p.options.fileNames.clear();
                 p.options.fileNames.push_back(otioFile);
+                for (auto& fileName : loadedFiles)
+                {
+                    p.options.fileNames.push_back(fileName);
+                }
             }
 
             if (!p.options.fileNames.empty())

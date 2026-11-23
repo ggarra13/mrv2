@@ -10,10 +10,8 @@ set(HEADERS
     mrvColorSpaces.h
     mrvFile.h
     mrvFonts.h
-    mrvGPU.h
     mrvHome.h
     mrvHotkey.h
-    mrvLicensing.h
     mrvLocale.h
     mrvMedia.h
     mrvMesh.h
@@ -29,10 +27,8 @@ set(SOURCES
     mrvColorSpaces.cpp
     mrvFile.cpp
     mrvFonts.cpp
-    mrvGPU.cpp
     mrvHome.cpp
     mrvHotkey.cpp
-    mrvLicensing.cpp
     mrvLocale.cpp
     mrvMedia.cpp
     mrvMesh.cpp
@@ -45,8 +41,19 @@ if (TLRENDER_NET OR TLRENDER_SSL)
     find_package(OpenSSL REQUIRED)
 endif()
 
+if(NOT EMSCRIPTEN)
+    list(APPEND SOURCES 
+	mrvGPU.cpp
+	mrvLicensing.cpp
+    )
+    list(APPEND HEADERS
+	mrvGPU.h
+	mrvLicensing.h
+    )
+endif()
+
 set(LIBRARIES )
-set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath mrvOS ${FLTK_LIBRARIES})
+set(LIBRARIES tlRender::tlIO tlRender::tlCore mrvOS ${FLTK_LIBRARIES})
 
 if (MRV2_NETWORK)
     set(LIBRARIES_PRIVATE

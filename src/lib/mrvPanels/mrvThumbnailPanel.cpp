@@ -183,11 +183,8 @@ namespace mrv
 #endif
 
                 const auto context = App::app->getContext();
-#ifndef __EMSCRIPTEN__
-                // \@wgpu: \@wmrv2:
                 auto thumbnailSystem =
                     context->getSystem<TIMELINEUI::ThumbnailSystem>();
-#endif
 
 #ifdef MRV2_PYBIND11
                 // Only release the GIL if this thread currently holds it
@@ -222,10 +219,7 @@ namespace mrv
                 if (it != thumbnailRequests.end())
                 {
                     const auto& request = it->second;
-#ifndef __EMSCRIPTEN__
-                    // \@wgpu: \@wmrv2
                     thumbnailSystem->cancelRequests({request.id});
-#endif
                     thumbnailRequests.erase(it);
                 }
 
@@ -238,12 +232,9 @@ namespace mrv
 
                 options["Layer"] = string::Format("{0}").arg(layerId);
 
-#ifndef __EMSCRIPTEN__
-                // \@wgpu: \@wmrv2
                 thumbnailRequests[widget] =
                     thumbnailSystem->getThumbnail(path, size.h, time,
                                                   mediaReferenceKey, options);
-#endif
             }
             catch (const std::exception& e)
             {
@@ -259,19 +250,14 @@ namespace mrv
         void ThumbnailPanel::_cancelRequests()
         {
             const auto context = App::app->getContext();
-#ifndef __EMSCRIPTEN__
             auto thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
-#endif
             std::vector<uint64_t> ids;
             for (const auto& i : thumbnailRequests)
             {
                 const auto& request = i.second;
                 ids.push_back(request.id);
             }
-#ifndef __EMSCRIPTEN__
-            // \@wgpu: \@wmrv2:
             thumbnailSystem->cancelRequests(ids);
-#endif
             thumbnailRequests.clear();
         }
 

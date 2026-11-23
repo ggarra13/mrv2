@@ -1,3 +1,14 @@
+v1.8.7
+======
+
+ChangeLog
+---------
+
+- Install / Windows: Now all windows and strings of the installer are translated to all languages.
+
+- Command-Line / Core: Loading movies and sequences from the command-line with the -edl switch now will properly list all items loaded besides the .otio file.
+
+
 v1.8.6
 ======
 

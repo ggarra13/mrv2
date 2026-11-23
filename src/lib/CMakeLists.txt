@@ -13,7 +13,7 @@ add_subdirectory(mrvFLU)         # mrvWidgets, FLTK, Intl
 add_subdirectory(mrvUI)          # mrvFLTK, mrvWidgets, Xrandr, wayland-client
 add_subdirectory(mrvImage)
 if(TLRENDER_FFMPEG)
-    add_subdirectory(mrvVoice)       # mrvWidgets, RtAudio
+    add_subdirectory(mrvVoice)       # mrvWidgets, miniaudio
 endif()
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
     # tlTimelineVk, tlVk, tlTimeline, tlTimelineUIVk, tlUI

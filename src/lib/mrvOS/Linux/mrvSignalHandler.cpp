@@ -9,7 +9,10 @@
 namespace fs = std::filesystem;
 
 
-#include "mrvCore/mrvLicensing.h"
+#ifndef __EMSCRIPTEN__
+#   include "mrvCore/mrvLicensing.h"
+#endif
+
 #include "mrvCore/mrvHome.h"
 
 #include "mrvOS/mrvSignalHandler.h"
@@ -21,7 +24,9 @@ namespace mrv
     {
         printStackTrace();
 
+#ifndef __EMSCRIPTEN__
         release_license();
+#endif
 
         exit(signal);
     }

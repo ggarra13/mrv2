@@ -26,6 +26,11 @@
 #include "mrvVk/mrvVkTextEdit.h"
 #endif
 
+#ifdef WEBGPU_BACKEND
+#include "mrvWGPU/mrvWGPUShape.h"
+#include "mrvWGPU/mrvWGPUTextEdit.h"
+#endif
+
 #include "mrvUI/mrvAsk.h"
 #include "mrvUI/mrvDesktop.h"
 #include "mrvUI/mrvMenus.h"
@@ -4968,8 +4973,6 @@ namespace mrv
         if (annotationsPanel)
             annotationsPanel->redraw();
 
-#ifndef __EMSCRIPTEN__
-        // \@wmrv2: \@wgpu:
         auto w = ui->uiView->getMultilineInput();
         if (!w)
             return;
@@ -4981,6 +4984,9 @@ namespace mrv
         w->color = from_fltk_color(c);
         ui->uiView->redrawWindows();
 #endif
+#ifdef WEBGPU_BACKEND
+        w->color = from_fltk_color(c);
+        ui->uiView->redrawWindows();
 #endif
     }
 
@@ -5565,8 +5571,6 @@ namespace mrv
 
     void edit_text_shape_cb(ViewerUI* ui)
     {
-        // \@wgpu: \@wmrv2:
-#ifndef __EMSCRIPTEN__
         TextEdit window(400, 190, _("Edit Text Annotation"));
 
         auto player = ui->uiView->getTimelinePlayer();
@@ -5602,6 +5606,12 @@ namespace mrv
                 window.add(s->text);
             }
 #endif
+#ifdef WEBGPU_BACKEND
+            if (auto s = dynamic_cast<WGPUTextShape*>(shape.get()))
+            {
+                window.add(s->text);
+            }
+#endif
         }
         window.textAnnotations.menu_end();
 
@@ -5614,7 +5624,6 @@ namespace mrv
         {
             Fl::check();
         }
-#endif
     }
 
     void clone_file_cb(Fl_Menu_* m, void* d)
@@ -5853,11 +5862,8 @@ namespace mrv
         auto context = App::app->getContext();
 
         // Update the Thumbnail and Playback cache.
-#ifndef __EMSCRIPTEN__
-        // \@wgpu: \@wmrv2:
         auto thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
         thumbnailSystem->clearCache();
-#endif
 
         player->clearCache();
     }

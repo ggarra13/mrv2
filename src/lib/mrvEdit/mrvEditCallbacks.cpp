@@ -3991,10 +3991,6 @@ namespace mrv
         }
         ui->uiTimeline->size(W, H);
 
-        if (H >= maxTileHeight)
-        {
-            H = maxTileHeight;
-        }
         H = ui->uiTimeline->getGeometry().h() + 16; // + 16 is needed
         H /= pixels_unit;
         ui->uiTimeline->size(W, H);

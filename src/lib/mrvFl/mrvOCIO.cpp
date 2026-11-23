@@ -37,9 +37,9 @@ namespace mrv
         std::vector<std::string> looks;
         std::vector<std::string> views;
 
+#ifdef TLRENDER_OCIO
         OCIO::ConstConfigRcPtr OCIOconfig = nullptr;
 
-#ifdef TLRENDER_OCIO
         namespace
         {
             /**
@@ -776,8 +776,6 @@ namespace mrv
                 }
             }
 
-#endif
-
             // Update UI
             ui->uiICS->clear();
             ui->uiOCIOView->clear();
@@ -830,6 +828,7 @@ namespace mrv
             }
 
             defaultIcs();
+#endif
         }
 
         void defaultIcs()
@@ -1405,6 +1404,7 @@ namespace mrv
 
         void setDisplay(const std::string& display)
         {
+#ifdef TLRENDER_OCIO
             auto defaultView = OCIOconfig->getDefaultView(display.c_str());
             if (!defaultView || strlen(defaultView) == 0)
             {
@@ -1417,6 +1417,7 @@ namespace mrv
             }
             auto display_view = combineView(display, defaultView);
             setView(display_view);
+#endif
         }
 
         struct OCIODefaults
