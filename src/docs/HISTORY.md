@@ -6,6 +6,8 @@ ChangeLog
 
 - Install / Windows: Now all windows and strings of the installer are translated to all languages.
 
+- UI: Improved Tile separator between Main Viewport and Timeline Viewport. 
+
 - Command-Line / Core: Loading movies and sequences from the command-line with the -edl switch now will properly list all items loaded besides the .otio file.
 
 
