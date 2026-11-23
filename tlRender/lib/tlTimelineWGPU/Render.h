@@ -1,0 +1,446 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2021-2024 Darby Johnston
+// Copyright (C) 2025-Present Gonzalo Garramuño.
+// All rights reserved.
+
+#pragma once
+
+#include <tlTimeline/IRender.h>
+
+#include <tlWGPU/Mesh.h>
+#include <tlWGPU/OffscreenBuffer.h>
+#include <tlWGPU/PipelineCreationState.h>
+#include <tlWGPU/Shader.h>
+#include <tlWGPU/Texture.h>
+
+#include <tlCore/LRUCache.h>
+
+#if defined(TLRENDER_OCIO)
+#    include <OpenColorIO/OpenColorIO.h>
+#endif // TLRENDER_OCIO
+
+#if defined(TLRENDER_OCIO)
+namespace OCIO = OCIO_NAMESPACE;
+#endif // TLRENDER_OCIO
+
+#include <FL/Fl_WebGPU_Window.H>
+
+#include <unordered_map>
+
+struct pl_shader_res;
+
+namespace tl
+{
+    //! Timeline Vulkan support
+    namespace timeline_wgpu
+    {
+        //! Texture cache.
+        typedef memory::LRUCache<
+            std::shared_ptr<image::Image>,
+            std::vector<std::shared_ptr<wgpu::Texture> > >
+            TextureCache;
+
+        //! Stereo mode.
+        enum class StereoType
+        {
+            kScanlines,
+            kColumns,
+            kCheckers,
+        };
+
+        //! Vulkan renderer.
+        class Render : public timeline::IRender
+        {
+            TLRENDER_NON_COPYABLE(Render);
+
+        protected:
+            void _init(
+                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<TextureCache>&);
+
+            Render(Fl_WebGPU_Context& ctx);
+
+        public:
+            virtual ~Render();
+
+            //! Create a new renderer.
+            static std::shared_ptr<Render> create(
+                Fl_WebGPU_Context& ctx, const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<TextureCache>& = nullptr);
+
+            //! Get the texture cache.
+            const std::shared_ptr<TextureCache>& getTextureCache() const;
+
+            //! Copy textures.
+            void copyTextures(
+                const std::shared_ptr<image::Image>&,
+                const std::vector<std::shared_ptr<wgpu::Texture> >&,
+                size_t offset = 0);
+
+            //! Proper Vulkan begin function
+            void begin(
+                WGPUCommandEncoder& cmd,
+                const std::shared_ptr<wgpu::OffscreenBuffer> fbo,
+                const uint32_t frameIndex, const math::Size2i&,
+                const timeline::RenderOptions& = timeline::RenderOptions());
+            void end() override;
+
+            //! Begin an additional offscreen pass inside the frame started by
+            //! begin().  This lets ONE renderer draw into several buffers
+            //! (video, annotations, output-device overlay) without
+            //! re-running the per-frame setup of begin() (garbage
+            //! collection, VAO pool bind).
+            //!
+            //! The state of the outer pass (fbo, render size, transform,
+            //! viewport, clip rect, pipeline group) is saved and restored by
+            //! endPass().
+            //!
+            //! \param pipelineGroup Name used to keep this target's
+            //! pipelines apart from the ones of other targets with a
+            //! different render pass (for example "annotation").
+            void beginPass(
+                WGPUCommandEncoder& cmd,
+                const std::shared_ptr<wgpu::OffscreenBuffer>& fbo,
+                const math::Size2i& renderSize,
+                const timeline::RenderOptions& renderOptions,
+                const std::string& pipelineGroup);
+
+            //! End a pass started with beginPass() and restore the outer
+            //! pass state.
+            void endPass();
+
+            Fl_WebGPU_Context& getContext() const;
+            WGPUCommandEncoder getCommandEncoder() const;
+
+            // Main entry pipeline creation function
+            void createPipeline(const std::string& pipelineName,
+                                const std::string& pipelineLayoutName,
+                                const std::shared_ptr<wgpu::OffscreenBuffer>& fbo,
+                                const std::shared_ptr<wgpu::Shader> shader,
+                                const std::shared_ptr<wgpu::VBO>& mesh,
+                                const wgpu::ColorTargetStateInfo& colorTarget =
+                                wgpu::ColorTargetStateInfo(),
+                                const wgpu::DepthStencilStateInfo& ds = wgpu::DepthStencilStateInfo(),
+                                const wgpu::MultisampleStateInfo& ms = wgpu::MultisampleStateInfo());
+            void createPipeline(
+                const std::shared_ptr<wgpu::OffscreenBuffer>& fbo,
+                const std::string& pipelineName,
+                const std::string& pipelineLayoutName,
+                const std::string& shaderName,
+                const std::string& meshName ,
+                const bool enableBlending = false,
+                const WGPUBlendFactor srcColorBlendFactor = WGPUBlendFactor_SrcAlpha,
+                const WGPUBlendFactor dstColorBlendFactor = WGPUBlendFactor_OneMinusSrcAlpha,
+                const WGPUBlendFactor srcAlphaBlendFactor = WGPUBlendFactor_One,
+                const WGPUBlendFactor dstAlphaBlendFactor = WGPUBlendFactor_OneMinusSrcAlpha,
+                const WGPUBlendOperation colorBlendOp = WGPUBlendOperation_Add,
+                const WGPUBlendOperation alphaBlendOp = WGPUBlendOperation_Add);
+            void usePipeline(const std::string& pipelineName);
+
+            //! Overriden begin function
+            void begin(
+                const math::Size2i&, const timeline::RenderOptions& =
+                timeline::RenderOptions()) override;
+
+            math::Size2i getRenderSize() const override;
+            void setRenderSize(const math::Size2i&) override;
+
+            //! Gets the internal FBO
+            std::shared_ptr<wgpu::OffscreenBuffer> getFBO() const;
+
+            //! Gets the current WebGPU render pass.
+            WGPURenderPassEncoder getRenderPass() const;
+
+            //! Changes the current WebGPU render pass.
+            void setRenderPass(WGPURenderPassEncoder);
+
+            math::Box2i getViewport() const override;
+            void setViewport(const math::Box2i&) override;
+            void clearViewport(const image::Color4f&) override;
+            bool getClipRectEnabled() const override;
+            void setClipRectEnabled(bool) override;
+            math::Box2i getClipRect() const override;
+            void setClipRect(const math::Box2i&) override;
+            math::Matrix4x4f getTransform() const override;
+            void setTransform(const math::Matrix4x4f&) override;
+            void applyTransforms();
+            void setShaderOptions(const timeline::ShaderOptions&);
+            void setOCIOOptions(const timeline::OCIOOptions&) override;
+            void setLUTOptions(const timeline::LUTOptions&) override;
+            void setHDROptions(const timeline::HDROptions&) override;
+
+            //! @{
+            //!     These functions draw to the internal FBO.
+            void drawRect(const math::Box2i&, const image::Color4f&,
+                          const std::string& shaderName = "") override;
+            void drawMesh(const std::string& pipelineName,
+                          const std::string& pipelineLayoutName,
+                          const std::string& shaderName,
+                          const std::string& meshName,
+                          const geom::TriangleMesh2&,
+                          const math::Vector2i& position,
+                          const image::Color4f&,
+                          const bool enableBlending = false,
+                          const WGPUBlendFactor srcColorBlendFactor = WGPUBlendFactor_SrcAlpha,
+                          const WGPUBlendFactor dstColorBlendFactor = WGPUBlendFactor_OneMinusSrcAlpha,
+                          const WGPUBlendFactor srcAlphaBlendFactor = WGPUBlendFactor_One,
+                          const WGPUBlendFactor dstAlphaBlendFactor = WGPUBlendFactor_OneMinusSrcAlpha,
+                          const WGPUBlendOperation colorBlendOp = WGPUBlendOperation_Add,
+                          const WGPUBlendOperation alphaBlendOp = WGPUBlendOperation_Add);
+
+            //! Creates text meshes to speed up drawing
+            void appendText(
+                std::vector<timeline::TextInfo>& info,
+                const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
+                const math::Vector2i& position) override;
+
+            //! Draws the text meshes.
+            void drawText(
+                const timeline::TextInfo&,
+                const math::Vector2i& position,
+                const image::Color4f&) override;
+
+            //! Draws a 2D mesh to the internal FBO.
+            void drawMesh(
+                const geom::TriangleMesh2&, const math::Vector2i& position,
+                const image::Color4f&, const std::string& meshName) override;
+
+            //! NO-OP for Vulkan
+            void drawColorMesh(
+                const geom::TriangleMesh2&, const math::Vector2i& position,
+                const image::Color4f&) override {};
+
+            //! Draws a 2D color mesh to the internal FBO.
+            void drawColorMesh(
+                const std::string& pipelineLayoutName,
+                const geom::TriangleMesh2&, const math::Vector2i& position,
+                const image::Color4f&);
+
+            //! NO-OP for Vulkan
+            void drawTexture(
+                unsigned int, const math::Box2i&,
+                const image::Color4f& =
+                    image::Color4f(1.F, 1.F, 1.F)) override {};
+
+            //! Draws a texture to the internal FBO.
+            void drawTexture(
+                const std::shared_ptr<wgpu::Texture>&, const math::Box2i&,
+                const image::Color4f& = image::Color4f(1.F, 1.F, 1.F));
+
+            //! Draws an image to the internal FBO.
+            void drawImage(
+                const std::shared_ptr<image::Image>&, const math::Box2i&,
+                const image::Color4f& = image::Color4f(1.F, 1.F, 1.F),
+                const timeline::ImageOptions& =
+                    timeline::ImageOptions()) override;
+
+            //! Draws an image to a provided FBO.
+            void drawImage(
+                const std::shared_ptr<wgpu::OffscreenBuffer>& fbo,
+                const std::shared_ptr<image::Image>&, const math::Box2i&,
+                const image::Color4f& = image::Color4f(1.F, 1.F, 1.F),
+                const timeline::ImageOptions& = timeline::ImageOptions(),
+                const bool clearRenderPass = true);
+
+            //! Draws the video data to the internal FBO.
+            void drawVideo(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>& = {},
+                const std::vector<timeline::DisplayOptions>& = {},
+                const timeline::CompareOptions& = timeline::CompareOptions(),
+                const timeline::BackgroundOptions& =
+                    timeline::BackgroundOptions()) override;
+
+            //! Draws the stereo video data to the internal FBO with a
+            //! particular method.
+            void drawStereo(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const StereoType = StereoType::kScanlines,
+                const float offset = 0.F,
+                const std::vector<timeline::ImageOptions>& = {},
+                const std::vector<timeline::DisplayOptions>& = {},
+                const timeline::CompareOptions& = timeline::CompareOptions());
+
+            //! Draws the stereo video data as an anaglyph to the internal FBO.
+            void drawAnaglyph(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const float offset = 0.F,
+                const std::vector<timeline::ImageOptions>& = {},
+                const std::vector<timeline::DisplayOptions>& = {},
+                const timeline::CompareOptions& = timeline::CompareOptions());
+
+            //! Draws a black mask to the internal FBO.
+            void drawMask(float pct = 0.F);
+
+            void drawRectViewport(const std::string& pipelineName,
+                                  const math::Box2i&, const image::Color4f&,
+                                  const bool enableBlending = true,
+                                  const std::string& shaderName = "");
+            void drawMeshViewport(const std::string& pipelineName,
+                                  const std::string& shaderName,
+                                  const std::string& meshName,
+                                  const geom::TriangleMesh2&,
+                                  const math::Vector2i& position,
+                                  const image::Color4f&,
+                                  const bool enableBlending = false);
+
+            //! Vulkan render pass functions
+            void beginLoadRenderPass() override;
+            void beginRenderPass() override;
+            void endRenderPass() override;
+            void setupViewportAndScissor() override;
+
+        private:
+            void _displayShader();
+
+            void _applyScissor(WGPURenderPassEncoder pass,
+                               const std::shared_ptr<wgpu::OffscreenBuffer>&
+                               fbo);
+            void _drawImageCommon(
+                const std::shared_ptr<wgpu::OffscreenBuffer>& fbo,
+                const std::shared_ptr<image::Image>& image,
+                const math::Box2i& box,
+                const image::Color4f& color,
+                const timeline::ImageOptions& imageOptions,
+                const bool clearRenderPass,
+                const bool flip,
+                const bool applyClipRect);
+
+            void _uploadMesh(const std::string& meshName,
+                             const geom::TriangleMesh2& mesh,
+                             size_t triangleCount);
+
+            void _emitMeshDraw(const std::string& pipelineLayoutName,
+                               const std::string& shaderName,
+                               const std::string& meshName,
+                               const math::Matrix4x4f& transform,
+                               const image::Color4f& color);
+
+            void _setupRectCommon(const math::Box2i& box);
+
+            void _drawBackground(
+                const std::vector<math::Box2i>&,
+                const timeline::BackgroundOptions&);
+            void _drawVideoA(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&,
+                const timeline::CompareOptions&);
+            void _drawVideoB(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&,
+                const timeline::CompareOptions&);
+            void _drawVideoWipe(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&,
+                const timeline::CompareOptions&);
+            void _drawVideoOverlay(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&,
+                const timeline::CompareOptions&);
+            void _drawVideoDifference(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&,
+                const timeline::CompareOptions&);
+            void _drawVideoAdd(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&,
+                const timeline::CompareOptions&);
+            void _drawVideoMultiply(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&,
+                const timeline::CompareOptions&);
+            void _drawVideoTile(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&,
+                const timeline::CompareOptions&);
+
+            void _drawVideoButterfly(
+                const std::vector<timeline::VideoFrame>& videoFrame,
+                const std::vector<math::Box2i>& boxes,
+                const std::vector<timeline::ImageOptions>& imageOptions,
+                const std::vector<timeline::DisplayOptions>& displayOptions,
+                const timeline::CompareOptions& compareOptions);
+
+            //! Draw both files into a pair of offscreen buffers, for the
+            //! comparisons that combine them a pixel at a time. Answers
+            //! whether there are two to combine.
+            bool _drawVideoPair(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&);
+            //! Draw the pair through a shader that samples both.
+            void _drawVideoPairShader(
+                const std::string& shader,
+                const math::Box2i&);
+            void _drawVideo(
+                std::shared_ptr<wgpu::OffscreenBuffer>& fbo,
+                const std::string& pipelineName,
+                const timeline::VideoFrame&, const math::Box2i&,
+                const std::shared_ptr<timeline::ImageOptions>&,
+                const timeline::DisplayOptions&);
+            void _create2DMesh(
+                const std::string& meshName, const geom::TriangleMesh2& mesh);
+            void _create3DMesh(
+                const std::string& meshName, const geom::TriangleMesh3& mesh);
+            void _createBindingSet(const std::shared_ptr<wgpu::Shader> shaderName);
+            WGPUPipelineLayout _createPipelineLayout(
+                const std::string& pipelineLayoutName,
+                const std::shared_ptr<wgpu::Shader> shader);
+            void _bindDescriptorSets(
+                WGPURenderPassEncoder pass,
+                const std::shared_ptr<wgpu::Shader> shader,
+                const void* pushData);
+            void _bindComputeDescriptorSets(
+                WGPUComputePassEncoder pass,
+                const std::shared_ptr<wgpu::Shader> shader,
+                const void* pushData);
+            void _vkDraw(const std::string& meshName);
+
+
+#if defined(TLRENDER_LIBPLACEBO)
+            void _addTextures(
+                std::vector<std::shared_ptr<wgpu::Texture> >& textures,
+                const pl_shader_res* res);
+
+            void _parseVariables(std::stringstream& s,
+                                 std::size_t& currentOffset,
+                                 const struct pl_shader_res* res,
+                                 const size_t pushConstantsMaxSize);
+
+#endif
+
+#if defined(TLRENDER_OCIO)
+            std::string
+            _getOCIOUniforms(const OCIO::GpuShaderDescRcPtr&);
+            void _createOCIOUniforms(const OCIO::GpuShaderDescRcPtr&);
+            void _updateOCIOUniforms(const OCIO::GpuShaderDescRcPtr&);
+            void _addTextures(
+                std::vector<std::shared_ptr<wgpu::Texture >>& textures,
+                const OCIO::GpuShaderDescRcPtr& shaderDesc);
+#endif
+            Fl_WebGPU_Context& ctx;
+
+            TLRENDER_PRIVATE();
+        };
+    } // namespace timeline_wgpu
+} // namespace tl
