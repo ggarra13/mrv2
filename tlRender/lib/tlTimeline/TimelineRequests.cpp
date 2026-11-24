@@ -408,13 +408,18 @@ namespace tl
         void Timeline::cancelRequests(const std::vector<uint64_t>& ids)
         {
             TLRENDER_P();
-            auto cancel = [&ids](auto& requests)
+
+            std::list<std::shared_ptr<Private::PendingVideoRequest> > cancelledVideo;
+            std::list<std::shared_ptr<Private::PendingAudioRequest> > cancelledAudio;
+
+            auto cancel = [&ids](auto& requests, auto& cancelled)
                 {
                     auto i = requests.begin();
                     while (i != requests.end())
                     {
                         if (std::find(ids.begin(), ids.end(), (*i)->id) != ids.end())
                         {
+                            cancelled.push_back(std::move(*i));
                             i = requests.erase(i);
                         }
                         else
@@ -425,13 +430,23 @@ namespace tl
                 };
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                cancel(p.mutex.videoRequests);
-                cancel(p.mutex.audioRequests);
-                // The ones already in progress are the request thread's to
-                // deal with, at the readers.
-                p.mutex.cancelledIds.insert(p.mutex.cancelledIds.end(), ids.begin(), ids.end());
+                cancel(p.mutex.videoRequests, cancelledVideo);
+                cancel(p.mutex.audioRequests, cancelledAudio);
+                p.mutex.cancelledIds.insert(
+                    p.mutex.cancelledIds.end(), ids.begin(), ids.end());
             }
             p.thread.cv.notify_one();
+
+            // Complete them so no promise is destroyed unfulfilled. Done
+            // outside the lock in case a continuation touches the timeline.
+            for (auto& request : cancelledVideo)
+            {
+                request->promise.set_value(VideoFrame());
+            }
+            for (auto& request : cancelledAudio)
+            {
+                request->promise.set_value(AudioFrame());
+            }
         }
 
         void Timeline::closeReaders()
