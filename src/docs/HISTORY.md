@@ -8,6 +8,8 @@ ChangeLog
 
 - UI: Improved Tile separator between Main Viewport and Timeline Viewport. 
 
+- UI/Core: Fixed YPbPr::to_rgb() function reading an incorrect variable resulting in black.
+
 - Command-Line / Core: Loading movies and sequences from the command-line with the -edl switch now will properly list all items loaded besides the .otio file.
 
 - Core: Fixed a potential race condition when rewinding the playback.

@@ -79,11 +79,11 @@ namespace
     inline float
     hue(const Color4f& rgb, const float maxV, const float spanV) noexcept
     {
-        // If spanV is practically zero, hue is meaningless (grayscale). 
+        // If spanV is practically zero, hue is meaningless (grayscale).
         // We catch this in the parent function, but returning 0.0f here is a
         // safe fallback.
         if (spanV < 1e-6f) return 0.0f;
-        
+
         float h;
         if (rgb.r == maxV)
         {
@@ -331,15 +331,15 @@ namespace mrv
             {
                 float minV = std::min(rgb.r, std::min(rgb.g, rgb.b));
                 float maxV = std::max(rgb.r, std::max(rgb.g, rgb.b));
-    
+
                 float spanV = maxV - minV;
-    
-                float v = maxV; 
+
+                float v = maxV;
                 float h = 0.0f;
                 float s = 0.0f;
 
                 // Use a small epsilon instead of 0.0f to protect against float inaccuracy
-                if (maxV > 1e-6f) 
+                if (maxV > 1e-6f)
                 {
                     s = spanV / maxV;
                 }
@@ -416,7 +416,7 @@ namespace mrv
             {
                 // Luma (Y) coefficients for BT.601
                 float y = rgb.r * 0.299f + rgb.g * 0.587f + rgb.b * 0.114f;
-    
+
                 return Color4f(
                     y,
                     (rgb.b - y) * 0.5643f, // Pb: Scales (B-Y) to [-0.5, 0.5]
@@ -424,7 +424,7 @@ namespace mrv
                     rgb.a
                     );
             }
-            
+
             //! ITU. 709  (Digital HDTV )
             Color4f to_ITU709(const Color4f& rgb) noexcept {
                 float y = rgb.r * 0.2126f + rgb.g * 0.7152f + rgb.b * 0.0722f;
@@ -485,14 +485,14 @@ namespace mrv
 
                 c.a = YPbPr.a;
 
-                const float y = c.r;
-                const float cb = c.g;
-                const float cr = c.b;
+                const float y = YPbPr.r;
+                const float cb = YPbPr.g;
+                const float cr = YPbPr.b;
 
                 c.r = y + (yuvCoefficients.x * cr);
                 c.g = y - (yuvCoefficients.y * cb) - (yuvCoefficients.z * cr);
                 c.b = y + (yuvCoefficients.w * cb);
-                
+
                 c.r = Imath::clamp(c.r, 0.0f, 1.0f);
                 c.g = Imath::clamp(c.g, 0.0f, 1.0f);
                 c.b = Imath::clamp(c.b, 0.0f, 1.0f);
@@ -509,7 +509,7 @@ namespace mrv
         void
         checkLevels(image::Color4f& yuv,
                     const image::VideoLevels videoLevels)
-        {            
+        {
             if (videoLevels == image::VideoLevels::FullRange)
             {
                 // Chroma is encoded as [0, 1]; re-centre to [-0.5, 0.5]
@@ -543,7 +543,7 @@ namespace mrv
                 yuv.b = ((yuv.b - kChromaMin) * kChromaScale) - 0.5f;
             }
         }
-        
+
         //! Convert tlRender's layer names to more human readable ones.
         std::string layer(const std::string layerName)
         {
