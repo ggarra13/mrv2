@@ -351,22 +351,28 @@ namespace tl
             ++(p.currentStats.images);
 
             const auto& info = image->getInfo();
-            std::vector<std::shared_ptr<gl::Texture> > textures;
-            if (!imageOptions.cache)
+
+            const std::string key =
+                std::to_string((uintptr_t)this) +
+                std::to_string(static_cast<int>(info.pixelType)) + ":" +
+                std::to_string(info.size.w) + "x" +
+                std::to_string(info.size.h) + ":" +
+                std::to_string(info.size.pixelAspectRatio) + ":" +
+                std::to_string(static_cast<int>(imageOptions.imageFilters.minify)) + "*" +
+                std::to_string(static_cast<int>(imageOptions.imageFilters.magnify));
+
+            auto& slot = p.imageSlots[key];
+            if (slot.textures.empty())
+                slot.textures = getTextures(info, imageOptions.imageFilters);
+
+            if (slot.last != image)
             {
-                textures = getTextures(info, imageOptions.imageFilters);
-                copyTextures(image, textures);
+                copyTextures(image, slot.textures);
+                slot.last = image;
             }
-            else if (!p.textureCache->get(image, textures))
-            {
-                textures = getTextures(info, imageOptions.imageFilters);
-                copyTextures(image, textures);
-                size_t glBytes = image->getDataByteCount();
-                if (image::getChannelCount(info.pixelType) == 3 &&
-                    info.pixelType != image::PixelType::RGB_U10)
-                    glBytes = glBytes / 3 * 4; // GPUs store RGB as RGBA.
-                p.textureCache->add(image, textures, glBytes);
-            }
+
+            auto& textures = slot.textures;
+
             setActiveTextures(info, textures);
 
             p.shaders["image"]->bind();

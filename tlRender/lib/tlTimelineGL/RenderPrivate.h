@@ -153,6 +153,15 @@ namespace tl
             bool clipRectEnabled = false;
             math::Box2i clipRect;
 
+            // Mapping of last image to texture(s) (YUV planes for example)
+            struct ImageSlot
+            {
+                std::vector<std::shared_ptr<gl::Texture> > textures;
+                std::shared_ptr<image::Image> last;
+            };
+            std::map<std::string, ImageSlot> imageSlots;
+            std::map<const void*, int> imageOrdinal;
+
             std::map<std::string, std::shared_ptr<gl::Shader> > shaders;
             std::map<std::string, std::shared_ptr<gl::OffscreenBuffer> >
                 buffers;

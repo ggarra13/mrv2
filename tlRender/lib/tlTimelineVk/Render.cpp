@@ -970,12 +970,6 @@ namespace tl
             IRender::_init(context);
             TLRENDER_P();
 
-            p.textureCache = textureCache;
-            if (!p.textureCache)
-            {
-                p.textureCache = std::make_shared<TextureCache>();
-            }
-
             if (!p.statsSystem)
             {
                 p.statsSystem = context->getSystem<system::StatsSystem>();
@@ -1094,7 +1088,7 @@ namespace tl
             p.renderPass = fbo->getClearRenderPass();
             p.frameIndex = frameIndex;
 
-
+            p.imageOrdinal.clear();
 
 
 
@@ -1163,7 +1157,6 @@ namespace tl
 
             p.renderSize = renderSize;
             p.renderOptions = renderOptions;
-            p.textureCache->setMax(renderOptions.textureCacheByteCount);
 
             VkDevice device = ctx.device;
 

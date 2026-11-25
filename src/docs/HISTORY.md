@@ -12,6 +12,7 @@ ChangeLog
 
 - Command-Line / Core: Loading movies and sequences from the command-line with the -edl switch now will properly list all items loaded besides the .otio file.
 
+- Vulkan/WGPU/Core: Sped up playback even more.
 - Core: Fixed a potential race condition when rewinding the playback.
 
 
