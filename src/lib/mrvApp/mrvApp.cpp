@@ -590,6 +590,10 @@ namespace mrv
         Fl::use_high_res_VK(true);
 #endif
 
+#ifdef WEBGPU_BACKEND
+        Fl::use_high_res_GL(true);
+#endif
+
 
         Fl::set_fonts("-*");
 
@@ -2015,8 +2019,10 @@ namespace mrv
             p.settings->getValue<int>("Performance/FFmpegThreadCount"));
         out["FFmpeg/HWAccel"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegHWAccel"));
+#ifndef __EMSCRIPTEN__
         out["FFmpeg/HWDriver"] = string::Format("{0}").arg(
             p.settings->getValue<std::string>("Performance/FFmpegHWDriver"));
+#endif
 
 #ifdef __EMSCRIPTEN__
         auto c = ui;
@@ -2213,8 +2219,9 @@ namespace mrv
             p.activeFiles[0]->mediaReferenceKey = p.player->getMediaReferenceKey();
             p.activeFiles[0]->annotations = p.player->getAllAnnotations();
 
-            // \@wmrv2
-            // p.activeFiles[0]->voiceAnnotations = p.player->getAllVoiceAnnotations();
+#ifndef __EMSCRIPTEN__
+            p.activeFiles[0]->voiceAnnotations = p.player->getAllVoiceAnnotations();
+#endif
 #ifdef TLRENDER_OCIO
             p.activeFiles[0]->ocioIcs = ocio::ics();
             p.activeFiles[0]->ocioLook = ocio::look();
@@ -2411,9 +2418,9 @@ namespace mrv
                         set_edit_mode_cb(EditMode::kFull, ui);
                 }
 
+#ifdef TLRENDER_OCIO
                 if (!activeFiles.empty())
                 {
-#ifdef TLRENDER_OCIO
                     try
                     {
                         if (activeFiles[0]->ocioIcs.empty())
@@ -2442,8 +2449,8 @@ namespace mrv
 
                     if (activeFiles[0]->lutOptions != p.lutOptions)
                         setLUTOptions(activeFiles[0]->lutOptions);
-#endif
                 }
+#endif
 
                 if (isRunning())
                 {
