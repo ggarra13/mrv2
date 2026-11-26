@@ -46,9 +46,11 @@ namespace mrv
         void onlyOne(bool t)
         {
             one_panel_only = t;
+#ifdef MRV2_NETWORK
             bool send = App::ui->uiPrefs->SendUI->value();
             if (send)
                 tcp->pushMessage("One Panel Only", t);
+#endif
         }
 
         bool onlyOne()
@@ -77,9 +79,11 @@ namespace mrv
                 if (clearCache) stereo3DPanel->clearCache();
                 stereo3DPanel->redraw();
             }
+#ifdef MRV2_NETWORK
             bool send = App::ui->uiPrefs->SendTimeline->value();
             if (send)
                 tcp->pushMessage("Redraw Panel Thumbnails", clearCache);
+#endif
         }
 
 
@@ -210,11 +214,13 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage("Color Panel", static_cast<bool>(!colorPanel));
             }
+#endif
 
             if (colorPanel)
             {
@@ -241,11 +247,13 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage("Files Panel", static_cast<bool>(!filesPanel));
             }
+#endif
 
             if (filesPanel)
             {
@@ -272,12 +280,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Compare Panel", static_cast<bool>(!comparePanel));
             }
+#endif
 
             if (comparePanel)
             {
@@ -303,12 +313,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Settings Panel", static_cast<bool>(!settingsPanel));
             }
+#endif
 
             if (settingsPanel)
             {
@@ -335,12 +347,15 @@ namespace mrv
             default:
                 break;
             }
+
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Python Panel", static_cast<bool>(!pythonPanel));
             }
+#endif
 
             if (pythonPanel)
             {
@@ -399,12 +414,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Color Area Panel", static_cast<bool>(!colorAreaPanel));
             }
+#endif
 
             if (colorAreaPanel)
             {
@@ -431,12 +448,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Notes Panel", static_cast<bool>(!notesPanel));
             }
+#endif
 
             if (notesPanel)
             {
@@ -463,12 +482,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Annotations Panel", static_cast<bool>(!annotationsPanel));
             }
+#endif
 
             if (annotationsPanel)
             {
@@ -495,12 +516,15 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Background Panel", static_cast<bool>(!backgroundPanel));
             }
+#endif
+
             if (backgroundPanel)
             {
                 delete backgroundPanel;
@@ -526,12 +550,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Media Info Panel", static_cast<bool>(!imageInfoPanel));
             }
+#endif
 
             if (imageInfoPanel)
             {
@@ -558,12 +584,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Histogram Panel", static_cast<bool>(!histogramPanel));
             }
+#endif
 
             if (histogramPanel)
             {
@@ -590,12 +618,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Vectorscope Panel", static_cast<bool>(!vectorscopePanel));
             }
+#endif
 
             if (vectorscopePanel)
             {
@@ -622,12 +652,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Waveform Panel", static_cast<bool>(!waveformPanel));
             }
+#endif
 
             if (waveformPanel)
             {
@@ -654,6 +686,7 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
@@ -661,6 +694,8 @@ namespace mrv
                     "Environment Map Panel",
                     static_cast<bool>(!environmentMapPanel));
             }
+#endif
+
             if (environmentMapPanel)
             {
                 delete environmentMapPanel;
@@ -687,11 +722,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage("NDI Panel", static_cast<bool>(!ndiPanel));
             }
+#endif
+
             if (ndiPanel)
             {
                 delete ndiPanel;
@@ -719,12 +757,15 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Webrtc Panel", static_cast<bool>(!webrtcPanel));
             }
+#endif
+
             if (webrtcPanel)
             {
                 delete webrtcPanel;
@@ -753,11 +794,14 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage("USD Panel", static_cast<bool>(!usdPanel));
             }
+#endif
+
             if (usdPanel)
             {
                 delete usdPanel;
@@ -784,12 +828,15 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Stats Panel", static_cast<bool>(!statsPanel));
             }
+#endif
+
             if (statsPanel)
             {
                 delete statsPanel;
@@ -815,12 +862,15 @@ namespace mrv
                 break;
             }
 
+#ifdef MRV2_NETWORK
             bool send = ui->uiPrefs->SendUI->value();
             if (send)
             {
                 tcp->pushMessage(
                     "Stereo 3D Panel", static_cast<bool>(!stereo3DPanel));
             }
+#endif
+
             if (stereo3DPanel)
             {
                 delete stereo3DPanel;
@@ -866,6 +916,7 @@ namespace mrv
 
         void syncPanels(const std::string& peerId)
         {
+#ifdef MRV2_NETWORK
             bool send = App::ui->uiPrefs->SendUI->value();
             if (!send)
                 return;
@@ -930,11 +981,10 @@ namespace mrv
             msg["value"] = static_cast<bool>(pythonPanel);
             tcp->pushToPeer(peerId, msg);
 #endif
-#ifdef MRV2_NETWORK
             msg["command"] = "WebRTC Panel";
             msg["value"] = static_cast<bool>(webrtcPanel);
             tcp->pushToPeer(peerId, msg);
-#endif
+
             msg["command"] = "Histogram Panel";
             msg["value"] = static_cast<bool>(histogramPanel);
             tcp->pushToPeer(peerId, msg);
@@ -950,6 +1000,7 @@ namespace mrv
             msg["command"] = "Stats Panel";
             msg["value"] = static_cast<bool>(statsPanel);
             tcp->pushToPeer(peerId, msg);
+#endif
         }
 
     } // namespace panel
