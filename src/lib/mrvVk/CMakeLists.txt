@@ -42,7 +42,7 @@ if(APPLE)
 endif()
 
 set(LIBRARIES mrvUI mrvWidgets mrvCore ${FLTK_vk_LIBRARY} )
-list(APPEND LIBRARIES tlRender::tlTimelineUIVk tlRender::tlDraw tlRender::tlTimelineVk tlRender::tlVk tlRender::tlUI tlRender::tlTimeline  Vulkan::Vulkan)
+list(APPEND LIBRARIES tlRender::tlTimelineUIVk tlRender::tlUI tlRender::tlDraw tlRender::tlTimelineVk tlRender::tlVk tlRender::tlTimeline  Vulkan::Vulkan)
 set(LIBRARIES_PRIVATE )
 
 add_library(mrvVk ${SOURCES} ${HEADERS})

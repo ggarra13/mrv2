@@ -575,18 +575,29 @@ namespace tl
             ++(p.currentStats.images);
 
             const auto& info = image->getInfo();
-            std::vector<std::shared_ptr<wgpu::Texture> > textures;
-            if (!imageOptions.cache)
+
+            const int ordinal = p.imageOrdinal[fbo.get()]++;
+            const std::string key =
+                std::to_string(reinterpret_cast<uintptr_t>(fbo.get())) + ":" +
+                std::to_string(ordinal) + ":" +
+                std::to_string(static_cast<int>(info.pixelType)) + ":" +
+                std::to_string(info.size.w) + "x" +
+                std::to_string(info.size.h) + ":" +
+                std::to_string(static_cast<int>(imageOptions.imageFilters.minify)) + "*" +
+                std::to_string(static_cast<int>(imageOptions.imageFilters.magnify));
+
+            auto& slot = p.imageSlots[key];
+            if (slot.textures.empty())
+                slot.textures = getTextures(ctx, info,
+                                            imageOptions.imageFilters);
+
+            if (slot.last != image)
             {
-                textures = getTextures(ctx, info, imageOptions.imageFilters);
-                copyTextures(image, textures);
+                copyTextures(image, slot.textures);
+                slot.last = image;
             }
-            else if (!p.textureCache->get(image, textures))
-            {
-                textures = getTextures(ctx, info, imageOptions.imageFilters);
-                copyTextures(image, textures);
-                p.textureCache->add(image, textures, image->getDataByteCount());
-            }
+
+            auto& textures = slot.textures;
 
             auto shader = p.shaders["image"];
             _createBindingSet(shader);

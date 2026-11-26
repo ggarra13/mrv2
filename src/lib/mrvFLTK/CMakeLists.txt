@@ -27,6 +27,10 @@ if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
     list(APPEND LIBRARIES mrvVk tlRender::tlTimelineUIVk Vulkan::Vulkan)
 endif()
 
+if(TLRENDER_WGPU AND MRV2_BACKEND STREQUAL "WGPU")
+    list(APPEND LIBRARIES mrvWGPU tlRender::tlTimelineUIWGPU)
+endif()
+
 if(MRV2_PYBIND11)
     list(APPEND LIBRARIES pybind11::embed )
     if(UNIX AND NOT APPLE)

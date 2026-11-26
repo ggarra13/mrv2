@@ -16,7 +16,7 @@ if(TLRENDER_FFMPEG)
     add_subdirectory(mrvVoice)       # mrvWidgets, miniaudio
 endif()
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
-    # tlTimelineVk, tlVk, tlTimeline, tlTimelineUIVk, tlUI
+    # tlTimelineVk, tlVk, tlTimeline, tlTimelineUI, tlUI
     # mrvUI, mrvEdit, mrvWidgets, mrvCore, FLTK
     add_subdirectory(mrvVk)
 endif()

@@ -12,15 +12,22 @@
 # * tlRender::tlCore
 # * tlRender::tlIO
 # * tlRender::tlTimeline
-# * tlRender::tlTimelineGL
-# * tlRender::tlTimelineUI
 # * tlRender::tlDevice
 # * tlRender::tlDraw
+#
 # * tlRender::tlGL
+# * tlRender::tlTimelineGL
+# * tlRender::tlTimelineUI
+#
+# * tlRender::tlVk
 # * tlRender::tlTimelineVk
 # * tlRender::tlTimelineUIVk
+#
 # * tlRender::tlUI
-# * tlRender::tlVk
+#
+# * tlRender::tlWGPU
+# * tlRender::tlTimelineWGPU
+# * tlRender::tlTimelineUIWGPU
 # * tlRender::glad
 #
 # This module defines the following interfaces:
@@ -40,7 +47,7 @@ find_package(harfbuzz REQUIRED)
 find_package(OpenTimelineIO REQUIRED CONFIG)
 find_package(PNG REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(lunasvg REQUIRED)
+find_package(minizip REQUIRED)
 
 #
 # These may be installed in cmake or not installed if the setting is off
@@ -55,7 +62,9 @@ if(TLRENDER_EXR)
     find_package(OpenEXR CONFIG)
 endif()
 if(TLRENDER_FFMPEG)
-    find_package(dovi)
+    if (NOT EMSCRIPTEN)
+	find_package(dovi)
+    endif()
     find_package(FFmpeg REQUIRED)
 endif()
 if(TLRENDER_LIBPLACEBO)
@@ -69,6 +78,9 @@ if(TLRENDER_NDI)
 endif()
 if(TLRENDER_RAW)
     find_package(LibRaw)
+endif()
+if(TLRENDER_SVG)
+    find_package(lunasvg REQUIRED)
 endif()
 if(TLRENDER_TIFF)
     find_package(TIFF)
@@ -130,28 +142,44 @@ if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     find_library(tlRender_tlDraw_LIBRARY NAMES tlDraw)
     find_library(tlRender_tlIO_LIBRARY NAMES tlIO)
     find_library(tlRender_tlTimeline_LIBRARY NAMES tlTimeline)
-    find_library(tlRender_tlTimelineUI_LIBRARY NAMES tlTimelineUI)
     find_library(tlRender_tlDevice_LIBRARY NAMES tlDevice)
+
     find_library(tlRender_tlGL_LIBRARY NAMES tlGL)
     find_library(tlRender_tlTimelineGL_LIBRARY NAMES tlTimelineGL)
+    find_library(tlRender_tlTimelineUI_LIBRARY NAMES tlTimelineUI)
+    
     find_library(tlRender_tlVk_LIBRARY NAMES tlVk)
-    find_library(tlRender_tlUI_LIBRARY NAMES tlUI)
     find_library(tlRender_tlTimelineVk_LIBRARY NAMES tlTimelineVk)
     find_library(tlRender_tlTimelineUIVk_LIBRARY NAMES tlTimelineUIVk)
+    
+    find_library(tlRender_tlWGPU_LIBRARY NAMES tlWGPU)
+    find_library(tlRender_tlTimelineWGPU_LIBRARY NAMES tlTimelineWGPU)
+    find_library(tlRender_tlTimelineUIWGPU_LIBRARY NAMES tlTimelineUIWGPU)
+    
+    find_library(tlRender_tlUI_LIBRARY NAMES tlUI)
+
     find_library(tlRender_glad_LIBRARY NAMES glad)
 else()
     find_library(tlRender_tlCore_LIBRARY NAMES tlCore)
     find_library(tlRender_tlDraw_LIBRARY NAMES tlDraw)
     find_library(tlRender_tlIO_LIBRARY NAMES tlIO)
     find_library(tlRender_tlTimeline_LIBRARY NAMES tlTimeline)
-    find_library(tlRender_tlTimelineUI_LIBRARY NAMES tlTimelineUI)
     find_library(tlRender_tlDevice_LIBRARY NAMES tlDevice)
+    
     find_library(tlRender_tlGL_LIBRARY NAMES tlGL)
     find_library(tlRender_tlTimelineGL_LIBRARY NAMES tlTimelineGL)
-    find_library(tlRender_tlVk_LIBRARY NAMES tlVk)
+    find_library(tlRender_tlTimelineUI_LIBRARY NAMES tlTimelineUI)
+    
     find_library(tlRender_tlUI_LIBRARY NAMES tlUI)
+    
+    find_library(tlRender_tlVk_LIBRARY NAMES tlVk)
     find_library(tlRender_tlTimelineVk_LIBRARY NAMES tlTimelineVk)
     find_library(tlRender_tlTimelineUIVk_LIBRARY NAMES tlTimelineUIVk)
+    
+    find_library(tlRender_tlWGPU_LIBRARY NAMES tlWGPU)
+    find_library(tlRender_tlTimelineWGPU_LIBRARY NAMES tlTimelineWGPU)
+    find_library(tlRender_tlTimelineUIWGPU_LIBRARY NAMES tlTimelineUIWGPU)
+    
     find_library(tlRender_glad_LIBRARY NAMES glad)
 endif()
 
@@ -176,6 +204,16 @@ if(tlRender_tlVk_LIBRARY AND tlRender_tlTimelineVk_LIBRARY)
 	${tlRender_tlTimelineUIVk_LIBRARY})
 endif()
 
+set(tlRender_WGPU_FOUND FALSE)
+set(tlRender_WGPU_LIBRARIES)
+if(tlRender_tlWGPU_LIBRARY AND tlRender_tlTimelineWGPU_LIBRARY)
+    set(tlRender_WGPU_FOUND TRUE)
+    set(tlRender_WGPU_LIBRARIES
+	${tlRender_tlWGPU_LIBRARY}
+	${tlRender_tlTimelineWGPU_LIBRARY}
+	${tlRender_tlTimelineUIWGPU_LIBRARY})
+endif()
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
     tlRender
@@ -189,15 +227,23 @@ mark_as_advanced(
     tlRender_tlCore_LIBRARY
     tlRender_tlIO_LIBRARY
     tlRender_tlTimeline_LIBRARY
-    tlRender_tlTimelineGL_LIBRARY
-    tlRender_tlTimelineUI_LIBRARY
     tlRender_tlDraw_LIBRARY
     tlRender_tlDevice_LIBRARY
+    
     tlRender_tlGL_LIBRARY
+    tlRender_tlTimelineGL_LIBRARY
+    tlRender_tlTimelineUI_LIBRARY
+
+    tlRender_tlVk_LIBRARY
     tlRender_tlTimelineVk_LIBRARY
     tlRender_tlTimelineUIVk_LIBRARY
+    
+    tlRender_tlWGPU_LIBRARY
+    tlRender_tlTimelineWGPU_LIBRARY
+    tlRender_tlTimelineUIWGPU_LIBRARY
+    
     tlRender_tlUI_LIBRARY
-    tlRender_tlVk_LIBRARY
+    
     tlRender_glad_LIBRARY)
 
 set(tlRender_tlCore_LIBRARIES "OTIO::opentimelineio;harfbuzz::harfbuzz;Freetype::Freetype;PNG::PNG;Imath::Imath;nlohmann_json::nlohmann_json" )
@@ -206,6 +252,7 @@ if (OpenColorIO_FOUND)
     list(APPEND tlRender_tlCore_LIBRARIES OpenColorIO::OpenColorIO)
     list(APPEND tlRender_tlTimelineGL_LIBRARIES "tlRender::tlTimeline;tlRender::tlGL;OpenColorIO::OpenColorIO")
     list(APPEND tlRender_tlTimelineVk_LIBRARIES "tlRender::tlTimeline;tlRender::tlVk;OpenColorIO::OpenColorIO")
+    list(APPEND tlRender_tlTimelineWGPU_LIBRARIES "tlRender::tlTimeline;tlRender::tlWGPU;OpenColorIO::OpenColorIO")
 endif()
 set(tlRender_tlIO_LIBRARIES )
 if (lunasvg_FOUND)
@@ -217,6 +264,7 @@ endif()
 if (libplacebo_FOUND)
     list(APPEND tlRender_tlTimelineGL_LIBRARIES "libplacebo::libplacebo")
     list(APPEND tlRender_tlTimelineVk_LIBRARIES "libplacebo::libplacebo")
+    list(APPEND tlRender_tlTimelineWGPU_LIBRARIES "libplacebo::libplacebo")
 endif()
 if (PNG_FOUND)
     list(APPEND tlRender_tlIO_LIBRARIES PNG)
@@ -348,8 +396,8 @@ if (tlRender_GL_FOUND)
     endif()
 endif()
 
-if (tlRender_VK_FOUND)
-    if(tlRender_FOUND AND TLRENDER_VK AND NOT TARGET tlRender::tlVk)
+if (tlRender_VK_FOUND AND TLRENDER_VK)
+    if(tlRender_FOUND AND NOT TARGET tlRender::tlVk)
 	set(tlRender_tlVk_LIBRARIES "tlRender::tlCore")
 	add_library(tlRender::tlVk UNKNOWN IMPORTED)
 	set_target_properties(tlRender::tlVk PROPERTIES
@@ -358,7 +406,7 @@ if (tlRender_VK_FOUND)
             INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
 	    INTERFACE_LINK_LIBRARIES "${tlRender_tlVk_LIBRARIES}")
     endif()
-    if(tlRender_FOUND AND TLRENDER_VK AND NOT TARGET tlRender::tlTimelineVk)
+    if(tlRender_FOUND AND NOT TARGET tlRender::tlTimelineVk)
 	set(tlRender_tlTimelineVk_LIBRARIES "tlRender::tlVk;tlRender::tlTimeline")
 	add_library(tlRender::tlTimelineVk UNKNOWN IMPORTED)
 	set_target_properties(tlRender::tlTimelineVk PROPERTIES
@@ -389,24 +437,61 @@ if (tlRender_VK_FOUND)
     endif()
 endif()
 
+if (tlRender_WGPU_FOUND AND TLRENDER_WGPU)
+    if(tlRender_FOUND AND NOT TARGET tlRender::tlWGPU)
+	set(tlRender_tlWGPU_LIBRARIES "tlRender::tlCore")
+
+	add_library(tlRender::tlWGPU UNKNOWN IMPORTED)
+	set_target_properties(tlRender::tlWGPU PROPERTIES
+            IMPORTED_LOCATION "${tlRender_tlWGPU_LIBRARY}"
+            INTERFACE_COMPILE_DEFINITIONS "${tlRender_COMPILE_DEFINITIONS}"
+            INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
+	    INTERFACE_LINK_LIBRARIES "${tlRender_tlWGPU_LIBRARIES}")
+    endif()
+    
+    if(tlRender_FOUND AND NOT TARGET tlRender::tlTimelineWGPU)
+	set(tlRender_tlTimelineWGPU_LIBRARIES "tlRender::tlWGPU;tlRender::tlTimeline")
+	add_library(tlRender::tlTimelineWGPU UNKNOWN IMPORTED)
+	set_target_properties(tlRender::tlTimelineWGPU PROPERTIES
+            IMPORTED_LOCATION "${tlRender_tlTimelineWGPU_LIBRARY}"
+            INTERFACE_COMPILE_DEFINITIONS "${tlRender_COMPILE_DEFINITIONS}"
+            INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
+            INTERFACE_LINK_LIBRARIES "${tlRender_tlTimelineWGPU_LIBRARIES}")
+    endif()
+    
+    if(tlRender_FOUND AND NOT TARGET tlRender::tlTimelineUIWGPU)
+	set(tlRender_tlTimelineUIWGPU_LIBRARIES "tlRender::tlTimelineWGPU;tlRender::tlIO;tlRender::tlTimeline;tlRender::tlUI")
+	add_library(tlRender::tlTimelineUI UNKNOWN IMPORTED)
+	set_target_properties(tlRender::tlTimelineUI PROPERTIES
+            IMPORTED_LOCATION "${tlRender_tlTimelineUI_LIBRARY}"
+            INTERFACE_COMPILE_DEFINITIONS "${tlRender_COMPILE_DEFINITIONS}"
+            INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
+            INTERFACE_LINK_LIBRARIES "${tlRender_tlTimelineUI_LIBRARIES}")
+    endif()
+endif()
+
 if(tlRender_FOUND AND NOT TARGET tlRender)
     add_library(tlRender INTERFACE)
     target_link_libraries(tlRender INTERFACE tlRender::tlCore)
     target_link_libraries(tlRender INTERFACE tlRender::tlIO)
     target_link_libraries(tlRender INTERFACE tlRender::tlTimeline)
-    if (tlRender_tlTimelineUI_LIBRARY)
-	target_link_libraries(tlRender INTERFACE tlRender::tlTimelineUI)
+    if (tlRender_tlUI_LIBRARY)
+	target_link_libraries(tlRender INTERFACE tlRender::tlUI)
     endif()
     if (tlRender_GL_FOUND)
+	target_link_libraries(tlRender INTERFACE tlRender::tlTimelineUI)
 	target_link_libraries(tlRender INTERFACE tlRender::tlTimelineGL)
 	target_link_libraries(tlRender INTERFACE tlRender::tlGL)
     endif()
-    if (tlRender_tlTimelineUIVk_LIBRARY)
-	target_link_libraries(tlRender INTERFACE tlRender::tlTimelineUIVk)
-    endif()
     if (tlRender_VK_FOUND)
+	target_link_libraries(tlRender INTERFACE tlRender::tlTimelineUIVk)
 	target_link_libraries(tlRender INTERFACE tlRender::tlTimelineVk)
 	target_link_libraries(tlRender INTERFACE tlRender::tlVk)
+    endif()
+    if (tlRender_WGPU_FOUND)
+	target_link_libraries(tlRender INTERFACE tlRender::tlTimelineUIWGPU)
+	target_link_libraries(tlRender INTERFACE tlRender::tlTimelineWGPU)
+	target_link_libraries(tlRender INTERFACE tlRender::tlWGPU)
     endif()
     target_link_libraries(tlRender INTERFACE tlRender::tlDevice)
     target_link_libraries(tlRender INTERFACE tlRender::glad)

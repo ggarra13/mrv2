@@ -1039,6 +1039,7 @@ namespace tl
             p.renderPass = nullptr;
 
 
+            p.imageOrdinal.clear();
             p.currentPipeline.clear();
             p.frameIndex = frameIndex;
 

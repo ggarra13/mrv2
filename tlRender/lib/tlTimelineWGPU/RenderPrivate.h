@@ -179,6 +179,15 @@ namespace tl
             unsigned bindingIndex = 7;
             timeline::RenderOptions renderOptions;
 
+
+            struct ImageSlot
+            {
+                std::vector<std::shared_ptr<wgpu::Texture> > textures;
+                std::shared_ptr<image::Image> last;
+            };
+            std::map<std::string, ImageSlot> imageSlots;
+            std::map<const void*, int> imageOrdinal;
+
             //! Variable to cache source code to avoid recreation of shader
             //! when possible
             std::string oldSource;

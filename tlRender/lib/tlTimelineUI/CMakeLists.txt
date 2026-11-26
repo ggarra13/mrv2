@@ -13,9 +13,11 @@ set(HEADERS
     TimelineRuler.h
     TimelineWidget.h
     TransitionItem.h
-    VideoClipItem.h)
+    VideoClipItem.h
+)
 set(HEADERS_PRIVATE
-    TimelineItemPrivate.h)
+    TimelineItemPrivate.h
+)
 
 set(SOURCE
     AudioClipItem.cpp
@@ -39,11 +41,12 @@ set(SOURCE
     TimelineRuler.cpp
     TimelineWidget.cpp
     TransitionItem.cpp
-    VideoClipItem.cpp)
+    VideoClipItem.cpp
+)
 
-if(MRV2_BACKEND STREQUAL "VK")
-    list(APPEND SOURCE ThumbnailSystem_Vk.cpp)
-    set(LIBRARY_NAME tlTimelineUIVk)
+if(TLRENDER_OCIO)
+    list(APPEND SOURCE OCIOSDR.cpp)
+    list(APPEND HEADERS OCIOSDR.h)
 endif()
 
 if(MRV2_BACKEND STREQUAL "GL")
@@ -51,10 +54,16 @@ if(MRV2_BACKEND STREQUAL "GL")
     set(LIBRARY_NAME tlTimelineUI)
 endif()
 
-if (TLRENDER_OCIO)
-    list(APPEND SOURCE  OCIOSDR.cpp)
-    list(APPEND HEADERS OCIOSDR.h)
+if(MRV2_BACKEND STREQUAL "VK")
+    list(APPEND SOURCE ThumbnailSystem_Vk.cpp)
+    set(LIBRARY_NAME tlTimelineUIVk)
 endif()
+
+if(MRV2_BACKEND STREQUAL "WGPU")
+    list(APPEND SOURCE ThumbnailSystem_WGPU.cpp)
+    set(LIBRARY_NAME tlTimelineUIWGPU)
+endif()
+
 
 add_library(${LIBRARY_NAME} ${HEADERS} ${HEADERS_PRIVATE} ${SOURCE})
 target_link_libraries(${LIBRARY_NAME} PUBLIC tlUI PRIVATE ${LIBRARIES_PRIVATE})

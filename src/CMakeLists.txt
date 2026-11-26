@@ -52,7 +52,7 @@ if ( UNIX )
     endif()
 endif()
 
-if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
+if (MRV2_BACKEND STREQUAL "VK")
     set(mrv2_NAME vmrv2)
     find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
 else()
@@ -92,11 +92,6 @@ else()
     set(FLTK_FLUID_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/fluid)
 endif()
 
-message( STATUS "Found FLTK: ${FLTK_INCLUDE_DIR}" )
-message( STATUS "FLTK LIBRARIES: ${FLTK_vk_LIBRARY} ${FLTK_gl_LIBRARY} ${FLTK_LIBRARIES}" )
-message( STATUS "FLTK_FLUID_EXECUTABLE: ${FLTK_FLUID_EXECUTABLE}" )
-
-
 if (UNIX)
     find_package(Intl REQUIRED)  # old method
 else()
@@ -127,8 +122,10 @@ if(MRV2_BACKEND STREQUAL "GL")
     add_definitions(-DMRV2_BACKEND_GL=1)
 elseif(MRV2_BACKEND STREQUAL "VK")
     add_definitions(-DMRV2_BACKEND_VK=1)
-elseif(MRV2_BACKEND STREQUAL "BOTH")
-    add_definitions(-DMRV2_BACKEND_BOTH=1)
+elseif(MRV2_BACKEND STREQUAL "WGPU")
+    add_definitions(-DMRV2_BACKEND_WGPU=1)
+else()
+    message(FATAL_ERROR "Unknown MRV2_BACKEND.  Set it to GL, VK or WGPU")
 endif()
 
 if(MRV2_CPPTRACE)
