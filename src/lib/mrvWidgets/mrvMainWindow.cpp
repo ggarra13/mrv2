@@ -1157,6 +1157,10 @@ namespace mrv
     void MainWindow::set_alpha(int new_alpha)
     {
         int minAlpha = 95;
+
+        if (new_alpha == win_alpha)
+            return;
+
         // Don't allow fully transparent window
         if (new_alpha < minAlpha)
         {
@@ -1310,6 +1314,15 @@ namespace mrv
     }
 
 #endif // !__APPLE__
+
+    // void MainWindow::redraw()
+    // {
+    //     static int counter = 0;
+    //     ++counter;
+    //     if (counter > 10)
+    //         abort();
+    //     damage(FL_DAMAGE_ALL);
+    // }
 
     void MainWindow::set_click_through(bool value)
     {

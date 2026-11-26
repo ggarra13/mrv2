@@ -64,10 +64,10 @@ decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
+decl {\#include "mrvWidgets/mrvResizableBar.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvResizableBar.h"} {public global
+decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvSlider.h"} {public global
@@ -788,7 +788,7 @@ const auto& startTime = range.start_time();
 uiStartFrame->setTime( startTime );
 
 ui->uiTimeline->setTimelinePlayer(player);
-ui->uiTimeline->redraw();} selected
+ui->uiTimeline->redraw();}
           xywh {682 3 27 24} type Toggle down_box DOWN_BOX selection_color 14 labelcolor 20 align 16
         }
         Fl_Input uiStartFrame {
@@ -891,8 +891,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 934 674} type Double color 1 align 80 resizable
-      class {mrv::MainWindow} size_range {934 674 0 0} visible
+      xywh {0 0 934 674} type Double color 1 align 80 hide resizable
+      class {mrv::MainWindow} size_range {934 674 0 0}
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 934 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
@@ -1203,7 +1203,7 @@ uiMain->workspace = uiViewGroup;}
             Fl_Group uiToolsGroup {open
               xywh {0 59 42 501}
             } {
-              Fl_Group uiActionGroup {
+              Fl_Group uiActionGroup {selected
                 xywh {0 59 42 501} box FLAT_BOX
               } {
                 Fl_Button uiScrub {

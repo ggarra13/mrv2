@@ -50,7 +50,7 @@ namespace mrv
 
         //! Turn off/on screen saver/suspend mode.
         void allow_screen_saver(bool value);
-        
+
         //! Iconize all windows
         void iconize_all();
 
