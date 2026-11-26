@@ -20,6 +20,11 @@ ChangeLog
 
 - Core: Fixed useless redraw of the whole UI even when transparency was not used.
 
+Fixes
+-----
+
+- Core:  URL movie was streaming without audio.
+
 
 v1.8.6
 ======

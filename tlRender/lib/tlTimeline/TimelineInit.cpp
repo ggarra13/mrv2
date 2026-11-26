@@ -484,8 +484,11 @@ namespace tl
 
                     auto audioClip = new OTIO_NS::Clip;
                     audioClip->set_source_range(*info.audioTime);
+                    bool listdir = false;
+                    if (path.hasProtocol())
+                        listdir = true;
                     audioClip->set_media_reference(new OTIO_NS::ExternalReference(
-                                                       path.getFileName(),
+                                                       path.getFileName(listdir),
                                                        info.audioTime));
 
                     audioTrack = new OTIO_NS::Track("Audio", std::nullopt, OTIO_NS::Track::Kind::audio);
