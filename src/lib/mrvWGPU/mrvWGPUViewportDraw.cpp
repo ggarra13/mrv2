@@ -1,0 +1,1103 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
+#include "mrvWidgets/mrViewer.h"
+
+#include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvWidgets/mrvMultilineInput.h"
+
+#include "mrvWGPU/mrvWGPUDefines.h"
+#include "mrvWGPU/mrvWGPUViewport.h"
+#include "mrvWGPU/mrvWGPUViewportPrivate.h"
+#include "mrvWGPU/mrvTimelineViewportPrivate.h"
+#include "mrvWGPU/mrvWGPUShape.h"
+#include "mrvWGPU/mrvWGPUUtil.h"
+
+#include "mrvUI/mrvDesktop.h"
+#include "mrvUI/mrvMonitor.h"
+
+#include "mrvCore/mrvLocale.h"
+#include "mrvCore/mrvUtil.h"
+
+#include "mrvOS/mrvMemory.h"
+
+#include <tlTimelineWGPU/RenderStructs.h>
+#include <tlWGPU/Util.h>
+
+#ifndef __EMSCRIPTEN__
+#    include <tlDevice/IOutput.h>
+#endif
+
+#include <tlIO/System.h>
+
+#include <tlCore/HDR.h>
+#include <tlCore/Mesh.h>
+#include <tlCore/String.h>
+
+
+#include <FL/Fl_PNG_Image.H>
+
+#include <algorithm>
+#include <cmath>
+#include <regex>
+
+namespace
+{
+    const char* kModule = "draw";
+    const std::string kFontFamily = "NotoSans-Bold";
+}
+
+namespace mrv
+{
+    namespace webgpu
+    {
+
+        void Viewport::_drawAnaglyph(int left, int right) const noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+
+            wgpu.render->drawAnaglyph(
+                {p.videoData[left],
+                 p.videoData[right]},
+                timeline::getBoxes(timeline::CompareMode::Wipe,
+                                   p.displayOptions,
+                                   {
+                                       p.videoData[left],
+                                       p.videoData[right]
+                                   }),
+                p.stereo3DOptions.eyeSeparation,
+                p.imageOptions, p.displayOptions);
+        }
+
+        void Viewport::_drawScanlines(int left, int right) noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            wgpu.render->drawStereo(
+                {p.videoData[left],
+                 p.videoData[right]},
+                timeline::getBoxes(timeline::CompareMode::Wipe,
+                                   p.displayOptions,
+                                   {
+                                       p.videoData[left],
+                                       p.videoData[right]
+                                   }),
+                timeline_vlk::StereoType::kScanlines,
+                p.stereo3DOptions.eyeSeparation,
+                p.imageOptions, p.displayOptions);
+        }
+
+        void Viewport::_drawCheckerboard(int left, int right) noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            wgpu.render->drawStereo(
+                {p.videoData[left],
+                 p.videoData[right]},
+                timeline::getBoxes(timeline::CompareMode::Wipe,
+                                   p.displayOptions,
+                                   {
+                                       p.videoData[left],
+                                       p.videoData[right]
+                                   }),
+                timeline_vlk::StereoType::kCheckers,
+                p.stereo3DOptions.eyeSeparation,
+                p.imageOptions, p.displayOptions);
+        }
+
+        void Viewport::_drawColumns(int left, int right) noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            wgpu.render->drawStereo(
+                {p.videoData[left],
+                 p.videoData[right]},
+                timeline::getBoxes(timeline::CompareMode::Wipe,
+                                   p.displayOptions,
+                                   {
+                                       p.videoData[left],
+                                       p.videoData[right]
+                                   }),
+                timeline_vlk::StereoType::kColumns,
+                p.stereo3DOptions.eyeSeparation,
+                p.imageOptions, p.displayOptions);
+        }
+
+        void Viewport::_drawStereoVulkan() noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            const bool swap = p.stereo3DOptions.swapEyes;
+            int left = 0, right = p.videoData.size() - 1;
+            if (swap)
+            {
+                left = right;
+                right = 0;
+            }
+
+            const auto& renderSize = getRenderSize();
+
+            {
+                // vlk::OffscreenBufferBinding binding(wgpu.buffer);
+                wgpu.render->begin(renderSize);
+                wgpu.render->setOCIOOptions(p.ocioOptions);
+                wgpu.render->setLUTOptions(p.lutOptions);
+                if (p.missingFrame)
+                {
+                    _drawMissingFrame(renderSize);
+                }
+                else
+                {
+                    wgpu.render->drawVideo(
+                        {p.videoData[left]},
+                        timeline::getBoxes(
+                            timeline::CompareMode::A,
+                            p.displayOptions,
+                            {p.videoData[left]}),
+                        p.imageOptions, p.displayOptions, p.compareOptions,
+                        getBackgroundOptions());
+                }
+
+                _drawOverlays(renderSize);
+
+                wgpu.render->end();
+            }
+
+            {
+                locale::SetAndRestore saved;
+
+                wgpu.render->begin(renderSize);
+                wgpu.render->setOCIOOptions(p.ocioOptions);
+                wgpu.render->setLUTOptions(p.lutOptions);
+
+                if (p.stereo3DOptions.eyeSeparation != 0.F)
+                {
+                    math::Matrix4x4f mvp = wgpu.render->getTransform();
+                    mvp = mvp * math::translate(math::Vector3f(
+                                                    p.stereo3DOptions.eyeSeparation, 0.F, 0.F));
+                    wgpu.render->setTransform(mvp);
+                }
+
+                wgpu.render->drawVideo(
+                    {p.videoData[right]},
+                    timeline::getBoxes(
+                        timeline::CompareMode::A,
+                        p.displayOptions,
+                        {p.videoData[right]}),
+                    p.imageOptions, p.displayOptions);
+
+                _drawOverlays(renderSize);
+
+                wgpu.render->end();
+            }
+        }
+
+        void Viewport::_drawStereo3D() noexcept
+        {
+            TLRENDER_P();
+            const bool swap = p.stereo3DOptions.swapEyes;
+            int left = 0, right = p.videoData.size() - 1;
+            if (swap)
+            {
+                left = right;
+                right = 0;
+            }
+            assert(left != right);
+
+            switch (p.stereo3DOptions.output)
+            {
+            case Stereo3DOutput::Scanlines:
+                _drawScanlines(left, right);
+                break;
+            case Stereo3DOutput::Columns:
+                _drawColumns(left, right);
+                break;
+            case Stereo3DOutput::Checkerboard:
+                _drawCheckerboard(left, right);
+                break;
+            default:
+            case Stereo3DOutput::Anaglyph:
+                _drawAnaglyph(left, right);
+                break;
+            }
+        }
+
+        void
+        Viewport::_drawMissingFrame(const math::Size2i& renderSize) noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            if (p.missingFrameType != tl::io::MissingFrames::Black)
+            {
+                wgpu.render->drawVideo(
+                    {p.lastVideoFrame},
+                    timeline::getBoxes(p.compareOptions,
+                                       p.displayOptions,
+                                       {p.lastVideoFrame}),
+                    p.imageOptions, p.displayOptions, p.compareOptions,
+                    getBackgroundOptions());
+            }
+
+            if (p.ui->uiPrefs->ScratchFrame->value())
+            {
+                Fl_Color c = p.ui->uiPrefs->ScratchColor->color();
+                int width = p.ui->uiPrefs->ScratchWidth->value();
+
+                uint8_t ur = 0, ug = 0, ub = 0, ua = 0;
+                Fl::get_color(c, ur, ug, ub, ua);
+
+                image::Color4f color(ur / 255.F,
+                                     ug / 255.F,
+                                     ub / 255.F,
+                                     0.8);
+                wgpu.lines->drawLine(wgpu.render,
+                                   math::Vector2i(0, 0),
+                                   math::Vector2i(renderSize.w, renderSize.h),
+                                   color, width);
+                wgpu.lines->drawLine(wgpu.render,
+                                   math::Vector2i(0, renderSize.h),
+                                   math::Vector2i(renderSize.w, 0), color,
+                                   width);
+            }
+        }
+
+        void Viewport::_drawCursor(const math::Matrix4x4f& mvp) noexcept
+        {
+            MRV2_WGPU();
+            TLRENDER_P();
+            const image::Color4f color(1.F, 1.F, 1.F, 1.0F);
+            const float multiplier =
+                1.0F + (2.5F * (p.actionMode == ActionMode::kErase));
+            const float pen_size = _getPenSize() * multiplier;
+            p.mousePos = _getFocus();
+            const auto& pos = _getRasterf();
+            wgpu.render->setTransform(mvp);
+            wgpu.viewport->drawCursor(wgpu.render, pos, pen_size, color);
+        }
+
+        void Viewport::_drawShape(
+            const std::shared_ptr<timeline_vlk::Render>& render,
+            const std::shared_ptr< draw::Shape >& shape,
+            const float alphamult,
+            const float resolutionMultiplier) noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            auto note = dynamic_cast< draw::NoteShape* >(shape.get());
+            if (note)
+            {
+                if (panel::annotationsPanel && alphamult == 1.F)
+                    panel::annotationsPanel->notes->value(note->text.c_str());
+            }
+            else
+            {
+                float alpha = shape->color.a;
+                shape->color.a *= alphamult;
+                shape->color.a *= shape->fade;
+                if (auto vkshape = dynamic_cast<VKErasePathShape*>(shape.get()))
+                {
+                    vkshape->mult = resolutionMultiplier;
+                    vkshape->draw(render, wgpu.lines);
+                }
+                else if (auto vkshape = dynamic_cast<VKLinkShape*>(shape.get()))
+                {
+                    vkshape->mult = resolutionMultiplier;
+                    vkshape->draw(render, wgpu.lines);
+                }
+                else if (auto vkshape = dynamic_cast<VKTextShape*>(shape.get()))
+                {
+                    vkshape->mult = resolutionMultiplier;
+                    vkshape->draw(render, wgpu.lines);
+                }
+                else if (auto vkshape = dynamic_cast<VKPathShape*>(shape.get()))
+                {
+                    vkshape->draw(render, wgpu.lines);
+                }
+                else if (auto vkshape = dynamic_cast<VKShape*>(shape.get()))
+                {
+                    vkshape->draw(render, wgpu.lines);
+                }
+                else
+                {
+                    LOG_ERROR("Unknown shape - not drawing");
+                }
+                shape->color.a = alpha;
+            }
+        }
+
+#ifdef TLRENDER_FFMPEG
+        void Viewport::_drawAnnotations(
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
+            const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
+            const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
+            const std::vector<std::shared_ptr<voice::Annotation> >& voannotations,
+            const math::Size2i& renderSize)
+#else
+            void Viewport::_drawAnnotations(
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
+                const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
+                const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
+                const std::vector<std::shared_ptr<bool> >& voannotations,
+                const math::Size2i& renderSize)
+#endif
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            // We use the viewport's single renderer.
+            const auto& render = wgpu.render;
+
+            // Transition annotation buffer to start rendering to it.
+            if (annotationBuffer)
+            {
+                annotationBuffer->transitionToColorAttachment(wgpu.cmd);
+            }
+
+            // Start the annotation render.
+            timeline::RenderOptions renderOptions;
+            renderOptions.vaoSize = 16 * memory::megabyte;
+            renderOptions.colorBuffer = image::PixelType::RGBA_U8;
+
+            // Check if we have a text annotation and make sure to create the
+            // glyph texture.
+            bool glyphTexture = false;
+            for (const auto& annotation : annotations)
+            {
+                if (glyphTexture)
+                    break;
+                const auto& shapes = annotation->shapes;
+                for (const auto& shape : shapes)
+                {
+                    if (auto s = dynamic_cast<VKTextShape*>(shape.get()))
+                    {
+                        glyphTexture = true;
+                        break;
+                    }
+                }
+            }
+
+            renderOptions.glyphTexture = glyphTexture;
+
+            // Draw into the annotation buffer with the same renderer used for
+            // the video.  Each target gets its own pipeline group so the
+            // pipelines are not recreated every time we switch targets.
+            // We do not touch the OCIO/LUT options: they belong to the video
+            // and are not used by annotations.
+            const std::string pipelineGroup =
+                (annotationBuffer == wgpu.overlay) ? "overlay" : "annotation";
+            render->beginPass(wgpu.cmd, annotationBuffer, renderSize,
+                              renderOptions, pipelineGroup);
+            render->setTransform(renderMVP);
+
+            render->beginRenderPass();
+
+            // Calculate resolution multiplier.
+            float resolutionMultiplier = renderSize.w * 6 / 4096.0 / p.viewZoom;
+            resolutionMultiplier = std::clamp(resolutionMultiplier, 1.F, 10.F);
+
+            // Iterate through each annotation.
+            for (const auto& annotation : annotations)
+            {
+                const auto& annotationTime = annotation->time;
+                float alphamult = 0.F;
+                if (annotation->allFrames || time.floor() == annotationTime.floor())
+                    alphamult = 1.F;
+                else
+                {
+                    if (p.ghostPrevious)
+                    {
+                        for (short i = p.ghostPrevious - 1; i > 0; --i)
+                        {
+                            OTIO_NS::RationalTime offset(i, time.rate());
+                            if ((time - offset).floor() == annotationTime.floor())
+                            {
+                                alphamult = 1.F - (float)i / p.ghostPrevious;
+                                break;
+                            }
+                        }
+                    }
+                    if (p.ghostNext)
+                    {
+                        for (short i = 1; i < p.ghostNext; ++i)
+                        {
+                            OTIO_NS::RationalTime offset(i, time.rate());
+                            if ((time + offset).floor() == annotationTime.floor())
+                            {
+                                alphamult = 1.F - (float)i / p.ghostNext;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                const auto& shapes = annotation->shapes;
+                for (const auto& shape : shapes)
+                {
+                    if (alphamult <= 0.001F)
+                        continue;
+
+                    if (auto s = dynamic_cast<VKTextShape*>(shape.get()))
+                    {
+                        // 1. Get the current view rotation and the text's raster position
+                        const float rotationAngle = _getRotation();
+                        const math::Vector3f textPos(s->pts[0].x, s->pts[0].y, 0.F);
+
+                        // 2. Create the "Pivot" components
+                        // Move text anchor to origin
+                        const math::Matrix4x4f toOrigin =
+                            math::translate(math::Vector3f(-textPos.x, -textPos.y, 0.F));
+
+                        // Rotate inversely (negative angle) to keep text upright
+                        const math::Matrix4x4f inverseRotation = math::rotateZ(-rotationAngle);
+
+                        // Move text back to its spot
+                        const math::Matrix4x4f backToPos = math::translate(textPos);
+
+                        // 3. Combine to form the Text Model Matrix
+                        // Order: We apply toOrigin first (right-most), then rotate, then move back.
+                        const math::Matrix4x4f textModelMatrix = backToPos * inverseRotation * toOrigin;
+
+                        // 4. Calculate the final MVP for the text
+                        // The text correction happens *before* the global projection is applied.
+                        const math::Matrix4x4f textMVP = projectionMatrix() * textModelMatrix;
+
+                        render->setTransform(textMVP);
+                    }
+                    else
+                    {
+                        render->setTransform(renderMVP);
+                    }
+                    _drawShape(render, shape, alphamult, resolutionMultiplier);
+                }
+            }
+
+#ifdef TLRENDER_FFMPEG
+            VKVoiceOverShape shape;
+
+            for (const auto annotation : voannotations)
+            {
+                if (!annotation->allFrames && time.floor() != annotation->time.floor())
+                    continue;
+
+                const auto& voices = annotation->voices;
+                for (const auto voice : voices)
+                {
+
+                    shape.center = voice->getCenter();
+                    shape.status = voice->getStatus();
+                    shape.mult   = resolutionMultiplier;
+
+                    const auto& mouseData = voice->getMouseData();
+                    shape.blinkingIndex = ( voice->getCounter() * 12 ) % 256;
+
+                    shape.draw(render, mouseData);
+                }
+            }
+#endif
+            render->endRenderPass();
+            render->endPass();
+        }
+
+        void Viewport::_compositeAnnotations(
+            WGPUCommandBuffer cmd,
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
+            const math::Matrix4x4f& orthoMatrix,
+            const std::shared_ptr<vlk::Shader>& shader,
+            const std::shared_ptr<vlk::VBO>& vbo,
+            const math::Size2i& viewportSize)
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            shader->bind(frameIndex);
+
+            timeline_vlk::PushConstants pc;
+            pc.mvp = orthoMatrix;
+            pc.color = image::Color4f(1.F, 1.F, 1.F, 1.F);
+            vkCmdPushConstants(
+                cmd, wgpu.pipeline_layout,
+                wgpu.shader->getPushStageFlags(), 0, sizeof(pc), &pc);
+
+            timeline::Channels channels = timeline::Channels::Color;
+            if (!p.displayOptions.empty())
+                channels = p.displayOptions[0].channels;
+            shader->setUniform("channels", static_cast<int>(channels));
+            shader->setFBO("textureSampler", overlay);
+
+            // --- Bind Descriptor Set for this shader ---
+            // Record the command to bind the descriptor set for the CURRENT
+            // frame index
+            WGPUDescriptorSet descriptorSet = shader->getDescriptorSet();
+            vkCmdBindDescriptorSets(
+                cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                wgpu.annotation_pipeline_layout, 0, 1,
+                &descriptorSet, 0, nullptr);
+
+            if (wgpu.avao && vbo)
+            {
+                // Draw calls for the composition geometry (e.g., a
+                // screen-filling quad)
+                wgpu.avao->bind(frameIndex);
+                wgpu.avao->draw(cmd, vbo);
+            }
+        }
+
+        void Viewport::_readOverlay(
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay)
+        {
+            MRV2_WGPU();
+            TLRENDER_P();
+
+            WGPUCommandBuffer cmd =
+                beginSingleTimeCommands(device(), commandPool());
+
+            const size_t width = overlay->getWidth();
+            const size_t height = overlay->getHeight();
+
+            const image::PixelType pixelType = image::PixelType::RGBA_U8;
+            wgpu.annotationImage = image::Image::create(width, height, pixelType);
+
+            overlay->readPixels(cmd, 0, 0, width, height);
+
+            vkEndCommandBuffer(cmd);
+
+            overlay->submitReadback(cmd);
+
+            wait_queue();
+
+            WGPUResult result = VK_NOT_READY;
+            void* data = nullptr;
+            while (result == VK_NOT_READY)
+            {
+                result = overlay->getLatestReadPixels(data);
+            }
+
+            if (!data)
+                return;
+
+            std::memcpy(wgpu.annotationImage->getData(),
+                        data, wgpu.annotationImage->getDataByteCount());
+
+            vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
+        }
+
+        inline void Viewport::_appendText(
+            std::vector<timeline::TextInfo>& textInfos,
+            const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
+            math::Vector2i& pos, const int16_t lineHeight) const
+        {
+            MRV2_WGPU();
+
+            wgpu.render->appendText(textInfos, glyphs, pos);
+            pos.y += lineHeight;
+        }
+
+        inline void Viewport::_appendText(
+            std::vector<timeline::TextInfo>& textInfos,
+            const std::string& text,
+            const image::FontInfo& fontInfo,
+            math::Vector2i& pos, const int16_t lineHeight) const
+        {
+            _appendText(textInfos, _p->fontSystem->getGlyphs(text, fontInfo), pos,
+                        lineHeight);
+        }
+
+        void Viewport::_drawText(
+            const std::vector<timeline::TextInfo>& textInfos,
+            const math::Vector2i& pos,
+            const image::Color4f& color) const
+        {
+            MRV2_WGPU();
+            for (auto& textInfo : textInfos)
+            {
+                wgpu.render->drawText(textInfo, pos, color);
+            }
+        }
+
+        void Viewport::_drawRectangleOutline(
+            const std::string& pipelineName,
+            const math::Matrix4x4f& mvp,
+            const math::Box2i& area, const image::Color4f& color) const noexcept
+        {
+            MRV2_WGPU();
+            TLRENDER_P();
+
+
+            float width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
+            wgpu.render->setTransform(mvp);
+            util::drawRectOutline(wgpu.render, pipelineName, area, color, width,
+                                  renderPass());
+        }
+
+        void Viewport::_drawAreaSelection() const noexcept
+        {
+            TLRENDER_P();
+
+            Fl_Color c = p.ui->uiPrefs->ViewSelection->color();
+            uint8_t r, g, b;
+            Fl::get_color(c, r, g, b);
+
+            const image::Color4f color(r / 255.F, g / 255.F, b / 255.F);
+
+            math::Box2i selection = p.selection;
+            if (selection.min == selection.max)
+            {
+                selection.max.x++;
+                selection.max.y++;
+            }
+            const math::Matrix4x4f& mvp = projectionMatrix();
+            _drawRectangleOutline("selection", mvp, selection, color);
+        }
+
+        void Viewport::_drawSafeAreas(
+            const float percentX, const float percentY,
+            const float pixelAspectRatio, const image::Color4f& color,
+            const math::Matrix4x4f& mvp, const char* label) noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            auto renderSize = getRenderSize();
+
+            double aspectX = (double)renderSize.h / (double)renderSize.w;
+            double aspectY = (double)renderSize.w / (double)renderSize.h;
+
+            double amountY = (0.5 - percentY * aspectY / 2);
+            double amountX = (0.5 - percentX * aspectX / 2);
+
+            bool vertical = true;
+            if (amountY < amountX)
+            {
+                vertical = false;
+            }
+
+            int width = 2 / _p->viewZoom;
+
+            math::Box2i box;
+            int X, Y;
+            if (vertical)
+            {
+                X = renderSize.w * percentX;
+                Y = renderSize.h * amountY;
+            }
+            else
+            {
+                X = renderSize.w * amountX / pixelAspectRatio;
+                Y = renderSize.h * percentY;
+            }
+
+            // Calculate box coordinates in the renderSize's coordinate space
+            box.min.x = X;
+            box.min.y = Y;
+            box.max.x = (renderSize.w - X);
+            box.max.y = (renderSize.h - Y);
+
+            _drawRectangleOutline(label, mvp, box, color);
+
+            const image::FontInfo fontInfo(kFontFamily, 12 * width);
+            const auto& glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
+
+            math::Vector2i pos(box.min.x, (box.max.y - 2 * width));
+            std::vector<timeline::TextInfo> textInfos;
+            wgpu.render->appendText(textInfos, glyphs, pos);
+
+            _drawText(textInfos, math::Vector2i(), color);
+        }
+
+        void Viewport::_drawSafeAreas() noexcept
+        {
+            MRV2_WGPU();
+
+            TLRENDER_P();
+            if (!p.player)
+                return;
+
+            const auto& info = p.player->player()->getIOInfo();
+            const auto& video = info.video[0];
+            const auto pr = video.size.pixelAspectRatio;
+
+            const auto& viewportSize = getViewportSize();
+            const auto& renderSize = getRenderSize();
+
+            const math::Matrix4x4f& mvp = projectionMatrix();
+            const WGPURenderPass oldRenderPass = wgpu.render->getRenderPass();
+            const math::Matrix4x4f oldTransform = wgpu.render->getTransform();
+
+            wgpu.render->setRenderPass(renderPass());
+            double aspect = (double)renderSize.w / pr / (double)renderSize.h;
+            if (aspect <= 1.78)
+            {
+                // For HDTV, NTSC or PAL, we just use the action/title areas
+                image::Color4f color(1.F, 0.F, 0.F);
+                _drawSafeAreas(aspect * 0.9, 0.9F, pr, color, mvp, "tv action");
+                _drawSafeAreas(aspect * 0.8F, 0.8F, pr, color, mvp, "tv title");
+            }
+            else
+            {
+                // For film, we use the different film ratios
+                image::Color4f color(1.F, 0.F, 0.F);
+                // Assume film, draw 2.35, 1.85, 1.66 and hdtv areas
+                _drawSafeAreas(2.35, 1.F, pr, color, mvp, _("2.35"));
+
+                // Draw HDTV safe aeas
+                _drawSafeAreas(1.77 * 0.9, 0.9F, pr, color, mvp, "tv action");
+                _drawSafeAreas(1.77 * 0.8F, 0.8F, pr, color, mvp, "tv title");
+
+                color = image::Color4f(1.F, 1.0f, 0.F);
+                _drawSafeAreas(1.89, 1.F, pr, color, mvp, _("1.85"));
+                color = image::Color4f(0.F, 1.0f, 1.F);
+                _drawSafeAreas(1.66, 1.F, pr, color, mvp, _("1.66"));
+                // Draw hdtv too
+                color = image::Color4f(1.F, 0.0f, 1.F);
+                _drawSafeAreas(1.77, 1.0, pr, color, mvp, "hdtv");
+            }
+            wgpu.render->setTransform(oldTransform);
+            wgpu.render->setRenderPass(oldRenderPass);
+        }
+
+        void Viewport::_drawHUD(
+            const std::vector<timeline::TextInfo>& textInfos,
+            const float alpha) const noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            const image::Color4f shadowColor(0.3F, 0.3F, 0.3F, 1.F);
+
+            Fl_Color c = p.ui->uiPrefs->ViewHud->color();
+            uint8_t r, g, b;
+            Fl::get_color(c, r, g, b);
+            const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
+            const math::Vector2i labelPos;
+
+
+            image::Color4f boxColor(0.F, 0.F, 0.F, 0.3F);
+            for (auto& textInfo : textInfos)
+            {
+                const math::Box2i shadowBox = math::margin(textInfo.box, 8);
+                wgpu.render->drawRectViewport("hud",
+                                            shadowBox, boxColor);
+            }
+            _drawText(textInfos, labelPos, labelColor);
+        }
+
+        void Viewport::_drawHUD(float alpha) const noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+
+            if (!p.fontSystem || p.videoData.empty() || !p.player)
+                return;
+
+            Viewport* self = const_cast< Viewport* >(this);
+            const math::Size2i& viewportSize = getViewportSize();
+
+            // Calculate resolution multiplier.
+            uint16_t fontSize = p.ui->uiPrefs->HudFontSize->value() *
+                                self->pixels_per_unit();
+            const image::FontInfo fontInfo(kFontFamily, fontSize);
+
+
+            const image::FontMetrics fontMetrics =
+                p.fontSystem->getMetrics(fontInfo);
+
+            auto lineHeight = fontMetrics.lineHeight;
+            math::Vector2i pos(20, lineHeight * 2);
+
+            const auto player = p.player;
+
+            const auto& path = player->path();
+            const OTIO_NS::RationalTime& time = p.videoData[0].time;
+            int64_t frame = time.to_frames();
+
+            wgpu.render->setViewport(math::Box2i(0, 0, viewportSize.w,
+                                               viewportSize.h));
+            wgpu.render->setRenderSize(viewportSize);
+            const math::Matrix4x4f oldTransform = wgpu.render->getTransform();
+            WGPURenderPass oldRenderPass = wgpu.render->getRenderPass();
+
+            wgpu.render->setRenderPass(renderPass());
+            wgpu.render->setTransform(math::ortho(
+                                        0.F, static_cast<float>(viewportSize.w),
+                                        0.F, static_cast<float>(viewportSize.h), -1.F, 1.F));
+
+            std::vector<timeline::TextInfo> textInfos;
+
+            char buf[512];
+            if (p.hud & HudDisplay::kDirectory)
+            {
+                const std::string& directory = path.getDirectory();
+                _appendText(textInfos, directory, fontInfo, pos, lineHeight);
+            }
+
+            bool otioClip = false;
+            OTIO_NS::RationalTime clipTime;
+            if (p.hud & HudDisplay::kFilename)
+            {
+                std::string fullname = createStringFromPathAndTime(path, time);
+                const std::string extension = path.getExtension();
+                if (extension == ".otio" || extension == ".otioz")
+                {
+                    otioClip = true;
+                    auto i = p.tagData.find("otioClipName");
+                    if (i != p.tagData.end())
+                    {
+                        auto otioClipName = i->second;
+                        fullname += " ( " + otioClipName + " )";
+                    }
+                    i = p.tagData.find("otioClipTime");
+                    if (i != p.tagData.end())
+                    {
+                        std::stringstream ss(i->second);
+                        ss >> clipTime;
+                    }
+                }
+                _appendText(textInfos, fullname, fontInfo, pos, lineHeight);
+            }
+
+            if (p.hud & HudDisplay::kResolution)
+            {
+                const auto& inPlayer = player->player();
+                if (inPlayer)
+                {
+                    const auto& info = inPlayer->getIOInfo();
+                    const auto& video = info.video[0];
+                    if (video.size.pixelAspectRatio != 1.F)
+                    {
+                        int width = video.size.w * video.size.pixelAspectRatio;
+                        snprintf(
+                            buf, 512, "%d x %d  ( %.3g )  %d x %d", video.size.w,
+                            video.size.h, video.size.pixelAspectRatio, width,
+                            video.size.h);
+                    }
+                    else
+                    {
+                        snprintf(buf, 512, "%d x %d", video.size.w, video.size.h);
+                    }
+                    _appendText(textInfos, buf, fontInfo, pos, lineHeight);
+                }
+            }
+
+            std::string tmp;
+            tmp.reserve(512);
+            if (p.hud & HudDisplay::kFrame)
+            {
+                snprintf(buf, 512, "F: %" PRId64 " ", frame);
+                tmp += buf;
+                if (otioClip)
+                {
+                    int64_t clipFrame = clipTime.to_frames();
+                    snprintf(buf, 512, " ( %" PRId64 " )", clipFrame);
+                    tmp += buf;
+                }
+            }
+
+            if (p.hud & HudDisplay::kFrameRange)
+            {
+                const auto& range = player->timeRange();
+                frame = range.start_time().to_frames();
+                const int64_t last_frame = range.end_time_inclusive().to_frames();
+                snprintf(
+                    buf, 512, " Range: %" PRId64 " -  %" PRId64 " " , frame, last_frame);
+                tmp += buf;
+            }
+
+            if (p.hud & HudDisplay::kTimecode)
+            {
+                snprintf(buf, 512, " TC: %s ", time.to_timecode(nullptr).c_str());
+                tmp += buf;
+                if (otioClip)
+                {
+                    snprintf(
+                        buf, 512, " ( %s ) ",
+                        clipTime.to_timecode(nullptr).c_str());
+                    tmp += buf;
+                }
+            }
+
+            if (p.hud & HudDisplay::kFPS)
+            {
+                const auto playback = player->playback();
+                auto& stats = p.stats;
+
+                if (playback == timeline::Playback::Stop ||
+                    (p.actionMode == ActionMode::kScrub && p.lastEvent == FL_DRAG))
+                {
+                    stats.restart();  // not playing, or dragging in the view
+                }
+                else
+                {
+                    const double speed = player->speed();
+                    const bool forward = playback == timeline::Playback::Forward;
+                    const int64_t loopFrames =
+                        player->loop() == timeline::Loop::Loop
+                        ? player->inOutRange().duration().to_frames()
+                        : 0;
+
+                    // Don't use 'frame' here: the kFrameRange block above overwrites it.
+                    stats.update(time.to_frames(), speed, forward, loopFrames,
+                                 std::chrono::steady_clock::now());
+
+                    if (stats.fps > 0.0)
+                        snprintf(buf, 512, "DF: %" PRIu64 " FPS: %.2f/%.2f",
+                                 stats.droppedFrames, std::min(stats.fps, speed), speed);
+                    else
+                        snprintf(buf, 512, "DF: %" PRIu64 " FPS: --/%.2f",
+                                 stats.droppedFrames, speed);
+                    tmp += buf;
+                    tmp += swap_interval() ? " FIFO" : " MBOX";
+                }
+            }
+
+            if (!tmp.empty())
+                _appendText(textInfos, tmp, fontInfo, pos, lineHeight);
+
+            tmp.clear();
+            if (p.hud & HudDisplay::kFrameCount)
+            {
+                const OTIO_NS::TimeRange& range = player->timeRange();
+                const OTIO_NS::RationalTime& duration =
+                    range.end_time_inclusive() - range.start_time();
+                snprintf(buf, 512, "FC: %" PRId64, (int64_t)duration.to_frames());
+                tmp += buf;
+            }
+
+            if (!tmp.empty())
+                _appendText(textInfos, tmp, fontInfo, pos, lineHeight);
+
+            tmp.clear();
+            if (p.hud & HudDisplay::kMemory)
+            {
+                uint64_t totalVirtualMem = 0;
+                uint64_t virtualMemUsed = 0;
+                uint64_t virtualMemUsedByMe = 0;
+                uint64_t totalPhysMem = 0;
+                uint64_t physMemUsed = 0;
+                uint64_t physMemUsedByMe = 0;
+                memory_information(
+                    totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
+                    totalPhysMem, physMemUsed, physMemUsedByMe);
+
+                snprintf(
+                    buf, 512,
+                    _("PMem: %" PRIu64 " / %" PRIu64 " MB  VMem: %" PRIu64
+                      " / %" PRIu64 " MB"),
+                    physMemUsedByMe, totalPhysMem, virtualMemUsedByMe,
+                    totalVirtualMem);
+                tmp += buf;
+            }
+
+            if (!tmp.empty())
+                _appendText(textInfos, tmp, fontInfo, pos, lineHeight);
+
+            if (p.hud & HudDisplay::kCache)
+            {
+                if (p.player)
+                {
+                    const auto cache = p.player->player()->observeCacheInfo()->get();
+                    _appendText(textInfos, _("Cache: "), fontInfo, pos,
+                                lineHeight);
+                    snprintf(
+                        buf, 512, "    V: %.2f %%  A: %.2f %%",
+                        cache.videoPercentage, cache.audioPercentage);
+                    _appendText(textInfos, buf, fontInfo, pos, lineHeight);
+                }
+            }
+
+            if (p.hud & HudDisplay::kAttributes)
+            {
+                for (const auto& tag : p.tagData)
+                {
+                    if (pos.y > viewportSize.h)
+                        break;
+
+                    snprintf(
+                        buf, 512, "%s = %s", tag.first.c_str(),
+                        tag.second.c_str());
+
+                    _appendText(textInfos, buf, fontInfo, pos, lineHeight);
+                }
+            }
+
+            _drawHUD(textInfos, alpha);
+
+            wgpu.render->setTransform(oldTransform);
+            wgpu.render->setRenderPass(oldRenderPass);
+        }
+
+        void Viewport::_drawWindowArea(const std::string& pipelineName,
+                                       const std::string& dw) noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+            const auto& renderSize = getRenderSize();
+            const auto& viewportSize = getViewportSize();
+            const image::Color4f color(0.5, 0.5, 0.5, 1.0);
+
+            math::Box2i box;
+            std::stringstream ss(dw);
+            ss >> box;
+
+            const math::Matrix4x4f& mvp = projectionMatrix();
+            const WGPURenderPass oldRenderPass = wgpu.render->getRenderPass();
+            const math::Matrix4x4f oldTransform = wgpu.render->getTransform();
+
+            wgpu.render->setRenderPass(renderPass());
+
+            _drawRectangleOutline(pipelineName, mvp, box, color);
+
+            wgpu.render->setTransform(oldTransform);
+            wgpu.render->setRenderPass(oldRenderPass);
+        }
+
+        void Viewport::_drawDataWindow() noexcept
+        {
+            TLRENDER_P();
+
+            image::Tags::const_iterator i = p.tagData.find("Data Window");
+            if (i == p.tagData.end())
+                return;
+
+            const std::string& dw = i->second;
+            _drawWindowArea("Data Window", dw);
+        }
+
+        void Viewport::_drawDisplayWindow() noexcept
+        {
+            TLRENDER_P();
+
+            image::Tags::const_iterator i = p.tagData.find("Display Window");
+            if (i == p.tagData.end())
+                return;
+
+            const std::string& dw = i->second;
+            _drawWindowArea("Display Window", dw);
+        }
+
+        void
+        Viewport::_drawOverlays(const math::Size2i& renderSize) const noexcept
+        {
+            TLRENDER_P();
+            MRV2_WGPU();
+            wgpu.render->drawMask(p.masking);
+        }
+
+        void Viewport::_updateHDRMetadata()
+        {
+            TLRENDER_P();
+        }
+
+
+    } // namespace webgpu
+
+} // namespace mrv

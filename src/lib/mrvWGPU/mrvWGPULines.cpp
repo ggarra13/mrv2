@@ -1,0 +1,245 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// mrv2
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
+
+
+#include "mrvWGPU/mrvWGPUShaders.h"
+#include "mrvWGPU/mrvWGPULines.h"
+
+#include <tlWGPU/Mesh.h>
+#include <tlWGPU/Shader.h>
+
+#include <tlDraw/Polyline2D.h>
+
+#include <tlCore/Matrix.h>
+#include <tlCore/Mesh.h>
+#include <tlCore/Vector.h>
+
+#include <FL/Fl_WebGPU_Window.H>
+
+
+namespace mrv
+{
+
+    namespace webgpu
+    {
+
+        using namespace tl;
+
+        struct Lines::Private
+        {
+            std::shared_ptr<wgpu::Shader> softShader;
+            std::shared_ptr<wgpu::Shader> hardShader;
+            std::shared_ptr<wgpu::VBO> vbo;
+            std::shared_ptr<wgpu::VAO> vao;
+        };
+
+        Lines::Lines(Fl_WebGPU_Context& vulkan_ctx,
+                     WGPURenderPassEncoder renderPass) :
+            _p(new Private),
+            ctx(vulkan_ctx),
+            m_renderPass(renderPass)
+        {
+        }
+
+        Lines::~Lines() {}
+
+        void Lines::drawMesh(
+            const std::shared_ptr<timeline_wgpu::Render>& render,
+            const geom::TriangleMesh2& mesh,
+            const image::Color4f& color,
+            const bool soft,
+            const std::string& pipelineName)
+        {
+            bool enableBlending = false;
+            if (color.a < 0.99F)
+                enableBlending = true;
+
+            WGPUBlendFactor srcColorBlendFactor = WGPUBlendFactor_SrcAlpha;
+            WGPUBlendFactor dstColorBlendFactor = WGPUBlendFactor_OneMinusSrcAlpha;
+            WGPUBlendFactor srcAlphaBlendFactor = WGPUBlendFactor_One;
+            WGPUBlendFactor dstAlphaBlendFactor = WGPUBlendFactor_OneMinusSrcAlpha;
+
+            std::string shaderName = "hard";
+
+            if (soft)
+            {
+                enableBlending = true;
+                shaderName = "soft";
+            }
+
+            if (pipelineName == "erase")
+            {
+                enableBlending = true;
+                srcColorBlendFactor = WGPUBlendFactor_Zero;
+                dstColorBlendFactor = WGPUBlendFactor_OneMinusSrcAlpha;
+                srcAlphaBlendFactor = WGPUBlendFactor_Zero;
+                dstAlphaBlendFactor = WGPUBlendFactor_OneMinusSrcAlpha;
+            }
+
+            if (getRenderPass() == nullptr)
+            {
+                render->drawMesh("viewport", shaderName, shaderName, "mesh",
+                                 mesh, math::Vector2i(0, 0), color,
+                                 enableBlending,
+                                 srcColorBlendFactor, dstColorBlendFactor,
+                                 srcAlphaBlendFactor, dstAlphaBlendFactor);
+            }
+            else
+            {
+                WGPURenderPassEncoder oldRenderPass = render->getRenderPass();
+                render->setRenderPass(getRenderPass());
+                render->drawMeshViewport(pipelineName, shaderName, "mesh",
+                                         mesh, math::Vector2i(0, 0),
+                                         color);
+                render->setRenderPass(oldRenderPass);
+            }
+        }
+
+        void Lines::drawLines(
+            const std::shared_ptr<timeline_wgpu::Render>& render,
+            const draw::PointList& pts, const image::Color4f& color,
+            const float width, const bool soft,
+            const draw::Polyline2D::JointStyle jointStyle,
+            const draw::Polyline2D::EndCapStyle endStyle,
+            const bool catmullRomSpline, const bool allowOverlap,
+            const std::string& pipelineName)
+        {
+            TLRENDER_P();
+            using namespace tl::draw;
+
+            Polyline2D path;
+            path.setWidth(width);
+            path.setSoftEdges(soft);
+            path.create(
+                pts, jointStyle, endStyle, catmullRomSpline, allowOverlap);
+
+            const PointList& draw = path.getVertices();
+            const Polyline2D::UVList& uvs = path.getUVs();
+            const Polyline2D::TriangleList& triangles = path.getTriangles();
+
+            geom::TriangleMesh2 mesh;
+
+            size_t numVertices = draw.size();
+            size_t numTriangles = triangles.size();
+            size_t numUVs = uvs.size();
+
+            // Verify data in debug mode
+            assert(numTriangles > 0);
+            assert(numVertices > 0);
+            assert(numUVs == 0 || numUVs == numVertices);
+
+            mesh.triangles.reserve(numTriangles);
+
+            tl::wgpu::VBOType vboType = wgpu::VBOType::Pos2_F32;
+            geom::Triangle2 triangle;
+            if (numUVs > 0)
+            {
+                vboType = wgpu::VBOType::Pos2_F32_UV_U16;
+                for (size_t i = 0; i < numTriangles; ++i)
+                {
+                    Polyline2D::IndexTriangle t = triangles[i];
+                    t += Polyline2D::IndexTriangle(1, 1, 1);
+                    triangle.v[0].v = t[0];
+                    triangle.v[1].v = t[1];
+                    triangle.v[2].v = t[2];
+                    triangle.v[0].t = t[0];
+                    triangle.v[1].t = t[1];
+                    triangle.v[2].t = t[2];
+                    mesh.triangles.push_back(triangle);
+                }
+                mesh.t.reserve(numUVs);
+                for (size_t i = 0; i < numUVs; ++i)
+                    mesh.t.push_back(math::Vector2f(uvs[i].x, uvs[i].y));
+            }
+            else
+            {
+                for (size_t i = 0; i < numTriangles; ++i)
+                {
+                    Polyline2D::IndexTriangle t = triangles[i];
+                    t += Polyline2D::IndexTriangle(1, 1, 1);
+                    triangle.v[0].v = t[0];
+                    triangle.v[1].v = t[1];
+                    triangle.v[2].v = t[2];
+                    mesh.triangles.push_back(triangle);
+                }
+            }
+
+            mesh.v.reserve(numVertices);
+            for (size_t i = 0; i < numVertices; ++i)
+                mesh.v.push_back(math::Vector2f(draw[i].x, draw[i].y));
+
+            drawMesh(render, mesh, color, soft, pipelineName);
+        }
+
+        void Lines::drawLine(
+            const std::shared_ptr<timeline_wgpu::Render>& render,
+            const math::Vector2i& start, const math::Vector2i& end,
+            const image::Color4f& color, const float width)
+        {
+            using namespace tl::draw;
+
+            std::vector< Point > line;
+            line.push_back(Point(start.x, start.y));
+            line.push_back(Point(end.x, end.y));
+
+            drawLines(
+                render, line, color, width, false,
+                Polyline2D::JointStyle::MITER, Polyline2D::EndCapStyle::BUTT,
+                false);
+        }
+
+        void Lines::drawFilledCircle(
+            const std::shared_ptr<timeline_wgpu::Render>& render,
+            const math::Vector2f& center, const float radius,
+            const image::Color4f& color, const unsigned sides)
+        {
+            auto mesh = geom::circleFilled(center, radius, sides);
+            render->drawMeshViewport("viewport", "mesh", "mesh",
+                                     mesh, math::Vector2i(0, 0),
+                                     color);
+        }
+
+        void Lines::drawCircle(
+            const std::shared_ptr<timeline_wgpu::Render>& render,
+            const math::Vector2f& center, const float radius, const float width,
+            const image::Color4f& color, const bool soft,
+            const std::string& pipelineName)
+        {
+            const int triangleAmount = 30;
+            const double twoPi = math::pi * 2.0;
+
+            draw::PointList verts;
+            verts.reserve(triangleAmount);
+            for (int i = 0; i < triangleAmount; ++i)
+            {
+                draw::Point pt(
+                    center.x + (radius * cos(i * twoPi / triangleAmount)),
+                    center.y + (radius * sin(i * twoPi / triangleAmount)));
+                verts.push_back(pt);
+            }
+
+            drawLines(
+                render, verts, color, width, soft,
+                draw::Polyline2D::JointStyle::ROUND,
+                draw::Polyline2D::EndCapStyle::JOINT,
+                false, false, pipelineName);
+        }
+
+        void Lines::drawCursor(
+            const std::shared_ptr<timeline_wgpu::Render>& render,
+            const math::Vector2f& center, const float radius,
+            const image::Color4f& color)
+        {
+            float lineWidth = 2.0;
+            if (radius <= 2.0)
+                lineWidth = 1.0f;
+            drawCircle(render, center, radius, lineWidth, color, false);
+            image::Color4f black(0.F, 0.F, 0.F, 1.F);
+            if (radius > 2.0F)
+                drawCircle(render, center, radius - 2.0F, 2.0, black, false);
+        }
+
+    } // namespace webgpu
+} // namespace mrv
