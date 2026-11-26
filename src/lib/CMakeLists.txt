@@ -16,7 +16,7 @@ if(TLRENDER_FFMPEG)
     add_subdirectory(mrvVoice)       # mrvWidgets, miniaudio
 endif()
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
-    # tlTimelineVk, tlVk, tlTimeline, tlTimelineUI, tlUI
+    # tlTimelineVk, tlVk, tlTimeline, tlTimelineUIVk, tlUI
     # mrvUI, mrvEdit, mrvWidgets, mrvCore, FLTK
     add_subdirectory(mrvVk)
 endif()
@@ -24,6 +24,9 @@ if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL")
     # tlGL, tlTimeline, tlTimelineUI, tlUI, glfw
     # mrvUI, mrvEdit, mrvWidgets, mrvCore, FLTK_gl
     add_subdirectory(mrvGL)
+endif()
+if (TLRENDER_WGPU AND MRV2_BACKEND STREQUAL "WGPU")
+    add_subdirectory(mrvWGPU)
 endif()
 add_subdirectory(mrvViewport)    # mrvWidgets, mrvFLTK and mrvVoice
 if(MRV2_PDF)
