@@ -2,16 +2,21 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvPreferencesUI.h"
-#include "mrvHotkeyUI.h"
 
-#include "mrvFLU/Flu_File_Chooser.h"
+#include "mrvWidgets/mrvPreferencesUI.h"
+#include "mrvWidgets/mrvHotkeyUI.h"
+
+#ifndef __EMSCRIPTEN__
+#    include "mrvFLU/Flu_File_Chooser.h"
+#endif
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvApp.h"
 
 #include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvOCIO.h"
+#ifdef TLRENDER_OCIO
+#    include "mrvFl/mrvOCIO.h"
+#endif
 
 #ifdef MRV2_NETWORK
 #    include "mrvNetwork/mrvImageListener.h"
@@ -116,16 +121,7 @@ namespace mrv
 
         base.get("version", version, kPreferencesVersion);
 
-        // Use this if we are desperate for money :D!
-        // if (version < kPreferencesVersion &&
-        //     (app::demo_mode || app::force_demo))
-        // {
-        //     // \@note: On first start up of a demo for the current
-        //                preferences version, we present the donation window.
-        //     unlock_features_cb(nullptr, ui);
-        // }
-
-        SettingsObject* settings = ViewerUI::app->settings();
+        SettingsObject* settings = App::app->settings();
 
         Fl_Preferences fltk_settings(base, "settings");
         unsigned num = fltk_settings.entries();
@@ -334,10 +330,18 @@ namespace mrv
         gui.get("timeline_edit_view", tmp, 0);
         uiPrefs->EditView->value(tmp);
 
+#ifdef __EMSCRIPTEN__
+        gui.get("timeline_edit_thumbnails", tmp, 2);
+#else
         gui.get("timeline_edit_thumbnails", tmp, 1);
+#endif
         uiPrefs->EditThumbnails->value(tmp);
 
+#ifdef __EMSCRIPTEN__
+        gui.get("timeline_edit_waveforms", tmp, 2);
+#else
         gui.get("timeline_edit_waveforms", tmp, 1);
+#endif
         uiPrefs->EditWaveforms->value(tmp);
 
         gui.get("timeline_edit_transitions", tmp, 1);
@@ -489,11 +493,11 @@ namespace mrv
         hdr.get("gamut_mapping", tmp, 0);  // Auto is default
         uiPrefs->GamutMapping->value(tmp);
 
-        DBG3;
         //
         // ui/colors
         //
 
+#ifndef __EMSCRIPTEN__
         Fl_Preferences colors(gui, "colors");
 
         colors.get("background_color", bgcolor, 0x43434300);
@@ -601,6 +605,8 @@ namespace mrv
 
         uiPrefs->uiLanguage->value(uiIndex);
 
+#endif
+
         //
         // ui/view/colors
         //
@@ -636,6 +642,7 @@ namespace mrv
         //////////////////////////////////////////////////////
         // OCIO
         /////////////////////////////////////////////////////
+#ifdef TLRENDER_OCIO
         std::string ocioPath = studiopath() + "mrv2.ocio.json";
         if (file::isReadable(ocioPath))
         {
@@ -716,6 +723,7 @@ namespace mrv
         Fl_Preferences look(ocio, "Look");
         look.get("Look", tmpS, "", 4096);
         uiPrefs->uiOCIO_Look->value(tmpS);
+#endif
 
         //
         // ui/view/hud
@@ -749,6 +757,7 @@ namespace mrv
         hud.get("font_size", tmp, 12);
         uiPrefs->HudFontSize->value(tmp);
 
+#ifndef __EMSCRIPTEN__
         Fl_Preferences win(view, "window");
 
         win.get("always_save_on_exit", tmp, 0);
@@ -795,13 +804,18 @@ namespace mrv
         flu.get("usd_thumbnails", tmp, 1);
         uiPrefs->USDThumbnails->value((bool)tmp);
         Flu_File_Chooser::thumbnailsUSD = (bool)tmp;
+#endif
 
         //
         // playback
         //
         Fl_Preferences playback(base, "playback");
 
+#ifdef __EMSCRIPTEN__
+        playback.get("auto_playback", tmp, 0);
+#else
         playback.get("auto_playback", tmp, 1);
+#endif
         uiPrefs->AutoPlayback->value(tmp);
 
         playback.get("single_click_playback", tmp, 0);
@@ -1114,6 +1128,7 @@ namespace mrv
         // Hotkeys
         //
         reset_hotkeys();
+#ifndef __EMSCRIPTEN__
         if (!resetHotkeys)
         {
             std::string hotkeyPath = prefspath();
@@ -1146,6 +1161,7 @@ namespace mrv
 
         // Update hotkeys tooltips in UI.
         update_hotkey_tooltips();
+#endif
 
         std_any value;
 
@@ -1234,7 +1250,7 @@ namespace mrv
         int visible;
 
         ViewerUI* ui = App::ui;
-        SettingsObject* settings = ViewerUI::app->settings();
+        SettingsObject* settings = App::app->settings();
 
         std::string userprefspath = studiopath();
         if (!file::isReadable(userprefspath + "/mrv2.prefs"))
@@ -1318,8 +1334,10 @@ namespace mrv
             visible = 1;
         settings->setValue("gui/DockGroup/Visible", visible);
 
+#ifdef TLRENDER_OCIO
         std::string ocioPath = prefspath() + "mrv2.ocio.json";
         ocio::savePresets(ocioPath);
+#endif
 
         std::string userprefspath = studiopath();
         if (!file::isReadable(userprefspath + "/mrv2.prefs"))
@@ -1696,12 +1714,14 @@ namespace mrv
         flu.set("usd_thumbnails", uiPrefs->USDThumbnails->value());
 
         //
+#ifndef __EMSCRIPTEN__
         Flu_File_Chooser::singleButtonTravelDrawer =
             uiPrefs->FileReqFolder->value();
         Flu_File_Chooser::thumbnailsFileReq =
             uiPrefs->FileReqThumbnails->value();
         Flu_File_Chooser::thumbnailsUSD =
             uiPrefs->USDThumbnails->value();
+#endif
 
         //
         // playback prefs
@@ -1874,6 +1894,7 @@ namespace mrv
         behavior.set("allow_screen_saver",
                      (int)uiPrefs->AllowScreenSaver->value());
 
+#ifndef __EMSCRIPTEN__
         {
             userprefspath = prefspath();
 
@@ -1889,6 +1910,7 @@ namespace mrv
                       .arg(hotkeys_file);
             LOG_STATUS(msg);
         }
+#endif
 
         base.flush();
 
@@ -1899,7 +1921,9 @@ namespace mrv
                   .arg("mrv2.prefs");
         LOG_INFO(msg);
 
+#ifndef __EMSCRIPTEN__
         check_language(uiPrefs, language_index, app);
+#endif
     }
 
     bool Preferences::set_transforms()
@@ -1911,9 +1935,11 @@ namespace mrv
 
     void Preferences::reset()
     {
+#ifndef __EMSCRIPTEN__
         const std::string prefs = prefspath() + "mrv2.prefs";
         LOG_INFO(_("Removing ") << prefs);
         fs::remove(prefs);
+#endif
         Preferences::load();
         Preferences::run();
     }
@@ -1922,12 +1948,13 @@ namespace mrv
     {
         auto ui = App::ui;
         PreferencesUI* uiPrefs = ui->uiPrefs;
-        App* app = ui->app;
+        App* app = App::app;
         Fl_Menu_Item* item = nullptr;
 
+#ifndef __EMSCRIPTEN__
         check_language(uiPrefs, language_index, app);
-
-#ifdef __APPLE__
+#else
+#   ifdef __APPLE__
         if (uiPrefs->MacOSMenus->value())
         {
             ui->uiMenuBar->clear();
@@ -1951,9 +1978,10 @@ namespace mrv
                 ui->uiMenuGroup->redraw();
             }
         }
+#    endif
 #endif
 
-        SettingsObject* settings = ViewerUI::app->settings();
+        SettingsObject* settings = App::app->settings();
 
         //
         // Windows
@@ -2042,16 +2070,37 @@ namespace mrv
                 options.thumbnails = false;
                 break;
             case 1: // Small
-                options.thumbnailHeight = 50 * ui->uiView->pixels_per_unit();
+                options.thumbnailHeight = TIMELINEUI::kThumbnailSmall *
+                                          ui->uiView->pixels_per_unit();
                 break;
             case 2: // Medium
-                options.thumbnailHeight = 75 * ui->uiView->pixels_per_unit();
+                options.thumbnailHeight = TIMELINEUI::kThumbnailMedium *
+                                          ui->uiView->pixels_per_unit();
                 break;
             case 3: // Large
-                options.thumbnailHeight = 100 * ui->uiView->pixels_per_unit();
+                options.thumbnailHeight = TIMELINEUI::kThumbnailLarge *
+                                          ui->uiView->pixels_per_unit();
                 break;
             }
-            options.waveformHeight = options.thumbnailHeight / 2;
+            int waveforms = uiPrefs->EditWaveforms->value();
+            switch (waveforms)
+            {
+            case 0:
+                options.waveforms = false;
+                break;
+            case 1: // Small
+                options.waveformHeight = TIMELINEUI::kWaveformSmall *
+                                         ui->uiView->pixels_per_unit();
+                break;
+            case 2: // Medium
+                options.waveformHeight = TIMELINEUI::kWaveformMedium *
+                                         ui->uiView->pixels_per_unit();
+                break;
+            case 3: // Large
+                options.waveformHeight = TIMELINEUI::kWaveformLarge *
+                                         ui->uiView->pixels_per_unit();
+                break;
+            }
             options.trackInfo = settings->getValue<int>("Timeline/TrackInfo");
             options.clipInfo = settings->getValue<int>("Timeline/ClipInfo");
             ui->uiTimeline->setDisplayOptions(options);
@@ -2111,7 +2160,11 @@ namespace mrv
             missingFrames = value;
         }
 
+#ifdef __EMSCRIPTEN__
+        auto t = ui;
+#else
         TimelineClass* t = ui->uiTimeWindow;
+#endif
         t->uiLoopMode->value(uiPrefs->LoopMode->value());
         t->uiLoopMode->do_callback();
 
@@ -2122,12 +2175,15 @@ namespace mrv
         ui->uiGamma->value(uiPrefs->ViewGamma->value());
 
         // OCIO
+#ifdef TLRENDER_OCIO
         ocio::setup();
+#endif
 
         //
         // Handle file requester
         //
 
+#ifndef __EMSCRIPTEN__
         Flu_File_Chooser::thumbnailsFileReq =
             (bool)uiPrefs->FileReqThumbnails->value();
 
@@ -2135,11 +2191,16 @@ namespace mrv
             (bool)uiPrefs->FileReqFolder->value();
 
         native_file_chooser = uiPrefs->NativeFileChooser->value();
+#endif
 
         //
         // Handle pixel values
         //
+#ifdef __EMSCRIPTEN__
+        auto c = ui;
+#else
         PixelToolBarClass* c = ui->uiPixelWindow;
+#endif
         c->uiAColorType->value(uiPrefs->PixelRGBA->value());
         c->uiAColorType->do_callback();
         c->uiAColorType->redraw();
@@ -2343,6 +2404,7 @@ namespace mrv
             }
         }
 
+#ifndef __EMSCRIPTEN__
         int vsync = ui->uiPrefs->OpenGLVsync->value();
         if (vsync == MonitorVSync::kVSyncPresentationOnly ||
             vsync == MonitorVSync::kVSyncNone)
@@ -2371,6 +2433,7 @@ namespace mrv
                 }
             }
         }
+#endif
 
 #ifdef TLRENDER_AUDIO
         auto context = App::app->getContext();
@@ -2415,6 +2478,7 @@ namespace mrv
         }
 #endif
 
+#ifndef __EMSCRIPTEN__
         ui->uiMain->allow_screen_saver((bool)uiPrefs->AllowScreenSaver->value());
 
         std::string userprefspath = studiopath();
@@ -2430,6 +2494,7 @@ namespace mrv
         base.flush();
 
         panel::refreshThumbnails();
+#endif
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
