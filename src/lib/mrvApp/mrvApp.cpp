@@ -99,7 +99,7 @@ namespace py = pybind11;
 #    include <Poco/Net/SSLManager.h>
 #endif
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
 extern "C" {
     #include <libavformat/avformat.h>
 }
@@ -621,7 +621,7 @@ namespace mrv
         Poco::Net::initializeSSL();
 #endif
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         avformat_network_init();
 #endif
 

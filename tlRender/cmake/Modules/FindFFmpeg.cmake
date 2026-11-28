@@ -18,7 +18,7 @@
 #
 # * FFmpeg
 
-find_path(FFmpeg_INCLUDE_DIR NAMES libavcodec/avcodec.h)
+find_path(FFmpeg_INCLUDE_DIR NAMES libavutil/avutil.h)
 set(FFmpeg_INCLUDE_DIRS
     ${FFmpeg_INCLUDE_DIR})
 
@@ -71,8 +71,6 @@ find_package_handle_standard_args(
     FFmpeg
     REQUIRED_VARS
         FFmpeg_INCLUDE_DIR
-        FFmpeg_avcodec_LIBRARY
-        FFmpeg_avformat_LIBRARY
         FFmpeg_avutil_LIBRARY
         FFmpeg_swresample_LIBRARY
         FFmpeg_swscale_LIBRARY)
@@ -133,12 +131,16 @@ if(FFmpeg_FOUND AND NOT TARGET FFmpeg::avdevice AND FFmpeg_avdevice_LIBRARY)
 endif()
 if(FFmpeg_FOUND AND NOT TARGET FFmpeg)
     add_library(FFmpeg INTERFACE)
-    target_link_libraries(FFmpeg INTERFACE FFmpeg::avcodec)
+    if (FFmpeg_avcodec_LIBRARY)
+	target_link_libraries(FFmpeg INTERFACE FFmpeg::avcodec)
+    endif()
     if (FFmpeg_avdevice_LIBRARY)
 	target_link_libraries(FFmpeg INTERFACE FFmpeg::avdevice)
     endif()
-    target_link_libraries(FFmpeg INTERFACE FFmpeg::avformat)
-    target_link_libraries(FFmpeg INTERFACE FFmpeg::avutil)
+    if (FFmpeg_avformat_LIBRARY)
+	target_link_libraries(FFmpeg INTERFACE FFmpeg::avformat)
+    endif()
     target_link_libraries(FFmpeg INTERFACE FFmpeg::swresample)
     target_link_libraries(FFmpeg INTERFACE FFmpeg::swscale)
+    target_link_libraries(FFmpeg INTERFACE FFmpeg::avutil)
 endif()

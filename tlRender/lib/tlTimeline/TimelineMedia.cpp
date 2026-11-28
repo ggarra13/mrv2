@@ -602,7 +602,7 @@ namespace tl
                         {
                             const file::Path mediaPath = timeline::getPath(
                                 i.second,
-                                path.getDirectory(),
+                                path.getProtocol() + path.getDirectory(),
                                 options.pathOptions);
                             newMediaByPath[mediaPath.get()] = i.second;
                             newMediaByNormalPath[normalMediaPath(mediaPath)] =

@@ -39,6 +39,8 @@
 #include <tlWGPU/OffscreenBuffer.h>
 #include <tlWGPU/Init.h>
 
+#include <tlIO/WebCodecs.h>
+
 #include <tlCore/FontSystem.h>
 #include <tlCore/StringFormat.h>
 
@@ -345,6 +347,8 @@ namespace mrv
                 {
                     TIMELINEUI::ThumbnailSystem::create(context, ctx);
                 }
+
+                tl::webcodecs::setContext(&ctx);
 
                 // Set the renderers's max nits
                 if (!wgpu.render)

@@ -19,6 +19,7 @@ if (NOT EMSCRIPTEN)
     files_to_absolute_paths()
 endif()
 
+
 target_link_libraries(mrvVoice PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvVoice PROPERTIES FOLDER lib)
 

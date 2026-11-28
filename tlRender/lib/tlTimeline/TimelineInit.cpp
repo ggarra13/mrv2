@@ -36,6 +36,8 @@
 #endif // __APPLE__
 
 #include <algorithm>
+#include <fstream>
+#include <iterator>
 
 namespace tl
 {
@@ -555,34 +557,53 @@ namespace tl
                 if (".otio" == ext)
                 {
 #if defined(__EMSCRIPTEN__)
-                    // There is no file system on the web: the timeline is
-                    // fetched -- a relative path resolves against the
-                    // page -- and parsed from memory. The fetch can be
-                    // synchronous because opening runs off the main
-                    // thread.
-                    emscripten_fetch_attr_t attr;
-                    emscripten_fetch_attr_init(&attr);
-                    strcpy(attr.requestMethod, "GET");
-                    attr.attributes =
-                        EMSCRIPTEN_FETCH_LOAD_TO_MEMORY |
-                        EMSCRIPTEN_FETCH_SYNCHRONOUS;
-                    emscripten_fetch_t* fetch = emscripten_fetch(
-                        &attr, fileName.c_str());
-                    std::string json;
-                    if (fetch)
+                    std::error_code ec;
+                    if (std::filesystem::exists(file::toFileSystem(fileName),
+                                                ec))
                     {
-                        if (200 == fetch->status)
+                        std::ifstream in(file::toFileSystem(fileName),
+                                         std::ios::binary);
+                        const std::string json(
+                            (std::istreambuf_iterator<char>(in)),
+                            std::istreambuf_iterator<char>());
+                        if (!json.empty())
                         {
-                            json = std::string(
-                                fetch->data, fetch->numBytes);
+                            otioTimeline = dynamic_cast<OTIO_NS::Timeline*>(
+                                OTIO_NS::Timeline::from_json_string(json,
+                                                                    &otioError));
                         }
-                        emscripten_fetch_close(fetch);
                     }
-                    if (!json.empty())
+                    else
                     {
-                        otioTimeline = dynamic_cast<OTIO_NS::Timeline*>(
-                            OTIO_NS::Timeline::from_json_string(
-                                json, &otioError));
+                        // There is no file system on the web: the timeline is
+                        // fetched -- a relative path resolves against the
+                        // page -- and parsed from memory. The fetch can be
+                        // synchronous because opening runs off the main
+                        // thread.
+                        emscripten_fetch_attr_t attr;
+                        emscripten_fetch_attr_init(&attr);
+                        strcpy(attr.requestMethod, "GET");
+                        attr.attributes =
+                            EMSCRIPTEN_FETCH_LOAD_TO_MEMORY |
+                            EMSCRIPTEN_FETCH_SYNCHRONOUS;
+                        emscripten_fetch_t* fetch = emscripten_fetch(
+                            &attr, fileName.c_str());
+                        std::string json;
+                        if (fetch)
+                        {
+                            if (200 == fetch->status)
+                            {
+                                json = std::string(
+                                    fetch->data, fetch->numBytes);
+                            }
+                            emscripten_fetch_close(fetch);
+                        }
+                        if (!json.empty())
+                        {
+                            otioTimeline = dynamic_cast<OTIO_NS::Timeline*>(
+                                OTIO_NS::Timeline::from_json_string(
+                                    json, &otioError));
+                        }
                     }
 #else // __EMSCRIPTEN__
                     otioTimeline = dynamic_cast<OTIO_NS::Timeline*>(

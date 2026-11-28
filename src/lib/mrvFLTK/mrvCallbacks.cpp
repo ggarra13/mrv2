@@ -8,7 +8,7 @@
 #include "mrvWidgets/mrViewer.h"
 #include "mrvWidgets/make_ocio_chooser.h"
 #include "mrvWidgets/mrvSaveImageOptionsUI.h"
-#ifdef TLRENDER_FFMPEG
+#ifndef __EMSCRIPTEN__
 #    include "mrvWidgets/mrvSaveMovieOptionsUI.h"
 #    include "mrvWidgets/mrvURLMovieUI.h"
 #endif
@@ -311,6 +311,7 @@ namespace mrv
         default:
             break;
         }
+#ifndef __EMSCRIPTEN__
         URLMovieUI urlMovie;
         while (urlMovie.uiMain->shown())
         {
@@ -342,6 +343,7 @@ namespace mrv
         files.push_back(full_url);
 
         open_files_cb(files, ui);
+#endif
     }
 
     void open_single_image_cb(Fl_Widget* w, ViewerUI* ui)
@@ -1051,7 +1053,7 @@ namespace mrv
         {
             LOG_ERROR(e.what());
         }
-#endif
+#endif  // !__EMSCRIPTEN__
     }
 
     void save_movie_cb(Fl_Menu_* w, ViewerUI* ui)

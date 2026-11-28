@@ -11,7 +11,7 @@
 #if defined(TLRENDER_EXR)
 #    include <tlIO/OpenEXR.h>
 #endif // TLRENDER_EXR
-#if defined(TLRENDER_FFMPEG)
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
 #    include <tlIO/FFmpeg.h>
 #endif // TLRENDER_FFMPEG
 #if defined(TLRENDER_JPEG)
@@ -39,6 +39,9 @@
 #if defined(TLRENDER_RAW)
 #    include <tlIO/RAW.h>
 #endif // TLRENDER_RAW
+#if defined(TLRENDER_WEBCODECS)
+#    include <tlIO/WebCodecs.h>
+#endif
 #if defined(TLRENDER_ZFILE)
 #    include <tlIO/ZFile.h>
 #endif
@@ -71,6 +74,9 @@ namespace tl
                 _plugins.push_back(dpx::ReadPlugin::create(logSystem));
                 _plugins.push_back(ppm::ReadPlugin::create(logSystem));
                 _plugins.push_back(sgi::ReadPlugin::create(logSystem));
+#if defined(TLRENDER_WEBCODECS)
+                _plugins.push_back(webcodecs::ReadPlugin::create(logSystem));
+#endif
 #if defined(TLRENDER_SVG)
                 _plugins.push_back(svg::ReadPlugin::create(logSystem));
 #endif
@@ -80,7 +86,7 @@ namespace tl
 #if defined(TLRENDER_JPEG)
                 _plugins.push_back(jpeg::ReadPlugin::create(logSystem));
 #endif
-#if defined(TLRENDER_FFMPEG)
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
                 _plugins.push_back(ffmpeg::ReadPlugin::create(logSystem));
 #endif // TLRENDER_FFMPEG
 #if defined(TLRENDER_NDI)
@@ -308,7 +314,7 @@ namespace tl
 #if defined(TLRENDER_JPEG)
                 _plugins.push_back(jpeg::WritePlugin::create(logSystem));
 #endif
-#if defined(TLRENDER_FFMPEG)
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
                 _plugins.push_back(ffmpeg::WritePlugin::create(logSystem));
 #endif // TLRENDER_FFMPEG
 #if defined(TLRENDER_PNG)

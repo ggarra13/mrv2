@@ -43,22 +43,10 @@ if [[ $KERNEL == *Windows* ]]; then
     fi
 elif [[ $KERNEL == *Darwin* ]]; then
     true
-    # echo "Global secrets"
-    # echo "--------------"
-    # echo "MACOS_CERTIFICATE_BASE64=$MACOS_CERTIFICATE_BASE64"
-    # echo "P12_PASSWORD=$P12_PASSWORD"
-    # echo "DEVELOPER_ID=$DEVELOPER_ID"
-    # echo "APPLE_ID=$APPLE_ID"
-    # echo "TEAM_ID=$TEAM_ID"
-    # echo "NOTARYTOOL_PROFILE=$NOTARYTOOL_PROFILE"
-    # echo
-    # echo "Local secrets"
-    # echo "-------------"
-    # echo "APP_PASSWORD=$APP_PASSWORD"
 fi
 
-if [[ "$INSTALL_CMAKE" == "1"  ||
-	  "$INSTALL_CMAKE" == "ON" ]]; then
+if [[ "$INSTALL_CMAKE" == "1" ||
+      "$INSTALL_CMAKE" == "ON" ]]; then
     . etc/install_cmake.sh
 fi
 
@@ -76,12 +64,6 @@ get_git_version
 # Get the compilers
 #
 get_compilers
-
-#
-# Create the certs certificate
-#
-. etc/update_cacert.sh
-update_cacert
 
 #
 # These are some of the expensive mrv2 options
@@ -393,6 +375,10 @@ if [ -z "$TLRENDER_WAYLAND" ]; then
     export TLRENDER_WAYLAND=${BUILD_WAYLAND}
 fi
 
+if [ -z "$TLRENDER_WEBCODECS" ]; then
+    export TLRENDER_WEBCODECS=OFF
+fi
+
 if [ -z "$TLRENDER_WGPU" ]; then
     export TLRENDER_WGPU=OFF
 fi
@@ -508,22 +494,30 @@ else
     exit 1
 fi
 
-if command -v swig > /dev/null 2>&1; then
-    swig -version
-else
-    echo
-    echo "swig NOT found!!!  Cannot compile pyFLTK"
-    echo
-    exit 1
-fi
+if [[ "$TLRENDER_WGPU" == "OFF" ]]; then
+    if command -v swig > /dev/null 2>&1; then
+        swig -version
+    else
+        echo
+        echo "swig NOT found!!!  Cannot compile pyFLTK"
+        echo
+        exit 1
+    fi
 
-if command -v perl > /dev/null 2>&1; then
-    perl -version
+    if command -v perl > /dev/null 2>&1; then
+        perl -version
+    else
+        echo
+        echo "Perl NOT found!!! Cannot compile OpenSSL."
+        echo
+        exit 1
+    fi
 else
-    echo
-    echo "Perl NOT found!!! Cannot compile OpenSSL."
-    echo
-    exit 1
+    #
+    # Create the certs certificate
+    #
+    . etc/update_cacert.sh
+    update_cacert
 fi
 
 
@@ -596,7 +590,8 @@ echo "STB support (TGA, BMP, PSD) ........ ${TLRENDER_STB} 	(TLRENDER_STB)"
 echo "SSL support ........................ ${TLRENDER_SSL} 	(TLRENDER_SSL)"
 echo "TIFF support ....................... ${TLRENDER_TIFF} 	(TLRENDER_TIFF)"
 echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
-echo "WebGPU support ..................... ${TLRENDER_WGPU}     (TLRENDER_WGPU)"
+echo "WebGPU support ..................... ${TLRENDER_WGPU} 	(TLRENDER_WGPU)"
+echo "WebCodecs support instead of FFmpeg. ${TLRENDER_WEBCODECS} 	(TLRENDER_WEBCODECS)"
 echo "ZFile support ...................... ${TLRENDER_ZFILE} 	(TLRENDER_ZFILE)"
 
 if [[ $ASK_TO_CONTINUE == 1 ]]; then
@@ -615,6 +610,7 @@ fi
 #
 rm -rf $BUILD_DIR/install/include/FL
 
+
 cd $BUILD_DIR
 
 #
@@ -623,8 +619,22 @@ cd $BUILD_DIR
 unset  VCPKG_ROOT
 export VCPKG_INSTALL_PREFIX=$PWD/install
 
+# -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH
+# -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH
+# -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH
 
-cmd="cmake -G 'Ninja'
+COMPILE_FLAGS=""
+EMCMAKE=""
+ROOT_PATH=""
+if [[ "$TLRENDER_WGPU" == "ON" ]]; then
+    EMCMAKE=emcmake
+    export PORT_DIR="$PWD/emdawnwebgpu/emdawnwebgpu_pkg/"
+    COMPILE_FLAGS='-pthread -matomics -mbulk-memory --use-port=${PORT_DIR}/emdawnwebgpu.port.py'
+    FIND_ROOT_PATH="-DCMAKE_FIND_ROOT_PATH=${CMAKE_PREFIX_PATH}"
+    export TLRENDER_API=WGPU
+fi
+
+cmd="${EMCMAKE} cmake -G 'Ninja'
 	   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
            -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
 	   -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
@@ -632,6 +642,9 @@ cmd="cmake -G 'Ninja'
            -DCMAKE_OSX_ARCHITECTURES=\"${CMAKE_OSX_ARCHITECTURES}\"
            -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
 	   -DCMAKE_CXX_STANDARD=20
+           ${FIND_ROOT_PATH}
+	   -DCMAKE_C_FLAGS=\"${COMPILE_FLAGS}\"
+	   -DCMAKE_CXX_FLAGS=\"${COMPILE_FLAGS}\"
 
 	   -DBUILD_VCPKG=${BUILD_VCPKG}
 	   -DBUILD_PYTHON=${BUILD_PYTHON}
@@ -684,6 +697,7 @@ cmd="cmake -G 'Ninja'
 	   -DTLRENDER_VK=${TLRENDER_VK}
 	   -DTLRENDER_VPX=${TLRENDER_VPX}
 	   -DTLRENDER_WAYLAND=${TLRENDER_WAYLAND}
+           -DTLRENDER_WEBCODECS=${TLRENDER_WEBCODECS}
            -DTLRENDER_WGPU=${TLRENDER_WGPU}
            -DTLRENDER_X11=${TLRENDER_X11}
            -DTLRENDER_X264=${TLRENDER_X264}
@@ -712,6 +726,7 @@ cmd="cmake -G 'Ninja'
 	   -DGNU_C_COMPILER_NAME=\"${GNU_C_COMPILER_NAME}\"
 	   ${CMAKE_FLAGS} ../.."
 
+unset PYTHON # Needed so that emcmake works fine
 time run_cmd $cmd
 
 time run_cmd cmake --build . --verbose $FLAGS --config $CMAKE_BUILD_TYPE --target all

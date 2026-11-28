@@ -20,9 +20,11 @@
 
 extern "C"
 {
-#include <libavformat/avformat.h>
-#include <libavcodec/avcodec.h>
-#include <libavutil/channel_layout.h>
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
+    #include <libavformat/avformat.h>
+    #include <libavcodec/avcodec.h>
+    #include <libavutil/channel_layout.h>
+#endif
 }
 
 #if defined(TLRENDER_AUDIO)
@@ -68,9 +70,11 @@ namespace
     // A helper function to print error messages from FFmpeg functions
     void print_ffmpeg_error(int error_code, const std::string& message)
     {
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         char errbuf[AV_ERROR_MAX_STRING_SIZE];
         av_strerror(error_code, errbuf, sizeof(errbuf));
         LOG_ERROR(message << ": " << errbuf);
+#endif
     }
 }
 
@@ -321,6 +325,7 @@ namespace mrv
         {
             TLRENDER_P();
 
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
             AVFormatContext* fmt_ctx = NULL;
             AVCodecContext* dec_ctx = NULL;
             int audio_stream_index = -1;
@@ -463,6 +468,7 @@ namespace mrv
             av_frame_free(&frame);
             avcodec_free_context(&dec_ctx);
             avformat_close_input(&fmt_ctx);
+#endif
 
             if (!p.audio.buffer.empty())
             {
@@ -488,6 +494,7 @@ namespace mrv
 
             fileName = voiceOverFileName();
 
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
             AVFormatContext *fmt_ctx = NULL;
             AVStream *stream = NULL;
 
@@ -575,6 +582,8 @@ namespace mrv
             if (!(fmt_ctx->oformat->flags & AVFMT_NOFILE))
                 avio_closep(&fmt_ctx->pb);
             avformat_free_context(fmt_ctx);
+#endif
+
         }
 
         void VoiceOver::startPlaying()

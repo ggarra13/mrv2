@@ -83,7 +83,7 @@ namespace tl
             }
             const auto mediaPath = timeline::getPath(
                 mediaReference,
-                path.getDirectory(),
+                path.getProtocol() + path.getDirectory(),
                 options.pathOptions);
             const double seqRate = getSeqRate(mediaReference);
             const std::string key = getKey(mediaPath, seqRate);
@@ -288,7 +288,9 @@ namespace tl
         {
             TLRENDER_P();
             const file::Path mediaPath = timeline::getPath(
-                mediaReference, p.path.getDirectory(), p.options.pathOptions);
+                mediaReference,
+                p.path.getProtocol() +
+                p.path.getDirectory(), p.options.pathOptions);
             auto frameCache = p.frameCache;
             return p.getCached<io::IVideoRead>(
                 p.videoReadCache,

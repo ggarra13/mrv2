@@ -99,15 +99,10 @@
 
 #include <libintl.h>
 #include <libpng16/png.h>
-#include <lunasvg/lunasvg.h>
 #include <minizip/mz.h>
 #include <nlohmann/json.hpp>
 #include <opentime/version.h>
 #include <opentimelineio/version.h>
-
-#ifdef TLRENDER_NDI
-#    include <Processing.NDI.Lib.h>
-#endif
 
 #ifdef TLRENDER_AUDIO
 #    include <miniaudio/miniaudio.h>
@@ -133,6 +128,10 @@ extern "C"
 #define WebDecodeVersionRevision(v) ((v)        & 0xFF)
 #endif
 
+#ifdef TLRENDER_NDI
+#    include <Processing.NDI.Lib.h>
+#endif
+
 #ifdef TLRENDER_OPENJPH
 #    include <openjph/ojph_version.h>
 #endif
@@ -145,6 +144,10 @@ extern "C"
 
 #ifdef TLRENDER_STB
 #    include <stb/stb_image.h>
+#endif
+
+#ifdef TLRENDER_SVG
+#    include <lunasvg/lunasvg.h>
 #endif
 
 #ifdef TLRENDER_SVTAV1
@@ -195,8 +198,10 @@ namespace OCIO = OCIO_NAMESPACE;
 #ifdef TLRENDER_FFMPEG
 extern "C"
 {
+#ifndef TLRENDER_WEBCODECS
 #    include <libavcodec/avcodec.h>
 #    include <libavformat/avformat.h>
+#endif
 #    include <libswscale/version.h>
 #    include <libswresample/version.h>
 }
@@ -261,7 +266,7 @@ namespace mrv
             o << " (" << std::hex << release_level << ")" << std::dec;
         }
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         const AVCodec*
         next_codec_for_id(enum AVCodecID id, void** iter, int encoder)
         {
@@ -373,6 +378,10 @@ namespace mrv
 #ifdef OPENGL_BACKEND
         return "OpenGL";
 #endif
+#ifdef WEBGPU_BACKEND
+        return "WebGPU";
+#endif
+        return "GLES3";
     }
 
     const char* version()
@@ -400,22 +409,25 @@ namespace mrv
     const std::string build_info()
     {
         std::stringstream s;
+#ifndef __EMSCRIPTEN__
         s << _("Build Environment:") << std::endl
           << _("\tDistribution: ") << kBUILD_DISTRO << " " << kBUILD_VERSION
           << std::endl
           << _("\tDesktop Environment: ") << kBUILD_DESKTOP_ENV << std::endl
           << _("\tKernel Info: ") << kBUILD_KERNEL_INFO << std::endl;
+#endif
         return s.str();
     }
 
     const std::string running_info()
     {
         std::stringstream s;
+#ifndef __EMSCRIPTEN__
         s << _("Running Environment:") << std::endl
           << mrv::os::getVersion() << std::endl
           << mrv::os::getDesktop() << std::endl
           << mrv::os::getKernel() << std::endl;
-
+#endif
         return s.str();
     }
 
@@ -424,7 +436,7 @@ namespace mrv
     void ffmpeg_formats(mrv::TextBrowser* b)
     {
         using namespace std;
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         const AVInputFormat* ifmt = NULL;
         const AVOutputFormat* ofmt = NULL;
 #endif
@@ -622,7 +634,7 @@ namespace mrv
 #endif
 
         last_name = "000";
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         for (;;)
         {
             bool decode = false;
@@ -703,7 +715,7 @@ namespace mrv
 
     static void ffmpeg_codecs(mrv::TextBrowser* b, int type)
     {
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         b->column_widths(ffmpeg_codec_widths);
         const AVCodecDescriptor** codecs;
         unsigned i;
@@ -765,21 +777,21 @@ namespace mrv
 
     void ffmpeg_audio_codecs(mrv::TextBrowser* browser)
     {
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         return ffmpeg_codecs(browser, AVMEDIA_TYPE_AUDIO);
 #endif
     }
 
     void ffmpeg_video_codecs(mrv::TextBrowser* browser)
     {
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         return ffmpeg_codecs(browser, AVMEDIA_TYPE_VIDEO);
 #endif
     }
 
     void ffmpeg_subtitle_codecs(mrv::TextBrowser* browser)
     {
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         return ffmpeg_codecs(browser, AVMEDIA_TYPE_SUBTITLE);
 #endif
     }
@@ -787,7 +799,7 @@ namespace mrv
     std::vector<std::string> ffmpeg_hardware_decoders()
     {
         std::vector<std::string> out;
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         enum AVHWDeviceType type = AV_HWDEVICE_TYPE_NONE;
         while ((type = av_hwdevice_iterate_types(type)) !=
                AV_HWDEVICE_TYPE_NONE)
@@ -811,7 +823,7 @@ namespace mrv
 
     void ffmpeg_protocols(mrv::TextBrowser* b)
     {
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         void* opaque = NULL;
         const char* up;
         for (up = avio_enum_protocols(&opaque, 0); up;
@@ -866,7 +878,7 @@ namespace mrv
           << "Copyright (c) 2001-2022 Expat maintainers" << endl
           << endl;
 #endif
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         o << "FFmpeg " << av_version_info() << endl
           << "libavutil          v" << AV_STRINGIFY(LIBAVUTIL_VERSION) << endl
           << "libavcodec      v" << AV_STRINGIFY(LIBAVCODEC_VERSION) << endl
@@ -995,6 +1007,7 @@ namespace mrv
              "reserved."
           << endl
           << endl;
+#ifdef TLRENDER_SVG
         o << "lunasvg v"
           << LUNASVG_VERSION_MAJOR << "."
           << LUNASVG_VERSION_MINOR << "."
@@ -1002,6 +1015,7 @@ namespace mrv
           << endl
           << "Copyright (c) 2020-2026 Samuel Ugochukwu <sammycageagle@gmail.com>."        << endl
           << endl;
+#endif
 #ifdef FLTK_USE_WAYLAND
         o << "libwayland v" << WAYLAND_VERSION << endl
           << "Copyright © 2012 Intel Corporation"
@@ -1191,6 +1205,9 @@ namespace mrv
     const std::string cpu_info()
     {
         std::string out;
+#ifdef __EMSCRIPTEN__
+        return out;
+#else
         out += GetCpuCaps(&gCpuCaps);
 
         uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
@@ -1206,7 +1223,7 @@ namespace mrv
         out += "\n";
         out += tl::string::Format(
             _("Total Virtual Memory: {0} Gb")).arg(totalVirtualMem / 1024.0);
-
+#endif
         return out;
     }
 
@@ -1272,6 +1289,10 @@ namespace mrv
         return 0;
 #endif
 
+#ifdef WEBGPU_BACKEND
+        return 0;
+#endif
+
 #ifdef VULKAN_BACKEND
         // Attempt to get the function pointer for vkEnumerateInstanceVersion
         PFN_vkEnumerateInstanceVersion pfnEnumerateInstanceVersion =
@@ -1296,6 +1317,10 @@ namespace mrv
     {
         using std::endl;
         std::stringstream o;
+
+#ifdef __EMSCRIPTEN__
+        return o.str();
+#endif
 
         int num_monitors = Fl::screen_count();
         o << "Monitors:\t" << num_monitors << endl << endl;

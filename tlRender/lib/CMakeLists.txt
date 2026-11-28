@@ -1,11 +1,14 @@
 add_subdirectory(tlCore)
-if(NOT MRV2_BACKEND STREQUAL "VK")
+if(TLRENDER_GL AND NOT MRV2_BACKEND STREQUAL "VK")
     add_subdirectory(tlGL)
 endif()
 if(TLRENDER_VK)
     add_subdirectory(tlVk)
 endif()
-add_subdirectory(tlIO)        # needs tlGL for USD
+if(TLRENDER_WGPU)
+    add_subdirectory(tlWGPU)
+endif()
+add_subdirectory(tlIO)        # needs tlGL for USD and tlWGPU for WebCodecs
 add_subdirectory(tlTimeline)
 add_subdirectory(tlDraw)
 if(TLRENDER_GLFW)
@@ -16,6 +19,11 @@ endif()
 if(TLRENDER_VK)
     add_subdirectory(tlTimelineVk)
 endif()
-add_subdirectory(tlDevice)    # needs tlTimelineGL or tlTimelineVk for rendering
+if(TLRENDER_WGPU)
+    add_subdirectory(tlTimelineWGPU)
+endif()
+add_subdirectory(tlDevice)
 add_subdirectory(tlUI)
-add_subdirectory(tlTimelineUI)
+add_subdirectory(tlTimelineUI)  # this compiles tlTimelineUI on GL,
+                                #               tlTimelineUIVk on Vulkan
+                                #               tlTimelineUIWGPU on WGPU

@@ -6,7 +6,7 @@
 
 #include <tlTimeline/HDROptions.h>
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
 #    include <tlIO/FFmpeg.h>
 #endif
 
@@ -36,7 +36,7 @@ namespace mrv
         tl::timeline::HDRExportMode exportMode =
             tl::timeline::HDRExportMode::LinearHDR;
 
-#ifdef TLRENDER_FFMPEG
+#if defined(TLRENDER_FFMPEG) && !defined(TLRENDER_WEBCODECS)
         tl::ffmpeg::Profile ffmpegProfile = tl::ffmpeg::Profile::kNone;
         std::string ffmpegPreset;
         std::string ffmpegPixelFormat = "YUV420P";

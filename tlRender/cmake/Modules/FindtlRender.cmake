@@ -461,12 +461,12 @@ if (tlRender_WGPU_FOUND AND TLRENDER_WGPU)
     
     if(tlRender_FOUND AND NOT TARGET tlRender::tlTimelineUIWGPU)
 	set(tlRender_tlTimelineUIWGPU_LIBRARIES "tlRender::tlTimelineWGPU;tlRender::tlIO;tlRender::tlTimeline;tlRender::tlUI")
-	add_library(tlRender::tlTimelineUI UNKNOWN IMPORTED)
-	set_target_properties(tlRender::tlTimelineUI PROPERTIES
-            IMPORTED_LOCATION "${tlRender_tlTimelineUI_LIBRARY}"
+	add_library(tlRender::tlTimelineUIWGPU UNKNOWN IMPORTED)
+	set_target_properties(tlRender::tlTimelineUIWGPU PROPERTIES
+            IMPORTED_LOCATION "${tlRender_tlTimelineUIWGPU_LIBRARY}"
             INTERFACE_COMPILE_DEFINITIONS "${tlRender_COMPILE_DEFINITIONS}"
             INTERFACE_INCLUDE_DIRECTORIES "${tlRender_INCLUDE_DIR}"
-            INTERFACE_LINK_LIBRARIES "${tlRender_tlTimelineUI_LIBRARIES}")
+            INTERFACE_LINK_LIBRARIES "${tlRender_tlTimelineUIWGPU_LIBRARIES}")
     endif()
 endif()
 
