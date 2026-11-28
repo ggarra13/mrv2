@@ -177,14 +177,14 @@ namespace mrv
                 if (!file::isMovie(path) && !file::isOTIO(path) &&
                     !file::isOTIOZ(path))
                 {
-                    _ocioProcessors[widget] = TIMELINEUI::OCIOCPUProcessor();
+                    _ocioProcessors[widget] = timelineui::OCIOCPUProcessor();
                     _ocioProcessors[widget].setOptions(p.ui->uiView->getOCIOOptions());
                 }
 #endif
 
                 const auto context = App::app->getContext();
                 auto thumbnailSystem =
-                    context->getSystem<TIMELINEUI::ThumbnailSystem>();
+                    context->getSystem<timelineui::ThumbnailSystem>();
 
 #ifdef MRV2_PYBIND11
                 // Only release the GIL if this thread currently holds it
@@ -250,7 +250,7 @@ namespace mrv
         void ThumbnailPanel::_cancelRequests()
         {
             const auto context = App::app->getContext();
-            auto thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
+            auto thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
             std::vector<uint64_t> ids;
             for (const auto& i : thumbnailRequests)
             {

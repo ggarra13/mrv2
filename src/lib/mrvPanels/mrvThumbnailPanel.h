@@ -71,7 +71,7 @@ namespace mrv
         protected:
             //! Whether to clear the cache for the thumbnails.
             bool _clearCache = false;
-            std::map<Fl_Widget*, TIMELINEUI::OCIOCPUProcessor > _ocioProcessors;
+            std::map<Fl_Widget*, timelineui::OCIOCPUProcessor > _ocioProcessors;
             std::map<Fl_Widget*, bool > _ocioSDR;
             std::map<Fl_Widget*, timelineui::ThumbnailRequest> thumbnailRequests;
         };

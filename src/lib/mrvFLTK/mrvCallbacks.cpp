@@ -4769,7 +4769,7 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = TIMELINEUI::kThumbnailSmall *
+        options.thumbnailHeight = timelineui::kThumbnailSmall *
                                   ui->uiView->pixels_per_unit();
 
 #ifdef MRV2_NETWORK
@@ -4801,7 +4801,7 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = TIMELINEUI::kThumbnailMedium *
+        options.thumbnailHeight = timelineui::kThumbnailMedium *
                                   ui->uiView->pixels_per_unit();
 
 #ifdef MRV2_NETWORK
@@ -4833,7 +4833,7 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = TIMELINEUI::kThumbnailLarge *
+        options.thumbnailHeight = timelineui::kThumbnailLarge *
                                   ui->uiView->pixels_per_unit();
 
 #ifdef MRV2_NETWORK
@@ -4866,7 +4866,7 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.waveforms = true;
-        options.waveformHeight = TIMELINEUI::kWaveformSmall *
+        options.waveformHeight = timelineui::kWaveformSmall *
                                  ui->uiView->pixels_per_unit();
 
 #ifdef MRV2_NETWORK
@@ -4898,7 +4898,7 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.waveforms = true;
-        options.waveformHeight = TIMELINEUI::kWaveformMedium *
+        options.waveformHeight = timelineui::kWaveformMedium *
                                  ui->uiView->pixels_per_unit();
 
 #ifdef MRV2_NETWORK
@@ -4931,7 +4931,7 @@ namespace mrv
         }
         auto options = ui->uiTimeline->getDisplayOptions();
         options.waveforms = true;
-        options.waveformHeight = TIMELINEUI::kWaveformLarge *
+        options.waveformHeight = timelineui::kWaveformLarge *
                                  ui->uiView->pixels_per_unit();
 
 #ifdef MRV2_NETWORK
@@ -5864,7 +5864,7 @@ namespace mrv
         auto context = App::app->getContext();
 
         // Update the Thumbnail and Playback cache.
-        auto thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
+        auto thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
         thumbnailSystem->clearCache();
 
         player->clearCache();

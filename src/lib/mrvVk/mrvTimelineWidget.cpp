@@ -983,7 +983,7 @@ namespace mrv
                         else
                         {
 #ifdef VULKAN_BACKEND
-                            ocioOptions = TIMELINEUI::toSDR(ocioOptions);
+                            ocioOptions = timelineui::toSDR(ocioOptions);
 #endif
                             p.render->setOCIOOptions(ocioOptions);
                         }

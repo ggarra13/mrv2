@@ -3950,7 +3950,7 @@ namespace mrv
 
     int calculate_edit_viewport_size(ViewerUI* ui)
     {
-        const TIMELINEUI::DisplayOptions& displayOptions =
+        const timelineui::DisplayOptions& displayOptions =
             ui->uiTimeline->getDisplayOptions();
 
         // This specifies whether to show Video Only or Video and Audio.

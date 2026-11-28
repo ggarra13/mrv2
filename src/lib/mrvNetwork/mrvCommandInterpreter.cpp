@@ -1416,7 +1416,7 @@ namespace mrv
                         tcp->unlock();
                         return;
                     }
-                    TIMELINEUI::DisplayOptions value = message["value"];
+                    timelineui::DisplayOptions value = message["value"];
                     ui->uiTimeline->setDisplayOptions(value);
                 }
                 else if (c == "Timeline/FrameView")

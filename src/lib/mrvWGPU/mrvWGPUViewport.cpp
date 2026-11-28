@@ -343,9 +343,9 @@ namespace mrv
             if (auto context = wgpu.context.lock())
             {
                 // Add the thumbnail system if not present.
-                if (!context->getSystem<TIMELINEUI::ThumbnailSystem>())
+                if (!context->getSystem<timelineui::ThumbnailSystem>())
                 {
-                    TIMELINEUI::ThumbnailSystem::create(context, ctx);
+                    timelineui::ThumbnailSystem::create(context, ctx);
                 }
 
                 // Set the renderers's max nits

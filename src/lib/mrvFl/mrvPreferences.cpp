@@ -2070,15 +2070,15 @@ namespace mrv
                 options.thumbnails = false;
                 break;
             case 1: // Small
-                options.thumbnailHeight = TIMELINEUI::kThumbnailSmall *
+                options.thumbnailHeight = timelineui::kThumbnailSmall *
                                           ui->uiView->pixels_per_unit();
                 break;
             case 2: // Medium
-                options.thumbnailHeight = TIMELINEUI::kThumbnailMedium *
+                options.thumbnailHeight = timelineui::kThumbnailMedium *
                                           ui->uiView->pixels_per_unit();
                 break;
             case 3: // Large
-                options.thumbnailHeight = TIMELINEUI::kThumbnailLarge *
+                options.thumbnailHeight = timelineui::kThumbnailLarge *
                                           ui->uiView->pixels_per_unit();
                 break;
             }
@@ -2089,15 +2089,15 @@ namespace mrv
                 options.waveforms = false;
                 break;
             case 1: // Small
-                options.waveformHeight = TIMELINEUI::kWaveformSmall *
+                options.waveformHeight = timelineui::kWaveformSmall *
                                          ui->uiView->pixels_per_unit();
                 break;
             case 2: // Medium
-                options.waveformHeight = TIMELINEUI::kWaveformMedium *
+                options.waveformHeight = timelineui::kWaveformMedium *
                                          ui->uiView->pixels_per_unit();
                 break;
             case 3: // Large
-                options.waveformHeight = TIMELINEUI::kWaveformLarge *
+                options.waveformHeight = timelineui::kWaveformLarge *
                                          ui->uiView->pixels_per_unit();
                 break;
             }

@@ -1436,13 +1436,13 @@ namespace mrv
             mode |= FL_MENU_INACTIVE;
 
         const float kPixels_per_unit = ui->uiView->pixels_per_unit();
-        const int kTSmall = TIMELINEUI::kThumbnailSmall * kPixels_per_unit;
-        const int kTMedium = TIMELINEUI::kThumbnailMedium * kPixels_per_unit;
-        const int kTLarge = TIMELINEUI::kThumbnailLarge * kPixels_per_unit;
+        const int kTSmall = timelineui::kThumbnailSmall * kPixels_per_unit;
+        const int kTMedium = timelineui::kThumbnailMedium * kPixels_per_unit;
+        const int kTLarge = timelineui::kThumbnailLarge * kPixels_per_unit;
 
-        const int kWSmall = TIMELINEUI::kWaveformSmall * kPixels_per_unit;
-        const int kWMedium = TIMELINEUI::kWaveformMedium * kPixels_per_unit;
-        const int kWLarge = TIMELINEUI::kWaveformLarge * kPixels_per_unit;
+        const int kWSmall = timelineui::kWaveformSmall * kPixels_per_unit;
+        const int kWMedium = timelineui::kWaveformMedium * kPixels_per_unit;
+        const int kWLarge = timelineui::kWaveformLarge * kPixels_per_unit;
 
 
         idx = menu->add(
