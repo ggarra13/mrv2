@@ -10,7 +10,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         //! Timeline widget.
         //!
@@ -274,5 +274,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

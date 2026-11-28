@@ -10,7 +10,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         //! Transition item.
         class TransitionItem : public IItem
@@ -50,5 +50,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

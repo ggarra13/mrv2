@@ -10,7 +10,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         //! Gap item.
         class GapItem : public IBasicItem
@@ -38,5 +38,5 @@ namespace tl
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
         };
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

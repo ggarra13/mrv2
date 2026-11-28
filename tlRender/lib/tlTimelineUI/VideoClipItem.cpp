@@ -30,7 +30,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
 
         namespace
@@ -86,7 +86,7 @@ namespace tl
             SizeData size;
 
             io::Options ioOptions;
-            TIMELINEUI::InfoRequest infoRequest;
+            timelineui::InfoRequest infoRequest;
             std::shared_ptr<io::Info> ioInfo;
             std::map<OTIO_NS::RationalTime, ThumbnailRequest>
                 thumbnailRequests;
@@ -121,7 +121,7 @@ namespace tl
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
                                       : path.getFileName(false),
-                ui::ColorRole::VideoClip, "tl::TIMELINEUI::VideoClipItem",
+                ui::ColorRole::VideoClip, "tl::timelineui::VideoClipItem",
                 clip.value, scale, options, displayOptions, itemData, context,
                 parent);
 
@@ -629,7 +629,7 @@ namespace tl
             if (p.infoRequest.future.valid())
             {
                 ids.push_back(p.infoRequest.id);
-                p.infoRequest = TIMELINEUI::InfoRequest();
+                p.infoRequest = timelineui::InfoRequest();
             }
             for (const auto& i : p.thumbnailRequests)
             {
@@ -638,5 +638,5 @@ namespace tl
             p.thumbnailRequests.clear();
             p.thumbnailSystem->cancelRequests(ids);
         }
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

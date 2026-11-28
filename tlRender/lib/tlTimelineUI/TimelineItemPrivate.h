@@ -15,7 +15,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         struct TimelineItem::Private
         {
@@ -144,5 +144,5 @@ namespace tl
             std::vector<MouseItemDropTarget>
             getDropTargets(const math::Box2i& geometry, int index, int track);
         };
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

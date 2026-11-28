@@ -28,7 +28,7 @@ namespace tl
     }
 #endif
 
-    namespace TIMELINEUI
+    namespace timelineui
     {
         //! Information request.
         struct InfoRequest
@@ -280,5 +280,5 @@ namespace tl
         void from_json(const nlohmann::json&, ThumbnailCacheOptions&);
 
         ///@}
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

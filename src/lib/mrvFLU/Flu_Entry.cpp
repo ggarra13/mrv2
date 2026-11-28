@@ -102,7 +102,6 @@ namespace
 
 struct Flu_Entry::Private
 {
-#ifdef OPENGL_BACKEND
     std::weak_ptr<timelineui::ThumbnailSystem> thumbnailSystem;
 
     struct ThumbnailData
@@ -110,17 +109,6 @@ struct Flu_Entry::Private
         bool init = true;
         timelineui::ThumbnailRequest request;
     };
-#endif
-
-#ifdef VULKAN_BACKEND
-    std::weak_ptr<timelineui_vk::ThumbnailSystem> thumbnailSystem;
-
-    struct ThumbnailData
-    {
-        bool init = true;
-        timelineui_vk::ThumbnailRequest request;
-    };
-#endif
 
     ThumbnailData thumbnail;
 
@@ -135,13 +123,7 @@ Flu_Entry::Flu_Entry(
 {
     TLRENDER_P();
 
-#ifdef OPENGL_BACKEND
     p.thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
-#endif
-
-#ifdef VULKAN_BACKEND
-    p.thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
-#endif
 
     _init(name, t, d, c);
 }

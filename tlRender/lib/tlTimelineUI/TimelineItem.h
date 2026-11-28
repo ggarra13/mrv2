@@ -19,7 +19,7 @@ namespace tl
         class GLFWWindow;
     }
 
-    namespace TIMELINEUI
+    namespace timelineui
     {
         //! Track types.
         enum class TrackType { kNone, Video, Audio };
@@ -271,5 +271,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

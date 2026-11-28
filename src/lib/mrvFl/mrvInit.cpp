@@ -20,7 +20,7 @@ namespace mrv
     {
         using namespace tl;
 
-        TIMELINEUI::init(context);
+        timelineui::init(context);
 
 #ifdef TLRENDER_NDI
         device::init(context);

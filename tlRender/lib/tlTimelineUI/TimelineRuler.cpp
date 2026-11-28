@@ -15,7 +15,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         namespace
         {
@@ -114,7 +114,7 @@ namespace tl
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
-            IWidget::_init("tl::TIMELINEUI::TimelineRuler", context, parent);
+            IWidget::_init("tl::timelineui::TimelineRuler", context, parent);
             TLRENDER_P();
 
             _setMouseHover(true);
@@ -854,5 +854,5 @@ namespace tl
                     event.style->getColorRole(ui::ColorRole::Text));
             }
         }
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

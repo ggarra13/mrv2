@@ -10,7 +10,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         
         void TimelineItem::_mouseMoveEventRoll(ui::MouseMoveEvent& event)

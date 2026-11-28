@@ -21,7 +21,7 @@ namespace tl
 // #ifdef OPENGL_BACKEND
 //             // We cannot init the Vulkan thumbnail system here as we need
 //             // the FLTK context
-//             if (!context->getSystem<TIMELINEUI::ThumbnailSystem>())
+//             if (!context->getSystem<timelineui::ThumbnailSystem>())
 //             {
 //                 timelineui::ThumbnailSystem::create(context);
 //             }

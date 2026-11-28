@@ -11,7 +11,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         struct EffectItem::Private
         {
@@ -65,7 +65,7 @@ namespace tl
 
             IBasicItem::_init(
                 p.label, ui::ColorRole::Effect,
-                "tl::TIMELINEUI::EffectItem",
+                "tl::timelineui::EffectItem",
                 item, scale, options, displayOptions, itemData,
                 context, parent);
         }
@@ -251,5 +251,5 @@ namespace tl
             _updates |= ui::Update::Size;
             _updates |= ui::Update::Draw;
         }
-    } // namespace TIMELINEUI_vk
+    } // namespace timelineui_vk
 } // namespace tl

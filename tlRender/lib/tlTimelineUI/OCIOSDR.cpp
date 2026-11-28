@@ -14,7 +14,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         namespace
         {
@@ -343,5 +343,5 @@ namespace tl
             }
             return current;
         }
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

@@ -13,7 +13,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         //! Get a marker color.
         image::Color4f getMarkerColor(const std::string&);

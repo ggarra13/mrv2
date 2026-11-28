@@ -157,11 +157,11 @@ namespace mrv
 
             TimelinePlayer* player = nullptr;
 
-            std::weak_ptr<timelineui_vk::ThumbnailSystem> thumbnailSystem;
+            std::weak_ptr<timelineui::ThumbnailSystem> thumbnailSystem;
 
             struct ThumbnailData
             {
-                timelineui_vk::ThumbnailRequest request;
+                timelineui::ThumbnailRequest request;
                 std::shared_ptr<image::Image> image;
             };
             ThumbnailData thumbnail;
@@ -182,8 +182,8 @@ namespace mrv
             std::shared_ptr<ui::Style> style;
             std::shared_ptr<image::FontSystem> fontSystem;
             std::shared_ptr<timeline_vlk::Render> render;
-            timelineui_vk::DisplayOptions displayOptions;
-            std::shared_ptr<timelineui_vk::TimelineWidget> timelineWidget;
+            timelineui::DisplayOptions displayOptions;
+            std::shared_ptr<timelineui::TimelineWidget> timelineWidget;
             std::shared_ptr<TimelineWindow> timelineWindow;
             std::shared_ptr<tl::vlk::Shader> shader;
             std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
@@ -253,7 +253,7 @@ namespace mrv
 
 
             p.timelineWidget =
-                timelineui_vk::TimelineWidget::create(timeUnitsModel, ctx,
+                timelineui::TimelineWidget::create(timeUnitsModel, ctx,
                                                       context);
             p.timelineWidget->setEditable(false);
             p.timelineWidget->setFrameView(true);
@@ -267,16 +267,16 @@ namespace mrv
 
             p.timelineWidget->setParent(p.timelineWindow);
 
-            timelineui_vk::DisplayOptions displayOptions;
+            timelineui::DisplayOptions displayOptions;
             displayOptions.trackInfo =
                 settings->getValue<bool>("Timeline/TrackInfo");
             displayOptions.clipInfo =
                 settings->getValue<bool>("Timeline/ClipInfo");
             p.timelineWidget->setDisplayOptions(displayOptions);
 
-            if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
+            if (!context->getSystem<timelineui::ThumbnailSystem>())
             {
-                p.thumbnailSystem = timelineui_vk::ThumbnailSystem::create(context, ctx);
+                p.thumbnailSystem = timelineui::ThumbnailSystem::create(context, ctx);
             }
 
             setStopOnScrub(false);
@@ -640,12 +640,12 @@ namespace mrv
             }
         }
 
-        timelineui_vk::ItemOptions TimelineWidget::getItemOptions() const
+        timelineui::ItemOptions TimelineWidget::getItemOptions() const
         {
             return _p->timelineWidget->getItemOptions();
         }
 
-        timelineui_vk::DisplayOptions TimelineWidget::getDisplayOptions() const
+        timelineui::DisplayOptions TimelineWidget::getDisplayOptions() const
         {
             return _p->timelineWidget->getDisplayOptions();
         }
@@ -714,13 +714,13 @@ namespace mrv
         }
 
         void
-        TimelineWidget::setItemOptions(const timelineui_vk::ItemOptions& value)
+        TimelineWidget::setItemOptions(const timelineui::ItemOptions& value)
         {
             _p->timelineWidget->setItemOptions(value);
         }
 
         void TimelineWidget::setDisplayOptions(
-            const timelineui_vk::DisplayOptions& value)
+            const timelineui::DisplayOptions& value)
         {
             TLRENDER_P();
 

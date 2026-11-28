@@ -8,7 +8,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         bool ThumbnailCacheOptions::operator == (const ThumbnailCacheOptions& other) const
         {

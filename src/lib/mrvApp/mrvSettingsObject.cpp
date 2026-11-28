@@ -109,9 +109,9 @@
 
          p.defaultValues["Timeline/Editable"] = true;
          p.defaultValues["Timeline/TrackInfo"] =
-             TIMELINEUI::DisplayOptions().trackInfo;
+             timelineui::DisplayOptions().trackInfo;
          p.defaultValues["Timeline/ClipInfo"] =
-             TIMELINEUI::DisplayOptions().clipInfo;
+             timelineui::DisplayOptions().clipInfo;
          p.defaultValues["Timeline/ScrollToCurrentFrame"] = true;
          p.defaultValues["Timeline/StopOnScrub"] = true;
          p.defaultValues["Timeline/FirstTrack"] = false;

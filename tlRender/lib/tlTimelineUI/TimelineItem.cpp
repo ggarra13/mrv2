@@ -23,7 +23,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
 #ifdef OPENGL_BACKEND
         void TimelineItem::_init(
@@ -65,7 +65,7 @@ namespace tl
                 OTIO_NS::RationalTime(0.0, timeRange.duration().rate()),
                 timeRange.duration());
             IItem::_init(
-                "tl::TIMELINEUI::TimelineItem", timeRange, trimmedRange,
+                "tl::timelineui::TimelineItem", timeRange, trimmedRange,
                 trimmedRange, scale,
                 options, displayOptions, itemData, context, parent);
             TLRENDER_P();
@@ -79,7 +79,7 @@ namespace tl
             p.timeScrub =
                 observer::Value<otime::RationalTime>::create(time::invalidTime);
 
-            p.thumbnailSystem = context->getSystem<TIMELINEUI::ThumbnailSystem>();
+            p.thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
 
             const auto otioTimeline = timeline->getTimeline();
             for (const auto& child : otioTimeline->tracks()->children())
@@ -1260,5 +1260,5 @@ namespace tl
             return !(clampedRange == proposedRange);
         }
 
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

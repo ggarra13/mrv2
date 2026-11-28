@@ -6,7 +6,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         void GapItem::_init(
             ui::ColorRole colorRole,
@@ -19,7 +19,7 @@ namespace tl
         {
             IBasicItem::_init(
                 !gap->name().empty() ? gap->name() : "Gap", colorRole,
-                "tl::TIMELINEUI::GapItem", gap.value, scale, options,
+                "tl::timelineui::GapItem", gap.value, scale, options,
                 displayOptions, itemData, context, parent);
         }
 
@@ -42,5 +42,5 @@ namespace tl
                 context, parent);
             return out;
         }
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

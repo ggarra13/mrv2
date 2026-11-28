@@ -18,7 +18,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         namespace
         {
@@ -167,7 +167,7 @@ namespace tl
 
 #ifdef OPENGL_BACKEND
             p.window = gl::GLFWWindow::create(
-                "tl::TIMELINEUI::TimelineWidget", math::Size2i(1, 1), context,
+                "tl::timelineui::TimelineWidget", math::Size2i(1, 1), context,
                 static_cast<int>(gl::GLFWWindowOptions::kNone));
 #endif
 
@@ -1131,5 +1131,5 @@ namespace tl
                 out = p.timelineItems.front()->getSelectedTransitions();
             return out;
         }
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

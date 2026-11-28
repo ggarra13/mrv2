@@ -15,7 +15,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         //! Timeline ruler.
         //!
@@ -147,5 +147,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

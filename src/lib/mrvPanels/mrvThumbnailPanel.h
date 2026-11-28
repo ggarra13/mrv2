@@ -73,12 +73,7 @@ namespace mrv
             bool _clearCache = false;
             std::map<Fl_Widget*, TIMELINEUI::OCIOCPUProcessor > _ocioProcessors;
             std::map<Fl_Widget*, bool > _ocioSDR;
-#ifdef OPENGL_BACKEND
             std::map<Fl_Widget*, timelineui::ThumbnailRequest> thumbnailRequests;
-#endif
-#ifdef VULKAN_BACKEND
-            std::map<Fl_Widget*, timelineui_vk::ThumbnailRequest> thumbnailRequests;
-#endif
         };
 
     } // namespace panel

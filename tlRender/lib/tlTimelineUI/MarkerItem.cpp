@@ -7,7 +7,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         image::Color4f getMarkerColor(const std::string& color)
         {
@@ -69,7 +69,7 @@ namespace tl
             const std::shared_ptr<IWidget>& parent)
         {
             IItem::_init(
-                "tl::TIMELINEUI::MarkerItem",
+                "tl::timelineui::MarkerItem",
                 timeRange,
                 timeRange,
                 timeRange,

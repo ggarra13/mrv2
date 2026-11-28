@@ -11,7 +11,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         struct TransitionItem::Private
         {
@@ -76,7 +76,7 @@ namespace tl
             }
 
             IItem::_init(
-                "tl::TIMELINEUI::TransitionItem", timeRange, trimmedRange, timeRange,
+                "tl::timelineui::TransitionItem", timeRange, trimmedRange, timeRange,
                 scale, options, displayOptions, itemData, context, parent);
         }
 
@@ -250,5 +250,5 @@ namespace tl
             _updates |= ui::Update::Size;
             _updates |= ui::Update::Draw;
         }
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

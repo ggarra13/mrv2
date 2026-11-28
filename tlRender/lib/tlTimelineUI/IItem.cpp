@@ -12,7 +12,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         bool ItemOptions::operator==(const ItemOptions& other) const
         {
@@ -291,5 +291,5 @@ namespace tl
             j.at("markers").get_to(value.markers);
         }
 
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

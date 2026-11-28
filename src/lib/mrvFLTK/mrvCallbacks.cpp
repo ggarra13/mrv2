@@ -1764,7 +1764,7 @@ namespace mrv
         // Remove thumbnail system.
 #ifdef VULKAN_BACKEND
         auto context = App::app->getContext();
-        auto system  = context->getSystem<timelineui_vk::ThumbnailSystem>();
+        auto system  = context->getSystem<timelineui::ThumbnailSystem>();
         context->removeSystem(system);
         system.reset();
 #endif

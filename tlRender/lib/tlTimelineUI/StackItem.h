@@ -8,12 +8,12 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         class ThumbnailGenerator;
     }
     
-    namespace TIMELINEUI
+    namespace timelineui
     {
         //! Stack item.
         class StackItem : public IItem
@@ -56,5 +56,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

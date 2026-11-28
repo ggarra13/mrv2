@@ -18,7 +18,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         struct AudioClipItem::Private
         {
@@ -42,9 +42,9 @@ namespace tl
             };
             SizeData size;
 
-            TIMELINEUI::InfoRequest infoRequest;
+            timelineui::InfoRequest infoRequest;
             std::shared_ptr<io::Info> ioInfo;
-            std::map<otime::RationalTime, TIMELINEUI::WaveformRequest> waveformRequests;
+            std::map<otime::RationalTime, timelineui::WaveformRequest> waveformRequests;
         };
 
         void AudioClipItem::_init(
@@ -63,7 +63,7 @@ namespace tl
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
                 : path.getFileName(false),
-                ui::ColorRole::AudioClip, "tl::TIMELINEUI::AudioClipItem",
+                ui::ColorRole::AudioClip, "tl::timelineui::AudioClipItem",
                 clip.value, scale, options, displayOptions, itemData, context,
                 parent);
             TLRENDER_P();
@@ -396,7 +396,7 @@ namespace tl
             if (p.infoRequest.future.valid())
             {
                 ids.push_back(p.infoRequest.id);
-                p.infoRequest = TIMELINEUI::InfoRequest();
+                p.infoRequest = timelineui::InfoRequest();
             }
             for (const auto& i : p.waveformRequests)
             {
@@ -405,5 +405,5 @@ namespace tl
             p.waveformRequests.clear();
             p.thumbnailSystem->cancelRequests(ids);
         }
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

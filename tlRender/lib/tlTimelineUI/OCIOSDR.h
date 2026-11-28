@@ -17,7 +17,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         namespace OCIO = OCIO_NAMESPACE;
 
@@ -81,5 +81,5 @@ namespace tl
         //! isValid().
         std::shared_ptr<const OCIOCPUProcessor> getOCIOCPUProcessor(
             const timeline::OCIOOptions&, bool forceSDR = true);
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

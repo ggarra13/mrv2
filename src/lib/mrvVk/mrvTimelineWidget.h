@@ -49,10 +49,10 @@ namespace mrv
             void setStyle(const std::shared_ptr<ui::Style>& = nullptr);
 
             //! Get timelineUI's timelineWidget item options
-            timelineui_vk::ItemOptions getItemOptions() const;
+            timelineui::ItemOptions getItemOptions() const;
 
             //! Get timelineUI's timelineWidget display options
-            timelineui_vk::DisplayOptions getDisplayOptions() const;
+            timelineui::DisplayOptions getDisplayOptions() const;
 
             //! Set the timeline player.
             void setTimelinePlayer(TimelinePlayer*);
@@ -82,10 +82,10 @@ namespace mrv
             void setStopOnScrub(bool);
 
             //! Set the Item options.
-            void setItemOptions(const timelineui_vk::ItemOptions&);
+            void setItemOptions(const timelineui::ItemOptions&);
 
             //! Set the Display options.
-            void setDisplayOptions(const timelineui_vk::DisplayOptions&);
+            void setDisplayOptions(const timelineui::DisplayOptions&);
 
             //! Frame the view.
             void frameView();

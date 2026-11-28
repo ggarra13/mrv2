@@ -19,7 +19,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         namespace
         {
@@ -525,5 +525,5 @@ namespace tl
             }
         }
 
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl
