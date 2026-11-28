@@ -150,89 +150,89 @@ namespace tl
             p.mutex.cacheInfo = p.cacheInfo->get();
             p.audioMutex.speed = p.speed->get();
             p.log(context);
+
+#if defined(TLRENDER_AUDIO)
+            if (auto context = getContext().lock())
+            {
+                // Initialize audio.
+                auto audioSystem = context->getSystem<audio::System>();
+                auto maContext =
+                    audioSystem ? audioSystem->getContext() : nullptr;
+                if (maContext && !audioSystem->getDevices().empty())
+                {
+                    p.audioThread.info =
+                        audioSystem->getDefaultOutputInfo();
+                    if (p.audioThread.info.channelCount > 0 &&
+                        p.audioThread.info.dataType !=
+                        audio::DataType::kNone &&
+                        p.audioThread.info.sampleRate > 0)
+                    {
+                        // miniaudio converts to the device's native
+                        // format for us, so fall back to float when
+                        // we have no direct equivalent (e.g. F64).
+                        ma_format format =
+                            toMiniaudio(p.audioThread.info.dataType);
+                        if (ma_format_unknown == format)
+                        {
+                            format = ma_format_f32;
+                            p.audioThread.info.dataType =
+                                audio::DataType::F32;
+                        }
+
+                        ma_device_config config =
+                            ma_device_config_init(
+                                ma_device_type_playback);
+                        config.playback.pDeviceID =
+                            static_cast<const ma_device_id*>(
+                                audioSystem->getDeviceId(
+                                    audioSystem->getOutputDevice()));
+                        config.playback.format = format;
+                        config.playback.channels =
+                            p.audioThread.info.channelCount;
+                        config.sampleRate =
+                            p.audioThread.info.sampleRate;
+                        config.periodSizeInFrames =
+                            p.playerOptions.audioBufferFrameCount;
+                        config.dataCallback = p.maDataCallback;
+                        config.notificationCallback =
+                            p.maNotificationCallback;
+                        config.pUserData = _p.get();
+
+                        std::unique_ptr<ma_device> device(
+                            new ma_device);
+                        ma_result r = ma_device_init(
+                            maContext.get(), &config, device.get());
+                        if (MA_SUCCESS == r)
+                        {
+                            // The device is initialized; from here on
+                            // the deleter uninitializes it.
+                            p.thread.maContext = maContext;
+                            p.thread.maDevice.reset(device.release());
+                            r = ma_device_start(
+                                p.thread.maDevice.get());
+                            if (MA_SUCCESS == r)
+                            {
+                                p.thread.audioStarted = true;
+                            }
+                        }
+                        if (r != MA_SUCCESS)
+                        {
+                            std::stringstream ss;
+                            ss << "Cannot open audio stream: "
+                               << ma_result_description(r);
+                            context->log(
+                                "tl::timeline::Player", ss.str(),
+                                log::Type::Error);
+                        }
+                    }
+                }
+            }
+#endif // TLRENDER_AUDIO
             p.thread.running = true;
             p.thread.thread = std::thread(
                 [this]
                 {
                     TLRENDER_P();
-
-#if defined(TLRENDER_AUDIO)
-                    if (auto context = getContext().lock())
-                    {
-                        // Initialize audio.
-                        auto audioSystem = context->getSystem<audio::System>();
-                        auto maContext =
-                            audioSystem ? audioSystem->getContext() : nullptr;
-                        if (maContext && !audioSystem->getDevices().empty())
-                        {
-                            p.audioThread.info =
-                                audioSystem->getDefaultOutputInfo();
-                            if (p.audioThread.info.channelCount > 0 &&
-                                p.audioThread.info.dataType !=
-                                    audio::DataType::kNone &&
-                                p.audioThread.info.sampleRate > 0)
-                            {
-                                // miniaudio converts to the device's native
-                                // format for us, so fall back to float when
-                                // we have no direct equivalent (e.g. F64).
-                                ma_format format =
-                                    toMiniaudio(p.audioThread.info.dataType);
-                                if (ma_format_unknown == format)
-                                {
-                                    format = ma_format_f32;
-                                    p.audioThread.info.dataType =
-                                        audio::DataType::F32;
-                                }
-
-                                ma_device_config config =
-                                    ma_device_config_init(
-                                        ma_device_type_playback);
-                                config.playback.pDeviceID =
-                                    static_cast<const ma_device_id*>(
-                                        audioSystem->getDeviceId(
-                                            audioSystem->getOutputDevice()));
-                                config.playback.format = format;
-                                config.playback.channels =
-                                    p.audioThread.info.channelCount;
-                                config.sampleRate =
-                                    p.audioThread.info.sampleRate;
-                                config.periodSizeInFrames =
-                                    p.playerOptions.audioBufferFrameCount;
-                                config.dataCallback = p.maDataCallback;
-                                config.notificationCallback =
-                                    p.maNotificationCallback;
-                                config.pUserData = _p.get();
-
-                                std::unique_ptr<ma_device> device(
-                                    new ma_device);
-                                ma_result r = ma_device_init(
-                                    maContext.get(), &config, device.get());
-                                if (MA_SUCCESS == r)
-                                {
-                                    // The device is initialized; from here on
-                                    // the deleter uninitializes it.
-                                    p.thread.maContext = maContext;
-                                    p.thread.maDevice.reset(device.release());
-                                    r = ma_device_start(
-                                        p.thread.maDevice.get());
-                                    if (MA_SUCCESS == r)
-                                    {
-                                        p.thread.audioStarted = true;
-                                    }
-                                }
-                                if (r != MA_SUCCESS)
-                                {
-                                    std::stringstream ss;
-                                    ss << "Cannot open audio stream: "
-                                       << ma_result_description(r);
-                                    context->log(
-                                        "tl::timeline::Player", ss.str(),
-                                        log::Type::Error);
-                                }
-                            }
-                        }
-                    }
-#endif // TLRENDER_AUDIO
 
                     p.thread.cacheTimer = std::chrono::steady_clock::now();
                     p.thread.logTimer = std::chrono::steady_clock::now();
@@ -286,45 +286,6 @@ namespace tl
                         if (!framesFound.empty())
                         {
                             p.invalidateVideoCache(framesFound);
-                        }
-
-                        // Tell the timeline(s) where the playhead is. Video
-                        // requests are served nearest the playhead first, and
-                        // while it is playing the readers decode only what can
-                        // still reach the screen; see
-                        // Timeline::setRequestPriority() and
-                        // io::IVideoRead::setPlayhead().
-                        {
-                            const bool playing =
-                                Playback::Stop != p.thread.playback;
-                            const bool reverse =
-                                Playback::Reverse == p.thread.playback;
-                            p.timeline->setRequestPriority(
-                                p.thread.currentTime, reverse, playing);
-                            for (const auto& t : compare)
-                            {
-                                if (!t)
-                                    continue;
-                                // Each compare timeline is requested at its
-                                // own time: the same offset from its start
-                                // when relative, the same time when absolute.
-                                OTIO_NS::RationalTime compareTime =
-                                    p.thread.currentTime;
-                                if (CompareTimeMode::Relative ==
-                                    p.thread.compareTime)
-                                {
-                                    compareTime =
-                                        p.thread.currentTime -
-                                        p.thread.timeRange.start_time()
-                                            .rescaled_to(
-                                                p.thread.currentTime.rate()) +
-                                        t->getTimeRange().start_time()
-                                            .rescaled_to(
-                                                p.thread.currentTime.rate());
-                                }
-                                t->setRequestPriority(
-                                    compareTime, reverse, playing);
-                            }
                         }
 
                         // Update the cache.

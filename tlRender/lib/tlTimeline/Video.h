@@ -44,8 +44,8 @@ namespace tl
             Transition transition = Transition::kNone;
             float transitionValue = 0.F;
 
-            //! The path of the media the image came from, so a consumer can
-            //! resolve things about the source; e.g., an input color space.
+            //! Whether the image stands in for a frame the media does not have,
+            //! rather than being the frame that was asked for. Carried per
             std::string                 path;
 
             //! The path of the media "imageB" came from.
