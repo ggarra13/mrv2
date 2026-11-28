@@ -243,6 +243,10 @@ namespace mrv
             size_t rawImageSize = 0;
 
             //! Whether the view is in full screen mode
+            //! See _readPixel().
+            bool gotReadPixel = true;
+
+            //! Whether the view is in full screen mode
             bool fullScreen = false;
 
             //! Sets whether the window starts in maximized mode.

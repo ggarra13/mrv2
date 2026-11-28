@@ -241,6 +241,10 @@ namespace mrv
 
             //! Store the size of previous buffer so we avoid allocating it
             //! again.
+            bool gotReadPixel = true;
+
+            //! Store the size of previous buffer so we avoid allocating it
+            //! again.
             size_t rawImageSize = 0;
 
             //! Whether the view is in full screen mode

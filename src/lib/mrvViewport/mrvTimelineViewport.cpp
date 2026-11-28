@@ -2281,7 +2281,8 @@ namespace mrv
                 _readPixel(rgba);
             }
 
-            _updatePixelBar(rgba);
+            if (p.gotReadPixel)
+                _updatePixelBar(rgba);
         }
 
         EnvironmentMapOptions
