@@ -44,13 +44,12 @@ namespace tl
                 std::shared_ptr<ui::Label> label;
                 std::shared_ptr<ui::Label> durationLabel;
 
-                // Items and their otio Indexes in the timeline
                 std::vector<std::shared_ptr<IItem> > items;
                 std::vector<int> otioIndexes;
 
                 std::map<int, std::vector<std::shared_ptr<EffectItem> > > effects;
 
-                // Transitions and their otio Indexes in the timeline
+
                 std::vector<std::shared_ptr<TransitionItem> > transitions;
                 std::vector<int> otioTransitionIndexes;
 

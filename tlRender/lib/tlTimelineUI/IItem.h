@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Namespace.h"
+#include <tlTimelineUI/Namespace.h>
 
 #include <tlUI/IWidget.h>
 
@@ -15,7 +15,7 @@
 
 namespace tl
 {
-    namespace TIMELINEUI
+    namespace timelineui
     {
         class IItem;
 
@@ -205,5 +205,5 @@ namespace tl
         private:
             TLRENDER_PRIVATE();
         };
-    } // namespace TIMELINEUI
+    } // namespace timelineui
 } // namespace tl

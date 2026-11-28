@@ -5,7 +5,10 @@
 #include "VideoClipItem.h"
 #include "EffectItem.h"
 #include "ThumbnailSystem.h"
-#include "OCIOSDR.h"
+
+#ifdef TLRENDER_OCIO
+#    include "OCIOSDR.h"
+#endif
 
 #include <tlUI/DrawUtil.h>
 
@@ -374,9 +377,10 @@ namespace tl
             const timeline::ClipRectEnabledState clipRectEnabledState(
                 event.render);
             const timeline::ClipRectState clipRectState(event.render);
+
             event.render->setClipRectEnabled(true);
-            event.render->setClipRect(
-                math::intersect(box, clipRectState.getClipRect()));
+            event.render->setClipRect(math::intersect(box, clipRectState.getClipRect()));
+
             // The thumbnails are drawn in an sRGB window, so an HDR OCIO
             // display / view (ST2084, ACES 2.0 HDR, ...) would wash them
             // out.  Use the closest SDR display / view instead.
@@ -410,6 +414,7 @@ namespace tl
             thumbnailHDR.peak_detection = false;
             event.render->setHDROptions(thumbnailHDR);
 
+#ifdef TLRENDER_OCIO
             // Returns the thumbnail with OCIO applied, converting and
             // caching it on first use.  Returns null if the CPU path cannot
             // be used (the caller then falls back to drawVideo()).
@@ -460,6 +465,7 @@ namespace tl
                 p.ocioThumbnails[key] = entry;
                 return entry.converted;
             };
+#endif
 
             const math::Box2i clipRect =
                 _getClipRect(drawRect, _displayOptions.clipRectScale);
@@ -519,6 +525,8 @@ namespace tl
                                 time, _timeRange, trimmedRange,
                                 p.ioInfo->videoTime->duration().rate());
 
+
+
                         const std::string cacheKey = io::getVideoCacheKey(
                             p.path, mediaTime, p.ioOptions, {});
                         const auto i = _data->thumbnails.find(cacheKey);
@@ -531,7 +539,7 @@ namespace tl
                                 videoData.size = i->second->getSize();
                                 videoData.layers.push_back({i->second});
 
-#ifdef VULKAN_BACKEND
+#if defined(VULKAN_BACKEND) || defined(WEBGPU_BACKEND)
                                 event.render->endRenderPass();
 #endif
 
@@ -554,12 +562,13 @@ namespace tl
                                 // OCIO only (no LUT, no tone mapping): apply
                                 // it once on the CPU and cache the result.
                                 std::shared_ptr<image::Image> ocioImage;
+#ifdef TLRENDER_OCIO
                                 if (!ocioOff && lutOff && hdrOff && singleU8)
                                 {
                                     ocioImage = getOCIOThumbnail(
                                         cacheKey, layer.image, thumbnailOCIO);
                                 }
-
+#endif
                                 if (ocioImage)
                                 {
                                     event.render->drawImage(ocioImage, box);
@@ -591,7 +600,7 @@ namespace tl
                                                             {}, {}, {},
                                                             background);
                                 }
-#ifdef VULKAN_BACKEND
+#if defined(VULKAN_BACKEND) || defined(WEBGPU_BACKEND)
                                 event.render->beginLoadRenderPass();
 #endif
                             }

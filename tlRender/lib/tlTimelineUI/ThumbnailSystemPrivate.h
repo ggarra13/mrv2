@@ -18,6 +18,12 @@
 #    include <FL/Fl.H>
 #endif
 
+#ifdef WEBGPU_BACKEND
+#    include <tlTimelineWGPU/Render.h>
+#    include <tlWGPU/WGPU.h>
+#    include <tlWGPU/OffscreenBuffer.h>
+#endif
+
 #include <tlTimeline/Timeline.h>
 
 #include <tlIO/System.h>
@@ -149,6 +155,11 @@ namespace tl
                 std::shared_ptr<vlk::OffscreenBuffer> buffer;
                 VkCommandBuffer cmd = VK_NULL_HANDLE;
                 VkCommandPool commandPool = VK_NULL_HANDLE;
+                uint32_t frameIndex = 0;
+#endif
+#ifdef WEBGPU_BACKEND
+                std::shared_ptr<timeline_wgpu::Render> render;
+                std::shared_ptr<wgpu::OffscreenBuffer> buffer;
                 uint32_t frameIndex = 0;
 #endif
                 std::atomic<bool> ioCacheClear = false;

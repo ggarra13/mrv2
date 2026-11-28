@@ -9,6 +9,8 @@
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 
+#include <emscripten/emscripten.h>
+
 #include <algorithm>
 #include <atomic>
 #include <cassert>
@@ -552,13 +554,13 @@ namespace tl
                 beginFrame();
             }
         }
-
         void Shader::beginFrame()
         {
             // Safe without per-frame copies: queue writes made for the next
             // frame are ordered after the previous frame's submit.
             if (pushRing)
                 pushRing->offset = 0;
+            bindingSetCursor = 0;
         }
 
         void Shader::addStorageBuffer(
@@ -1150,6 +1152,37 @@ namespace tl
         }
 
         std::shared_ptr<ShaderBindingSet> Shader::createBindingSet()
+        {
+            _ensureLayout();
+
+            // Sets built against an old layout or push ring are stale.
+            if (!bindingSetPool.empty() &&
+                (bindingSetPool.front()->bindGroupLayout != activeLayout ||
+                 bindingSetPool.front()->pushRing != pushRing))
+            {
+                bindingSetPool.clear();
+                bindingSetCursor = 0;
+            }
+
+            if (bindingSetCursor < bindingSetPool.size())
+            {
+                activeBindingSet = bindingSetPool[bindingSetCursor++];
+            }
+            else
+            {
+                bindingSetPool.push_back(_allocateBindingSet()); // sets active
+                ++bindingSetCursor;
+
+                if (bindingSetPool.size() > 512)
+                    std::cerr << "WARNING: shader " << shaderName << " pool has "
+                              << bindingSetPool.size()
+                              << " sets; is beginFrame() ever called?\n";
+            }
+            return activeBindingSet;
+        }
+
+
+        std::shared_ptr<ShaderBindingSet> Shader::_allocateBindingSet()
         {
             _ensureLayout();
 

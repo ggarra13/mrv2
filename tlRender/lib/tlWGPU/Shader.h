@@ -383,6 +383,14 @@ namespace tl
 
             std::shared_ptr<ShaderBindingSet> activeBindingSet;
 
+            //! Binding sets are recycled: one per createBindingSet() call
+            //! within a frame, reused (cursor reset) on the next frame.
+            std::vector<std::shared_ptr<ShaderBindingSet> > bindingSetPool;
+            std::size_t bindingSetCursor = 0;
+
+            //! The original allocating implementation.
+            std::shared_ptr<ShaderBindingSet> _allocateBindingSet();
+
             TLRENDER_PRIVATE();
         };
     } // namespace webgpu

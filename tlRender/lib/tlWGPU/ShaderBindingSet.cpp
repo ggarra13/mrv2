@@ -4,6 +4,8 @@
 
 #include <tlWGPU/ShaderBindingSet.h>
 
+#include <emscripten/emscripten.h>
+
 #include <algorithm>
 #include <atomic>
 #include <chrono>

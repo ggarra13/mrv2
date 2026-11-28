@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 #include "mrvViewport/mrvTimelineViewport.h"
 
 #include "mrvWGPU/mrvWGPUDefines.h"
@@ -12,8 +11,6 @@
 #ifdef TLRENDER_FFMPEG
 #    include "mrvVoice/mrvAnnotation.h"
 #endif
-
-// #include <tlWGPU/OffscreenBuffer.h>
 
 #include <tlDraw/Annotation.h>
 

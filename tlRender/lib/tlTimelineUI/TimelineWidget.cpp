@@ -244,6 +244,25 @@ namespace tl
         }
 #endif
 
+#ifdef WEBGPU_BACKEND
+        TimelineWidget::TimelineWidget(Fl_WebGPU_Context& ctx) :
+            ctx(ctx),
+            _p(new Private)
+        {
+        }
+
+        std::shared_ptr<TimelineWidget> TimelineWidget::create(
+            const std::shared_ptr<timeline::ITimeUnitsModel>& timeUnitsModel,
+            Fl_WebGPU_Context& ctx,
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<IWidget>& parent)
+        {
+            auto out = std::shared_ptr<TimelineWidget>(new TimelineWidget(ctx));
+            out->_init(timeUnitsModel, context, parent);
+            return out;
+        }
+#endif
+
         double TimelineWidget::getScale() const
         {
             TLRENDER_P();
@@ -679,13 +698,10 @@ namespace tl
                 value)
         {
             TLRENDER_P();
-
             p.moveCallback = value;
 
-            for (auto item : p.timelineItems)
-            {
-                item->setMoveCallback(value);
-            }
+            if (!p.timelineItems.empty())
+                p.timelineItems.front()->setMoveCallback(value);
         }
 
         void TimelineWidget::mousePressEvent(ui::MouseClickEvent& event)
@@ -1012,7 +1028,7 @@ namespace tl
                         p.timelineItems.back()->setMoveCallback(p.moveCallback);
                     }
 #endif
-#ifdef VULKAN_BACKEND
+#if defined(VULKAN_BACKEND) || defined(WEBGPU_BACKEND)
                     p.timelineItems.push_back(TimelineItem::create(
                         context,
                         p.player,

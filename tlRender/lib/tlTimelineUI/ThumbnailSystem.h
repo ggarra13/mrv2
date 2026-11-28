@@ -165,6 +165,12 @@ namespace tl
                 Fl_Vk_Context& ctx);
 #endif
 
+#ifdef WEBGPU_BACKEND
+            ThumbnailSystem(
+                const std::shared_ptr<system::Context>&,
+                Fl_WebGPU_Context& ctx);
+#endif
+
         public:
             ~ThumbnailSystem();
 
@@ -180,6 +186,13 @@ namespace tl
             static std::shared_ptr<ThumbnailSystem> create(
                 const std::shared_ptr<system::Context>&,
                 Fl_Vk_Context&);
+#endif
+
+#ifdef WEBGPU_BACKEND
+            //! Create a new thumbnail System.
+            static std::shared_ptr<ThumbnailSystem> create(
+                const std::shared_ptr<system::Context>&,
+                Fl_WebGPU_Context&);
 #endif
 
             //! Get information.
@@ -251,6 +264,10 @@ namespace tl
 
 #ifdef VULKAN_BACKEND
             Fl_Vk_Context& ctx;
+#endif
+
+#ifdef WEBGPU_BACKEND
+            Fl_WebGPU_Context& ctx;
 #endif
             TLRENDER_PRIVATE();
         };

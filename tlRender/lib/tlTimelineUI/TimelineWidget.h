@@ -34,6 +34,10 @@ namespace tl
             TimelineWidget(Fl_Vk_Context& ctx);
 #endif
 
+#ifdef WEBGPU_BACKEND
+            TimelineWidget(Fl_WebGPU_Context& ctx);
+#endif
+
         public:
             virtual ~TimelineWidget();
 
@@ -50,6 +54,15 @@ namespace tl
             static std::shared_ptr<TimelineWidget> create(
                 const std::shared_ptr<timeline::ITimeUnitsModel>&,
                 Fl_Vk_Context& ctx,
+                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<IWidget>& parent = nullptr);
+#endif
+
+#ifdef WEBGPU_BACKEND
+            //! Create a new widget.
+            static std::shared_ptr<TimelineWidget> create(
+                const std::shared_ptr<timeline::ITimeUnitsModel>&,
+                Fl_WebGPU_Context& ctx,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 #endif
@@ -228,6 +241,10 @@ namespace tl
 
 #ifdef VULKAN_BACKEND
             Fl_Vk_Context& ctx;
+#endif
+
+#ifdef WEBGPU_BACKEND
+            Fl_WebGPU_Context& ctx;
 #endif
 
         private:

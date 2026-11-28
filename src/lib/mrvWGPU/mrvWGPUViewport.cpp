@@ -2,6 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
 #include "mrvApp/mrvSettingsObject.h"
 
 
@@ -44,7 +45,6 @@
 #include <tlCore/FontSystem.h>
 #include <tlCore/StringFormat.h>
 
-#include <FL/fl_config.h>
 
 namespace
 {
@@ -348,11 +348,10 @@ namespace mrv
                     TIMELINEUI::ThumbnailSystem::create(context, ctx);
                 }
 
-                tl::webcodecs::setContext(&ctx);
-
                 // Set the renderers's max nits
                 if (!wgpu.render)
                     wgpu.render = timeline_wgpu::Render::create(ctx, context);
+
 
                 p.fontSystem = image::FontSystem::create(context);
 

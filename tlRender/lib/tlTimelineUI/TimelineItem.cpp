@@ -36,9 +36,17 @@ namespace tl
             const std::shared_ptr<ItemData>& itemData,
             const std::shared_ptr<gl::GLFWWindow>& window,
             const std::shared_ptr<IWidget>& parent)
-#endif
-
-#ifdef VULKAN_BACKEND
+#elif defined(VULKAN_BACKEND)
+        void TimelineItem::_init(
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Timeline>& timeline,
+            const std::shared_ptr<timeline::Player>& player,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
+            double scale, const ItemOptions& options,
+            const DisplayOptions& displayOptions,
+            const std::shared_ptr<ItemData>& itemData,
+            const std::shared_ptr<IWidget>& parent)
+#else
         void TimelineItem::_init(
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Timeline>& timeline,
@@ -271,6 +279,47 @@ namespace tl
         }
 #endif
 
+#ifdef WEBGPU_BACKEND
+        TimelineItem::TimelineItem(Fl_WebGPU_Context& ctx) :
+            ctx(ctx),
+            _p(new Private)
+        {
+        }
+
+        std::shared_ptr<TimelineItem> TimelineItem::create(
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Player>& player,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
+            double scale, const ItemOptions& options,
+            const DisplayOptions& displayOptions,
+            const std::shared_ptr<ItemData>& itemData,
+            Fl_WebGPU_Context& ctx,
+            const std::shared_ptr<IWidget>& parent)
+        {
+            auto out = std::shared_ptr<TimelineItem>(new TimelineItem(ctx));
+            out->_init(
+                context, player->getTimeline(), player, stack, scale, options, displayOptions,
+                itemData, parent);
+            return out;
+        }
+
+        std::shared_ptr<TimelineItem> TimelineItem::create(
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Timeline>& timeline,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
+            double scale, const ItemOptions& options,
+            const DisplayOptions& displayOptions,
+            const std::shared_ptr<ItemData>& itemData,
+            Fl_WebGPU_Context& ctx,
+            const std::shared_ptr<IWidget>& parent)
+        {
+            auto out = std::shared_ptr<TimelineItem>(new TimelineItem(ctx));
+            out->_init(
+                context, timeline, nullptr, stack, scale, options, displayOptions,
+                itemData, parent);
+            return out;
+        }
+#endif
         void TimelineItem::setEditable(bool value)
         {
             _p->editable = value;
@@ -563,7 +612,6 @@ namespace tl
         {
             IWidget::mousePressEvent(event);
             TLRENDER_P();
-
             bool saveUndo = false;
             bool doSelection = false;
             bool selectionMode = false;
@@ -933,13 +981,11 @@ namespace tl
             for (const auto& item : p.mouse.items)
             {
                 if (!dynamic_cast<VideoClipItem*>(item->p.get()) &&
-                    !dynamic_cast<AudioClipItem*>(item->p.get()) &&
-                    !dynamic_cast<GapItem*>(item->p.get()))
+                    !dynamic_cast<AudioClipItem*>(item->p.get()))
                     continue;
                 timeline::MoveData move;
-                int otioIndex = p.tracks[item->track].otioIndexes[item->index];
                 move.fromTrack = move.toTrack = item->track;
-                move.fromIndex = move.toIndex = otioIndex;
+                move.fromIndex = move.toIndex = item->index;
                 out.push_back(move);
             }
             return out;
@@ -956,9 +1002,8 @@ namespace tl
                 if (!dynamic_cast<TransitionItem*>(item->p.get()))
                     continue;
                 timeline::MoveData move;
-                int otioIndex = p.tracks[item->track].otioTransitionIndexes[item->index];
                 move.fromTrack = move.toTrack = item->track;
-                move.fromIndex = move.toIndex = otioIndex;
+                move.fromIndex = move.toIndex = item->index;
                 out.push_back(move);
             }
             return out;
