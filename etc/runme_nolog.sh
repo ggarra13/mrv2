@@ -512,7 +512,7 @@ if [[ "$TLRENDER_WGPU" == "OFF" ]]; then
         echo
         exit 1
     fi
-else
+    
     #
     # Create the certs certificate
     #
